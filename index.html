@@ -264,10 +264,21 @@ const KIDS = [
     note:'荃灣官立中學 · 綠色',
     subjects:{
       chinese:{tools:[{icon:'📖',name:'中文練習',desc:'敬請期待',coming:true}]},
-      english:{tools:[{icon:'🇬🇧',name:'English',desc:'敬請期待',coming:true}]},
-      maths:{tools:[{icon:'📐',name:'Maths',desc:'敬請期待',coming:true}]},
+      english:{tools:[
+        {icon:'🎧',name:'Dictation Vocabulary',desc:'聽寫詞彙',file:'yourong/english/En_Dictation_vocabulary有容.html'}
+      ]},
+      maths:{tools:[
+        {icon:'🎲',name:'概率模擬器',desc:'01 · Dice Expected Value',file:'yourong/maths/01概率模拟器_DiceExpectedValue_0508.html'},
+        {icon:'📊',name:'Expected Values',desc:'02 · 期望值練習',file:'yourong/maths/02ExpectedValues_有容_0508.html'}
+      ]},
       physics:{tools:[{icon:'⚛️',name:'Physics',desc:'敬請期待',coming:true}]},
-      chemistry:{tools:[{icon:'🧪',name:'Chemistry',desc:'敬請期待',coming:true}]},
+      chemistry:{tools:[
+        {icon:'📅',name:'30日化學計劃',desc:'01 · 系統進度',file:'yourong/chemistry/01Chemistry_30day_plan_有容_0510.html'},
+        {icon:'⚡',name:'Electrolytes 三問',desc:'02 · 電解質重點',file:'yourong/chemistry/02Electrolytes三问_有容_0507.html'},
+        {icon:'🧠',name:'離子快速記憶攻略',desc:'03 · Cations & Anions',file:'yourong/chemistry/03Cations_Anions快速记忆攻略_0507.html'},
+        {icon:'🃏',name:'離子閃卡',desc:'04 · Flashcards',file:'yourong/chemistry/04Flashcards_CationsAnions_有容_0508.html'},
+        {icon:'🔤',name:'下標上標 NH₃/NH₄⁺',desc:'05 · 化學符號規範',file:'yourong/chemistry/05下标上标_NH3_NH4_有容_0507.html'}
+      ]},
       biology:{tools:[{icon:'🧬',name:'Biology',desc:'敬請期待',coming:true}]},
       history:{tools:[{icon:'📜',name:'History',desc:'敬請期待',coming:true}]},
       'chinese-history':{tools:[{icon:'🏛️',name:'中國歷史',desc:'敬請期待',coming:true}]},
@@ -279,10 +290,18 @@ const KIDS = [
     note:'荃灣官立中學 · 藍色',
     subjects:{
       chinese:{tools:[{icon:'📖',name:'中文練習',desc:'敬請期待',coming:true}]},
-      english:{tools:[{icon:'🇬🇧',name:'English',desc:'敬請期待',coming:true}]},
-      maths:{tools:[{icon:'📐',name:'Maths',desc:'敬請期待',coming:true}]},
+      english:{tools:[
+        {icon:'🎧',name:'Dictation Vocabulary',desc:'聽寫詞彙',file:'haina/english/En_Dictation_vocabulary_海纳.html'}
+      ]},
+      maths:{tools:[
+        {icon:'🎲',name:'概率模擬器',desc:'Dice Expected Value',file:'haina/maths/概率模拟器_DiceExpectedValue_0508海纳.html'}
+      ]},
       physics:{tools:[{icon:'⚛️',name:'Physics',desc:'敬請期待',coming:true}]},
-      chemistry:{tools:[{icon:'🧪',name:'Chemistry',desc:'敬請期待',coming:true}]},
+      chemistry:{tools:[
+        {icon:'📅',name:'30日化學計劃',desc:'01 · 系統進度',file:'haina/chemistry/01Chemistry_30day_plan_海纳_0510.html'},
+        {icon:'🃏',name:'陽離子陰離子閃卡',desc:'02 · Cations & Anions',file:'haina/chemistry/02Flashcards_CationsAnions_海纳_0508.html'},
+        {icon:'⚡',name:'離子快速記憶攻略',desc:'03 · 記憶技巧',file:'haina/chemistry/03_Cations_Anions快速记忆攻略_0507.html'}
+      ]},
       biology:{tools:[{icon:'🧬',name:'Biology',desc:'敬請期待',coming:true}]},
       history:{tools:[{icon:'📜',name:'History',desc:'敬請期待',coming:true}]},
       'chinese-history':{tools:[{icon:'🏛️',name:'中國歷史',desc:'敬請期待',coming:true}]},
@@ -294,14 +313,43 @@ const KIDS = [
     note:'迦密愛禮信小學 · 金色',
     subjects:{
       chinese:{tools:[
-        {icon:'🗣️',name:'詞彙粵語聽寫',desc:'第5·7·11·12課 40詞',file:'duoduo/chinese/index.html'},
-        {icon:'🃏',name:'閃卡練習',desc:'敬請期待',coming:true},
-        {icon:'📝',name:'不供詞填充',desc:'敬請期待',coming:true}
+        {icon:'📚',name:'全詞彙總表',desc:'00 · 課文詞彙一覽',file:'duoduo/chinese/00中文_全词汇总表.html'},
+        {icon:'🔤',name:'聽寫·閃卡·不供詞填空',desc:'01 · 三合一練習',file:'duoduo/chinese/01中文_词汇听写闪卡填空.html'},
+        {icon:'✏️',name:'句式與標點',desc:'02 · 教學與練習',file:'duoduo/chinese/02中文_句式与标点_教学与练习_0509.html'},
+        {icon:'🏛️',name:'文言文閱讀專項',desc:'03 · 第11-12課',file:'duoduo/chinese/03中文_文言文阅读专项_第11-12课_0509.html'},
+        {icon:'📝',name:'便條寫作',desc:'04 · 實用文訓練',file:'duoduo/chinese/04中文_便条写作_0509.html'},
+        {icon:'🎧',name:'課文粵語跟讀',desc:'05 · 語音訓練',file:'duoduo/chinese/05中文_课文粤语跟读_0509.html'},
+        {icon:'📖',name:'閱讀理解',desc:'06 · 7天精讀訓練',file:'duoduo/chinese/06中文_阅读理解_7天精读训练_0509.html'},
+        {icon:'🧩',name:'重組句子',desc:'07 · 語序邏輯',file:'duoduo/chinese/07中文_重组句子_0509.html'},
+        {icon:'✍️',name:'作文技巧',desc:'08 · 寫作要點',file:'duoduo/chinese/08中文_作文_技巧_0509.html'}
       ]},
-      english:{tools:[{icon:'🔤',name:'英文詞彙',desc:'敬請期待',coming:true}]},
+      english:{tools:[
+        {icon:'📋',name:'語法複習包',desc:'01 · 全面梳理',file:'duoduo/english/01En_语法复习包_0509.html'},
+        {icon:'⏳',name:'現在完成式加碼50題',desc:'02 · 強化練習',file:'duoduo/english/02En_现在完成式加码50题_0509.html'},
+        {icon:'📖',name:'精讀7篇·邊讀邊教',desc:'03 · 閱讀理解',file:'duoduo/english/03En_精读7篇_边读边教_0509.html'},
+        {icon:'🔍',name:'改錯 Proofreading',desc:'04 · 校對訓練',file:'duoduo/english/04En_改错Proofreading_0509.html'},
+        {icon:'✍️',name:'作文技巧',desc:'05 · 寫作要點',file:'duoduo/english/05En_作文_技巧_0509.html'},
+        {icon:'📄',name:'模擬卷 45min',desc:'06 · 限時測驗',file:'duoduo/english/06英语_模拟卷_45min_0509.html'},
+        {icon:'✍️',name:'作文模擬 30min',desc:'07 · 限時寫作',file:'duoduo/english/07英语_作文模拟_30min_0509.html'},
+        {icon:'🎧',name:'詞彙聽力跟讀',desc:'08 · 聽說訓練',file:'duoduo/english/08英语_词汇听力跟读_0510.html'},
+        {icon:'📝',name:'Vocabulary 精練',desc:'09 · 詞彙鞏固',file:'duoduo/english/09英语_Vocabulary精练_0510.html'},
+        {icon:'🔄',name:'動詞形態變換',desc:'10 · 語法活用',file:'duoduo/english/10英语_动词形态变换_0510.html'},
+        {icon:'💪',name:'語法加碼練習',desc:'0201 · 進階訓練',file:'duoduo/english/0201En_语法加码练习.html'}
+      ]},
       math:{tools:[{icon:'🔢',name:'數學練習',desc:'敬請期待',coming:true}]},
-      general:{tools:[{icon:'🌿',name:'常識複習',desc:'敬請期待',coming:true}]},
-      ethics:{tools:[{icon:'🙏',name:'倫理宗教',desc:'敬請期待',coming:true}]}
+      general:{tools:[
+        {icon:'📚',name:'知識講解',desc:'01 · 學科要點',file:'duoduo/general/01常识科_知识讲.html'},
+        {icon:'📄',name:'模擬卷 1-10',desc:'02 · 綜合練習',file:'duoduo/general/02常识科_模拟卷1-10.html'},
+        {icon:'💡',name:'混淆概念與答題框架',desc:'03 · 辨析訓練',file:'duoduo/general/03常识科_混淆概念与答题框架.html'},
+        {icon:'🃏',name:'自學手冊閃卡',desc:'04 · 記憶工具',file:'duoduo/general/04常识科_自学手册闪卡.html'}
+      ]},
+      ethics:{tools:[
+        {icon:'🙏',name:'互動教學',desc:'01 · 倫宗基礎',file:'duoduo/ethics/01伦宗_互动教学_0509.html'},
+        {icon:'📄',name:'模擬卷 1',desc:'02 · 測驗練習',file:'duoduo/ethics/02伦宗_模拟卷1_0509.html'},
+        {icon:'📄',name:'模擬卷 2',desc:'03 · 測驗練習',file:'duoduo/ethics/03伦宗_模拟卷2_0509.html'},
+        {icon:'📄',name:'模擬卷 3',desc:'04 · 測驗練習',file:'duoduo/ethics/04伦宗_模拟卷3_0509.html'},
+        {icon:'✅',name:'模擬卷答案',desc:'05 · 參考答案',file:'duoduo/ethics/05伦宗_模拟卷答案_0509.html'}
+      ]}
     }
   }
 ];
