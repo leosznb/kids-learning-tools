@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>多多中文作文 — 命題作文技巧</title>
+<style>
+:root {
+  --bg:#fdfdfd; --card:#fff; --text:#1a1a1a; --sub:#555;
+  --red:#c0392b; --red-l:#fdf2f2;
+  --blue:#1a5276; --blue-l:#eaf2f8;
+  --gold:#b8860b; --gold-l:#fef9e7;
+  --green:#1e7a3a; --green-l:#eafaf1;
+  --border:#e0e0e0; --shadow:0 1px 4px rgba(0,0,0,0.06);
+  --font:'Segoe UI','Noto Sans TC','Microsoft JhengHei',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.75;padding:20px;}
+.container{max-width:800px;margin:0 auto;}
+
+h1{font-size:1.6em;text-align:center;margin-bottom:4px;font-weight:700;}
+.subtitle{text-align:center;color:var(--sub);font-size:0.85em;margin-bottom:24px;}
+.section{margin-bottom:20px;background:var(--card);border:1px solid var(--border);border-radius:8px;overflow:hidden;}
+.section-header{padding:14px 20px;font-weight:700;font-size:1.05em;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;cursor:pointer;}
+.section-header:hover{background:#fafafa;}
+.section-body{padding:16px 20px;display:none;}
+.section.open .section-body{display:block;}
+.section-header .arrow{transition:transform 0.2s;font-size:0.8em;}
+.section.open .arrow{transform:rotate(90deg);}
+
+h3{font-size:0.95em;color:var(--red);margin:16px 0 8px;}
+h3:first-child{margin-top:0;}
+
+.step-row{display:flex;gap:12px;flex-wrap:wrap;margin:10px 0;}
+.step-card{flex:1;min-width:140px;background:#fafafa;border:1px solid var(--border);border-radius:6px;padding:12px 14px;text-align:center;}
+.step-card .num{display:inline-block;width:28px;height:28px;line-height:28px;border-radius:14px;font-weight:700;font-size:0.85em;color:#fff;margin-bottom:6px;}
+.step-card:nth-child(1) .num{background:var(--red);}
+.step-card:nth-child(2) .num{background:var(--blue);}
+.step-card:nth-child(3) .num{background:var(--green);}
+.step-card:nth-child(4) .num{background:var(--gold);}
+.step-card .title{font-weight:700;font-size:0.9em;margin-bottom:4px;}
+.step-card .desc{font-size:0.8em;color:var(--sub);}
+
+.framework{background:#fafafa;border-left:4px solid var(--red);padding:10px 14px;margin:8px 0;border-radius:0 6px 6px 0;font-size:0.9em;}
+.framework.narrative{border-left-color:var(--blue);}
+.framework.argument{border-left-color:var(--red);}
+.framework.fable{border-left-color:var(--green);}
+.framework.note{border-left-color:var(--gold);}
+.framework .fw-title{font-weight:700;margin-bottom:4px;}
+
+.template-box{background:#fefefe;border:1px dashed var(--border);border-radius:6px;padding:12px 14px;margin:8px 0;font-size:0.88em;}
+.template-box .t-label{font-size:0.75em;color:var(--sub);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;}
+.template-box .t-content{line-height:1.9;}
+
+.vocab-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.vocab-card{background:#fafafa;border:1px solid var(--border);border-radius:6px;padding:10px 12px;font-size:0.85em;}
+.vocab-card .vc-title{font-weight:700;color:var(--red);margin-bottom:4px;font-size:0.9em;}
+.vocab-card .vc-words{line-height:1.8;}
+
+.time-bar{display:flex;gap:4px;margin:10px 0;height:24px;border-radius:4px;overflow:hidden;}
+.time-seg{display:flex;align-items:center;justify-content:center;font-size:0.72em;font-weight:600;color:#fff;}
+.time-seg.t1{background:var(--red);flex:1;}
+.time-seg.t2{background:var(--blue);flex:6;}
+.time-seg.t3{background:var(--green);flex:3;}
+.time-seg.t4{background:var(--gold);flex:1;}
+
+table{width:100%;border-collapse:collapse;margin:10px 0;font-size:0.88em;}
+table th,table td{padding:8px 10px;border:1px solid var(--border);text-align:left;}
+table th{background:#f5f5f5;font-weight:700;}
+
+.check-list{list-style:none;font-size:0.88em;}
+.check-list li{padding:4px 0;}
+.check-list li::before{content:'☐ ';color:var(--red);margin-right:6px;}
+
+@media(max-width:600px){
+  body{padding:10px;}
+  .vocab-grid{grid-template-columns:1fr;}
+  .step-row{flex-direction:column;}
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>✍️ 多多中文呈分試 — 命題作文技巧</h1>
+<p class="subtitle">中作 55 分鐘　｜　範圍：五下單元三、五、七及便條</p>
+
+<!-- ====== STEP 1: 时间分配 ====== -->
+<div class="section open">
+<div class="section-header" onclick="this.parentElement.classList.toggle('open')"><span class="arrow">▶</span>⏱ 時間分配（55分鐘怎麼用）</div>
+<div class="section-body">
+<div class="time-bar">
+  <div class="time-seg t1">5'</div>
+  <div class="time-seg t2">30'</div>
+  <div class="time-seg t3">15'</div>
+  <div class="time-seg t4">5'</div>
+</div>
+<table>
+<tr><th>階段</th><th>時間</th><th>做甚麼</th></tr>
+<tr><td>① 審題</td><td>5 分鐘</td><td>圈關鍵詞、確定體裁、想中心思想</td></tr>
+<tr><td>② 寫作</td><td>30 分鐘</td><td>按框架逐段寫，不要停下來改</td></tr>
+<tr><td>③ 檢查</td><td>15 分鐘</td><td>錯別字、標點、語句通順、分段</td></tr>
+<tr><td>④ 謄清</td><td>5 分鐘</td><td>確保字跡清晰可辨</td></tr>
+</table>
+<div class="framework"><div class="fw-title">⚠️ 禁止做的事</div>① 不要一看到題目就開始寫（沒審題）<br>② 不要邊寫邊改（打斷思路）<br>③ 不要只寫關鍵詞不寫完整句子<br>④ 不要忘記分段（至少4-5段）</div>
+</div></div>
+
+<!-- ====== STEP 2: 三种体裁框架 ====== -->
+<div class="section open">
+<div class="section-header" onclick="this.parentElement.classList.toggle('open')"><span class="arrow">▶</span>📐 體裁框架（三種必考體裁）</div>
+<div class="section-body">
+
+<h3>🟦 記敘文（借物抒情 / 寫人記事）— 考最多</h3>
+<div class="framework narrative">
+<div class="fw-title">五段式框架</div>
+<strong>第一段（開頭）</strong>：點題，交代時間/地點/人物/物件<br>
+<strong>第二段（起因）</strong>：事情是怎樣開始的？物件從哪裏來？<br>
+<strong>第三段（經過）</strong>：最精彩的部分，寫細節、寫感受<br>
+<strong>第四段（轉折/高潮）</strong>：轉折點或最深感受<br>
+<strong>第五段（結尾）</strong>：總結 + 點題 + 感悟
+</div>
+<div class="template-box">
+<div class="t-label">📝 記敍文萬能開頭</div>
+<div class="t-content">在我的記憶中，＿＿＿＿＿總是佔據着一個特別的位置。每當我看到＿＿＿＿＿，就會想起＿＿＿＿＿。</div>
+</div>
+
+<h3>🟥 議論文（堅持、勇敢、成功）— 單元三重點</h3>
+<div class="framework argument">
+<div class="fw-title">四段式框架</div>
+<strong>第一段（提出觀點）</strong>：開門見山，表明立場<br>
+<strong>第二段（論據一）</strong>：舉實例（名人故事、生活經歷）<br>
+<strong>第三段（論據二）</strong>：反面論證或另一個角度<br>
+<strong>第四段（總結）</strong>：重申觀點 + 對自己的啟發
+</div>
+<div class="template-box">
+<div class="t-label">📝 議論文萬能開頭</div>
+<div class="t-content">有人說＿＿＿＿＿，也有人認為＿＿＿＿＿。在我看來，＿＿＿＿＿。以下我將從兩方面說明我的觀點。</div>
+</div>
+
+<h3>🟩 寓言改寫 / 讀後感 — 單元七重點</h3>
+<div class="framework fable">
+<div class="fw-title">三段式框架</div>
+<strong>第一段</strong>：簡述原文故事（1-2句即可）<br>
+<strong>第二段</strong>：分析寓意——這個故事告訴我們甚麼道理？<br>
+<strong>第三段</strong>：聯繫生活——這個道理在我們生活中有甚麼應用？
+</div>
+
+<h3>🟨 便條寫作</h3>
+<div class="framework note">
+<div class="fw-title">便條格式（必須記住）</div>
+【稱呼】＋【正文】＋【祝頌語】＋【署名】＋【日期】<br>
+正文要簡潔清楚，通常 3-4 句：<br>
+① 寫便條的原因 → ② 具體內容 → ③ 期望對方做的事
+</div>
+</div></div>
+
+<!-- ====== STEP 3: 开头结尾 ====== -->
+<div class="section">
+<div class="section-header" onclick="this.parentElement.classList.toggle('open')"><span class="arrow">▶</span>🎯 開頭結尾模板（背 3 個就夠）</div>
+<div class="section-body">
+<table>
+<tr><th>類型</th><th>開頭</th><th>結尾</th></tr>
+<tr>
+  <td>記人</td>
+  <td>在我們身邊，總有一些人默默地影響着我們。＿＿＿就是這樣一個人。</td>
+  <td>＿＿＿教會了我＿＿＿。他/她就像＿＿＿，永遠＿＿＿。</td>
+</tr>
+<tr>
+  <td>記事</td>
+  <td>人生中總有一些經歷，雖然短暫卻令人難忘。那一次，＿＿＿。</td>
+  <td>這件事雖然已經過去了，但它讓我明白＿＿＿。這份記憶，我會永遠珍藏。</td>
+</tr>
+<tr>
+  <td>借物</td>
+  <td>＿＿＿是一件看似普通的＿＿＿，但它對我來說卻意義非凡。</td>
+  <td>＿＿＿不僅是＿＿＿，更承載着＿＿＿。每當我看到它，就會＿＿＿。</td>
+</tr>
+<tr>
+  <td>議論</td>
+  <td>有人說＿＿＿。我完全同意／不同意，因為＿＿＿。</td>
+  <td>總而言之，＿＿＿。讓我們一起＿＿＿。</td>
+</tr>
+<tr>
+  <td>寓言</td>
+  <td>《＿＿＿》是一個家喻戶曉的故事，表面上講＿＿＿，實際上告訴我們＿＿＿。</td>
+  <td>這個故事雖然簡單，但道理深刻。在我們的生活中，＿＿＿。</td>
+</tr>
+</table>
+</div></div>
+
+<!-- ====== STEP 4: 好词好句 ====== -->
+<div class="section">
+<div class="section-header" onclick="this.parentElement.classList.toggle('open')"><span class="arrow">▶</span>📝 好詞好句（按主題分類）</div>
+<div class="section-body">
+<div class="vocab-grid">
+<div class="vocab-card">
+<div class="vc-title">🟥 堅持 / 努力</div>
+<div class="vc-words">堅持不懈　持之以恆　不怕困難<br>迎難而上　半途而廢　鍥而不捨<br>「失敗乃成功之母」<br>「只要功夫深，鐵杵磨成針」</div>
+</div>
+<div class="vocab-card">
+<div class="vc-title">🟦 勇敢 / 面對</div>
+<div class="vc-words">勇敢無畏　挺身而出　臨危不懼<br>鼓起勇氣　退縮逃避　挑戰自己<br>「真正的勇敢不是不害怕，而是害怕時仍然前行」</div>
+</div>
+<div class="vocab-card">
+<div class="vc-title">🟩 情感 / 感受</div>
+<div class="vc-words">感動不已　心潮澎湃　熱淚盈眶<br>深深體會　銘記於心　難以忘懷<br>失望沮喪　喜出望外　激動萬分</div>
+</div>
+<div class="vocab-card">
+<div class="vc-title">🟨 成功 / 收穫</div>
+<div class="vc-words">努力不懈　終於成功　收穫滿滿<br>一分耕耘一分收穫<br>「台上三分鐘，台下十年功」<br>「不經一番寒徹骨，怎得梅花撲鼻香」</div>
+</div>
+<div class="vocab-card">
+<div class="vc-title">🟧 人物描寫</div>
+<div class="vc-words">慈祥的笑容　溫柔的目光<br>粗糙的雙手　堅定的眼神<br>諄諄教誨　語重心長<br>默默付出　無微不至</div>
+</div>
+<div class="vocab-card">
+<div class="vc-title">🟪 時間過渡</div>
+<div class="vc-words">起初……後來……最後……<br>曾經有一段時間<br>隨着時間的推移<br>從此以後　不知不覺中</div>
+</div>
+</div>
+</div></div>
+
+<!-- ====== STEP 5: 常见题目 ====== -->
+<div class="section">
+<div class="section-header" onclick="this.parentElement.classList.toggle('open')"><span class="arrow">▶</span>📋 常見題目預演</div>
+<div class="section-body">
+<table>
+<tr><th>題目</th><th>體裁</th><th>寫作要點</th></tr>
+<tr><td>記一次失敗的經歷</td><td>記事</td><td>失敗的細節 → 當時感受 → 學到甚麼</td></tr>
+<tr><td>我最敬佩的人</td><td>記人</td><td>外貌/事例 → 為何敬佩 → 對我的影響</td></tr>
+<tr><td>一件心愛的物品</td><td>借物</td><td>物品來歷 → 外觀 → 與我的故事 → 意義</td></tr>
+<tr><td>堅持就是勝利</td><td>議論</td><td>提出觀點 → 舉例(名人/自己) → 反面論證 → 總結</td></tr>
+<tr><td>勇敢面對困難</td><td>議論</td><td>甚麼是勇敢 → 舉例證明 → 怎樣做到 → 總結</td></tr>
+<tr><td>《自相矛盾》讀後感</td><td>寓言</td><td>簡述故事 → 分析寓意 → 生活例子</td></tr>
+</table>
+</div></div>
+
+<!-- ====== STEP 6: 繁体字易错 ====== -->
+<div class="section">
+<div class="section-header" onclick="this.parentElement.classList.toggle('open')"><span class="arrow">▶</span>⚠️ 作文最易寫錯的繁體字</div>
+<div class="section-body">
+<table>
+<tr><th>簡體</th><th>繁體（正確）</th><th>常見錯誤</th></tr>
+<tr><td>经历</td><td><strong>經歷</strong></td><td>錯寫成「經曆」</td></tr>
+<tr><td>坚持</td><td><strong>堅持</strong></td><td>「堅」下是土不是士</td></tr>
+<tr><td>勇敢</td><td><strong>勇敢</strong></td><td>「敢」左邊不是「又」</td></tr>
+<tr><td>收获</td><td><strong>收穫</strong></td><td>錯寫成「收獲」</td></tr>
+<tr><td>困难</td><td><strong>困難</strong></td><td>「難」左邊是「莫」非「又」</td></tr>
+<tr><td>母亲</td><td><strong>母親</strong></td><td>「親」右邊是「見」</td></tr>
+<tr><td>感动</td><td><strong>感動</strong></td><td>「動」左邊是「重」</td></tr>
+<tr><td>失败</td><td><strong>失敗</strong></td><td>「敗」左邊是「貝」</td></tr>
+<tr><td>努力</td><td><strong>努力</strong></td><td>「努」上是「女」</td></tr>
+<tr><td>因为</td><td><strong>因為</strong></td><td>「為」不是「为」</td></tr>
+</table>
+</div></div>
+
+<!-- ====== STEP 7: 考前检查 ====== -->
+<div class="section">
+<div class="section-header" onclick="this.parentElement.classList.toggle('open')"><span class="arrow">▶</span>✅ 寫完檢查清單</div>
+<div class="section-body">
+<ul class="check-list">
+<li>有沒有分段？（至少 4-5 段）</li>
+<li>每段開頭有沒有空兩格？</li>
+<li>標點符號有沒有漏？（。，！？）</li>
+<li>有沒有錯別字？（特別注意簡轉繁）</li>
+<li>句子通順嗎？讀一遍試試</li>
+<li>有沒有用上好詞好句？（至少 2-3 個成語）</li>
+<li>結尾有沒有點題？</li>
+<li>字數夠嗎？（約250-300字）</li>
+</ul>
+</div></div>
+
+</div>
+</body>
+</html>

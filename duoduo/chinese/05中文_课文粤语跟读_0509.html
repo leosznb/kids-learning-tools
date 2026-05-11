@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>多多呈分試 · 課文粵語跟讀 · 第5/6/7/8/11/12課</title>
+<style>
+:root{--bg:#fafaf9;--card:#fff;--text:#1a1a1a;--t2:#555;--border:#e5e5e3;--accent:#b45309;--r:10px;--sh:0 1px 3px rgba(0,0,0,0.06);--font:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Microsoft JhengHei",sans-serif}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.75}
+.header{background:var(--card);border-bottom:1px solid var(--border);padding:1.1rem 0.8rem 0.5rem;text-align:center;position:sticky;top:0;z-index:50;backdrop-filter:blur(8px)}
+.header h1{font-size:1.25rem;font-weight:700}.header .sub{font-size:0.74rem;color:var(--t2)}
+.utabs{display:flex;justify-content:center;gap:0.15rem;margin-top:0.4rem;flex-wrap:wrap}
+.utabs button{font-family:var(--font);font-size:0.72rem;font-weight:600;padding:0.3rem 0.55rem;border:2px solid var(--border);background:var(--card);border-radius:999px;cursor:pointer;color:var(--t2)}
+.utabs button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.container{max-width:860px;margin:0 auto;padding:0.8rem 1rem 3rem}
+.page{display:none}.page.active{display:block}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:1.3rem;margin-bottom:0.85rem;box-shadow:var(--sh)}
+.card h2{font-size:1.05rem;font-weight:700;margin-bottom:0.3rem}
+.voice-note{background:#eff6ff;border:1px solid #bfdbfe;border-radius:var(--r);padding:0.5rem 0.8rem;margin-bottom:0.8rem;font-size:0.78rem}
+
+/* ═══ PLAYBACK BAR ═══ */
+.pbar{display:flex;align-items:center;gap:0.4rem;flex-wrap:wrap;margin-bottom:0.6rem;padding:0.5rem 0.8rem;background:#f8fafc;border:1px solid var(--border);border-radius:var(--r)}
+.pbar button{font-family:var(--font);font-size:0.8rem;font-weight:600;padding:0.4rem 0.9rem;border:1px solid var(--border);background:var(--card);border-radius:999px;cursor:pointer;transition:all 0.15s;white-space:nowrap}
+.pbar button:hover{background:#fef2f2;border-color:#fca5a5;color:#dc2626}
+.pbar button.playing{background:#fef2f2;border-color:#dc2626;color:#dc2626;animation:pulse 1s infinite}
+.pbar .sg{display:flex;align-items:center;gap:0.2rem;margin-left:auto}
+.pbar .sg label{font-size:0.75rem;font-weight:600;color:var(--t2)}
+.pbar .sg input[type=range]{width:4.5rem}
+.pbar .sg .sv{font-size:0.75rem;font-weight:700;min-width:2.3rem;text-align:center}
+.pbar .prog{font-size:0.75rem;color:var(--t2);white-space:nowrap}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+
+/* ═══ TEXT ═══ */
+.tb{font-size:1.15rem;line-height:2.2;padding:0.5rem 0}
+.tb .s{transition:background 0.2s;padding:0.15rem 0.3rem;border-radius:4px;cursor:pointer}
+.tb .s:hover{background:#fefce8}
+.tb .s.active{background:#fef08a;font-weight:700}
+.tb .s.played{color:var(--t2)}
+.tb.poem .s{display:block;margin-bottom:0.2rem}
+.footer{text-align:center;color:#999;font-size:0.7rem;padding:2rem 0 1rem}
+@media print{.header{position:static;border-bottom:2px solid #000}.utabs,.pbar,.voice-note{display:none}.page{display:block!important;page-break-before:always}.page:first-of-type{page-break-before:avoid}body{background:#fff;font-size:10pt}.container{max-width:100%;padding:0}.tb .s.active{background:none;font-weight:400}}
+@media(max-width:600px){.header{padding:0.7rem 0.4rem 0.4rem}.header h1{font-size:1rem}.tb{font-size:1rem;line-height:2}.pbar{gap:0.3rem;padding:0.4rem 0.5rem}.pbar button{font-size:0.72rem;padding:0.3rem 0.5rem}}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>多多呈分試 · 課文粵語跟讀</h1>
+  <p class="sub">五下單元三·五·七 · 共六篇課文 · 迦密愛禮信小學</p>
+  <div class="utabs">
+    <button class="active" onclick="switchPage('l5',this)">L5·堅持與成功</button>
+    <button onclick="switchPage('l6',this)">L6·勇敢的學問</button>
+    <button onclick="switchPage('l7',this)">L7·香椿魚</button>
+    <button onclick="switchPage('l8',this)">L8·紙船</button>
+    <button onclick="switchPage('l11',this)">L11·鷸蚌相爭</button>
+    <button onclick="switchPage('l12',this)">L12·自相矛盾</button>
+  </div>
+</div>
+
+<div class="container">
+
+<div class="voice-note">
+  <strong>🔊 粵語跟讀：</strong>點「▶ 開始跟讀」，系統用粵語女聲逐句朗讀。<span style="background:#fef08a;padding:0 0.2rem">黃色高亮</span>為當前句子。拖動語速滑桿（0.5x–1.25x）。點任意句子可從該句開始。<strong>建議用 Safari</strong>。
+</div>
+
+<!-- ══════ L5 ══════ -->
+<div class="page active" id="page-l5">
+<div class="pbar"><button onclick="speakLesson('l5')" id="btn-l5">▶ 開始跟讀</button><button onclick="stopSpeak()">⏹</button><span class="prog" id="prog-l5"></span><div class="sg"><label>語速</label><input type="range" id="spd-l5" min="0.5" max="1.25" step="0.05" value="0.85" oninput="document.getElementById('sv-l5').textContent=this.value+'x'"><span class="sv" id="sv-l5">0.85x</span></div></div>
+<div class="card"><h2>第5課 · 堅持與成功</h2><div class="tb" id="text-l5"></div></div>
+</div>
+
+<!-- ══════ L6 ══════ -->
+<div class="page" id="page-l6">
+<div class="pbar"><button onclick="speakLesson('l6')" id="btn-l6">▶ 開始跟讀</button><button onclick="stopSpeak()">⏹</button><span class="prog" id="prog-l6"></span><div class="sg"><label>語速</label><input type="range" id="spd-l6" min="0.5" max="1.25" step="0.05" value="0.85" oninput="document.getElementById('sv-l6').textContent=this.value+'x'"><span class="sv" id="sv-l6">0.85x</span></div></div>
+<div class="card"><h2>第6課 · 勇敢的學問</h2><div class="tb" id="text-l6"></div></div>
+</div>
+
+<!-- ══════ L7 ══════ -->
+<div class="page" id="page-l7">
+<div class="pbar"><button onclick="speakLesson('l7')" id="btn-l7">▶ 開始跟讀</button><button onclick="stopSpeak()">⏹</button><span class="prog" id="prog-l7"></span><div class="sg"><label>語速</label><input type="range" id="spd-l7" min="0.5" max="1.25" step="0.05" value="0.85" oninput="document.getElementById('sv-l7').textContent=this.value+'x'"><span class="sv" id="sv-l7">0.85x</span></div></div>
+<div class="card"><h2>第7課 · 香椿魚</h2><div class="tb" id="text-l7"></div></div>
+</div>
+
+<!-- ══════ L8 ══════ -->
+<div class="page" id="page-l8">
+<div class="pbar"><button onclick="speakLesson('l8')" id="btn-l8">▶ 開始跟讀</button><button onclick="stopSpeak()">⏹</button><span class="prog" id="prog-l8"></span><div class="sg"><label>語速</label><input type="range" id="spd-l8" min="0.5" max="1.25" step="0.05" value="0.85" oninput="document.getElementById('sv-l8').textContent=this.value+'x'"><span class="sv" id="sv-l8">0.85x</span></div></div>
+<div class="card"><h2>第8課 · 紙船——寄母親</h2><p style="font-size:0.78rem;color:var(--t2);margin-bottom:0.4rem">冰心 · 新詩</p><div class="tb poem" id="text-l8"></div></div>
+</div>
+
+<!-- ══════ L11 ══════ -->
+<div class="page" id="page-l11">
+<div class="pbar"><button onclick="speakLesson('l11')" id="btn-l11">▶ 開始跟讀</button><button onclick="stopSpeak()">⏹</button><span class="prog" id="prog-l11"></span><div class="sg"><label>語速</label><input type="range" id="spd-l11" min="0.5" max="1.25" step="0.05" value="0.75" oninput="document.getElementById('sv-l11').textContent=this.value+'x'"><span class="sv" id="sv-l11">0.75x</span></div></div>
+<div class="card"><h2>第11課 · 鷸蚌相爭</h2><p style="font-size:0.78rem;color:var(--t2);margin-bottom:0.4rem">出自《戰國策》</p><div class="tb" id="text-l11"></div></div>
+</div>
+
+<!-- ══════ L12 ══════ -->
+<div class="page" id="page-l12">
+<div class="pbar"><button onclick="speakLesson('l12')" id="btn-l12">▶ 開始跟讀</button><button onclick="stopSpeak()">⏹</button><span class="prog" id="prog-l12"></span><div class="sg"><label>語速</label><input type="range" id="spd-l12" min="0.5" max="1.25" step="0.05" value="0.75" oninput="document.getElementById('sv-l12').textContent=this.value+'x'"><span class="sv" id="sv-l12">0.75x</span></div></div>
+<div class="card"><h2>第12課 · 自相矛盾</h2><p style="font-size:0.78rem;color:var(--t2);margin-bottom:0.4rem">出自《韓非子》</p><div class="tb" id="text-l12"></div></div>
+</div>
+
+<div class="footer">多多呈分試 · 課文粵語跟讀 · 六篇全覆蓋</div>
+</div>
+
+<script>
+// ═══ TEXT DATA (6 lessons) ═══
+var TEXTS = {
+  l5: [
+    "眾人皆知，堅持是成功的關鍵。",
+    "堅持就是堅決地做某事，不輕易放棄，但這不等於說只要堅持，就必定能够成功，永遠不會失敗。",
+    "然而，只要我們用對了方法，堅持就是成功不可或缺的因素。",
+    "今天，觸控式手機大行其道，全因為一個人：美國蘋果公司的創辦人史提夫喬布斯。",
+    "原來上一代的手機都是按鍵式的，須按鍵輸入指令，喬布斯不喜歡按鍵，銳意研製觸控式手機，讓人們用手指輕觸屏幕發出指令。",
+    "當時喬布斯的想法——說得直白一點——只是一廂情願，許多人都不看好。",
+    "喬布斯帶領專家躦研觸控屏幕的技術，從不間斷，終於取得成果。",
+    "事實證明，沒有按鍵的手機操作更簡便、更受大眾的歡迎。",
+    "二百多年前，英國一生愛德華詹納發現了牛痘接種的技術。",
+    "可是，當時許多人都懷疑「種牛痘，防天花」的理論，他們譏笑接種牛痘的人會長牛角、生牛毛。",
+    "詹納堅信自己是對的，無懼冷嘲熱諷，不斷進行實驗，終於證明了牛痘疫苗的效用。",
+    "古語有云：「鍥而不捨，金石可鏤。」",
+    "意思是說，不斷雕刻而不放棄，即使是金屬、石頭，也能刻上花紋，說的正是這個道理。",
+    "長跑比賽的運動員最明白這個道理，他們由起點開始奔跑，越過十米、百米、二百米……最後到達終點。",
+    "沒有之前的九百九十米，哪有最後十米的衝刺？",
+    "堅持的確是成功的關鍵，我們非但要堅持，還要制訂正確的目標。",
+    "試想想，要去東山，你卻堅持把南山當做東山，這樣豈不是自討苦吃嗎？",
+    "總而言之，堅持的同時要多動腦筋，這樣，堅持才可以成為打開成功大門的鑰匙，讓你得到豐碩的果實。"
+  ],
+  l6: [
+    "提起勇士、勇敢，大家都會稱讚他們勇敢，不怕困難和危險。",
+    "可是，你有否想過，勇敢也有真假之別？",
+    "真的勇敢是理智的，想清楚才做；假的勇敢卻只是憑衝動做事。",
+    "真與假不能混為一談。",
+    "就像鑽石和玻璃，看來有點相似，但鑽石不僅罕有，而且遠比玻璃閃亮、堅硬。",
+    "毫無疑問，假的勇敢不值得欣賞。",
+    "孔子是春秋時代的著名學者，子路是他的學生，一向善於行軍打仗。",
+    "有一次，子路問孔子：「如果老師要帶領軍隊的話，會找誰同去？」",
+    "他一心以為孔子會說是自己，誰知孔子說不會跟暴虎馮河的人同去，讓他碰了一個軟釘子。",
+    "「暴虎」即赤手空拳打老虎，「馮河」即不乘船徒步過河。",
+    "老虎是猛獸，赤手空拳跟老虎搏鬥，不是拿自己的性命開玩笑嗎？",
+    "不知河水有多深，就徒步過河，隨時會遇溺。",
+    "暴虎馮河的人，看似勇敢，其實只是魯莽，隨時會闖禍。",
+    "因此，孔子拒絕與這類人同行。",
+    "你有沒有想過，勇敢也有大小之分？",
+    "小的勇敢，只與自己有關——吃了虧、受到侮辱，要討回公道而跟別人拼命；",
+    "大的勇敢，同樣不怕犧牲，爭取的卻是眾人的幸福，因此才得到世人的推崇。",
+    "清代末年，政治腐敗，人民生活於水深火熱之中。",
+    "孫中山先生有見及此，挺身而出，策劃革命。",
+    "儘管當時的統治者設法追捕他，要重治他的罪，但勇敢的孫先生始終沒有放棄。",
+    "最後，他推翻了當時的政府。",
+    "總而言之，勇敢是一門學問。",
+    "這門學問，只有真正的勇者、勇士才會懂得。"
+  ],
+  l7: [
+    "在故鄉老家的院子裏，有一棵高大的香椿樹。",
+    "香椿樹的葉子有一股香味，可以食用；木材細緻堅固，可以做家具。",
+    "在傳統文化中，它代表長壽，在祝壽詞中也常見「椿壽」一詞。",
+    "春天，香椿樹長出嫩綠的芽，透過陽光，有如綠翡翠。",
+    "不久，嫩芽由綠變成紫紅的葉子。",
+    "這時候，用嫩香椿葉炒雞蛋，或是拌豆腐，再放點麻油，別提有多好吃了。",
+    "再等不多久，香椿葉長大變綠，摘下後洗一洗，裹上麵粉，用油炸過，形狀像一條一條的小魚，這就是小食「香椿魚」。",
+    "香椿魚不只外形有趣，更是香脆可口。",
+    "到了夏天，香椿樹枝葉茂密，我在樹下擺一張桌子塗鴉。",
+    "夕陽西下，涼風吹來，我們擺上碗筷，全家在樹下共進晚餐。",
+    "離開家的那年，我坐在火車上都能看到那棵大香椿樹。",
+    "車子越走越遠，樹影從視線裏消失，我的眼淚止不住簌簌地掉了下來。",
+    "四十多年後，我第一次返回故鄉，家人分散四方，早已不住在老地方了。",
+    "我還沒來得及問家人的情況，竟先問四哥那棵香椿樹還在不在。",
+    "四哥輕描淡寫地說：「那棵樹啊，早就被砍掉了。」",
+    "我當時聽了，心裏真是挺難過的。",
+    "後來到二姐家，我看見院子裏有棵小香椿樹，雖然長得細細的，也不是很高，但是正在發芽長葉，相當茂盛。",
+    "八十四歲的二姐知道我愛吃香椿魚，每天一大早讓外甥女摘香椿葉炸香椿魚給我吃，幾乎每頓飯都有一盤香椿魚。",
+    "其實我不是貪嘴，而是邊吃邊回憶童年吧！"
+  ],
+  l8: [
+    "我從不肯妄棄了一張紙，",
+    "總是留着——留着，",
+    "疊成一隻一隻很小的船兒，",
+    "從舟上拋下在海裏。",
+    "有的被天風吹捲到舟中的窗裏，",
+    "有的被海浪打濕，沾在船頭上。",
+    "我仍是不灰心的每天的疊着，",
+    "總希望有一隻能流到我要它到的地方去。",
+    "母親，倘若你夢中看見一隻很小的白船兒，",
+    "不要驚訝它無端入夢。",
+    "這是你至愛的女兒含着淚疊的，",
+    "萬水千山，求它載着她的愛和悲哀歸去。"
+  ],
+  l11: [
+    "蚌方出曝，而鷸啄其肉，蚌合而拑其喙。",
+    "鷸曰：「今日不雨，明日不雨，必有死蚌。」",
+    "蚌亦謂鷸曰：「今日不出，明日不出，必有死鷸。」",
+    "兩者不肯相舍，漁者得而並擒之。"
+  ],
+  l12: [
+    "人有鬻矛與楯者，譽其楯之堅曰：「物莫能陷也。」",
+    "俄而又譽其矛曰：「吾矛之利，物無不陷也。」",
+    "人應之曰：「以子之矛，陷子之盾，何如？」",
+    "其人弗能應也。",
+    "以不可陷之盾與無不陷之矛，為名不可兩立也。"
+  ]
+};
+
+// ═══ BUILD ═══
+function buildAll() {
+  for (var k in TEXTS) {
+    var el = document.getElementById('text-' + k);
+    if (!el) continue;
+    var h = '';
+    TEXTS[k].forEach(function(s, i) {
+      h += '<span class="s" id="s-' + k + '-' + i + '" onclick="jumpTo(\'' + k + '\',' + i + ')">' + s + '</span> ';
+    });
+    el.innerHTML = h;
+  }
+}
+
+// ═══ TTS ═══
+var synth = window.speechSynthesis, spk = false, cl = null, ci = 0;
+function gv() {
+  var v = synth.getVoices();
+  var hk = v.filter(function(x){return x.lang==='zh-HK';});
+  return hk.length ? hk[0] : (v.filter(function(x){return x.lang.startsWith('zh-');})[0]||null);
+}
+function speakLesson(k) {
+  stopSpeak();
+  if(!synth){alert('請用 Safari 開啟。');return;}
+  var voice = gv();
+  if(!voice){alert('找不到粵語語音。請用 Safari。');return;}
+  var s = TEXTS[k];
+  if(!s) return;
+  spk = true; cl = k; ci = 0;
+  var btn = document.getElementById('btn-'+k);
+  var prog = document.getElementById('prog-'+k);
+  var speed = parseFloat(document.getElementById('spd-'+k).value);
+  if(btn) btn.classList.add('playing');
+  document.querySelectorAll('#text-'+k+' .s').forEach(function(x){x.classList.remove('active','played');});
+  (function nxt() {
+    if(!spk || ci >= s.length) {
+      spk = false; if(btn) btn.classList.remove('playing');
+      if(prog) prog.textContent = '✅ 完成'; cl = null; return;
+    }
+    if(prog) prog.textContent = (ci+1) + '/' + s.length;
+    var pv = document.getElementById('s-'+k+'-'+(ci-1));
+    if(pv){pv.classList.remove('active');pv.classList.add('played');}
+    var cu = document.getElementById('s-'+k+'-'+ci);
+    if(cu){cu.classList.add('active');cu.scrollIntoView({behavior:'smooth',block:'center'});}
+    var u = new SpeechSynthesisUtterance(s[ci]);
+    u.lang = 'zh-HK'; u.voice = voice; u.rate = speed;
+    u.onend = function() { ci++; setTimeout(nxt, 400); };
+    u.onerror = function() { spk = false; if(btn) btn.classList.remove('playing'); };
+    synth.speak(u);
+  })();
+}
+function stopSpeak() {
+  if(synth) synth.cancel();
+  spk = false; cl = null;
+  document.querySelectorAll('.pbar button.playing').forEach(function(b){b.classList.remove('playing');});
+  document.querySelectorAll('.prog').forEach(function(p){p.textContent='';});
+}
+function jumpTo(k, idx) {
+  stopSpeak();
+  ci = idx;
+  var s = TEXTS[k]; if(!s) return;
+  var voice = gv(); if(!voice) return;
+  spk = true; cl = k;
+  var btn = document.getElementById('btn-'+k);
+  var prog = document.getElementById('prog-'+k);
+  var speed = parseFloat(document.getElementById('spd-'+k).value);
+  if(btn) btn.classList.add('playing');
+  document.querySelectorAll('#text-'+k+' .s').forEach(function(x){x.classList.remove('active','played');});
+  (function nxt() {
+    if(!spk || ci >= s.length) {
+      spk = false; if(btn) btn.classList.remove('playing');
+      if(prog) prog.textContent = '✅ 完成'; cl = null; return;
+    }
+    if(prog) prog.textContent = (ci+1) + '/' + s.length;
+    var pv = document.getElementById('s-'+k+'-'+(ci-1));
+    if(pv){pv.classList.remove('active');pv.classList.add('played');}
+    var cu = document.getElementById('s-'+k+'-'+ci);
+    if(cu){cu.classList.add('active');cu.scrollIntoView({behavior:'smooth',block:'center'});}
+    var u = new SpeechSynthesisUtterance(s[ci]);
+    u.lang = 'zh-HK'; u.voice = voice; u.rate = speed;
+    u.onend = function() { ci++; setTimeout(nxt, 400); };
+    u.onerror = function() { spk = false; if(btn) btn.classList.remove('playing'); };
+    synth.speak(u);
+  })();
+}
+function switchPage(name, btn) {
+  stopSpeak();
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
+  document.getElementById('page-'+name).classList.add('active');
+  document.querySelectorAll('.utabs button').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');
+}
+window.addEventListener('DOMContentLoaded', function() {
+  buildAll();
+  if(synth) synth.getVoices();
+});
+</script>
+</body>
+</html>
