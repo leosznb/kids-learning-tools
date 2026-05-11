@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>荃官S3 Bio · 終極兵器庫 · 作戰總覽 v3.0</title>
+<style>
+:root {
+  --leaf:#2D6A4F; --leaf-light:#40916C; --leaf-pale:#D8F3DC; --bark:#5C4033;
+  --sky:#F4F9F4; --sun:#F0A500; --danger:#C1292E; --water:#457B9D;
+  --paper:#FFFDF7; --text:#1B2A1B; --text-light:#555; --border:#B7B7A4;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  font-family:-apple-system,"SF Pro Display","Segoe UI",Roboto,"Noto Sans TC","Microsoft JhengHei",sans-serif;
+  background:var(--sky);color:var(--text);line-height:1.7;padding:0 0 60px;
+}
+.header{
+  background:linear-gradient(160deg,#1B4332 0%,#2D6A4F 40%,#40916C 100%);
+  color:#fff;padding:30px 20px 26px;text-align:center;position:relative;overflow:hidden;
+}
+.header h1{font-size:1.9em;font-weight:800;position:relative;z-index:1;}
+.header .sub{font-size:0.95em;opacity:0.88;margin-top:4px;position:relative;z-index:1;}
+.badge-row{margin-top:12px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;position:relative;z-index:1;}
+.badge{
+  display:inline-block;padding:5px 13px;border-radius:18px;font-size:0.8em;font-weight:700;
+}
+.badge-red{background:var(--danger);color:#fff;}
+.badge-amber{background:var(--sun);color:#1B2A1B;}
+.badge-outline{background:rgba(255,255,255,0.2);color:#fff;border:1px solid rgba(255,255,255,0.4);}
+.badge-green{background:var(--leaf-light);color:#fff;}
+
+.container{max-width:1050px;margin:0 auto;padding:0 16px;}
+.sec-title{
+  font-size:1.25em;font-weight:800;color:var(--leaf);
+  padding:26px 0 10px;display:flex;align-items:center;gap:8px;
+  border-bottom:2px solid var(--leaf-pale);margin-bottom:16px;
+}
+
+/* Summary grid */
+.summary-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:20px 0 24px;
+}
+.sum-card{
+  background:var(--paper);border-radius:12px;padding:16px;text-align:center;
+  box-shadow:0 2px 10px rgba(0,0,0,0.05);border:1px solid var(--border);
+}
+.sum-card .num{font-size:2.2em;font-weight:900;color:var(--leaf);}
+.sum-card .lbl{font-size:0.82em;color:var(--text-light);margin-top:2px;}
+.sum-card.red{border-top:3px solid var(--danger);}
+.sum-card.red .num{color:var(--danger);}
+
+/* Topic table */
+.tbl-wrap{overflow-x:auto;margin-bottom:24px;}
+.tbl{
+  width:100%;border-collapse:collapse;font-size:0.88em;background:var(--paper);
+  border-radius:10px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,0.05);
+}
+.tbl thead th{
+  background:var(--leaf);color:#fff;padding:10px;text-align:left;font-weight:700;font-size:0.85em;
+}
+.tbl tbody td{padding:9px 10px;border-bottom:1px solid #ecece0;vertical-align:top;}
+.tbl tbody tr:hover{background:#f5faf5;}
+.prob-dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:3px;}
+.dot-100{background:var(--danger);}
+.dot-83{background:#e0552c;}
+.dot-67{background:var(--sun);}
+.dot-50{background:var(--leaf-light);}
+.dot-33{background:var(--water);}
+.dot-17{background:#90a4ae;}
+.tag{
+  display:inline-block;padding:2px 8px;border-radius:10px;font-size:0.75em;font-weight:700;
+}
+.tag-crit{background:#fce4e4;color:var(--danger);}
+.tag-high{background:#fff3d6;color:#8B6914;}
+.tag-med{background:#d8f3dc;color:var(--leaf);}
+.tag-low{background:#e8f4f8;color:var(--water);}
+
+/* Detail cards */
+.card{
+  background:var(--paper);border-radius:12px;padding:20px 22px;margin-bottom:16px;
+  box-shadow:0 2px 10px rgba(0,0,0,0.05);border:1px solid var(--border);border-left:4px solid var(--leaf);
+}
+.card.crit{border-left-color:var(--danger);}
+.card.high{border-left-color:var(--sun);}
+.card.med{border-left-color:var(--leaf-light);}
+.card h3{font-size:1.05em;font-weight:800;margin-bottom:6px;display:flex;align-items:center;gap:8px;}
+.card .meta{font-size:0.82em;color:var(--text-light);margin-bottom:10px;display:flex;gap:16px;flex-wrap:wrap;}
+.card .points{
+  background:#fafbf6;padding:12px 14px;border-radius:8px;font-size:0.88em;line-height:1.9;
+}
+.card .notes{
+  margin-top:8px;padding:10px 14px;border-radius:8px;font-size:0.85em;
+  background:#fffdf4;border-left:3px solid var(--sun);
+}
+.card .wpn{font-size:0.82em;color:var(--text-light);margin-top:6px;}
+.wpn-tag{
+  display:inline-block;padding:2px 8px;border-radius:4px;font-size:0.82em;font-weight:600;
+  background:#f0f0e5;color:var(--bark);margin:1px 2px;
+}
+
+/* Sources */
+.src-table{width:100%;border-collapse:collapse;font-size:0.85em;}
+.src-table td{padding:6px 10px;border-bottom:1px solid #e9e9e0;}
+.src-table .hl{background:#eefff0;font-weight:700;}
+
+/* Footer */
+.footer{text-align:center;font-size:0.78em;color:var(--text-light);padding:30px 0 20px;}
+
+@media print{
+  body{background:#fff;padding:0;}
+  .header{background:#fff;color:#000;border-bottom:3px solid #000;}
+  .header h1{color:#000;}
+  .badge{border:2px solid #000;background:#fff!important;color:#000!important;}
+  .card,.tbl-wrap{break-inside:avoid;}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════ HEADER ═══════ -->
+<div class="header">
+  <h1>🧬 荃官 S3 Biology · 終極兵器庫</h1>
+  <div class="sub">2nd Term Examination 2025–26 · 作戰總覽 v3.0</div>
+  <div class="badge-row">
+    <span class="badge badge-red">📅 6月4日（四）早上 · 第一科</span>
+    <span class="badge badge-amber">⏳ 距離考試僅 22 天</span>
+  </div>
+  <div class="badge-row" style="margin-top:6px;">
+    <span class="badge badge-outline">📖 Textbook P.1–101</span>
+    <span class="badge badge-outline">📓 Workbook P.1–42</span>
+    <span class="badge badge-outline">📝 Supp Notes P.2–23</span>
+    <span class="badge badge-outline">📋 All WS (1st + 2nd Term)</span>
+  </div>
+  <div class="badge-row" style="margin-top:4px;">
+    <span class="badge badge-green">✏️ Pencil</span>
+    <span class="badge badge-green">📏 Ruler</span>
+    <span class="badge badge-green">🔢 Calculator</span>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- ═══════ SUMMARY ═══════ -->
+<div class="summary-grid">
+  <div class="sum-card"><div class="num">18</div><div class="lbl">知識點總數</div></div>
+  <div class="sum-card red"><div class="num">3</div><div class="lbl">🔴 必出（100%·6/6卷）</div></div>
+  <div class="sum-card"><div class="num">4</div><div class="lbl">🟡 高頻（67–83%）</div></div>
+  <div class="sum-card"><div class="num">8</div><div class="lbl">📄 歷年試卷分析</div></div>
+  <div class="sum-card"><div class="num">18</div><div class="lbl">📚 知識庫文件總數</div></div>
+</div>
+
+<!-- ═══════ MASTER FREQUENCY TABLE ═══════ -->
+<h2 class="sec-title"><span>📊</span>考點頻率總表（出題概率從高到低）</h2>
+<p style="font-size:0.88em;color:var(--text-light);margin-bottom:12px;">
+  基於荃官 6 份歷年 Bio 試卷（2223 1st、2223 2nd、2324 2nd、2425 1st、2425 2nd、2526 2nd UT）
+  逐題提取考點計算頻率。🆕 標記來自 Supplementary Notes / 老師課件的新增知識點。
+</p>
+
+<div class="tbl-wrap">
+<table class="tbl">
+<thead>
+<tr><th>#</th><th>知識點</th><th>出題頻率</th><th>歷年題型</th><th>難度</th><th>指定武器</th></tr>
+</thead>
+<tbody>
+
+<tr>
+  <td>1</td>
+  <td><strong>Nutrition & Food Substances</strong><br><small>6類營養素、Food Tests、BMI、Food Pyramid、均衡飲食、能量值</small></td>
+  <td><span class="prob-dot dot-100"></span><span class="tag tag-crit">100% · 6/6</span></td>
+  <td>MCQ：食物測試辨識、BMI計算<br>Structure：營養標籤分析、案例診斷</td>
+  <td>★★☆</td>
+  <td><span class="wpn-tag">#1 閃卡</span><span class="wpn-tag">#2 食物測試實驗室</span><span class="wpn-tag">#5 概念對決</span></td>
+</tr>
+
+<tr>
+  <td>2</td>
+  <td><strong>Human Digestive System</strong><br><small>消化系統結構、化學/物理消化、各部位消化液/酶/產物、吸收(Villi)、Blood vs Lymph transport、Bile</small></td>
+  <td><span class="prob-dot dot-100"></span><span class="tag tag-crit">100% · 6/6</span></td>
+  <td>MCQ：消化液配對、吸收路徑<br>Structure：流程圖、Villi結構功能、實驗</td>
+  <td>★★★★</td>
+  <td><span class="wpn-tag">#1 閃卡</span><span class="wpn-tag">#3 消化征途</span><span class="wpn-tag">#5 概念對決</span></td>
+</tr>
+
+<tr>
+  <td>3</td>
+  <td><strong>Enzymes</strong><br><small>酶特性、Lock-and-key、溫度/pH影響、Denaturation、實驗變量、🆕Inhibitors、🆕Graph Plotting</small></td>
+  <td><span class="prob-dot dot-100"></span><span class="tag tag-crit">100% · 6/6</span></td>
+  <td>MCQ：最適條件、變性原因<br>Structure：圖表分析、實驗設計(IV/DV/CV)、應用題</td>
+  <td>★★★★</td>
+  <td><span class="wpn-tag">#1 閃卡</span><span class="wpn-tag">#4 酶活性指揮中心</span><span class="wpn-tag">#5 概念對決</span></td>
+</tr>
+
+<tr>
+  <td>4</td>
+  <td><strong>Deficiency Diseases</strong><br><small>Scurvy / Rickets / Goitre / Anaemia / Night blindness / Kwashiorkor</small></td>
+  <td><span class="prob-dot dot-83"></span><span class="tag tag-high">83% · 5/6</span></td>
+  <td>MCQ：缺什麼→什麼病→什麼食物<br>Structure：案例診斷、飲食方案建議</td>
+  <td>★★☆</td>
+  <td><span class="wpn-tag">#1 閃卡</span><span class="wpn-tag">#6 缺乏症速配</span></td>
+</tr>
+
+<tr>
+  <td>5</td>
+  <td><strong>Teeth & Dietary Fibre</strong><br><small>牙齒結構(Enamel/Dentine/Pulp)、蛀牙機制4階段、膳食纖維兩大功能</small></td>
+  <td><span class="prob-dot dot-67"></span><span class="tag tag-high">67% · 4/6</span></td>
+  <td>MCQ：結構辨識、蛀牙成因<br>Structure：蛀牙機制流程、預防措施</td>
+  <td>★★☆</td>
+  <td><span class="wpn-tag">#1 閃卡</span><span class="wpn-tag">#3 消化征途</span></td>
+</tr>
+
+<tr>
+  <td>6</td>
+  <td><strong>Body Defence & Immunity</strong><br><small>防禦線、抗原/抗體、Primary/Secondary response、Active/Passive、Vaccination、Memory cells</small></td>
+  <td><span class="prob-dot dot-67"></span><span class="tag tag-high">67% · 4/6</span></td>
+  <td>MCQ：Active/Passive判斷、抗體曲線<br>Structure：時間線繪製、疫苗原理解釋</td>
+  <td>★★★★★</td>
+  <td><span class="wpn-tag">#1 閃卡</span><span class="wpn-tag">#8 免疫防線時間軸</span><span class="wpn-tag">#5 概念對決</span></td>
+</tr>
+
+<tr>
+  <td>7</td>
+  <td><strong>DNA & Biotechnology</strong><br><small>DNA結構(Nucleotide)、Base pairing、Gel Electrophoresis、DNA Fingerprinting、Genetic Engineering、🆕DNA vs RNA</small></td>
+  <td><span class="prob-dot dot-67"></span><span class="tag tag-high">67% · 4/6</span></td>
+  <td>MCQ：DNA結構、鹼基配對<br>Structure：電泳分析、親子鑑定、胰島素生產</td>
+  <td>★★★★</td>
+  <td><span class="wpn-tag">#1 閃卡</span><span class="wpn-tag">#7 DNA探案現場</span><span class="wpn-tag">#5 概念對決</span></td>
+</tr>
+
+<tr>
+  <td>8</td>
+  <td><strong>Cancer</strong><br><small>Carcinogens、Colorectal/Lung/Skin/Liver cancer風險因素配對、預防</small></td>
+  <td><span class="prob-dot dot-50"></span><span class="tag tag-med">50% · 3/6</span></td>
+  <td>MCQ：致癌物配對<br>Structure：案例風險分析</td>
+  <td>★★☆</td>
+  <td><span class="wpn-tag">#1 閃卡</span><span class="wpn-tag">#9 慢性病診斷室</span></td>
+</tr>
+
+<tr>
+  <td>9</td>
+  <td><strong>Diabetes & Blood Glucose</strong><br><small>Insulin/Glucagon、血糖曲線分析、Type 1 vs Type 2、Insulin不可口服</small></td>
+  <td><span class="prob-dot dot-33"></span><span class="tag tag-med">33% · 2/6</span></td>
+  <td>MCQ：Insulin功能<br>Structure：血糖曲線判斷糖尿病</td>
+  <td>★★★</td>
+  <td><span class="wpn-tag">#1 閃卡</span><span class="wpn-tag">#9 慢性病診斷室</span></td>
+</tr>
+
+<tr>
+  <td>10</td>
+  <td><strong>Health & Diseases</strong><br><small>Infectious vs Non-infectious、Pathogens(bacteria/virus/fungi/protozoa)、Vector-borne(Malaria/Dengue)</small></td>
+  <td><span class="prob-dot dot-33"></span><span class="tag tag-med">33% · 2/6</span></td>
+  <td>MCQ：疾病分類、傳播媒介<br>Structure：Malaria/Dengue對比</td>
+  <td>★★☆</td>
+  <td><span class="wpn-tag">#1 閃卡</span><span class="wpn-tag">#5 概念對決</span></td>
+</tr>
+
+<tr>
+  <td>11</td>
+  <td><strong>CVD / Coronary Artery Disease</strong><br><small>Cholesterol→Plaque→動脈狹窄→心臟病發、風險因素</small></td>
+  <td><span class="prob-dot dot-33"></span><span class="tag tag-med">33% · 2/6</span></td>
+  <td>MCQ：風險因素辨識<br>Structure：動脈堵塞機制解釋</td>
+  <td>★★★</td>
+  <td><span class="wpn-tag">#1 閃卡</span><span class="wpn-tag">#9 慢性病診斷室</span></td>
+</tr>
+
+<tr>
+  <td>12</td>
+  <td><strong>Metabolism & Water Balance</strong><br><small>Catabolism/Anabolism、水分攝入/流失途徑、體溫調節</small></td>
+  <td><span class="prob-dot dot-33"></span><span class="tag tag-med">33% · 2/6</span></td>
+  <td>MCQ：分解/合成代謝判斷<br>Structure：水分流失計算</td>
+  <td>★★☆</td>
+  <td><span class="wpn-tag">#1 閃卡</span><span class="wpn-tag">#9 慢性病診斷室</span></td>
+</tr>
+
+<tr>
+  <td>13</td>
+  <td><strong>Food Labels & GI</strong><br><small>營養標籤解讀、GI值高低</small></td>
+  <td><span class="prob-dot dot-17"></span><span class="tag tag-low">17% · 1/6</span></td>
+  <td>MCQ：標籤數據推算<br>Structure：飲食方案評估</td>
+  <td>★★☆</td>
+  <td><span class="wpn-tag">#1 閃卡</span><span class="wpn-tag">#2 食物測試實驗室</span></td>
+</tr>
+
+<tr>
+  <td>14</td>
+  <td><strong>Food Preservation</strong><br><small>食物保存方法與原理</small></td>
+  <td><span class="prob-dot dot-17"></span><span class="tag tag-low">17% · 1/6</span></td>
+  <td>MCQ：保存方法配對</td>
+  <td>★☆☆</td>
+  <td><span class="wpn-tag">#1 閃卡</span></td>
+</tr>
+
+<tr style="background:#f0fff0;">
+  <td>🆕 15</td>
+  <td><strong>🆕 Carbs/Lipids/Proteins 詳細分類</strong><br><small>Mono/Di/Poly-saccharides、Triglyceride/Phospholipid/Steroid、Amino acid→Dipeptide→Polypeptide</small></td>
+  <td><span class="tag tag-crit">🆕 Supp Notes</span></td>
+  <td>預測：MCQ分類判斷、Structure結構辨識</td>
+  <td>★★★</td>
+  <td><span class="wpn-tag">#1 閃卡</span><span class="wpn-tag">#5 概念對決</span></td>
+</tr>
+
+<tr style="background:#f0fff0;">
+  <td>🆕 16</td>
+  <td><strong>🆕 DNA vs RNA</strong><br><small>Sugar(Deoxyribose vs Ribose)、Bases(T vs U)、Shape(Double vs Single)、Function</small></td>
+  <td><span class="tag tag-high">🆕 Supp Notes + Rev PPT</span></td>
+  <td>預測：MCQ對比題、Structure填表</td>
+  <td>★★☆</td>
+  <td><span class="wpn-tag">#1 閃卡</span><span class="wpn-tag">#7 DNA探案現場</span></td>
+</tr>
+
+<tr style="background:#f0fff0;">
+  <td>🆕 17</td>
+  <td><strong>🆕 7 Characteristics of Life</strong><br><small>Nutrition/Respiration/Excretion/Irritability/Movement/Growth/Reproduction</small></td>
+  <td><span class="tag tag-med">🆕 Supp Notes + P1-10</span></td>
+  <td>預測：MCQ分類（哪項不屬生命特徵？）</td>
+  <td>★☆☆</td>
+  <td><span class="wpn-tag">#1 閃卡</span></td>
+</tr>
+
+<tr style="background:#f0fff0;">
+  <td>🆕 18</td>
+  <td><strong>🆕 Enzyme Inhibitors</strong><br><small>Competitive vs Non-competitive、Vmax變化、曲線判讀</small></td>
+  <td><span class="tag tag-crit">🆕 12.2a PPT</span></td>
+  <td>預測：Structure圖表對比分析</td>
+  <td>★★★★</td>
+  <td><span class="wpn-tag">#1 閃卡</span><span class="wpn-tag">#4 酶活性指揮中心</span></td>
+</tr>
+
+</tbody>
+</table>
+</div>
+
+<!-- ═══════ PRIORITY 1: CRITICAL (100%) ═══════ -->
+<h2 class="sec-title"><span>🔴</span>第一梯隊：必出考點（100%）</h2>
+
+<div class="card crit">
+  <h3>#1 Nutrition & Food Substances</h3>
+  <div class="meta"><span>📖 Textbook P.1–52</span><span>📓 Workbook P.1–18</span><span>📝 Supp Notes P.2–9</span><span>⏱ 估佔分 ~25%</span></div>
+  <div class="points">
+    <strong>考核要點：</strong><br>
+    · 6類食物物質功能默寫（Carbs/Proteins/Lipids/Vitamins/Minerals/Fibre/Water）<br>
+    · <strong>6大Food Tests</strong>——Benedict's(還原糖→橙紅,需水浴加熱)、Iodine(澱粉→藍黑)、DCPIP(維C→脫色)、Grease spot(脂質→半透明漬不消失)、Protein test paper(蛋白質→紫)、Glucose test paper(僅葡萄糖→綠)<br>
+    · Reducing vs Non-reducing sugar區分（Benedict's測不到蔗糖）<br>
+    · 🆕 Carbs分類：Monosaccharide(Glucose/Fructose/Galactose)、Disaccharide(Maltose/Sucrose/Lactose)、Polysaccharide(Starch/Glycogen/Cellulose)<br>
+    · 🆕 Lipids分類：Triglyceride(1甘油+3脂肪酸)、Phospholipid(細胞膜)、Steroid(膽固醇/性激素)<br>
+    · 🆕 Protein結構：Amino acid → Dipeptide → Polypeptide → Protein<br>
+    · BMI計算 + Food Pyramid + 均衡飲食 + 能量值(Lipid最高~38kJ/g > Protein≈Carbs~17 > Water=0)
+  </div>
+  <div class="notes">
+    <strong>⚠️ 最常錯：</strong>Benedict's不加熱=無效測試；DCPIP脫色是還原反應；Glucose test paper只測glucose不測其他還原糖；Sucrose是Non-reducing
+  </div>
+  <div class="wpn">🛠️ <span class="wpn-tag">#1 閃卡</span><span class="wpn-tag">#2 食物測試實驗室</span><span class="wpn-tag">#5 概念對決</span></div>
+</div>
+
+<div class="card crit">
+  <h3>#2 Human Digestive System</h3>
+  <div class="meta"><span>📖 Textbook P.53–58</span><span>📓 Workbook P.19–23</span><span>📝 Supp Notes P.10–12</span><span>⏱ 估佔分 ~25%</span></div>
+  <div class="points">
+    <strong>考核要點：</strong><br>
+    · 消化系統完整路徑：Oral cavity → Oesophagus(蠕動) → Stomach(胃液HCl+胃蛋白酶) → Duodenum(胰液+膽汁) → Ileum(腸液+Villi吸收) → Colon(吸水) → Rectum(儲存排遺)<br>
+    · <strong>各部位消化液/酶/底物/產物</strong>——必考填空配對<br>
+    · <strong>Bile</strong>：肝產、膽囊儲、無酶、乳化脂肪=物理消化——每年必考3分題<br>
+    · Villi 4大適應特徵：大表面積/薄壁(1 cell thick)/豐富微血管/Lacteal<br>
+    · 🆕 Blood vs Lymph transport：Blood→Glucose/Amino acids/Minerals/Vit C；Lymph(Lacteal)→Fatty acids/Glycerol/Fat-soluble vitamins(A,D,E,K)<br>
+    · 🆕 Human Nutrition 5步驟：Ingestion→Digestion→Absorption→Assimilation→Egestion<br>
+    · Dietary Fibre兩大功能(吸水增體積防便秘+吸毒素降腸癌風險) ⚠️不被消化
+  </div>
+  <div class="notes">
+    <strong>⚠️ 最常錯：</strong>Pancreatic juice ≠ Bile；Bile是物理消化不是化學；Fibre不被消化；Blood vs Lymph吸收路徑搞反；Assimilation常被遺漏
+  </div>
+  <div class="wpn">🛠️ <span class="wpn-tag">#1 閃卡</span><span class="wpn-tag">#3 消化征途</span><span class="wpn-tag">#5 概念對決</span></div>
+</div>
+
+<div class="card crit">
+  <h3>#3 Enzymes</h3>
+  <div class="meta"><span>📖 Textbook P.42–68（貫穿）</span><span>📝 Supp Notes P.5–7</span><span>📎 12.2a PPT</span><span>⏱ 估佔分 ~20%</span></div>
+  <div class="points">
+    <strong>考核要點：</strong><br>
+    · <strong>酶五大特性</strong>：Biological catalyst / Specific(lock-and-key) / Reusable / Protein / Lower activation energy<br>
+    · Lock-and-key hypothesis：Active site + Substrate → ES complex → Product（酶不變可重用）<br>
+    · <strong>溫度曲線</strong>：最適溫度(~37°C)→高溫Denaturation(不可逆)→低溫暫時抑制(可逆)<br>
+    · <strong>pH影響</strong>：唾液澱粉酶~pH7 / 胃蛋白酶~pH2 / 脂肪酶~pH8<br>
+    · Denaturation = active site形狀永久改變，substrate無法結合<br>
+    · <strong>🆕 Competitive Inhibitor</strong>：類似substrate形狀→競爭active site→可逆(Vmax不變)<br>
+    · <strong>🆕 Non-competitive Inhibitor</strong>：結合allosteric site→改變酶形狀→常不可逆(Vmax降低)<br>
+    · <strong>實驗設計變量</strong>：IV(改變的因素) / DV(測量的結果) / CV(保持不變)→必考填空<br>
+    · <strong>🆕 Graph Plotting</strong>：尺子畫軸、標註軸名+單位、合適比例、×標點、best-fit line
+  </div>
+  <div class="notes">
+    <strong>⚠️ 最常錯：</strong>Denaturation不可逆vs低溫可逆；IV/DV/CV分不清；Competitive vs Non-competitive曲線搞反；作圖不標單位
+  </div>
+  <div class="wpn">🛠️ <span class="wpn-tag">#1 閃卡</span><span class="wpn-tag">#4 酶活性指揮中心</span><span class="wpn-tag">#5 概念對決</span></div>
+</div>
+
+<!-- ═══════ PRIORITY 2: HIGH (67-83%) ═══════ -->
+<h2 class="sec-title"><span>🟡</span>第二梯隊：高頻考點（67–83%）</h2>
+
+<div class="card high">
+  <h3>#4 Deficiency Diseases · #5 Teeth & Fibre · #6 Body Defence & Immunity · #7 DNA & Biotech</h3>
+  <div class="meta"><span>📖 Textbook P.48–68</span><span>📝 Supp Notes P.6–21</span><span>📎 Revision PPT x2</span><span>⏱ 合計估佔分 ~40%</span></div>
+  <div class="points">
+    <strong>#4 Deficiency Diseases（83%）：</strong>5大缺乏症完整串聯（缺VitC→Scurvy牙齦出血、缺VitD→Rickets軟骨O型腿、缺Iodine→Goitre甲狀腺腫、缺Iron→Anaemia貧血疲倦、缺VitA→Night blindness夜盲）+ Kwashiorkor蛋白質缺乏<br>
+    <strong>#5 Teeth & Fibre（67%）：</strong>牙齒結構(Enamel最硬無活細胞/Dentine/Pulp cavity含神經血管)、蛀牙4階段(細菌+糖→酸→溶Enamel→達Dentine→牙痛)、Fluoride強化琺瑯質、Fibre兩大功能<br>
+    <strong>#6 Body Defence & Immunity（67%）：</strong>Antigen→Antibody→Memory cell完整鏈、Primary(慢/低峰值/長lag) vs Secondary(快/高峰值/短lag)、Active(自產抗體+記憶) vs Passive(外來抗體)、Vaccination原理(弱化病原體→初次應答→記憶細胞→真感染時快速二次應答)、香港兒童疫苗時間表<br>
+    <strong>#7 DNA & Biotech（67%）：</strong>Nucleotide=Phosphate+Deoxyribose+Base、A=T/C≡G配對、🆕DNA vs RNA(Sugar/Bases/Shape/Function)、Gel Electrophoresis(小片段走更遠)、DNA Fingerprinting(犯罪/親子鑑定)、Genetic Engineering胰島素5步驟(取基因→插質粒→轉細菌→生產→純化)
+  </div>
+  <div class="notes">
+    <strong>⚠️ 最常錯：</strong>Goitre缺Iodine不是缺Calcium；Primary/Secondary response特徵搞反；Active=自己產抗體≠只有疫苗；電泳小片段在下(離well遠)；DNA有T、RNA有U
+  </div>
+  <div class="wpn">🛠️ <span class="wpn-tag">#1 閃卡</span><span class="wpn-tag">#3 消化征途</span><span class="wpn-tag">#5 概念對決</span><span class="wpn-tag">#6 缺乏症速配</span><span class="wpn-tag">#7 DNA探案現場</span><span class="wpn-tag">#8 免疫防線時間軸</span></div>
+</div>
+
+<!-- ═══════ PRIORITY 3: MEDIUM (33-50%) ═══════ -->
+<h2 class="sec-title"><span>🟢</span>第三梯隊：中頻考點（33–50%）+ 🆕新增</h2>
+
+<div class="card med">
+  <h3>#8–14 Cancer / Diabetes / Health&Diseases / CVD / Metabolism&Water / Food Labels / Food Preservation + 🆕 #15–18</h3>
+  <div class="meta"><span>📖 Textbook P.1–101</span><span>📝 Supp Notes P.2–23</span><span>⏱ 合計估佔分 ~20%</span></div>
+  <div class="points">
+    · <strong>Cancer（50%）</strong>：Carcinogens→Colorectal(紅肉/加工肉)/Lung(吸煙/Tar)/Skin(UV)/Liver(酒精)<br>
+    · <strong>Diabetes（33%）</strong>：Insulin降血糖(促細胞吸收+肝糖合成)→Type1(insulin不足) vs Type2(insulin resistance)；血糖曲線分析(空腹高血糖+回落慢=糖尿病)；Insulin不可口服(蛋白質,被消化)<br>
+    · <strong>Health & Diseases（33%）</strong>：Infectious(pathogens→bacteria/virus/fungi/protozoa) vs Non-infectious；Vector-borne：Malaria(瘧原蟲+雌性按蚊) vs Dengue(病毒+白紋伊蚊)<br>
+    · <strong>CVD（33%）</strong>：Cholesterol→Plaque→Coronary artery狹窄→心臟供血不足→Heart attack；風險因素(smoking/high-fat diet/lack of exercise/obesity/hypertension)<br>
+    · <strong>Metabolism（33%）</strong>：Catabolism(分解→釋能,例Respiration) vs Anabolism(合成→吸能,例Protein synthesis)；Water Balance(攝入=飲水+食物+代謝水；流失=尿+糞+汗+呼吸)；高溫→出汗增加→體溫調節<br>
+    · <strong>Food Labels & GI（17%）</strong>：營養標籤解讀；GI值(高GI→快速升糖,低GI→緩慢穩定)<br>
+    · <strong>Food Preservation（17%）</strong>：冷凍/脫水/真空包裝等方法原理<br>
+    · 🆕 <strong>7 Characteristics of Life</strong>：Nutrition/Respiration/Excretion/Irritability/Movement/Growth/Reproduction；Excretion(代謝廢物)≠Egestion(未消化食物)<br>
+    · 🆕 <strong>Enzyme Inhibitors</strong>（詳見#3 Enzymes）<br>
+    · 🆕 <strong>DNA vs RNA</strong>（詳見#7 DNA）<br>
+    · 🆕 <strong>Carbs/Lipids/Proteins分類</strong>（詳見#1 Nutrition）
+  </div>
+  <div class="notes"><strong>⚠️ 策略：</strong>這些考點是「拉開差距」的關鍵——不一定考，但考了就決定A/B等級。不放棄。</div>
+  <div class="wpn">🛠️ <span class="wpn-tag">#1 閃卡</span><span class="wpn-tag">#5 概念對決</span><span class="wpn-tag">#7 DNA探案現場</span><span class="wpn-tag">#9 慢性病診斷室</span></div>
+</div>
+
+<!-- ═══════ ANSWERING TECHNIQUES ═══════ -->
+<h2 class="sec-title"><span>🎯</span>Biology 答題技巧全攻略（海納·有容專區）</h2>
+<p style="font-size:0.9em;color:var(--text-light);margin-bottom:14px;">以下技巧基於荃官歷年Bio試卷扣分點分析。海納和有容常「答不到點子上」被扣分——不是不懂，是沒有用<strong>考試要的語言和結構</strong>來答。這部分就是你們的得分轉化器。</p>
+
+<!-- ═══ 1. GOLDEN RULE ═══ -->
+<div class="card crit">
+  <h3>⚡ 黃金法則：Biology Structure 題答題三步曲</h3>
+  <p style="font-size:0.9em;line-height:1.8;">荃官Structure題的評分邏輯是 <strong>「寫對關鍵詞 → 給分；缺少關鍵詞 → 零分」</strong>。以下三步曲適配所有≥3分的簡答/論述題：</p>
+  <table class="tbl" style="margin-top:10px;">
+  <thead><tr><th style="width:14%;">步驟</th><th style="width:30%;">做什麼</th><th>Bio實例</th></tr></thead>
+  <tbody>
+  <tr><td><strong>Step 1<br>指出原理/定義</strong><br><small style="color:var(--danger);">(1–2分)</small></td><td>用<strong>完整英文句</strong>寫出涉及的biological concept或definition</td><td>"Denaturation is the <strong>permanent change</strong> in the <strong>shape of the active site</strong> of an enzyme, causing the <strong>substrate</strong> to be unable to bind."</td></tr>
+  <tr><td><strong>Step 2<br>解釋因果/機制</strong><br><small style="color:var(--sun);">(1–2分)</small></td><td>用 <strong>"This is because..."</strong> 或 <strong>"As a result..."</strong> 連接因果</td><td>"<strong>This is because</strong> high temperature breaks the <strong>bonds</strong> that maintain the specific 3D shape. <strong>As a result</strong>, the enzyme can no longer catalyse the reaction."</td></tr>
+  <tr><td><strong>Step 3<br>聯繫情境/總結</strong><br><small style="color:var(--water);">(1分)</small></td><td>回到題目給的具體情境，說出對 <strong>data / graph / case</strong> 的判斷</td><td>"In this experiment, the rate of reaction <strong>decreased significantly</strong> after 40°C, indicating that salivary amylase was <strong>denatured</strong>."</td></tr>
+  </tbody>
+  </table>
+</div>
+
+<!-- ═══ 2. QUESTION-TYPE GUIDE ═══ -->
+<div class="card high">
+  <h3>📐 分題型答題框架</h3>
+
+  <h4 style="color:var(--leaf);margin-top:10px;">🅰️ 數據/圖表分析題（Data/Graph Interpretation）· 佔分 3–5</h4>
+  <p style="font-size:0.88em;"><strong style="color:var(--danger);">最常見扣分：</strong>只描述數字變化但沒有比較、沒有單位、沒有引用具體數據。</p>
+  <div style="background:#f9faf6;padding:10px 14px;border-radius:8px;margin:6px 0;font-size:0.85em;">
+    <strong>正確答法四要素：</strong><br>
+    ① <strong>趨勢詞</strong>：increase / decrease / remain constant / reach a peak / drop sharply<br>
+    ② <strong>比較詞</strong>：higher than / lower than / twice as much as / compared to<br>
+    ③ <strong>數字+單位</strong>：from 25°C to 40°C / increased by 50% / at pH 7<br>
+    ④ <strong>生物學解釋</strong>：This shows that... / This is because...
+  </div>
+  <p style="font-size:0.85em;"><strong>示例——血糖曲線題（3分）：</strong></p>
+  <p style="background:#eefff0;padding:8px 14px;border-radius:6px;font-size:0.82em;">
+  ❌ <span style="color:var(--danger);">錯：</span>The blood glucose level went up and then down. Person B's level is higher.<br>
+  ✅ <span style="color:var(--leaf);">對：</span>After the meal, the blood glucose level of Person A <strong>increased from 5 mmol/L to a peak of 9 mmol/L at 30 minutes</strong>, then <strong>returned to normal by 120 minutes</strong>. Person B's blood glucose level <strong>remained above 11 mmol/L even after 120 minutes</strong>, which is <strong>significantly higher than Person A</strong>. This suggests that <strong>Person B may have diabetes</strong> because his body cannot regulate blood glucose effectively.
+  </p>
+
+  <h4 style="color:var(--leaf);margin-top:16px;">🅱️ 實驗設計題（Experimental Design）· 佔分 4–6</h4>
+  <p style="font-size:0.88em;"><strong style="color:var(--danger);">最常見扣分：</strong>IV / DV / CV分不清；控制變量寫不完整；沒有寫control set-up。</p>
+  <div style="background:#f9faf6;padding:10px 14px;border-radius:8px;margin:6px 0;font-size:0.85em;">
+    <strong>必答清單：</strong><br>
+    · <strong>Independent Variable (IV)</strong>：The factor that is <strong>changed</strong> by the experimenter<br>
+    · <strong>Dependent Variable (DV)</strong>：The factor that is <strong>measured</strong> as the result<br>
+    · <strong>Controlled Variables (CV)</strong>：Factors kept <strong>constant</strong> to ensure a fair test<br>
+    · <strong>Control set-up</strong>：A set-up without the IV, used for comparison
+  </div>
+  <p style="font-size:0.85em;"><strong>示例——唾液澱粉酶實驗（4分）：</strong></p>
+  <p style="background:#eefff0;padding:8px 14px;border-radius:6px;font-size:0.82em;">
+  ✅ IV: <strong>Temperature</strong> of the water bath (e.g. 10°C, 20°C, 30°C, 40°C, 50°C)<br>
+  ✅ DV: <strong>Time taken</strong> for the iodine test to show no blue-black colour (or the <strong>rate</strong> of starch digestion)<br>
+  ✅ CV: Volume of starch solution, volume of salivary amylase, <strong>pH</strong>, type of starch used<br>
+  ✅ Control: A tube containing <strong>boiled salivary amylase</strong> (denatured enzyme) under the same conditions
+  </p>
+
+  <h4 style="color:var(--leaf);margin-top:16px;">🅲️ 流程/機制描述題（Process Description）· 佔分 4–6</h4>
+  <p style="font-size:0.88em;"><strong style="color:var(--danger);">最常見扣分：</strong>步驟漏掉中間環節、缺少連接詞、沒有按順序。</p>
+  <div style="background:#f9faf6;padding:10px 14px;border-radius:8px;margin:6px 0;font-size:0.85em;">
+    <strong>三步驗證法——寫完後自問：</strong><br>
+    ① 起因寫了嗎？（What triggers the process?）<br>
+    ② 每個中間步驟都寫了嗎？（Are all intermediate steps included?）<br>
+    ③ 結果寫了嗎？（What is the final outcome?）
+  </div>
+  <p style="font-size:0.85em;"><strong>示例——蛀牙機制（4分）：</strong></p>
+  <p style="background:#eefff0;padding:8px 14px;border-radius:6px;font-size:0.82em;">
+  ✅ ① <strong>Bacteria</strong> in the mouth feed on <strong>sugar</strong> remaining on teeth. → ② The bacteria produce <strong>acid</strong> as a waste product. → ③ The acid <strong>dissolves the enamel</strong>, the hardest outer layer of the tooth. → ④ Once the enamel is broken, the acid reaches the <strong>dentine</strong>, causing a <strong>cavity</strong>. → ⑤ When the cavity reaches the <strong>pulp cavity</strong>, it irritates the nerve, causing <strong>toothache</strong>.
+  </p>
+
+  <h4 style="color:var(--leaf);margin-top:16px;">🅳️ 比較/對比題（Comparison）· 佔分 3–4</h4>
+  <p style="font-size:0.88em;"><strong style="color:var(--danger);">最常見扣分：</strong>只寫了一方的特徵，沒有同時對比另一方；用詞不對（same/different/both/whereas）。</p>
+  <div style="background:#f9faf6;padding:10px 14px;border-radius:8px;margin:6px 0;font-size:0.85em;">
+    <strong>對比題必用句型：</strong><br>
+    · "X is... <strong>while/whereas</strong> Y is..."<br>
+    · "<strong>Unlike</strong> X, Y..."<br>
+    · "<strong>Both</strong> X and Y are... <strong>but</strong> X differs in that..."<br>
+    · "X has... <strong>compared to</strong> Y, which has..."
+  </div>
+  <p style="font-size:0.85em;"><strong>示例——Primary vs Secondary Immune Response（3分）：</strong></p>
+  <p style="background:#eefff0;padding:8px 14px;border-radius:6px;font-size:0.82em;">
+  ✅ The <strong>secondary</strong> response produces antibodies <strong>much faster</strong> than the primary response. The <strong>lag time</strong> in the secondary response is <strong>shorter</strong>. The <strong>peak antibody concentration</strong> in the secondary response is <strong>significantly higher</strong>. <strong>This is because</strong> <strong>memory cells</strong> are produced during the primary response and remain in the body, ready to produce antibodies rapidly upon re-exposure to the <strong>same antigen</strong>.
+  </p>
+
+  <h4 style="color:var(--leaf);margin-top:16px;">🅴️ 案例診斷題（Case Diagnosis）· 佔分 3–4</h4>
+  <p style="font-size:0.88em;"><strong style="color:var(--danger);">最常見扣分：</strong>診斷對了但沒寫理由；只寫了食物建議但沒解釋為什麼那個食物有效。</p>
+  <div style="background:#f9faf6;padding:10px 14px;border-radius:8px;margin:6px 0;font-size:0.85em;">
+    <strong>診斷題三步：</strong><br>
+    ① <strong>Diagnosis</strong>：Identify the disease/condition from symptoms<br>
+    ② <strong>Cause</strong>：State the deficiency or risk factor<br>
+    ③ <strong>Solution</strong>：Recommend food / action + explain why it works
+  </div>
+</div>
+
+<!-- ═══ 3. TOP 10 PITFALLS ═══ -->
+<div class="card">
+  <h3>🚨 海納·有容最常犯的10個扣分點（來自歷年試卷）</h3>
+  <table class="tbl" style="margin-top:8px;">
+  <thead><tr><th style="width:4%;">#</th><th style="width:26%;">扣分行為</th><th style="width:28%;">修正</th><th>舉例</th></tr></thead>
+  <tbody>
+  <tr><td>1</td><td>只答"What"不答"Why"</td><td>每寫一個claim必須跟<strong>"because / this is because"</strong></td><td style="font-size:0.82em;">❌ "Enzyme activity decreases."<br>✅ "Enzyme activity decreases <strong>because</strong> the enzyme has been <strong>denatured</strong>."</td></tr>
+  <tr><td>2</td><td>關鍵詞拼寫錯誤</td><td>Bio卷關鍵詞≠普通英語——拼錯即零分</td><td style="font-size:0.82em;">❌ "denaturisation" → ✅ "denaturation"<br>❌ "vili" → ✅ "villi"</td></tr>
+  <tr><td>3</td><td>混淆相似概念</td><td>考前專門對比：active/passive、blood/lymph、primary/secondary</td><td style="font-size:0.82em;">Active immunity = <strong>body produces</strong> antibodies<br>Passive immunity = <strong>antibodies injected</strong></td></tr>
+  <tr><td>4</td><td>沒有引用圖表數據</td><td>圖表題必須<strong>quote具體數字+單位</strong></td><td style="font-size:0.82em;">"The temperature <strong>rose from 25°C to 40°C</strong>"（不是"it went up"）</td></tr>
+  <tr><td>5</td><td>實驗題漏寫Control set-up</td><td>任何實驗設計題<strong>必須</strong>描述control</td><td style="font-size:0.82em;">"A control set-up <strong>without the enzyme</strong> (or with boiled enzyme) is needed for comparison."</td></tr>
+  <tr><td>6</td><td>描述對但時序錯</td><td>流程題<strong>嚴格按時間順序</strong>作答</td><td style="font-size:0.82em;">Digestion: mouth→stomach→duodenum→ileum（不能跳步）</td></tr>
+  <tr><td>7</td><td>只用中文思維寫英文</td><td>背熟Biology標準句型（見下方常用句型表）</td><td style="font-size:0.82em;">不是"the food goes into..."<br>而是"food is <strong>digested</strong> / <strong>broken down</strong>"</td></tr>
+  <tr><td>8</td><td>忽略題目給的mark allocation</td><td><strong>幾分就答幾個點</strong>——3分題至少3個獨立要點</td><td style="font-size:0.82em;">(4 marks)→必須4 distinct points</td></tr>
+  <tr><td>9</td><td>空著不寫</td><td><strong>寫關鍵詞碰分</strong>——即使不完全確定，寫相關term也有機會拿1–2分</td><td style="font-size:0.82em;">不確定是不是Denaturation→照寫"the enzyme's active site changed shape"也可能給分</td></tr>
+  <tr><td>10</td><td>沒檢查就交卷</td><td>最後5分鐘：查關鍵詞拼寫+mark allocation對應</td><td style="font-size:0.82em;">重點查：denaturation / villi / Benedict's / salivary amylase / antibody</td></tr>
+  </tbody>
+  </table>
+</div>
+
+<!-- ═══ 4. USEFUL SENTENCE PATTERNS ═══ -->
+<div class="card med">
+  <h3>📝 Biology 答題常用句型（EMI 必備）</h3>
+  <table class="tbl" style="margin-top:8px;">
+  <thead><tr><th style="width:22%;">用途</th><th>句型</th></tr></thead>
+  <tbody>
+  <tr><td>解釋原因</td><td><strong>This is because...</strong> / <strong>The reason is that...</strong> / <strong>This can be explained by the fact that...</strong></td></tr>
+  <tr><td>描述因果</td><td><strong>As a result,</strong> ... / <strong>This leads to...</strong> / <strong>This causes...</strong> / <strong>Consequently,</strong> ...</td></tr>
+  <tr><td>描述趨勢</td><td><strong>As X increases, Y increases/decreases.</strong> / <strong>There is a positive/negative correlation between X and Y.</strong></td></tr>
+  <tr><td>描述對比</td><td><strong>X is... whereas Y is...</strong> / <strong>Unlike X, Y...</strong> / <strong>Compared to X, Y is more/less...</strong></td></tr>
+  <tr><td>引用證據</td><td><strong>According to the graph/table,</strong> ... / <strong>The data shows that...</strong> / <strong>As shown in Figure 1,</strong> ...</td></tr>
+  <tr><td>下結論</td><td><strong>Therefore, it can be concluded that...</strong> / <strong>This indicates that...</strong> / <strong>This suggests that...</strong></td></tr>
+  <tr><td>提出建議</td><td><strong>To prevent this,</strong> ... / <strong>In order to..., it is recommended that...</strong></td></tr>
+  <tr><td>描述功能</td><td><strong>The function of X is to...</strong> / <strong>X is responsible for...</strong> / <strong>X plays a role in...</strong></td></tr>
+  </tbody>
+  </table>
+</div>
+
+<!-- ═══ 5. EXAM STRATEGY ═══ -->
+<div class="card">
+  <h3>⏱ 考試現場策略（6月4日早上）</h3>
+  <table class="tbl" style="margin-top:8px;">
+  <thead><tr><th style="width:12%;">階段</th><th style="width:18%;">時間</th><th>做什麼</th></tr></thead>
+  <tbody>
+  <tr><td>🔍 掃描</td><td>開考2分鐘</td><td>快速瀏覽全卷，標記最有把握的題→先做它們建立信心。切忌見到難題就卡住。</td></tr>
+  <tr><td>✅ MCQ</td><td>20–25分鐘</td><td>先消去法排除明顯錯誤選項；不確定的題目在題號旁畫「?」→最後回頭。</td></tr>
+  <tr><td>✍️ Structure</td><td>30–35分鐘</td><td>先做熟悉的題→難題留最後。<strong>每題按mark數分段作答</strong>，3分題=3段落。</td></tr>
+  <tr><td>🔍 檢查</td><td>最後5分鐘</td><td><strong>必查清單：</strong>①關鍵詞拼寫 ②mark allocation對應 ③圖表題有沒有quote數字 ④空白題有沒有寫關鍵詞碰分。</td></tr>
+  </tbody>
+  </table>
+</div>
+
+<!-- ═══════ WEAPON DEPLOYMENT ═══════ -->
+<h2 class="sec-title"><span>🛡️</span>HTML武器部署計劃</h2>
+
+<div class="tbl-wrap">
+<table class="tbl">
+<thead><tr><th>#</th><th>武器名稱</th><th>類型</th><th>覆蓋考點</th><th>優先級</th></tr></thead>
+<tbody>
+<tr><td>1</td><td><strong>🃏 閃電記憶卡</strong></td><td>閃卡翻轉+對比卡</td><td>全部18考點·87張卡</td><td>🔴 全程使用</td></tr>
+<tr><td>2</td><td><strong>🔬 食物測試實驗室</strong></td><td>虛擬實驗+測驗</td><td>Nutrition #1·Food Tests·Trick Foods</td><td>🔴 Day 1</td></tr>
+<tr><td>3</td><td><strong>🗺️ 消化征途</strong></td><td>互動流程圖+拖拽</td><td>Digestion #2·Teeth #5·Fibre</td><td>🔴 Day 1</td></tr>
+<tr><td>4</td><td><strong>⚡ 酶活性指揮中心</strong></td><td>動態圖表+Inhibitor對比+作圖</td><td>Enzymes #3·Inhibitors #18·Graph</td><td>🔴 Day 2</td></tr>
+<tr><td>5</td><td><strong>⚔️ 概念對決台</strong></td><td>並排對比卡</td><td>混淆概念(Immunity/Nutrition/DNA/Disease)</td><td>🟡 Day 2</td></tr>
+<tr><td>6</td><td><strong>🩸 缺乏症速配</strong></td><td>拖拽配對</td><td>Deficiency #4</td><td>🟡 Day 3</td></tr>
+<tr><td>7</td><td><strong>🧬 DNA探案現場</strong></td><td>電泳模擬+DNA vs RNA</td><td>DNA #7·DNA vs RNA #16</td><td>🟡 Day 3</td></tr>
+<tr><td>8</td><td><strong>🛡️ 免疫防線時間軸</strong></td><td>交互動畫</td><td>Immunity #6</td><td>🟡 Day 4</td></tr>
+<tr><td>9</td><td><strong>🏥 慢性病診斷室</strong></td><td>分析+診斷</td><td>Cancer #8·Diabetes #9·CVD #11·Metabolism #12</td><td>🟢 Day 4</td></tr>
+<tr><td>10</td><td><strong>🧠 終極模考戰場</strong></td><td>MCQ+Structure實戰</td><td>全範圍（歷年真題）</td><td>🟢 Day 5</td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- ═══════ DATA SOURCES ═══════ -->
+<h2 class="sec-title"><span>📚</span>資料來源（荃官知識庫·18份Biology文件）</h2>
+
+<div class="card" style="border-left-color:var(--bark);">
+  <table class="src-table">
+  <tr class="hl"><td>📧 Biology_scope of exam_20260512</td><td>2nd Term Exam官方範圍：Textbook P.1–101 + WB P.1–42 + Supp P.2–23</td></tr>
+  <tr><td>📧 Bio_scope_2nd UT</td><td>2nd UT範圍：Textbook P.42–68 + WB P.11–27</td></tr>
+  <tr class="hl"><td>📝 S3 Bio Supplementary Notes (202526)</td><td>完整補充筆記：Food Substances→Carbs/Lipids/Proteins→Enzymes→Nutrition→Body Defence→Nucleic Acids→Biotech→Life Characteristics</td></tr>
+  <tr class="hl"><td>📎 revision - body defence, DNA and biotech.pptx</td><td>老師指定複習課件：Body Defence + DNA結構/RNA對比 + Biotech應用</td></tr>
+  <tr class="hl"><td>📎 12.2a enzyme and graph interpretation.pptx</td><td>老師指定複習課件：Enzyme Inhibitors + Graph Plotting技巧</td></tr>
+  <tr class="hl"><td>📄 Supplementary Worksheet3_Body Defence</td><td>Body Defence補充練習：免疫應答+疫苗劑量分析</td></tr>
+  <tr class="hl"><td>📝 Body Defence 逐題指導（筆記）</td><td>免疫防線完整邏輯鏈+答題指導</td></tr>
+  <tr><td>📄 2526 2nd UT Bio (QP+Ans)</td><td>最新校內統測卷</td></tr>
+  <tr><td>📄 2526 1st UT Bio (QP)</td><td>本學期首次統測</td></tr>
+  <tr><td>📄 2425 2nd Exam Bio (QP+SA)</td><td>去年同級考試——最重要參考</td></tr>
+  <tr><td>📄 2425 1st Exam Bio (QP+SA)</td><td>去年上學期考試</td></tr>
+  <tr><td>📄 2324 2nd Exam Bio (MC+QA)</td><td>前年同期考試</td></tr>
+  <tr><td>📄 2223 2nd Exam Bio (MC+SA)</td><td>2022–23同期考試</td></tr>
+  <tr><td>📄 2223 1st Exam Bio (QP+SA)</td><td>2022–23上學期考試</td></tr>
+  </table>
+</div>
+
+<div class="footer">
+  <p>荃官 S3 Biology 終極兵器庫 · 作戰總覽 v3.0 · 基於知識庫18份文件重建 · 2026-05-12</p>
+  <p style="margin-top:4px;">下一步：按武器#1→#10順序逐個構建HTML，每次出品前先自審攻防</p>
+</div>
+
+</div>
+</body>
+</html>

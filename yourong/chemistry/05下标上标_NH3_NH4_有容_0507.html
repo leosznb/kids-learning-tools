@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>下标与上标 — 有容专讲：NH₃ vs NH₄⁺</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", "Helvetica Neue", sans-serif;
+    background: linear-gradient(160deg, #f0f4f8 0%, #e8edf2 100%);
+    padding: 24px;
+    color: #1a1a2e;
+    min-height: 100vh;
+    display: flex; justify-content: center;
+  }
+  .page {
+    max-width: 800px;
+    width: 100%;
+    background: #fff;
+    border-radius: 14px;
+    padding: 36px 40px;
+    box-shadow: 0 2px 24px rgba(0,0,0,.08);
+  }
+  h1 {
+    font-size: 26px;
+    text-align: center;
+    letter-spacing: 2px;
+    margin-bottom: 4px;
+    color: #0d1b2a;
+  }
+  .subtitle {
+    text-align: center;
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 28px;
+  }
+  h2 {
+    font-size: 17px;
+    margin: 28px 0 10px 0;
+    padding: 8px 14px;
+    background: #162447;
+    color: #fff;
+    border-radius: 6px;
+    letter-spacing: 1px;
+  }
+  p { font-size: 14px; line-height: 1.75; margin: 8px 0; }
+
+  .pair {
+    display: flex;
+    gap: 24px;
+    margin: 16px 0;
+  }
+  .card {
+    flex: 1;
+    border-radius: 12px;
+    padding: 24px 20px;
+    text-align: center;
+    position: relative;
+  }
+  .card-neutral {
+    background: linear-gradient(135deg, #e8f0e8 0%, #d4e8d4 100%);
+    border: 2px solid #7ab87a;
+  }
+  .card-ion {
+    background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+    border: 2px solid #ff9800;
+  }
+  .formula-big {
+    font-size: 64px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    margin: 8px 0;
+  }
+  .card-neutral .formula-big { color: #2d5a2d; }
+  .card-ion .formula-big { color: #c43e00; }
+
+  .label-badge {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+  .badge-neutral { background: #c8e6c9; color: #1b5e20; }
+  .badge-ion { background: #ffe0b2; color: #bf360c; }
+
+  .callout-row {
+    display: flex;
+    gap: 16px;
+    margin: 10px 0;
+  }
+  .callout {
+    flex: 1;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    text-align: center;
+    font-weight: 600;
+  }
+  .call-sub { background: #e3f2fd; border: 1.5px solid #42a5f5; color: #0d47a1; }
+  .call-sup { background: #fce4ec; border: 1.5px solid #ef5350; color: #880e4f; }
+  .call-none { background: #f5f5f5; border: 1.5px solid #bbb; color: #555; }
+
+  .annot {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin: 10px 0;
+    flex-wrap: wrap;
+  }
+  .annot-item {
+    background: #fff;
+    border: 1.5px solid #ddd;
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+  .dot-blue { background: #42a5f5; }
+  .dot-red { background: #ef5350; }
+  .dot-gray { background: #999; }
+
+  .step-flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 16px 0;
+    flex-wrap: wrap;
+  }
+  .step {
+    background: #fff;
+    border: 2px solid #673ab7;
+    border-radius: 10px;
+    padding: 12px 18px;
+    text-align: center;
+    font-size: 15px;
+    font-weight: 600;
+    color: #4527a0;
+    min-width: 70px;
+  }
+  .step-arrow {
+    font-size: 22px;
+    color: #673ab7;
+    font-weight: bold;
+  }
+  .step-result {
+    background: #673ab7;
+    color: #fff;
+    border-radius: 10px;
+    padding: 12px 22px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 700;
+  }
+
+  .rule-box {
+    background: linear-gradient(135deg, #e8eaf6, #c5cae9);
+    border-left: 5px solid #3f51b5;
+    border-radius: 6px;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .rule-box p { margin: 4px 0; font-size: 14px; }
+  .rule-box .big { font-size: 18px; font-weight: 700; color: #1a237e; }
+
+  .quiz-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 12px 0;
+  }
+  .quiz-item {
+    background: #fafafa;
+    border: 1.5px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 13px;
+  }
+  .quiz-item .q { font-weight: 600; color: #333; margin-bottom: 4px; }
+  .quiz-item .a { color: #999; font-style: italic; }
+
+  .highlight {
+    background: #fff9c4;
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-weight: 600;
+  }
+  .red { color: #c62828; font-weight: 700; }
+  .blue { color: #1565c0; font-weight: 700; }
+  .green { color: #2e7d32; font-weight: 700; }
+
+  .footer-note {
+    text-align: center;
+    margin-top: 24px;
+    padding-top: 14px;
+    border-top: 1.5px solid #e0e0e0;
+    font-size: 12px;
+    color: #999;
+  }
+
+  table { border-collapse: collapse; width: 100%; margin: 10px 0; font-size: 13px; }
+  th { background: #263238; color: #fff; padding: 8px 12px; text-align: left; }
+  td { padding: 8px 12px; border-bottom: 1px solid #e0e0e0; }
+  tr:nth-child(even) td { background: #f9f9f9; }
+</style>
+</head>
+<body>
+<div class="page">
+
+<h1>下标 &amp; 上标 — 有容专讲</h1>
+<div class="subtitle">用 NH₃ 和 NH₄⁺ 一次看懂，永远不混</div>
+
+<!-- ===== 两兄弟并排 ===== -->
+<div class="pair">
+  <div class="card card-neutral">
+    <div class="label-badge badge-neutral">中性分子</div>
+    <div class="formula-big">NH₃</div>
+    <p style="font-size:15px;margin:6px 0;color:#2d5a2d;"><strong>氨分子 · ammonia</strong></p>
+  </div>
+  <div class="card card-ion">
+    <div class="label-badge badge-ion">阳离子</div>
+    <div class="formula-big">NH₄⁺</div>
+    <p style="font-size:15px;margin:6px 0;color:#c43e00;"><strong>铵离子 · ammonium ion</strong></p>
+  </div>
+</div>
+
+<p style="text-align:center;font-size:16px;">两个家伙，长得像。一个<span class="green">中性</span>，一个<span class="red">带电</span>。<br>区别就在 <strong>下标的数字</strong> 和 <strong>右上角有没有那撮电荷</strong>。</p>
+
+<!-- ===== 拆解图 ===== -->
+<h2>一、拆开看 — 两个位置，两种含义</h2>
+
+<div class="pair">
+  <div class="card card-neutral" style="text-align:left;">
+    <p style="text-align:center;font-size:40px;font-weight:700;color:#2d5a2d;">NH₃</p>
+    <div class="annot">
+      <div class="annot-item"><span class="dot dot-blue"></span> <strong>右下角 3</strong>：3 个 H 原子</div>
+      <div class="annot-item"><span class="dot dot-gray"></span> <strong>右上角空着</strong>：不带电</div>
+    </div>
+    <p style="font-size:12px;color:#666;text-align:center;margin-top:8px;">N 原子 1 个 + H 原子 3 个 → 中性分子</p>
+  </div>
+  <div class="card card-ion" style="text-align:left;">
+    <p style="text-align:center;font-size:40px;font-weight:700;color:#c43e00;">NH₄⁺</p>
+    <div class="annot">
+      <div class="annot-item"><span class="dot dot-blue"></span> <strong>右下角 4</strong>：4 个 H 原子</div>
+      <div class="annot-item"><span class="dot dot-red"></span> <strong>右上角 +</strong>：带 1 个正电（1 省略）</div>
+    </div>
+    <p style="font-size:12px;color:#666;text-align:center;margin-top:8px;">N 原子 1 个 + H 原子 4 个 → 阳离子，1+</p>
+  </div>
+</div>
+
+<div class="rule-box">
+  <p class="big">📍 核心规则（就两句）</p>
+  <p>🔵 <strong>右下角 = 数人头</strong> —— 告诉你「有几个这样的原子」</p>
+  <p>🔴 <strong>右上角 = 数电荷</strong> —— 告诉你「带多少电」</p>
+</div>
+
+<!-- ===== 为什么？ ===== -->
+<h2>二、为什么 NH₃ 加一个 H 就变成了 NH₄⁺？</h2>
+
+<p>这是理解 <span class="red">上标从哪来</span> 的关键——</p>
+
+<div class="step-flow">
+  <div class="step">NH₃<br>⬆ 中性</div>
+  <div class="step-arrow">+</div>
+  <div class="step">H⁺<br>⬆ 带 1+</div>
+  <div class="step-arrow">→</div>
+  <div class="step-result">NH₄⁺<br>整体带 1+</div>
+</div>
+
+<p style="text-align:center;font-size:13px;color:#666;">N 原子上有一对孤对电子（lone pair），像一只手伸出去拉住一个 H⁺。<br>H⁺ 自己带一个正电荷，拉进来之后，电荷归整个离子团所有。</p>
+
+<div class="callout-row">
+  <div class="callout call-sub">🔵 下标从 3 → 4<br>多了一个 H 原子</div>
+  <div class="callout call-sup">🔴 上标从无 → +<br>多了一个正电荷</div>
+</div>
+
+<p style="text-align:center;font-size:13px;color:#888;margin-top:4px;">道理就是这么简单：<strong>多一个 H⁺，既多一个原子（下标变），也多一个正电荷（上标变）。</strong></p>
+
+<!-- ===== 三组对比 ===== -->
+<h2>三、推翻最常见的写法错误</h2>
+
+<table>
+<tr><th>错误写法</th><th>为什么错</th><th>正确写法</th></tr>
+<tr>
+  <td style="font-size:22px;color:#c62828;font-weight:700;">NH⁴⁺</td>
+  <td>4 是 H 的个数，必须写在 <strong>右下角</strong><br>写在右上角就变成「带 4 个正电」了<br>NH₄⁺ 只带 1 个正电，不是 4 个！</td>
+  <td style="font-size:22px;color:#2e7d32;font-weight:700;">NH₄⁺</td>
+</tr>
+<tr>
+  <td style="font-size:22px;color:#c62828;font-weight:700;">NH₄⁺¹</td>
+  <td>1 正电荷，数字「1」省略不写<br>写了反而错</td>
+  <td style="font-size:22px;color:#2e7d32;font-weight:700;">NH₄⁺</td>
+</tr>
+<tr>
+  <td style="font-size:22px;color:#c62828;font-weight:700;">NH₄¹⁺</td>
+  <td>电荷标在右上角，<strong>数字在左、符号在右</strong><br>1 省略不写所以看不到，但 2− 是 2 左 − 右</td>
+  <td style="font-size:22px;color:#2e7d32;font-weight:700;">SO₄²⁻</td>
+</tr>
+</table>
+
+<!-- ===== 推广到其他例子 ===== -->
+<h2>四、用学会的眼再看这些</h2>
+
+<table>
+<tr><th>化学式</th><th>右下角（下标）</th><th>右上角（上标）</th></tr>
+<tr><td><strong>H₂O</strong></td><td>2 → 2 个 H</td><td>空 → 中性分子</td></tr>
+<tr><td><strong>CO₂</strong></td><td>2 → 2 个 O</td><td>空 → 中性分子</td></tr>
+<tr><td><strong>SO₄²⁻</strong></td><td>4 → 4 个 O</td><td>2− → 2 个负电</td></tr>
+<tr><td><strong>NO₃⁻</strong></td><td>3 → 3 个 O</td><td>− → 1 个负电（1 省略）</td></tr>
+<tr><td><strong>Al³⁺</strong></td><td>无 → 只有 1 个 Al，不写下标</td><td>3+ → 3 个正电</td></tr>
+</table>
+
+<!-- ===== 口诀 ===== -->
+<h2>五、口诀 — 记这两句就够</h2>
+
+<div class="rule-box">
+  <p style="font-size:17px;font-weight:700;margin-bottom:6px;">「<span class="blue">右下计人头</span>，<span class="red">右上数电荷</span>」</p>
+  <p style="font-size:13px;color:#555;">—— NH₃ 的 3 在右下 = 3 个 H；NH₄⁺ 的 + 在右上 = 一个正电</p>
+</div>
+
+<div class="rule-box" style="background:linear-gradient(135deg,#fff9c4,#fff176);border-left-color:#f9a825;">
+  <p style="font-size:17px;font-weight:700;margin-bottom:6px;">「<span style="color:#e65100;">数字在左，符号在右</span>，<span style="color:#666;">1 省略不写</span>」</p>
+  <p style="font-size:13px;color:#555;">—— 2− 不是 −2；NH₄⁺ 不是 NH₄¹⁺</p>
+</div>
+
+<!-- ===== 自测 ===== -->
+<h2>六、自测 — 写完揭答案</h2>
+
+<div class="quiz-grid">
+  <div class="quiz-item">
+    <div class="q">1. NH₄⁺ 的「4」写在哪个角？代表什么？</div>
+    <div class="a">答案 → 右下角，代表 4 个 H 原子</div>
+  </div>
+  <div class="quiz-item">
+    <div class="q">2. NH₄⁺ 的「+」写在哪个角？代表什么？</div>
+    <div class="a">答案 → 右上角，代表 1 个正电荷</div>
+  </div>
+  <div class="quiz-item">
+    <div class="q">3. NH₃ 为什么没有上标？</div>
+    <div class="a">答案 → 它是中性分子，不带电</div>
+  </div>
+  <div class="quiz-item">
+    <div class="q">4. NH₃ 和 NH₄⁺ 的右下角数字为什么不同？</div>
+    <div class="a">答案 → NH₃ 有 3 个 H，NH₄⁺ 多吸了一个 H⁺（变成 4 个 H）</div>
+  </div>
+  <div class="quiz-item">
+    <div class="q">5. SO₄²⁻ 的「2−」为什么 2 在前面？</div>
+    <div class="a">答案 → 数字在左，符号在右。2− 不是 −2</div>
+  </div>
+  <div class="quiz-item">
+    <div class="q">6. NO₃⁻ 有几个 O？带几个电？</div>
+    <div class="a">答案 → 3 个 O（下标 3）；1 个负电（上标 −）</div>
+  </div>
+</div>
+
+<!-- ===== 跟攻略关联 ===== -->
+<h2>七、跟 Cations &amp; Anions 攻略的关联</h2>
+
+<p>有容学会这个之后，回头看上次的记忆攻略，三件事就全串起来了：</p>
+
+<table>
+<tr><th>攻略里的规则</th><th>跟下标 / 上标的关系</th></tr>
+<tr><td><strong>-ate 多氧 -ite 少氧</strong></td><td>说的就是 <span class="blue">下标</span>（O 的个数）不同</td></tr>
+<tr><td><strong>加 H 减一电</strong></td><td>说的就是 <span class="red">上标</span>（电荷）变了：2− → 1−</td></tr>
+<tr><td><strong>同家族电荷相同</strong></td><td>SO₄²⁻ 和 SO₃²⁻ 的 <span class="red">上标相同</span>（都是 2−），<span class="blue">下标不同</span></td></tr>
+</table>
+
+<div class="footer-note">
+  NH₃ + H⁺ → NH₄⁺ 这一条看懂了，下标和上标就通透了。<br>
+  右下角永远管「有几个原子」，右上角永远管「带多少电」——分别记账，各管各的。
+</div>
+
+</div>
+</body>
+</html>

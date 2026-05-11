@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Electrolytes — 有容</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+    background: linear-gradient(160deg, #f5f0e8 0%, #ede7dd 100%);
+    padding: 24px;
+    color: #1a1a2e;
+    min-height: 100vh;
+    display: flex; justify-content: center;
+  }
+  .page {
+    max-width: 860px;
+    width: 100%;
+    background: #fffef9;
+    border-radius: 14px;
+    padding: 36px 40px;
+    box-shadow: 0 2px 26px rgba(0,0,0,.07);
+  }
+  h1 { font-size: 26px; text-align: center; letter-spacing: 2px; margin-bottom: 4px; color: #1a1a2e; }
+  .subtitle { text-align: center; font-size: 13px; color: #999; margin-bottom: 28px; }
+  .subtitle .tag { display: inline-block; background: #3949ab; color: #fff; padding: 2px 10px; border-radius: 3px; font-size: 11px; margin: 0 8px; }
+  h2 {
+    font-size: 17px; margin: 30px 0 12px 0; padding: 9px 16px;
+    background: #2c3e50; color: #fff; border-radius: 6px; letter-spacing: 1px;
+  }
+  h2 .cn { font-size: 13px; font-weight: 400; color: #b0bec5; display: inline; margin-left: 6px; }
+  h3 { font-size: 14.5px; margin: 18px 0 8px 0; color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 4px; }
+  h3 .cn { font-size: 12px; font-weight: 400; color: #888; margin-left: 6px; }
+  p { font-size: 14px; line-height: 1.8; margin: 8px 0; }
+
+  .card-row { display: flex; gap: 16px; margin: 14px 0; }
+  .card { flex: 1; border-radius: 12px; padding: 20px 18px; text-align: center; position: relative; }
+  .card-red    { background: linear-gradient(135deg, #fdecea 0%, #f8d7da 100%); border: 2px solid #e57373; }
+  .card-green  { background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); border: 2px solid #66bb6a; }
+  .card-blue   { background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); border: 2px solid #42a5f5; }
+  .card-purple { background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%); border: 2px solid #ba68c8; }
+
+  .card-label { display: inline-block; padding: 3px 14px; border-radius: 20px; font-size: 11px; font-weight: 700; letter-spacing: 1px; margin-bottom: 8px; }
+  .lbl-red    { background: #f8d7da; color: #a94442; }
+  .lbl-green  { background: #c8e6c9; color: #1b5e20; }
+  .lbl-blue   { background: #bbdefb; color: #0d47a1; }
+  .lbl-purple { background: #e1bee7; color: #4a148c; }
+
+  .card .formula { font-size: 32px; font-weight: 700; margin: 6px 0; }
+  .card .desc { font-size: 12px; color: #555; }
+  .card .desc .cn { display: block; font-size: 11px; color: #999; margin-top: 2px; }
+
+  .state-compare { display: flex; gap: 16px; margin: 14px 0; }
+  .state-box { flex: 1; border-radius: 10px; padding: 16px; text-align: center; border: 2px solid; }
+  .state-locked { background: #fafafa; border-color: #ccc; }
+  .state-free { background: #e8f5e9; border-color: #4caf50; }
+  .state-box .icon { font-size: 40px; margin-bottom: 6px; }
+  .state-box .title { font-size: 15px; font-weight: 700; margin-bottom: 2px; }
+  .state-box .title .cn { display: block; font-size: 12px; font-weight: 400; color: #888; }
+  .state-box .detail { font-size: 12px; color: #666; line-height: 1.6; }
+  .state-box .detail .cn { display: block; font-size: 11px; color: #aaa; }
+
+  .elysis { display: flex; align-items: center; gap: 12px; margin: 16px 0; flex-wrap: wrap; justify-content: center; }
+  .elysis .stage { background: #fff; border: 2px solid #34495e; border-radius: 10px; padding: 14px 16px; text-align: center; min-width: 100px; font-size: 13px; }
+  .elysis .stage .big { font-size: 22px; font-weight: 700; color: #2c3e50; }
+  .elysis .stage .cn { display: block; font-size: 11px; color: #888; }
+  .elysis .arrow { font-size: 24px; font-weight: bold; color: #34495e; }
+
+  .key-box { background: linear-gradient(135deg, #fce4ec, #f8bbd0); border-left: 5px solid #e91e63; border-radius: 6px; padding: 14px 18px; margin: 16px 0; }
+  .key-box .big { font-size: 17px; font-weight: 700; color: #880e4f; }
+  .key-box .cn { font-size: 13px; color: #555; display: block; margin-top: 4px; }
+
+  .info-box { background: #e8eaf6; border-left: 5px solid #3f51b5; border-radius: 6px; padding: 14px 18px; margin: 14px 0; }
+  .info-box .big { font-size: 17px; font-weight: 700; color: #1a237e; }
+  .info-box .cn { display: block; font-size: 13px; color: #666; margin-top: 2px; }
+
+  table { border-collapse: collapse; width: 100%; margin: 12px 0; font-size: 13px; }
+  th { background: #37474f; color: #fff; padding: 9px 12px; text-align: left; }
+  th .cn { display: block; font-size: 11px; font-weight: 400; color: #b0bec5; }
+  td { padding: 9px 12px; border-bottom: 1px solid #e0e0e0; vertical-align: top; }
+  td .cn { display: block; font-size: 11px; color: #888; }
+  tr:nth-child(even) td { background: #fafafa; }
+
+  .highlight { background: #fff9c4; padding: 1px 5px; border-radius: 3px; font-weight: 600; }
+  .red { color: #c62828; font-weight: 700; }
+  .green { color: #2e7d32; font-weight: 700; }
+  .blue { color: #1565c0; font-weight: 700; }
+
+  .footer-note { text-align: center; margin-top: 24px; padding-top: 14px; border-top: 1.5px solid #e0e0e0; font-size: 12px; color: #999; }
+  .footer-note .cn { display: block; margin-top: 4px; font-size: 11px; }
+</style>
+</head>
+<body>
+<div class="page">
+
+<h1>Electrolytes — Three Questions</h1>
+<div class="subtitle">
+  Solid NaCl no conduction → aqueous conducts &nbsp;|&nbsp; HCl has no metal yet is an electrolyte &nbsp;|&nbsp; What "decomposed" really means<br>
+  <span class="tag">EN first · 中文輔助</span>
+</div>
+
+<!-- ===== Q1 ===== -->
+<h2>Q1: Why can't solid NaCl conduct, but aqueous NaCl can?<span class="cn">為什麼固體 NaCl 不導電，溶於水就能導電？</span></h2>
+
+<div class="state-compare">
+  <div class="state-box state-locked">
+    <div class="icon">🧊</div>
+    <div class="title">Solid NaCl<span class="cn">固體 NaCl</span></div>
+    <div class="detail">
+      Na⁺ and Cl⁻ <strong>locked in lattice</strong><span class="cn">被鎖在晶格裡</span>
+      They can only vibrate, <strong>cannot move freely</strong><span class="cn">只能原地振動，不能自由移動</span><br><br>
+      <span class="red">No mobile ions<span class="cn">沒有自由移動的離子</span></span><br>
+      → <span class="red">Does NOT conduct ❌<span class="cn">不導電</span></span>
+    </div>
+  </div>
+  <div class="state-box state-free">
+    <div class="icon">💧</div>
+    <div class="title">NaCl aqueous solution<span class="cn">NaCl 水溶液</span></div>
+    <div class="detail">
+      Water molecules <strong>pull ions out of the lattice</strong><span class="cn">水分子把離子從晶格拉出來</span>
+      Ions are <strong>free to move</strong><span class="cn">離子可以自由游動</span><br><br>
+      <span class="green">Mobile ions present<span class="cn">有自由移動的離子</span></span><br>
+      → <span class="green">Conducts electricity ✅<span class="cn">導電</span></span>
+    </div>
+  </div>
+</div>
+
+<div class="info-box">
+  <p class="big">Conduction requires <strong>freely moving charged particles</strong></p>
+  <span class="cn">導電需要「可以自由移動的帶電粒子」</span>
+  <p style="margin-top:6px;">
+    🔵 <strong>Conductor (metal)</strong> → <strong>delocalized electrons</strong> carry the current → conducts in both solid and liquid states<br>
+    <span class="cn">金屬導體靠自由電子移動 → 固體、液體都能導電</span><br>
+    🟠 <strong>Electrolyte</strong> → <strong>mobile ions</strong> carry the current → <span class="highlight">only conducts when <strong>molten</strong> or in <strong>aqueous solution</strong></span><br>
+    <span class="cn">電解質靠自由離子移動 → 只有熔融或溶於水時才導電</span>
+  </p>
+</div>
+
+<div class="key-box">
+  <p class="big">📌 In one sentence</p>
+  <p>
+    <strong>Solid NaCl: ions present but cannot move → no conduction.</strong><br>
+    <strong>Aqueous NaCl: ions free to move → conducts.</strong><br>
+    It's not about <em>having</em> ions — it's about whether they can <strong>move</strong>.
+  </p>
+  <span class="cn">固體 NaCl：離子在，但動不了 → 不導電。溶於水：離子自由了 → 導電。<br>不是「有沒有離子」，是「離子能不能動」。</span>
+</div>
+
+<!-- ===== Q2 ===== -->
+<h2>Q2: Why is HCl an electrolyte when it has no metal?<span class="cn">為什麼 HCl 沒有金屬卻是 electrolyte？</span></h2>
+
+<h3>The key fact<span class="cn">關鍵事實</span></h3>
+
+<div class="card-row">
+  <div class="card card-red">
+    <div class="card-label lbl-red">Pure HCl (gas/liquid)<br><small>純 HCl 氣體或液體</small></div>
+    <div class="formula" style="color:#a94442;">HCl</div>
+    <div class="desc">
+      <strong>Covalent molecule</strong> — H and Cl share electrons<span class="cn">共價分子 — H 和 Cl 共用電子</span>
+      No ions, only molecules<span class="cn">沒有離子，只是一個個分子</span><br><br>
+      <span class="red">Does NOT conduct ❌<span class="cn">不導電</span></span>
+    </div>
+  </div>
+  <div class="card card-green">
+    <div class="card-label lbl-green">HCl aqueous solution<br><small>HCl 水溶液</small></div>
+    <div class="formula" style="color:#2e7d32;">H⁺ + Cl⁻</div>
+    <div class="desc">
+      HCl molecules <strong>dissociate</strong> in water<span class="cn">分子在水中解離</span>
+      Producing H⁺ and Cl⁻ ions<span class="cn">變成 H⁺ 和 Cl⁻ 離子</span>
+      Ions free to move<span class="cn">離子可以自由移動</span><br><br>
+      <span class="green">Conducts ✅ — it IS an electrolyte!<span class="cn">導電 — 是 electrolyte！</span></span>
+    </div>
+  </div>
+</div>
+
+<div class="info-box">
+  <p class="big">The secret: it's not about having a metal — it's about whether <strong>ions are produced</strong> when dissolved</p>
+  <span class="cn">秘密：不看有沒有金屬，看溶於水後有沒有產生離子</span>
+  <p style="margin-top:6px;">
+    Reaction when HCl dissolves in water:<br>
+    <strong>HCl(g) + H₂O(l) → H₃O⁺(aq) + Cl⁻(aq)</strong><br><br>
+    Simplified: <strong>HCl(aq) → H⁺(aq) + Cl⁻(aq)</strong><br><br>
+    Water splits HCl molecules → produces <span class="red">H⁺</span> and <span class="green">Cl⁻</span> ions<br>
+    <span class="cn">水把 HCl 分子拆開 → 產生 H⁺ 和 Cl⁻ 離子</span>
+  </p>
+</div>
+
+<h3>Complete definition of an electrolyte<span class="cn">完整定義</span></h3>
+
+<table>
+<tr>
+  <th>Condition<span class="cn">條件</span></th>
+  <th>Explanation<span class="cn">解釋</span></th>
+  <th>Example<span class="cn">例子</span></th>
+</tr>
+<tr>
+  <td><strong>Conducts only when <em>molten</em> or in <em>aqueous solution</em></strong><span class="cn">只在熔融或水溶液中導電</span></td>
+  <td>In solid state, ions cannot move; when molten or dissolved, ions become free<span class="cn">固體時離子不能動；熔融或溶於水後離子自由</span></td>
+  <td>NaCl(s) ❌ → NaCl(aq) ✅<br>NaCl(s) ❌ → NaCl(l) ✅</td>
+</tr>
+<tr>
+  <td><strong><em>Decomposed by electricity</em> during conduction</strong><span class="cn">導電時伴隨化學分解</span></td>
+  <td>Current not only passes through — it <em>breaks the compound into elements</em><span class="cn">電流不只是通過，還會把化合物拆成元素</span></td>
+  <td>2NaCl(l) → 2Na + Cl₂<br><small>(see Q3 / 見第三問)</small></td>
+</tr>
+<tr>
+  <td><strong>Metal + non-metal compounds,</strong><br>or a <strong>few non-metal-only compounds</strong><span class="cn">金屬+非金屬，或少數純非金屬化合物</span></td>
+  <td>Ionic compounds are electrolytes; acids (pure non-metals) <em>dissociate</em> in water to give H⁺ → also electrolytes<span class="cn">離子化合物是 electrolyte；酸類溶於水解離出 H⁺ → 也是 electrolyte</span></td>
+  <td>NaCl, CuSO₄, PbBr₂<br>HCl, CH₃COOH, citric acid</td>
+</tr>
+</table>
+
+<div class="key-box">
+  <p class="big">📌 In one sentence</p>
+  <p>
+    An electrolyte is defined by whether it <strong>produces freely moving ions</strong> when molten or dissolved —<br>
+    <strong>not</strong> by whether it contains a metal.
+  </p>
+  <span class="cn">是不是 electrolyte，不看有沒有金屬——看熔融或溶於水後有沒有產生可自由移動的離子。</span>
+</div>
+
+<!-- ===== Q3 ===== -->
+<h2>Q3: What does "decomposed by electricity" actually mean?<span class="cn">「Decomposed by electricity」到底是什麼意思？</span></h2>
+
+<h3>Example: electrolysis of molten NaCl<span class="cn">以電解熔融 NaCl 為例</span></h3>
+
+<div class="elysis">
+  <div class="stage">
+    <div class="big">NaCl(l)</div>
+    <strong>Molten NaCl</strong><br>
+    Na⁺ and Cl⁻ free to move<br>
+    <span class="cn">熔融氯化鈉 · 離子自由移動</span>
+  </div>
+  <div class="arrow">⚡</div>
+  <div class="stage">
+    <strong>Current applied</strong><br>
+    <span class="cn">通電後</span><br>
+    <span style="color:#e74c3c;">Na⁺ → <strong>cathode (−)</strong></span><br>
+    <span class="cn" style="color:#e74c3c;">Na⁺ 移向負極</span>
+    <span style="color:#2ecc71;">Cl⁻ → <strong>anode (+)</strong></span><br>
+    <span class="cn" style="color:#2ecc71;">Cl⁻ 移向正極</span>
+  </div>
+  <div class="arrow">→</div>
+  <div class="stage">
+    <strong>Cathode (−)</strong><br>
+    <span style="color:#e74c3c;">Na⁺ + e⁻ → Na</span><br>
+    <span style="font-size:11px;">silvery sodium metal<br><span class="cn">銀白色金屬鈉</span></span>
+  </div>
+  <div class="arrow">+</div>
+  <div class="stage">
+    <strong>Anode (+)</strong><br>
+    <span style="color:#2ecc71;">2Cl⁻ → Cl₂ + 2e⁻</span><br>
+    <span style="font-size:11px;">yellow-green chlorine gas<br><span class="cn">黃綠色氯氣</span></span>
+  </div>
+</div>
+
+<div class="info-box">
+  <p class="big">"Decomposed" means: the compound is <strong>broken down into its elements</strong> by electricity</p>
+  <span class="cn">「Decomposed」= 化合物被電拆回元素</span>
+  <p style="margin-top:6px;">
+    <strong>Overall reaction: 2NaCl(l) → 2Na(s) + Cl₂(g)</strong><br><br>
+    Sodium chloride (a compound) is decomposed by electricity into:<br>
+    🟠 <strong>Sodium Na</strong> (metal element) — produced at the <strong>cathode</strong><br>
+    🟢 <strong>Chlorine Cl₂</strong> (non-metal element) — produced at the <strong>anode</strong><br>
+    <span class="cn">氯化鈉（化合物）被電分解成：鈉 Na（金屬）在負極 cathode 產生 · 氯 Cl₂（非金屬）在正極 anode 產生</span>
+  </p>
+</div>
+
+<h3>Decomposition — the key difference between Electrolyte and Conductor<span class="cn">分解 — Electrolyte 和 Conductor 的關鍵差別</span></h3>
+
+<table>
+<tr><th></th><th>Conductor (metal)<span class="cn">金屬導體</span></th><th>Electrolyte<span class="cn">電解質</span></th></tr>
+<tr>
+  <td><strong>What carries the current?</strong><span class="cn">靠什麼導電？</span></td>
+  <td>Delocalised electrons<span class="cn">離域電子</span></td>
+  <td>Mobile ions<span class="cn">自由離子</span></td>
+</tr>
+<tr>
+  <td><strong>Chemical change during conduction?</strong><span class="cn">導電時發生化學變化？</span></td>
+  <td><span class="green">NO</span> — copper wire stays copper<span class="cn">銅線通電後還是銅線</span></td>
+  <td><span class="red">YES</span> — NaCl becomes Na + Cl₂<span class="cn">NaCl 通電後不再是 NaCl</span></td>
+</tr>
+<tr>
+  <td><strong>Conducts as a solid?</strong><span class="cn">固體狀態能導電？</span></td>
+  <td><span class="green">YES</span><span class="cn">能</span></td>
+  <td><span class="red">NO</span> — ions locked in place<span class="cn">不能 — 離子被鎖住</span></td>
+</tr>
+<tr>
+  <td><strong>Examples</strong><span class="cn">例子</span></td>
+  <td>Copper, iron, graphite<span class="cn">銅、鐵、石墨</span></td>
+  <td>NaCl(aq), CuSO₄(aq), HCl(aq)</td>
+</tr>
+</table>
+
+<div class="key-box">
+  <p class="big">📌 In one sentence</p>
+  <p>
+    <strong>Metal:</strong> electrons pass through — the metal itself stays unchanged.<br>
+    <strong>Electrolyte:</strong> ions are discharged — <strong>the substance undergoes a chemical change; it is decomposed.</strong>
+  </p>
+  <span class="cn">金屬通電 = 電子路過，金屬本身不變。Electrolyte 通電 = 離子被拆，物質本身被分解。</span>
+</div>
+
+<!-- ===== SUMMARY ===== -->
+<h2>Three questions, one big idea<span class="cn">三問合一</span></h2>
+
+<div class="card-row">
+  <div class="card card-red">
+    <div class="card-label lbl-red">Solid NaCl<br><small>固體 NaCl</small></div>
+    <div style="font-size:28px;margin:8px 0;">🔒</div>
+    <div class="desc">
+      <strong>Ions locked</strong> — cannot move<br>
+      <strong>No conduction ❌</strong><br>
+      <span class="cn">離子鎖住，不能動，不導電</span>
+    </div>
+  </div>
+  <div class="card card-green">
+    <div class="card-label lbl-green">NaCl(aq)<br><small>水溶液</small></div>
+    <div style="font-size:28px;margin:8px 0;">🔓</div>
+    <div class="desc">
+      <strong>Ions free</strong> — mobile + decomposed<br>
+      <strong>Conducts ✅</strong><br>
+      <span class="cn">離子自由，能動+被分解，導電</span>
+    </div>
+  </div>
+  <div class="card card-blue">
+    <div class="card-label lbl-blue">HCl(aq)<br><small>水溶液</small></div>
+    <div style="font-size:28px;margin:8px 0;">🧪</div>
+    <div class="desc">
+      <strong>Dissociates</strong> → produces H⁺, Cl⁻<br>
+      <strong>Conducts ✅</strong><br>
+      <span class="cn">分子解離，產生離子，導電</span>
+    </div>
+  </div>
+  <div class="card card-purple">
+    <div class="card-label lbl-purple">Copper metal<br><small>金屬銅</small></div>
+    <div style="font-size:28px;margin:8px 0;">⚡</div>
+    <div class="desc">
+      <strong>Electrons mobile</strong> — stays Cu<br>
+      <strong>Conducts ✅</strong><br>
+      <span class="cn">電子自由，金屬不變，導電</span>
+    </div>
+  </div>
+</div>
+
+<div class="info-box" style="background:#fff9c4;border-left-color:#f9a825;">
+  <p class="big" style="color:#e65100;">Ultimate test for exams<span class="cn">終極判斷法</span></p>
+  <p style="margin-top:4px;">
+    <strong>Q: Is this substance an electrolyte?</strong><br><br>
+    <strong>① Solid?</strong> → <strong>Definitely NOT</strong> — electrolytes do NOT conduct as solids<br>
+    <span class="cn">固體 → 一定不是，electrolyte 在固體時不導電</span><br><br>
+    <strong>② Molten / aqueous?</strong> → Check for <strong>mobile ions</strong><br>
+    <span class="cn">熔融 / 水溶液 → 看有沒有自由離子</span><br>
+    · <strong>Ionic compound</strong> (metal + non-metal) → has ions → <span class="green">electrolyte ✅</span><br>
+    · <strong>Acid</strong> dissolved in water → dissociates to give H⁺ → <span class="green">electrolyte ✅</span><br>
+    · <strong>Pure covalent</strong> (alcohol, oil, distilled water) → no ions → <span class="red">NOT ❌</span><br>
+    <span class="cn">離子化合物 → 有 · 酸溶於水 → 有 · 純共價分子 → 沒有</span><br><br>
+    <strong>③ Chemical decomposition during conduction?</strong><br>
+    → <strong>Yes</strong> → <span class="green">electrolyte ✅</span><br>
+    → <strong>No</strong> (e.g. metals) → conductor only, NOT an electrolyte<br>
+    <span class="cn">導電時有化學分解？有 → electrolyte · 沒有（如金屬）→ conductor only</span>
+  </p>
+</div>
+
+<div class="footer-note">
+  <strong>Master these three questions, and you've mastered electrolytes.</strong><br>
+  <span class="cn">記住這三個問題的答案，Electrolytes 這一課就通了。</span>
+  NaCl solid vs aqueous = can ions move · HCl = acid dissociates · Decomposed = compound broken into elements<br>
+  <span class="cn">NaCl 固體 vs 水溶液 = 離子能不能動 · HCl = 酸解離 · Decomposed = 化合物被電拆回元素</span>
+</div>
+
+</div>
+</body>
+</html>
