@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>倫理宗教科 模擬卷答案冊（卷一至三）</title>
+<style>
+  :root {
+    --cream: #fdf8f0; --warm-white: #fffef9; --gold: #c8a45c;
+    --ink: #2c2416; --line: #d4c5a9; --accent: #8b6914;
+    --light-accent: #f5ecd7; --green: #2d7d46;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Noto Serif HK", "Songti SC", "SimSun", serif;
+    background: #e8dcc8; display: flex; justify-content: center; padding: 24px;
+    color: var(--ink); line-height: 1.85;
+  }
+  .book {
+    max-width: 860px; width: 100%; background: var(--warm-white);
+    border: 1px solid var(--line); box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+    padding: 48px 56px;
+  }
+  .book::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+    background: linear-gradient(90deg, var(--gold), var(--accent), var(--gold));
+  }
+  /* Tabs */
+  .tabs { display: flex; gap: 0; margin-bottom: 28px; border-bottom: 2px solid var(--line); }
+  .tab { padding: 10px 24px; cursor: pointer; border: 1px solid transparent; 
+    border-bottom: none; border-radius: 6px 6px 0 0; font-size: 15px; font-weight: 600;
+    color: #8b7a5c; background: transparent; transition: all .2s; }
+  .tab:hover { color: var(--accent); background: var(--light-accent); }
+  .tab.active { color: var(--accent); background: var(--warm-white);
+    border-color: var(--line); border-bottom-color: var(--warm-white);
+    position: relative; bottom: -2px; }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  h1 { font-size: 20px; text-align: center; margin-bottom: 6px; letter-spacing: 2px; }
+  .subtitle { text-align: center; font-size: 13px; color: #8b7a5c; margin-bottom: 24px; }
+
+  .section { margin-bottom: 24px; }
+  .section-title {
+    font-size: 15px; font-weight: 700; margin-bottom: 10px;
+    border-bottom: 2px solid var(--gold); padding-bottom: 4px;
+    display: flex; justify-content: space-between;
+  }
+  .answer-row {
+    display: flex; align-items: baseline; gap: 8px; margin-bottom: 6px;
+    padding: 3px 6px; border-radius: 3px;
+  }
+  .answer-row:nth-child(even) { background: #fdfaf3; }
+  .answer-row .qnum { font-weight: 700; min-width: 28px; color: var(--accent); }
+  .answer-row .ans { 
+    color: var(--green); font-weight: 600; flex: 1;
+  }
+  .answer-row .note { font-size: 12px; color: #999; min-width: 60px; text-align: right; }
+  .answer-row .alt { font-size: 12px; color: #8b7a5c; display: block; font-weight: 400; }
+
+  .model-answer {
+    background: var(--light-accent); border-left: 3px solid var(--gold);
+    padding: 10px 14px; margin: 6px 0 10px 28px; border-radius: 0 4px 4px 0;
+    font-size: 14px;
+  }
+  .model-answer strong { color: var(--accent); }
+
+  .tip-box {
+    background: #fefdf5; border: 1px solid #e8d58b; border-radius: 6px;
+    padding: 14px 18px; margin: 16px 0; font-size: 13px;
+  }
+  .tip-box h4 { color: var(--accent); margin-bottom: 6px; font-size: 14px; }
+
+  .summary-box {
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;
+    margin: 20px 0;
+  }
+  .summary-card {
+    background: var(--light-accent); border-radius: 8px; padding: 16px;
+    text-align: center;
+  }
+  .summary-card .big { font-size: 32px; font-weight: 700; color: var(--accent); }
+  .summary-card .label { font-size: 12px; color: #8b7a5c; margin-top: 4px; }
+
+  @media (max-width: 700px) {
+    .book { padding: 24px 20px; }
+    .summary-box { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="book">
+
+<h1>📖 倫理宗教科 模擬卷答案冊</h1>
+<div class="subtitle">範圍：今日聖經課本 5下 第4-9課　｜　迦密愛禮信小學 五年級呈分試</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('vol1')">模擬卷一</div>
+  <div class="tab" onclick="switchTab('vol2')">模擬卷二</div>
+  <div class="tab" onclick="switchTab('vol3')">模擬卷三</div>
+  <div class="tab" onclick="switchTab('guide')">📋 家長指引</div>
+</div>
+
+<!-- ==================== 卷一答案 ==================== -->
+<div id="vol1" class="tab-content active">
+
+<div class="section">
+  <div class="section-title">一、供詞填充（20%，每空2分）<span>答案</span></div>
+  <div class="answer-row"><span class="qnum">1.</span><span class="ans">大祭司</span><span class="note">第4課</span></div>
+  <div class="answer-row"><span class="qnum">2.</span><span class="ans">彼拉多</span><span class="note">第4課</span></div>
+  <div class="answer-row"><span class="qnum">3.</span><span class="ans">殺人犯</span><span class="alt">「囚犯」不給分（課文強調寧選殺人犯也不選耶穌）</span><span class="note">第4課</span></div>
+  <div class="answer-row"><span class="qnum">4.</span><span class="ans">僕人</span><span class="note">第5課</span></div>
+  <div class="answer-row"><span class="qnum">5.</span><span class="ans">使女</span><span class="note">第5課</span></div>
+  <div class="answer-row"><span class="qnum">6.</span><span class="ans">起誓</span><span class="note">第5課</span></div>
+  <div class="answer-row"><span class="qnum">7.</span><span class="ans">紫袍</span><span class="alt">「紫色的袍」可接受</span><span class="note">第6課</span></div>
+  <div class="answer-row"><span class="qnum">8.</span><span class="ans">荊棘</span><span class="note">第6課</span></div>
+  <div class="answer-row"><span class="qnum">9.</span><span class="ans">約瑟</span><span class="alt">「財主約瑟」可接受</span><span class="note">第7課</span></div>
+  <div class="answer-row"><span class="qnum">10.</span><span class="ans">復活</span><span class="note">第7課</span></div>
+</div>
+
+<div class="section">
+  <div class="section-title">二、簡答（14%，每題2分）<span>答案</span></div>
+  <div class="answer-row"><span class="qnum">1.</span><span class="ans">大祭司問：「祢是神的兒子嗎？」</span><span class="alt">意思正確即可，不要求逐字</span></div>
+  <div class="answer-row"><span class="qnum">2.</span><span class="ans">為了討好羣眾</span><span class="alt">「羣眾受宗教領袖煽動，寧願釋放殺人犯」亦正確</span></div>
+  <div class="answer-row"><span class="qnum">3.</span><span class="ans">三次</span></div>
+  <div class="answer-row"><span class="qnum">4.</span><span class="ans">兩遍</span></div>
+  <div class="answer-row"><span class="qnum">5.</span><span class="ans">髑髏地</span><span class="alt">「耶路撒冷外的髑髏地」可接受</span></div>
+  <div class="answer-row"><span class="qnum">6.</span><span class="ans">財主約瑟</span><span class="alt">「約瑟」可接受</span></div>
+  <div class="answer-row"><span class="qnum">7.</span><span class="ans">加利利</span></div>
+</div>
+
+<div class="section">
+  <div class="section-title">三、金句填充（30%，每空3分）<span>（和合本修訂版）</span></div>
+  <div class="answer-row"><span class="qnum">1.</span><span class="ans">不是&nbsp;、&nbsp;不是</span><span class="note">雅5:12</span></div>
+  <div class="answer-row"><span class="qnum">2.</span><span class="ans">憂傷痛悔&nbsp;、&nbsp;不輕看</span><span class="note">詩51:17</span></div>
+  <div class="answer-row"><span class="qnum">3.</span><span class="ans">基督&nbsp;、&nbsp;死</span><span class="note">羅5:8</span></div>
+  <div class="answer-row"><span class="qnum">4.</span><span class="ans">不再死&nbsp;、&nbsp;死</span><span class="note">羅6:9</span></div>
+  <div class="answer-row"><span class="qnum">5.</span><span class="ans">看見&nbsp;、&nbsp;看見</span><span class="note">約20:29</span></div>
+  <div class="answer-row"><span class="qnum">6.</span><span class="ans">教導&nbsp;、&nbsp;同在</span><span class="note">太28:20</span></div>
+</div>
+
+<div class="section">
+  <div class="section-title">四、配對（12%，每題3分）<span>答案</span></div>
+  <div class="answer-row"><span class="qnum">1.</span><span class="ans">D（彼拉多）</span></div>
+  <div class="answer-row"><span class="qnum">2.</span><span class="ans">A（彼得）</span></div>
+  <div class="answer-row"><span class="qnum">3.</span><span class="ans">B（約瑟）</span></div>
+  <div class="answer-row"><span class="qnum">4.</span><span class="ans">C（多馬）</span></div>
+</div>
+
+<div class="section">
+  <div class="section-title">五、問答（12%，每題4分）<span>參考答案</span></div>
+  
+  <div class="model-answer">
+    <strong>1.</strong> 大祭司問耶穌：「祢是神的兒子嗎？」耶穌回答：「我是。」大祭司非常憤怒，指耶穌說了褻瀆的話，眾人判定祂有罪，應該處死。<br>
+    <span style="color:#8b7a5c;">（評分：答出問題內容2分 + 答出耶穌回應及後果2分）</span>
+  </div>
+  <div class="model-answer">
+    <strong>2.</strong> 彼得想起耶穌曾對他說：「今夜，雞叫兩遍之前，你要三次不認我。」他羞愧不已，不禁痛哭起來。<br>
+    <span style="color:#8b7a5c;">（評分：答出「想起耶穌的話」2分 + 答出「痛哭/懊悔」2分）</span>
+  </div>
+  <div class="model-answer">
+    <strong>3. 生活應用題（開放式答案，合理即可給分）</strong><br>
+    參考答案：① 我會立即上前勸阻，告訴高年級同學欺負人是不對的；② 如果勸阻無效，我會立即告訴老師或風紀，請他們幫忙處理。<br>
+    接受其他合理答案，如「安慰被欺負的同學」、「尋求大人協助」等。
+  </div>
+</div>
+
+</div><!-- vol1 -->
+
+<!-- ==================== 卷二答案 ==================== -->
+<div id="vol2" class="tab-content">
+
+<div class="section">
+  <div class="section-title">一、供詞填充（20%，每空2分）<span>答案</span></div>
+  <div class="answer-row"><span class="qnum">1.</span><span class="ans">髑髏地</span><span class="note">第6課</span></div>
+  <div class="answer-row"><span class="qnum">2.</span><span class="ans">猶太人的王</span><span class="note">第6課</span></div>
+  <div class="answer-row"><span class="qnum">3.</span><span class="ans">幔子</span><span class="note">第6課</span></div>
+  <div class="answer-row"><span class="qnum">4.</span><span class="ans">細麻布</span><span class="note">第7課</span></div>
+  <div class="answer-row"><span class="qnum">5.</span><span class="ans">震動</span><span class="note">第7課</span></div>
+  <div class="answer-row"><span class="qnum">6.</span><span class="ans">石頭</span><span class="note">第7課</span></div>
+  <div class="answer-row"><span class="qnum">7.</span><span class="ans">釘痕</span><span class="alt">「釘痕和肋旁的傷痕」中任一部分可接受</span><span class="note">第8課</span></div>
+  <div class="answer-row"><span class="qnum">8.</span><span class="ans">疑惑</span><span class="note">第8課</span></div>
+  <div class="answer-row"><span class="qnum">9.</span><span class="ans">四十</span><span class="alt">「40」可接受</span><span class="note">第9課</span></div>
+  <div class="answer-row"><span class="qnum">10.</span><span class="ans">彩雲</span><span class="alt">「雲」扣1分（缺「彩」）</span><span class="note">第9課</span></div>
+</div>
+
+<div class="section">
+  <div class="section-title">二、簡答（14%，每題2分）<span>答案</span></div>
+  <div class="answer-row"><span class="qnum">1.</span><span class="ans">紫色／紫袍</span></div>
+  <div class="answer-row"><span class="qnum">2.</span><span class="ans">赦免他們</span><span class="alt">「父啊！赦免他們吧，因為他們不知道自己在做甚麼」可接受</span></div>
+  <div class="answer-row"><span class="qnum">3.</span><span class="ans">宗教領袖</span><span class="alt">「猶太人的宗教領袖」可接受</span></div>
+  <div class="answer-row"><span class="qnum">4.</span><span class="ans">第三天</span><span class="alt">「3天後」可接受</span></div>
+  <div class="answer-row"><span class="qnum">5.</span><span class="ans">多馬</span></div>
+  <div class="answer-row"><span class="qnum">6.</span><span class="ans">「我的主！我的神！」</span><span class="alt">意思準確即可</span></div>
+  <div class="answer-row"><span class="qnum">7.</span><span class="ans">頒布大使命，吩咐門徒使萬民成為祂的門徒</span><span class="alt">「傳揚福音」「使萬民作門徒」可接受</span></div>
+</div>
+
+<div class="section">
+  <div class="section-title">三、金句填充（30%，每空3分）<span>（和合本修訂版）</span></div>
+  <div class="answer-row"><span class="qnum">1.</span><span class="ans">說是&nbsp;、&nbsp;說不是</span><span class="alt">「說是」答「說『是』」可接受；必須有「說」字</span><span class="note">雅5:12</span></div>
+  <div class="answer-row"><span class="qnum">2.</span><span class="ans">憂傷痛悔&nbsp;、&nbsp;不輕看</span><span class="note">詩51:17</span></div>
+  <div class="answer-row"><span class="qnum">3.</span><span class="ans">罪人&nbsp;、&nbsp;死</span><span class="note">羅5:8</span></div>
+  <div class="answer-row"><span class="qnum">4.</span><span class="ans">死人&nbsp;、&nbsp;不再死</span><span class="note">羅6:9</span></div>
+  <div class="answer-row"><span class="qnum">5.</span><span class="ans">吩咐&nbsp;、&nbsp;教導</span><span class="alt">「教導」誤寫「教導」以外詞語不給分</span><span class="note">太28:20</span></div>
+</div>
+
+<div class="section">
+  <div class="section-title">四、配對（12%，每題3分）<span>答案</span></div>
+  <div class="answer-row"><span class="qnum">1.</span><span class="ans">C（從上到下裂成兩半）</span></div>
+  <div class="answer-row"><span class="qnum">2.</span><span class="ans">A（用細麻布包裹耶穌遺體）</span></div>
+  <div class="answer-row"><span class="qnum">3.</span><span class="ans">D（天使滾開墳墓的石頭）</span></div>
+  <div class="answer-row"><span class="qnum">4.</span><span class="ans">B（被彩雲接到天上）</span></div>
+</div>
+
+<div class="section">
+  <div class="section-title">五、問答（12%，每題4分）<span>參考答案</span></div>
+  
+  <div class="model-answer">
+    <strong>1.</strong> 罪狀牌寫着「猶太人的王」。百夫長看見耶穌斷氣後，說：「這人真是個義人！」<br>
+    <span style="color:#8b7a5c;">（評分：罪狀牌內容2分 + 百夫長的話2分）</span>
+  </div>
+  <div class="model-answer">
+    <strong>2.</strong> 多馬起初不信，因為耶穌第一次顯現時他不在場，他說除非親眼看見並親手摸耶穌的釘痕和肋旁的傷痕，否則絕不相信。過了八天，耶穌再次顯現，叫多馬摸祂的手和探祂的肋旁，多馬便不再懷疑，說：「我的主！我的神！」耶穌對他說：「你因為看見了我才信嗎？那沒有看見卻信的有福了。」<br>
+    <span style="color:#8b7a5c;">（評分：不信原因2分 + 轉變過程和耶穌的話2分，意思正確即可）</span>
+  </div>
+  <div class="model-answer">
+    <strong>3. 生活應用題（開放式答案，合理即可給分）</strong><br>
+    參考答案：① 我會先嘗試自己解決，例如請求其他人的幫助，或跟朋友商量能否調整安排；② 若真的做不到，我會誠實地告訴朋友，解釋原因並道歉。<br>
+    接受其他合理答案，如「尋求父母/老師的建議」、「盡力而為，不輕易放棄」結合「誠實溝通」等。
+  </div>
+</div>
+
+</div><!-- vol2 -->
+
+<!-- ==================== 卷三答案 ==================== -->
+<div id="vol3" class="tab-content">
+
+<div class="section">
+  <div class="section-title">一、供詞填充（20%）<span>答案</span></div>
+  <div class="answer-row"><span class="qnum">1.</span><span class="ans">嫉妒</span><span class="note">第4課</span></div>
+  <div class="answer-row"><span class="qnum">2.</span><span class="ans">加利利</span><span class="note">第5課</span></div>
+  <div class="answer-row"><span class="qnum">3.</span><span class="ans">百夫長&nbsp;、&nbsp;義人</span><span class="note">第6課</span></div>
+  <div class="answer-row"><span class="qnum">4.</span><span class="ans">看守</span><span class="alt">「把守」可接受（課文：將墳墓把守妥當）</span><span class="note">第7課</span></div>
+  <div class="answer-row"><span class="qnum">5.</span><span class="ans">肋旁</span><span class="note">第8課</span></div>
+  <div class="answer-row"><span class="qnum">6.</span><span class="ans">頭巾</span><span class="note">第8課</span></div>
+  <div class="answer-row"><span class="qnum">7.</span><span class="ans">否認</span><span class="alt">「不承認」可接受</span><span class="note">第5課</span></div>
+  <div class="answer-row"><span class="qnum">8.</span><span class="ans">水禮</span><span class="alt">「洗禮」可接受</span><span class="note">第9課</span></div>
+  <div class="answer-row"><span class="qnum">9.</span><span class="ans">大使命</span><span class="note">第9課</span></div>
+</div>
+
+<div class="section">
+  <div class="section-title">二、簡答（14%，每題2分）<span>答案</span></div>
+  <div class="answer-row"><span class="qnum">1.</span><span class="ans">假證人</span></div>
+  <div class="answer-row"><span class="qnum">2.</span><span class="ans">逾越節</span></div>
+  <div class="answer-row"><span class="qnum">3.</span><span class="ans">兩遍</span></div>
+  <div class="answer-row"><span class="qnum">4.</span><span class="ans">兩個</span></div>
+  <div class="answer-row"><span class="qnum">5.</span><span class="ans">「不要害怕！」</span><span class="alt">「不要害怕！我知道你們要找那被釘十字架的耶穌」可接受</span></div>
+  <div class="answer-row"><span class="qnum">6.</span><span class="ans">（第一空）網了許多魚／使門徒網了許多魚；（第二空）一無所獲</span><span class="alt">意思正確即可，每空1分</span></div>
+  <div class="answer-row"><span class="qnum">7.</span><span class="ans">兩個穿白衣的天使</span><span class="alt">「天使」可接受（扣1分，因缺「兩個」和「穿白衣」）</span></div>
+</div>
+
+<div class="section">
+  <div class="section-title">三、金句填充（30%，每空3分）<span>（和合本修訂版）</span></div>
+  <div class="answer-row"><span class="qnum">1.</span><span class="ans">雅各</span><span class="note">雅5:12</span></div>
+  <div class="answer-row"><span class="qnum">2.</span><span class="ans">憂傷痛悔</span><span class="note">詩51:17</span></div>
+  <div class="answer-row"><span class="qnum">3.</span><span class="ans">罪人&nbsp;、&nbsp;顯明</span><span class="note">羅5:8</span></div>
+  <div class="answer-row"><span class="qnum">4.</span><span class="ans">不再死&nbsp;、&nbsp;主</span><span class="note">羅6:9</span></div>
+  <div class="answer-row"><span class="qnum">5.</span><span class="ans">看見&nbsp;、&nbsp;信</span><span class="note">約20:29</span></div>
+  <div class="answer-row"><span class="qnum">6.</span><span class="ans">教導&nbsp;、&nbsp;天天</span><span class="note">太28:20</span></div>
+</div>
+
+<div class="section">
+  <div class="section-title">四、配對（12%，每題3分）<span>答案</span></div>
+  <div class="answer-row"><span class="qnum">1.</span><span class="ans">C（為了討好羣眾，把耶穌交給兵丁釘十字架）</span></div>
+  <div class="answer-row"><span class="qnum">2.</span><span class="ans">D（三次不承認認識耶穌）</span></div>
+  <div class="answer-row"><span class="qnum">3.</span><span class="ans">A（最先發現耶穌的墳墓空了）</span></div>
+  <div class="answer-row"><span class="qnum">4.</span><span class="ans">B（要親手摸耶穌的釘痕才相信）</span></div>
+</div>
+
+<div class="section">
+  <div class="section-title">五、問答（12%，每題4分）<span>參考答案</span></div>
+  
+  <div class="model-answer">
+    <strong>1.</strong> 耶穌在假證人面前，一句話也沒有說。後來大祭司問祂是不是神的兒子，祂才坦然承認「我是」。這教導我們：面對不實的指控時，我們不需要急於辯駁，但要對真理堅定不移，勇敢說出事實。另外，耶穌沒有以惡報惡，給我們樹立了面對冤枉時保持冷靜和信靠神的榜樣。<br>
+    <span style="color:#8b7a5c;">（評分：耶穌的反應2分 + 個人領受2分，合理即可給分）</span>
+  </div>
+  <div class="model-answer">
+    <strong>2.</strong> 耶穌三次問彼得：「你愛我嗎？」彼得三次回答：「主啊，是的，你知道我愛你。」然後耶穌三次吩咐他：「你餵養我的羊。」耶穌三次查察彼得愛主的心，可能是要對應彼得之前三次不認主的失敗，給彼得機會重新確認對主的愛，亦表明耶穌完全寬恕並恢復彼得的門徒身分，把牧養信徒的重任交給他。<br>
+    <span style="color:#8b7a5c;">（評分：答出「你愛我嗎」三次2分 + 說出意義（寬恕/恢復/對應三次不認）2分）</span>
+  </div>
+  <div class="model-answer">
+    <strong>3. 生活應用題（開放式答案，合理即可給分）</strong><br>
+    參考答案：① 我會在測驗後私下提醒好朋友，告訴他作弊是不誠實的行為，對他自己和其他同學都不公平；② 如果情況嚴重或他屢勸不改，我會告訴老師，因為真正的朋友應該幫助對方做正確的事，而不是掩蓋錯誤。<br>
+    接受其他合理答案，關鍵是同時表現出「關顧朋友」和「持守真理」的平衡。
+  </div>
+</div>
+
+</div><!-- vol3 -->
+
+<!-- ==================== 家長指引 ==================== -->
+<div id="guide" class="tab-content">
+
+<div class="section">
+  <div class="section-title">📋 家長使用指引</div>
+
+<div class="summary-box">
+  <div class="summary-card">
+    <div class="big">3</div>
+    <div class="label">份模擬卷</div>
+  </div>
+  <div class="summary-card">
+    <div class="big">6</div>
+    <div class="label">課覆蓋（第4-9課）</div>
+  </div>
+  <div class="summary-card">
+    <div class="big">30</div>
+    <div class="label">分鐘／卷（與真實考試一致）</div>
+  </div>
+</div>
+
+<div class="tip-box">
+  <h4>🗓️ 建議使用時間</h4>
+  <table style="width:100%; border-collapse:collapse; font-size:13px;">
+    <tr style="border-bottom:1px solid #e0d5b0;">
+      <td style="padding:6px 8px;"><strong>模擬卷一</strong></td>
+      <td style="padding:6px 8px;">5月28日（階段二尾聲）</td>
+      <td style="padding:6px 8px;">第一次計時練習，了解弱項</td>
+    </tr>
+    <tr style="border-bottom:1px solid #e0d5b0;">
+      <td style="padding:6px 8px;"><strong>模擬卷二</strong></td>
+      <td style="padding:6px 8px;">5月31日（階段二最後）</td>
+      <td style="padding:6px 8px;">第二次計時，對比進步</td>
+    </tr>
+    <tr>
+      <td style="padding:6px 8px;"><strong>模擬卷三</strong></td>
+      <td style="padding:6px 8px;">6月6日（考前兩天）</td>
+      <td style="padding:6px 8px;">終極模擬，最後查缺</td>
+    </tr>
+  </table>
+</div>
+
+<div class="tip-box">
+  <h4>🎯 評分策略</h4>
+  <ul style="margin-left:16px;">
+    <li><strong>目標分數</strong>：75-85分（參考past paper楊洛誠77分）</li>
+    <li><strong>金句是命脈</strong>：金句填充佔30%，是拉分關鍵。六句金句需要做到「零錯誤」——多多寫錯一個字就扣3分，CP值極高。</li>
+    <li><strong>供詞填充</strong>：有詞庫可供選擇，屬「送分題」，應力保不失。特別注意專有名詞（髑髏地、加利利、逾越節等）的寫法。</li>
+    <li><strong>問答題</strong>：生活應用題只要有寫就有分，教多多「一定不要留空」——寫兩句合理的回應即可拿到大部分分數。</li>
+  </ul>
+</div>
+
+<div class="tip-box">
+  <h4>⚠️ 常見陷阱提醒</h4>
+  <ul style="margin-left:16px;">
+    <li><strong>髑髏地</strong> vs 骷髏地 — 課本用「髑髏」二字，較生僻，需特別練習書寫。</li>
+    <li><strong>幔子</strong> — 不要寫成「慢子」或「曼子」。</li>
+    <li><strong>彼拉多</strong> — 三個字都要寫對，不要寫成「比拉多」。</li>
+    <li><strong>約瑟</strong> — 注意與舊約的約瑟區分，這裏是埋葬耶穌的財主約瑟。</li>
+    <li><strong>金句出處</strong> — 卷三考了經文章節（雅各書），這可能超出範圍，但可提醒多多留意每句金句的出處書卷名。</li>
+    <li><strong>憂傷痛悔</strong> — 不要寫成「憂傷痛悔」以外的詞（如「憂傷後悔」），和合本修訂版固定用詞。</li>
+  </ul>
+</div>
+
+<div class="tip-box">
+  <h4>📖 六課金句速查（和合本修訂版）</h4>
+  <table style="width:100%; border-collapse:collapse; font-size:13px;">
+    <tr style="background:#f5ecd7;"><td style="padding:6px 8px;"><strong>課次</strong></td><td style="padding:6px 8px;"><strong>課題</strong></td><td style="padding:6px 8px;"><strong>金句</strong></td><td style="padding:6px 8px;"><strong>出處</strong></td></tr>
+    <tr style="border-bottom:1px solid #e0d5b0;"><td style="padding:6px 8px;">4</td><td style="padding:6px 8px;">接受審判</td><td style="padding:6px 8px;">是，就說是；不是，就說不是。</td><td style="padding:6px 8px;">雅各書5:12</td></tr>
+    <tr style="border-bottom:1px solid #e0d5b0;"><td style="padding:6px 8px;">5</td><td style="padding:6px 8px;">彼得三次不認主</td><td style="padding:6px 8px;">神啊，憂傷痛悔的心，你必不輕看。</td><td style="padding:6px 8px;">詩篇51:17</td></tr>
+    <tr style="border-bottom:1px solid #e0d5b0;"><td style="padding:6px 8px;">6</td><td style="padding:6px 8px;">被釘十架</td><td style="padding:6px 8px;">惟有基督在我們還作罪人的時候為我們死，神的愛就在此向我們顯明了。</td><td style="padding:6px 8px;">羅馬書5:8</td></tr>
+    <tr style="border-bottom:1px solid #e0d5b0;"><td style="padding:6px 8px;">7</td><td style="padding:6px 8px;">被埋與復活</td><td style="padding:6px 8px;">因為知道基督既從死人中復活，就不再死，死也不再作祂的主了。</td><td style="padding:6px 8px;">羅馬書6:9</td></tr>
+    <tr style="border-bottom:1px solid #e0d5b0;"><td style="padding:6px 8px;">8</td><td style="padding:6px 8px;">多馬不信</td><td style="padding:6px 8px;">你因為看見了我才信嗎？那沒有看見卻信的有福了。</td><td style="padding:6px 8px;">約翰福音20:29</td></tr>
+    <tr><td style="padding:6px 8px;">9</td><td style="padding:6px 8px;">顯現與升天</td><td style="padding:6px 8px;">凡我所吩咐你們的，都教導他們遵守。看哪，我天天與你們同在，直到世代的終結。</td><td style="padding:6px 8px;">馬太福音28:20</td></tr>
+  </table>
+</div>
+
+</div>
+
+</div><!-- guide -->
+
+</div><!-- book -->
+
+<script>
+function switchTab(id) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+</body>
+</html>
