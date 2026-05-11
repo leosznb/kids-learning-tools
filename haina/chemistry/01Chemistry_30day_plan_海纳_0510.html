@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>海纳 · S3 Chemistry 30天複習計劃</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: -apple-system, 'Segoe UI', 'Noto Sans SC', sans-serif; background:#f0f2f5; color:#333; line-height:1.7; }
+.header { background:linear-gradient(135deg, #0d47a1, #1976d2); color:#fff; padding:36px 20px 24px; text-align:center; }
+.header h1 { font-size:1.5rem; font-weight:700; }
+.header .sub { font-size:0.85rem; opacity:.8; margin:8px 0; }
+.header .badge { display:inline-block; background:#ff5722; color:#fff; padding:4px 14px; border-radius:20px; font-weight:700; font-size:0.85rem; }
+.container { max-width:860px; margin:0 auto; padding:16px; }
+.card { background:#fff; border-radius:10px; padding:20px; margin-bottom:16px; box-shadow:0 1px 4px rgba(0,0,0,.08); }
+.card h2 { font-size:1.15rem; color:#0d47a1; border-bottom:2px solid #bbdefb; padding-bottom:8px; margin-bottom:14px; }
+.card h3 { font-size:1rem; color:#1976d2; margin:16px 0 8px; }
+table { width:100%; border-collapse:collapse; margin:10px 0; font-size:0.82rem; }
+table th { background:#1565c0; color:#fff; padding:7px 8px; text-align:left; font-weight:600; font-size:0.78rem; }
+table td { padding:6px 8px; border-bottom:1px solid #e8ecf0; vertical-align:top; }
+table tr:nth-child(even) { background:#f5f8fc; }
+.week-row td { background:#e3f2fd; font-weight:700; color:#0d47a1; padding:9px 8px; border-bottom:2px solid #1976d2; font-size:0.85rem; }
+.tag { display:inline-block; padding:2px 8px; border-radius:10px; font-size:0.72rem; font-weight:600; margin:1px; }
+.tag-s { background:#bbdefb; color:#0d47a1; }
+.tag-m { background:#ffcdd2; color:#b71c1c; }
+.tip { padding:12px 14px; margin:10px 0; border-radius:0 6px 6px 0; font-size:0.82rem; }
+.tip.blue { background:#e3f2fd; border-left:4px solid #1976d2; }
+.tip.red { background:#ffebee; border-left:4px solid #c62828; }
+.stats { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin:10px 0; }
+.stat { text-align:center; padding:14px 8px; border-radius:8px; background:#e3f2fd; }
+.stat .n { font-size:1.4rem; font-weight:700; color:#0d47a1; }
+.stat .l { font-size:0.75rem; color:#555; }
+.checklist { list-style:none; }
+.checklist li { padding:3px 0 3px 24px; position:relative; font-size:0.82rem; }
+.checklist li::before { content:"☐"; position:absolute; left:0; color:#999; }
+.footer { text-align:center; padding:24px; color:#888; font-size:0.78rem; }
+.badges { display:flex; gap:8px; flex-wrap:wrap; margin:8px 0; }
+@media print { body{background:#fff;font-size:11pt;} .card{box-shadow:none;border:1px solid #ddd;break-inside:avoid;} table{font-size:9pt;} th{background:#1565c0!important;color:#fff!important;} }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🧪 海纳 · S3 Chemistry 30天複習計劃</h1>
+  <p class="sub">荃灣官立中學 · 2025–2026 Second Term Exam · 6月9日（二）</p>
+  <div class="badge">📅 倒數 30 天 · 100分 · 60分鐘 · 目標：60+/100</div>
+</div>
+
+<div class="container">
+
+<!-- DIAGNOSIS -->
+<div class="card">
+  <h2>📊 診斷報告（基於 2022–23 Past Paper）</h2>
+  <div class="stats">
+    <div class="stat"><div class="n">~57/100</div><div class="l">估分</div></div>
+    <div class="stat"><div class="n">30/40</div><div class="l">MCQ（75%）</div></div>
+    <div class="stat"><div class="n">24條</div><div class="l">錯題入庫</div></div>
+  </div>
+  <p style="font-size:0.9rem; margin:12px 0 8px;"><strong>✅ 優勢：</strong>MCQ基本功過關（75%）、Section B Q1 Fuels全對、Q2 Metals基本正確、同位素定義正確、Na⁺/K⁺焰色正確、無大量空白。</p>
+  <p style="font-size:0.9rem; margin-bottom:8px;"><strong>🔴 弱項：</strong></p>
+  <table>
+    <tr><th>薄弱區</th><th>錯題數</th><th>典型表現</th></tr>
+    <tr><td>CaCO₃/石灰水化學</td><td>4</td><td>方程式寫錯、CO₂檢驗原理錯、過量CO₂反應方向反</td></tr>
+    <tr><td>金屬提取實驗</td><td>3</td><td>產物判斷錯（鉛vs碳搞反）、方程式不平衡、加蓋原因錯</td></tr>
+    <tr><td>焰色反應</td><td>3</td><td>Cu²⁺顏色記錯、濃HCl用途錯、白金絲名稱錯</td></tr>
+    <tr><td>聚合物</td><td>3</td><td>C=C條件不熟、反應名稱缺失、鏈長隨機性不熟</td></tr>
+    <tr><td>蒸餾裝置</td><td>2</td><td>anti-bumping granules、tripod 名稱錯</td></tr>
+    <tr><td>MCQ概念漏洞</td><td>5</td><td>分離方法混淆、聚合物C=C判斷、S²⁻電子數、PVC性質</td></tr>
+  </table>
+  <div class="tip blue">
+    <strong>🎯 定位：技巧補漏型。</strong>海納的基礎框架存在，問題集中在特定主題的概念應用和關鍵詞精準度。30天計劃：<strong>70%主題補漏 + 30%考試技巧</strong>（方程式默寫、裝置圖繪製、結構題答題框架、時間管理）。
+  </div>
+</div>
+
+<!-- EXAM PREDICTION -->
+<div class="card">
+  <h2>🔮 2026 Exam 預測（基於 Scope + 2425/2223 真題模式）</h2>
+
+  <h3>Section B 結構題預測（8種高頻題型，選6–8題）</h3>
+  <table>
+    <tr><th style="width:40px;">#</th><th>預測題型</th><th>概率</th><th>對應範圍</th><th>歷年證據</th></tr>
+    <tr>
+      <td>1</td>
+      <td><strong>同位素</strong>：定義 + 豐度計算 + 化學/物理性質比較</td>
+      <td>🔥 95%</td>
+      <td>Isotopes (Notes #N02)</td>
+      <td>2425 Q5 (6分完整題) · 2223 Q17 MCQ</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td><strong>金屬鍵/離子鍵</strong>：繪圖 + 化合物命名 + 電子圖</td>
+      <td>🔥 95%</td>
+      <td>Metallic & Ionic bonding (Notes)</td>
+      <td>2425 Q1c + Q4a + Q6a · 2223 Q8d 離子圖</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td><strong>蒸餾裝置</strong>：標注 + 水流方向 + 原理 + 純度檢驗</td>
+      <td>🔥 90%</td>
+      <td>13.3 Compounds & Mixtures (p.30–44)</td>
+      <td>2425 Q2 (7分) · 2223 Q7 (7分)</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td><strong>碳酸鈣/石灰岩化學</strong>：熱分解 + 酸反應 + CO₂檢驗 + 過量CO₂</td>
+      <td>🔥 90%</td>
+      <td>Rocks & Minerals (Notes)</td>
+      <td>2425 Q1 + Q6 (共13分) · 2223 Q3 (7分)</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td><strong>金屬提取</strong>：方法比較 + 選材應用 + 回收</td>
+      <td>🔥 85%</td>
+      <td>13.4 Metals B&amp;C (p.48–63 + Notes #N04)</td>
+      <td>2425 Q4b · 2223 Q2 + Q5</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td><strong>聚合物</strong>：單體→重複單元 + 聚合反應 + 塑料性質</td>
+      <td>🔥 85%</td>
+      <td>13.5 Materials (p.67–89 + Notes #N05)</td>
+      <td>2425 Q1b · 2223 Q4 + Q15/Q16/Q20 MCQ</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td><strong>鹼金屬/週期表趨勢</strong>：反應現象 + 同族比較 + 電子排佈</td>
+      <td>🔥 80%</td>
+      <td>13.2 Periodic Table (p.21–29 + Notes #N03)</td>
+      <td>2425 Q4a (Na與水) · 2223 Q8 (Sr比較)</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td><strong>離子檢驗/氣體檢驗</strong>：Cl⁻/CO₃²⁻/SO₄²⁻ 鑑別 + O₂/H₂/CO₂ 檢驗</td>
+      <td>🔥 80%</td>
+      <td>The Ocean (Notes) + Atmosphere (Notes) + 13.3</td>
+      <td>2425 Q2f (Cl⁻) + Q5d (H₂) · 2223 Q9 (6分設計題)</td>
+    </tr>
+  </table>
+
+  <div class="tip blue">
+    <strong>💡 關鍵發現：</strong>2022–23 與 2024–25 年度的 Section B 題型<strong>100% 重疊</strong>——8種模式連續兩年出現。2026年極大概率從這8種中選取6–8題。每種模式練習1題 = 8題備戰。
+  </div>
+
+  <h3>📋 應掌握的完整知識點清單</h3>
+  <p style="font-size:0.82rem; color:#666;">標記說明：<span style="color:#c62828;font-weight:700;">🔴必出</span> <span style="color:#f57f17;font-weight:700;">🟡高頻</span> <span style="color:#2e7d32;">🟢基礎</span></p>
+
+  <table>
+    <tr><th>主題</th><th>知識點</th><th>優先級</th><th>常考形式</th></tr>
+    <tr><td rowspan="2">🧯 Lab Safety</td><td>Hazard symbols：corrosive, flammable, irritant, toxic, oxidizing</td><td>🟢</td><td>MCQ 1–2題</td></tr>
+    <tr><td>實驗室安全規則</td><td>🟢</td><td>MCQ</td></tr>
+    <tr><td rowspan="3">⚛️ Atom &amp; Elements</td><td>原子結構：proton(+), neutron(0), electron(−) 位置與電荷</td><td>🔴</td><td>MCQ</td></tr>
+    <tr><td>電子排佈規則 (2,8,8,2...) → 前20元素能默寫</td><td>🔴</td><td>MCQ + 結構題</td></tr>
+    <tr><td>離子電子排佈：陽離子失電子、陰離子得電子</td><td>🟡</td><td>MCQ</td></tr>
+    <tr><td rowspan="4">🔢 Isotopes</td><td>定義：same protons, different neutrons</td><td>🔴</td><td>結構題</td></tr>
+    <tr><td>相對原子質量計算：Σ(同位素質量 × 豐度)/100</td><td>🔴</td><td>結構題 6–8分</td></tr>
+    <tr><td>化學性質相同（電子數相同），物理性質不同（質量不同）</td><td>🔴</td><td>結構題</td></tr>
+    <tr><td>設未知數解方程求豐度</td><td>🟡</td><td>結構題</td></tr>
+    <tr><td rowspan="4">📊 Periodic Table</td><td>Group I (Alkali metals)：Li→Na→K 活性↑向下</td><td>🔴</td><td>結構題</td></tr>
+    <tr><td>Na + H₂O 四個觀察現象</td><td>🔴</td><td>結構題</td></tr>
+    <tr><td>Group II 鹼土金屬：Ca→Sr→Ba 活性↑向下</td><td>🟡</td><td>結構題</td></tr>
+    <tr><td>同族元素最外層電子數相同 → 化學性質相似</td><td>🟡</td><td>結構題</td></tr>
+    <tr><td rowspan="4">🧪 Compounds &amp; Mixtures</td><td>蒸餾裝置圖：thermometer, condenser, anti-bumping granules, tripod</td><td>🔴</td><td>結構題 6–8分</td></tr>
+    <tr><td>冷凝管水流方向：下進上出 + 原因（更好冷卻效果）</td><td>🔴</td><td>結構題</td></tr>
+    <tr><td>分離方法配對：filtration(固液), distillation(沸點差), evaporation/crystallization(獲固體)</td><td>🟡</td><td>MCQ</td></tr>
+    <tr><td>物理變化 vs 化學變化判別</td><td>🟡</td><td>MCQ</td></tr>
+    <tr><td rowspan="4">🔩 Metals B&amp;C</td><td>金屬提取方法：Electrolysis(K→Al) vs Carbon reduction(Zn→Cu)</td><td>🔴</td><td>MCQ + 結構題</td></tr>
+    <tr><td>PbO + C → Pb + CO₂ 實驗：產物銀灰色、加蓋防再氧化</td><td>🔴</td><td>結構題</td></tr>
+    <tr><td>金屬性質選材：導電→電線、高強度→橋樑、低密度→飛機、高導熱→鍋</td><td>🟡</td><td>MCQ + 結構題</td></tr>
+    <tr><td>回收金屬的原因（不可再生資源、減少污染）</td><td>🟡</td><td>結構題</td></tr>
+    <tr><td rowspan="3">🧶 Materials</td><td>C=C 雙鍵是 addition polymerization 的前提</td><td>🔴</td><td>MCQ + 結構題</td></tr>
+    <tr><td>Monomer → Repeating unit 書寫</td><td>🟡</td><td>結構題</td></tr>
+    <tr><td>PVC 含毒增塑劑不做水瓶 / Polystyrene 隔熱做食物容器 / 熱塑性 vs 熱固性</td><td>🟡</td><td>MCQ</td></tr>
+    <tr><td rowspan="3">🌍 Atmosphere</td><td>空氣成分：N₂~78%, O₂~21%, Ar~0.9%, CO₂~0.04%</td><td>🟡</td><td>MCQ</td></tr>
+    <tr><td>氣體檢驗：O₂→glowing splint relights, H₂→'pop', CO₂→limewater milky</td><td>🔴</td><td>MCQ + 結構題</td></tr>
+    <tr><td>液態空氣分離：N₂(-196°C)先沸出 → O₂(-183°C)後沸出</td><td>🟡</td><td>MCQ</td></tr>
+    <tr><td rowspan="2">🌊 Ocean</td><td>Cl⁻ 檢驗：dilute HNO₃ + AgNO₃ → white precipitate (AgCl)</td><td>🟡</td><td>結構題</td></tr>
+    <tr><td>海水淡化：蒸餾 / 逆滲透</td><td>🟢</td><td>MCQ</td></tr>
+    <tr><td rowspan="4">🪨 Rocks &amp; Minerals</td><td>CaCO₃(s) → CaO(s) + CO₂(g)（熱分解）</td><td>🔴</td><td>結構題 必出</td></tr>
+    <tr><td>CaO(s) + H₂O(l) → Ca(OH)₂(aq)（製石灰水）</td><td>🔴</td><td>結構題</td></tr>
+    <tr><td>CO₂(g) + Ca(OH)₂(aq) → CaCO₃(s)↓ + H₂O(l)（石灰水變渾濁）</td><td>🔴</td><td>結構題</td></tr>
+    <tr><td>過量CO₂：CaCO₃ + H₂O + CO₂ → Ca(HCO₃)₂（變回無色）</td><td>🔴</td><td>結構題</td></tr>
+    <tr><td rowspan="4">⚡ Bonding</td><td>金屬鍵圖：positive ions + sea of delocalised electrons</td><td>🔴</td><td>結構題 必繪圖</td></tr>
+    <tr><td>離子鍵電子圖：方括號 + 電荷 + 完整八隅體</td><td>🔴</td><td>結構題</td></tr>
+    <tr><td>過渡金屬離子命名：Fe²⁺→iron(II), Fe³⁺→iron(III)</td><td>🟡</td><td>結構題</td></tr>
+    <tr><td>交叉法寫離子化合物化學式</td><td>🟡</td><td>結構題</td></tr>
+    <tr><td rowspan="4">🔥 焰色 + 離子顏色</td><td>焰色：Li⁺紅、Na⁺金黃、K⁺淡紫、Ca²⁺磚紅、Cu²⁺藍綠</td><td>🔴</td><td>MCQ</td></tr>
+    <tr><td>濃HCl用途：清潔 Nichrome/Platinum wire</td><td>🟡</td><td>結構題</td></tr>
+    <tr><td>常見離子顏色：Cu²⁺藍、Fe²⁺淺綠、Fe³⁺黃褐、Co²⁺粉紅、MnO₄⁻紫、Cr₂O₇²⁻橙</td><td>🟡</td><td>MCQ</td></tr>
+    <tr><td>檢驗水純度：測沸點</td><td>🟡</td><td>結構題</td></tr>
+    <tr><td rowspan="3">🧪 離子鑑別</td><td>CO₃²⁻ + dilute acid → 氣泡 (CO₂)</td><td>🔴</td><td>結構題 設計題</td></tr>
+    <tr><td>Cl⁻ + AgNO₃ (+ dilute HNO₃) → 白色沉澱</td><td>🔴</td><td>結構題</td></tr>
+    <tr><td>SO₄²⁻ + BaCl₂ → 白色沉澱</td><td>🟡</td><td>結構題</td></tr>
+  </table>
+
+  <h3>⏱ Section A MCQ 高頻分佈預測（20題）</h3>
+  <table>
+    <tr><th>題數</th><th>知識領域</th></tr>
+    <tr><td>1–2</td><td>Lab Safety（危險品標誌）</td></tr>
+    <tr><td>2–3</td><td>Atomic structure + electronic arrangement（原子結構 + 電子排佈）</td></tr>
+    <tr><td>1–2</td><td>Isotopes（同位素辨識 + 粒子數計算）</td></tr>
+    <tr><td>2</td><td>Periodic Table trends（週期表趨勢 + 同族比較）</td></tr>
+    <tr><td>2–3</td><td>Separation methods + distillation（分離方法 + 蒸餾原理）</td></tr>
+    <tr><td>2</td><td>Metals：extraction methods + properties &amp; uses（金屬提取 + 性質應用）</td></tr>
+    <tr><td>2</td><td>Materials：polymers, plastics, C=C（聚合物 + 塑料性質）</td></tr>
+    <tr><td>1–2</td><td>Atmosphere + Ocean（空氣成分 + 氣體檢驗 + Cl⁻檢驗）</td></tr>
+    <tr><td>1–2</td><td>Rocks &amp; Minerals（石灰岩用途 + CaCO₃反應）</td></tr>
+    <tr><td>1–2</td><td>Flame test colours + ion colours（焰色 + 離子顏色）</td></tr>
+    <tr><td>1–2</td><td>Ionic bonding &amp; formulae（離子鍵 + 化學式）</td></tr>
+  </table>
+</div>
+
+<!-- 30-DAY PLAN -->
+<div class="card">
+  <h2>📅 30天衝刺計劃</h2>
+  <p style="font-size:0.85rem; color:#666; margin-bottom:12px;">每日 45–60 分鐘。每週一個主題補漏 + 一種考試技巧訓練。週末限時小測（必須計時）。</p>
+
+  <table>
+    <tr class="week-row"><td colspan="4">📌 Week 1（11–17 May）· 主題：CaCO₃化學 + 技巧：方程式默寫法</td></tr>
+    <tr><th style="width:55px;">日期</th><th style="width:90px;">重點</th><th>任務</th><th style="width:30px;">✓</th></tr>
+    <tr><td>11 Mon</td><td>🧪 補漏</td><td>☐ 重溫 CaCO₃→CaO→Ca(OH)₂→CaCO₃ 循環<br>☐ 默寫 5 條 CaCO₃ 方程式</td><td>☐</td></tr>
+    <tr><td>12 Tue</td><td>🧪 補漏</td><td>☐ CO₂ 檢驗原理 + 過量CO₂反應<br>☐ 用自己的話解釋：為什麼石灰水先渾濁後變清</td><td>☐</td></tr>
+    <tr><td>13 Wed</td><td>🔩 補漏</td><td>☐ PbO + C → Pb + CO₂ 實驗全流程<br>☐ 產物顏色（silvery-grey）、加蓋原因（防再氧化）<br>☐ 練習方程式配平 3 題</td><td>☐</td></tr>
+    <tr><td>14 Thu</td><td>🎯 技巧</td><td>☐ <strong>方程式默寫法：</strong>空白紙默寫9條必背方程式，計時8分鐘<br>☐ 重點：狀態符號 (s)/(l)/(g)/(aq) 不可遺漏</td><td>☐</td></tr>
+    <tr><td>15 Fri</td><td>📝 小測</td><td>☐ 自測：CaCO₃三連方程式默寫 + PbO實驗流程默寫</td><td>☐</td></tr>
+    <tr><td>16 Sat</td><td>🔄 複習</td><td>☐ 重做本週錯題 + Supplementary Exercises CaCO₃ 部分</td><td>☐</td></tr>
+    <tr><td>17 Sun</td><td>📖 輕複習</td><td>☐ 快速瀏覽方程式卡（10分鐘）</td><td>☐</td></tr>
+  </table>
+
+  <table style="margin-top:14px;">
+    <tr class="week-row"><td colspan="4">📌 Week 2（18–24 May）· 主題：鍵結繪圖 + 技巧：結構題答題框架</td></tr>
+    <tr><th>日期</th><th>重點</th><th>任務</th><th>✓</th></tr>
+    <tr><td>18 Mon</td><td>⚡ 補漏</td><td>☐ 金屬鍵圖：畫 Na、Mg、Al（positive ions + sea of delocalised electrons）<br>☐ 注意：delocalised electrons 數量 ≠ positive ions 數量</td><td>☐</td></tr>
+    <tr><td>19 Tue</td><td>⚡ 補漏</td><td>☐ 離子鍵電子圖：MgO、NaCl、CaCl₂、Mg₃N₂ 各畫一遍<br>☐ 過渡金屬命名：Fe²⁺→iron(II)、Fe³⁺→iron(III)</td><td>☐</td></tr>
+    <tr><td>20 Wed</td><td>🧶 補漏</td><td>☐ 聚合物 C=C 條件 + monomer→repeating unit<br>☐ Addition polymerization 名稱 + chain length = random</td><td>☐</td></tr>
+    <tr><td>21 Thu</td><td>🎯 技巧</td><td>☐ <strong>結構題答題框架：</strong>定義題(完整句)→解釋題(原理→證據→結論)→計算題(公式→代入→答案→單位)</td><td>☐</td></tr>
+    <tr><td>22 Fri</td><td>📝 小測</td><td>☐ 自測：鍵結繪圖+同位素計算+聚合物</td><td>☐</td></tr>
+    <tr><td>23 Sat</td><td>🔄 複習</td><td>☐ 重做錯題 + 繪圖再練一遍</td><td>☐</td></tr>
+    <tr><td>24 Sun</td><td>📖 輕複習</td><td>☐ 繪圖要點瀏覽（10分鐘）</td><td>☐</td></tr>
+  </table>
+
+  <table style="margin-top:14px;">
+    <tr class="week-row"><td colspan="4">📌 Week 3（25–31 May）· 主題：裝置圖+焰色+離子鑑別 + 技巧：限時訓練</td></tr>
+    <tr><th>日期</th><th>重點</th><th>任務</th><th>✓</th></tr>
+    <tr><td>25 Mon</td><td>🧪 補漏</td><td>☐ 蒸餾裝置圖畫3遍 + 標注所有部件（thermometer, condenser, anti-bumping granules, tripod）<br>☐ 冷凝管水流：下進上出</td><td>☐</td></tr>
+    <tr><td>26 Tue</td><td>🔥 補漏</td><td>☐ 焰色全套：Li⁺紅、Na⁺金黃、K⁺淡紫、Ca²⁺磚紅、Cu²⁺藍綠<br>☐ 濃HCl用途 + 檢驗水純度（測沸點）</td><td>☐</td></tr>
+    <tr><td>27 Wed</td><td>🌍 補漏</td><td>☐ Atmosphere/Ocean/Rocks Notes<br>☐ Cl⁻檢驗 + 離子鑑別實驗設計（NaCl/Na₂SO₄/Na₂CO₃）</td><td>☐</td></tr>
+    <tr><td>28 Thu</td><td>🎯 技巧</td><td>☐ 裝置圖限時5分鐘畫完並標注<br>☐ 限時25分鐘做 2425 Section A（MCQ）</td><td>☐</td></tr>
+    <tr><td>29 Fri</td><td>📝 真題</td><td>☐ 限時60分鐘做 2425 全卷 → 核對MS → 記錄錯題</td><td>☐</td></tr>
+    <tr><td>30 Sat</td><td>📝 檢討</td><td>☐ 2425 錯題逐題重做 + 方程式再默寫 + 同位素計算再練</td><td>☐</td></tr>
+    <tr><td>31 Sun</td><td>🔄 補漏</td><td>☐ 回顧 Week 1–3 薄弱點 + 重溫 Experiment Worksheets</td><td>☐</td></tr>
+  </table>
+
+  <table style="margin-top:14px;">
+    <tr class="week-row"><td colspan="4">📌 Week 4（1–8 Jun）· 衝刺：真題+考前策略</td></tr>
+    <tr><th>日期</th><th>重點</th><th>任務</th><th>✓</th></tr>
+    <tr><td>1 Mon</td><td>📝 真題</td><td>☐ 限時做 2223 全卷（60分鐘模擬）</td><td>☐</td></tr>
+    <tr><td>2 Tue</td><td>📝 檢討</td><td>☐ 2223 錯題分析 + 同位素計算/鍵結繪圖最後一練 + CaCO₃方程式最後一默</td><td>☐</td></tr>
+    <tr><td>3 Wed</td><td>🎯 技巧</td><td>☐ 結構題搶分策略：先掃題→最有把握先做→同位素計算驗算%加起來=100</td><td>☐</td></tr>
+    <tr><td>4 Thu</td><td>📖 輕複習</td><td>☐ <span class="tag tag-m">多多呈分試日</span> Day Off 或 15分鐘輕回顧</td><td>☐</td></tr>
+    <tr><td>5 Fri</td><td>📝 MCQ</td><td>☐ Supplementary Exercises 全部剩餘MCQ</td><td>☐</td></tr>
+    <tr><td>6 Sat</td><td>🎯 技巧</td><td>☐ 考前時間管理：MCQ≤20分鐘→不確定用排除法→Section B留5分鐘檢查關鍵字</td><td>☐</td></tr>
+    <tr><td>7 Sun</td><td>🔁 回顧</td><td>☐ 全部Summary Notes + 錯題庫最後一遍 + 早睡</td><td>☐</td></tr>
+    <tr><td>8 Mon</td><td>📖 考前</td><td>☐ 只看薄弱點清單（20分鐘）→ 確認文具 + 計算機 → 🧪 6/9 考試！</td><td>☐</td></tr>
+  </table>
+
+  <div class="tip blue" style="margin-top:12px;">
+    <strong>🧪 必背方程式卡（Week 1必須全部默寫無誤）：</strong><br>
+    ① CaCO₃(s)→CaO(s)+CO₂(g)　② CaO(s)+H₂O(l)→Ca(OH)₂(aq)<br>
+    ③ CO₂(g)+Ca(OH)₂(aq)→CaCO₃(s)↓+H₂O(l)　④ CaCO₃(s)+H₂O(l)+CO₂(g)→Ca(HCO₃)₂(aq)<br>
+    ⑤ CaCO₃(s)+2HCl(aq)→CaCl₂(aq)+H₂O(l)+CO₂(g)　⑥ 2Na(s)+2H₂O(l)→2NaOH(aq)+H₂(g)<br>
+    ⑦ 2PbO(s)+C(s)→2Pb(s)+CO₂(g)　⑧ Mg(s)+2H₂O(g)→Mg(OH)₂(aq)+H₂(g)<br>
+    ⑨ n(H₂C=CH₂)→[CH₂CH₂]n
+  </div>
+</div>
+
+<!-- MISTAKE TABLE -->
+<div class="card">
+  <h2>📋 完整錯題清單（24條 · 2022–23 Past Paper）</h2>
+  <p style="font-size:0.82rem; color:#666; margin-bottom:8px;">MCQ: 30/40（錯5題：Q5, Q15, Q17, Q18, Q20）· Section B 估分 ~27/60</p>
+  <table>
+    <tr><th>#</th><th>題目</th><th>你的答案</th><th>正確答案</th><th>錯誤原因</th><th>考核點</th></tr>
+    <tr><td>1</td><td>Q2(c): 飛機框架選金屬Y的理由</td><td>high electrical conductivity</td><td>low density and moderate strength</td><td>概念不清</td><td>Metal properties & applications</td></tr>
+    <tr><td>2</td><td>Q2(d): 做鍋選金屬</td><td>選V和W，理由low strength</td><td>選V，理由highest thermal conductivity</td><td>概念不清</td><td>Metal thermal conductivity</td></tr>
+    <tr><td>3</td><td>Q3(b): 石灰水製備方法</td><td>只寫方程式，缺操作方法</td><td>"Add water to quicklime" + 方程式</td><td>公式/步驟錯誤</td><td>Preparing limewater</td></tr>
+    <tr><td>4</td><td>Q3(c): CaO+H₂O方程式</td><td>CaO(aq)+H₂O(l)→Ca(HO)₂(aq)</td><td>CaO(s)+H₂O(l)→Ca(OH)₂(aq)</td><td>公式/步驟錯誤</td><td>State symbols & formula</td></tr>
+    <tr><td>5</td><td>Q3(d)(i): CO₂使石灰水變渾濁原理</td><td>carbon hydrogencarbonate is formed</td><td>CO₂ reacts with Ca(OH)₂ to form white insoluble CaCO₃</td><td>概念不清</td><td>CO₂ test with limewater</td></tr>
+    <tr><td>6</td><td>Q3(d)(ii): 過量CO₂通入石灰水</td><td>變渾濁+白色沉澱</td><td>變回無色（生成可溶Ca(HCO₃)₂）</td><td>概念不清</td><td>Excess CO₂ + limewater</td></tr>
+    <tr><td>7</td><td>Q4(c): 聚合反應名稱</td><td>未作答</td><td>(Addition) polymerization</td><td>公式/步驟錯誤</td><td>Addition polymerization</td></tr>
+    <tr><td>8</td><td>Q4(d): 聚合物鏈長是否相同</td><td>Yes, same polymers</td><td>No, polymerization is a random process</td><td>概念不清</td><td>Polymer chain randomness</td></tr>
+    <tr><td>9</td><td>Q5(b): 碳還原PbO的產物</td><td>brick colour, product is carbon</td><td>silvery-grey solid, product is lead</td><td>概念不清</td><td>Lead extraction product ID</td></tr>
+    <tr><td>10</td><td>Q5(d): PbO+C方程式配平</td><td>0.5C+2PbO→2Pb+CO₂</td><td>2PbO+C→2Pb+CO₂</td><td>公式/步驟錯誤</td><td>Balancing equations</td></tr>
+    <tr><td>11</td><td>Q5(f): 加熱後加蓋原因</td><td>Because it is very hot</td><td>To prevent formation of PbO again</td><td>概念不清</td><td>Preventing re-oxidation</td></tr>
+    <tr><td>12</td><td>Q6(b): 焰色測試中濃HCl用途</td><td>colour more easy to observed</td><td>To remove impurities / clean nichrome wire</td><td>概念不清</td><td>Flame test cleaning</td></tr>
+    <tr><td>13</td><td>Q6(c): 替代nichrome wire的金屬</td><td>Load</td><td>Platinum wire</td><td>公式/步驟錯誤</td><td>Flame test apparatus</td></tr>
+    <tr><td>14</td><td>Q6(d)(iii): Cu²⁺焰色</td><td>brick red（磚紅色）</td><td>bluish green（藍綠色）</td><td>概念不清</td><td>Flame test colours – Cu²⁺</td></tr>
+    <tr><td>15</td><td>Q7(a): 蒸餾裝置標注Y和Z</td><td>Y: test tube; Z: triple lamps</td><td>Y: anti-bumping granules; Z: tripod</td><td>概念不清</td><td>Distillation apparatus labels</td></tr>
+    <tr><td>16</td><td>Q7(d): 檢驗蒸餾水純度</td><td>Use electricity to test</td><td>Measure the boiling point of water</td><td>概念不清</td><td>Testing water purity</td></tr>
+    <tr><td>17</td><td>Q8(a): Sr(Z=38)電子排佈</td><td>答案不完整/錯誤</td><td>2,8,18,8,2</td><td>概念不清</td><td>Electronic arrangement Sr</td></tr>
+    <tr><td>18</td><td>Q8(d)(i): SrCl₂電子圖</td><td>繪圖不正確</td><td>[Sr]²⁺ 2[Cl]⁻ 完整八隅體</td><td>概念不清</td><td>Ionic bonding electron diagram</td></tr>
+    <tr><td>19</td><td>Q9: 區分NaCl/Na₂SO₄/Na₂CO₃</td><td>方案不完整</td><td>先稀HNO₃(CO₃²⁻冒泡)→AgNO₃(Cl⁻白沉)→BaCl₂(SO₄²⁻白沉)</td><td>概念不清</td><td>Ion identification design</td></tr>
+    <tr><td>20</td><td>MCQ Q5: 從NaCl溶液獲固體NaCl</td><td>A: Evaporation only</td><td>C: Evaporation + Crystallization</td><td>概念不清</td><td>Separation methods</td></tr>
+    <tr><td>21</td><td>MCQ Q15: 哪些化合物可形成聚合物</td><td>C: (2)和(3)</td><td>B: (1)和(3) — (1)含C=C可聚合,(2)酯不含C=C</td><td>概念不清</td><td>Polymer formation C=C requirement</td></tr>
+    <tr><td>22</td><td>MCQ Q17: ³⁴₁₆S sulphide ion 亞原子粒子數</td><td>C: p=16,e⁻=16,n=18</td><td>B: p=16,e⁻=18,n=18（S²⁻獲2電子）</td><td>概念不清</td><td>Isotope + ion electron count</td></tr>
+    <tr><td>23</td><td>MCQ Q18: 聚合物X repeating unit</td><td>C</td><td>D</td><td>概念不清</td><td>Polymer repeating unit ID</td></tr>
+    <tr><td>24</td><td>MCQ Q20: PVC不用做水瓶的原因</td><td>D: 兩句都錯</td><td>B: 兩句都對但2nd非解釋（PVC含毒增塑劑）</td><td>概念不清</td><td>PVC toxic plasticizers</td></tr>
+  </table>
+  <p style="font-size:0.8rem; color:#888; margin-top:8px;">錯誤類型：概念不清 19 條 · 公式/步驟錯誤 5 條</p>
+</div>
+
+<!-- PARENT -->
+<div class="card">
+  <h2>👨‍👦 家長檢查點</h2>
+  <table>
+    <tr><th style="width:80px;">週次</th><th>檢查項目</th></tr>
+    <tr><td>Week 1</td><td>隨機抽問9條方程式——能不看書默寫嗎？CaCO₃ 五條尤其重要</td></tr>
+    <tr><td>Week 2</td><td>叫他畫 MgO 的離子鍵電子圖——電子轉移方向、方括號、電荷都對嗎？</td></tr>
+    <tr><td>Week 3</td><td>限時25分鐘做MCQ——時間夠嗎？錯在哪？</td></tr>
+    <tr><td>Week 4</td><td>做2425全卷60分鐘——分數有提升嗎？關鍵字串法對照MS</td></tr>
+  </table>
+  <div class="tip blue" style="margin-top:8px;">
+    <strong>💡 提分公式：</strong>CaCO₃方程式(~8分) + 鍵結繪圖(~8分) + 蒸餾裝置標注(~4分) = <strong>+20分潛力</strong>。這三項是靠「重複練習」就能拿到的分數。
+  </div>
+</div>
+
+<!-- FINAL CHECKLIST -->
+<div class="card">
+  <h2>✅ 6月8日終檢清單</h2>
+  <ul class="checklist">
+    <li>9條方程式能默寫無誤（含狀態符號）</li>
+    <li>蒸餾裝置圖能5分鐘內畫完並全標注</li>
+    <li>金屬鍵圖 + 離子鍵圖（MgO, NaCl, CaCl₂）能不看書畫</li>
+    <li>同位素豐度計算做過≥3題</li>
+    <li>焰色反應 Li紅/Na黃/K淡紫/Ca磚紅/Cu藍綠 背熟</li>
+    <li>離子鑑別流程（Cl⁻/SO₄²⁻/CO₃²⁻）能默寫</li>
+    <li>2425 和 2223 真題都限時做過</li>
+    <li>時間分配：MCQ≤20min, Section B 35–40min, 5min檢查</li>
+  </ul>
+</div>
+
+<div class="footer">
+  <p>Generated 2026-05-10 · 海纳 💙 技巧補漏型 · 目標 60+/100</p>
+</div>
+</div>
+</body>
+</html>

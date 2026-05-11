@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🃏 Bio 闪电记忆卡 — S3 Biology 87 Cards</title>
+<style>
+:root {
+  --bg: #0a0e27;
+  --glass: rgba(255,255,255,0.06);
+  --glass-border: rgba(255,255,255,0.12);
+  --glass-hover: rgba(255,255,255,0.10);
+  --text: #e0e6f0;
+  --text-dim: #8899bb;
+  --accent: #4da6ff;
+  --kw: #e8890c;
+  --green: #2ecc71;
+  --red: #e74c3c;
+  --amber: #f39c12;
+  --card-bg: rgba(20,25,55,0.85);
+}
+* { box-sizing:border-box; margin:0; padding:0; }
+body {
+  font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+  background: radial-gradient(ellipse at 50% 0%, #1a2040 0%, #0a0e27 70%);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex; flex-direction: column; align-items: center;
+  padding: 16px;
+}
+
+/* Header */
+.header {
+  text-align: center; padding: 24px 0 12px;
+  max-width: 700px; width: 100%;
+}
+.header h1 { font-size: 2em; font-weight: 800; letter-spacing: -0.02em; }
+.header .sub { color: var(--text-dim); font-size: 0.9em; margin-top: 4px; }
+.header .badge-row { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-top:10px; }
+.badge { font-size:0.75em; padding:3px 10px; border-radius:99px; font-weight:600; }
+.badge-red { background:rgba(231,76,60,0.2); color:#e74c3c; }
+.badge-amber { background:rgba(243,156,18,0.2); color:#f39c12; }
+.badge-green { background:rgba(46,204,113,0.2); color:#2ecc71; }
+
+/* Controls */
+.controls {
+  display:flex; flex-wrap:wrap; gap:10px; align-items:center; justify-content:center;
+  padding: 12px 0; max-width:700px; width:100%;
+}
+.controls select, .controls button {
+  padding: 8px 16px; border-radius: 10px; border:1px solid var(--glass-border);
+  background: var(--glass); color: var(--text); font-size:0.85em;
+  cursor: pointer; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  font-family: inherit;
+}
+.controls select:hover, .controls button:hover { background: var(--glass-hover); }
+.controls button.active { background: rgba(77,166,255,0.2); border-color: var(--accent); color: var(--accent); }
+.progress { font-size:0.85em; color:var(--text-dim); min-width:60px; text-align:center; }
+
+/* Card area */
+.card-area {
+  perspective: 1200px;
+  width: 100%; max-width: 600px;
+  margin: 8px auto 16px;
+}
+.flashcard {
+  width: 100%; aspect-ratio: 3/4; max-height: 480px;
+  position: relative;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.flashcard-inner {
+  width: 100%; height: 100%;
+  position: relative;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+.flashcard.flipped .flashcard-inner { transform: rotateY(180deg); }
+.card-face {
+  position: absolute; inset:0;
+  border-radius: 20px;
+  padding: 32px 24px;
+  display: flex; flex-direction: column; align-items:center; justify-content:center;
+  text-align: center;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  background: var(--card-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  overflow-y: auto;
+}
+.card-front {
+  font-size: 1.6em; font-weight: 700; letter-spacing: -0.01em;
+  line-height: 1.5;
+}
+.card-back {
+  transform: rotateY(180deg);
+  font-size: 1.05em; line-height: 1.6; text-align: left;
+  justify-content: flex-start; align-items: flex-start;
+  padding: 28px 24px;
+}
+.card-back .kw { font-weight:700; color:var(--kw); text-decoration: underline; text-decoration-color: rgba(232,137,12,0.3); text-underline-offset: 2px; }
+.card-back .zh { color: var(--text-dim); font-size:0.85em; margin-top:8px; display:block; }
+.card-back .def { margin-bottom:6px; }
+.card-tag {
+  position: absolute; top: 12px; right: 14px; font-size:0.7em;
+  padding:2px 8px; border-radius: 6px; font-weight:600;
+}
+.tag-red { background:rgba(231,76,60,0.3); color:#f87171; }
+.tag-amber { background:rgba(243,156,18,0.3); color:#fbbf24; }
+.tag-green { background:rgba(46,204,113,0.3); color:#4ade80; }
+.card-number {
+  position: absolute; top: 12px; left: 14px;
+  font-size: 0.75em; color: var(--text-dim);
+}
+
+/* Nav row */
+.nav-row {
+  display:flex; gap:10px; align-items:center; justify-content:center;
+  flex-wrap:wrap; margin:8px 0;
+}
+.nav-row button {
+  padding: 10px 20px; border-radius: 12px; border:1px solid var(--glass-border);
+  background: var(--glass); color: var(--text); font-size:0.9em;
+  cursor: pointer; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  font-family: inherit; font-weight:600;
+}
+.nav-row button:hover { background: var(--glass-hover); }
+.nav-row button:disabled { opacity:0.35; cursor:default; }
+.btn-master {
+  width:36px; height:36px; border-radius: 50%; border:1px solid var(--glass-border);
+  background: var(--glass); color: var(--text); font-size:1em;
+  cursor: pointer; display:flex; align-items:center; justify-content:center;
+}
+.btn-master.mastered { background:rgba(46,204,113,0.25); border-color:var(--green); color:var(--green); }
+
+/* Compare mode */
+.compare-area { display:none; width:100%; max-width:700px; margin:12px auto; }
+.compare-area.active { display:block; }
+.compare-pair {
+  display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-bottom:16px;
+}
+.compare-card {
+  background: var(--card-bg); border:1px solid var(--glass-border);
+  border-radius:16px; padding:20px; backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+  cursor: pointer; text-align:center; min-height:180px;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  transition: transform 0.4s; -webkit-tap-highlight-color: transparent;
+}
+.compare-card .label { font-size:0.8em; color:var(--text-dim); margin-bottom:6px; }
+.compare-card .title { font-size:1.2em; font-weight:700; }
+.compare-card .detail { display:none; font-size:0.85em; line-height:1.5; margin-top:10px; text-align:left; }
+.compare-card.revealed .detail { display:block; }
+.compare-vs {
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.2em; font-weight:800; color:var(--text-dim);
+}
+
+/* Toast */
+.toast {
+  position:fixed; bottom:30px; left:50%; transform:translateX(-50%);
+  background:rgba(46,204,113,0.9); color:#fff; padding:10px 24px;
+  border-radius:99px; font-weight:600; font-size:0.9em;
+  opacity:0; transition:opacity 0.3s; pointer-events:none; z-index:999;
+}
+.toast.show { opacity:1; }
+
+/* Responsive */
+@media (max-width:500px) {
+  .flashcard { max-height:380px; }
+  .card-front { font-size:1.3em; }
+  .card-back { font-size:0.95em; padding:20px 16px; }
+  .compare-pair { grid-template-columns:1fr; }
+  .controls { gap:6px; }
+  .controls select, .controls button { padding:6px 10px; font-size:0.8em; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🃏 Bio 闪电记忆卡</h1>
+  <div class="sub">S3 Biology · 18考點 · 87張卡 · Tap to flip</div>
+  <div class="badge-row">
+    <span class="badge badge-red">🔴 必出 (50 cards)</span>
+    <span class="badge badge-amber">🟡 高频 (22 cards)</span>
+    <span class="badge badge-green">🟢 中低频 (15 cards)</span>
+  </div>
+</div>
+
+<div class="controls">
+  <select id="filterPrio" onchange="applyFilter()">
+    <option value="all">全部优先级</option>
+    <option value="red">🔴 必出</option>
+    <option value="amber">🟡 高频</option>
+    <option value="green">🟢 中低频</option>
+  </select>
+  <select id="filterTopic" onchange="applyFilter()">
+    <option value="all">全部考点</option>
+    <option value="1">1. Nutrition & Food Substances</option>
+    <option value="2">2. Human Digestive System</option>
+    <option value="3">3. Enzymes</option>
+    <option value="4">4. Deficiency Diseases</option>
+    <option value="5">5. DNA & Biotechnology</option>
+    <option value="6">6. Body Defence & Immunity</option>
+    <option value="7">7. Cancer</option>
+    <option value="8">8. Diabetes & Chronic Diseases</option>
+    <option value="9">9. Metabolism & Water Balance</option>
+    <option value="10">10. Teeth & Dietary Fibre</option>
+    <option value="11">11. Food Labels & GI</option>
+    <option value="12">12. Carbohydrates Classification</option>
+    <option value="13">13. Lipids Classification</option>
+    <option value="14">14. Proteins Structure</option>
+    <option value="15">15. DNA vs RNA</option>
+    <option value="16">16. Enzyme Inhibitors</option>
+    <option value="17">17. Characteristics of Life</option>
+    <option value="18">18. Graph Plotting</option>
+  </select>
+  <button id="btnShuffle" onclick="shuffleCards()">🔀 Shuffle</button>
+  <button id="btnCompare" onclick="toggleCompare()">⚔️ 对比模式</button>
+  <span class="progress" id="progressLabel">1 / 87</span>
+</div>
+
+<div class="card-area" id="cardArea">
+  <div class="flashcard" id="flashcard" onclick="flipCard()">
+    <div class="flashcard-inner">
+      <div class="card-face card-front" id="cardFront"></div>
+      <div class="card-face card-back" id="cardBack"></div>
+    </div>
+  </div>
+</div>
+
+<div class="nav-row">
+  <button onclick="prevCard()" id="btnPrev">◀ 上一张</button>
+  <button class="btn-master" id="btnMaster" onclick="toggleMastered()" title="Mark mastered">✓</button>
+  <button onclick="nextCard()" id="btnNext">下一张 ▶</button>
+</div>
+
+<div class="compare-area" id="compareArea">
+  <h3 style="text-align:center;margin-bottom:12px;">⚔️ 概念对决台 — 5组混淆概念</h3>
+  <div id="comparePairs"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ==================== CARD DATA ====================
+const CARDS = [
+  // ——— 1. Nutrition & Food Substances (8 cards) ———
+  {id:1, topic:1, prio:"red", front:"Carbohydrates", back:'<span class="def"><span class="kw">Organic compounds</span> containing <span class="kw">C, H, O</span> (H:O = 2:1).</span><span class="def">Main source of <span class="kw">energy</span> for the body.</span><span class="def">Types: <span class="kw">monosaccharides</span> (glucose), <span class="kw">disaccharides</span> (maltose), <span class="kw">polysaccharides</span> (starch, glycogen, cellulose).</span><span class="zh">碳水化合物：含C、H、O的有機化合物，是身體的主要能量來源。</span>'},
+  {id:2, topic:1, prio:"red", front:"Proteins", back:'<span class="def"><span class="kw">Organic compounds</span> containing <span class="kw">C, H, O, N</span> (sometimes S).</span><span class="def">Made of <span class="kw">amino acids</span> linked by <span class="kw">peptide bonds</span>.</span><span class="def">Functions: <span class="kw">growth & repair</span> of body tissues, make enzymes, hormones, antibodies.</span><span class="zh">蛋白質：含C、H、O、N的有機化合物，由氨基酸以肽鍵連接而成，用於生長和修復組織。</span>'},
+  {id:3, topic:1, prio:"red", front:"Lipids (Fats & Oils)", back:'<span class="def"><span class="kw">Organic compounds</span> containing <span class="kw">C, H, O</span> (much less O than carbohydrates).</span><span class="def">Made of <span class="kw">1 glycerol + 3 fatty acids</span>.</span><span class="def">Functions: <span class="kw">energy storage</span> (highest energy per gram), thermal insulation, make cell membranes (phospholipids), dissolve fat-soluble vitamins (A, D, E, K).</span><span class="zh">脂質：含C、H、O的有機化合物，由1個甘油+3個脂肪酸組成。能量儲存（每克能量最高）、保溫、構成細胞膜。</span>'},
+  {id:4, topic:1, prio:"red", front:"Vitamin C (Ascorbic acid)", back:'<span class="def"><span class="kw">Water-soluble</span> vitamin.</span><span class="def">Function: helps make <span class="kw">collagen</span> (for healthy skin, gums, blood vessels).</span><span class="def"><span class="kw">Heat-unstable</span> — destroyed by prolonged cooking.</span><span class="def">Deficiency → <span class="kw">Scurvy</span> (bleeding gums, slow wound healing).</span><span class="zh">維生素C：水溶性維生素，幫助製造膠原蛋白。熱不穩定，長時間烹煮會被破壞。</span>'},
+  {id:5, topic:1, prio:"red", front:"Vitamin D", back:'<span class="def"><span class="kw">Fat-soluble</span> vitamin.</span><span class="def">Function: promotes <span class="kw">calcium absorption</span> for healthy bones and teeth.</span><span class="def">Source: sunlight (UV → skin synthesises), egg yolk, fatty fish.</span><span class="def">Deficiency → <span class="kw">Rickets</span> (soft, deformed bones in children).</span><span class="zh">維生素D：脂溶性維生素，促進鈣吸收，缺乏導致佝僂病。</span>'},
+  {id:6, topic:1, prio:"red", front:"Dietary Fibre", back:'<span class="def"><span class="kw">Cannot be digested or absorbed</span> by humans.</span><span class="def">Two key functions: <span class="kw">① Prevents constipation</span> (adds bulk to faeces, stimulates peristalsis).</span><span class="def"><span class="kw">② Reduces risk of colorectal cancer</span> and cardiovascular diseases (lowers blood cholesterol).</span><span class="zh">膳食纖維：人體無法消化吸收。預防便秘、降低大腸癌和心血管疾病風險。</span>'},
+  {id:7, topic:1, prio:"red", front:"Water", back:'<span class="def">A <span class="kw">solvent</span> for metabolic reactions.</span><span class="def">Functions: <span class="kw">transport</span> substances (blood plasma), <span class="kw">temperature regulation</span> (sweating), medium for chemical reactions, removes waste (urine).</span><span class="def">Does <span class="kw">NOT</span> provide energy.</span><span class="zh">水：代謝反應的溶劑，運輸物質、調節體溫、排除廢物。不提供能量。</span>'},
+  {id:8, topic:1, prio:"red", front:"Balanced Diet", back:'<span class="def">A diet containing all <span class="kw">7 food substances</span> in the <span class="kw">right amounts and proportions</span>.</span><span class="def">Food pyramid (bottom → top): <span class="kw">Grains</span> > Vegetables & Fruits > Meat, Fish, Eggs, Milk > Fats, Oils, Salt, Sugar.</span><span class="def">Energy requirement depends on: <span class="kw">age, sex, activity level, body size</span>.</span><span class="zh">均衡飲食：包含7種食物成分且比例適當。能量需求取決於年齡、性別、活動量和體型。</span>'},
+
+  // ——— 2. Human Digestive System (8 cards) ———
+  {id:9, topic:2, prio:"red", front:"Digestion", back:'<span class="def">The breakdown of <span class="kw">large, insoluble</span> food molecules into <span class="kw">small, soluble</span> molecules that can be absorbed into the blood.</span><span class="def"><span class="kw">Mechanical digestion</span>: physical breakdown (e.g. chewing by teeth, churning in stomach, <span class="kw">bile emulsification</span>).</span><span class="def"><span class="kw">Chemical digestion</span>: breakdown by <span class="kw">enzymes</span> (hydrolysis).</span><span class="zh">消化：將大分子不溶性食物分解為小分子可溶性物質，以便吸收到血液中。</span>'},
+  {id:10, topic:2, prio:"red", front:"Digestive System Pathway", back:'<span class="def"><span class="kw">Mouth</span> → <span class="kw">Oesophagus</span> (peristalsis) → <span class="kw">Stomach</span> (protein digestion begins) → <span class="kw">Duodenum</span> (most digestion) → <span class="kw">Ileum</span> (absorption) → <span class="kw">Large intestine</span> (water absorption) → <span class="kw">Rectum</span> → <span class="kw">Anus</span></span><span class="zh">消化途徑：口腔→食道→胃→十二指腸→迴腸→大腸→直腸→肛門</span>'},
+  {id:11, topic:2, prio:"red", front:"Digestive Juices & Enzymes Summary", back:'<span class="def"><span class="kw">Saliva</span> (salivary glands): amylase → starch → maltose</span><span class="def"><span class="kw">Gastric juice</span> (stomach): protease (pepsin) → proteins → peptides; HCl kills bacteria + provides acidic pH</span><span class="def"><span class="kw">Pancreatic juice</span> (pancreas → duodenum): amylase, protease, lipase</span><span class="def"><span class="kw">Bile</span> (liver → gall bladder): <span class="kw">NO enzymes</span> — emulsifies lipids (physical digestion)</span><span class="def"><span class="kw">Intestinal juice</span> (small intestine): completes digestion</span><span class="zh">消化液：唾液(澱粉酶)、胃液(蛋白酶+HCl)、胰液(多種酶)、膽汁(無酶，乳化脂肪)、腸液</span>'},
+  {id:12, topic:2, prio:"red", front:"Villi (singular: Villus)", back:'<span class="def">Finger-like projections in the <span class="kw">small intestine (ileum)</span> for absorption.</span><span class="def">4 adaptations: <span class="kw">① Thin wall</span> (1-cell thick epithelium) for short diffusion distance. <span class="kw">② Rich blood capillary network</span> to carry away absorbed nutrients. <span class="kw">③ Lacteal</span> (lymph vessel) absorbs fatty acids & glycerol. <span class="kw">④ Large surface area</span> (many villi + microvilli). Moist surface.</span><span class="zh">絨毛：小腸內壁的指狀突起，4項適應特徵：薄壁、豐富微血管、乳糜管、大表面積。</span>'},
+  {id:13, topic:2, prio:"red", front:"Absorption: Blood vs Lymph", back:'<span class="def"><span class="kw">Blood capillaries</span> absorb: glucose, amino acids, minerals, water-soluble vitamins (B, C), water.</span><span class="def"><span class="kw">Lacteal (lymph)</span> absorbs: <span class="kw">fatty acids & glycerol</span> (recombined into fat droplets), fat-soluble vitamins (A, D, E, K).</span><span class="def">⚔️ Common pitfall: Fatty acids go to <span class="kw">lymph, NOT blood</span> directly!</span><span class="zh">吸收：微血管吸收葡萄糖、氨基酸等；乳糜管吸收脂肪酸和甘油。</span>'},
+  {id:14, topic:2, prio:"red", front:"Bile", back:'<span class="def">Produced by the <span class="kw">liver</span>, stored in the <span class="kw">gall bladder</span>.</span><span class="def">Contains <span class="kw">bile salts</span> (NOT enzymes).</span><span class="def">Function: <span class="kw">emulsification of lipids</span> — breaks large fat droplets into smaller ones, <span class="kw">increasing surface area</span> for lipase action.</span><span class="def">⚔️ This is <span class="kw">PHYSICAL</span> digestion, NOT chemical!</span><span class="zh">膽汁：肝臟製造、膽囊儲存，含膽鹽（非酶），乳化脂肪屬物理消化。</span>'},
+  {id:15, topic:2, prio:"red", front:"Peristalsis", back:'<span class="def"><span class="kw">Wave-like muscular contractions</span> of the gut wall.</span><span class="def">Function: pushes food along the alimentary canal (oesophagus, stomach, intestines).</span><span class="def">Controlled by <span class="kw">involuntary muscles</span> (smooth muscle).</span><span class="zh">蠕動：消化道壁的波浪式肌肉收縮，推動食物前進。</span>'},
+  {id:16, topic:2, prio:"red", front:"Where is water absorbed most?", back:'<span class="def"><span class="kw">Large intestine (colon)</span> — absorbs most water, minerals, and some vitamins.</span><span class="def">⚔️ Common pitfall: NOT the stomach! The stomach mainly digests proteins.</span><span class="zh">大腸吸收大部分水分、礦物質和部分維生素。不是胃！</span>'},
+
+  // ——— 3. Enzymes (7 cards) ———
+  {id:17, topic:3, prio:"red", front:"Enzyme", back:'<span class="def">A <span class="kw">biological catalyst</span> made of <span class="kw">protein</span>.</span><span class="def">Speeds up chemical reactions by <span class="kw">lowering activation energy</span>.</span><span class="def">Remains <span class="kw">chemically unchanged</span> after the reaction (reusable).</span><span class="def">Properties: <span class="kw">specificity</span>, sensitive to temperature & pH, works in small amounts.</span><span class="zh">酶：由蛋白質構成的生物催化劑，通過降低活化能來加速化學反應。可重複使用。</span>'},
+  {id:18, topic:3, prio:"red", front:"Lock-and-Key Hypothesis", back:'<span class="def">The <span class="kw">active site</span> of an enzyme has a specific shape that fits only a specific <span class="kw">substrate</span> (like a key fits a lock).</span><span class="def">Steps: Substrate binds to active site → <span class="kw">Enzyme-substrate complex</span> forms → Reaction occurs → Products released → Enzyme unchanged.</span><span class="zh">鎖鑰假說：酶的活性部位形狀獨特，只與特定底物吻合。底物→酶-底物複合物→產物+酶。</span>'},
+  {id:19, topic:3, prio:"red", front:"Denaturation", back:'<span class="def"><span class="kw">Permanent loss</span> of the enzyme\'s active site shape.</span><span class="def">Caused by: <span class="kw">high temperature</span> (above optimum) or <span class="kw">extreme pH</span>.</span><span class="def">The enzyme can <span class="kw">no longer function</span> — the substrate cannot fit the active site.</span><span class="def">⚔️ Denaturation is <span class="kw">IRREVERSIBLE</span>. Low temperature only <span class="kw">inactivates</span> (reversible).</span><span class="zh">變性：高溫或極端pH導致活性部位永久變形，酶失去功能，不可逆。</span>'},
+  {id:20, topic:3, prio:"red", front:"Temperature & Enzyme Activity", back:'<span class="def">As temp increases → kinetic energy ↑ → more collisions → <span class="kw">rate increases</span>.</span><span class="def">At <span class="kw">optimum temperature</span> → maximum rate.</span><span class="def">Above optimum → enzyme <span class="kw">denatures</span> → rate drops sharply to zero.</span><span class="def">Human enzymes: optimum ~37°C.</span><span class="zh">溫度：升溫加速→最適溫度(峰值)→超過則變性失活。人體酶最適約37°C。</span>'},
+  {id:21, topic:3, prio:"red", front:"pH & Enzyme Activity", back:'<span class="def">Each enzyme has an <span class="kw">optimum pH</span>.</span><span class="def">Example: <span class="kw">Pepsin</span> (stomach) optimum pH ~2 (acidic). <span class="kw">Salivary amylase</span> optimum pH ~7 (neutral).</span><span class="def">Deviation from optimum: enzyme shape changes → <span class="kw">rate decreases</span>. Extreme pH → denaturation.</span><span class="zh">pH：每種酶有其最適pH。胃蛋白酶(~pH2)、唾液澱粉酶(~pH7)。極端pH會變性。</span>'},
+  {id:22, topic:3, prio:"red", front:"Activation Energy", back:'<span class="def">The <span class="kw">minimum energy</span> required to start a chemical reaction.</span><span class="def">Enzymes <span class="kw">lower</span> the activation energy → reaction occurs faster at body temperature.</span><span class="def">Without enzymes, most metabolic reactions would be too slow to sustain life.</span><span class="zh">活化能：啟動化學反應所需的最低能量。酶降低活化能，使反應在體溫下快速進行。</span>'},
+  {id:23, topic:3, prio:"red", front:"Experimental Variables (Enzyme Investigation)", back:'<span class="def"><span class="kw">Independent variable</span>: the factor you change (e.g. temperature, pH).</span><span class="def"><span class="kw">Dependent variable</span>: the factor you measure (e.g. rate of reaction, time for starch to disappear).</span><span class="def"><span class="kw">Controlled variables</span>: factors kept constant (e.g. enzyme concentration, substrate concentration, volume).</span><span class="zh">實驗變量：自變量(改變的)、因變量(測量的)、控制變量(保持不變的)。</span>'},
+
+  // ——— 4. Deficiency Diseases (6 cards) ———
+  {id:24, topic:4, prio:"red", front:"Scurvy", back:'<span class="def">Deficiency of <span class="kw">Vitamin C</span>.</span><span class="def">Symptoms: <span class="kw">bleeding gums, slow wound healing</span>, easy bruising.</span><span class="def">Reason: Vitamin C is needed to make <span class="kw">collagen</span> (structural protein in skin, gums, blood vessels).</span><span class="def">Prevention: fresh <span class="kw">fruits and vegetables</span> (e.g. oranges, lemons, bell peppers).</span><span class="zh">壞血病：缺乏維生素C，牙齦出血、傷口難癒合。多吃新鮮蔬果預防。</span>'},
+  {id:25, topic:4, prio:"red", front:"Anaemia", back:'<span class="def">Deficiency of <span class="kw">Iron</span>.</span><span class="def">Symptoms: <span class="kw">pale face, dizziness, fatigue, poor night vision</span>.</span><span class="def">Reason: Iron is needed to make <span class="kw">haemoglobin</span> in red blood cells → less oxygen transport.</span><span class="def">Prevention: <span class="kw">liver, red meat, green leafy vegetables</span>.</span><span class="zh">貧血：缺乏鐵質，面色蒼白、頭暈疲倦。鐵是製造血紅蛋白所需。多吃肝臟、紅肉、綠葉蔬菜。</span>'},
+  {id:26, topic:4, prio:"red", front:"Goitre", back:'<span class="def">Deficiency of <span class="kw">Iodine</span>.</span><span class="def">Symptoms: <span class="kw">swelling of the thyroid gland</span> in the neck.</span><span class="def">Reason: Iodine is needed to make <span class="kw">thyroid hormone (thyroxine)</span> which regulates metabolism.</span><span class="def">Prevention: <span class="kw">seafood, iodised salt</span>.</span><span class="zh">大脖子病：缺乏碘，甲狀腺腫大。碘是製造甲狀腺素所需。多吃海鮮、加碘鹽。</span>'},
+  {id:27, topic:4, prio:"red", front:"Rickets", back:'<span class="def">Deficiency of <span class="kw">Vitamin D and/or Calcium</span>.</span><span class="def">Symptoms: <span class="kw">soft, deformed bones</span> (bowed legs in children).</span><span class="def">Reason: Vitamin D promotes calcium absorption → without it, bones do not harden properly.</span><span class="def">Prevention: <span class="kw">sunlight exposure, egg yolk, fatty fish, milk</span>.</span><span class="zh">佝僂病：缺乏維生素D/鈣，骨骼軟化變形。多曬太陽、吃蛋黃、魚類、牛奶。</span>'},
+  {id:28, topic:4, prio:"red", front:"Night Blindness", back:'<span class="def">Deficiency of <span class="kw">Vitamin A</span>.</span><span class="def">Symptoms: <span class="kw">difficulty seeing in dim light</span>.</span><span class="def">Reason: Vitamin A is needed to make <span class="kw">visual pigment (rhodopsin)</span> in the retina.</span><span class="def">Prevention: <span class="kw">liver, carrots, dark green vegetables</span> (rich in beta-carotene → converted to vitamin A).</span><span class="zh">夜盲症：缺乏維生素A，弱光下視力困難。多吃肝臟、胡蘿蔔、深綠蔬菜。</span>'},
+  {id:29, topic:4, prio:"amber", front:"Obesity", back:'<span class="def">Excessive body fat due to <span class="kw">energy intake > energy output</span>.</span><span class="def">Measured by <span class="kw">BMI</span> (Body Mass Index) = weight (kg) / height² (m²).</span><span class="def">Health risks: <span class="kw">cardiovascular diseases, diabetes, hypertension, joint problems</span>.</span><span class="zh">肥胖：能量攝入>消耗。BMI衡量。增加心血管病、糖尿病、高血壓風險。</span>'},
+
+  // ——— 5. DNA & Biotechnology (7 cards) ———
+  {id:30, topic:5, prio:"red", front:"DNA Structure (Nucleotide)", back:'<span class="def">DNA is made of units called <span class="kw">nucleotides</span>.</span><span class="def">Each nucleotide has 3 parts: <span class="kw">① Phosphate group</span> <span class="kw">② 5-carbon sugar (deoxyribose)</span> <span class="kw">③ Nitrogenous base</span> (A, T, C, G).</span><span class="def">Nucleotides join by <span class="kw">condensation</span> reactions (water released).</span><span class="zh">DNA結構：核苷酸由磷酸基團、脫氧核糖、含氮鹼基三部分組成，以縮合反應連接。</span>'},
+  {id:31, topic:5, prio:"red", front:"Base Pairing Rule", back:'<span class="def"><span class="kw">Adenine (A) pairs with Thymine (T)</span> — 2 hydrogen bonds.</span><span class="def"><span class="kw">Cytosine (C) pairs with Guanine (G)</span> — 3 hydrogen bonds.</span><span class="def">The two strands are <span class="kw">complementary</span> and run <span class="kw">anti-parallel</span>.</span><span class="zh">鹼基配對：A=T（2氫鍵）、C≡G（3氫鍵）。兩鏈互補、反向平行。</span>'},
+  {id:32, topic:5, prio:"red", front:"Gel Electrophoresis", back:'<span class="def">A technique to <span class="kw">separate DNA fragments by size</span>.</span><span class="def">DNA is <span class="kw">negatively charged</span> → moves towards the <span class="kw">positive electrode</span>.</span><span class="def"><span class="kw">Smaller fragments</span> move faster and travel <span class="kw">further</span> through the gel.</span><span class="def">Used in: <span class="kw">DNA fingerprinting, parentage testing, forensic science</span>.</span><span class="zh">凝膠電泳：利用DNA帶負電向正極移動，小片段跑得更快更遠。用於DNA指紋和親子鑑定。</span>'},
+  {id:33, topic:5, prio:"red", front:"DNA Fingerprinting", back:'<span class="def">A method to <span class="kw">identify individuals</span> based on their unique DNA pattern.</span><span class="def">Steps: Extract DNA → Cut with restriction enzymes → <span class="kw">Gel electrophoresis</span> → Compare band patterns.</span><span class="def">Applications: <span class="kw">parentage test</span> (child\'s bands = mother + father), criminal investigation, paternity disputes.</span><span class="zh">DNA指紋：以獨特DNA模式識別個體。用於親子鑑定（孩子條帶=母親+父親）。</span>'},
+  {id:34, topic:5, prio:"amber", front:"Genetic Engineering (Insulin)", back:'<span class="def">Inserting a <span class="kw">human insulin gene</span> into <span class="kw">bacteria</span> to produce insulin.</span><span class="def">Steps: Cut insulin gene from human DNA → Insert into <span class="kw">plasmid</span> (bacterial DNA ring) using same restriction enzyme → Bacteria multiply → Bacteria produce human insulin → Harvest & purify.</span><span class="def">Advantage: <span class="kw">identical to human insulin</span>, no animal immune reaction.</span><span class="zh">基因工程(胰島素)：將人類胰島素基因插入細菌質粒，讓細菌大量生產人類胰島素。</span>'},
+  {id:35, topic:5, prio:"amber", front:"Chromosome, DNA, Gene", back:'<span class="def"><span class="kw">Chromosome</span>: tightly coiled DNA molecule visible during cell division. Humans have 46 (23 pairs).</span><span class="def"><span class="kw">DNA</span>: the molecule that carries genetic information (double helix).</span><span class="def"><span class="kw">Gene</span>: a segment of DNA that codes for a specific protein (determines a trait).</span><span class="zh">染色體→DNA→基因：染色體是DNA的緊密纏繞形態，基因是DNA上編碼特定蛋白質的片段。</span>'},
+  {id:36, topic:5, prio:"amber", front:"DNA Extraction Sources", back:'<span class="def">DNA can be extracted from: <span class="kw">blood, saliva, hair roots, skin cells</span>.</span><span class="def">Any cell with a <span class="kw">nucleus</span> contains DNA.</span><span class="def">Red blood cells have <span class="kw">NO nucleus</span> → cannot be used for DNA extraction.</span><span class="zh">DNA提取來源：血液、唾液、毛囊、皮膚細胞。紅血球無細胞核，不能用於提取DNA。</span>'},
+
+  // ——— 6. Body Defence & Immunity (7 cards) ———
+  {id:37, topic:6, prio:"red", front:"Phagocytosis", back:'<span class="def">A <span class="kw">non-specific</span> immune response.</span><span class="def"><span class="kw">Phagocytes</span> (white blood cells) <span class="kw">engulf and digest</span> pathogens.</span><span class="def">Process: Phagocyte recognises pathogen → Engulfs it → Forms <span class="kw">phagosome</span> → Enzymes digest the pathogen → Waste expelled.</span><span class="zh">吞噬作用：吞噬細胞（白細胞）非特異性地吞噬和消化病原體。</span>'},
+  {id:38, topic:6, prio:"red", front:"Antibody Production", back:'<span class="def">A <span class="kw">specific</span> immune response by <span class="kw">lymphocytes</span> (B-cells).</span><span class="def">Pathogen carries <span class="kw">antigens</span> on surface → Lymphocyte produces specific <span class="kw">antibodies</span> that fit the antigen (lock-and-key).</span><span class="def">Antibodies: <span class="kw">clump pathogens together</span> (agglutination), <span class="kw">neutralise toxins</span>, mark pathogens for phagocytes.</span><span class="zh">抗體產生：淋巴細胞針對抗原產生特定抗體，抗體聚集病原體、中和毒素。</span>'},
+  {id:39, topic:6, prio:"red", front:"Primary vs Secondary Response", back:'<span class="def"><span class="kw">Primary (1st exposure)</span>: slower response, longer lag phase, <span class="kw">lower</span> peak antibody level, declines quickly.</span><span class="def"><span class="kw">Secondary (2nd exposure)</span>: <span class="kw">faster</span> response, shorter lag phase, <span class="kw">much higher</span> peak antibody level, lasts longer.</span><span class="def">Reason: <span class="kw">Memory cells</span> formed after 1st infection initiate faster & stronger response.</span><span class="zh">初次應答 vs 二次應答：二次更快、更強、更持久。因為記憶細胞的存在。</span>'},
+  {id:40, topic:6, prio:"red", front:"Active vs Passive Immunity", back:'<span class="def"><span class="kw">Active immunity</span>: body produces its <span class="kw">own antibodies</span> (after infection or vaccination). Long-lasting. Memory cells formed.</span><span class="def"><span class="kw">Passive immunity</span>: receive <span class="kw">ready-made antibodies</span> from outside (e.g. mother\'s milk, antibody injection). Immediate but short-lived. No memory cells.</span><span class="zh">主動免疫：自身產生抗體，持久；被動免疫：接受現成抗體，即時但短暫。</span>'},
+  {id:41, topic:6, prio:"red", front:"Vaccination", back:'<span class="def">Injecting <span class="kw">dead/weakened pathogens</span> or their antigens.</span><span class="def">Triggers <span class="kw">primary response</span> → Memory cells formed → Upon real infection, <span class="kw">secondary response</span> is rapid & strong → Person is <span class="kw">immune</span>.</span><span class="def">This is <span class="kw">artificial active immunity</span>.</span><span class="zh">疫苗接種：注射死/弱病原體，引發初次應答→形成記憶細胞→遇真感染時快速二次應答。</span>'},
+  {id:42, topic:6, prio:"amber", front:"Infectious vs Non-infectious Diseases", back:'<span class="def"><span class="kw">Infectious</span>: caused by <span class="kw">pathogens</span> (bacteria, viruses, fungi, protozoa). Can spread from person to person. e.g. COVID-19, malaria, dengue fever, tuberculosis.</span><span class="def"><span class="kw">Non-infectious</span>: NOT caused by pathogens. Cannot spread. e.g. cancer, diabetes, CVD, scurvy.</span><span class="zh">傳染病：由病原體引起，可人傳人；非傳染病：非病原體引起，不傳染。</span>'},
+  {id:43, topic:6, prio:"amber", front:"Vector-borne Diseases", back:'<span class="def">Diseases transmitted by <span class="kw">vectors</span> (organisms that carry pathogens without getting sick).</span><span class="def"><span class="kw">Malaria</span>: vector = female Anopheles mosquito; pathogen = Plasmodium (protozoan).</span><span class="def"><span class="kw">Dengue fever</span>: vector = Aedes mosquito; pathogen = dengue virus.</span><span class="zh">媒介傳播疾病：瘧疾(按蚊/瘧原蟲)、登革熱(伊蚊/登革熱病毒)。</span>'},
+
+  // ——— 7. Cancer (4 cards) ———
+  {id:44, topic:7, prio:"amber", front:"Cancer", back:'<span class="def">A disease caused by <span class="kw">uncontrolled cell division</span>.</span><span class="def">Caused by <span class="kw">mutations</span> in genes that control cell division.</span><span class="def"><span class="kw">Benign tumour</span>: stays in one place, does not spread.</span><span class="def"><span class="kw">Malignant tumour</span>: invades nearby tissues and spreads via blood/lymph (metastasis).</span><span class="zh">癌症：細胞不受控制地分裂。良性腫瘤不擴散；惡性腫瘤會轉移。</span>'},
+  {id:45, topic:7, prio:"amber", front:"Carcinogens & Cancer Types", back:'<span class="def"><span class="kw">Carcinogen</span>: a substance/factor that causes cancer.</span><span class="def">Key pairs: <span class="kw">Tar (smoking) → Lung cancer</span>. <span class="kw">UV radiation → Skin cancer</span>. <span class="kw">Aflatoxin → Liver cancer</span>. <span class="kw">High-fat, low-fibre diet → Colorectal cancer</span>.</span><span class="def">Prevention: avoid smoking, use sunscreen, eat fibre-rich foods, exercise.</span><span class="zh">致癌物：焦油→肺癌、紫外線→皮膚癌、黃麴毒素→肝癌、高脂低纖飲食→大腸癌。</span>'},
+  {id:46, topic:7, prio:"amber", front:"Cancer Risk Factors (2425 Q1)", back:'<span class="def">Colorectal cancer: <span class="kw">high-fat, low-fibre diet</span>, lack of exercise.</span><span class="def">Lung cancer: <span class="kw">smoking (tar)</span>, air pollution.</span><span class="def">Skin cancer: <span class="kw">UV radiation</span> from sunlight.</span><span class="def">Liver cancer: <span class="kw">aflatoxin</span> (mouldy food), hepatitis B virus, alcohol.</span><span class="zh">癌症風險因素：大腸癌(高脂低纖)、肺癌(吸煙)、皮膚癌(紫外線)、肝癌(黃麴毒素/酒精)。</span>'},
+  {id:47, topic:7, prio:"green", front:"Cancer Prevention", back:'<span class="def">Lifestyle changes: <span class="kw">eat more dietary fibre</span> (vegetables, fruits, whole grains). <span class="kw">Avoid smoking</span> and excessive alcohol. <span class="kw">Use sunscreen</span>. <span class="kw">Regular exercise</span>. Maintain healthy weight.</span><span class="def">Screening: early detection improves survival rates (e.g. colonoscopy for colorectal cancer).</span><span class="zh">預防癌症：多吃纖維、戒煙限酒、防曬、運動、保持體重、定期篩查。</span>'},
+
+  // ——— 8. Diabetes & Chronic Diseases (5 cards) ———
+  {id:48, topic:8, prio:"amber", front:"Diabetes Mellitus", back:'<span class="def">A disease where blood glucose level is <span class="kw">abnormally high</span>.</span><span class="def">Cause: <span class="kw">insufficient insulin</span> production or body cells <span class="kw">do not respond to insulin</span>.</span><span class="def">Insulin: a <span class="kw">hormone</span> (protein) produced by the pancreas that <span class="kw">lowers blood glucose</span> (converts glucose → glycogen in liver).</span><span class="def">Why insulin can\'t be taken orally: it\'s a <span class="kw">protein</span> → digested in stomach.</span><span class="zh">糖尿病：血糖過高，胰島素不足或細胞不敏感。胰島素是蛋白質，不能口服。</span>'},
+  {id:49, topic:8, prio:"amber", front:"Blood Glucose Regulation", back:'<span class="def">After meal: blood glucose ↑ → pancreas releases <span class="kw">insulin</span> → liver converts glucose → <span class="kw">glycogen</span> (storage) → blood glucose ↓.</span><span class="def">Between meals: blood glucose ↓ → pancreas releases <span class="kw">glucagon</span> → liver converts glycogen → glucose → blood glucose ↑.</span><span class="def">This is <span class="kw">negative feedback</span>.</span><span class="zh">血糖調節：胰島素降血糖(葡萄糖→糖原)、胰高血糖素升血糖(糖原→葡萄糖)。負反饋。</span>'},
+  {id:50, topic:8, prio:"amber", front:"Cardiovascular Disease (CVD)", back:'<span class="def">Diseases of the <span class="kw">heart and blood vessels</span>.</span><span class="def">Risk factors: <span class="kw">high blood cholesterol</span> (from saturated fats), <span class="kw">hypertension</span> (high blood pressure from too much <span class="kw">sodium/salt</span>), smoking, obesity, lack of exercise, diabetes.</span><span class="def">Mechanism: fatty deposits (plaque) narrow arteries → <span class="kw">atherosclerosis</span> → heart attack/stroke.</span><span class="zh">心血管病：高膽固醇、高血壓(過多鈉)、吸煙、肥胖等導致動脈粥樣硬化。</span>'},
+  {id:51, topic:8, prio:"amber", front:"Hypertension (High Blood Pressure)", back:'<span class="def">Persistently high blood pressure in arteries.</span><span class="def">Main dietary cause: <span class="kw">excessive sodium (salt)</span> intake → water retention → blood volume ↑ → pressure ↑.</span><span class="def">Risks: damages artery walls → <span class="kw">atherosclerosis</span> → heart attack, stroke, kidney damage.</span><span class="def">Prevention: <span class="kw">reduce salt intake</span>, regular exercise, healthy diet.</span><span class="zh">高血壓：過多鈉攝入→水分滯留→血量增→血壓升。損害動脈壁。減鹽是關鍵。</span>'},
+  {id:52, topic:8, prio:"green", front:"Diabetes Risk Factors", back:'<span class="def">Type 2 diabetes risk factors: <span class="kw">obesity, lack of physical activity, family history, unhealthy diet</span> (high sugar/fat).</span><span class="def">In a blood glucose graph: diabetic person shows <span class="kw">higher fasting level, higher peak, slower return to baseline</span> after glucose drink.</span><span class="zh">糖尿病風險：肥胖、缺乏運動、家族史、不健康飲食。血糖曲線更高更慢回落。</span>'},
+
+  // ——— 9. Metabolism & Water Balance (4 cards) ———
+  {id:53, topic:9, prio:"amber", front:"Metabolism", back:'<span class="def">All <span class="kw">chemical reactions</span> occurring in living organisms.</span><span class="def"><span class="kw">Catabolism</span>: breakdown of complex molecules → simple molecules. <span class="kw">Releases energy</span>. e.g. respiration, digestion.</span><span class="def"><span class="kw">Anabolism</span>: building complex molecules from simple ones. <span class="kw">Requires energy</span>. e.g. photosynthesis, protein synthesis.</span><span class="zh">新陳代謝：分解代謝(釋能)和合成代謝(耗能)。</span>'},
+  {id:54, topic:9, prio:"amber", front:"Catabolism vs Anabolism", back:'<span class="def"><span class="kw">Catabolism</span>: complex → simple, <span class="kw">releases energy</span>. Example: <span class="kw">Respiration</span> (glucose + O₂ → CO₂ + H₂O + energy).</span><span class="def"><span class="kw">Anabolism</span>: simple → complex, <span class="kw">requires energy</span>. Example: <span class="kw">Photosynthesis</span> (CO₂ + H₂O → glucose + O₂, using light energy). <span class="kw">Protein synthesis</span> (amino acids → protein).</span><span class="zh">分解代謝(釋能):呼吸作用。合成代謝(耗能):光合作用、蛋白質合成。</span>'},
+  {id:55, topic:9, prio:"amber", front:"Water Balance", back:'<span class="def"><span class="kw">Water intake</span>: drinking, food, metabolic water (from respiration).</span><span class="def"><span class="kw">Water loss</span>: urine (kidneys), sweating (skin), breathing (water vapour in exhaled air), faeces.</span><span class="def">Balance is maintained by the <span class="kw">kidneys</span> (adjusting urine concentration) and <span class="kw">thirst mechanism</span>.</span><span class="zh">水分平衡：攝入(飲水、食物、代謝水)和流失(尿液、汗液、呼氣、糞便)。腎臟調節。</span>'},
+  {id:56, topic:9, prio:"green", front:"Temperature Regulation", back:'<span class="def">Humans are <span class="kw">homeothermic</span> (maintain constant body temperature ~37°C).</span><span class="def">Too hot: <span class="kw">sweating</span> (evaporation cools skin), <span class="kw">vasodilation</span> (more blood flows near skin surface → heat loss).</span><span class="def">Too cold: <span class="kw">shivering</span> (muscle contraction generates heat), <span class="kw">vasoconstriction</span> (less blood near skin → conserve heat).</span><span class="zh">體溫調節：熱時出汗+血管擴張散熱；冷時顫抖+血管收縮保溫。</span>'},
+
+  // ——— 10. Teeth & Dietary Fibre (4 cards) ———
+  {id:57, topic:10, prio:"amber", front:"Types of Teeth", back:'<span class="def"><span class="kw">Incisors</span> (front): chisel-shaped, <span class="kw">cutting</span> food.</span><span class="def"><span class="kw">Canines</span>: pointed, <span class="kw">tearing</span> food.</span><span class="def"><span class="kw">Premolars</span>: broad with cusps, <span class="kw">crushing and grinding</span>.</span><span class="def"><span class="kw">Molars</span>: largest, broad with cusps, <span class="kw">crushing and grinding</span>.</span><span class="zh">牙齒類型：門齒(切)、犬齒(撕)、前臼齒(壓碎)、臼齒(研磨)。</span>'},
+  {id:58, topic:10, prio:"amber", front:"Tooth Decay (Dental Caries)", back:'<span class="def">Caused by <span class="kw">bacteria</span> in dental plaque feeding on <span class="kw">sugar</span> → produce <span class="kw">acid</span> → acid dissolves <span class="kw">enamel</span> (the hard outer layer) → cavity forms → decay reaches dentine → pulp (pain).</span><span class="def">Prevention: <span class="kw">brush teeth</span> (remove plaque), <span class="kw">reduce sugar intake</span>, <span class="kw">fluoride toothpaste</span> (strengthens enamel), regular dental check-ups.</span><span class="zh">蛀牙：細菌+糖→酸→溶解琺瑯質→蛀洞。預防：刷牙、少糖、含氟牙膏。</span>'},
+  {id:59, topic:10, prio:"amber", front:"Dietary Fibre Functions", back:'<span class="def">① <span class="kw">Prevents constipation</span>: adds bulk to faeces, absorbs water → stimulates <span class="kw">peristalsis</span> (wave-like gut movement).</span><span class="def">② <span class="kw">Reduces blood cholesterol</span> → lowers risk of cardiovascular diseases.</span><span class="def">③ <span class="kw">Reduces risk of colorectal cancer</span>: speeds up passage of waste → less time for carcinogens to contact colon wall.</span><span class="zh">膳食纖維功能：預防便秘、降膽固醇、減少大腸癌風險。</span>'},
+  {id:60, topic:10, prio:"green", front:"Tooth Structure", back:'<span class="def"><span class="kw">Enamel</span>: hardest substance in body, covers crown, no living cells.</span><span class="def"><span class="kw">Dentine</span>: bone-like, living, under enamel.</span><span class="def"><span class="kw">Pulp cavity</span>: contains blood vessels and nerves.</span><span class="def"><span class="kw">Cementum</span>: covers root, anchors tooth to jawbone via periodontal membrane.</span><span class="zh">牙齒結構：琺瑯質(最硬)、象牙質、牙髓腔(血管神經)、牙骨質。</span>'},
+
+  // ——— 11. Food Labels & GI (3 cards) ———
+  {id:61, topic:11, prio:"green", front:"Food Labels (Nutrition Labels)", back:'<span class="def">Must show: <span class="kw">energy value</span> (kcal/kJ), amounts of <span class="kw">carbohydrates, proteins, total fat, saturated fat, trans fat, sodium, sugars</span>.</span><span class="def">Energy calculation: <span class="kw">Carbohydrate × 4 + Protein × 4 + Lipid × 9</span> (kcal/g).</span><span class="zh">營養標籤：須標示能量值、碳水化合物、蛋白質、脂肪、鈉、糖。能量計算：碳×4+蛋白×4+脂肪×9 kcal/g。</span>'},
+  {id:62, topic:11, prio:"green", front:"Glycemic Index (GI)", back:'<span class="def">A measure of how quickly a food raises <span class="kw">blood glucose level</span>.</span><span class="def"><span class="kw">High GI</span>: rapid rise in blood glucose (e.g. white bread, sugary drinks, potatoes).</span><span class="def"><span class="kw">Low GI</span>: slow, gradual rise (e.g. whole grains, beans, most vegetables).</span><span class="def">Low GI foods are better for <span class="kw">diabetics</span> and weight management.</span><span class="zh">升糖指數：高GI食物快速升血糖；低GI食物緩慢平穩。糖尿病患者宜選低GI。</span>'},
+  {id:63, topic:11, prio:"green", front:"Energy Requirements", back:'<span class="def">Energy needs depend on: <span class="kw">age, sex, body size, activity level, pregnancy/lactation</span>.</span><span class="def">Teenagers need <span class="kw">more protein</span> for growth.</span><span class="def">Athletes need more <span class="kw">carbohydrates</span> for energy.</span><span class="def">Elderly need less energy but still need nutrients.</span><span class="zh">能量需求取決於：年齡、性別、體型、活動量、懷孕哺乳。青少年需更多蛋白質。</span>'},
+
+  // ——— 12. Carbohydrates Classification (4 cards) ———
+  {id:64, topic:12, prio:"amber", front:"Monosaccharides (Simple Sugars)", back:'<span class="def">The <span class="kw">simplest</span> carbohydrates — single sugar units.</span><span class="def">General formula: <span class="kw">C₆H₁₂O₆</span></span><span class="def">Examples: <span class="kw">Glucose</span> (main energy source for cells), <span class="kw">Fructose</span> (fruit sugar), <span class="kw">Galactose</span>.</span><span class="def">All are <span class="kw">reducing sugars</span> — give positive Benedict\'s test.</span><span class="zh">單糖：最簡單的糖，C₆H₁₂O₆。葡萄糖、果糖、半乳糖。均為還原糖。</span>'},
+  {id:65, topic:12, prio:"amber", front:"Disaccharides", back:'<span class="def">Two monosaccharides joined by a <span class="kw">glycosidic bond</span> (condensation reaction).</span><span class="def"><span class="kw">Maltose</span> = glucose + glucose (from starch digestion). <span class="kw">Reducing sugar</span>.</span><span class="def"><span class="kw">Sucrose</span> = glucose + fructose (table sugar). <span class="kw">NON-reducing sugar</span> — does NOT give positive Benedict\'s test unless hydrolysed first!</span><span class="def"><span class="kw">Lactose</span> = glucose + galactose (milk sugar). Reducing sugar.</span><span class="zh">雙糖：麥芽糖(還原糖)、蔗糖(非還原糖!)、乳糖(還原糖)。</span>'},
+  {id:66, topic:12, prio:"amber", front:"Polysaccharides", back:'<span class="def"><span class="kw">Many</span> monosaccharides joined together (polymer).</span><span class="def"><span class="kw">Starch</span>: plant energy storage. Made of amylose + amylopectin. Tested by <span class="kw">Iodine test</span> (blue-black).</span><span class="def"><span class="kw">Glycogen</span>: animal energy storage (liver & muscles). More branched than starch.</span><span class="def"><span class="kw">Cellulose</span>: plant cell wall structural component. Humans cannot digest.</span><span class="zh">多醣：澱粉(植物儲能)、糖原(動物儲能)、纖維素(植物細胞壁，人不能消化)。</span>'},
+  {id:67, topic:12, prio:"amber", front:"Reducing vs Non-reducing Sugar", back:'<span class="def"><span class="kw">Reducing sugars</span>: can donate electrons to Benedict\'s reagent → <span class="kw">positive Benedict\'s test</span> (blue → brick-red on heating). e.g. glucose, maltose, lactose.</span><span class="def"><span class="kw">Non-reducing sugar</span>: <span class="kw">sucrose</span> — must be <span class="kw">hydrolysed (boiled with dilute acid)</span> first, then neutralised, then tested with Benedict\'s.</span><span class="zh">還原糖vs非還原糖：還原糖直接Benedict\'s陽性。蔗糖需先水解→中和→再測。</span>'},
+
+  // ——— 13. Lipids Classification (3 cards) ———
+  {id:68, topic:13, prio:"amber", front:"Triglycerides", back:'<span class="def">The most common type of lipid in the body.</span><span class="def">Structure: <span class="kw">1 glycerol + 3 fatty acids</span> joined by <span class="kw">ester bonds</span> (condensation reaction, 3 H₂O released).</span><span class="def">Function: <span class="kw">long-term energy storage</span> (more energy per gram than carbohydrates), insulation, protection of organs.</span><span class="zh">甘油三酯：1甘油+3脂肪酸以酯鍵連接。長期能量儲存，每克能量最高。</span>'},
+  {id:69, topic:13, prio:"amber", front:"Phospholipids", back:'<span class="def">Structure: <span class="kw">1 glycerol + 2 fatty acids + 1 phosphate group</span>.</span><span class="def"><span class="kw">Amphipathic</span>: hydrophilic (water-loving) head + hydrophobic (water-fearing) tails.</span><span class="def">Main component of <span class="kw">cell membranes</span> (phospholipid bilayer).</span><span class="zh">磷脂：1甘油+2脂肪酸+1磷酸基團，雙親性。細胞膜的主要成分。</span>'},
+  {id:70, topic:13, prio:"amber", front:"Saturated vs Unsaturated Fats", back:'<span class="def"><span class="kw">Saturated</span>: no C=C double bonds in fatty acid chains. Solid at room temp. Mostly from <span class="kw">animal</span> sources. Raises blood cholesterol → CVD risk.</span><span class="def"><span class="kw">Unsaturated</span>: one or more C=C double bonds. Liquid at room temp (oils). Mostly from <span class="kw">plant</span> sources and fish. Healthier choice.</span><span class="zh">飽和vs不飽和脂肪：飽和(無雙鍵，動物來源，固態)升高膽固醇；不飽和(有雙鍵，植物來源)更健康。</span>'},
+
+  // ——— 14. Proteins Structure (3 cards) ———
+  {id:71, topic:14, prio:"amber", front:"Amino Acids", back:'<span class="def">The <span class="kw">building blocks (monomers)</span> of proteins.</span><span class="def">Structure: central carbon + <span class="kw">amino group (-NH₂) + carboxyl group (-COOH) + R group (variable side chain)</span>.</span><span class="def">There are <span class="kw">20 different</span> amino acids. The R group determines the amino acid\'s properties.</span><span class="zh">氨基酸：蛋白質的單體，含氨基(-NH₂)和羧基(-COOH)。有20種不同氨基酸。</span>'},
+  {id:72, topic:14, prio:"amber", front:"Peptide Bond & Polypeptide", back:'<span class="def">Amino acids link by <span class="kw">peptide bonds</span> (condensation reaction, water released).</span><span class="def"><span class="kw">Dipeptide</span>: 2 amino acids. <span class="kw">Polypeptide</span>: many amino acids (chain).</span><span class="def"><span class="kw">Protein</span>: one or more polypeptide chains folded into a specific 3D shape → determines function.</span><span class="zh">肽鍵：氨基酸以肽鍵連接(縮合反應)。二肽→多肽→蛋白質(三維折疊決定功能)。</span>'},
+  {id:73, topic:14, prio:"amber", front:"Protein Functions", back:'<span class="def">① <span class="kw">Structural</span>: collagen in skin, keratin in hair/nails.</span><span class="def">② <span class="kw">Enzymatic</span>: all enzymes are proteins (biological catalysts).</span><span class="def">③ <span class="kw">Transport</span>: haemoglobin carries oxygen.</span><span class="def">④ <span class="kw">Defence</span>: antibodies (immunoglobulins).</span><span class="def">⑤ <span class="kw">Hormonal</span>: insulin, glucagon.</span><span class="def">⑥ <span class="kw">Movement</span>: actin & myosin in muscles.</span><span class="zh">蛋白質功能：結構、酶、運輸(血紅蛋白)、防禦(抗體)、激素、運動。</span>'},
+
+  // ——— 15. DNA vs RNA (4 cards) ———
+  {id:74, topic:15, prio:"amber", front:"DNA vs RNA — Sugar", back:'<span class="def"><span class="kw">DNA</span>: <span class="kw">Deoxyribose</span> (missing one O on 2\' carbon).</span><span class="def"><span class="kw">RNA</span>: <span class="kw">Ribose</span> (has -OH on 2\' carbon).</span><span class="def">⚔️ Key difference: DNA = deoxyribose; RNA = ribose.</span><span class="zh">DNA含脫氧核糖；RNA含核糖。</span>'},
+  {id:75, topic:15, prio:"amber", front:"DNA vs RNA — Bases", back:'<span class="def"><span class="kw">DNA bases</span>: <span class="kw">Adenine (A), Thymine (T), Cytosine (C), Guanine (G)</span>.</span><span class="def"><span class="kw">RNA bases</span>: <span class="kw">Adenine (A), Uracil (U), Cytosine (C), Guanine (G)</span>.</span><span class="def">⚔️ Key: DNA has <span class="kw">Thymine (T)</span>; RNA has <span class="kw">Uracil (U)</span> instead!</span><span class="zh">DNA鹼基：A, T, C, G。RNA鹼基：A, U, C, G。U取代T。</span>'},
+  {id:76, topic:15, prio:"amber", front:"DNA vs RNA — Structure", back:'<span class="def"><span class="kw">DNA</span>: <span class="kw">Double-stranded</span>, forms a <span class="kw">double helix</span>. Very long, stable molecule. Found in <span class="kw">nucleus</span>. Stores genetic information.</span><span class="def"><span class="kw">RNA</span>: <span class="kw">Single-stranded</span>. Shorter, less stable. Found in nucleus and cytoplasm. Functions: <span class="kw">mRNA</span> (carries genetic code), <span class="kw">tRNA</span> (brings amino acids), <span class="kw">rRNA</span> (ribosome component).</span><span class="zh">DNA雙鏈螺旋(細胞核)，RNA單鏈(核+質)。mRNA傳遞信息、tRNA帶氨基酸。</span>'},
+  {id:77, topic:15, prio:"amber", front:"DNA vs RNA — Summary Table", back:'<span class="def"><table style="width:100%;font-size:0.85em;border-collapse:collapse;"><tr><td style="padding:4px;border-bottom:1px solid rgba(255,255,255,0.15)"><b>Feature</b></td><td style="padding:4px;border-bottom:1px solid rgba(255,255,255,0.15)"><b>DNA</b></td><td style="padding:4px;border-bottom:1px solid rgba(255,255,255,0.15)"><b>RNA</b></td></tr><tr><td style="padding:4px;border-bottom:1px solid rgba(255,255,255,0.1)">Sugar</td><td style="padding:4px;border-bottom:1px solid rgba(255,255,255,0.1)"><span class="kw">Deoxyribose</span></td><td style="padding:4px;border-bottom:1px solid rgba(255,255,255,0.1)"><span class="kw">Ribose</span></td></tr><tr><td style="padding:4px;border-bottom:1px solid rgba(255,255,255,0.1)">Bases</td><td style="padding:4px;border-bottom:1px solid rgba(255,255,255,0.1)">A,T,C,G</td><td style="padding:4px;border-bottom:1px solid rgba(255,255,255,0.1)">A,U,C,G</td></tr><tr><td style="padding:4px;border-bottom:1px solid rgba(255,255,255,0.1)">Strands</td><td style="padding:4px;border-bottom:1px solid rgba(255,255,255,0.1)">Double</td><td style="padding:4px;border-bottom:1px solid rgba(255,255,255,0.1)">Single</td></tr><tr><td style="padding:4px">Function</td><td style="padding:4px">Genetic storage</td><td style="padding:4px">Protein synthesis</td></tr></table></span>'},
+
+  // ——— 16. Enzyme Inhibitors (3 cards) ———
+  {id:78, topic:16, prio:"amber", front:"Competitive Inhibitor", back:'<span class="def">A molecule with a <span class="kw">similar shape to the substrate</span>.</span><span class="def">It <span class="kw">competes</span> for the <span class="kw">active site</span> → blocks substrate from binding.</span><span class="def">Effect can be overcome by <span class="kw">increasing substrate concentration</span> (substrate outcompetes inhibitor).</span><span class="def">Vmax (maximum rate) can still be reached at high enough substrate concentration.</span><span class="zh">競爭性抑制劑：形狀似底物，競爭活性部位。增加底物濃度可克服。</span>'},
+  {id:79, topic:16, prio:"amber", front:"Non-competitive Inhibitor", back:'<span class="def">Binds to a site <span class="kw">other than the active site</span> (allosteric site).</span><span class="def"><span class="kw">Changes the shape</span> of the active site → substrate can no longer fit.</span><span class="def">Effect <span class="kw">CANNOT be overcome</span> by increasing substrate concentration.</span><span class="def"><span class="kw">Vmax is reduced</span> permanently (fewer functional enzymes).</span><span class="zh">非競爭性抑制劑：結合活性部位以外的位點，改變形狀。增加底物濃度無效。</span>'},
+  {id:80, topic:16, prio:"amber", front:"Competitive vs Non-competitive — Graph", back:'<span class="def">Rate vs Substrate Concentration graph:</span><span class="def"><span class="kw">Competitive</span>: same Vmax, higher Km (need more substrate to reach half Vmax).</span><span class="def"><span class="kw">Non-competitive</span>: <span class="kw">lower Vmax</span>, same Km.</span><span class="def">⚔️ This is a classic exam data-analysis question!</span><span class="zh">競爭性：Vmax不變；非競爭性：Vmax降低。考試經典圖表分析題。</span>'},
+
+  // ——— 17. Characteristics of Life (4 cards) ———
+  {id:81, topic:17, prio:"green", front:"7 Characteristics of Life (MRS GREN)", back:'<span class="def"><span class="kw">M</span>ovement, <span class="kw">R</span>espiration, <span class="kw">S</span>ensitivity (response to stimuli), <span class="kw">G</span>rowth, <span class="kw">R</span>eproduction, <span class="kw">E</span>xcretion, <span class="kw">N</span>utrition.</span><span class="def">Mnemonic: <span class="kw">MRS GREN</span>.</span><span class="zh">生命七大特徵：運動、呼吸、感應、生長、生殖、排泄、營養 (MRS GREN)。</span>'},
+  {id:82, topic:17, prio:"green", front:"Excretion vs Egestion", back:'<span class="def"><span class="kw">Excretion</span>: removal of <span class="kw">metabolic waste</span> produced by body cells (e.g. urea in urine, CO₂ from lungs, sweat).</span><span class="def"><span class="kw">Egestion</span>: removal of <span class="kw">undigested food</span> (faeces) that never entered cells.</span><span class="def">⚔️ This is NOT the same! Exam trap!</span><span class="zh">排泄(代謝廢物) vs 排遺(未消化食物)。考試陷阱！不同概念。</span>'},
+  {id:83, topic:17, prio:"green", front:"Respiration", back:'<span class="def">The process of <span class="kw">releasing energy</span> from food (glucose) in <span class="kw">ALL living cells</span>.</span><span class="def"><span class="kw">Aerobic</span>: glucose + O₂ → CO₂ + H₂O + <span class="kw">large amount of energy</span> (38 ATP). Occurs in <span class="kw">mitochondria</span>.</span><span class="def"><span class="kw">Anaerobic</span> (in humans): glucose → <span class="kw">lactic acid</span> + small amount of energy (2 ATP). No O₂ needed. Occurs in cytoplasm.</span><span class="zh">呼吸作用：釋放能量。有氧(線粒體，38ATP)；無氧(細胞質，乳酸+2ATP)。</span>'},
+  {id:84, topic:17, prio:"green", front:"Growth & Development", back:'<span class="def"><span class="kw">Growth</span>: <span class="kw">permanent increase in size</span> (cell division + cell enlargement). Measured by dry mass, height, etc.</span><span class="def"><span class="kw">Development</span>: changes in <span class="kw">complexity and function</span> (e.g. puberty, metamorphosis).</span><span class="def">In humans: growth hormone from <span class="kw">pituitary gland</span> stimulates growth.</span><span class="zh">生長：體積永久增加；發育：複雜性和功能變化。生長激素由腦垂體分泌。</span>'},
+
+  // ——— 18. Graph Plotting & Interpretation (3 cards) ———
+  {id:85, topic:18, prio:"green", front:"Graph Description — 3-Step Template", back:'<span class="def">Step ① <span class="kw">Start</span>: "When [X-axis variable] increases from [A] to [B]..."</span><span class="def">Step ② <span class="kw">Trend</span>: "...the [Y-axis variable] increases/decreases from [value 1] to [value 2]."</span><span class="def">Step ③ <span class="kw">Peak/Optimum</span>: "The [Y] reaches its <span class="kw">maximum/minimum</span> at [optimum point]."</span><span class="def">Use <span class="kw">comparative language</span>: more rapid, significantly higher, more prolonged, gradually, sharply.</span><span class="zh">三段描述法：起點→趨勢→峰值。用比較級詞彙。</span>'},
+  {id:86, topic:18, prio:"green", front:"Graph Plotting Rules", back:'<span class="def"><span class="kw">X-axis</span>: <span class="kw">Independent variable</span> (the factor you change).</span><span class="def"><span class="kw">Y-axis</span>: <span class="kw">Dependent variable</span> (the factor you measure).</span><span class="def">Rules: <span class="kw">Label both axes</span> with variable name + unit. Use <span class="kw">appropriate scale</span> (use most of the graph paper). Plot points with <span class="kw">small crosses (×)</span>. Draw <span class="kw">best-fit line/curve</span> (do NOT connect dot-to-dot unless specified). Give a <span class="kw">title</span>.</span><span class="zh">作圖規則：X軸自變量、Y軸因變量。標軸名+單位、合適刻度、打叉標點、畫最佳線。</span>'},
+  {id:87, topic:18, prio:"green", front:"Describing Enzyme Graphs — Key Vocabulary", back:'<span class="def"><span class="kw">Optimum</span>: the point where rate is maximum.</span><span class="def"><span class="kw">Denaturation</span>: sharp drop after optimum (irreversible).</span><span class="def"><span class="kw">Plateau</span>: rate levels off (e.g. substrate concentration graph — all active sites occupied).</span><span class="def"><span class="kw">Initial rate</span>: the steepest part of the curve (fastest reaction).</span><span class="def"><span class="kw">Limiting factor</span>: the factor preventing further increase in rate.</span><span class="zh">圖表詞彙：最適點、變性(急降)、平台(飽和)、初始速率、限制因素。</span>'}
+];
+
+// ==================== APP STATE ====================
+let currentIndex = 0;
+let filteredCards = [...CARDS];
+let mastered = new Set(JSON.parse(localStorage.getItem('bioMastered')||'[]'));
+let isCompareMode = false;
+
+// ==================== FUNCTIONS ====================
+function renderCard() {
+  if (filteredCards.length === 0) { document.getElementById('cardFront').textContent='No cards'; document.getElementById('cardBack').innerHTML=''; document.getElementById('progressLabel').textContent='0 / 0'; return; }
+  const card = filteredCards[currentIndex];
+  document.getElementById('cardFront').textContent = card.front;
+  document.getElementById('cardBack').innerHTML = card.back + '<span style="display:block;margin-top:12px;font-size:0.8em;color:var(--text-dim)">Topic ' + card.topic + ' · Card ' + card.id + '/87</span>';
+  document.getElementById('progressLabel').textContent = (currentIndex+1) + ' / ' + filteredCards.length;
+  updateMasteredBtn();
+  document.getElementById('flashcard').classList.remove('flipped');
+}
+
+function flipCard() {
+  if (filteredCards.length===0) return;
+  document.getElementById('flashcard').classList.toggle('flipped');
+}
+
+function nextCard() {
+  if (filteredCards.length===0) return;
+  currentIndex = (currentIndex + 1) % filteredCards.length;
+  renderCard();
+}
+
+function prevCard() {
+  if (filteredCards.length===0) return;
+  currentIndex = (currentIndex - 1 + filteredCards.length) % filteredCards.length;
+  renderCard();
+}
+
+function shuffleCards() {
+  for (let i = filteredCards.length-1; i>0; i--) {
+    const j = Math.floor(Math.random()*(i+1));
+    [filteredCards[i], filteredCards[j]] = [filteredCards[j], filteredCards[i]];
+  }
+  currentIndex = 0;
+  renderCard();
+  showToast('🔀 Shuffled!');
+}
+
+function applyFilter() {
+  const prio = document.getElementById('filterPrio').value;
+  const topic = document.getElementById('filterTopic').value;
+  filteredCards = CARDS.filter(c => {
+    if (prio!=='all' && c.prio!==prio) return false;
+    if (topic!=='all' && c.topic!==parseInt(topic)) return false;
+    return true;
+  });
+  currentIndex = 0;
+  renderCard();
+}
+
+function toggleMastered() {
+  if (filteredCards.length===0) return;
+  const card = filteredCards[currentIndex];
+  if (mastered.has(card.id)) { mastered.delete(card.id); showToast('🔁 Unmarked'); }
+  else { mastered.add(card.id); showToast('✅ Mastered!'); }
+  localStorage.setItem('bioMastered', JSON.stringify([...mastered]));
+  updateMasteredBtn();
+}
+
+function updateMasteredBtn() {
+  if (filteredCards.length===0) return;
+  const btn = document.getElementById('btnMaster');
+  const id = filteredCards[currentIndex].id;
+  if (mastered.has(id)) { btn.classList.add('mastered'); btn.textContent='✓'; }
+  else { btn.classList.remove('mastered'); btn.textContent='○'; }
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 1500);
+}
+
+// ==================== COMPARE MODE ====================
+const COMPARE_PAIRS = [
+  {left:{title:'Active Immunity',detail:'Body produces its <span class="kw">own antibodies</span> after exposure to pathogen/vaccine.<br><br>✅ <span class="kw">Memory cells</span> formed<br>✅ <span class="kw">Long-lasting</span> protection<br>⏱️ Slower onset (takes days-weeks)'},
+   right:{title:'Passive Immunity',detail:'Receives <span class="kw">ready-made antibodies</span> from external source (mother\'s milk, injection).<br><br>❌ <span class="kw">No memory cells</span> formed<br>❌ <span class="kw">Short-lived</span> protection<br>⚡ Immediate protection'}},
+  {left:{title:'Primary Response',detail:'<span class="kw">First exposure</span> to pathogen.<br><br>🐌 Slower response<br>📉 Lower antibody peak<br>📉 Quicker decline<br>⏳ Longer lag phase'},
+   right:{title:'Secondary Response',detail:'<span class="kw">Second exposure</span> to same pathogen.<br><br>⚡ Faster response (memory cells)<br>📈 Much higher antibody peak<br>📈 Slower decline (prolonged)<br>⏳ Shorter lag phase'}},
+  {left:{title:'Blood Transport',detail:'Absorbs into <span class="kw">blood capillaries</span> in villi:<br>• <span class="kw">Glucose</span><br>• <span class="kw">Amino acids</span><br>• <span class="kw">Minerals</span><br>• <span class="kw">Water-soluble vitamins</span> (B, C)<br>• <span class="kw">Water</span>'},
+   right:{title:'Lymph Transport',detail:'Absorbs into <span class="kw">lacteal</span> (lymph vessel) in villi:<br>• <span class="kw">Fatty acids & glycerol</span><br>• <span class="kw">Fat-soluble vitamins</span> (A, D, E, K)<br><br>⚠️ Fatty acids go to <span class="kw">LYMPH</span> first, then blood!'}},
+  {left:{title:'DNA',detail:'🧬 <span class="kw">Deoxyribonucleic acid</span><br>• Sugar: <span class="kw">Deoxyribose</span><br>• Bases: A, T, C, G<br>• <span class="kw">Double-stranded</span> helix<br>• Found in <span class="kw">nucleus</span><br>• Stores genetic information'},
+   right:{title:'RNA',detail:'📋 <span class="kw">Ribonucleic acid</span><br>• Sugar: <span class="kw">Ribose</span><br>• Bases: A, U, C, G<br>• <span class="kw">Single-stranded</span><br>• Found in nucleus & cytoplasm<br>• Protein synthesis (mRNA, tRNA, rRNA)'}},
+  {left:{title:'Competitive Inhibitor',detail:'🔄 <span class="kw">Similar shape</span> to substrate<br>• Binds to <span class="kw">active site</span><br>• Effect overcome by <span class="kw">increasing substrate conc.</span><br>• <span class="kw">Same Vmax</span>, higher Km'},
+   right:{title:'Non-competitive Inhibitor',detail:'🛑 Binds to <span class="kw">allosteric site</span> (not active site)<br>• <span class="kw">Changes active site shape</span><br>• Effect <span class="kw">CANNOT</span> be overcome<br>• <span class="kw">Lower Vmax</span>, same Km'}}
+];
+
+function buildComparePairs() {
+  const container = document.getElementById('comparePairs');
+  container.innerHTML = COMPARE_PAIRS.map((p,i) => `
+    <div style="text-align:center;margin:8px 0;font-size:0.8em;color:var(--text-dim)">Pair ${i+1}/5</div>
+    <div class="compare-pair">
+      <div class="compare-card" onclick="revealCompare(this)" data-side="left">
+        <div class="label">LEFT</div>
+        <div class="title">${p.left.title}</div>
+        <div class="detail">${p.left.detail}</div>
+      </div>
+      <div class="compare-card" onclick="revealCompare(this)" data-side="right">
+        <div class="label">RIGHT</div>
+        <div class="title">${p.right.title}</div>
+        <div class="detail">${p.right.detail}</div>
+      </div>
+    </div>
+    <div class="compare-vs">⚡ VS ⚡</div>
+  `).join('');
+}
+
+function revealCompare(el) {
+  el.classList.toggle('revealed');
+}
+
+function toggleCompare() {
+  isCompareMode = !isCompareMode;
+  const area = document.getElementById('compareArea');
+  const btn = document.getElementById('btnCompare');
+  const cardArea = document.getElementById('cardArea');
+  if (isCompareMode) {
+    area.classList.add('active');
+    btn.classList.add('active');
+    cardArea.style.display = 'none';
+    buildComparePairs();
+  } else {
+    area.classList.remove('active');
+    btn.classList.remove('active');
+    cardArea.style.display = '';
+  }
+}
+
+// ==================== KEYBOARD ====================
+document.addEventListener('keydown', e => {
+  if (isCompareMode) return;
+  if (e.key==='ArrowLeft') prevCard();
+  if (e.key==='ArrowRight') nextCard();
+  if (e.key===' '||e.key==='Spacebar') { e.preventDefault(); flipCard(); }
+  if (e.key==='m') toggleMastered();
+});
+
+// ==================== INIT ====================
+renderCard();
+</script>
+</body>
+</html>
