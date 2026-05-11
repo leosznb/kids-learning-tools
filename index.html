@@ -8,152 +8,236 @@
 *{margin:0;padding:0;box-sizing:border-box}
 body{
   font-family:-apple-system,BlinkMacSystemFont,"PingFang HK","Microsoft YaHei",sans-serif;
-  min-height:100vh;background:#f5f5f7;color:#1d1d1f;
+  min-height:100vh;color:#fff;
+  background:linear-gradient(160deg,#0f0c29 0%,#1a1a3e 30%,#16213e 60%,#0f3460 100%);
   -webkit-font-smoothing:antialiased;
 }
-.app{
-  max-width:520px;margin:0 auto;padding:16px 12px 30px;
-  min-height:100vh;position:relative;
+/* 星空粒子背景 */
+body::before{
+  content:'';position:fixed;top:0;left:0;width:100%;height:100%;
+  background:
+    radial-gradient(2px 2px at 20px 30px,#eee,transparent),
+    radial-gradient(2px 2px at 40px 70px,rgba(255,255,255,.8),transparent),
+    radial-gradient(2px 2px at 50px 160px,#ddd,transparent),
+    radial-gradient(2px 2px at 90px 40px,#fff,transparent),
+    radial-gradient(2px 2px at 130px 80px,rgba(255,255,255,.9),transparent),
+    radial-gradient(2px 2px at 160px 120px,#ddd,transparent),
+    radial-gradient(1px 1px at 200px 50px,#fff,transparent),
+    radial-gradient(1px 1px at 250px 90px,rgba(255,255,255,.7),transparent),
+    radial-gradient(1px 1px at 300px 30px,#eee,transparent),
+    radial-gradient(1px 1px at 350px 110px,#fff,transparent),
+    radial-gradient(2px 2px at 400px 60px,rgba(255,255,255,.8),transparent),
+    radial-gradient(1px 1px at 430px 150px,#ddd,transparent);
+  pointer-events:none;z-index:0;
 }
-/* 状态栏 */
-.status-bar{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:8px 4px 16px;
+.app{max-width:480px;margin:0 auto;padding:24px 16px 40px;position:relative;z-index:1}
+
+/* 头部 */
+.hero{text-align:center;padding:32px 0 28px}
+.hero .icon{font-size:3em;display:block;margin-bottom:12px;animation:float 3s ease-in-out infinite}
+.hero h1{font-size:1.8em;font-weight:800;letter-spacing:-0.5px;
+  background:linear-gradient(135deg,#a78bfa,#60a5fa,#34d399);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
 }
-.status-bar .title{font-size:1.3em;font-weight:700}
-.status-bar .badge{
-  font-size:0.7em;background:#e8e8ed;padding:4px 10px;
-  border-radius:20px;color:#86868b;
+.hero .tagline{font-size:0.85em;color:#8892b0;margin-top:8px;letter-spacing:1px}
+.hero .divider{width:40px;height:3px;background:linear-gradient(90deg,#a78bfa,#34d399);margin:16px auto 0;border-radius:2px}
+
+/* 卡片容器 */
+.kid-list{display:flex;flex-direction:column;gap:20px}
+
+/* 孩子卡片 */
+.kid-card{
+  position:relative;border-radius:24px;padding:28px 24px;
+  cursor:pointer;transition:all .35s cubic-bezier(.4,0,.2,1);
+  overflow:hidden;
+  text-decoration:none;display:block;
+  border:1px solid transparent;
+}
+.kid-card::before{
+  content:'';position:absolute;inset:0;border-radius:24px;
+  background:radial-gradient(ellipse at top left,var(--glow),transparent 70%);
+  opacity:0;transition:opacity .4s;
+}
+.kid-card:active::before{opacity:1}
+.kid-card:active{transform:scale(0.97)}
+.kid-card .card-bg{
+  position:absolute;inset:0;border-radius:24px;
+}
+.kid-card .card-content{position:relative;z-index:1;display:flex;align-items:center;gap:18px}
+.kid-card .kid-avatar{
+  width:64px;height:64px;border-radius:20px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:2.2em;flex-shrink:0;
+  box-shadow:0 8px 30px var(--shadow);
+}
+.kid-card .kid-info{flex:1}
+.kid-card .kid-name{font-size:1.35em;font-weight:700;margin-bottom:4px;letter-spacing:-0.3px}
+.kid-card .kid-grade{font-size:0.8em;opacity:0.7;margin-bottom:8px}
+.kid-card .kid-meta{display:flex;gap:10px;flex-wrap:wrap}
+.kid-card .kid-meta span{
+  font-size:0.72em;padding:3px 10px;border-radius:20px;
+  border:1px solid rgba(255,255,255,.15);
+  background:rgba(255,255,255,.06);
+  white-space:nowrap;
+}
+.kid-card .arrow{
+  font-size:1.3em;opacity:0.5;transition:all .3s;flex-shrink:0;
+  width:30px;text-align:center;
+}
+.kid-card:active .arrow{transform:translateX(4px);opacity:1}
+
+/* 有容 - 绿色 Nature Organic */
+.kid-card.yr{
+  background:linear-gradient(135deg,rgba(22,53,30,.85),rgba(15,38,20,.9));
+  border-color:rgba(52,211,153,.2);
+  box-shadow:0 4px 30px rgba(52,211,153,.08);
+}
+.kid-card.yr .kid-avatar{
+  background:linear-gradient(135deg,#34d399,#059669);
+  box-shadow:0 8px 30px rgba(52,211,153,.35);
+}
+.kid-card.yr{--glow:rgba(52,211,153,.15);}
+.kid-card.yr .kid-avatar{--shadow:rgba(52,211,153,.35);}
+
+/* 海納 - 蓝色 Ocean Tech */
+.kid-card.hn{
+  background:linear-gradient(135deg,rgba(15,23,42,.85),rgba(12,18,34,.9));
+  border-color:rgba(96,165,250,.2);
+  box-shadow:0 4px 30px rgba(96,165,250,.08);
+}
+.kid-card.hn .kid-avatar{
+  background:linear-gradient(135deg,#60a5fa,#2563eb);
+  box-shadow:0 8px 30px rgba(96,165,250,.35);
+}
+.kid-card.hn{--glow:rgba(96,165,250,.15);}
+.kid-card.hn .kid-avatar{--shadow:rgba(96,165,250,.35);}
+
+/* 多多 - 金色 Warm Sun */
+.kid-card.dd{
+  background:linear-gradient(135deg,rgba(40,30,10,.85),rgba(30,20,8,.9));
+  border-color:rgba(251,191,36,.2);
+  box-shadow:0 4px 30px rgba(251,191,36,.08);
+}
+.kid-card.dd .kid-avatar{
+  background:linear-gradient(135deg,#fbbf24,#d97706);
+  box-shadow:0 8px 30px rgba(251,191,36,.35);
+}
+.kid-card.dd{--glow:rgba(251,191,36,.15);}
+.kid-card.dd .kid-avatar{--shadow:rgba(251,191,36,.35);}
+
+/* 動畫 */
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+
+/* 底部 */
+.footer{
+  text-align:center;margin-top:32px;
+  font-size:0.7em;color:#64748b;letter-spacing:1px;
+  opacity:0.6;
 }
 
-/* 返回按钮 */
+/* 子頁面返回按鈕 */
 .back-btn{
   display:none;align-items:center;gap:4px;
-  background:none;border:none;font-size:0.9em;
-  color:#007aff;cursor:pointer;padding:8px 4px;
-  margin-bottom:4px;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
+  color:#cbd5e1;font-size:0.85em;cursor:pointer;padding:8px 14px;
+  border-radius:20px;margin-bottom:12px;transition:all .2s;
 }
-.back-btn.show{display:flex}
+.back-btn.show{display:inline-flex}
+.back-btn:active{background:rgba(255,255,255,.12)}
 
-/* 标题区域 */
-.screen-title{
-  font-size:1.4em;font-weight:700;margin-bottom:4px;
-}
-.screen-subtitle{
-  font-size:0.85em;color:#86868b;margin-bottom:20px;
-}
+/* 頁面切換 */
+.page{display:none}
+.page.active{display:block;animation:fadeIn .3s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 
-/* 孩子卡片 (首页) */
-.kid-grid{display:flex;flex-direction:column;gap:14px}
-.kid-card{
-  background:#fff;border-radius:18px;padding:20px 16px;
-  cursor:pointer;transition:all .2s;
-  box-shadow:0 1px 3px rgba(0,0,0,0.06);
-  display:flex;align-items:center;gap:14px;
-  border:1.5px solid transparent;
-}
-.kid-card:active{transform:scale(0.98)}
-.kid-card .avatar{
-  width:52px;height:52px;border-radius:26px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:1.5em;color:#fff;font-weight:700;flex-shrink:0;
-}
-.kid-card .info{flex:1}
-.kid-card .name{font-size:1.1em;font-weight:600}
-.kid-card .grade{font-size:0.78em;color:#86868b;margin-top:2px}
-.kid-card .arrow{color:#c7c7cc;font-size:1.2em}
-.kid-card.dd .avatar{background:linear-gradient(135deg,#FFD54F,#FF8F00)}
-.kid-card.hn .avatar{background:linear-gradient(135deg,#64B5F6,#1565C0)}
-.kid-card.yr .avatar{background:linear-gradient(135deg,#81C784,#2E7D32)}
-
-/* 科目网格 */
+/* 科目頁 */
+.subj-header{text-align:center;padding:20px 0 24px}
+.subj-header .emoji-lg{font-size:3.5em;display:block;margin-bottom:8px}
+.subj-header h2{font-size:1.6em;font-weight:700}
+.subj-header .sub{font-size:0.85em;color:#8892b0;margin-top:4px}
 .subject-grid{
-  display:grid;grid-template-columns:1fr 1fr;gap:10px;
+  display:grid;grid-template-columns:1fr 1fr;gap:12px;
 }
 .subject-card{
-  background:#fff;border-radius:14px;padding:14px 12px;
-  cursor:pointer;transition:all .2s;
-  box-shadow:0 1px 3px rgba(0,0,0,0.04);
-  border:1.5px solid transparent;
+  border-radius:18px;padding:18px 14px;cursor:pointer;
+  transition:all .25s;display:flex;flex-direction:column;gap:8px;
+  border:1px solid rgba(255,255,255,.08);
+  background:rgba(255,255,255,.04);
+  position:relative;overflow:hidden;
 }
-.subject-card:active{transform:scale(0.97)}
-.subject-card .emoji{font-size:1.6em;display:block;margin-bottom:4px}
-.subject-card .sname{font-size:0.9em;font-weight:600}
-.subject-card .scount{font-size:0.7em;color:#86868b;margin-top:3px}
-.subject-card.has-tools{border-color:#34c759}
-.subject-card .status-dot{display:inline-block;width:6px;height:6px;border-radius:3px;margin-right:4px}
-.subject-card .status-dot.active{background:#34c759}
-.subject-card .status-dot.empty{background:#c7c7cc}
+.subject-card::after{
+  content:'';position:absolute;top:0;left:0;width:4px;height:100%;
+  background:var(--accent);border-radius:4px 0 0 4px;opacity:.6;
+}
+.subject-card:active{transform:scale(.96);background:rgba(255,255,255,.08)}
+.subject-card .s-emoji{font-size:1.8em}
+.subject-card .s-name{font-size:0.95em;font-weight:600}
+.subject-card .s-meta{font-size:0.72em;color:#94a3b8;display:flex;align-items:center;gap:5px}
+.subject-card .s-dot{width:6px;height:6px;border-radius:3px}
+.subject-card .s-dot.on{background:#34d399}
+.subject-card .s-dot.off{background:#475569}
 
-/* 工具列表 */
-.tool-list{display:flex;flex-direction:column;gap:8px}
+/* 工具頁 */
+.tool-header{text-align:center;padding:16px 0 20px}
+.tool-header .emoji-lg{font-size:3em;display:block;margin-bottom:8px}
+.tool-header h2{font-size:1.4em;font-weight:700}
+.tool-header .sub{font-size:0.8em;color:#8892b0;margin-top:4px}
+.tool-list{display:flex;flex-direction:column;gap:10px}
 .tool-item{
-  background:#fff;border-radius:12px;padding:14px 16px;
-  display:flex;align-items:center;gap:12px;
+  border-radius:16px;padding:16px;display:flex;align-items:center;gap:14px;
   cursor:pointer;transition:all .2s;
-  box-shadow:0 1px 3px rgba(0,0,0,0.04);
+  border:1px solid rgba(255,255,255,.08);
+  background:rgba(255,255,255,.04);
 }
-.tool-item:active{transform:scale(0.98)}
-.tool-item .t-icon{font-size:1.5em}
+.tool-item:active{transform:scale(.98);background:rgba(255,255,255,.08)}
+.tool-item .t-icon{font-size:1.6em;flex-shrink:0}
 .tool-item .t-info{flex:1}
-.tool-item .t-name{font-size:0.95em;font-weight:600}
-.tool-item .t-desc{font-size:0.75em;color:#86868b;margin-top:2px}
-.tool-item .t-action{color:#007aff;font-size:0.85em;font-weight:500}
-.tool-item.coming .t-name{color:#86868b}
-.tool-item.coming .t-action{color:#c7c7cc}
+.tool-item .t-name{font-size:0.95em;font-weight:600;margin-bottom:2px}
+.tool-item .t-desc{font-size:0.72em;color:#8892b0}
+.tool-item .t-arrow{color:#64748b;font-size:1.1em}
+.tool-item.coming{opacity:.45}
+.tool-item.coming .t-arrow{color:#475569}
 
-/* 空状态 */
-.empty-state{
-  text-align:center;padding:40px 20px;color:#86868b;
-}
-.empty-state .e-icon{font-size:3em;margin-bottom:12px;opacity:0.5}
-.empty-state .e-text{font-size:0.9em;line-height:1.5}
-
-/* 页面切换动画 */
-.page{display:none}
-.page.active{display:block;animation:fadeIn .25s ease}
-@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-
-/* footer */
-.footer{text-align:center;font-size:0.7em;color:#86868b;padding:20px 0 10px;opacity:0.6}
+/* 空狀態 */
+.empty-state{text-align:center;padding:40px 20px;color:#64748b}
+.empty-state .e-icon{font-size:3em;opacity:.4;margin-bottom:12px}
 </style>
 </head>
 <body>
 <div class="app">
 
-<!-- ========== 状态栏 ========== -->
-<button class="back-btn" id="backBtn" onclick="goBack()">‹ 返回</button>
-<div class="status-bar">
-  <span class="title" id="pageTitle">📚 學習工具箱</span>
-  <span class="badge" id="pageBadge">v1.0</span>
-</div>
-
-<!-- ========== 页面 1: 首页 ========== -->
+<!-- ========== 頁面 1: 首頁 ========== -->
 <div class="page active" id="page-home">
-  <div class="screen-subtitle">選擇孩子，開始學習</div>
-  <div class="kid-grid" id="kidGrid"></div>
+  <div class="hero">
+    <span class="icon">📚</span>
+    <h1>學習工具箱</h1>
+    <p class="tagline">ETHAN · 孩子們的學習夥伴</p>
+    <div class="divider"></div>
+  </div>
+  <div class="kid-list" id="kidGrid"></div>
+  <div class="footer">騰訊雲 COS 備份 · Cloudflare 全球加速</div>
 </div>
 
-<!-- ========== 页面 2: 科目列表 ========== -->
+<!-- ========== 頁面 2: 科目列表 ========== -->
 <div class="page" id="page-subjects">
-  <div class="screen-title" id="subjTitle"></div>
-  <div class="screen-subtitle" id="subjSubtitle"></div>
+  <button class="back-btn" id="backBtn" onclick="goBack()">← 返回</button>
+  <div class="subj-header" id="subjHeader"></div>
   <div class="subject-grid" id="subjGrid"></div>
 </div>
 
-<!-- ========== 页面 3: 工具列表 ========== -->
+<!-- ========== 頁面 3: 工具列表 ========== -->
 <div class="page" id="page-tools">
-  <div class="screen-title" id="toolTitle"></div>
-  <div class="screen-subtitle" id="toolSubtitle"></div>
+  <button class="back-btn show" onclick="goBack()">← 返回</button>
+  <div class="tool-header" id="toolHeader"></div>
   <div class="tool-list" id="toolList"></div>
 </div>
 
-<div class="footer">騰訊雲 COS 備份 · Cloudflare Pages 全球加速 · 🚀 已驗證</div>
 </div>
 
 <script>
 // ============================================================
-// 数据定义
+// 數據
 // ============================================================
 const ICONS = {
   chinese:'📖', english:'🇬🇧', maths:'📐', math:'📐', physics:'⚛️',
@@ -166,208 +250,173 @@ const SUBJECT_NAMES = {
   history:'History', 'chinese-history':'中國歷史', geography:'Geography',
   general:'常識', ethics:'倫理宗教'
 };
+const SUBJECT_COLORS = {
+  chinese:'#f59e0b', english:'#3b82f6', maths:'#8b5cf6', math:'#8b5cf6',
+  physics:'#06b6d4', chemistry:'#10b981', biology:'#22c55e',
+  history:'#ef4444','chinese-history':'#dc2626',
+  geography:'#14b8a6', general:'#84cc16', ethics:'#a855f7'
+};
 
-const KIDS = {
-  duoduo:{
-    name:'多多', grade:'P5', emoji:'🟡',
+// 順序：有容(上) → 海納(中) → 多多(下)
+const KIDS = [
+  {
+    key:'yourong', name:'有容', grade:'F3', emoji:'🟢', css:'yr',
+    note:'荃灣官立中學 · 綠色',
+    subjects:{
+      chinese:{tools:[{icon:'📖',name:'中文練習',desc:'敬請期待',coming:true}]},
+      english:{tools:[{icon:'🇬🇧',name:'English',desc:'敬請期待',coming:true}]},
+      maths:{tools:[{icon:'📐',name:'Maths',desc:'敬請期待',coming:true}]},
+      physics:{tools:[{icon:'⚛️',name:'Physics',desc:'敬請期待',coming:true}]},
+      chemistry:{tools:[{icon:'🧪',name:'Chemistry',desc:'敬請期待',coming:true}]},
+      biology:{tools:[{icon:'🧬',name:'Biology',desc:'敬請期待',coming:true}]},
+      history:{tools:[{icon:'📜',name:'History',desc:'敬請期待',coming:true}]},
+      'chinese-history':{tools:[{icon:'🏛️',name:'中國歷史',desc:'敬請期待',coming:true}]},
+      geography:{tools:[{icon:'🌍',name:'Geography',desc:'敬請期待',coming:true}]}
+    }
+  },
+  {
+    key:'haina', name:'海納', grade:'F3', emoji:'🔵', css:'hn',
+    note:'荃灣官立中學 · 藍色',
+    subjects:{
+      chinese:{tools:[{icon:'📖',name:'中文練習',desc:'敬請期待',coming:true}]},
+      english:{tools:[{icon:'🇬🇧',name:'English',desc:'敬請期待',coming:true}]},
+      maths:{tools:[{icon:'📐',name:'Maths',desc:'敬請期待',coming:true}]},
+      physics:{tools:[{icon:'⚛️',name:'Physics',desc:'敬請期待',coming:true}]},
+      chemistry:{tools:[{icon:'🧪',name:'Chemistry',desc:'敬請期待',coming:true}]},
+      biology:{tools:[{icon:'🧬',name:'Biology',desc:'敬請期待',coming:true}]},
+      history:{tools:[{icon:'📜',name:'History',desc:'敬請期待',coming:true}]},
+      'chinese-history':{tools:[{icon:'🏛️',name:'中國歷史',desc:'敬請期待',coming:true}]},
+      geography:{tools:[{icon:'🌍',name:'Geography',desc:'敬請期待',coming:true}]}
+    }
+  },
+  {
+    key:'duoduo', name:'多多', grade:'P5', emoji:'🟡', css:'dd',
+    note:'迦密愛禮信小學 · 金色',
     subjects:{
       chinese:{tools:[
         {icon:'🗣️',name:'詞彙粵語聽寫',desc:'第5·7·11·12課 40詞',file:'duoduo/chinese/index.html'},
         {icon:'🃏',name:'閃卡練習',desc:'敬請期待',coming:true},
         {icon:'📝',name:'不供詞填充',desc:'敬請期待',coming:true}
       ]},
-      english:{tools:[
-        {icon:'🔤',name:'英文詞彙',desc:'敬請期待',coming:true}
-      ]},
-      math:{tools:[
-        {icon:'🔢',name:'數學練習',desc:'敬請期待',coming:true}
-      ]},
-      general:{tools:[
-        {icon:'🌿',name:'常識複習',desc:'敬請期待',coming:true}
-      ]},
-      ethics:{tools:[
-        {icon:'🙏',name:'倫理宗教',desc:'敬請期待',coming:true}
-      ]}
-    }
-  },
-  haina:{
-    name:'海納', grade:'F3', emoji:'🔵',
-    subjects:{
-      chinese:{tools:[
-        {icon:'📖',name:'中文練習',desc:'敬請期待',coming:true}
-      ]},
-      english:{tools:[
-        {icon:'🇬🇧',name:'English',desc:'敬請期待',coming:true}
-      ]},
-      maths:{tools:[
-        {icon:'📐',name:'Maths',desc:'敬請期待',coming:true}
-      ]},
-      physics:{tools:[
-        {icon:'⚛️',name:'Physics',desc:'敬請期待',coming:true}
-      ]},
-      chemistry:{tools:[
-        {icon:'🧪',name:'Chemistry',desc:'敬請期待',coming:true}
-      ]},
-      biology:{tools:[
-        {icon:'🧬',name:'Biology',desc:'敬請期待',coming:true}
-      ]},
-      history:{tools:[
-        {icon:'📜',name:'History',desc:'敬請期待',coming:true}
-      ]},
-      'chinese-history':{tools:[
-        {icon:'🏛️',name:'中國歷史',desc:'敬請期待',coming:true}
-      ]},
-      geography:{tools:[
-        {icon:'🌍',name:'Geography',desc:'敬請期待',coming:true}
-      ]}
-    }
-  },
-  yourong:{
-    name:'有容', grade:'F3', emoji:'🟢',
-    subjects:{
-      chinese:{tools:[
-        {icon:'📖',name:'中文練習',desc:'敬請期待',coming:true}
-      ]},
-      english:{tools:[
-        {icon:'🇬🇧',name:'English',desc:'敬請期待',coming:true}
-      ]},
-      maths:{tools:[
-        {icon:'📐',name:'Maths',desc:'敬請期待',coming:true}
-      ]},
-      physics:{tools:[
-        {icon:'⚛️',name:'Physics',desc:'敬請期待',coming:true}
-      ]},
-      chemistry:{tools:[
-        {icon:'🧪',name:'Chemistry',desc:'敬請期待',coming:true}
-      ]},
-      biology:{tools:[
-        {icon:'🧬',name:'Biology',desc:'敬請期待',coming:true}
-      ]},
-      history:{tools:[
-        {icon:'📜',name:'History',desc:'敬請期待',coming:true}
-      ]},
-      'chinese-history':{tools:[
-        {icon:'🏛️',name:'中國歷史',desc:'敬請期待',coming:true}
-      ]},
-      geography:{tools:[
-        {icon:'🌍',name:'Geography',desc:'敬請期待',coming:true}
-      ]}
+      english:{tools:[{icon:'🔤',name:'英文詞彙',desc:'敬請期待',coming:true}]},
+      math:{tools:[{icon:'🔢',name:'數學練習',desc:'敬請期待',coming:true}]},
+      general:{tools:[{icon:'🌿',name:'常識複習',desc:'敬請期待',coming:true}]},
+      ethics:{tools:[{icon:'🙏',name:'倫理宗教',desc:'敬請期待',coming:true}]}
     }
   }
-};
+];
 
 let historyStack = ['home'];
 let currentKid = null;
 let currentSubject = null;
 
 // ============================================================
-// 渲染函数
+// 渲染
 // ============================================================
-function showPage(id){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById('page-'+id).classList.add('active');
-}
-
 function renderHome(){
   const grid = document.getElementById('kidGrid');
   grid.innerHTML = '';
-  for(const [key,kid] of Object.entries(KIDS)){
+  KIDS.forEach(kid => {
     const totalTools = Object.values(kid.subjects)
       .reduce((sum,s)=>sum + s.tools.filter(t=>!t.coming).length, 0);
     const card = document.createElement('div');
-    card.className = `kid-card ${key}`;
+    card.className = `kid-card ${kid.css}`;
     card.innerHTML = `
-      <div class="avatar">${kid.emoji}</div>
-      <div class="info">
-        <div class="name">${kid.name}</div>
-        <div class="grade">${kid.grade} · ${totalTools} 個工具可用</div>
+      <div class="card-content">
+        <div class="kid-avatar">${kid.emoji}</div>
+        <div class="kid-info">
+          <div class="kid-name">${kid.name}</div>
+          <div class="kid-grade">${kid.note}</div>
+          <div class="kid-meta">
+            <span>${kid.grade}</span>
+            <span>${totalTools} 工具</span>
+            <span>${Object.keys(kid.subjects).length} 科</span>
+          </div>
+        </div>
+        <span class="arrow">→</span>
       </div>
-      <span class="arrow">›</span>
     `;
-    card.onclick = ()=>{navigateToSubjects(key);};
+    card.onclick = ()=>{navigateToSubjects(kid);};
     grid.appendChild(card);
-  }
+  });
 }
 
-function renderSubjects(kidKey){
-  const kid = KIDS[kidKey];
-  document.getElementById('subjTitle').textContent = `${kid.emoji} ${kid.name} 的科目`;
-  document.getElementById('subjSubtitle').textContent = `選擇科目查看學習工具`;
+function renderSubjects(kid, noPush){
+  const h = document.getElementById('subjHeader');
+  h.innerHTML = `
+    <div class="emoji-lg">${kid.emoji}</div>
+    <h2>${kid.name} 的科目</h2>
+    <div class="sub">${kid.note}</div>
+  `;
   const grid = document.getElementById('subjGrid');
   grid.innerHTML = '';
   for(const [skey,subj] of Object.entries(kid.subjects)){
     const toolCount = subj.tools.filter(t=>!t.coming).length;
-    const isEdit = toolCount>0;
     const card = document.createElement('div');
-    card.className = `subject-card${isEdit?' has-tools':''}`;
+    card.className = 'subject-card';
+    card.style.setProperty('--accent', SUBJECT_COLORS[skey]||'#64748b');
     card.innerHTML = `
-      <div class="emoji">${ICONS[skey]||'📁'}</div>
-      <div class="sname">${SUBJECT_NAMES[skey]||skey}</div>
-      <div class="scount">
-        <span class="status-dot ${isEdit?'active':'empty'}"></span>
-        ${isEdit ? `${toolCount} 個工具` : '暫無工具'}
+      <div class="s-emoji">${ICONS[skey]||'📁'}</div>
+      <div class="s-name">${SUBJECT_NAMES[skey]||skey}</div>
+      <div class="s-meta">
+        <span class="s-dot ${toolCount>0?'on':'off'}"></span>
+        ${toolCount>0 ? `${toolCount} 個工具` : '暫無'}
       </div>
     `;
-    card.onclick = ()=>{navigateToTools(kidKey,skey);};
+    card.onclick = ()=>{navigateToTools(kid,skey);};
     grid.appendChild(card);
   }
+  showPage('subjects');
+  document.getElementById('backBtn').classList.add('show');
+  if(!noPush) historyStack.push('subjects');
 }
 
-function renderTools(kidKey,subjKey){
-  const kid = KIDS[kidKey];
+function renderTools(kid,subjKey, noPush){
   const subj = kid.subjects[subjKey];
-  document.getElementById('toolTitle').textContent = `${ICONS[subjKey]||'📁'} ${SUBJECT_NAMES[subjKey]||subjKey}`;
-  document.getElementById('toolSubtitle').textContent = `${kid.name} · ${kid.grade}`;
+  const h = document.getElementById('toolHeader');
+  h.innerHTML = `
+    <div class="emoji-lg">${ICONS[subjKey]||'📁'}</div>
+    <h2>${SUBJECT_NAMES[subjKey]||subjKey}</h2>
+    <div class="sub">${kid.name} · ${kid.grade}</div>
+  `;
   const list = document.getElementById('toolList');
   list.innerHTML = '';
-  const tools = subj.tools;
-  if(tools.length===0){
-    list.innerHTML = '<div class="empty-state"><div class="e-icon">🔧</div><div class="e-text">暫無工具，敬請期待</div></div>';
-    return;
+  if(!subj.tools.length){
+    list.innerHTML = '<div class="empty-state"><div class="e-icon">🔧</div>暫無工具，敬請期待</div>';
+  } else {
+    subj.tools.forEach(t=>{
+      const item = document.createElement('div');
+      item.className = `tool-item${t.coming?' coming':''}`;
+      item.innerHTML = `
+        <span class="t-icon">${t.icon}</span>
+        <div class="t-info">
+          <div class="t-name">${t.name}</div>
+          <div class="t-desc">${t.desc}</div>
+        </div>
+        <span class="t-arrow">${t.coming?'':'→'}</span>
+      `;
+      if(!t.coming){
+        item.onclick = ()=>{ window.open(t.file||'index.html','_blank'); };
+      }
+      list.appendChild(item);
+    });
   }
-  tools.forEach(t=>{
-    const item = document.createElement('div');
-    item.className = `tool-item${t.coming?' coming':''}`;
-    item.innerHTML = `
-      <span class="t-icon">${t.icon}</span>
-      <div class="t-info">
-        <div class="t-name">${t.name}</div>
-        <div class="t-desc">${t.desc}</div>
-      </div>
-      <span class="t-action">${t.coming?'敬請期待':'打開 ›'}</span>
-    `;
-    if(!t.coming){
-      item.onclick = ()=>{
-        const path = t.file || 'index.html';
-        window.open(path, '_blank');
-      };
-    }
-    list.appendChild(item);
-  });
-}
-
-// ============================================================
-// 导航
-// ============================================================
-function navigateToSubjects(kidKey){
-  currentKid = kidKey;
-  renderSubjects(kidKey);
-  showPage('subjects');
-  document.getElementById('pageTitle').textContent = `${KIDS[kidKey].emoji} ${KIDS[kidKey].name}`;
-  document.getElementById('pageBadge').textContent = kidKey;
-  document.getElementById('backBtn').classList.add('show');
-  historyStack.push('subjects');
-}
-
-function navigateToTools(kidKey,subjKey){
-  currentKid = kidKey;
-  currentSubject = subjKey;
-  renderTools(kidKey,subjKey);
   showPage('tools');
-  document.getElementById('pageTitle').textContent = `${ICONS[subjKey]||'📁'} ${SUBJECT_NAMES[subjKey]||subjKey}`;
-  document.getElementById('pageBadge').textContent = kidKey;
-  document.getElementById('backBtn').classList.add('show');
-  historyStack.push('tools');
+  if(!noPush) historyStack.push('tools');
+}
+
+// ============================================================
+// 導航
+// ============================================================
+function navigateToSubjects(kid){
+  currentKid = kid;
+  renderSubjects(kid);
+}
+
+function navigateToTools(kid,subjKey){
+  currentKid = kid;
+  currentSubject = subjKey;
+  renderTools(kid,subjKey);
 }
 
 function goBack(){
@@ -376,15 +425,17 @@ function goBack(){
   const prev = historyStack[historyStack.length-1];
   if(prev==='home'){
     showPage('home');
-    document.getElementById('pageTitle').textContent = '📚 學習工具箱';
-    document.getElementById('pageBadge').textContent = 'v1.0';
     document.getElementById('backBtn').classList.remove('show');
   } else if(prev==='subjects'){
-    renderSubjects(currentKid);
-    showPage('subjects');
-    document.getElementById('pageTitle').textContent = `${KIDS[currentKid].emoji} ${KIDS[currentKid].name}`;
-    document.getElementById('pageBadge').textContent = currentKid;
+    renderSubjects(currentKid, true);
+  } else if(prev==='tools'){
+    renderTools(currentKid,currentSubject, true);
   }
+}
+
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
 }
 
 // ============================================================
