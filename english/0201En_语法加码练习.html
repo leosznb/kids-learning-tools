@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>多多 Grammar 加碼練習 · U1-U2-U3-U5-U6</title>
+<style>
+:root{--bg:#fafaf9;--card:#fff;--text:#1a1a1a;--t2:#555;--border:#e5e5e3;--accent:#b45309;--g:#16a34a;--r2:#dc2626;--b:#2563eb;--r:10px;--sh:0 1px 3px rgba(0,0,0,0.06);--font:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Microsoft JhengHei",sans-serif}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.75;-webkit-font-smoothing:antialiased}
+
+.header{background:var(--card);border-bottom:1px solid var(--border);padding:0.8rem 0.6rem 0.4rem;text-align:center;position:sticky;top:0;z-index:100;box-shadow:var(--sh)}
+.header h1{font-size:1.1rem;font-weight:700}
+.header .sub{font-size:0.72rem;color:var(--t2);margin-top:0.1rem}
+.tab-bar{display:flex;gap:0.2rem;justify-content:center;margin-top:0.5rem;flex-wrap:wrap;padding-bottom:0.3rem}
+.tab-bar button{border:1px solid var(--border);background:var(--card);padding:0.25rem 0.45rem;border-radius:5px;font-size:0.7rem;cursor:pointer;transition:all .15s;white-space:nowrap}
+.tab-bar button.active,.tab-bar button:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+.container{max-width:760px;margin:0 auto;padding:0.8rem 0.8rem 2rem}
+.page{display:none}.page.active{display:block}
+
+/* Score bar */
+.score-bar-top{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:0.5rem 0.8rem;margin-bottom:0.7rem;display:flex;align-items:center;gap:0.6rem;flex-wrap:wrap;position:sticky;top:108px;z-index:50}
+.score-bar-top .label{font-weight:700;font-size:0.8rem}
+.score-bar-top .bar{flex:1;min-width:100px;height:22px;background:#e5e7eb;border-radius:11px;overflow:hidden}
+.score-bar-top .fill{height:100%;background:linear-gradient(90deg,var(--g),#22c55e);border-radius:11px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:0.68rem;font-weight:700;transition:width .3s}
+.score-bar-top .num{font-size:0.78rem;font-weight:700;color:var(--accent);white-space:nowrap}
+
+/* Quick rules */
+.quick-rules{background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:0.6rem 0.8rem;margin-bottom:0.7rem;font-size:0.78rem;line-height:1.8}
+.quick-rules b{color:var(--b)}
+.quick-rules .ruletitle{font-weight:700;font-size:0.82rem;margin-bottom:0.2rem}
+
+/* Gradient header */
+.grad-hd{background:var(--accent);color:#fff;padding:0.35rem 0.8rem;border-radius:6px;font-size:0.78rem;font-weight:700;margin:0.6rem 0 0.4rem;display:flex;align-items:center;gap:0.4rem}
+.grad-hd .grad-num{background:#fff;color:var(--accent);width:20px;height:20px;border-radius:50%;text-align:center;line-height:20px;font-size:0.65rem;font-weight:800}
+
+/* Question */
+.q-card{border:1px solid var(--border);border-radius:8px;padding:0.7rem 0.8rem;margin:0.4rem 0;background:var(--card);transition:border-color .2s}
+.q-card.correct{border-color:var(--g);background:#f0fdf4}
+.q-card.wrong{border-color:var(--r2);background:#fef2f2}
+.q-card .q-row{display:flex;align-items:flex-start;gap:0.5rem}
+.q-card .q-num{background:var(--accent);color:#fff;min-width:22px;height:22px;border-radius:50%;text-align:center;line-height:22px;font-size:0.68rem;font-weight:700;flex-shrink:0;margin-top:1px}
+.q-card .q-text{font-size:0.88rem;line-height:1.9;flex:1}
+.q-card .q-text .gap{display:inline-block;border-bottom:2px dashed var(--accent);min-width:70px;text-align:center;margin:0 0.2rem;padding:0 0.3rem;font-weight:700;color:var(--accent)}
+.q-card .q-text .gap.filled{color:var(--g);border-bottom-color:var(--g)}
+.q-card .q-text .gap.wrong-filled{color:var(--r2);border-bottom-color:var(--r2)}
+
+/* MC options */
+.opts{margin:0.4rem 0 0 1.8rem;display:flex;flex-wrap:wrap;gap:0.3rem}
+.opts button{border:1px solid var(--border);background:var(--card);padding:0.3rem 0.7rem;border-radius:5px;font-size:0.82rem;cursor:pointer;transition:all .15s;font-family:var(--font)}
+.opts button:hover{background:#f0fdf4;border-color:var(--g)}
+.opts button.chosen-correct{background:#dcfce7;border-color:var(--g);color:var(--g);font-weight:700}
+.opts button.chosen-wrong{background:#fecaca;border-color:var(--r2);color:var(--r2);text-decoration:line-through}
+
+/* Input */
+.input-row{display:flex;gap:0.4rem;align-items:center;margin:0.3rem 0 0 1.8rem}
+.input-row input{border:1px solid var(--border);border-radius:5px;padding:0.3rem 0.5rem;font-size:0.84rem;font-family:var(--font);width:180px}
+.input-row input:focus{outline:none;border-color:var(--b);box-shadow:0 0 0 2px rgba(37,99,235,0.15)}
+.input-row button.check-btn{background:var(--b);color:#fff;border:none;padding:0.3rem 0.7rem;border-radius:5px;font-size:0.75rem;cursor:pointer;font-family:var(--font)}
+.input-row button.check-btn:hover{opacity:0.85}
+
+/* Feedback */
+.fb{font-size:0.76rem;margin:0.3rem 0 0 1.8rem;display:none;line-height:1.8}
+.fb.show{display:block}
+.fb .why{color:var(--t2);font-size:0.73rem;margin-top:0.15rem;padding-left:0.3rem;border-left:3px solid var(--b)}
+
+/* Reset btn */
+.reset-row{text-align:center;margin:1rem 0}
+.reset-btn{background:var(--card);border:1px solid var(--border);padding:0.4rem 1rem;border-radius:6px;font-size:0.78rem;cursor:pointer;font-family:var(--font)}
+.reset-btn:hover{background:#f0fdf4;border-color:var(--g)}
+
+.warning{background:#fef2f2;border:1px solid #fecaca;border-radius:6px;padding:0.4rem 0.7rem;font-size:0.78rem;color:#991b1b;margin:0.3rem 0}
+
+.footer{text-align:center;color:#999;font-size:0.68rem;padding:1.5rem 0 0.5rem}
+
+@media(max-width:600px){
+  .header{padding:0.6rem 0.4rem 0.3rem}.header h1{font-size:0.95rem}
+  .container{padding:0.4rem 0.3rem 1.5rem}.q-card{padding:0.5rem 0.6rem}
+  .q-card .q-text{font-size:0.82rem}.opts button{font-size:0.76rem;padding:0.25rem 0.5rem}
+  .score-bar-top{position:static;margin-bottom:0.5rem}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+<h1>📝 多多 Grammar 加碼練習</h1>
+<p class="sub">U1 不定代名詞 · U2 所有格代名詞+介詞 · U3 動名詞vs不定式 · U5 so many/much & -ed/-ing · U6 不帶to不定式</p>
+<div class="tab-bar">
+<button class="active" onclick="switchPage('u1',this)">U1 不定代名詞</button>
+<button onclick="switchPage('u2',this)">U2 所有格+介詞</button>
+<button onclick="switchPage('u3',this)">U3 動名詞vs不定式</button>
+<button onclick="switchPage('u5',this)">U5 many/much & -ed/-ing</button>
+<button onclick="switchPage('u6',this)">U6 不帶to不定式</button>
+<button onclick="switchPage('mix',this)">🎯 綜合挑戰</button>
+</div>
+</div>
+
+<div class="container">
+
+<!-- ═══════════════════ U1: INDEFINITE PRONOUNS ═══════════════════ -->
+<div class="page active" id="page-u1">
+
+<div class="quick-rules">
+<div class="ruletitle">📋 U1 Quick Rules · 不定代名詞 + too + adj</div>
+<b>some-</b> (someone/something/somewhere) → 肯定句 | <b>any-</b> → 否定句/疑問句 | <b>no-</b> → 否定意思（動詞用肯定）<br>
+<b>every-</b> → 「每一個」| <b>too + adj</b> → 「太……」（負面：太…而不能）
+</div>
+
+<div class="score-bar-top" id="u1-score-bar">
+<span class="label">🏆 U1 得分</span>
+<div class="bar"><div class="fill" id="u1-fill" style="width:0%">0%</div></div>
+<span class="num" id="u1-num">0/35</span>
+</div>
+
+<!-- G1: some-/any-/no- + body/one (10 MC) -->
+<div class="grad-hd"><span class="grad-num">1</span> somebody / anybody / nobody / everybody · 10題</div>
+
+<div class="q-card" data-unit="u1" data-answer="B"><div class="q-row"><span class="q-num">1</span>
+<div class="q-text">I knocked on the door but <span class="gap">_____</span> answered.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u1')">A. somebody</button><button onclick="pickMC(this,'B','u1')">B. nobody</button><button onclick="pickMC(this,'C','u1')">C. anybody</button><button onclick="pickMC(this,'D','u1')">D. everybody</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>「but」表示轉折——敲了門，但沒人應門。nobody = 沒有人。</div></div></div>
+
+<div class="q-card" data-unit="u1" data-answer="C"><div class="q-row"><span class="q-num">2</span>
+<div class="q-text">Is there <span class="gap">_____</span> in the classroom?</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u1')">A. somebody</button><button onclick="pickMC(this,'B','u1')">B. nobody</button><button onclick="pickMC(this,'C','u1')">C. anybody</button><button onclick="pickMC(this,'D','u1')">D. everybody</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>疑問句用 any- → anybody。somebody 只用於肯定句。</div></div></div>
+
+<div class="q-card" data-unit="u1" data-answer="A"><div class="q-row"><span class="q-num">3</span>
+<div class="q-text"><span class="gap">_____</span> loves the new teacher. She is very kind.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u1')">A. Everybody</button><button onclick="pickMC(this,'B','u1')">B. Nobody</button><button onclick="pickMC(this,'C','u1')">C. Anybody</button><button onclick="pickMC(this,'D','u1')">D. Somebody</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>「She is very kind」說明老師很好，所以「每個人都喜歡她」。everybody = 每個人。</div></div></div>
+
+<div class="q-card" data-unit="u1" data-answer="A"><div class="q-row"><span class="q-num">4</span>
+<div class="q-text"><span class="gap">_____</span> called you while you were out. It was your mum.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u1')">A. Somebody</button><button onclick="pickMC(this,'B','u1')">B. Nobody</button><button onclick="pickMC(this,'C','u1')">C. Anybody</button><button onclick="pickMC(this,'D','u1')">D. Everybody</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>肯定句 + 有具體的人 → somebody（有人）。後面確認是媽媽。</div></div></div>
+
+<div class="q-card" data-unit="u1" data-answer="D"><div class="q-row"><span class="q-num">5</span>
+<div class="q-text">I don't think <span class="gap">_____</span> can finish this in one minute.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u1')">A. somebody</button><button onclick="pickMC(this,'B','u1')">B. everybody</button><button onclick="pickMC(this,'C','u1')">C. nobody</button><button onclick="pickMC(this,'D','u1')">D. anybody</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>「don't think」是否定語氣 → 用 any- → anybody。anybody = 任何人（否定句中 = 沒有人能）。</div></div></div>
+
+<div class="q-card" data-unit="u1" data-answer="B"><div class="q-row"><span class="q-num">6</span>
+<div class="q-text"><span class="gap">_____</span> wants to play with Tom because he is always mean.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u1')">A. Somebody</button><button onclick="pickMC(this,'B','u1')">B. Nobody</button><button onclick="pickMC(this,'C','u1')">C. Anybody</button><button onclick="pickMC(this,'D','u1')">D. Everybody</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>Tom 總是 mean（刻薄），所以「沒有人」想跟他玩。nobody + 肯定動詞 = 沒有人。</div></div></div>
+
+<div class="q-card" data-unit="u1" data-answer="C"><div class="q-row"><span class="q-num">7</span>
+<div class="q-text">Is <span class="gap">_____</span> ready? Let's start the game!</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u1')">A. somebody</button><button onclick="pickMC(this,'B','u1')">B. nobody</button><button onclick="pickMC(this,'C','u1')">C. everyone</button><button onclick="pickMC(this,'D','u1')">D. anybody</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>Let's start = 要開始遊戲了 → 問「大家都準備好了嗎」。everyone = 每個人。</div></div></div>
+
+<div class="q-card" data-unit="u1" data-answer="A"><div class="q-row"><span class="q-num">8</span>
+<div class="q-text">There is <span class="gap">_____</span> at the door. Can you open it?</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u1')">A. someone</button><button onclick="pickMC(this,'B','u1')">B. anyone</button><button onclick="pickMC(this,'C','u1')">C. no one</button><button onclick="pickMC(this,'D','u1')">D. everyone</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>肯定句 → someone（有人）。後文「Can you open it?」確認門外有人。</div></div></div>
+
+<div class="q-card" data-unit="u1" data-answer="D"><div class="q-row"><span class="q-num">9</span>
+<div class="q-text">Did you see <span class="gap">_____</span> strange in the park yesterday?</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u1')">A. something</button><button onclick="pickMC(this,'B','u1')">B. nothing</button><button onclick="pickMC(this,'C','u1')">C. somebody</button><button onclick="pickMC(this,'D','u1')">D. anything</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>疑問句 → any-。strange 是「奇怪的」，指事物 → anything。「something」只用於肯定句。</div></div></div>
+
+<div class="q-card" data-unit="u1" data-answer="B"><div class="q-row"><span class="q-num">10</span>
+<div class="q-text">The room was empty. <span class="gap">_____</span> was there.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u1')">A. Somebody</button><button onclick="pickMC(this,'B','u1')">B. Nobody</button><button onclick="pickMC(this,'C','u1')">C. Anybody</button><button onclick="pickMC(this,'D','u1')">D. Everybody</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>empty = 空的 → 沒有人。nobody + was = 沒有人。如果要用 anybody 必須說 "There wasn't anybody"。</div></div></div>
+
+<!-- G2: something/anything/nothing (10 Fill) -->
+<div class="grad-hd"><span class="grad-num">2</span> something / anything / nothing · 10題</div>
+
+<div class="q-card" data-unit="u1" data-answer="something"><div class="q-row"><span class="q-num">11</span>
+<div class="q-text">I want to eat <span class="gap">_____</span>. I'm very hungry.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u1')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>肯定句 + hungry（肚餓）→ something（一些東西吃）。</div></div></div>
+
+<div class="q-card" data-unit="u1" data-answer="anything"><div class="q-row"><span class="q-num">12</span>
+<div class="q-text">There isn't <span class="gap">_____</span> in the fridge. Let's go shopping.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u1')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>isn't = 否定句 → anything。Let's go shopping 確認雪櫃空了。</div></div></div>
+
+<div class="q-card" data-unit="u1" data-answer="nothing"><div class="q-row"><span class="q-num">13</span>
+<div class="q-text">He said <span class="gap">_____</span> about the accident. He just kept quiet.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u1')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>kept quiet = 保持沉默 → 甚麼都沒說。nothing + 肯定動詞 said = 沒說任何事。</div></div></div>
+
+<div class="q-card" data-unit="u1" data-answer="something"><div class="q-row"><span class="q-num">14</span>
+<div class="q-text">There is <span class="gap">_____</span> wrong with my computer. It won't start.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u1')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>肯定句 + 電腦壞了 → something（有問題）。something wrong = 有問題。</div></div></div>
+
+<div class="q-card" data-unit="u1" data-answer="anything"><div class="q-row"><span class="q-num">15</span>
+<div class="q-text">Do you need <span class="gap">_____</span> from the supermarket?</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u1')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>疑問句 → anything。Do you need... = 你需要……嗎？</div></div></div>
+
+<div class="q-card" data-unit="u1" data-answer="nothing"><div class="q-row"><span class="q-num">16</span>
+<div class="q-text">I could see <span class="gap">_____</span> in the dark room. It was pitch black.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u1')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>pitch black = 漆黑一片 → 甚麼都看不見。nothing = 沒有東西（肯定動詞 could see nothing）。</div></div></div>
+
+<div class="q-card" data-unit="u1" data-answer="something"><div class="q-row"><span class="q-num">17</span>
+<div class="q-text">Stop! I can hear <span class="gap">_____</span> outside the window.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u1')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>肯定句 + Stop! 表示真的聽到聲音 → something（有東西/聲音）。</div></div></div>
+
+<div class="q-card" data-unit="u1" data-answer="anything"><div class="q-row"><span class="q-num">18</span>
+<div class="q-text">I didn't eat <span class="gap">_____</span> for breakfast this morning.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u1')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>didn't eat = 否定句 → anything（沒吃任何東西）。</div></div></div>
+
+<div class="q-card" data-unit="u1" data-answer="nothing"><div class="q-row"><span class="q-num">19</span>
+<div class="q-text">There is <span class="gap">_____</span> more important than your health.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u1')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>意思：沒有比健康更重要的東西。nothing + 肯定動詞 is = 沒有東西……。</div></div></div>
+
+<div class="q-card" data-unit="u1" data-answer="everything"><div class="q-row"><span class="q-num">20</span>
+<div class="q-text">Don't worry. <span class="gap">_____</span> will be fine.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u1')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>Don't worry = 別擔心 → 一切都會好的。everything = 一切（所有事情）。</div></div></div>
+
+<!-- G3: somewhere/anywhere/nowhere (5 MC) -->
+<div class="grad-hd"><span class="grad-num">3</span> somewhere / anywhere / nowhere · 5題</div>
+
+<div class="q-card" data-unit="u1" data-answer="B"><div class="q-row"><span class="q-num">21</span>
+<div class="q-text">Let's go <span class="gap">_____</span> nice for dinner tonight.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u1')">A. anywhere</button><button onclick="pickMC(this,'B','u1')">B. somewhere</button><button onclick="pickMC(this,'C','u1')">C. nowhere</button><button onclick="pickMC(this,'D','u1')">D. everywhere</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>肯定句（Let's go）= 提議 → somewhere nice（某個好地方）。</div></div></div>
+
+<div class="q-card" data-unit="u1" data-answer="C"><div class="q-row"><span class="q-num">22</span>
+<div class="q-text">I can't find my keys <span class="gap">_____</span>. I've looked all over the house!</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u1')">A. somewhere</button><button onclick="pickMC(this,'B','u1')">B. everywhere</button><button onclick="pickMC(this,'C','u1')">C. anywhere</button><button onclick="pickMC(this,'D','u1')">D. nowhere</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>can't find = 否定 → anywhere。注意：not...anywhere = 哪裏都找不到。</div></div></div>
+
+<div class="q-card" data-unit="u1" data-answer="A"><div class="q-row"><span class="q-num">23</span>
+<div class="q-text">The children had <span class="gap">_____</span> to play. The park was closed.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u1')">A. nowhere</button><button onclick="pickMC(this,'B','u1')">B. somewhere</button><button onclick="pickMC(this,'C','u1')">C. anywhere</button><button onclick="pickMC(this,'D','u1')">D. everywhere</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>公園關了 → 沒有地方玩。nowhere = 沒有地方（肯定動詞 had nowhere）。</div></div></div>
+
+<div class="q-card" data-unit="u1" data-answer="B"><div class="q-row"><span class="q-num">24</span>
+<div class="q-text">Is there <span class="gap">_____</span> I can charge my phone?</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u1')">A. somewhere</button><button onclick="pickMC(this,'B','u1')">B. anywhere</button><button onclick="pickMC(this,'C','u1')">C. nowhere</button><button onclick="pickMC(this,'D','u1')">D. everywhere</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>Is there... = 疑問句 → anywhere。</div></div></div>
+
+<div class="q-card" data-unit="u1" data-answer="D"><div class="q-row"><span class="q-num">25</span>
+<div class="q-text">I left my bag <span class="gap">_____</span> in the school. I can't remember where.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u1')">A. anywhere</button><button onclick="pickMC(this,'B','u1')">B. nowhere</button><button onclick="pickMC(this,'C','u1')">C. everywhere</button><button onclick="pickMC(this,'D','u1')">D. somewhere</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>肯定句 + 「不記得在哪」= somewhere（某處）。</div></div></div>
+
+<!-- G4: too + adjective (10 Fill) -->
+<div class="grad-hd"><span class="grad-num">4</span> too + adjective · 10題</div>
+
+<div class="q-card" data-unit="u1" data-answer="too hot"><div class="q-row"><span class="q-num">26</span>
+<div class="q-text">I can't drink this soup. It is <span class="gap">_____</span>.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u1')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>「can't drink」+ soup → 湯太燙喝不了 → too hot。</div></div></div>
+
+<div class="q-card" data-unit="u1" data-answer="too young"><div class="q-row"><span class="q-num">27</span>
+<div class="q-text">My baby sister can't walk yet. She is still <span class="gap">_____</span>.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u1')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>can't walk yet + baby → 太小 → too young。</div></div></div>
+
+<div class="q-card" data-unit="u1" data-answer="too heavy"><div class="q-row"><span class="q-num">28</span>
+<div class="q-text">I can't carry this box. It is <span class="gap">_____</span>.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u1')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>can't carry + box → 太重要搬不動 → too heavy。</div></div></div>
+
+<div class="q-card" data-unit="u1" data-answer="too expensive"><div class="q-row"><span class="q-num">29</span>
+<div class="q-text">The bag is $5000. I can't buy it. It is <span class="gap">_____</span>.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u1')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>$5000 + can't buy → 太貴 → too expensive。</div></div></div>
+
+<div class="q-card" data-unit="u1" data-answer="too tired"><div class="q-row"><span class="q-num">30</span>
+<div class="q-text">Mum said she couldn't cook dinner because she was <span class="gap">_____</span>.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u1')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>couldn't cook + 媽媽 → 太累做不了飯 → too tired。</div></div></div>
+
+<div class="q-card" data-unit="u1" data-answer="too fast"><div class="q-row"><span class="q-num">31</span>
+<div class="q-text">Can you slow down? You are walking <span class="gap">_____</span>.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u1')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>slow down = 慢下來 → 走太快 → too fast。</div></div></div>
+
+<div class="q-card" data-unit="u1" data-answer="too difficult"><div class="q-row"><span class="q-num">32</span>
+<div class="q-text">I can't answer this question. It is <span class="gap">_____</span>.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u1')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>can't answer + question → 太難 → too difficult。</div></div></div>
+
+<div class="q-card" data-unit="u1" data-answer="too noisy"><div class="q-row"><span class="q-num">33</span>
+<div class="q-text">I can't hear you. It's <span class="gap">_____</span> in here.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u1')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>can't hear you → 太吵 → too noisy。</div></div></div>
+
+<div class="q-card" data-unit="u1" data-answer="too late"><div class="q-row"><span class="q-num">34</span>
+<div class="q-text">Hurry up! We will miss the bus. It's <span class="gap">_____</span>!</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u1')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>Hurry up + miss the bus → 太遲了 → too late。</div></div></div>
+
+<div class="q-card" data-unit="u1" data-answer="too small"><div class="q-row"><span class="q-num">35</span>
+<div class="q-text">These shoes hurt my feet. They are <span class="gap">_____</span> for me.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u1')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>hurt my feet = 夾腳 → 鞋子太小 → too small。</div></div></div>
+
+<div class="reset-row"><button class="reset-btn" onclick="resetUnit('u1')">🔄 Reset U1</button></div>
+</div><!-- end U1 -->
+
+
+<!-- ═══════════════════ U2: POSSESSIVE PRONOUNS + PREPOSITIONS ═══════════════════ -->
+<div class="page" id="page-u2">
+
+<div class="quick-rules">
+<div class="ruletitle">📋 U2 Quick Rules · 所有格代名詞 + 介詞</div>
+<b>Possessive Pronouns</b>（獨立使用，不加名詞）：mine, yours, his, hers, ours, theirs<br>
+<b>Possessive Adjectives</b>（後面必須加名詞）：my, your, his, her, our, their<br>
+<b>介詞</b>：in (在…裏面/年月季節), on (在…上面/星期/日期), at (在…地點/時間點), between (兩者之間), among (三者以上之中)
+</div>
+
+<div class="score-bar-top" id="u2-score-bar">
+<span class="label">🏆 U2 得分</span>
+<div class="bar"><div class="fill" id="u2-fill" style="width:0%">0%</div></div>
+<span class="num" id="u2-num">0/30</span>
+</div>
+
+<!-- G1: Possessive Pronouns MC 10 -->
+<div class="grad-hd"><span class="grad-num">1</span> mine / yours / his / hers / ours / theirs · 10題</div>
+
+<div class="q-card" data-unit="u2" data-answer="B"><div class="q-row"><span class="q-num">1</span>
+<div class="q-text">This book is not <span class="gap">_____</span>. It belongs to Tom.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u2')">A. my</button><button onclick="pickMC(this,'B','u2')">B. mine</button><button onclick="pickMC(this,'C','u2')">C. me</button><button onclick="pickMC(this,'D','u2')">D. I</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>is not ___ → 需要名詞性物主代名詞（獨立使用）。my 必須加名詞（my book），mine 可以獨立使用。</div></div></div>
+
+<div class="q-card" data-unit="u2" data-answer="C"><div class="q-row"><span class="q-num">2</span>
+<div class="q-text">This red pen is <span class="gap">_____</span>. I bought it yesterday.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u2')">A. my</button><button onclick="pickMC(this,'B','u2')">B. me</button><button onclick="pickMC(this,'C','u2')">C. mine</button><button onclick="pickMC(this,'D','u2')">D. I</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>is ___ → 獨立使用，不加名詞 → mine。</div></div></div>
+
+<div class="q-card" data-unit="u2" data-answer="A"><div class="q-row"><span class="q-num">3</span>
+<div class="q-text">Is this umbrella <span class="gap">_____</span>? You left it here last week.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u2')">A. yours</button><button onclick="pickMC(this,'B','u2')">B. your</button><button onclick="pickMC(this,'C','u2')">C. you</button><button onclick="pickMC(this,'D','u2')">D. theirs</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>Is this umbrella ___?（對 you 說話）→ yours。your 必須加名詞（your umbrella）。</div></div></div>
+
+<div class="q-card" data-unit="u2" data-answer="D"><div class="q-row"><span class="q-num">4</span>
+<div class="q-text">The blue car over there is <span class="gap">_____</span>. My parents bought it last month.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u2')">A. our</button><button onclick="pickMC(this,'B','u2')">B. us</button><button onclick="pickMC(this,'C','u2')">C. my</button><button onclick="pickMC(this,'D','u2')">D. ours</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>My parents bought = 我們的家庭 → ours。our 必須加名詞（our car）。</div></div></div>
+
+<div class="q-card" data-unit="u2" data-answer="B"><div class="q-row"><span class="q-num">5</span>
+<div class="q-text">These gloves belong to my sister. They are <span class="gap">_____</span>.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u2')">A. she</button><button onclick="pickMC(this,'B','u2')">B. hers</button><button onclick="pickMC(this,'C','u2')">C. her</button><button onclick="pickMC(this,'D','u2')">D. his</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>my sister（女性、第三人稱）→ hers。her 必須加名詞（her gloves）。</div></div></div>
+
+<div class="q-card" data-unit="u2" data-answer="C"><div class="q-row"><span class="q-num">6</span>
+<div class="q-text">John and Peter said the football was <span class="gap">_____</span>.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u2')">A. his</button><button onclick="pickMC(this,'B','u2')">B. her</button><button onclick="pickMC(this,'C','u2')">C. theirs</button><button onclick="pickMC(this,'D','u2')">D. our</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>John and Peter = 他們（兩人以上）→ theirs。his 只指一個人（男）。</div></div></div>
+
+<div class="q-card" data-unit="u2" data-answer="A"><div class="q-row"><span class="q-num">7</span>
+<div class="q-text">My lunchbox is blue. <span class="gap">_____</span> is red.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u2')">A. Yours</button><button onclick="pickMC(this,'B','u2')">B. Your</button><button onclick="pickMC(this,'C','u2')">C. You</button><button onclick="pickMC(this,'D','u2')">D. Mine</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>My lunchbox... ___ is red → 對比「我的」和「你的」。Yours 作主語，獨立使用。</div></div></div>
+
+<div class="q-card" data-unit="u2" data-answer="D"><div class="q-row"><span class="q-num">8</span>
+<div class="q-text">That dog is not <span class="gap">_____</span>. Ours has a longer tail.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u2')">A. we</button><button onclick="pickMC(this,'B','u2')">B. our</button><button onclick="pickMC(this,'C','u2')">C. us</button><button onclick="pickMC(this,'D','u2')">D. theirs</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>Ours has... = 我們的狗 → 對比 → 那隻狗不是「他們的」。theirs。</div></div></div>
+
+<div class="q-card" data-unit="u2" data-answer="B"><div class="q-row"><span class="q-num">9</span>
+<div class="q-text">I found a wallet on the floor. Is it <span class="gap">_____</span>?</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u2')">A. you</button><button onclick="pickMC(this,'B','u2')">B. yours</button><button onclick="pickMC(this,'C','u2')">C. your</button><button onclick="pickMC(this,'D','u2')">D. mine</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>Is it ___?（問對方）→ yours。your 必須加名詞。</div></div></div>
+
+<div class="q-card" data-unit="u2" data-answer="A"><div class="q-row"><span class="q-num">10</span>
+<div class="q-text">This isn't my book. <span class="gap">_____</span> has a red cover.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u2')">A. Mine</button><button onclick="pickMC(this,'B','u2')">B. My</button><button onclick="pickMC(this,'C','u2')">C. Me</button><button onclick="pickMC(this,'D','u2')">D. I</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>___ has a red cover → 作主語 → Mine（我的書）。My 不能單獨作主語。</div></div></div>
+
+<!-- G2: Possessive Adj vs Pronoun 10 Fill -->
+<div class="grad-hd"><span class="grad-num">2</span> my/your/his/her vs mine/yours/his/hers · 10題</div>
+
+<div class="q-card" data-unit="u2" data-answer="his"><div class="q-row"><span class="q-num">11</span>
+<div class="q-text">Tom forgot to bring <span class="gap">_____</span> homework today.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u2')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>___ homework → 後面有名詞 homework → 用形容詞性 his（不是 hiss？不對，his 既是形容詞性也是名詞性，但這裏需要形容詞性）。</div></div></div>
+
+<div class="q-card" data-unit="u2" data-answer="mine"><div class="q-row"><span class="q-num">12</span>
+<div class="q-text">Your handwriting is neat, but <span class="gap">_____</span> is messy.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u2')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>___ is messy → 獨立作主語，後面沒有名詞 → mine。</div></div></div>
+
+<div class="q-card" data-unit="u2" data-answer="her"><div class="q-row"><span class="q-num">13</span>
+<div class="q-text">Mary is doing <span class="gap">_____</span> homework in the library.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u2')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>___ homework → 後面有名詞 → her（形容詞性）。Mary 是女性。</div></div></div>
+
+<div class="q-card" data-unit="u2" data-answer="ours"><div class="q-row"><span class="q-num">14</span>
+<div class="q-text">Their garden is beautiful, but <span class="gap">_____</span> is bigger.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u2')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>___ is bigger → 獨立作主語 → ours（我們的）。對比 their garden vs our garden。</div></div></div>
+
+<div class="q-card" data-unit="u2" data-answer="yours"><div class="q-row"><span class="q-num">15</span>
+<div class="q-text">My phone is out of battery. Can I use <span class="gap">_____</span>?</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u2')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>Can I use ___? → 獨立使用，後面不加名詞 → yours。</div></div></div>
+
+<div class="q-card" data-unit="u2" data-answer="our"><div class="q-row"><span class="q-num">16</span>
+<div class="q-text">We need to clean <span class="gap">_____</span> classroom before we leave.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u2')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>___ classroom → 後面有名詞 → our（形容詞性）。</div></div></div>
+
+<div class="q-card" data-unit="u2" data-answer="their"><div class="q-row"><span class="q-num">17</span>
+<div class="q-text">The students put <span class="gap">_____</span> bags on the shelf.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u2')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>___ bags → 後面有名詞 → their。the students = 他們。</div></div></div>
+
+<div class="q-card" data-unit="u2" data-answer="hers"><div class="q-row"><span class="q-num">18</span>
+<div class="q-text">This dress looks like <span class="gap">_____</span>. She has one just like it.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u2')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>looks like ___ → 獨立使用，後面無名詞。She → hers。</div></div></div>
+
+<div class="q-card" data-unit="u2" data-answer="my"><div class="q-row"><span class="q-num">19</span>
+<div class="q-text">I lost <span class="gap">_____</span> keys this morning. I can't find them anywhere.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u2')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>___ keys → 後面有名詞 → my（形容詞性）。</div></div></div>
+
+<div class="q-card" data-unit="u2" data-answer="theirs"><div class="q-row"><span class="q-num">20</span>
+<div class="q-text">Our house is near the park, but <span class="gap">_____</span> is near the sea.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u2')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>___ is near the sea → 獨立作主語，對比 our house → theirs。</div></div></div>
+
+<!-- G3: Prepositions (10 MC) -->
+<div class="grad-hd"><span class="grad-num">3</span> Prepositions · in / on / at / between / among · 10題</div>
+
+<div class="q-card" data-unit="u2" data-answer="B"><div class="q-row"><span class="q-num">21</span>
+<div class="q-text">My birthday is <span class="gap">_____</span> June.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u2')">A. on</button><button onclick="pickMC(this,'B','u2')">B. in</button><button onclick="pickMC(this,'C','u2')">C. at</button><button onclick="pickMC(this,'D','u2')">D. between</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>月份前用 in。in June, in July, in December。on 用於具體日期（on 5th June）。</div></div></div>
+
+<div class="q-card" data-unit="u2" data-answer="A"><div class="q-row"><span class="q-num">22</span>
+<div class="q-text">The party is <span class="gap">_____</span> Saturday evening.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u2')">A. on</button><button onclick="pickMC(this,'B','u2')">B. in</button><button onclick="pickMC(this,'C','u2')">C. at</button><button onclick="pickMC(this,'D','u2')">D. between</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>星期幾前用 on：on Monday, on Saturday。in 用於月份/年份。</div></div></div>
+
+<div class="q-card" data-unit="u2" data-answer="C"><div class="q-row"><span class="q-num">23</span>
+<div class="q-text">I usually get up <span class="gap">_____</span> seven o'clock.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u2')">A. in</button><button onclick="pickMC(this,'B','u2')">B. on</button><button onclick="pickMC(this,'C','u2')">C. at</button><button onclick="pickMC(this,'D','u2')">D. among</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>具體時間點用 at：at 7 o'clock, at noon, at midnight。</div></div></div>
+
+<div class="q-card" data-unit="u2" data-answer="D"><div class="q-row"><span class="q-num">24</span>
+<div class="q-text">The bank is <span class="gap">_____</span> the post office and the library.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u2')">A. among</button><button onclick="pickMC(this,'B','u2')">B. in</button><button onclick="pickMC(this,'C','u2')">C. on</button><button onclick="pickMC(this,'D','u2')">D. between</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>兩者之間 → between A and B。among 用於三者或以上。</div></div></div>
+
+<div class="q-card" data-unit="u2" data-answer="A"><div class="q-row"><span class="q-num">25</span>
+<div class="q-text">The teacher is standing <span class="gap">_____</span> the students.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u2')">A. among</button><button onclick="pickMC(this,'B','u2')">B. between</button><button onclick="pickMC(this,'C','u2')">C. in</button><button onclick="pickMC(this,'D','u2')">D. on</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>很多學生 → among（三者以上之中）。between 只用於兩者之間。</div></div></div>
+
+<div class="q-card" data-unit="u2" data-answer="B"><div class="q-row"><span class="q-num">26</span>
+<div class="q-text">There is a picture <span class="gap">_____</span> the wall.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u2')">A. in</button><button onclick="pickMC(this,'B','u2')">B. on</button><button onclick="pickMC(this,'C','u2')">C. at</button><button onclick="pickMC(this,'D','u2')">D. among</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>在牆面上 → on the wall。in the wall 指嵌在牆裏面。</div></div></div>
+
+<div class="q-card" data-unit="u2" data-answer="A"><div class="q-row"><span class="q-num">27</span>
+<div class="q-text">We go swimming <span class="gap">_____</span> summer.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u2')">A. in</button><button onclick="pickMC(this,'B','u2')">B. on</button><button onclick="pickMC(this,'C','u2')">C. at</button><button onclick="pickMC(this,'D','u2')">D. between</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>季節前用 in：in summer, in winter, in spring, in autumn。</div></div></div>
+
+<div class="q-card" data-unit="u2" data-answer="C"><div class="q-row"><span class="q-num">28</span>
+<div class="q-text">I'll meet you <span class="gap">_____</span> the bus stop.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u2')">A. in</button><button onclick="pickMC(this,'B','u2')">B. on</button><button onclick="pickMC(this,'C','u2')">C. at</button><button onclick="pickMC(this,'D','u2')">D. among</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>具體地點/位置用 at：at the bus stop, at school, at home。</div></div></div>
+
+<div class="q-card" data-unit="u2" data-answer="B"><div class="q-row"><span class="q-num">29</span>
+<div class="q-text">Put your book <span class="gap">_____</span> the table.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u2')">A. in</button><button onclick="pickMC(this,'B','u2')">B. on</button><button onclick="pickMC(this,'C','u2')">C. at</button><button onclick="pickMC(this,'D','u2')">D. among</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>在桌面上 → on the table。in the table 指在桌子抽屜裏面。</div></div></div>
+
+<div class="q-card" data-unit="u2" data-answer="A"><div class="q-row"><span class="q-num">30</span>
+<div class="q-text">The children are playing <span class="gap">_____</span> the garden.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u2')">A. in</button><button onclick="pickMC(this,'B','u2')">B. on</button><button onclick="pickMC(this,'C','u2')">C. at</button><button onclick="pickMC(this,'D','u2')">D. between</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>在花園裏面（空間內）→ in the garden。</div></div></div>
+
+<div class="reset-row"><button class="reset-btn" onclick="resetUnit('u2')">🔄 Reset U2</button></div>
+</div><!-- end U2 -->
+
+
+<!-- ═══════════════════ U3: GERUNDS vs INFINITIVES ═══════════════════ -->
+<div class="page" id="page-u3">
+
+<div class="quick-rules">
+<div class="ruletitle">📋 U3 Quick Rules · 動名詞 vs 不定式</div>
+<b>動名詞 (-ing)</b>：enjoy, finish, keep, mind, practice, suggest + <b>-ing</b><br>
+<b>不定式 (to + V)</b>：want, hope, decide, plan, agree, promise + <b>to V</b><br>
+<b>兩者皆可</b>：like, love, hate, start, begin + -ing / to V（意思相近）<br>
+<b>動名詞作主語</b>：<b>Swimming</b> is fun.（游泳很有趣）
+</div>
+
+<div class="score-bar-top" id="u3-score-bar">
+<span class="label">🏆 U3 得分</span>
+<div class="bar"><div class="fill" id="u3-fill" style="width:0%">0%</div></div>
+<span class="num" id="u3-num">0/35</span>
+</div>
+
+<div class="grad-hd"><span class="grad-num">1</span> Gerund (-ing) after verbs · 10題</div>
+
+<div class="q-card" data-unit="u3" data-answer="swimming"><div class="q-row"><span class="q-num">1</span>
+<div class="q-text">I enjoy <span class="gap">_____</span> (swim) in the sea.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u3')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>enjoy + -ing → swimming。enjoy 後面永遠跟動名詞。</div></div></div>
+
+<div class="q-card" data-unit="u3" data-answer="doing"><div class="q-row"><span class="q-num">2</span>
+<div class="q-text">Have you finished <span class="gap">_____</span> (do) your homework?</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u3')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>finish + -ing → doing。finish 後面跟動名詞。</div></div></div>
+
+<div class="q-card" data-unit="u3" data-answer="practising|practicing"><div class="q-row"><span class="q-num">3</span>
+<div class="q-text">You should keep <span class="gap">_____</span> (practise) the piano every day.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u3')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>keep + -ing → practising（英式）/ practicing（美式）。keep = 持續做某事。</div></div></div>
+
+<div class="q-card" data-unit="u3" data-answer="eating"><div class="q-row"><span class="q-num">4</span>
+<div class="q-text">Would you mind <span class="gap">_____</span> (eat) outside? It's a bit noisy inside.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u3')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>mind + -ing → eating。Would you mind + -ing = 你介意……嗎？</div></div></div>
+
+<div class="q-card" data-unit="u3" data-answer="playing"><div class="q-row"><span class="q-num">5</span>
+<div class="q-text">Tom suggested <span class="gap">_____</span> (play) football after school.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u3')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>suggest + -ing → playing。suggest 後面永遠跟動名詞。</div></div></div>
+
+<div class="q-card" data-unit="u3" data-answer="talking"><div class="q-row"><span class="q-num">6</span>
+<div class="q-text">Please stop <span class="gap">_____</span> (talk) and listen to the teacher.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u3')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>stop + -ing → talking。stop + -ing = 停止做某事。</div></div></div>
+
+<div class="q-card" data-unit="u3" data-answer="reading"><div class="q-row"><span class="q-num">7</span>
+<div class="q-text">I practise <span class="gap">_____</span> (read) English books every night.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u3')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>practise + -ing → reading。practise 後面跟動名詞。</div></div></div>
+
+<div class="q-card" data-unit="u3" data-answer="waiting"><div class="q-row"><span class="q-num">8</span>
+<div class="q-text">I don't mind <span class="gap">_____</span> (wait) for you.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u3')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>mind + -ing → waiting。</div></div></div>
+
+<div class="q-card" data-unit="u3" data-answer="running"><div class="q-row"><span class="q-num">9</span>
+<div class="q-text">She kept <span class="gap">_____</span> (run) even though she was very tired.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u3')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>keep + -ing → running。keep running = 繼續跑。</div></div></div>
+
+<div class="q-card" data-unit="u3" data-answer="helping"><div class="q-row"><span class="q-num">10</span>
+<div class="q-text">My dad enjoys <span class="gap">_____</span> (help) me with my maths homework.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u3')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>enjoy + -ing → helping。enjoy 永遠跟動名詞。</div></div></div>
+
+<!-- G2: to-infinitive -->
+<div class="grad-hd"><span class="grad-num">2</span> to-infinitive after verbs · 10題</div>
+
+<div class="q-card" data-unit="u3" data-answer="to be"><div class="q-row"><span class="q-num">11</span>
+<div class="q-text">I want <span class="gap">_____</span> (be) a doctor when I grow up.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u3')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>want + to V → to be。want 後面永遠跟 to + 原形動詞。</div></div></div>
+
+<div class="q-card" data-unit="u3" data-answer="to visit"><div class="q-row"><span class="q-num">12</span>
+<div class="q-text">We decided <span class="gap">_____</span> (visit) Grandma this weekend.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u3')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>decide + to V → to visit。decide 後面跟不定式。</div></div></div>
+
+<div class="q-card" data-unit="u3" data-answer="to buy"><div class="q-row"><span class="q-num">13</span>
+<div class="q-text">Mum promised <span class="gap">_____</span> (buy) me a new phone.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u3')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>promise + to V → to buy。promise 後面跟不定式。</div></div></div>
+
+<div class="q-card" data-unit="u3" data-answer="to finish"><div class="q-row"><span class="q-num">14</span>
+<div class="q-text">I hope <span class="gap">_____</span> (finish) this project by Friday.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u3')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>hope + to V → to finish。hope 後面跟不定式。</div></div></div>
+
+<div class="q-card" data-unit="u3" data-answer="to go"><div class="q-row"><span class="q-num">15</span>
+<div class="q-text">They planned <span class="gap">_____</span> (go) camping last weekend but it rained.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u3')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>plan + to V → to go。plan 後面跟不定式。</div></div></div>
+
+<div class="q-card" data-unit="u3" data-answer="to help"><div class="q-row"><span class="q-num">16</span>
+<div class="q-text">She agreed <span class="gap">_____</span> (help) me with the cleaning.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u3')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>agree + to V → to help。agree 後面跟不定式。</div></div></div>
+
+<div class="q-card" data-unit="u3" data-answer="to learn"><div class="q-row"><span class="q-num">17</span>
+<div class="q-text">My brother wants <span class="gap">_____</span> (learn) how to play the guitar.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u3')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>want + to V → to learn。</div></div></div>
+
+<div class="q-card" data-unit="u3" data-answer="to bring"><div class="q-row"><span class="q-num">18</span>
+<div class="q-text">Don't forget <span class="gap">_____</span> (bring) your PE uniform tomorrow.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u3')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>forget + to V → to bring。forget to V = 忘記去做某事。</div></div></div>
+
+<div class="q-card" data-unit="u3" data-answer="to spend"><div class="q-row"><span class="q-num">19</span>
+<div class="q-text">We decided <span class="gap">_____</span> (spend) our holiday in Japan.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u3')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>decide + to V → to spend。</div></div></div>
+
+<div class="q-card" data-unit="u3" data-answer="to have"><div class="q-row"><span class="q-num">20</span>
+<div class="q-text">I hope <span class="gap">_____</span> (have) a great time at the party!</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u3')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>hope + to V → to have。</div></div></div>
+
+<!-- G3: Gerund vs Infinitive contrast 10 MC -->
+<div class="grad-hd"><span class="grad-num">3</span> Gerund vs Infinitive 對比 · 10題</div>
+
+<div class="q-card" data-unit="u3" data-answer="B"><div class="q-row"><span class="q-num">21</span>
+<div class="q-text">I enjoy <span class="gap">_____</span> to music before I sleep.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u3')">A. to listen</button><button onclick="pickMC(this,'B','u3')">B. listening</button><button onclick="pickMC(this,'C','u3')">C. listen</button><button onclick="pickMC(this,'D','u3')">D. listened</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>enjoy 後面只能跟 -ing。enjoy listening。</div></div></div>
+
+<div class="q-card" data-unit="u3" data-answer="A"><div class="q-row"><span class="q-num">22</span>
+<div class="q-text">She wants <span class="gap">_____</span> a teacher when she grows up.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u3')">A. to be</button><button onclick="pickMC(this,'B','u3')">B. being</button><button onclick="pickMC(this,'C','u3')">C. be</button><button onclick="pickMC(this,'D','u3')">D. been</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>want 後面只能跟 to V。want to be。</div></div></div>
+
+<div class="q-card" data-unit="u3" data-answer="C"><div class="q-row"><span class="q-num">23</span>
+<div class="q-text">I like <span class="gap">_____</span> basketball with my friends.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u3')">A. play</button><button onclick="pickMC(this,'B','u3')">B. to playing</button><button onclick="pickMC(this,'C','u3')">C. playing</button><button onclick="pickMC(this,'D','u3')">D. played</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>like 可以跟 -ing 或 to V。此處 playing 和 to play 都對，考題選擇 playing。</div></div></div>
+
+<div class="q-card" data-unit="u3" data-answer="B"><div class="q-row"><span class="q-num">24</span>
+<div class="q-text">Would you mind <span class="gap">_____</span> the window? It's hot.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u3')">A. to open</button><button onclick="pickMC(this,'B','u3')">B. opening</button><button onclick="pickMC(this,'C','u3')">C. open</button><button onclick="pickMC(this,'D','u3')">D. opened</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>mind 只能跟 -ing → opening。Would you mind opening...?</div></div></div>
+
+<div class="q-card" data-unit="u3" data-answer="A"><div class="q-row"><span class="q-num">25</span>
+<div class="q-text">He agreed <span class="gap">_____</span> us with the project.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u3')">A. to help</button><button onclick="pickMC(this,'B','u3')">B. helping</button><button onclick="pickMC(this,'C','u3')">C. help</button><button onclick="pickMC(this,'D','u3')">D. helped</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>agree 只能跟 to V → to help。</div></div></div>
+
+<div class="q-card" data-unit="u3" data-answer="C"><div class="q-row"><span class="q-num">26</span>
+<div class="q-text">The children kept <span class="gap">_____</span> even though the teacher told them to stop.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u3')">A. to talk</button><button onclick="pickMC(this,'B','u3')">B. talk</button><button onclick="pickMC(this,'C','u3')">C. talking</button><button onclick="pickMC(this,'D','u3')">D. talked</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>keep 只能跟 -ing → talking。</div></div></div>
+
+<div class="q-card" data-unit="u3" data-answer="B"><div class="q-row"><span class="q-num">27</span>
+<div class="q-text">We decided <span class="gap">_____</span> at home because of the rain.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u3')">A. staying</button><button onclick="pickMC(this,'B','u3')">B. to stay</button><button onclick="pickMC(this,'C','u3')">C. stay</button><button onclick="pickMC(this,'D','u3')">D. stayed</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>decide 只能跟 to V → to stay。</div></div></div>
+
+<div class="q-card" data-unit="u3" data-answer="A"><div class="q-row"><span class="q-num">28</span>
+<div class="q-text"><span class="gap">_____</span> is my favourite hobby.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u3')">A. Reading</button><button onclick="pickMC(this,'B','u3')">B. To read</button><button onclick="pickMC(this,'C','u3')">C. Read</button><button onclick="pickMC(this,'D','u3')">D. Reads</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>動名詞作主語 → Reading is...。To read 也可以作主語，但較正式，-ing 更常見。</div></div></div>
+
+<div class="q-card" data-unit="u3" data-answer="D"><div class="q-row"><span class="q-num">29</span>
+<div class="q-text">Did you finish <span class="gap">_____</span> your lunch?</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u3')">A. to eat</button><button onclick="pickMC(this,'B','u3')">B. eat</button><button onclick="pickMC(this,'C','u3')">C. ate</button><button onclick="pickMC(this,'D','u3')">D. eating</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>finish 只能跟 -ing → eating。</div></div></div>
+
+<div class="q-card" data-unit="u3" data-answer="B"><div class="q-row"><span class="q-num">30</span>
+<div class="q-text">Mum promised <span class="gap">_____</span> me to the zoo on Sunday.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u3')">A. taking</button><button onclick="pickMC(this,'B','u3')">B. to take</button><button onclick="pickMC(this,'C','u3')">C. take</button><button onclick="pickMC(this,'D','u3')">D. took</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>promise 只能跟 to V → to take。</div></div></div>
+
+<!-- G4: Gerund as subject 5 Fill -->
+<div class="grad-hd"><span class="grad-num">4</span> Gerund as Subject · 5題</div>
+
+<div class="q-card" data-unit="u3" data-answer="Swimming"><div class="q-row"><span class="q-num">31</span>
+<div class="q-text"><span class="gap">_____</span> (Swim) is good for your health.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u3')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>Swimming 作主語。動詞開頭作主語要用 -ing 形式（動名詞）。</div></div></div>
+
+<div class="q-card" data-unit="u3" data-answer="Learning"><div class="q-row"><span class="q-num">32</span>
+<div class="q-text"><span class="gap">_____</span> (Learn) a new language takes time.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u3')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>Learning 作主語。takes = 動詞（第三人稱單數，因為 Learning 是單數概念）。</div></div></div>
+
+<div class="q-card" data-unit="u3" data-answer="Eating"><div class="q-row"><span class="q-num">33</span>
+<div class="q-text"><span class="gap">_____</span> (Eat) too much junk food is unhealthy.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u3')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>Eating too much junk food = 整個動名詞片語作主語。</div></div></div>
+
+<div class="q-card" data-unit="u3" data-answer="Playing"><div class="q-row"><span class="q-num">34</span>
+<div class="q-text"><span class="gap">_____</span> (Play) video games for too long is bad for your eyes.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u3')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>Playing video games... = 動名詞片語作主語。</div></div></div>
+
+<div class="q-card" data-unit="u3" data-answer="Reading"><div class="q-row"><span class="q-num">35</span>
+<div class="q-text"><span class="gap">_____</span> (Read) before bed helps me relax.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u3')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>Reading before bed = 睡前閱讀。helps = 動詞。</div></div></div>
+
+<div class="reset-row"><button class="reset-btn" onclick="resetUnit('u3')">🔄 Reset U3</button></div>
+</div><!-- end U3 -->
+
+
+<!-- ═══════════════════ U5: SO MANY/MUCH + -ED/-ING ═══════════════════ -->
+<div class="page" id="page-u5">
+
+<div class="quick-rules">
+<div class="ruletitle">📋 U5 Quick Rules · so many/much + -ed/-ing adjectives</div>
+<b>so many</b> + 可數名詞複數（so many books, so many people）<br>
+<b>so much</b> + 不可數名詞（so much water, so much time）<br>
+<b>-ed 形容詞</b> → 人的感受（I am <b>interested</b>. / She is <b>bored</b>.）<br>
+<b>-ing 形容詞</b> → 事物的特性（The book is <b>interesting</b>. / The film is <b>boring</b>.）
+</div>
+
+<div class="score-bar-top" id="u5-score-bar">
+<span class="label">🏆 U5 得分</span>
+<div class="bar"><div class="fill" id="u5-fill" style="width:0%">0%</div></div>
+<span class="num" id="u5-num">0/25</span>
+</div>
+
+<div class="grad-hd"><span class="grad-num">1</span> so many vs so much · 10題</div>
+
+<div class="q-card" data-unit="u5" data-answer="B"><div class="q-row"><span class="q-num">1</span>
+<div class="q-text">There are <span class="gap">_____</span> people in the park today.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u5')">A. so much</button><button onclick="pickMC(this,'B','u5')">B. so many</button><button onclick="pickMC(this,'C','u5')">C. a lot</button><button onclick="pickMC(this,'D','u5')">D. too much</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>people 是可數名詞 → so many。people 雖然本身是複數，但它是可數的（one person, two people）。</div></div></div>
+
+<div class="q-card" data-unit="u5" data-answer="A"><div class="q-row"><span class="q-num">2</span>
+<div class="q-text">I have <span class="gap">_____</span> homework to do tonight.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u5')">A. so much</button><button onclick="pickMC(this,'B','u5')">B. so many</button><button onclick="pickMC(this,'C','u5')">C. a few</button><button onclick="pickMC(this,'D','u5')">D. a little</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>homework 是不可數名詞 → so much。不能說 homeworks。</div></div></div>
+
+<div class="q-card" data-unit="u5" data-answer="B"><div class="q-row"><span class="q-num">3</span>
+<div class="q-text">Why are there <span class="gap">_____</span> cars on the road?</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u5')">A. so much</button><button onclick="pickMC(this,'B','u5')">B. so many</button><button onclick="pickMC(this,'C','u5')">C. so little</button><button onclick="pickMC(this,'D','u5')">D. a lot</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>cars 是可數名詞複數 → so many。</div></div></div>
+
+<div class="q-card" data-unit="u5" data-answer="A"><div class="q-row"><span class="q-num">4</span>
+<div class="q-text">Don't put <span class="gap">_____</span> sugar in my tea, please.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u5')">A. so much</button><button onclick="pickMC(this,'B','u5')">B. so many</button><button onclick="pickMC(this,'C','u5')">C. so few</button><button onclick="pickMC(this,'D','u5')">D. a few</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>sugar 是不可數名詞 → so much。</div></div></div>
+
+<div class="q-card" data-unit="u5" data-answer="B"><div class="q-row"><span class="q-num">5</span>
+<div class="q-text">She has <span class="gap">_____</span> friends at her new school.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u5')">A. so much</button><button onclick="pickMC(this,'B','u5')">B. so many</button><button onclick="pickMC(this,'C','u5')">C. so little</button><button onclick="pickMC(this,'D','u5')">D. a much</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>friends 是可數名詞複數 → so many。</div></div></div>
+
+<div class="q-card" data-unit="u5" data-answer="A"><div class="q-row"><span class="q-num">6</span>
+<div class="q-text">We wasted <span class="gap">_____</span> time waiting for the bus.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u5')">A. so much</button><button onclick="pickMC(this,'B','u5')">B. so many</button><button onclick="pickMC(this,'C','u5')">C. so few</button><button onclick="pickMC(this,'D','u5')">D. a many</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>time 是不可數名詞 → so much。注意：當 time 指「次數」時才是可數。</div></div></div>
+
+<div class="q-card" data-unit="u5" data-answer="B"><div class="q-row"><span class="q-num">7</span>
+<div class="q-text">There are <span class="gap">_____</span> shops in this street.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u5')">A. so much</button><button onclick="pickMC(this,'B','u5')">B. so many</button><button onclick="pickMC(this,'C','u5')">C. a lot</button><button onclick="pickMC(this,'D','u5')">D. too much</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>shops 是可數名詞複數 → so many。</div></div></div>
+
+<div class="q-card" data-unit="u5" data-answer="A"><div class="q-row"><span class="q-num">8</span>
+<div class="q-text">Drinking <span class="gap">_____</span> coffee is not good for you.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u5')">A. so much</button><button onclick="pickMC(this,'B','u5')">B. so many</button><button onclick="pickMC(this,'C','u5')">C. a few</button><button onclick="pickMC(this,'D','u5')">D. a many</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>coffee 是不可數名詞 → so much。</div></div></div>
+
+<div class="q-card" data-unit="u5" data-answer="B"><div class="q-row"><span class="q-num">9</span>
+<div class="q-text">I made <span class="gap">_____</span> mistakes in the test.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u5')">A. so much</button><button onclick="pickMC(this,'B','u5')">B. so many</button><button onclick="pickMC(this,'C','u5')">C. a much</button><button onclick="pickMC(this,'D','u5')">D. too much</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>mistakes 是可數名詞複數 → so many。</div></div></div>
+
+<div class="q-card" data-unit="u5" data-answer="A"><div class="q-row"><span class="q-num">10</span>
+<div class="q-text">There is <span class="gap">_____</span> noise outside. I can't concentrate.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u5')">A. so much</button><button onclick="pickMC(this,'B','u5')">B. so many</button><button onclick="pickMC(this,'C','u5')">C. a few</button><button onclick="pickMC(this,'D','u5')">D. a many</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>noise 是不可數名詞 → so much。</div></div></div>
+
+<!-- G2: -ed/-ing adjectives 15 MC -->
+<div class="grad-hd"><span class="grad-num">2</span> -ed vs -ing adjectives · 15題</div>
+
+<div class="q-card" data-unit="u5" data-answer="B"><div class="q-row"><span class="q-num">11</span>
+<div class="q-text">I am <span class="gap">_____</span> in learning about space.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u5')">A. interesting</button><button onclick="pickMC(this,'B','u5')">B. interested</button><button onclick="pickMC(this,'C','u5')">C. interest</button><button onclick="pickMC(this,'D','u5')">D. interests</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>I am ___ → 人的感受用 -ed → interested。</div></div></div>
+
+<div class="q-card" data-unit="u5" data-answer="A"><div class="q-row"><span class="q-num">12</span>
+<div class="q-text">The film was very <span class="gap">_____</span>. I loved it!</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u5')">A. exciting</button><button onclick="pickMC(this,'B','u5')">B. excited</button><button onclick="pickMC(this,'C','u5')">C. excite</button><button onclick="pickMC(this,'D','u5')">D. excites</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>The film was ___ → 描述事物的特性用 -ing → exciting。如果說 I was excited 則是人的感受。</div></div></div>
+
+<div class="q-card" data-unit="u5" data-answer="C"><div class="q-row"><span class="q-num">13</span>
+<div class="q-text">She felt <span class="gap">_____</span> because she had nothing to do.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u5')">A. boring</button><button onclick="pickMC(this,'B','u5')">B. bore</button><button onclick="pickMC(this,'C','u5')">C. bored</button><button onclick="pickMC(this,'D','u5')">D. bores</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>She felt ___ → 人的感受用 -ed → bored。boring 是形容事物令人無聊。</div></div></div>
+
+<div class="q-card" data-unit="u5" data-answer="B"><div class="q-row"><span class="q-num">14</span>
+<div class="q-text">The magic show was <span class="gap">_____</span>. Everyone watched with surprise.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u5')">A. amazed</button><button onclick="pickMC(this,'B','u5')">B. amazing</button><button onclick="pickMC(this,'C','u5')">C. amaze</button><button onclick="pickMC(this,'D','u5')">D. amazes</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>The magic show was ___ → 描述事物的特性 → amazing。如果用 amazed 則是 "I was amazed"。</div></div></div>
+
+<div class="q-card" data-unit="u5" data-answer="A"><div class="q-row"><span class="q-num">15</span>
+<div class="q-text">I get <span class="gap">_____</span> when I have to wait for a long time.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u5')">A. annoyed</button><button onclick="pickMC(this,'B','u5')">B. annoying</button><button onclick="pickMC(this,'C','u5')">C. annoy</button><button onclick="pickMC(this,'D','u5')">D. annoys</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>I get ___ → 人的感受用 -ed → annoyed。</div></div></div>
+
+<div class="q-card" data-unit="u5" data-answer="D"><div class="q-row"><span class="q-num">16</span>
+<div class="q-text">This maths problem is really <span class="gap">_____</span>. I don't understand it.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u5')">A. confused</button><button onclick="pickMC(this,'B','u5')">B. confuse</button><button onclick="pickMC(this,'C','u5')">C. confuses</button><button onclick="pickMC(this,'D','u5')">D. confusing</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>This problem is ___ → 事物特性 → confusing。如果說 I am confused 則是人的感受。</div></div></div>
+
+<div class="q-card" data-unit="u5" data-answer="A"><div class="q-row"><span class="q-num">17</span>
+<div class="q-text">The children were <span class="gap">_____</span> after the long walk.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u5')">A. tired</button><button onclick="pickMC(this,'B','u5')">B. tiring</button><button onclick="pickMC(this,'C','u5')">C. tire</button><button onclick="pickMC(this,'D','u5')">D. tires</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>The children were ___ → 人的狀態用 -ed → tired。</div></div></div>
+
+<div class="q-card" data-unit="u5" data-answer="B"><div class="q-row"><span class="q-num">18</span>
+<div class="q-text">Carrying those heavy boxes was very <span class="gap">_____</span>.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u5')">A. tired</button><button onclick="pickMC(this,'B','u5')">B. tiring</button><button onclick="pickMC(this,'C','u5')">C. tire</button><button onclick="pickMC(this,'D','u5')">D. tires</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>Carrying boxes was ___ → 描述這件事的特性 → tiring（令人疲累的）。</div></div></div>
+
+<div class="q-card" data-unit="u5" data-answer="C"><div class="q-row"><span class="q-num">19</span>
+<div class="q-text">We were so <span class="gap">_____</span> when we heard the good news!</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u5')">A. exciting</button><button onclick="pickMC(this,'B','u5')">B. excite</button><button onclick="pickMC(this,'C','u5')">C. excited</button><button onclick="pickMC(this,'D','u5')">D. excites</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>We were ___ → 人的感受 → excited。</div></div></div>
+
+<div class="q-card" data-unit="u5" data-answer="D"><div class="q-row"><span class="q-num">20</span>
+<div class="q-text">The book is <span class="gap">_____</span>. I can't stop reading it!</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u5')">A. interested</button><button onclick="pickMC(this,'B','u5')">B. interest</button><button onclick="pickMC(this,'C','u5')">C. interests</button><button onclick="pickMC(this,'D','u5')">D. interesting</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>The book is ___ → 事物的特性 → interesting。</div></div></div>
+
+<div class="q-card" data-unit="u5" data-answer="A"><div class="q-row"><span class="q-num">21</span>
+<div class="q-text">Grandma looked <span class="gap">_____</span> when she saw all of us together.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u5')">A. surprised</button><button onclick="pickMC(this,'B','u5')">B. surprising</button><button onclick="pickMC(this,'C','u5')">C. surprise</button><button onclick="pickMC(this,'D','u5')">D. surprises</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>Grandma looked ___ → 人的感受 → surprised。</div></div></div>
+
+<div class="q-card" data-unit="u5" data-answer="B"><div class="q-row"><span class="q-num">22</span>
+<div class="q-text">The news was <span class="gap">_____</span>. Nobody expected it.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u5')">A. surprised</button><button onclick="pickMC(this,'B','u5')">B. surprising</button><button onclick="pickMC(this,'C','u5')">C. surprise</button><button onclick="pickMC(this,'D','u5')">D. surprises</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>The news was ___ → 事物的特性 → surprising。</div></div></div>
+
+<div class="q-card" data-unit="u5" data-answer="A"><div class="q-row"><span class="q-num">23</span>
+<div class="q-text">I am <span class="gap">_____</span> about my exam results.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u5')">A. worried</button><button onclick="pickMC(this,'B','u5')">B. worrying</button><button onclick="pickMC(this,'C','u5')">C. worry</button><button onclick="pickMC(this,'D','u5')">D. worries</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>I am ___ → 人的感受 → worried。</div></div></div>
+
+<div class="q-card" data-unit="u5" data-answer="B"><div class="q-row"><span class="q-num">24</span>
+<div class="q-text">The situation is very <span class="gap">_____</span>. I don't know what will happen.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u5')">A. worried</button><button onclick="pickMC(this,'B','u5')">B. worrying</button><button onclick="pickMC(this,'C','u5')">C. worry</button><button onclick="pickMC(this,'D','u5')">D. worries</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>The situation is ___ → 事物的特性 → worrying（令人擔憂的）。</div></div></div>
+
+<div class="q-card" data-unit="u5" data-answer="C"><div class="q-row"><span class="q-num">25</span>
+<div class="q-text">I felt very <span class="gap">_____</span> after finishing the marathon.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u5')">A. tiring</button><button onclick="pickMC(this,'B','u5')">B. tire</button><button onclick="pickMC(this,'C','u5')">C. tired</button><button onclick="pickMC(this,'D','u5')">D. tires</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>I felt ___ → 人的感受 → tired。</div></div></div>
+
+<div class="reset-row"><button class="reset-btn" onclick="resetUnit('u5')">🔄 Reset U5</button></div>
+</div><!-- end U5 -->
+
+
+<!-- ═══════════════════ U6: BARE INFINITIVES + OUGHT TO ═══════════════════ -->
+<div class="page" id="page-u6">
+
+<div class="quick-rules">
+<div class="ruletitle">📋 U6 Quick Rules · 不帶to的不定式 + ought to</div>
+<b>let/make/help</b> + 賓語 + <b>不帶to的不定式</b>（原形動詞）<br>
+　→ Let me <b>go</b>. / Make him <b>stop</b>. / Help her <b>clean</b>.<br>
+<b>情態動詞</b> (can, could, will, would, shall, should, may, might, must) + <b>原形動詞</b><br>
+<b>ought to</b> + 原形動詞（= should，但語氣更強）<br>
+<b>had better</b> + 原形動詞（= 最好做某事）
+</div>
+
+<div class="score-bar-top" id="u6-score-bar">
+<span class="label">🏆 U6 得分</span>
+<div class="bar"><div class="fill" id="u6-fill" style="width:0%">0%</div></div>
+<span class="num" id="u6-num">0/25</span>
+</div>
+
+<div class="grad-hd"><span class="grad-num">1</span> let / make / help + bare infinitive · 10題</div>
+
+<div class="q-card" data-unit="u6" data-answer="go"><div class="q-row"><span class="q-num">1</span>
+<div class="q-text">My mum won't let me <span class="gap">_____</span> (go) out after 9 p.m.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u6')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>let + 人 + <b>原形動詞</b> → go。不能說 let me to go。</div></div></div>
+
+<div class="q-card" data-unit="u6" data-answer="clean"><div class="q-row"><span class="q-num">2</span>
+<div class="q-text">The teacher made us <span class="gap">_____</span> (clean) the classroom after school.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u6')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>make + 人 + <b>原形動詞</b> → clean。make = 迫使。</div></div></div>
+
+<div class="q-card" data-unit="u6" data-answer="carry"><div class="q-row"><span class="q-num">3</span>
+<div class="q-text">Can you help me <span class="gap">_____</span> (carry) these bags?</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u6')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>help + 人 + 原形動詞 → carry。</div></div></div>
+
+<div class="q-card" data-unit="u6" data-answer="laugh"><div class="q-row"><span class="q-num">4</span>
+<div class="q-text">The funny clown made everyone <span class="gap">_____</span> (laugh).</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u6')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>make + 人 + 原形動詞 → laugh。</div></div></div>
+
+<div class="q-card" data-unit="u6" data-answer="play"><div class="q-row"><span class="q-num">5</span>
+<div class="q-text">Dad let us <span class="gap">_____</span> (play) video games for an hour.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u6')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>let + 人 + 原形動詞 → play。</div></div></div>
+
+<div class="q-card" data-unit="u6" data-answer="eat"><div class="q-row"><span class="q-num">6</span>
+<div class="q-text">She helped her little brother <span class="gap">_____</span> (eat) his dinner.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u6')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>help + 人 + 原形動詞 → eat。</div></div></div>
+
+<div class="q-card" data-unit="u6" data-answer="stay"><div class="q-row"><span class="q-num">7</span>
+<div class="q-text">The cold weather made me <span class="gap">_____</span> (stay) at home.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u6')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>make + 人 + 原形動詞 → stay。</div></div></div>
+
+<div class="q-card" data-unit="u6" data-answer="watch"><div class="q-row"><span class="q-num">8</span>
+<div class="q-text">Will you let me <span class="gap">_____</span> (watch) TV for a while?</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u6')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>let + 人 + 原形動詞 → watch。</div></div></div>
+
+<div class="q-card" data-unit="u6" data-answer="do"><div class="q-row"><span class="q-num">9</span>
+<div class="q-text">The coach made the players <span class="gap">_____</span> (do) fifty push-ups.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u6')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>make + 人 + 原形動詞 → do。</div></div></div>
+
+<div class="q-card" data-unit="u6" data-answer="find"><div class="q-row"><span class="q-num">10</span>
+<div class="q-text">Can you help me <span class="gap">_____</span> (find) my keys? I lost them.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u6')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>help + 人 + 原形動詞 → find。</div></div></div>
+
+<div class="grad-hd"><span class="grad-num">2</span> Modal verbs + bare infinitive · 10題</div>
+
+<div class="q-card" data-unit="u6" data-answer="B"><div class="q-row"><span class="q-num">11</span>
+<div class="q-text">You should <span class="gap">_____</span> more water every day.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u6')">A. to drink</button><button onclick="pickMC(this,'B','u6')">B. drink</button><button onclick="pickMC(this,'C','u6')">C. drinking</button><button onclick="pickMC(this,'D','u6')">D. drank</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>should + <b>原形動詞</b> → drink。情態動詞後面永遠跟原形動詞。</div></div></div>
+
+<div class="q-card" data-unit="u6" data-answer="A"><div class="q-row"><span class="q-num">12</span>
+<div class="q-text">He can <span class="gap">_____</span> three languages.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u6')">A. speak</button><button onclick="pickMC(this,'B','u6')">B. to speak</button><button onclick="pickMC(this,'C','u6')">C. speaking</button><button onclick="pickMC(this,'D','u6')">D. speaks</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>can + 原形動詞 → speak。不能說 can to speak 或 can speaks。</div></div></div>
+
+<div class="q-card" data-unit="u6" data-answer="C"><div class="q-row"><span class="q-num">13</span>
+<div class="q-text">You must <span class="gap">_____</span> your seatbelt in the car.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u6')">A. to wear</button><button onclick="pickMC(this,'B','u6')">B. wearing</button><button onclick="pickMC(this,'C','u6')">C. wear</button><button onclick="pickMC(this,'D','u6')">D. wears</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>must + 原形動詞 → wear。</div></div></div>
+
+<div class="q-card" data-unit="u6" data-answer="D"><div class="q-row"><span class="q-num">14</span>
+<div class="q-text">We will <span class="gap">_____</span> you at the station at 3 p.m.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u6')">A. to meet</button><button onclick="pickMC(this,'B','u6')">B. meeting</button><button onclick="pickMC(this,'C','u6')">C. meets</button><button onclick="pickMC(this,'D','u6')">D. meet</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>will + 原形動詞 → meet。</div></div></div>
+
+<div class="q-card" data-unit="u6" data-answer="B"><div class="q-row"><span class="q-num">15</span>
+<div class="q-text">May I <span class="gap">_____</span> your phone for a moment?</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u6')">A. to use</button><button onclick="pickMC(this,'B','u6')">B. use</button><button onclick="pickMC(this,'C','u6')">C. using</button><button onclick="pickMC(this,'D','u6')">D. used</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>may + 原形動詞 → use。</div></div></div>
+
+<div class="q-card" data-unit="u6" data-answer="A"><div class="q-row"><span class="q-num">16</span>
+<div class="q-text">They might <span class="gap">_____</span> late because of the traffic.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u6')">A. be</button><button onclick="pickMC(this,'B','u6')">B. to be</button><button onclick="pickMC(this,'C','u6')">C. being</button><button onclick="pickMC(this,'D','u6')">D. are</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>might + 原形動詞 → be。即使是 be 也要用原形。</div></div></div>
+
+<div class="q-card" data-unit="u6" data-answer="C"><div class="q-row"><span class="q-num">17</span>
+<div class="q-text">Could you <span class="gap">_____</span> me the way to the museum?</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u6')">A. to tell</button><button onclick="pickMC(this,'B','u6')">B. telling</button><button onclick="pickMC(this,'C','u6')">C. tell</button><button onclick="pickMC(this,'D','u6')">D. tells</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>could + 原形動詞 → tell。</div></div></div>
+
+<div class="q-card" data-unit="u6" data-answer="B"><div class="q-row"><span class="q-num">18</span>
+<div class="q-text">I would <span class="gap">_____</span> to order a pizza, please.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u6')">A. liking</button><button onclick="pickMC(this,'B','u6')">B. like</button><button onclick="pickMC(this,'C','u6')">C. to like</button><button onclick="pickMC(this,'D','u6')">D. likes</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>would + 原形動詞 → like。would like to = 想要。</div></div></div>
+
+<div class="q-card" data-unit="u6" data-answer="A"><div class="q-row"><span class="q-num">19</span>
+<div class="q-text">You mustn't <span class="gap">_____</span> in the library.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u6')">A. talk</button><button onclick="pickMC(this,'B','u6')">B. to talk</button><button onclick="pickMC(this,'C','u6')">C. talking</button><button onclick="pickMC(this,'D','u6')">D. talks</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>mustn't + 原形動詞 → talk。mustn't = 禁止。</div></div></div>
+
+<div class="q-card" data-unit="u6" data-answer="D"><div class="q-row"><span class="q-num">20</span>
+<div class="q-text">Shall we <span class="gap">_____</span> now?</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','u6')">A. to leave</button><button onclick="pickMC(this,'B','u6')">B. leaving</button><button onclick="pickMC(this,'C','u6')">C. leaves</button><button onclick="pickMC(this,'D','u6')">D. leave</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>shall + 原形動詞 → leave。</div></div></div>
+
+<div class="grad-hd"><span class="grad-num">3</span> ought to / had better · 5題</div>
+
+<div class="q-card" data-unit="u6" data-answer="ought to"><div class="q-row"><span class="q-num">21</span>
+<div class="q-text">You <span class="gap">_____</span> apologise to her. You were wrong.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u6')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>ought to = should（應該）。ought to + 原形動詞。</div></div></div>
+
+<div class="q-card" data-unit="u6" data-answer="had better"><div class="q-row"><span class="q-num">22</span>
+<div class="q-text">It's going to rain. You <span class="gap">_____</span> take an umbrella.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u6')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>had better = 最好……。had better + 原形動詞。</div></div></div>
+
+<div class="q-card" data-unit="u6" data-answer="ought to"><div class="q-row"><span class="q-num">23</span>
+<div class="q-text">We <span class="gap">_____</span> help those in need.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u6')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>ought to = 應該（道德/責任層面）。</div></div></div>
+
+<div class="q-card" data-unit="u6" data-answer="had better"><div class="q-row"><span class="q-num">24</span>
+<div class="q-text">You <span class="gap">_____</span> go to bed early. You have an exam tomorrow.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u6')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>had better = 最好。had better + 原形動詞。</div></div></div>
+
+<div class="q-card" data-unit="u6" data-answer="ought to"><div class="q-row"><span class="q-num">25</span>
+<div class="q-text">Students <span class="gap">_____</span> respect their teachers.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'u6')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>ought to = 應該（責任/義務）。</div></div></div>
+
+<div class="reset-row"><button class="reset-btn" onclick="resetUnit('u6')">🔄 Reset U6</button></div>
+</div><!-- end U6 -->
+
+
+<!-- ═══════════════════ MIXED CHALLENGE ═══════════════════ -->
+<div class="page" id="page-mix">
+
+<div class="quick-rules">
+<div class="ruletitle">🎯 綜合挑戰 · 所有單元混合 · 20題</div>
+題目來自 U1-U6 全部範圍，隨機混合，考你真正的語法實力！
+</div>
+
+<div class="score-bar-top" id="mix-score-bar">
+<span class="label">🏆 綜合得分</span>
+<div class="bar"><div class="fill" id="mix-fill" style="width:0%">0%</div></div>
+<span class="num" id="mix-num">0/20</span>
+</div>
+
+<div class="q-card" data-unit="mix" data-answer="B"><div class="q-row"><span class="q-num">1</span>
+<div class="q-text">I didn't see <span class="gap">_____</span> at the party I knew.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','mix')">A. somebody</button><button onclick="pickMC(this,'B','mix')">B. anybody</button><button onclick="pickMC(this,'C','mix')">C. nobody</button><button onclick="pickMC(this,'D','mix')">D. everybody</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>didn't see = 否定句 → anybody（U1 不定代名詞）。</div></div></div>
+
+<div class="q-card" data-unit="mix" data-answer="mine"><div class="q-row"><span class="q-num">2</span>
+<div class="q-text">This blue jacket is <span class="gap">_____</span>. I bought it last week.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'mix')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>is ___ → 獨立使用，無名詞 → mine（U2 所有格代名詞）。</div></div></div>
+
+<div class="q-card" data-unit="mix" data-answer="A"><div class="q-row"><span class="q-num">3</span>
+<div class="q-text">She enjoys <span class="gap">_____</span> in the park every morning.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','mix')">A. jogging</button><button onclick="pickMC(this,'B','mix')">B. to jog</button><button onclick="pickMC(this,'C','mix')">C. jog</button><button onclick="pickMC(this,'D','mix')">D. jogged</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>enjoy + -ing → jogging（U3 動名詞）。</div></div></div>
+
+<div class="q-card" data-unit="mix" data-answer="B"><div class="q-row"><span class="q-num">4</span>
+<div class="q-text">There is <span class="gap">_____</span> traffic today. We might be late.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','mix')">A. so many</button><button onclick="pickMC(this,'B','mix')">B. so much</button><button onclick="pickMC(this,'C','mix')">C. so few</button><button onclick="pickMC(this,'D','mix')">D. a many</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>traffic 不可數 → so much（U5 so many/much）。</div></div></div>
+
+<div class="q-card" data-unit="mix" data-answer="do"><div class="q-row"><span class="q-num">5</span>
+<div class="q-text">The teacher made Tom <span class="gap">_____</span> (do) his work again.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'mix')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>make + 人 + 原形動詞 → do（U6 不帶to不定式）。</div></div></div>
+
+<div class="q-card" data-unit="mix" data-answer="A"><div class="q-row"><span class="q-num">6</span>
+<div class="q-text">I am <span class="gap">_____</span> about the trip. I can't wait!</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','mix')">A. excited</button><button onclick="pickMC(this,'B','mix')">B. exciting</button><button onclick="pickMC(this,'C','mix')">C. excite</button><button onclick="pickMC(this,'D','mix')">D. excites</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>I am ___ → 人的感受 → excited（U5 -ed/-ing）。</div></div></div>
+
+<div class="q-card" data-unit="mix" data-answer="too heavy"><div class="q-row"><span class="q-num">7</span>
+<div class="q-text">I can't lift this suitcase. It's <span class="gap">_____</span>.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'mix')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>can't lift → too heavy（U1 too + adj）。</div></div></div>
+
+<div class="q-card" data-unit="mix" data-answer="B"><div class="q-row"><span class="q-num">8</span>
+<div class="q-text">The cat is sitting <span class="gap">_____</span> the two chairs.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','mix')">A. among</button><button onclick="pickMC(this,'B','mix')">B. between</button><button onclick="pickMC(this,'C','mix')">C. in</button><button onclick="pickMC(this,'D','mix')">D. on</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>兩張椅子之間 → between（U2 介詞）。among 是三者以上。</div></div></div>
+
+<div class="q-card" data-unit="mix" data-answer="to buy"><div class="q-row"><span class="q-num">9</span>
+<div class="q-text">Dad promised <span class="gap">_____</span> (buy) me a new bike.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'mix')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>promise + to V → to buy（U3 不定式）。</div></div></div>
+
+<div class="q-card" data-unit="mix" data-answer="C"><div class="q-row"><span class="q-num">10</span>
+<div class="q-text">You must <span class="gap">_____</span> your hands before eating.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','mix')">A. to wash</button><button onclick="pickMC(this,'B','mix')">B. washing</button><button onclick="pickMC(this,'C','mix')">C. wash</button><button onclick="pickMC(this,'D','mix')">D. washes</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>must + 原形動詞 → wash（U6 情態動詞）。</div></div></div>
+
+<div class="q-card" data-unit="mix" data-answer="nothing"><div class="q-row"><span class="q-num">11</span>
+<div class="q-text">There is <span class="gap">_____</span> in the fridge. We need to go shopping.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'mix')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>雪櫃空了 → nothing（U1 不定代名詞）。</div></div></div>
+
+<div class="q-card" data-unit="mix" data-answer="A"><div class="q-row"><span class="q-num">12</span>
+<div class="q-text">The film was <span class="gap">_____</span>. I almost fell asleep!</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','mix')">A. boring</button><button onclick="pickMC(this,'B','mix')">B. bored</button><button onclick="pickMC(this,'C','mix')">C. bore</button><button onclick="pickMC(this,'D','mix')">D. bores</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>The film was ___ → 事物特性 → boring（U5 -ed/-ing）。</div></div></div>
+
+<div class="q-card" data-unit="mix" data-answer="theirs"><div class="q-row"><span class="q-num">13</span>
+<div class="q-text">Our garden is small but <span class="gap">_____</span> is huge.</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'mix')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>___ is huge → 獨立作主語，對比 our garden → theirs（U2 所有格代名詞）。</div></div></div>
+
+<div class="q-card" data-unit="mix" data-answer="C"><div class="q-row"><span class="q-num">14</span>
+<div class="q-text">He decided <span class="gap">_____</span> a doctor when he was ten.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','mix')">A. becoming</button><button onclick="pickMC(this,'B','mix')">B. become</button><button onclick="pickMC(this,'C','mix')">C. to become</button><button onclick="pickMC(this,'D','mix')">D. became</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>decide + to V → to become（U3 不定式）。</div></div></div>
+
+<div class="q-card" data-unit="mix" data-answer="B"><div class="q-row"><span class="q-num">15</span>
+<div class="q-text">She has <span class="gap">_____</span> shoes that she can't fit them in the cupboard.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','mix')">A. so much</button><button onclick="pickMC(this,'B','mix')">B. so many</button><button onclick="pickMC(this,'C','mix')">C. a much</button><button onclick="pickMC(this,'D','mix')">D. too much</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>shoes 可數複數 → so many（U5 so many/much）。</div></div></div>
+
+<div class="q-card" data-unit="mix" data-answer="go"><div class="q-row"><span class="q-num">16</span>
+<div class="q-text">Will you let me <span class="gap">_____</span> (go) with you?</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'mix')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>let + 人 + 原形動詞 → go（U6 不帶to不定式）。</div></div></div>
+
+<div class="q-card" data-unit="mix" data-answer="A"><div class="q-row"><span class="q-num">17</span>
+<div class="q-text">Is there <span class="gap">_____</span> I can sit?</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','mix')">A. anywhere</button><button onclick="pickMC(this,'B','mix')">B. somewhere</button><button onclick="pickMC(this,'C','mix')">C. nowhere</button><button onclick="pickMC(this,'D','mix')">D. everywhere</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>Is there... = 疑問句 → anywhere（U1 不定代名詞）。</div></div></div>
+
+<div class="q-card" data-unit="mix" data-answer="D"><div class="q-row"><span class="q-num">18</span>
+<div class="q-text">My birthday is <span class="gap">_____</span> 15th August.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','mix')">A. in</button><button onclick="pickMC(this,'B','mix')">B. at</button><button onclick="pickMC(this,'C','mix')">C. among</button><button onclick="pickMC(this,'D','mix')">D. on</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>具體日期用 on（U2 介詞）。</div></div></div>
+
+<div class="q-card" data-unit="mix" data-answer="swimming"><div class="q-row"><span class="q-num">19</span>
+<div class="q-text">Let's go <span class="gap">_____</span> (swim) this afternoon!</div></div>
+<div class="input-row"><input type="text" placeholder="Type your answer..."><button class="check-btn" onclick="checkFill(this,'mix')">Check</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>go + -ing → swimming（U3 動名詞）。go swimming = 去游泳。</div></div></div>
+
+<div class="q-card" data-unit="mix" data-answer="C"><div class="q-row"><span class="q-num">20</span>
+<div class="q-text">You <span class="gap">_____</span> better hurry up, or we'll miss the train.</div></div>
+<div class="opts"><button onclick="pickMC(this,'A','mix')">A. ought</button><button onclick="pickMC(this,'B','mix')">B. should</button><button onclick="pickMC(this,'C','mix')">C. had</button><button onclick="pickMC(this,'D','mix')">D. would</button></div>
+<div class="fb"><span class="correct-msg">✅ Correct!</span><span class="wrong-msg">❌ Wrong!</span><div class="why"><b>為什麼？</b>___ better = had better（U6）。had better + 原形動詞。</div></div></div>
+
+<div class="reset-row"><button class="reset-btn" onclick="resetUnit('mix')">🔄 Reset 綜合挑戰</button></div>
+</div><!-- end mix -->
+
+
+<!-- ═══════════════════ FOOTER ═══════════════════ -->
+<div class="footer">多多 GR 5B Grammar 加碼練習 · U1-U2-U3-U5-U6 · 每題附「為什麼」解釋</div>
+</div><!-- end container -->
+
+<script>
+// Score tracking
+const scores={u1:{total:35,correct:0},u2:{total:30,correct:0},u3:{total:35,correct:0},u5:{total:25,correct:0},u6:{total:25,correct:0},mix:{total:20,correct:0}};
+
+function switchPage(id,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-bar button').forEach(b=>b.classList.remove('active'));
+  const page=document.getElementById('page-'+id);
+  if(page)page.classList.add('active');
+  if(btn)btn.classList.add('active');
+}
+
+function pickMC(btn,choice,unit){
+  const card=btn.closest('.q-card');
+  if(card.classList.contains('done'))return;
+  card.classList.add('done');
+  const answer=card.dataset.answer;
+  const fb=card.querySelector('.fb');
+  fb.classList.add('show');
+  const opts=card.querySelectorAll('.opts button');
+  opts.forEach(o=>o.disabled=true);
+
+  if(choice===answer){
+    card.classList.add('correct');
+    btn.classList.add('chosen-correct');
+    fb.querySelector('.correct-msg').style.display='inline';
+    fb.querySelector('.wrong-msg').style.display='none';
+    updateScore(unit,1);
+  }else{
+    card.classList.add('wrong');
+    btn.classList.add('chosen-wrong');
+    fb.querySelector('.correct-msg').style.display='none';
+    fb.querySelector('.wrong-msg').style.display='inline';
+    opts.forEach(o=>{if(o.textContent.trim().startsWith(answer))o.classList.add('chosen-correct')});
+  }
+}
+
+function checkFill(btn,unit){
+  const card=btn.closest('.q-card');
+  if(card.classList.contains('done'))return;
+  const input=card.querySelector('input');
+  const userAns=input.value.trim().toLowerCase();
+  const answer=card.dataset.answer.toLowerCase();
+  const fb=card.querySelector('.fb');
+  const gap=card.querySelector('.gap');
+
+  // Accept multiple correct answers separated by |
+  const accepted=answer.split('|').map(a=>a.trim());
+  const isCorrect=accepted.includes(userAns);
+
+  card.classList.add('done');
+  fb.classList.add('show');
+  input.disabled=true;
+  btn.disabled=true;
+
+  if(isCorrect){
+    card.classList.add('correct');
+    gap.textContent=userAns;
+    gap.classList.add('filled');
+    fb.querySelector('.correct-msg').style.display='inline';
+    fb.querySelector('.wrong-msg').style.display='none';
+    updateScore(unit,1);
+  }else{
+    card.classList.add('wrong');
+    gap.textContent=userAns||'(blank)';
+    gap.classList.add('wrong-filled');
+    fb.querySelector('.correct-msg').style.display='none';
+    fb.querySelector('.wrong-msg').style.display='inline';
+    fb.querySelector('.why').innerHTML+=' <b>答案：'+card.dataset.answer+'</b>';
+  }
+}
+
+function updateScore(unit,add){
+  if(!scores[unit])scores[unit]={total:0,correct:0};
+  scores[unit].correct+=add;
+  const pct=Math.round(scores[unit].correct/scores[unit].total*100);
+  const fill=document.getElementById(unit+'-fill');
+  const num=document.getElementById(unit+'-num');
+  if(fill){fill.style.width=pct+'%';fill.textContent=pct+'%';}
+  if(num)num.textContent=scores[unit].correct+'/'+scores[unit].total;
+}
+
+function resetUnit(unit){
+  const page=document.getElementById('page-'+unit);
+  if(!page)return;
+  const cards=page.querySelectorAll('.q-card');
+  cards.forEach(c=>{
+    c.classList.remove('done','correct','wrong');
+    const fb=c.querySelector('.fb');if(fb){fb.classList.remove('show');fb.querySelector('.correct-msg').style.display='';fb.querySelector('.wrong-msg').style.display='';}
+    const gap=c.querySelector('.gap');if(gap){gap.textContent='_____';gap.classList.remove('filled','wrong-filled');}
+    const input=c.querySelector('input');if(input){input.value='';input.disabled=false;}
+    const btn=c.querySelector('.check-btn');if(btn)btn.disabled=false;
+    const opts=c.querySelectorAll('.opts button');opts.forEach(o=>{o.disabled=false;o.classList.remove('chosen-correct','chosen-wrong')});
+  });
+  if(scores[unit])scores[unit].correct=0;
+  const fill=document.getElementById(unit+'-fill');
+  const num=document.getElementById(unit+'-num');
+  if(fill){fill.style.width='0%';fill.textContent='0%';}
+  if(num)num.textContent='0/'+scores[unit].total;
+}
+</script>
+</body>
+</html>

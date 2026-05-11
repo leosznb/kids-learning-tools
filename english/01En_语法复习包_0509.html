@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>多多英文呈分试复习包 · Unit 1-6</title>
+<style>
+:root {
+  --bg:#fafafa; --card:#fff; --text:#1a1a1a; --sub:#555; --light:#f5f5f5;
+  --blue:#1e40af; --blueL:#dbeafe; --blueM:#3b82f6;
+  --red:#dc2626; --redL:#fef2f2; --green:#16a34a; --greenL:#f0fdf4;
+  --amber:#d97706; --amberL:#fffbeb; --purple:#7c3aed; --purpleL:#f5f3ff;
+  --border:#e5e5e5; --radius:10px; --shadow:0 1px 3px rgba(0,0,0,0.05);
+}
+* { box-sizing:border-box; margin:0; padding:0; }
+body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans TC',sans-serif; background:var(--bg); color:var(--text); line-height:1.65; }
+.container { max-width:920px; margin:0 auto; padding:18px 14px; }
+
+/* Header */
+.site-header { text-align:center; padding:20px 0 8px; }
+.site-header h1 { font-size:1.55em; font-weight:800; color:var(--blue); letter-spacing:-.3px; }
+.site-header .sub { font-size:.82em; color:var(--sub); }
+.site-header .meta { display:flex; justify-content:center; gap:14px; margin-top:6px; flex-wrap:wrap; }
+.site-header .meta span { font-size:.75em; background:var(--blueL); color:var(--blue); padding:3px 10px; border-radius:20px; font-weight:600; }
+
+/* Nav */
+nav { display:flex; flex-wrap:wrap; gap:3px; margin:16px 0 20px; border-bottom:1px solid var(--border); padding-bottom:2px; overflow-x:auto; -webkit-overflow-scrolling:touch; }
+nav button { flex-shrink:0; padding:8px 13px; font-size:.78em; border:none; background:none; color:var(--sub); cursor:pointer; border-bottom:2px solid transparent; transition:all .15s; white-space:nowrap; font-family:inherit; }
+nav button:hover { color:var(--blue); }
+nav button.active { color:var(--blue); border-bottom-color:var(--blue); font-weight:700; }
+nav button.star { color:var(--amber); }
+nav button.star.active { color:var(--amber); border-bottom-color:var(--amber); }
+
+/* Panel */
+.panel { display:none; animation:fadeIn .25s; }
+.panel.active { display:block; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(4px);} to{opacity:1;transform:translateY(0);} }
+
+/* Cards */
+.card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:20px; margin-bottom:14px; box-shadow:var(--shadow); }
+.card h2 { font-size:1.05em; color:var(--blue); margin-bottom:4px; }
+.card h3 { font-size:.92em; color:var(--text); margin:14px 0 6px; }
+.card .rule-box { background:var(--blueL); padding:10px 14px; border-radius:6px; font-size:.84em; margin:8px 0; border-left:3px solid var(--blue); }
+.card .rule-box strong { color:var(--blue); }
+
+/* Visual: Timeline */
+.timeline-wrap { display:flex; gap:16px; flex-wrap:wrap; margin:12px 0; }
+.timeline { flex:1; min-width:260px; background:var(--light); border-radius:8px; padding:14px; position:relative; }
+.timeline .tl-bar { position:relative; height:6px; background:#d1d5db; border-radius:3px; margin:24px 0; }
+.timeline .tl-fill { position:absolute; height:6px; background:var(--blueM); border-radius:3px; }
+.timeline .tl-dot { position:absolute; width:14px; height:14px; border-radius:50%; background:var(--blue); top:-4px; }
+.timeline .tl-label { position:absolute; font-size:.72em; font-weight:600; white-space:nowrap; }
+.timeline .tl-label.top { top:-22px; }
+.timeline .tl-label.bot { top:10px; }
+.timeline .tl-stamp { position:absolute; top:-24px; font-size:.7em; color:var(--red); font-weight:700; }
+
+/* Visual: Decision Tree */
+.dtree { margin:10px 0; }
+.dtree .dt-node { padding:8px 14px; border-radius:6px; margin:6px 0; font-size:.84em; display:flex; align-items:center; gap:8px; cursor:default; }
+.dtree .dt-q { background:var(--amberL); border:1px solid #fde68a; font-weight:600; }
+.dtree .dt-a { background:var(--greenL); border:1px solid #bbf7d0; margin-left:24px; }
+.dtree .dt-x { background:var(--redL); border:1px solid #fecaca; margin-left:24px; }
+
+/* Visual: 4-Grid (indefinite pronouns) */
+.grid4 { display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; gap:8px; max-width:400px; margin:10px auto; }
+.grid4 .cell { padding:12px; border-radius:8px; text-align:center; font-size:.82em; cursor:pointer; transition:all .2s; border:2px solid transparent; }
+.grid4 .cell:hover { transform:scale(1.03); }
+.grid4 .cell.some { background:#dbeafe; border-color:#93c5fd; }
+.grid4 .cell.any { background:#fef3c7; border-color:#fcd34d; }
+.grid4 .cell.no  { background:#fce7f3; border-color:#f9a8d4; }
+.grid4 .cell.every { background:#d1fae5; border-color:#6ee7b7; }
+.grid4 .cell .big { font-size:1.3em; font-weight:800; display:block; }
+.grid4 .cell .meaning { font-size:.72em; color:var(--sub); }
+
+/* Visual: Countable/Uncountable Sort */
+.sort-area { display:flex; gap:14px; flex-wrap:wrap; margin:10px 0; }
+.sort-source { flex:1; min-width:200px; background:var(--light); padding:10px; border-radius:8px; }
+.sort-source h4 { font-size:.8em; color:var(--sub); margin-bottom:8px; }
+.sort-bucket { flex:1; min-width:180px; padding:10px; border-radius:8px; border:2px dashed var(--border); min-height:60px; }
+.sort-bucket.count { border-color:#93c5fd; background:#f8faff; }
+.sort-bucket.uncount { border-color:#fcd34d; background:#fffdf7; }
+.sort-bucket h4 { font-size:.8em; margin-bottom:6px; }
+.sort-bucket.count h4 { color:var(--blue); }
+.sort-bucket.uncount h4 { color:var(--amber); }
+.chip { display:inline-block; padding:5px 12px; margin:3px; background:var(--card); border:1px solid var(--border); border-radius:20px; font-size:.82em; cursor:pointer; transition:all .15s; user-select:none; }
+.chip:hover { background:var(--blueL); border-color:var(--blueM); }
+.chip.placed { background:var(--greenL); border-color:var(--green); cursor:default; }
+.chip.wrong-place { background:var(--redL); border-color:var(--red); animation:shake .3s; }
+@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-4px)} 75%{transform:translateX(4px)} }
+
+/* Visual: Emotion Wheel */
+.emo-row { display:flex; flex-wrap:wrap; gap:10px; margin:10px 0; }
+.emo-pair { display:flex; flex-direction:column; align-items:center; gap:4px; padding:10px; border-radius:8px; background:var(--light); min-width:90px; cursor:pointer; transition:all .15s; }
+.emo-pair:hover { background:var(--purpleL); }
+.emo-pair .face { font-size:1.5em; }
+.emo-pair .ed { font-size:.78em; color:var(--purple); font-weight:600; }
+.emo-pair .ing { font-size:.72em; color:var(--sub); }
+.emo-pair.active { background:var(--purpleL); border:2px solid var(--purple); }
+
+/* Flashcard */
+.flash-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(130px,1fr)); gap:8px; margin:10px 0; }
+.flash-card { perspective:600px; height:100px; cursor:pointer; }
+.flash-inner { position:relative; width:100%; height:100%; transition:transform .4s; transform-style:preserve-3d; }
+.flash-card.flipped .flash-inner { transform:rotateY(180deg); }
+.flash-front, .flash-back { position:absolute; width:100%; height:100%; backface-visibility:hidden; border-radius:8px; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:8px; font-size:.82em; }
+.flash-front { background:var(--blue); color:#fff; }
+.flash-front .base { font-size:1.1em; font-weight:700; }
+.flash-front .meaning { font-size:.7em; opacity:.85; }
+.flash-back { background:var(--card); border:2px solid var(--blue); transform:rotateY(180deg); }
+.flash-back .past { color:var(--amber); font-weight:700; }
+.flash-back .pp { color:var(--green); font-weight:700; font-size:.78em; }
+
+/* Verb group tabs */
+.vgroup-tabs { display:flex; gap:4px; flex-wrap:wrap; margin-bottom:12px; }
+.vgroup-tabs button { padding:5px 10px; font-size:.75em; border:1px solid var(--border); border-radius:20px; background:var(--card); cursor:pointer; font-family:inherit; }
+.vgroup-tabs button.active { background:var(--blue); color:#fff; border-color:var(--blue); }
+
+/* Exercises */
+.exercise-block { margin:8px 0; }
+.ex-row { display:flex; align-items:center; gap:8px; padding:8px 0; border-bottom:1px solid var(--border); flex-wrap:wrap; }
+.ex-row .ex-num { width:28px; height:28px; line-height:28px; text-align:center; background:var(--blueL); color:var(--blue); border-radius:50%; font-size:.75em; font-weight:700; flex-shrink:0; }
+.ex-row .ex-q { flex:1; font-size:.85em; min-width:200px; }
+.ex-row input { border:2px solid var(--border); border-radius:6px; padding:6px 10px; font-size:.84em; width:150px; transition:border-color .2s; }
+.ex-row input:focus { outline:none; border-color:var(--blueM); }
+.ex-row input.correct { border-color:var(--green); background:var(--greenL); }
+.ex-row input.wrong { border-color:var(--red); background:var(--redL); }
+.ex-row .reveal { display:none; font-size:.78em; padding:4px 8px; border-radius:4px; }
+.ex-row .reveal.show { display:block; }
+.ex-row .reveal.good { color:var(--green); }
+.ex-row .reveal.bad { color:var(--red); }
+
+/* Duoduo's error stamps */
+.dd-stamp { display:inline-block; background:var(--red); color:#fff; font-size:.68em; padding:2px 8px; border-radius:3px; font-weight:700; transform:rotate(-3deg); vertical-align:middle; margin-left:4px; }
+.dd-stamp.warn { background:var(--amber); }
+
+/* Buttons */
+.btn-row { display:flex; gap:10px; flex-wrap:wrap; margin:14px 0; }
+.btn { display:inline-flex; align-items:center; gap:4px; padding:9px 18px; border-radius:24px; border:none; background:var(--blue); color:#fff; font-size:.84em; font-weight:600; cursor:pointer; transition:all .15s; font-family:inherit; }
+.btn:hover { opacity:.88; transform:translateY(-1px); box-shadow:0 2px 8px rgba(30,64,175,.2); }
+.btn.o { background:var(--card); color:var(--blue); border:1.5px solid var(--blue); }
+.btn.s { padding:6px 12px; font-size:.76em; }
+.btn.g { background:var(--green); }
+
+/* Score */
+.score-bar { display:none; background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:16px; text-align:center; margin-top:12px; }
+.score-bar .big { font-size:2em; font-weight:800; color:var(--blue); }
+.score-bar .sub { font-size:.8em; color:var(--sub); }
+
+/* Tooltip / overlay */
+.overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.35); z-index:100; justify-content:center; align-items:center; }
+.overlay.show { display:flex; }
+.overlay .box { background:var(--card); border-radius:14px; padding:24px; max-width:520px; width:90%; max-height:80vh; overflow-y:auto; box-shadow:0 8px 32px rgba(0,0,0,.15); }
+.overlay .close { float:right; border:none; background:none; font-size:1.3em; cursor:pointer; color:var(--sub); }
+
+/* Confetti for correct answer (subtle) */
+@keyframes pop { 0%{transform:scale(1)} 50%{transform:scale(1.08)} 100%{transform:scale(1)} }
+.popping { animation:pop .3s ease; }
+
+/* Mobile */
+@media (max-width:600px) {
+  .container { padding:8px; }
+  nav button { padding:6px 9px; font-size:.7em; }
+  .card { padding:14px; }
+  .flash-grid { grid-template-columns:repeat(auto-fill,minmax(100px,1fr)); }
+  .grid4 { max-width:100%; }
+  .ex-row input { width:120px; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<header class="site-header">
+  <h1>📘 多多英文呈分试复习包</h1>
+  <p class="sub">Get Ready for Grammar 5B · Unit 1–6 全语法点</p>
+  <div class="meta">
+    <span>📅 6月5日英文卷</span><span>⏱ 45分钟</span><span>🎯 目标74分</span>
+  </div>
+</header>
+
+<nav>
+  <button class="active" onclick="switchTab('u1')">U1 · 庆祝</button>
+  <button onclick="switchTab('u2')">U2 · 开放日</button>
+  <button onclick="switchTab('u3')">U3 · 梦想</button>
+  <button class="star" onclick="switchTab('u4')">⭐ U4 · 敬佩的人</button>
+  <button onclick="switchTab('u5')">U5 · 难忘经历</button>
+  <button onclick="switchTab('u6')">U6 · 做个好人</button>
+  <button onclick="switchTab('verbs')">📋 动词表</button>
+  <button onclick="switchTab('prac')">✏️ 练习场</button>
+</nav>
+
+<!-- ======================== UNIT 1 ======================== -->
+<div class="panel active" id="panel-u1">
+<div class="card"><h2>🔹 too + adjective（太……了）</h2>
+<div class="rule-box">公式：<strong>too + 形容词</strong> → 表示「太……以至于不合适」<br>⚠️ too 必须放在形容词<b>前面</b>，不是后面！</div>
+<div style="display:flex;flex-wrap:wrap;gap:10px;margin:10px 0;">
+  <div style="flex:1;min-width:150px;background:var(--blueL);padding:12px;border-radius:8px;text-align:center;">
+    <div style="font-size:1.2em;">🧂</div>
+    <div style="font-weight:700;">too <span style="color:var(--red)">salty</span></div>
+    <div style="font-size:.75em;color:var(--sub);">太咸了</div>
+  </div>
+  <div style="flex:1;min-width:150px;background:var(--blueL);padding:12px;border-radius:8px;text-align:center;">
+    <div style="font-size:1.2em;">📏</div>
+    <div style="font-weight:700;">too <span style="color:var(--red)">long</span></div>
+    <div style="font-size:.75em;color:var(--sub);">太长了</div>
+  </div>
+  <div style="flex:1;min-width:150px;background:var(--blueL);padding:12px;border-radius:8px;text-align:center;">
+    <div style="font-size:1.2em;">👕</div>
+    <div style="font-weight:700;">too <span style="color:var(--red)">short</span></div>
+    <div style="font-size:.75em;color:var(--sub);">太短了</div>
+  </div>
+  <div style="flex:1;min-width:150px;background:var(--blueL);padding:12px;border-radius:8px;text-align:center;">
+    <div style="font-size:1.2em;">😴</div>
+    <div style="font-weight:700;">too <span style="color:var(--red)">boring</span></div>
+    <div style="font-size:.75em;color:var(--sub);">太无聊了</div>
+  </div>
+</div>
+<div style="background:var(--redL);padding:10px 14px;border-radius:6px;margin-top:8px;font-size:.82em;">
+  <span class="dd-stamp">多多易错</span> <span style="text-decoration:line-through;color:var(--red);">The film was boring <b>too</b>.</span> → <strong style="color:var(--green);">The film was <b>too</b> boring.</strong>（too 在形容词前面！）
+</div></div>
+
+<div class="card"><h2>🔹 Indefinite Pronouns（不定代词）</h2>
+<div class="rule-box">指<b>人</b>：someone / anyone / no one / everyone<br>指<b>物</b>：something / anything / nothing / everything</div>
+
+<div class="grid4">
+  <div class="cell some" onclick="this.classList.toggle('popping');document.getElementById('ig-hint-some').style.display='block'">
+    <span class="big">some-</span><span class="meaning">某人/某物</span>
+    <div style="font-size:.9em;margin-top:4px;">someone<br>something</div>
+  </div>
+  <div class="cell any" onclick="this.classList.toggle('popping');document.getElementById('ig-hint-any').style.display='block'">
+    <span class="big">any-</span><span class="meaning">任何人/物</span>
+    <div style="font-size:.9em;margin-top:4px;">anyone<br>anything</div>
+  </div>
+  <div class="cell no" onclick="this.classList.toggle('popping');document.getElementById('ig-hint-no').style.display='block'">
+    <span class="big">no-</span><span class="meaning">没人/没东西</span>
+    <div style="font-size:.9em;margin-top:4px;">no one<br>nothing</div>
+  </div>
+  <div class="cell every" onclick="this.classList.toggle('popping');document.getElementById('ig-hint-every').style.display='block'">
+    <span class="big">every-</span><span class="meaning">每人/每物</span>
+    <div style="font-size:.9em;margin-top:4px;">everyone<br>everything</div>
+  </div>
+</div>
+<div id="ig-hint-some" style="display:none;font-size:.8em;color:var(--blue);text-align:center;">✅ 肯定句用！I saw <b>someone</b>.</div>
+<div id="ig-hint-any" style="display:none;font-size:.8em;color:var(--amber);text-align:center;">⚠️ 疑问句/否定句用！Did you see <b>anyone</b>?</div>
+<div id="ig-hint-no" style="display:none;font-size:.8em;color:var(--purple);text-align:center;">❌ 表示「没有」！<b>No one</b> came.</div>
+<div id="ig-hint-every" style="display:none;font-size:.8em;color:var(--green);text-align:center;">👥 表示「全部」！<b>Everyone</b> is happy.</div>
+
+<div style="background:var(--amberL);padding:10px 14px;border-radius:6px;margin-top:10px;font-size:.82em;">
+  ⚠️ <strong>不定代词作主语 → 动词用单数！</strong><br>
+  <span style="color:var(--green);">✅ Everyone <b>is</b> happy.</span> &nbsp;|&nbsp;
+  <span style="color:var(--red);text-decoration:line-through;">❌ Everyone are happy.</span>
+</div>
+
+<div class="dtree" style="margin-top:12px;">
+  <div style="font-weight:700;font-size:.85em;">🤔 快速判断用哪个：</div>
+  <div class="dt-node dt-q">❓ 这句话是疑问句或否定句吗？</div>
+  <div class="dt-node dt-a">✅ 是 → 用 <b>anyone / anything</b></div>
+  <div class="dt-node dt-x">❌ 不是（是肯定句）→ 用 <b>someone / something</b> 或 <b>everyone / everything</b> 或 <b>no one / nothing</b></div>
+</div></div>
+</div>
+
+<!-- ======================== UNIT 2 ======================== -->
+<div class="panel" id="panel-u2">
+<div class="card"><h2>🔹 Describing people: in & with</h2>
+<div style="display:flex;gap:14px;flex-wrap:wrap;margin:10px 0;">
+  <div style="flex:1;min-width:180px;background:var(--blueL);padding:14px;border-radius:8px;text-align:center;">
+    <div style="font-size:2em;">👕</div>
+    <div style="font-weight:800;font-size:1.2em;color:var(--blue);">in</div>
+    <div style="font-size:.8em;color:var(--sub);">+ 衣物 / 穿着</div>
+    <div style="font-size:.82em;margin-top:6px;">in a red hat<br>in a blue dress<br>in a checked shirt</div>
+  </div>
+  <div style="flex:1;min-width:180px;background:var(--amberL);padding:14px;border-radius:8px;text-align:center;">
+    <div style="font-size:2em;">💇</div>
+    <div style="font-weight:800;font-size:1.2em;color:var(--amber);">with</div>
+    <div style="font-size:.8em;color:var(--sub);">+ 外貌特征 / 配饰</div>
+    <div style="font-size:.82em;margin-top:6px;">with long hair<br>with a beard<br>with glasses</div>
+  </div>
+</div>
+<div style="background:var(--redL);padding:10px 14px;border-radius:6px;font-size:.82em;">
+  <span class="dd-stamp">多多易错</span>
+  <span style="text-decoration:line-through;color:var(--red);">the man <b>with</b> a checked shirt</span> → <strong style="color:var(--green);">the man <b>in</b> a checked shirt</strong>（衬衫是衣物！）<br>
+  <span style="text-decoration:line-through;color:var(--red);">the girl <b>in</b> curly hair</span> → <strong style="color:var(--green);">the girl <b>with</b> curly hair</strong>（头发是外貌！）
+</div></div>
+
+<div class="card"><h2>🔹 Possessive Pronouns（物主代词）</h2>
+<div class="rule-box"><strong>Whose</strong> + 名词…？→ 回答用名词性物主代词（<b>后面不接名词</b>）</div>
+<div style="display:flex;flex-wrap:wrap;gap:10px;margin:10px 0;">
+  <div style="flex:1;min-width:140px;text-align:center;padding:10px;background:var(--light);border-radius:8px;">
+    <div style="font-size:.75em;color:var(--sub);">我的</div>
+    <div style="font-size:.9em;">my → <strong style="color:var(--blue);font-size:1.1em;">mine</strong></div>
+  </div>
+  <div style="flex:1;min-width:140px;text-align:center;padding:10px;background:var(--light);border-radius:8px;">
+    <div style="font-size:.75em;color:var(--sub);">你的</div>
+    <div style="font-size:.9em;">your → <strong style="color:var(--blue);font-size:1.1em;">yours</strong></div>
+  </div>
+  <div style="flex:1;min-width:140px;text-align:center;padding:10px;background:var(--light);border-radius:8px;">
+    <div style="font-size:.75em;color:var(--sub);">他的</div>
+    <div style="font-size:.9em;">his → <strong style="color:var(--blue);font-size:1.1em;">his</strong></div>
+  </div>
+  <div style="flex:1;min-width:140px;text-align:center;padding:10px;background:var(--light);border-radius:8px;">
+    <div style="font-size:.75em;color:var(--sub);">她的</div>
+    <div style="font-size:.9em;">her → <strong style="color:var(--blue);font-size:1.1em;">hers</strong></div>
+  </div>
+  <div style="flex:1;min-width:140px;text-align:center;padding:10px;background:var(--light);border-radius:8px;">
+    <div style="font-size:.75em;color:var(--sub);">我们的</div>
+    <div style="font-size:.9em;">our → <strong style="color:var(--blue);font-size:1.1em;">ours</strong></div>
+  </div>
+  <div style="flex:1;min-width:140px;text-align:center;padding:10px;background:var(--light);border-radius:8px;">
+    <div style="font-size:.75em;color:var(--sub);">他们的</div>
+    <div style="font-size:.9em;">their → <strong style="color:var(--blue);font-size:1.1em;">theirs</strong></div>
+  </div>
+</div>
+<div style="font-size:.82em;text-align:center;color:var(--sub);">口诀：<strong>有 s 就是「我的东西」，没 s 要加名词</strong>（除了 his 本身就有 s）</div>
+<div style="background:var(--redL);padding:10px 14px;border-radius:6px;margin-top:8px;font-size:.82em;">
+  <span class="dd-stamp">多多易错</span>
+  <span style="text-decoration:line-through;color:var(--red);">It is <b>mine book</b>.</span> → <strong style="color:var(--green);">It is <b>mine</b>.</strong>（mine 后面不接名词！）
+</div></div>
+</div>
+
+<!-- ======================== UNIT 3 ======================== -->
+<div class="panel" id="panel-u3">
+<div class="card"><h2>🔹 -ing form（动词-ing 作宾语）</h2>
+<div class="rule-box">like / love / enjoy / hate + <strong>V-ing</strong>　｜　good at / weak in + <strong>V-ing</strong></div>
+<div style="display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;">
+  <div style="padding:10px 16px;background:var(--blueL);border-radius:20px;font-size:.85em;font-weight:600;">like <span style="color:var(--blue);">reading</span></div>
+  <div style="padding:10px 16px;background:var(--blueL);border-radius:20px;font-size:.85em;font-weight:600;">love <span style="color:var(--blue);">singing</span></div>
+  <div style="padding:10px 16px;background:var(--blueL);border-radius:20px;font-size:.85em;font-weight:600;">enjoy <span style="color:var(--blue);">dancing</span></div>
+  <div style="padding:10px 16px;background:var(--blueL);border-radius:20px;font-size:.85em;font-weight:600;">hate <span style="color:var(--blue);">hiking</span></div>
+  <div style="padding:10px 16px;background:var(--greenL);border-radius:20px;font-size:.85em;font-weight:600;">good at <span style="color:var(--green);">swimming</span></div>
+  <div style="padding:10px 16px;background:var(--greenL);border-radius:20px;font-size:.85em;font-weight:600;">weak in <span style="color:var(--green);">riding</span></div>
+</div>
+<div style="background:var(--redL);padding:10px 14px;border-radius:6px;font-size:.82em;">
+  <span class="dd-stamp warn">多多真实错题</span>
+  <span style="text-decoration:line-through;color:var(--red);">good at <b>do</b> sums</span> → <strong style="color:var(--green);">good at <b>doing</b> sums</strong><br>
+  <span style="text-decoration:line-through;color:var(--red);">loved <b>make</b></span> → <strong style="color:var(--green);">loved <b>making</b></strong><br>
+  <span style="text-decoration:line-through;color:var(--red);">hates <b>listen</b></span> → <strong style="color:var(--green);">hates <b>listening</b></strong><br>
+  <span style="text-decoration:line-through;color:var(--red);">weak in <b>sing</b></span> → <strong style="color:var(--green);">weak in <b>singing</b></strong>
+</div></div>
+
+<div class="card"><h2>🔹 Infinitives with 'to'（带 to 的不定式）</h2>
+<div class="rule-box">would like / want / need + <strong>to + 动词原形</strong></div>
+<div style="background:var(--amberL);padding:10px 14px;border-radius:6px;font-size:.82em;">
+  <span class="dd-stamp warn">多多真实错题</span>
+  <span style="text-decoration:line-through;color:var(--red);">want <b>give up</b></span> → <strong style="color:var(--green);">want <b>to give up</b></strong>（want 后面必须有 to！）
+</div></div>
+</div>
+
+<!-- ======================== UNIT 4 ⭐ ======================== -->
+<div class="panel" id="panel-u4">
+<div class="card" style="border-left:4px solid var(--amber);">
+  <h2 style="color:var(--amber);">⭐ 最重要单元 · 占分 ~20%</h2>
+  <p style="font-size:.82em;color:var(--sub);">考试卷 Section B + C 都来自这里。多多的头号失分区。</p>
+</div>
+
+<div class="card"><h2>🔹 Present Perfect Tense（现在完成时）</h2>
+<div class="rule-box">公式：<strong>have / has + 过去分词</strong></div>
+
+<div style="background:var(--light);padding:14px;border-radius:8px;margin:10px 0;">
+  <div style="font-weight:700;margin-bottom:6px;">🎬 动画时间轴：for vs since</div>
+  <div class="timeline-wrap">
+    <div class="timeline">
+      <div style="font-weight:600;font-size:.82em;color:var(--blue);">📏 for + 一段时间</div>
+      <div class="tl-bar"><div class="tl-fill" style="left:0;width:100%;"></div><div class="tl-dot" style="left:0;"></div><div class="tl-dot" style="left:calc(100% - 7px);"></div><div class="tl-label top" style="left:0;">2008</div><div class="tl-label top" style="left:calc(100% - 28px);">现在</div><div class="tl-label bot" style="left:40%;color:var(--blue);font-weight:700;">← for twelve years →</div></div>
+      <div style="font-size:.75em;color:var(--sub);">像一段<b>路程</b>：从起点走到现在</div>
+    </div>
+    <div class="timeline">
+      <div style="font-weight:600;font-size:.82em;color:var(--amber);">📍 since + 时间点</div>
+      <div class="tl-bar"><div class="tl-fill" style="left:45%;width:55%;"></div><div class="tl-dot" style="left:45%;"></div><div class="tl-dot" style="left:calc(100% - 7px);"></div><div class="tl-stamp" style="left:45%;">📍2010</div><div class="tl-label top" style="left:calc(100% - 28px);">现在</div><div class="tl-label bot" style="left:65%;color:var(--amber);font-weight:700;">since 2010</div></div>
+      <div style="font-size:.75em;color:var(--sub);">像一个<b>路标</b>：从那个点开始</div>
+    </div>
+  </div>
+</div>
+
+<div class="dtree">
+  <div style="font-weight:700;font-size:.85em;">🤔 选 for 还是 since？一步一步判断：</div>
+  <div class="dt-node dt-q">① 看后面的词：是「多久」还是「什么时候」？</div>
+  <div class="dt-node dt-a">📏 「多久/多长时间」→ <b>for</b>（for 12 years / for a long time）</div>
+  <div class="dt-node dt-x">📍 「什么时候/哪个点」→ <b>since</b>（since 2010 / since January / since I was born）</div>
+</div>
+
+<div style="background:var(--redL);padding:10px 14px;border-radius:6px;margin-top:8px;font-size:.82em;">
+  <span class="dd-stamp">多多易错</span>
+  for January → <strong style="color:var(--green);">since January</strong>（一月是时间点！）&nbsp;|&nbsp;
+  since five years → <strong style="color:var(--green);">for five years</strong>（五年是时间段！）
+</div></div>
+
+<div class="card"><h2>🔹 Simple Past vs Present Perfect</h2>
+<div class="rule-box"><strong>有关键时间词 → 决定时态</strong></div>
+
+<div class="dtree">
+  <div class="dt-node dt-q">① 句子里有没有「yesterday / ago / last week / in 2016」？</div>
+  <div class="dt-node dt-a">✅ 有 → <b>一般过去式</b>（Simple Past）<br><span style="font-size:.8em;">例：I <b>won</b> an award <b>in 2016</b>. / I <b>saw</b> the movie <b>yesterday</b>.</span></div>
+  <div class="dt-node dt-q">② 句子里有没有「for / since / ever / never / yet / just / already」？</div>
+  <div class="dt-node dt-a">✅ 有 → <b>现在完成式</b>（Present Perfect）<br><span style="font-size:.8em;">例：He <b>has won</b> three awards <b>since 2016</b>. / I <b>have never been</b> to the USA.</span></div>
+</div>
+
+<div style="margin:12px 0;padding:14px;background:var(--light);border-radius:8px;">
+  <div style="font-weight:700;font-size:.85em;">🔑 关键信号词速查表</div>
+  <table style="width:100%;font-size:.8em;margin-top:6px;">
+    <tr><th style="background:var(--redL);color:var(--red);padding:6px;">→ 一般过去式</th><th style="background:var(--greenL);color:var(--green);padding:6px;">→ 现在完成式</th></tr>
+    <tr><td style="padding:4px;">yesterday, last night/week/month</td><td style="padding:4px;">for (一段时间), since (时间点)</td></tr>
+    <tr><td style="padding:4px;">... ago (two days ago)</td><td style="padding:4px;">ever, never</td></tr>
+    <tr><td style="padding:4px;">in 2016, in 2020 (过去年份)</td><td style="padding:4px;">yet (否定/问句), just, already</td></tr>
+    <tr><td style="padding:4px;">just now, this morning (已过去)</td><td style="padding:4px;">so far, up to now, before</td></tr>
+  </table>
+</div>
+
+<div style="background:var(--redL);padding:10px 14px;border-radius:6px;font-size:.82em;">
+  <span class="dd-stamp">多多最常错</span>
+  <span style="text-decoration:line-through;color:var(--red);">Clara <b>wrote</b> 20 songs <b>since</b> 2020.</span> → <strong style="color:var(--green);">Clara <b>has written</b> 20 songs since 2020.</strong><br>
+  <span style="text-decoration:line-through;color:var(--red);">I <b>have seen</b> that movie <b>yesterday</b>.</span> → <strong style="color:var(--green);">I <b>saw</b> that movie yesterday.</strong>
+</div></div>
+
+<div class="card"><h2>🔹 yet / just / already</h2>
+<div style="display:flex;gap:10px;flex-wrap:wrap;margin:10px 0;">
+  <div style="flex:1;min-width:140px;padding:14px;background:var(--redL);border-radius:8px;text-align:center;">
+    <div style="font-weight:800;color:var(--red);">yet</div><div style="font-size:.78em;">还没… / 已经…了吗？</div>
+    <div style="font-size:.75em;color:var(--sub);margin-top:4px;">否定句 + 问句<br>放在<b>句尾</b></div>
+  </div>
+  <div style="flex:1;min-width:140px;padding:14px;background:var(--greenL);border-radius:8px;text-align:center;">
+    <div style="font-weight:800;color:var(--green);">just</div><div style="font-size:.78em;">刚刚</div>
+    <div style="font-size:.75em;color:var(--sub);margin-top:4px;">have + <b>just</b> + 过去分词</div>
+  </div>
+  <div style="flex:1;min-width:140px;padding:14px;background:var(--blueL);border-radius:8px;text-align:center;">
+    <div style="font-weight:800;color:var(--blue);">already</div><div style="font-size:.78em;">已经</div>
+    <div style="font-size:.75em;color:var(--sub);margin-top:4px;">have + <b>already</b> + 过去分词</div>
+  </div>
+</div></div>
+</div>
+
+<!-- ======================== UNIT 5 ======================== -->
+<div class="panel" id="panel-u5">
+<div class="card"><h2>🔹 so many & so much（如此多…）</h2>
+<div class="rule-box"><strong>so many</strong> + 可数名词复数　｜　<strong>so much</strong> + 不可数名词</div>
+
+<div style="font-weight:700;font-size:.85em;margin:12px 0 6px;">👇 点击每个词，拖进正确的桶（可数 or 不可数）：</div>
+<div class="sort-area" id="sort-area-1">
+  <div class="sort-source" id="sort-source-1">
+    <h4>📦 待分类</h4>
+    <div id="chips-1"></div>
+  </div>
+  <div class="sort-bucket count" id="bucket-count" ondragover="event.preventDefault()" ondrop="drop(event,'count')">
+    <h4>📊 可数 → so many</h4><div id="placed-count"></div>
+  </div>
+  <div class="sort-bucket uncount" id="bucket-uncount" ondragover="event.preventDefault()" ondrop="drop(event,'uncount')">
+    <h4>💧 不可数 → so much</h4><div id="placed-uncount"></div>
+  </div>
+</div>
+<div id="sort-feedback" style="font-size:.82em;margin-top:8px;"></div></div>
+
+<div class="card"><h2>🔹 -ed & -ing adjectives</h2>
+<div class="rule-box"><strong>-ed</strong> = 人自己的感觉　｜　<strong>-ing</strong> = 事物给人的感觉</div>
+<div class="emo-row">
+  <div class="emo-pair" onclick="toggleEmoPair(this)"><div class="face">😫</div><div class="ed">tired</div><div class="ing">→ tiring</div></div>
+  <div class="emo-pair" onclick="toggleEmoPair(this)"><div class="face">🥱</div><div class="ed">bored</div><div class="ing">→ boring</div></div>
+  <div class="emo-pair" onclick="toggleEmoPair(this)"><div class="face">😌</div><div class="ed">relaxed</div><div class="ing">→ relaxing</div></div>
+  <div class="emo-pair" onclick="toggleEmoPair(this)"><div class="face">😍</div><div class="ed">excited</div><div class="ing">→ exciting</div></div>
+  <div class="emo-pair" onclick="toggleEmoPair(this)"><div class="face">😲</div><div class="ed">surprised</div><div class="ing">→ surprising</div></div>
+  <div class="emo-pair" onclick="toggleEmoPair(this)"><div class="face">😞</div><div class="ed">disappointed</div><div class="ing">→ disappointing</div></div>
+  <div class="emo-pair" onclick="toggleEmoPair(this)"><div class="face">😰</div><div class="ed">worried</div><div class="ing">→ worrying</div></div>
+  <div class="emo-pair" onclick="toggleEmoPair(this)"><div class="face">😱</div><div class="ed">frightened</div><div class="ing">→ frightening</div></div>
+</div>
+<div style="font-size:.78em;color:var(--sub);text-align:center;">👆 点击每对看翻转：<span style="color:var(--purple);font-weight:600;">-ed</span> = 我感觉 &nbsp;|&nbsp; <span style="color:var(--amber);font-weight:600;">-ing</span> = 它让人感觉</div>
+<div id="emo-detail" style="margin-top:8px;text-align:center;font-size:.82em;min-height:30px;"></div>
+<div style="background:var(--redL);padding:10px 14px;border-radius:6px;margin-top:8px;font-size:.82em;">
+  <span class="dd-stamp">经典错误</span>
+  <span style="text-decoration:line-through;color:var(--red);">The game was <b>excited</b>. The students were <b>exciting</b>.</span> → <strong style="color:var(--green);">The game was <b>exciting</b>. The students were <b>excited</b>.</strong>
+</div></div>
+</div>
+
+<!-- ======================== UNIT 6 ======================== -->
+<div class="panel" id="panel-u6">
+<div class="card"><h2>🔹 Infinitives with / without 'to'</h2>
+<div class="rule-box">need / want / would like / learn + <strong>to + V</strong>　｜　let / make / see / watch / hear + 人 + <strong>V</strong>（不带to）</div>
+
+<div style="display:flex;gap:10px;flex-wrap:wrap;margin:10px 0;">
+  <div style="flex:1;min-width:180px;background:var(--greenL);padding:12px;border-radius:8px;">
+    <div style="font-weight:700;color:var(--green);margin-bottom:6px;">✅ 带 to</div>
+    <div style="font-size:.8em;">need <b>to</b> hold<br>want <b>to</b> get<br>would like <b>to</b> sit<br>learn <b>to</b> be<br>try <b>to</b> help</div>
+  </div>
+  <div style="flex:1;min-width:180px;background:var(--redL);padding:12px;border-radius:8px;">
+    <div style="font-weight:700;color:var(--red);margin-bottom:6px;">🚫 不带 to（bare infinitive）</div>
+    <div style="font-size:.8em;">let sb <b>have</b><br>make sb <b>feel</b><br>see sb <b>walk</b><br>watch sb <b>do</b><br>hear sb <b>talk</b></div>
+  </div>
+</div>
+<div style="background:var(--redL);padding:10px 14px;border-radius:6px;font-size:.82em;">
+  <span class="dd-stamp">多多易错</span>
+  <span style="text-decoration:line-through;color:var(--red);">Ivy let the old lady <b>to have</b> her seat.</span> → <strong style="color:var(--green);">Ivy let the old lady <b>have</b> her seat.</strong>（let 后面不带 to！）
+</div></div>
+
+<div class="card"><h2>🔹 ought to / ought not to</h2>
+<div class="rule-box"><strong>ought to</strong> + V = 应该做　｜　<strong>ought not to</strong> (oughtn't to) + V = 不应该做</div>
+<div style="display:flex;gap:12px;flex-wrap:wrap;margin:8px 0;">
+  <div style="flex:1;min-width:150px;padding:12px;background:var(--greenL);border-radius:8px;text-align:center;">
+    <div style="font-size:1.8em;">👍</div>
+    <div style="font-weight:700;">ought to</div>
+    <div style="font-size:.78em;">应该</div>
+  </div>
+  <div style="flex:1;min-width:150px;padding:12px;background:var(--redL);border-radius:8px;text-align:center;">
+    <div style="font-size:1.8em;">👎</div>
+    <div style="font-weight:700;">ought NOT to</div>
+    <div style="font-size:.78em;">不应该</div>
+  </div>
+</div></div>
+</div>
+
+<!-- ======================== VERB TABLE ======================== -->
+<div class="panel" id="panel-verbs">
+<div class="card"><h2>📋 必会不规则动词表（30个）</h2>
+<p style="font-size:.8em;color:var(--sub);">按发音规律分6组，每天翻一组，6天一轮。W1听写前5组。</p>
+
+<div class="vgroup-tabs" id="vg-tabs"></div>
+<div class="flash-grid" id="flash-grid"></div>
+<div id="vg-label" style="text-align:center;font-size:.82em;color:var(--sub);margin-top:4px;"></div>
+<p style="text-align:center;font-size:.78em;color:var(--sub);margin-top:8px;">👆 点击卡片翻转，看过去式和过去分词</p></div>
+</div>
+
+<!-- ======================== PRACTICE ======================== -->
+<div class="panel" id="panel-prac">
+<div class="card"><h2>✏️ 基础过关练习（49题）</h2>
+<p style="font-size:.8em;color:var(--sub);">覆盖U1-6所有语法点。做完点「对答案」，看总分。</p>
+<div class="exercise-block" id="ex-block"></div>
+<div class="btn-row">
+  <button class="btn" onclick="checkAllEx()">✅ 对答案</button>
+  <button class="btn o" onclick="resetAllEx()">🔄 重做</button>
+</div>
+<div class="score-bar" id="score-bar">
+  <div class="big" id="score-total">0/49</div>
+  <div class="sub">得分率</div>
+  <div id="score-detail" style="font-size:.78em;margin-top:6px;color:var(--sub);"></div>
+</div></div>
+</div>
+
+</div><!-- container -->
+
+<!-- Verb flashcard data -->
+<script>
+const verbGroups = {
+  '① 基础五虎': [
+    {b:'be',p:'was/were',pp:'been',m:'是'},
+    {b:'have',p:'had',pp:'had',m:'有'},
+    {b:'do',p:'did',pp:'done',m:'做'},
+    {b:'go',p:'went',pp:'gone',m:'去'},
+    {b:'see',p:'saw',pp:'seen',m:'看见'}
+  ],
+  '② -en组': [
+    {b:'eat',p:'ate',pp:'eaten',m:'吃'},
+    {b:'come',p:'came',pp:'come',m:'来'},
+    {b:'give',p:'gave',pp:'given',m:'给'},
+    {b:'take',p:'took',pp:'taken',m:'拿'},
+    {b:'write',p:'wrote',pp:'written',m:'写'}
+  ],
+  '③ -t/d不变组': [
+    {b:'make',p:'made',pp:'made',m:'做'},
+    {b:'get',p:'got',pp:'got',m:'得到'},
+    {b:'know',p:'knew',pp:'known',m:'知道'},
+    {b:'buy',p:'bought',pp:'bought',m:'买'},
+    {b:'bring',p:'brought',pp:'brought',m:'带来'}
+  ],
+  '④ i-a-u组': [
+    {b:'win',p:'won',pp:'won',m:'赢'},
+    {b:'run',p:'ran',pp:'run',m:'跑'},
+    {b:'sing',p:'sang',pp:'sung',m:'唱'},
+    {b:'swim',p:'swam',pp:'swum',m:'游泳'},
+    {b:'speak',p:'spoke',pp:'spoken',m:'说话'}
+  ],
+  '⑤ -t结尾组': [
+    {b:'lead',p:'led',pp:'led',m:'带领'},
+    {b:'meet',p:'met',pp:'met',m:'遇见'},
+    {b:'feel',p:'felt',pp:'felt',m:'感觉'},
+    {b:'send',p:'sent',pp:'sent',m:'发送'},
+    {b:'spend',p:'spent',pp:'spent',m:'花费'}
+  ],
+  '⑥ -ght/特殊组': [
+    {b:'teach',p:'taught',pp:'taught',m:'教'},
+    {b:'think',p:'thought',pp:'thought',m:'想'},
+    {b:'hear',p:'heard',pp:'heard',m:'听到'},
+    {b:'read',p:'read',pp:'read',m:'读'},
+    {b:'admire',p:'admired',pp:'admired',m:'敬佩⚠️'}
+  ]
+};
+
+// Tab switching
+function switchTab(name) {
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById('panel-'+name).classList.add('active');
+  event.target.classList.add('active');
+  if (name==='verbs') buildVerbTable();
+  if (name==='prac') buildExercises();
+  if (name==='u5') buildSortGame();
+}
+
+// Unit 5 sorting game
+const sortWords = [
+  {w:'people',c:'count'},{w:'money',c:'uncount'},{w:'photos',c:'count'},
+  {w:'noise',c:'uncount'},{w:'children',c:'count'},{w:'fun',c:'uncount'},
+  {w:'homework',c:'uncount'},{w:'friends',c:'count'},{w:'rain',c:'uncount'},
+  {w:'animals',c:'count'},{w:'food',c:'uncount'},{w:'souvenirs',c:'count'}
+];
+let sortRemaining = [];
+
+function buildSortGame() {
+  sortRemaining = [...sortWords];
+  document.getElementById('chips-1').innerHTML = sortRemaining.map((sw,i) =>
+    `<span class="chip" id="chip-${i}" draggable="true" ondragstart="drag(event,'${i}')">${sw.w}</span>`
+  ).join('');
+  document.getElementById('placed-count').innerHTML = '';
+  document.getElementById('placed-uncount').innerHTML = '';
+  document.getElementById('sort-feedback').innerHTML = '';
+}
+
+function drag(ev, idx) {
+  ev.dataTransfer.setData('text', idx);
+}
+function drop(ev, bucket) {
+  ev.preventDefault();
+  const idx = ev.dataTransfer.getData('text');
+  const chip = document.getElementById('chip-'+idx);
+  if (!chip || chip.classList.contains('placed')) return;
+  const sw = sortRemaining[parseInt(idx)];
+  const dest = document.getElementById('placed-'+bucket);
+  chip.classList.add('placed');
+  if (sw.c === bucket) {
+    chip.style.background='#d1fae5'; chip.style.borderColor='#16a34a';
+    dest.innerHTML += chip.outerHTML.replace('id="chip-'+idx+'"','');
+    chip.remove();
+    sortRemaining[parseInt(idx)] = null;
+    document.getElementById('sort-feedback').innerHTML = '<span style="color:var(--green);">✅ 正确！</span>';
+    setTimeout(()=>{ if (document.getElementById('sort-feedback')) document.getElementById('sort-feedback').innerHTML=''; },1500);
+  } else {
+    chip.classList.add('wrong-place');
+    setTimeout(()=>chip.classList.remove('wrong-place'),300);
+    document.getElementById('sort-feedback').innerHTML = '<span style="color:var(--red);">❌ 不对哦，再想想！</span>';
+  }
+}
+
+// Emotion pair toggle
+function toggleEmoPair(el) {
+  document.querySelectorAll('.emo-pair').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  const ed = el.querySelector('.ed').textContent;
+  const ing = el.querySelector('.ing').textContent.replace('→ ','');
+  document.getElementById('emo-detail').innerHTML = `
+    <span style="color:var(--purple);font-weight:600;">I was <b>${ed}</b>.</span> = 我<b>感到</b>${getEmoCN(ed)}<br>
+    <span style="color:var(--amber);font-weight:600;">It was <b>${ing}</b>.</span> = 这件事<b>令人</b>${getEmoCN(ed)}
+  `;
+}
+function getEmoCN(w) {
+  const m = {tired:'累',bored:'无聊',relaxed:'放松',excited:'兴奋',surprised:'惊讶',disappointed:'失望',worried:'担心',frightened:'害怕'};
+  return m[w]||'';
+}
+
+// Verb table
+let currentVGroup = '① 基础五虎';
+function buildVerbTable() {
+  const tabs = document.getElementById('vg-tabs');
+  tabs.innerHTML = Object.keys(verbGroups).map((g,i)=>
+    `<button class="${g===currentVGroup?'active':''}" onclick="switchVGroup('${g}')">${g}</button>`
+  ).join('');
+  renderFlashcards();
+}
+function switchVGroup(g) {
+  currentVGroup = g;
+  document.querySelectorAll('#vg-tabs button').forEach(b=>b.classList.remove('active'));
+  event.target.classList.add('active');
+  renderFlashcards();
+}
+function renderFlashcards() {
+  const grid = document.getElementById('flash-grid');
+  const verbs = verbGroups[currentVGroup];
+  document.getElementById('vg-label').textContent = currentVGroup;
+  grid.innerHTML = verbs.map((v,i)=>
+    `<div class="flash-card" id="fc-${i}" onclick="this.classList.toggle('flipped')">
+      <div class="flash-inner">
+        <div class="flash-front"><span class="base">${v.b}</span><span class="meaning">${v.m}</span></div>
+        <div class="flash-back"><span class="past">Past: ${v.p}</span><span class="pp">P.P.: ${v.pp}</span></div>
+      </div>
+    </div>`
+  ).join('');
+}
+
+// Exercises
+const exData = [
+  // U1
+  {u:1,q:"The soup is ___ (too salty / salty too).",a:"too salty",h:"too 在形容词<b>前面</b>！",t:"choice"},
+  {u:1,q:"This box is ___ (too heavy / too big) for me to carry.",a:"too heavy",h:"搬不动→太重",t:"choice"},
+  {u:1,q:"Is there ___ (anything / everything) in the box?",a:"anything",h:"疑问句用 anything！",t:"choice"},
+  {u:1,q:"___ (Everyone / Anyone) wants to go to the party.",a:"Everyone",h:"肯定句→ Everyone",t:"choice"},
+  {u:1,q:"I didn't see ___ (anyone / someone) at the park.",a:"anyone",h:"否定句 didn't → anyone",t:"choice"},
+  {u:1,q:"___ (No one / Anyone) knew the answer.",a:"No one",h:"没人知道→ No one",t:"choice"},
+  {u:1,q:"There is ___ (something / anything) on the table.",a:"something",h:"肯定句→ something",t:"choice"},
+  // U2
+  {u:2,q:"The girl ___ (in / with) a blue dress is my sister.",a:"in",h:"dress是衣物→ in！",t:"choice"},
+  {u:2,q:"The man ___ (with / in) a beard is my uncle.",a:"with",h:"beard是外貌→ with！",t:"choice"},
+  {u:2,q:"Who's the boy ___ (in / with) the red hat?",a:"in",h:"hat是衣物→ in！",t:"choice"},
+  {u:2,q:"This book is ___ (mine / my).",a:"mine",h:"后面不接名词→ mine",t:"choice"},
+  {u:2,q:"Those crayons are ___ (theirs / their).",a:"theirs",h:"不接名词→ theirs",t:"choice"},
+  {u:2,q:"Whose jacket is this? It's ___ (hers / her).",a:"hers",h:"不接名词→ hers",t:"choice"},
+  {u:2,q:"These stickers belong to us. They are ___ (ours / our).",a:"ours",h:"belong to us → ours",t:"choice"},
+  // U3
+  {u:3,q:"Lily enjoys ___ (read / reading) in the library.",a:"reading",h:"enjoy + V-ing！",t:"choice"},
+  {u:3,q:"He is good at ___ (dance / dancing).",a:"dancing",h:"good at + V-ing！",t:"choice"},
+  {u:3,q:"Tom hates ___ (hike / hiking) in the country park.",a:"hiking",h:"hate + V-ing！去e加ing",t:"choice"},
+  {u:3,q:"I am weak in ___ (do / doing) sums.",a:"doing",h:"weak in + V-ing！",t:"choice"},
+  {u:3,q:"She loves ___ (sing / singing).",a:"singing",h:"love + V-ing！",t:"choice"},
+  {u:3,q:"I'd like ___ (to be / be) a singer.",a:"to be",h:"would like + to + V！",t:"choice"},
+  {u:3,q:"You need ___ (to practise / practise) every day.",a:"to practise",h:"need + to + V！",t:"choice"},
+  {u:3,q:"My family want ___ (to go / go) cycling.",a:"to go",h:"want + to + V！",t:"choice"},
+  // U4
+  {u:4,q:"I ___ (have been / has been) a teacher for 12 years.",a:"have been",h:"I → have！",t:"choice"},
+  {u:4,q:"She ___ (has played / have played) the violin since 2010.",a:"has played",h:"She → has！",t:"choice"},
+  {u:4,q:"How long have you ___ (admire / admired) him?",a:"admired",h:"have + 过去分词！加d",t:"choice"},
+  {u:4,q:"It ___ (have been / has been) one of my favourite films.",a:"has been",h:"It = 单数 → has！",t:"choice"},
+  {u:4,q:"I've been a lawyer ___ (for / since) 2008.",a:"since",h:"2008是时间点→ since",t:"choice"},
+  {u:4,q:"Mrs Wong has played the violin ___ (for / since) 15 years.",a:"for",h:"15年是一段时间→ for",t:"choice"},
+  {u:4,q:"He has taught here ___ (since / for) January.",a:"since",h:"January是时间点→ since",t:"choice"},
+  {u:4,q:"We have known each other ___ (for / since) more than 7 years.",a:"for",h:"7年是一段时间→ for",t:"choice"},
+  {u:4,q:"I ___ (won / have won) an award in 2016.",a:"won",h:"有 in 2016 → 一般过去！",t:"choice"},
+  {u:4,q:"He ___ (has won / won) three awards since 2016.",a:"has won",h:"有 since → 现在完成！",t:"choice"},
+  {u:4,q:"Daniel ___ (entered / has entered) the contest last month.",a:"entered",h:"有 last month → 一般过去！",t:"choice"},
+  // U5
+  {u:5,q:"There were ___ (so many / so much) people in the park.",a:"so many",h:"people可数→ so many",t:"choice"},
+  {u:5,q:"We paid ___ (so much / so many) money for the tickets.",a:"so much",h:"money不可数→ so much",t:"choice"},
+  {u:5,q:"There was ___ (so much / so many) noise in the room.",a:"so much",h:"noise不可数→ so much",t:"choice"},
+  {u:5,q:"I took ___ (so many / so much) photos.",a:"so many",h:"photos可数→ so many",t:"choice"},
+  {u:5,q:"I was ___ (bored / boring) during the film.",a:"bored",h:"我的感觉→ -ed！",t:"choice"},
+  {u:5,q:"The film was ___ (boring / bored).",a:"boring",h:"电影给人的感觉→ -ing！",t:"choice"},
+  {u:5,q:"The roller coaster ride was ___ (exciting / excited).",a:"exciting",h:"过山车令人…→ -ing！",t:"choice"},
+  {u:5,q:"Eric felt ___ (relaxed / relaxing) after the holiday.",a:"relaxed",h:"Eric的感觉→ -ed！",t:"choice"},
+  // U6
+  {u:6,q:"Joe needs ___ (hold / to hold) the handrail.",a:"to hold",h:"need + to + V！",t:"choice"},
+  {u:6,q:"Ivy let the old lady ___ (have / to have) her seat.",a:"have",h:"let + 人 + V（不带to）！",t:"choice"},
+  {u:6,q:"It made me ___ (feel / to feel) so happy.",a:"feel",h:"make + 人 + V（不带to）！",t:"choice"},
+  {u:6,q:"We ___ (ought to / ought) queue up.",a:"ought to",h:"ought to + V！不能漏to",t:"choice"},
+  {u:6,q:"We ___ (oughtn't to / oughtn't) litter.",a:"oughtn't to",h:"oughtn't to = ought not to",t:"choice"},
+  {u:6,q:"He ___ (ought not to / ought not) talk loudly.",a:"ought not to",h:"ought not to + V",t:"choice"}
+];
+
+function buildExercises() {
+  let html = '', currU = 0;
+  const names = {1:'U1',2:'U2',3:'U3',4:'⭐ U4',5:'U5',6:'U6'};
+  exData.forEach((ex,i)=>{
+    if(ex.u!==currU){ currU=ex.u; html+=`<h4 style="margin:14px 0 6px;color:var(--blue);">${names[ex.u]}</h4>`; }
+    html+=`<div class="ex-row" id="exr-${i}">
+      <span class="ex-num">${i+1}</span>
+      <span class="ex-q">${ex.q}</span>
+      <input type="text" id="exi-${i}" placeholder="选一个…" onkeydown="if(event.key==='Enter')checkOneEx(${i})">
+      <span class="reveal" id="exh-${i}">✅ <b>${ex.a}</b> — ${ex.h}</span>
+    </div>`;
+  });
+  document.getElementById('ex-block').innerHTML = html;
+  document.getElementById('score-bar').style.display = 'none';
+}
+
+function checkOneEx(i) {
+  const input = document.getElementById('exi-'+i);
+  const hint = document.getElementById('exh-'+i);
+  const ans = input.value.trim().toLowerCase();
+  const correct = exData[i].a.toLowerCase();
+  if(ans===correct){ input.className='correct'; hint.className='reveal good show'; }
+  else if(ans!==''){ input.className='wrong'; hint.className='reveal bad show'; hint.innerHTML=`❌ 你的答案：<b>${input.value}</b> → 正确：<b>${exData[i].a}</b> — ${exData[i].h}`; }
+}
+
+function checkAllEx() {
+  let correct=0, scores={};
+  exData.forEach((ex,i)=>{
+    scores[ex.u] = scores[ex.u] || {c:0,t:0};
+    scores[ex.u].t++;
+    const input = document.getElementById('exi-'+i);
+    const hint = document.getElementById('exh-'+i);
+    const ans = input.value.trim().toLowerCase();
+    const ca = ex.a.toLowerCase();
+    if(ans===ca){ input.className='correct'; hint.className='reveal good show'; hint.innerHTML=`✅ <b>${ex.a}</b> — ${ex.h}`; correct++; scores[ex.u].c++; }
+    else if(ans!==''){ input.className='wrong'; hint.className='reveal bad show'; hint.innerHTML=`❌ → 正确：<b>${ex.a}</b> — ${ex.h}`; }
+    else { hint.className='reveal good show'; hint.innerHTML=`⏭ 未答 → <b>${ex.a}</b> — ${ex.h}`; }
+  });
+  const pct = Math.round(correct/exData.length*100);
+  document.getElementById('score-total').textContent = `${correct}/${exData.length} (${pct}%)`;
+  let det = '';
+  const names = {1:'U1',2:'U2',3:'U3',4:'U4⭐',5:'U5',6:'U6'};
+  for(let u=1;u<=6;u++){ if(scores[u]) det+=`${names[u]}: ${scores[u].c}/${scores[u].t} | `; }
+  document.getElementById('score-detail').textContent = det;
+  document.getElementById('score-bar').style.display = 'block';
+  document.getElementById('score-bar').scrollIntoView({behavior:'smooth'});
+}
+
+function resetAllEx() {
+  exData.forEach((ex,i)=>{
+    document.getElementById('exi-'+i).value = '';
+    document.getElementById('exi-'+i).className = '';
+    document.getElementById('exh-'+i).className = 'reveal';
+  });
+  document.getElementById('score-bar').style.display = 'none';
+}
+
+// Init
+buildSortGame();
+</script>
+
+</body>
+</html>

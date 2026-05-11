@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>多多常識科 — 混淆概念對比表 + 答題框架</title>
+<style>
+  :root {
+    --bg: #f7f9f5;
+    --card-bg: #ffffff;
+    --primary: #3a7d44;
+    --primary-light: #e8f4ea;
+    --accent: #e67e22;
+    --accent-light: #fef5ec;
+    --danger: #c0392b;
+    --danger-light: #fdedec;
+    --space: #2c3e80;
+    --space-light: #eef0f9;
+    --text: #2d3436;
+    --text-light: #636e72;
+    --border: #dfe6e9;
+    --shadow: 0 2px 12px rgba(0,0,0,0.06);
+    --radius: 12px;
+    --font: 'Segoe UI', 'Noto Sans TC', 'Microsoft JhengHei', sans-serif;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    padding: 20px;
+  }
+  .container { max-width: 860px; margin:0 auto; }
+
+  h1 {
+    font-size: 1.8em;
+    color: var(--primary);
+    text-align: center;
+    margin-bottom: 6px;
+  }
+  .subtitle {
+    text-align: center;
+    color: var(--text-light);
+    font-size: 0.95em;
+    margin-bottom: 28px;
+  }
+
+  /* Section tabs */
+  .tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .tab-btn {
+    padding: 10px 20px;
+    border: 2px solid var(--border);
+    border-radius: 24px;
+    background: white;
+    cursor: pointer;
+    font-size: 0.95em;
+    font-family: var(--font);
+    transition: all 0.2s;
+  }
+  .tab-btn:hover { border-color: var(--primary); color: var(--primary); }
+  .tab-btn.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+  }
+
+  .section { display:none; }
+  .section.active { display:block; }
+
+  /* Comparison cards */
+  .compare-grid {
+    display: grid;
+    gap: 16px;
+  }
+  .compare-card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .compare-card .header {
+    padding: 14px 20px;
+    font-weight: 700;
+    font-size: 1.05em;
+    color: white;
+  }
+  .compare-card .body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+  .compare-card .col {
+    padding: 16px 20px;
+    border-right: 1px solid var(--border);
+  }
+  .compare-card .col:last-child { border-right: none; }
+  .compare-card .col-label {
+    font-weight: 700;
+    font-size: 0.9em;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .compare-card .col-detail {
+    font-size: 0.9em;
+    color: var(--text-light);
+    line-height: 1.6;
+  }
+  .compare-card .key-diff {
+    grid-column: 1 / -1;
+    padding: 10px 20px;
+    background: #fef9e7;
+    font-size: 0.88em;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .key-diff .icon { font-size: 1.1em; flex-shrink: 0; }
+
+  /* Color themes per topic */
+  .theme-green .header { background: var(--primary); }
+  .theme-green .col-label { color: var(--primary); }
+  .theme-space .header { background: var(--space); }
+  .theme-space .col-label { color: var(--space); }
+  .theme-accent .header { background: var(--accent); }
+  .theme-accent .col-label { color: var(--accent); }
+
+  /* Framework cards */
+  .framework-card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    border-left: 4px solid var(--primary);
+  }
+  .framework-card.health { border-left-color: var(--primary); }
+  .framework-card.science { border-left-color: var(--space); }
+  .framework-card.affairs { border-left-color: var(--accent); }
+  .framework-card h3 {
+    font-size: 1.1em;
+    margin-bottom: 6px;
+  }
+  .framework-card .badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 10px;
+    font-size: 0.8em;
+    font-weight: 600;
+    margin-left: 8px;
+  }
+  .badge-health { background: var(--primary-light); color: var(--primary); }
+  .badge-science { background: var(--space-light); color: var(--space); }
+  .badge-affairs { background: var(--accent-light); color: var(--accent); }
+
+  .steps {
+    display: flex;
+    gap: 10px;
+    margin: 14px 0;
+    flex-wrap: wrap;
+  }
+  .step {
+    flex: 1;
+    min-width: 120px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 12px;
+    text-align: center;
+  }
+  .step-num {
+    display: inline-block;
+    width: 28px; height: 28px;
+    line-height: 28px;
+    border-radius: 14px;
+    font-weight: 700;
+    font-size: 0.85em;
+    color: white;
+    margin-bottom: 6px;
+  }
+  .step.one .step-num { background: var(--primary); }
+  .step.two .step-num { background: var(--accent); }
+  .step.three .step-num { background: var(--space); }
+  .step-title {
+    font-weight: 700;
+    font-size: 0.88em;
+    margin-bottom: 4px;
+  }
+  .step-desc {
+    font-size: 0.8em;
+    color: var(--text-light);
+  }
+
+  .example-box {
+    background: #fafbfc;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-top: 14px;
+  }
+  .example-box .q {
+    font-weight: 700;
+    color: var(--danger);
+    font-size: 0.92em;
+    margin-bottom: 8px;
+  }
+  .example-box .a {
+    font-size: 0.9em;
+    line-height: 1.8;
+  }
+  .example-box .a span { 
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+  .hl-green { background: #d5f5e3; color: #1e8449; }
+  .hl-orange { background: #fdebd0; color: #b9770e; }
+  .hl-blue { background: #d6eaf8; color: #2471a3; }
+
+  /* Self-test */
+  .selftest {
+    background: linear-gradient(135deg, #f0f7f0, #e8f0e8);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-top: 24px;
+  }
+  .selftest h3 {
+    font-size: 1.15em;
+    margin-bottom: 16px;
+    color: var(--primary);
+  }
+  .quiz-item {
+    background: white;
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .quiz-item:hover { box-shadow: var(--shadow); }
+  .quiz-item .question {
+    font-weight: 600;
+    font-size: 0.95em;
+  }
+  .quiz-item .answer {
+    display: none;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--border);
+    color: var(--primary);
+    font-size: 0.9em;
+  }
+  .quiz-item.show .answer { display: block; }
+  .quiz-hint {
+    font-size: 0.8em;
+    color: var(--text-light);
+    margin-top: 4px;
+    font-style: italic;
+  }
+
+  @media (max-width: 600px) {
+    body { padding: 12px; }
+    .compare-card .body { grid-template-columns: 1fr; }
+    .compare-card .col { border-right: none; border-bottom: 1px solid var(--border); }
+    .steps { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>🌿 多多常識呈分試 — 混淆概念 + 答題框架</h1>
+<p class="subtitle">第4冊愛惜身體（第1-4課）+ 第6冊宇宙窺探（第1-3課）｜6月9日考試</p>
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="switchTab('compare')">🔍 混淆概念對比</button>
+  <button class="tab-btn" onclick="switchTab('framework')">✏️ 答題框架</button>
+  <button class="tab-btn" onclick="switchTab('selftest')">✅ 自測練習</button>
+</div>
+
+<!-- ============ TAB 1: 混淆概念對比 ============ -->
+<div class="section active" id="tab-compare">
+<div class="compare-grid">
+
+<!-- 随意动作 vs 反射动作 -->
+<div class="compare-card theme-green">
+  <div class="header">🧠 隨意動作 vs 反射動作</div>
+  <div class="body">
+    <div class="col">
+      <div class="col-label">🟢 隨意動作</div>
+      <div class="col-detail">
+        由<strong>大腦</strong>控制<br>
+        經過<strong>思考</strong><br>
+        速度較<strong>慢</strong><br><br>
+        例子：下棋、彈琴、踢足球
+      </div>
+    </div>
+    <div class="col">
+      <div class="col-label">🔵 反射動作</div>
+      <div class="col-detail">
+        由<strong>脊髓</strong>控制<br>
+        <strong>不經</strong>大腦思考<br>
+        快速<strong>即時</strong><br><br>
+        例子：碰到熱鍋縮手、敲膝蓋小腿踢起
+      </div>
+    </div>
+    <div class="key-diff">
+      <span class="icon">💡</span>
+      <span><strong>關鍵區分：</strong>問自己「有沒有經過思考？」— 有=隨意，無=反射。反射動作的作用是<strong>保護身體</strong>，避開危險。</span>
+    </div>
+  </div>
+</div>
+
+<!-- 一手烟 vs 二手烟 vs 三手烟 -->
+<div class="compare-card theme-accent">
+  <div class="header">🚬 一手煙 vs 二手煙 vs 三手煙</div>
+  <div class="body">
+    <div class="col">
+      <div class="col-label">🟠 一手煙</div>
+      <div class="col-detail">
+        吸煙者<strong>自己</strong>吸入的煙
+      </div>
+    </div>
+    <div class="col">
+      <div class="col-label">🟡 二手煙</div>
+      <div class="col-detail">
+        吸煙者<strong>呼出</strong>的煙 + 煙草<strong>燃燒</strong>時冒出的煙
+      </div>
+    </div>
+  </div>
+  <div class="body" style="grid-template-columns:1fr;">
+    <div class="col" style="border-right:none;">
+      <div class="col-label">🔴 三手煙</div>
+      <div class="col-detail">
+        吸煙後<strong>殘留</strong>在衣服、牆壁、家具上的有毒化學物質。<br>
+        <strong>⚠️ 幼兒威脅最大：</strong>幼兒爬行摸東西後把手放進嘴裏，容易吸入殘留毒物。
+      </div>
+    </div>
+  </div>
+  <div class="key-diff">
+    <span class="icon">💡</span>
+    <span><strong>關鍵區分：</strong>一手=自己吸；二手=空氣中飄的；三手=殘留在物品上的。三手煙最容易被忽略但對幼兒傷害最大。</span>
+  </div>
+</div>
+
+<!-- 自转 vs 公转 -->
+<div class="compare-card theme-space">
+  <div class="header">🌍 自轉 vs 公轉</div>
+  <div class="body">
+    <div class="col">
+      <div class="col-label">🔵 自轉</div>
+      <div class="col-detail">
+        繞<strong>地軸</strong>轉動<br>
+        方向：<strong>自西向東</strong><br>
+        周期：約<strong>24小時</strong>（一天）<br>
+        產生：<strong>晝夜交替</strong>、時差
+      </div>
+    </div>
+    <div class="col">
+      <div class="col-label">🟣 公轉</div>
+      <div class="col-detail">
+        繞<strong>太陽</strong>轉動<br>
+        周期：約<strong>365日</strong>（一年）<br>
+        <strong>地軸傾斜</strong> → 太陽直射/斜射<br>
+        產生：<strong>四季變化</strong>
+      </div>
+    </div>
+    <div class="key-diff">
+      <span class="icon">💡</span>
+      <span><strong>關鍵區分：</strong>自轉=自己轉圈（一天），產生白天黑夜；公轉=繞太陽轉圈（一年），加上地軸傾斜，產生春夏秋冬。</span>
+    </div>
+  </div>
+</div>
+
+<!-- 日蝕 vs 月蝕 -->
+<div class="compare-card theme-space">
+  <div class="header">🌑 日蝕 vs 月蝕</div>
+  <div class="body">
+    <div class="col">
+      <div class="col-label">☀️ 日蝕</div>
+      <div class="col-detail">
+        <strong>月球</strong>在太陽和地球之間<br>
+        三者成一直線<br>
+        月球遮擋射向地球的太陽光<br>
+        發生在<strong>農曆初一</strong><br>
+        發生在<strong>白天</strong>
+      </div>
+    </div>
+    <div class="col">
+      <div class="col-label">🌕 月蝕</div>
+      <div class="col-detail">
+        <strong>地球</strong>在太陽和月球之間<br>
+        三者成一直線<br>
+        地球遮擋射向月球的太陽光<br>
+        發生在<strong>農曆十五（滿月）</strong><br>
+        發生在<strong>夜晚</strong>
+      </div>
+    </div>
+    <div class="key-diff">
+      <span class="icon">💡</span>
+      <span><strong>關鍵區分：日蝕=月遮日（初一白天），月蝕=地遮月（十五夜晚）。</strong>記口訣：「日蝕月球中間站，月蝕地球擋光線。」</span>
+    </div>
+  </div>
+</div>
+
+<!-- 恒星 vs 行星 vs 卫星 -->
+<div class="compare-card theme-space">
+  <div class="header">⭐ 恆星 vs 行星 vs 衛星</div>
+  <div class="body">
+    <div class="col">
+      <div class="col-label">⭐ 恆星</div>
+      <div class="col-detail">
+        本身<strong>會發光</strong><br>
+        例子：<strong>太陽</strong>
+      </div>
+    </div>
+    <div class="col">
+      <div class="col-label">🪐 行星</div>
+      <div class="col-detail">
+        本身<strong>不會發光</strong><br>
+        圍繞<strong>恆星</strong>運行<br>
+        例子：<strong>地球</strong>
+      </div>
+    </div>
+  </div>
+  <div class="body" style="grid-template-columns:1fr;">
+    <div class="col" style="border-right:none;">
+      <div class="col-label">🌙 衛星</div>
+      <div class="col-detail">
+        本身<strong>不會發光</strong>，圍繞<strong>行星</strong>運行。例子：<strong>月球</strong>
+      </div>
+    </div>
+  </div>
+  <div class="key-diff">
+    <span class="icon">💡</span>
+    <span><strong>關鍵區分：</strong>恆星=會發光；行星=繞恆星；衛星=繞行星。記層級：宇宙 ⊃ 銀河系 ⊃ 太陽系 ⊃ 地球（行星）</span>
+  </div>
+</div>
+
+<!-- 八大行星速记 -->
+<div class="compare-card theme-green">
+  <div class="header">🪐 八大行星速記表</div>
+  <div class="body" style="grid-template-columns:1fr;">
+    <div class="col" style="border-right:none;">
+      <div class="col-detail" style="font-size:0.92em; line-height:2;">
+        <strong>由近到遠：</strong><br>
+        ① 水星 — 最近太陽、體積最小<br>
+        ② 金星 — 表面溫度最高<br>
+        ③ <strong>地球</strong> — 有液態水和生命 🏠<br>
+        ④ 火星 — 表面橙紅色<br>
+        ⑤ 木星 — 體積最大<br>
+        ⑥ 土星 — 有寬闊明亮光環<br>
+        ⑦ 天王星 — 有暗淡光環<br>
+        ⑧ 海王星 — 距離太陽最遠
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+</div>
+
+<!-- ============ TAB 2: 答題框架 ============ -->
+<div class="section" id="tab-framework">
+
+<div class="framework-card health">
+  <h3>🏥 健康類情境題 <span class="badge badge-health">吸煙/喝酒/毒品</span></h3>
+  <div class="steps">
+    <div class="step one">
+      <div class="step-num">①</div>
+      <div class="step-title">指出危害</div>
+      <div class="step-desc">說出具體有害物質和影響</div>
+    </div>
+    <div class="step two">
+      <div class="step-num">②</div>
+      <div class="step-title">說明影響</div>
+      <div class="step-desc">個人 + 他人/家庭 + 社會</div>
+    </div>
+    <div class="step three">
+      <div class="step-num">③</div>
+      <div class="step-title">正確做法</div>
+      <div class="step-desc">拒絕方法 + 求助對象</div>
+    </div>
+  </div>
+  <div class="example-box">
+    <div class="q">❓ 問：朋友慫恿你吸煙，你會怎麼做？為甚麼？</div>
+    <div class="a">
+      我會<span class="hl-green">堅決拒絕</span>。因為吸煙會損害個人健康，煙中的<span class="hl-orange">焦油可致癌</span>、<span class="hl-orange">尼古丁令人上癮</span>。而且二手煙和三手煙也會<span class="hl-green">危害身邊的人</span>。我會<span class="hl-blue">找藉口馬上離開</span>，事後<span class="hl-blue">告訴老師或父母</span>。
+    </div>
+  </div>
+  <div class="example-box" style="margin-top:10px;">
+    <div class="q">❓ 問：為甚麼不應該喝酒？</div>
+    <div class="a">
+      因為酒精會<span class="hl-orange">麻醉神經，降低判斷力和反應力</span>，酒後駕駛會危害生命安全且<span class="hl-orange">違法</span>。長期酗酒更會損害<span class="hl-green">肝臟和腦部</span>，導致肝癌、記憶力衰退等嚴重疾病。
+    </div>
+  </div>
+</div>
+
+<div class="framework-card science">
+  <h3>🔬 科學類情境題 <span class="badge badge-science">地球/月球/太空</span></h3>
+  <div class="steps">
+    <div class="step one">
+      <div class="step-num">①</div>
+      <div class="step-title">解釋原理</div>
+      <div class="step-desc">說出相關的科學原理</div>
+    </div>
+    <div class="step two">
+      <div class="step-num">②</div>
+      <div class="step-title">舉出實例</div>
+      <div class="step-desc">用具體數字/名稱說明</div>
+    </div>
+    <div class="step three">
+      <div class="step-num">③</div>
+      <div class="step-title">說明影響</div>
+      <div class="step-desc">這個現象帶來甚麼結果</div>
+    </div>
+  </div>
+  <div class="example-box">
+    <div class="q">❓ 問：為甚麼香港和英國有時差？</div>
+    <div class="a">
+      因為<span class="hl-blue">地球會自轉</span>，各地受太陽照射的時間不同。全球分為<span class="hl-green">24個時區</span>，香港在<span class="hl-orange">東八區（UTC+8）</span>，英國在<span class="hl-orange">零時區</span>，所以兩地時間相差約<span class="hl-green">8小時</span>。
+    </div>
+  </div>
+  <div class="example-box" style="margin-top:10px;">
+    <div class="q">❓ 問：為甚麼會有四季變化？</div>
+    <div class="a">
+      因為<span class="hl-blue">地軸是傾斜的</span>。地球<span class="hl-green">公轉</span>時，太陽有時<span class="hl-orange">直射</span>北半球（北半球是夏季），有時<span class="hl-orange">斜射</span>北半球（北半球是冬季），循環形成四季。
+    </div>
+  </div>
+</div>
+
+<div class="framework-card affairs">
+  <h3>📰 時事/分析題 <span class="badge badge-affairs">政策/措施評價</span></h3>
+  <div class="steps">
+    <div class="step one">
+      <div class="step-num">①</div>
+      <div class="step-title">個人層面</div>
+      <div class="step-desc">對個人健康/生活的好處</div>
+    </div>
+    <div class="step two">
+      <div class="step-num">②</div>
+      <div class="step-title">社會層面</div>
+      <div class="step-desc">對社會/公眾的影響</div>
+    </div>
+    <div class="step three">
+      <div class="step-num">③</div>
+      <div class="step-title">總結立場</div>
+      <div class="step-desc">簡短重申你的看法</div>
+    </div>
+  </div>
+  <div class="example-box">
+    <div class="q">❓ 問：你支持政府擴大禁煙區嗎？為甚麼？</div>
+    <div class="a">
+      我<span class="hl-green">支持</span>。從<span class="hl-orange">個人健康</span>看，擴大禁煙區可減少市民接觸二手煙，降低患癌風險。從<span class="hl-blue">社會層面</span>看，有助推動無煙文化，減輕醫療負擔。所以這是一項<span class="hl-green">有利公眾健康的政策</span>。
+    </div>
+  </div>
+</div>
+
+</div>
+
+<!-- ============ TAB 3: 自測練習 ============ -->
+<div class="section" id="tab-selftest">
+<div class="selftest">
+  <h3>✅ 點擊題目看答案（共10題，涵蓋全部7課）</h3>
+
+  <div class="quiz-item" onclick="this.classList.toggle('show')">
+    <div class="question">1. 為甚麼碰到燙手物體會立刻縮手？</div>
+    <div class="quiz-hint">（提示：想一下是誰在控制這個動作？）</div>
+    <div class="answer">這是反射動作，由脊髓直接控制，不經大腦思考，能快速保護身體免受燙傷。</div>
+  </div>
+
+  <div class="quiz-item" onclick="this.classList.toggle('show')">
+    <div class="question">2. 泌尿系統的四個器官按順序排列是？</div>
+    <div class="quiz-hint">（提示：從過濾到排出）</div>
+    <div class="answer">腎 → 輸尿管 → 膀胱 → 尿道</div>
+  </div>
+
+  <div class="quiz-item" onclick="this.classList.toggle('show')">
+    <div class="question">3. 煙草中的三種主要有害物質是甚麼？各有甚麼危害？</div>
+    <div class="quiz-hint">（提示：致癌、上癮、降低帶氧）</div>
+    <div class="answer">焦油：刺激呼吸道，可致癌，令牙齒指甲變黃。<br>尼古丁：令人上癮，收縮血管，加速衰老。<br>一氧化碳：降低血液帶氧能力。</div>
+  </div>
+
+  <div class="quiz-item" onclick="this.classList.toggle('show')">
+    <div class="question">4. 三手煙是甚麼？為甚麼對幼兒威脅最大？</div>
+    <div class="quiz-hint">（提示：殘留在哪裏？幼兒有甚麼習慣？）</div>
+    <div class="answer">三手煙是吸煙後殘留在衣服、牆壁、家具上的有毒化學物質。幼兒喜歡爬行摸東西並把手放進嘴裏，容易通過皮膚接觸或進食吸入毒物。</div>
+  </div>
+
+  <div class="quiz-item" onclick="this.classList.toggle('show')">
+    <div class="question">5. 自轉和公轉有甚麼分別？（旋轉中心、周期、產生的現象）</div>
+    <div class="quiz-hint">（提示：一個繞自己轉，一個繞太陽轉）</div>
+    <div class="answer">自轉：繞地軸，24小時，產生晝夜交替和時差。<br>公轉：繞太陽，365日，地軸傾斜產生四季變化。</div>
+  </div>
+
+  <div class="quiz-item" onclick="this.classList.toggle('show')">
+    <div class="question">6. 日蝕和月蝕有甚麼不同？（誰在中間？農曆哪天？）</div>
+    <div class="quiz-hint">（提示：日蝕=月遮日，月蝕=地遮月）</div>
+    <div class="answer">日蝕：月球在日地之間，農曆初一，發生在白天。<br>月蝕：地球在日月之間，農曆十五（滿月），發生在夜晚。</div>
+  </div>
+
+  <div class="quiz-item" onclick="this.classList.toggle('show')">
+    <div class="question">7. 恆星、行星、衛星有甚麼分別？各舉一例。</div>
+    <div class="quiz-hint">（提示：誰會發光？誰繞誰轉？）</div>
+    <div class="answer">恆星：本身會發光（太陽）。<br>行星：不發光，繞恆星運行（地球）。<br>衛星：不發光，繞行星運行（月球）。</div>
+  </div>
+
+  <div class="quiz-item" onclick="this.classList.toggle('show')">
+    <div class="question">8. 八大行星按距離太陽由近到遠排列？</div>
+    <div class="quiz-hint">（提示：水金地火木土天海）</div>
+    <div class="answer">水星 → 金星 → 地球 → 火星 → 木星 → 土星 → 天王星 → 海王星</div>
+  </div>
+
+  <div class="quiz-item" onclick="this.classList.toggle('show')">
+    <div class="question">9. 為甚麼每天要喝足夠的水？</div>
+    <div class="quiz-hint">（提示：水的兩個用途 + 為甚麼會流失）</div>
+    <div class="answer">水能幫助運送養分，並幫助腎過濾血液廢物以尿液排出。身體通過排汗和呼氣不斷失水，需補充以維持水分平衡。</div>
+  </div>
+
+  <div class="quiz-item" onclick="this.classList.toggle('show')">
+    <div class="question">10. 朋友慫恿你吸毒，你該怎麼做？（用三步框架回答）</div>
+    <div class="quiz-hint">（提示：說不 → 離開 → 告訴大人）</div>
+    <div class="answer">首先堅決說「不」，表明立場；其次找藉口馬上離開現場；事後必須告訴老師或父母，因為吸毒違法且危害終身。</div>
+  </div>
+
+</div>
+</div>
+
+</div>
+
+<script>
+function switchTab(name) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+</body>
+</html>

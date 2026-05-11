@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>多多·改错 Proofreading 4套</title>
+<style>
+:root {
+  --bg:#fafafa; --card:#fff; --text:#1a1a1a; --sub:#555; --light:#f5f5f5;
+  --blue:#1e40af; --blueL:#dbeafe; --red:#dc2626; --redL:#fef2f2;
+  --green:#16a34a; --greenL:#f0fdf4; --amber:#d97706; --amberL:#fffbeb;
+  --purple:#7c3aed; --purpleL:#f5f3ff; --border:#e5e5e5;
+  --radius:10px; --shadow:0 1px 3px rgba(0,0,0,.05);
+}
+* { box-sizing:border-box; margin:0; padding:0; }
+body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans TC',sans-serif; background:var(--bg); color:var(--text); line-height:1.65; }
+.container { max-width:860px; margin:0 auto; padding:16px 12px; }
+.header { text-align:center; padding:16px 0 8px; }
+.header h1 { font-size:1.45em; font-weight:800; color:var(--red); }
+.header .sub { font-size:.8em; color:var(--sub); }
+
+nav { display:flex; flex-wrap:wrap; gap:3px; margin:12px 0; border-bottom:1px solid var(--border); padding-bottom:4px; overflow-x:auto; }
+nav button { flex-shrink:0; padding:7px 13px; font-size:.78em; border:none; background:none; color:var(--sub); cursor:pointer; border-bottom:2px solid transparent; transition:all .15s; font-family:inherit; }
+nav button:hover { color:var(--red); }
+nav button.active { color:var(--red); border-bottom-color:var(--red); font-weight:700; }
+nav button.cheat { color:var(--amber); }
+nav button.cheat.active { color:var(--amber); border-bottom-color:var(--amber); }
+
+.panel { display:none; }
+.panel.active { display:block; animation:fadeIn .25s; }
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
+
+.card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:20px; margin-bottom:14px; box-shadow:var(--shadow); }
+.card h2 { font-size:1.05em; color:var(--red); margin-bottom:4px; }
+.card h3 { font-size:.9em; margin:12px 0 6px; }
+
+.cheat-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:10px 0; }
+.cheat-card { padding:14px; border-radius:8px; border:2px solid var(--border); }
+.cheat-card .c-icon { font-size:1.3em; }
+.cheat-card .c-title { font-weight:700; font-size:.88em; margin:4px 0; }
+.cheat-card .c-signal { font-size:.76em; color:var(--sub); }
+.cheat-card .c-fix { font-size:.78em; color:var(--green); font-weight:600; margin-top:4px; }
+.cheat-card.c1 { border-color:#fca5a5; background:#fff5f5; }
+.cheat-card.c2 { border-color:#fcd34d; background:#fffdf5; }
+.cheat-card.c3 { border-color:#93c5fd; background:#f8faff; }
+.cheat-card.c4 { border-color:#a5b4fc; background:#f8f9ff; }
+.cheat-card.c5 { border-color:#6ee7b7; background:#f5fffa; }
+.cheat-card.c6 { border-color:#f9a8d4; background:#fff5fa; }
+
+.pr-row { display:flex; gap:10px; align-items:flex-start; padding:12px; margin:6px 0; background:var(--card); border:1px solid var(--border); border-radius:8px; flex-wrap:wrap; }
+.pr-row .pr-num { width:30px; height:30px; line-height:30px; text-align:center; background:var(--red); color:#fff; border-radius:50%; font-size:.8em; font-weight:700; flex-shrink:0; }
+.pr-row .pr-body { flex:1; min-width:240px; }
+.pr-row .pr-sentence { font-size:.9em; margin-bottom:4px; }
+.pr-row .pr-sentence .err { color:var(--red); text-decoration:underline; text-decoration-color:var(--red); text-underline-offset:4px; font-weight:600; }
+.pr-row .pr-type { font-size:.72em; color:var(--sub); background:var(--light); display:inline-block; padding:2px 8px; border-radius:4px; }
+.pr-row .pr-input { margin-top:6px; display:flex; gap:6px; align-items:center; flex-wrap:wrap; }
+.pr-row .pr-input label { font-size:.76em; font-weight:600; white-space:nowrap; }
+.pr-row .pr-input input { border:2px solid var(--border); border-radius:6px; padding:6px 10px; font-size:.84em; width:100%; max-width:300px; font-family:inherit; }
+.pr-row .pr-input input:focus { outline:none; border-color:var(--red); }
+.pr-row .pr-input input.ok { border-color:var(--green); background:var(--greenL); }
+.pr-row .pr-input input.bad { border-color:var(--red); background:var(--redL); }
+.pr-row .pr-reveal { display:none; width:100%; margin-top:6px; padding:8px 12px; background:var(--greenL); border-radius:6px; font-size:.8em; }
+.pr-row .pr-reveal.on { display:block; }
+.pr-row .pr-reveal .fix { color:var(--green); font-weight:700; }
+.pr-row .pr-reveal .why { color:var(--sub); margin-top:2px; }
+
+.progress-bar { height:8px; background:var(--border); border-radius:4px; margin:16px 0 8px; overflow:hidden; }
+.progress-fill { height:100%; background:var(--green); border-radius:4px; transition:width .3s; width:0; }
+
+.score-box { display:none; text-align:center; padding:16px; background:var(--card); border:1px solid var(--border); border-radius:var(--radius); margin-top:12px; }
+.score-box .big { font-size:2em; font-weight:800; }
+
+.btn-row { display:flex; gap:8px; flex-wrap:wrap; margin:10px 0; }
+.btn { display:inline-flex; align-items:center; gap:4px; padding:8px 16px; border-radius:24px; border:none; background:var(--red); color:#fff; font-size:.82em; font-weight:600; cursor:pointer; font-family:inherit; transition:all .15s; }
+.btn:hover { opacity:.88; }
+.btn.o { background:var(--card); color:var(--red); border:1.5px solid var(--red); }
+
+@media (max-width:600px) { .container { padding:8px; } .cheat-grid { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <h1>🔍 改错 Proofreading · 4套专项</h1>
+  <p class="sub">上次 Section E 得 0/10 → 目标 6+/10 | 每题2分 = 追回12分</p>
+</div>
+
+<nav id="main-nav">
+  <button class="cheat active" data-panel="cheat">📋 改错口诀卡</button>
+  <button data-panel="s1">第1套·分类</button>
+  <button data-panel="s2">第2套·分类</button>
+  <button data-panel="s3">第3套·混合</button>
+  <button data-panel="s4">第4套·实战</button>
+</nav>
+
+<!-- ==================== CHEAT SHEET ==================== -->
+<div class="panel active" id="panel-cheat">
+<div class="card"><h2>📋 改错口诀卡 — 做题前先读一遍</h2>
+<p style="font-size:.8em;color:var(--sub);">考试 Section E 有5行，每行一个错。以下6类错误覆盖了95%的考点。先认出哪一类，再改。</p></div>
+
+<div class="cheat-grid">
+<div class="cheat-card c1"><div class="c-icon">⏱</div><div class="c-title">① 时态错</div><div class="c-signal">🔎 信号：yesterday / ago / last week / in 2016 → 过去式！<br>🔎 信号：for / since / yet / just / already → 现在完成！</div><div class="c-fix">✅ 改法：用<b>时间词</b>决定时态。过去时间 → V-ed / 不规则过去式。for/since → have/has + 过去分词</div></div>
+<div class="cheat-card c2"><div class="c-icon">🔤</div><div class="c-title">② 过去分词/动词形错</div><div class="c-signal">🔎 信号：have + 动词原形（❌）<br>🔎 信号：不规则动词过去分词拼错</div><div class="c-fix">✅ 改法：have/has 后面必须是<b>过去分词</b>！went→gone, wrote→written, ate→eaten</div></div>
+<div class="cheat-card c3"><div class="c-icon">🔗</div><div class="c-title">③ 动词模式错</div><div class="c-signal">🔎 信号：enjoy/like + to V（❌）<br>🔎 信号：want/need + V-ing（❌）<br>🔎 信号：let/make + to V（❌）</div><div class="c-fix">✅ 改法：enjoy/like/love/hate + <b>V-ing</b> | want/need/would like + <b>to V</b> | let/make/see/watch + <b>V（不带to）</b></div></div>
+<div class="cheat-card c4"><div class="c-icon">🎭</div><div class="c-title">④ -ed / -ing 形容词错</div><div class="c-signal">🔎 信号：I am boring（❌ 除非你承认自己很无聊）<br>🔎 信号：The film is excited（❌）</div><div class="c-fix">✅ 改法：<b>人</b>的感觉 → <b>-ed</b> | <b>事物</b>给人的感觉 → <b>-ing</b></div></div>
+<div class="cheat-card c5"><div class="c-icon">📊</div><div class="c-title">⑤ 数量词/代词错</div><div class="c-signal">🔎 信号：so many + 不可数（❌）<br>🔎 信号：so much + 可数（❌）<br>🔎 信号：mine book（❌）<br>🔎 信号：肯定句用 anyone（❌）</div><div class="c-fix">✅ 改法：many+可数 / much+不可数 | mine 后面<b>不接</b>名词 | 肯定句用 someone</div></div>
+<div class="cheat-card c6"><div class="c-icon">📝</div><div class="c-title">⑥ 介词/小品词错</div><div class="c-signal">🔎 信号：good at + V原形（❌）<br>🔎 信号：in + 外貌（❌）<br>🔎 信号：with + 衣物（❌）<br>🔎 信号：ought + V（漏to）</div><div class="c-fix">✅ 改法：good at / weak in + <b>V-ing</b> | in + 衣物 / with + 外貌 | ought <b>to</b></div></div>
+</div>
+
+<div class="card"><h3>🔑 多多做题三步法</h3>
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin:8px 0;">
+<div style="flex:1;min-width:140px;padding:12px;background:var(--redL);border-radius:8px;text-align:center;"><div style="font-weight:800;color:var(--red);font-size:1.1em;">1️⃣ 认类别</div><div style="font-size:.78em;">这句话在考什么语法？从上面6类里选</div></div>
+<div style="flex:1;min-width:140px;padding:12px;background:var(--amberL);border-radius:8px;text-align:center;"><div style="font-weight:800;color:var(--amber);font-size:1.1em;">2️⃣ 找证据</div><div style="font-size:.78em;">圈出告诉你「这里有问题」的信号词</div></div>
+<div style="flex:1;min-width:140px;padding:12px;background:var(--greenL);border-radius:8px;text-align:center;"><div style="font-weight:800;color:var(--green);font-size:1.1em;">3️⃣ 写改正</div><div style="font-size:.78em;">写出<b>改正后的整个短句</b>，不是只改一个词</div></div>
+</div></div></div>
+
+<!-- ==================== SET 1 ==================== -->
+<div class="panel" id="panel-s1">
+<div class="card"><h2>第1套 · 分类练（已标错误类型）</h2>
+<p style="font-size:.8em;color:var(--sub);">10题。每题已标类别，帮多多建立「认出错误类型」的第一反应。</p></div>
+<div id="q-s1"></div>
+<div class="progress-bar"><div id="p-s1" class="progress-fill"></div></div>
+<div class="score-box" id="score-s1"><div class="big" id="big-s1">0/10</div><div class="msg" id="msg-s1"></div></div>
+<div class="btn-row"><button class="btn" data-action="check" data-set="s1">✅ 对答案</button><button class="btn o" data-action="reset" data-set="s1">🔄 重做</button></div>
+</div>
+
+<!-- ==================== SET 2 ==================== -->
+<div class="panel" id="panel-s2">
+<div class="card"><h2>第2套 · 分类练（已标错误类型）</h2>
+<p style="font-size:.8em;color:var(--sub);">10题。类型标签延续，但难度略升。</p></div>
+<div id="q-s2"></div>
+<div class="progress-bar"><div id="p-s2" class="progress-fill"></div></div>
+<div class="score-box" id="score-s2"><div class="big" id="big-s2">0/10</div><div class="msg" id="msg-s2"></div></div>
+<div class="btn-row"><button class="btn" data-action="check" data-set="s2">✅ 对答案</button><button class="btn o" data-action="reset" data-set="s2">🔄 重做</button></div>
+</div>
+
+<!-- ==================== SET 3 ==================== -->
+<div class="panel" id="panel-s3">
+<div class="card"><h2>第3套 · 混合（不标类型）</h2>
+<p style="font-size:.8em;color:var(--sub);">10题混合，类型不标——多多必须自己判断。</p></div>
+<div id="q-s3"></div>
+<div class="progress-bar"><div id="p-s3" class="progress-fill"></div></div>
+<div class="score-box" id="score-s3"><div class="big" id="big-s3">0/10</div><div class="msg" id="msg-s3"></div></div>
+<div class="btn-row"><button class="btn" data-action="check" data-set="s3">✅ 对答案</button><button class="btn o" data-action="reset" data-set="s3">🔄 重做</button></div>
+</div>
+
+<!-- ==================== SET 4 ==================== -->
+<div class="panel" id="panel-s4">
+<div class="card"><h2>第4套 · 实战模拟</h2>
+<p style="font-size:.8em;color:var(--sub);">10题，完全模拟考试 Section E 格式。建议10分钟内完成。</p></div>
+<div id="q-s4"></div>
+<div class="progress-bar"><div id="p-s4" class="progress-fill"></div></div>
+<div class="score-box" id="score-s4"><div class="big" id="big-s4">0/10</div><div class="msg" id="msg-s4"></div></div>
+<div class="btn-row"><button class="btn" data-action="check" data-set="s4">✅ 对答案</button><button class="btn o" data-action="reset" data-set="s4">🔄 重做</button></div>
+</div>
+
+</div>
+
+<script>
+(function(){
+  // ========== DATA ==========
+  var SETS = {
+    s1:[
+      {q:'I have <span class="err">went</span> to Ocean Park three times.',a:'gone',type:'② 过去分词',why:'have 后面必须跟过去分词。go → went → gone'},
+      {q:'She <span class="err">have</span> played the violin for five years.',a:'has',type:'⑥ 小品词',why:'She = 单数 → has（不是 have）'},
+      {q:'My uncle has been a pilot <span class="err">for</span> 2015.',a:'since',type:'① 时态错',why:'2015 是时间点 → since。for 跟时间段。'},
+      {q:'I enjoy <span class="err">to read</span> books about animals.',a:'reading',type:'③ 动词模式',why:'enjoy + V-ing！不是 enjoy to read。'},
+      {q:'The baby was <span class="err">frightening</span> when she heard the thunder.',a:'frightened',type:'④ -ed/-ing',why:'baby 是人 → 用 -ed（感到害怕）。frightening = 令人害怕。'},
+      {q:'This bag is <span class="err">mine bag</span>.',a:'mine',type:'⑤ 代词错',why:'mine 后面不接名词！要么说 mine 要么说 my bag。'},
+      {q:'The film was <span class="err">excited</span>. I almost fell asleep.',a:'boring',type:'④ -ed/-ing',why:'差点睡着 → 电影很无聊（boring）。excited = 兴奋，和 almost fell asleep 矛盾！'},
+      {q:'Lily wants <span class="err">being</span> a lawyer in the future.',a:'to be',type:'③ 动词模式',why:'want + to + V原形！不是 want being。'},
+      {q:'There were <span class="err">so much</span> people at the concert.',a:'so many',type:'⑤ 数量词',why:'people 是可数名词 → so many。much 跟不可数。'},
+      {q:'Ivy let the old lady <span class="err">to sit</span> down first.',a:'sit',type:'③ 动词模式',why:'let + 人 + V原形（不带 to）！'}
+    ],
+    s2:[
+      {q:'It <span class="err">have</span> been a very long day.',a:'has',type:'⑥ 小品词',why:'It = 单数 → has！多多上次考试就错这个。'},
+      {q:'I have <span class="err">admire</span> my father since I was a child.',a:'admired',type:'② 过去分词',why:'have + 过去分词。admire → admired（加 d）。'},
+      {q:'We have waited for the bus <span class="err">since</span> twenty minutes.',a:'for',type:'① 时态错',why:'twenty minutes = 一段时间 → for。since 跟时间点。'},
+      {q:'Tom is good at <span class="err">play</span> the piano.',a:'playing',type:'⑥ 小品词',why:'good at + V-ing！不是 good at play。'},
+      {q:'The movie was so <span class="err">bored</span> that I left early.',a:'boring',type:'④ -ed/-ing',why:'电影令人无聊 → boring。bored = 人感到无聊。'},
+      {q:'I didn\'t see <span class="err">someone</span> at the entrance.',a:'anyone',type:'⑤ 代词错',why:'否定句 didn\'t → anyone。肯定句才用 someone。'},
+      {q:'Her mother made her <span class="err">to clean</span> her room.',a:'clean',type:'③ 动词模式',why:'make + 人 + V原形（不带 to）！'},
+      {q:'Clara <span class="err">has wrote</span> many songs since 2020.',a:'has written',type:'② 过去分词',why:'write 的过去分词是 written（不是 wrote）。'},
+      {q:'The girl <span class="err">with</span> a blue dress is very kind.',a:'in',type:'⑥ 介词错',why:'dress 是衣物 → 用 in！with 跟外貌特征。'},
+      {q:'We <span class="err">ought</span> be kind to elderly people.',a:'ought to',type:'⑥ 小品词',why:'ought 后面必须有 to！ought to + V原形。'}
+    ],
+    s3:[
+      {q:'I have <span class="err">ate</span> too much cake today.',a:'eaten',type:'',why:'eat 的过去分词是 eaten（不是 ate）。'},
+      {q:'The children were <span class="err">exciting</span> about the trip.',a:'excited',type:'',why:'孩子是人 → 感到兴奋 excited。exciting = 令人兴奋的。'},
+      {q:'My brother is weak in <span class="err">ride</span> a bicycle.',a:'riding',type:'',why:'weak in + V-ing！'},
+      {q:'She <span class="err">has went</span> to the library just now.',a:'went',type:'',why:'just now = 刚才（具体过去）→ 一般过去式 went！不是 has went。'},
+      {q:'There isn\'t <span class="err">something</span> in the fridge.',a:'anything',type:'',why:'否定句 isn\'t → anything。'},
+      {q:'We need <span class="err">hold</span> the handrail on the bus.',a:'to hold',type:'',why:'need + to + V原形！'},
+      {q:'The man <span class="err">in</span> a long beard is my grandfather.',a:'with',type:'',why:'beard 胡须是外貌特征 → with。in 跟衣物。'},
+      {q:'I <span class="err">have seen</span> that movie yesterday.',a:'saw',type:'',why:'有 yesterday → 一般过去式！不能用现在完成。'},
+      {q:'We had <span class="err">so much</span> fun activities at the camp.',a:'so many',type:'',why:'activities 可数 → so many。'},
+      {q:'Don\'t worry. I have <span class="err">already finish</span> my project.',a:'already finished',type:'',why:'have + 过去分词！finish → finished。'}
+    ],
+    s4:[
+      {q:'Jason <span class="err">has started</span> learning cooking last year.',a:'started',type:'',why:'last year = 具体过去时间 → 一般过去式 started！'},
+      {q:'I have <span class="err">never went</span> to Japan before.',a:'never been',type:'',why:'have + 过去分词。go 的过去分词是 gone/been。'},
+      {q:'The students felt <span class="err">disappointing</span> with their results.',a:'disappointed',type:'',why:'学生是人 → 感到失望 disappointed。disappointing = 令人失望的。'},
+      {q:'He enjoys <span class="err">to swim</span> in the sea every summer.',a:'swimming',type:'',why:'enjoy + V-ing！'},
+      {q:'We have lived in this building <span class="err">for</span> last September.',a:'since',type:'',why:'last September = 时间点 → since。'},
+      {q:'These crayons belong to us. They are <span class="err">ours crayons</span>.',a:'ours',type:'',why:'ours 后面不接名词。要么说 ours 要么说 our crayons。'},
+      {q:'The teacher let us <span class="err">to leave</span> early yesterday.',a:'leave',type:'',why:'let + 人 + V原形（不带 to）！'},
+      {q:'I was <span class="err">too much</span> tired to do my homework.',a:'too',type:'',why:'too + 形容词！不是 too much tired。'},
+      {q:'Everyone <span class="err">are</span> excited about the school trip.',a:'is',type:'',why:'Everyone = 单数！Everyone is。不定代词作主语用单数。'},
+      {q:'You <span class="err">oughtn\'t</span> talk loudly in the library.',a:'oughtn\'t to',type:'',why:'oughtn\'t 后面必须有 to！oughtn\'t to + V原形。'}
+    ]
+  };
+
+  var built = {};
+
+  function build(setId) {
+    if (built[setId]) return;
+    var data = SETS[setId];
+    var html = '';
+    data.forEach(function(item, i){
+      html += '<div class="pr-row" id="' + setId + '-r' + i + '">';
+      html += '<div class="pr-num">' + (i+1) + '</div>';
+      html += '<div class="pr-body">';
+      html += '<div class="pr-sentence">' + item.q + '</div>';
+      if (item.type) html += '<div class="pr-type">类型：' + item.type + '</div>';
+      html += '<div class="pr-input"><label>改正：</label><input type="text" id="' + setId + '-i' + i + '" placeholder="写出改正后的短句…"></div>';
+      html += '<div class="pr-reveal" id="' + setId + '-h' + i + '">';
+      html += '<div class="fix">✅ ' + item.a + '</div>';
+      html += '<div class="why">💡 ' + item.why + '</div>';
+      html += '</div></div></div>';
+    });
+    document.getElementById('q-' + setId).innerHTML = html;
+    built[setId] = true;
+  }
+
+  function checkSet(setId) {
+    build(setId);
+    var data = SETS[setId], correct = 0;
+    data.forEach(function(item, i){
+      var inp = document.getElementById(setId + '-i' + i);
+      var hint = document.getElementById(setId + '-h' + i);
+      var ans = inp.value.trim().toLowerCase().replace(/\s+/g, ' ');
+      var exp = item.a.toLowerCase().replace(/\s+/g, ' ');
+      if (ans === exp) { inp.className = 'ok'; correct++; }
+      else if (ans !== '') { inp.className = 'bad'; }
+      hint.className = 'pr-reveal on';
+    });
+    var pct = Math.round(correct / data.length * 100);
+    document.getElementById('p-' + setId).style.width = pct + '%';
+    var sb = document.getElementById('score-' + setId);
+    sb.style.display = 'block';
+    var big = document.getElementById('big-' + setId);
+    big.textContent = correct + '/10 (' + pct + '%)';
+    big.style.color = pct >= 70 ? 'var(--green)' : (pct >= 40 ? 'var(--amber)' : 'var(--red)');
+    document.getElementById('msg-' + setId).textContent = pct >= 70 ? '🎉 进步明显！' : (pct >= 40 ? '👍 有进步！错题回口诀卡看对应类别。' : '💪 回口诀卡，先认类别再做题。');
+    sb.scrollIntoView({behavior:'smooth'});
+  }
+
+  function resetSet(setId) {
+    build(setId);
+    SETS[setId].forEach(function(item, i){
+      var inp = document.getElementById(setId + '-i' + i);
+      inp.value = '';
+      inp.className = '';
+      document.getElementById(setId + '-h' + i).className = 'pr-reveal';
+    });
+    document.getElementById('p-' + setId).style.width = '0';
+    document.getElementById('score-' + setId).style.display = 'none';
+  }
+
+  // ========== NAVIGATION ==========
+  var navButtons = document.querySelectorAll('#main-nav button');
+  navButtons.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var panelId = this.getAttribute('data-panel');
+      // Deactivate all
+      document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('active'); });
+      navButtons.forEach(function(b){ b.classList.remove('active'); });
+      // Activate target
+      var panel = document.getElementById('panel-' + panelId);
+      if (panel) panel.classList.add('active');
+      this.classList.add('active');
+      // Build questions on first visit
+      if (panelId !== 'cheat') build(panelId);
+    });
+  });
+
+  // ========== ACTION BUTTONS ==========
+  document.querySelectorAll('[data-action]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var action = this.getAttribute('data-action');
+      var setId = this.getAttribute('data-set');
+      if (action === 'check') checkSet(setId);
+      if (action === 'reset') resetSet(setId);
+    });
+  });
+
+  // Pre-build set 1
+  build('s1');
+})();
+</script>
+
+</body>
+</html>

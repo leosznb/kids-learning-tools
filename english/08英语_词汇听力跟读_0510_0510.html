@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>多多英文詞彙聽力 · 紙上聽寫</title>
+<style>
+:root{--bg:#fafaf9;--card:#fff;--text:#1a1a1a;--t2:#555;--border:#e5e5e3;--accent:#b45309;--accent2:#d97706;--g:#16a34a;--r2:#dc2626;--b:#2563eb;--r:10px;--sh:0 1px 3px rgba(0,0,0,0.06);--font:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Microsoft JhengHei",sans-serif}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.75;-webkit-font-smoothing:antialiased;font-size:16px}
+.header{background:var(--card);border-bottom:1px solid var(--border);padding:1rem 0.8rem 0.5rem;text-align:center;position:sticky;top:0;z-index:100;box-shadow:var(--sh)}
+.header h1{font-size:1.3rem;font-weight:800;color:var(--accent)}
+.header .sub{font-size:0.82rem;color:var(--t2);margin-top:0.2rem}
+.tab-bar{display:flex;gap:0.3rem;justify-content:center;margin-top:0.6rem;flex-wrap:wrap}
+.tab-bar button{border:2px solid var(--border);background:var(--card);padding:0.45rem 1.1rem;border-radius:8px;font-size:0.85rem;cursor:pointer;transition:all .15s;font-weight:700;font-family:var(--font)}
+.tab-bar button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.tab-bar button:not(.active):hover{border-color:var(--accent);color:var(--accent)}
+
+.container{max-width:800px;margin:0 auto;padding:1rem 0.8rem 2rem}
+.page{display:none}.page.active{display:block}
+
+/* Speed & controls */
+.ctrl-bar{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:0.8rem 1rem;margin-bottom:0.8rem;display:flex;flex-wrap:wrap;align-items:center;gap:0.6rem}
+.ctrl-bar .ctrl-label{font-weight:700;font-size:0.85rem;color:var(--accent)}
+.ctrl-bar .speed-group{display:flex;gap:0.3rem}
+.ctrl-bar .speed-btn{border:1px solid var(--border);background:var(--card);padding:0.3rem 0.7rem;border-radius:6px;font-size:0.82rem;cursor:pointer;font-weight:700;font-family:var(--font);transition:all .15s}
+.ctrl-bar .speed-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.ctrl-bar .action-btn{background:var(--accent);color:#fff;border:none;padding:0.45rem 1.2rem;border-radius:8px;font-size:0.9rem;font-weight:700;cursor:pointer;font-family:var(--font)}
+.ctrl-bar .action-btn:disabled{opacity:0.4;cursor:not-allowed}
+.ctrl-bar .action-btn:hover:not(:disabled){opacity:0.9}
+
+/* Select all/deselect */
+.sel-bar{display:flex;gap:0.4rem;align-items:center;margin-bottom:0.5rem}
+.sel-bar button{border:1px solid var(--border);background:var(--card);padding:0.3rem 0.7rem;border-radius:6px;font-size:0.78rem;cursor:pointer;font-family:var(--font)}
+.sel-bar button:hover{border-color:var(--accent);color:var(--accent)}
+.sel-bar .sel-count{font-size:0.82rem;color:var(--t2);margin-left:auto}
+
+/* Word grid */
+.word-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:0.4rem;margin-bottom:0.8rem}
+.word-item{border:1px solid var(--border);border-radius:8px;padding:0.5rem 0.6rem;display:flex;align-items:center;gap:0.5rem;font-size:0.88rem;background:var(--card);transition:all .15s}
+.word-item input[type=checkbox]{width:20px;height:20px;accent-color:var(--accent);cursor:pointer;flex-shrink:0}
+.word-item .w-text{font-size:0.9rem;line-height:1.4;flex:1}
+
+/* Play status */
+.play-status{background:var(--card);border:2px solid var(--accent);border-radius:10px;padding:0.8rem 1rem;margin-bottom:0.8rem;display:none;text-align:center}
+.play-status.show{display:block}
+.play-status .ps-title{font-size:1rem;font-weight:700;color:var(--accent)}
+.play-status .ps-progress{margin:0.3rem 0;height:12px;background:#e5e7eb;border-radius:6px;overflow:hidden}
+.play-status .ps-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:6px;transition:width .3s;width:0%}
+.play-status .ps-count{font-size:0.78rem;color:var(--t2)}
+.play-status .ps-word{font-size:2.8rem;font-weight:800;color:var(--accent);margin:0.5rem 0 0.3rem;letter-spacing:0.05em;display:none;line-height:1.3;text-align:center}
+.play-status .ps-word.show{display:block}
+.play-status .ps-word .ps-ph{font-size:1.4rem;font-weight:600;color:var(--t2);display:block;margin-top:0.2rem}
+
+/* After playback - self-check */
+.check-area{border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:0.8rem}
+.check-area .ca-hd{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;padding:0.6rem 1rem;font-weight:700;font-size:0.95rem;display:flex;justify-content:space-between}
+.check-area .ca-body{background:var(--card);padding:0.5rem 0.8rem;max-height:600px;overflow-y:auto}
+.check-item{padding:0.5rem 0.4rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap}
+.check-item:last-child{border-bottom:none}
+.check-item .ci-num{background:var(--accent);color:#fff;min-width:24px;height:24px;border-radius:50%;text-align:center;line-height:24px;font-size:0.72rem;font-weight:700;flex-shrink:0}
+.check-item .ci-word{font-size:1rem;font-weight:700;display:none;min-width:80px;color:var(--text)}
+.check-item .ci-word.show{display:inline}
+.check-item .ci-reveal{background:var(--accent);color:#fff;border:none;padding:0.3rem 0.7rem;border-radius:6px;font-size:0.78rem;cursor:pointer;font-family:var(--font)}
+.check-item .ci-reveal.revealed{background:var(--t2)}
+.check-item .ci-btn{width:36px;height:36px;border-radius:50%;border:2px solid;font-size:1rem;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-family:var(--font);transition:all .15s;display:none}
+.check-item .ci-btn.show{display:inline-flex}
+.check-item .ci-btn.ok{border-color:var(--g);color:var(--g);background:#f0fdf4}
+.check-item .ci-btn.ok:hover{background:var(--g);color:#fff}
+.check-item .ci-btn.ok.done{background:var(--g);color:#fff}
+.check-item .ci-btn.fail{border-color:var(--r2);color:var(--r2);background:#fef2f2}
+.check-item .ci-btn.fail:hover{background:var(--r2);color:#fff}
+.check-item .ci-btn.fail.done{background:var(--r2);color:#fff}
+.check-item .ci-result{font-size:0.82rem;font-weight:700;margin-left:0.3rem;display:none}
+.check-item .ci-result.show{display:inline}
+
+/* Score bar */
+.score-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:0.6rem 1rem;margin-bottom:0.8rem;display:flex;align-items:center;gap:0.6rem;flex-wrap:wrap}
+.score-card .sc-label{font-weight:700;font-size:0.82rem}
+.score-card .sc-bar{flex:1;min-width:100px;height:22px;background:#e5e7eb;border-radius:11px;overflow:hidden}
+.score-card .sc-fill{height:100%;background:linear-gradient(90deg,var(--g),#22c55e);border-radius:11px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:0.72rem;font-weight:700;transition:width .3s;width:0%}
+.score-card .sc-num{font-size:0.85rem;font-weight:700;color:var(--accent);white-space:nowrap}
+
+/* Wrong words */
+.wrong-box{background:#fef2f2;border:2px solid #fecaca;border-radius:10px;padding:0.6rem 1rem;margin-bottom:0.8rem;display:none}
+.wrong-box.show{display:block}
+.wrong-box .wb-hd{font-weight:700;font-size:0.9rem;color:var(--r2);margin-bottom:0.3rem}
+.wrong-box .wb-words{display:flex;flex-wrap:wrap;gap:0.3rem}
+.wrong-box .wb-item{background:#fff;border:1px solid #fecaca;border-radius:5px;padding:0.25rem 0.5rem;font-size:0.82rem;font-weight:600}
+
+.empty-msg{padding:2rem 1rem;text-align:center;color:var(--t2);font-size:0.85rem}
+
+/* Reset */
+.reset-row{text-align:center;margin:0.8rem 0}
+.reset-row button{background:var(--card);border:1px solid var(--border);padding:0.4rem 1.2rem;border-radius:8px;font-size:0.82rem;cursor:pointer;font-family:var(--font)}
+.reset-row button:hover{border-color:var(--r2);color:var(--r2)}
+
+.footer{text-align:center;color:#bbb;font-size:0.7rem;padding:1.5rem 0 0.5rem}
+
+@media(max-width:600px){
+  .header{padding:0.7rem 0.5rem 0.3rem}.header h1{font-size:1.1rem}
+  .word-grid{grid-template-columns:1fr 1fr}.word-item{font-size:0.82rem;padding:0.4rem}
+  .ctrl-bar{flex-direction:column;align-items:stretch}
+  .check-item{font-size:0.85rem}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+<h1>📝 多多英文詞彙聽力</h1>
+<p class="sub">播放讀音 → 紙上聽寫 → 自己核對 → 錯詞收集</p>
+<div class="tab-bar">
+<button class="active" onclick="switchGroup(0,this)">📦 第一組 (30詞)</button>
+<button onclick="switchGroup(1,this)">📦 第二組 (31詞)</button>
+</div>
+</div>
+
+<div class="container">
+
+<div class="page active" id="page-group0"></div>
+<div class="page" id="page-group1"></div>
+
+</div><!-- end container -->
+
+<script>
+// ─── VOCABULARY DATA ───
+const groups = [
+  { name: '第一組 (30詞)', words: [
+    'actor','actress','athlete','lawyer','pilot','flight attendant',
+    'chef','lifeguard','photographer','waiter','waitress','singer',
+    'magician','clown','tour guide','travel agent','writer','gardener',
+    'parade dancer','useful','camera','uniform','attendant','stadium',
+    'perform a short play','humorous','patient','cheerful','helpful','caring'
+  ]},
+  { name: '第二組 (31詞)', words: [
+    'humble','creative','generous','gentle','responsible','hard-working',
+    'naughty','bored','worried','frightened','disappointed','shocked',
+    'interested','excited','tired','surprised','touched','frustrated','stressed',
+    'queue','jump the queue','block the doors','give your seat to people in need',
+    'let passengers exit first','hold the handrail','queue up','disturb others',
+    'take up extra seats','lean against the grab poles','put your feet on the seats'
+  ]}
+];
+
+// ─── STATE ───
+let currentGroup = 0;
+let speed = 1.0;
+let isPlaying = false;
+let wrongWords = [];
+
+// ─── INIT ───
+document.addEventListener('DOMContentLoaded',()=>{
+  renderGroup(0);
+  renderGroup(1);
+});
+
+function renderGroup(gIdx){
+  const page = document.getElementById('page-group'+gIdx);
+  const g = groups[gIdx];
+  let html = `
+  <div class="sel-bar">
+    <button onclick="selectAll(${gIdx},true)">✅ 全選</button>
+    <button onclick="selectAll(${gIdx},false)">❌ 取消全選</button>
+    <span class="sel-count" id="sel-count-${gIdx}">已選 0 / ${g.words.length}</span>
+  </div>
+  <div class="word-grid" id="word-grid-${gIdx}">
+  `;
+  g.words.forEach((w, i)=>{
+    html += `<label class="word-item"><input type="checkbox" data-g="${gIdx}" data-idx="${i}" checked onchange="updateCount(${gIdx})"><span class="w-text">${w}</span></label>`;
+  });
+  html += `</div>`;
+  page.innerHTML = html;
+  updateCount(gIdx);
+}
+
+function updateCount(gIdx){
+  const checks = document.querySelectorAll('#page-group'+gIdx+' input[type=checkbox]:checked');
+  const total = groups[gIdx].words.length;
+  document.getElementById('sel-count-'+gIdx).textContent = '已選 '+checks.length+' / '+total;
+}
+
+function selectAll(gIdx, val){
+  document.querySelectorAll('#page-group'+gIdx+' input[type=checkbox]').forEach(c=>c.checked=val);
+  updateCount(gIdx);
+}
+
+// ─── GROUP SWITCH ───
+function switchGroup(idx, btn){
+  currentGroup = idx;
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-group'+idx).classList.add('active');
+  document.querySelectorAll('.tab-bar button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  // Hide play status and check area from other group
+  document.getElementById('play-status-'+idx).classList.remove('show');
+}
+
+// ─── SPEED ───
+function setSpeed(val, btn){
+  speed = val;
+  document.querySelectorAll('.speed-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+// ─── PLAY ───
+function playGroup(gIdx){
+  if(isPlaying) return;
+  const checks = document.querySelectorAll('#page-group'+gIdx+' input[type=checkbox]:checked');
+  if(checks.length === 0){ alert('請先選擇要聽的單詞！'); return; }
+
+  isPlaying = true;
+  const btn = document.getElementById('play-btn-'+gIdx);
+  if(btn) btn.disabled = true;
+
+  // Get the words in order
+  const wordList = [];
+  document.querySelectorAll('#page-group'+gIdx+' input[type=checkbox]:checked').forEach(c=>{
+    const idx = parseInt(c.dataset.idx);
+    wordList.push(groups[gIdx].words[idx]);
+  });
+
+  // Show play status
+  const ps = document.getElementById('play-status-'+gIdx);
+  ps.classList.add('show');
+  ps.querySelector('.ps-title').textContent = '🔊 正在播放…… (紙上聽寫)';
+  ps.querySelector('.ps-fill').style.width = '0%';
+  ps.querySelector('.ps-count').textContent = '0 / '+wordList.length;
+
+  // Hide previous check area
+  const ca = document.getElementById('check-area-'+gIdx);
+  if(ca) ca.style.display = 'none';
+
+  // Start TTS sequence
+  let wordIdx = 0;
+  const gap = 3000; // 3 seconds between words
+
+  function speakNext(){
+    if(wordIdx >= wordList.length){
+      isPlaying = false;
+      if(btn) btn.disabled = false;
+      const wordEl = document.getElementById('ps-word-'+gIdx);
+      if(wordEl) wordEl.classList.remove('show');
+      ps.querySelector('.ps-title').textContent = '✅ 播放完畢！請核對答案';
+      ps.querySelector('.ps-fill').style.width = '100%';
+      ps.querySelector('.ps-count').textContent = wordList.length+' / '+wordList.length;
+      showCheckArea(gIdx, wordList);
+      return;
+    }
+
+    const word = wordList[wordIdx];
+    const progress = ((wordIdx+1)/wordList.length*100).toFixed(1);
+    ps.querySelector('.ps-fill').style.width = progress+'%';
+    ps.querySelector('.ps-count').textContent = (wordIdx+1)+' / '+wordList.length;
+
+    // Show word if repeat mode is on
+    const repeatCb = document.getElementById('repeat-mode-'+gIdx);
+    if(repeatCb && repeatCb.checked){
+      const wordEl = document.getElementById('ps-word-'+gIdx);
+      const textEl = document.getElementById('ps-word-text-'+gIdx);
+      if(wordEl){ wordEl.classList.add('show'); }
+      if(textEl){ textEl.textContent = word; }
+    }
+
+    // Speak the word (first time)
+    speak(word, ()=>{
+      // Wait 2 seconds, then speak again
+      setTimeout(()=>{
+        speak(word, ()=>{
+          wordIdx++;
+          setTimeout(speakNext, gap); // 3 seconds before next word
+        });
+      }, 1500);
+    });
+  }
+
+  speakNext();
+}
+
+function speak(text, callback){
+  if(!window.speechSynthesis){
+    if(callback) callback();
+    return;
+  }
+  window.speechSynthesis.cancel();
+
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'en-US';
+  u.rate = speed;
+  u.pitch = 1;
+  u.volume = 1;
+
+  const voices = window.speechSynthesis.getVoices();
+  const engVoice = voices.find(v=>v.lang.startsWith('en') && v.name.includes('Google')) 
+                || voices.find(v=>v.lang.startsWith('en-US'))
+                || voices.find(v=>v.lang.startsWith('en'));
+  if(engVoice) u.voice = engVoice;
+
+  let done = false;
+  const safeEnd = ()=>{
+    if(!done){ done=true; if(callback) callback(); }
+  };
+  u.onend = safeEnd;
+  u.onerror = safeEnd;
+  // Safety timeout: speech duration estimates ~ text.length * 100ms per char / rate
+  const timeoutMs = Math.max(2500, text.length * 120 / speed);
+  setTimeout(safeEnd, timeoutMs);
+
+  window.speechSynthesis.speak(u);
+}
+
+// ─── SHOW CHECK AREA ───
+function showCheckArea(gIdx, wordList){
+  const ca = document.getElementById('check-area-'+gIdx);
+  ca.style.display = 'block';
+  const body = ca.querySelector('.ca-body');
+  const total = ca.querySelector('.ca-total');
+  total.textContent = '/ '+wordList.length+' 題';
+  body.innerHTML = '';
+  wrongWords = [];
+
+  wordList.forEach((w, i)=>{
+    const div = document.createElement('div');
+    div.className = 'check-item';
+    div.innerHTML = `
+      <span class="ci-num">${i+1}</span>
+      <span class="ci-word" id="ciw-${gIdx}-${i}">${w}</span>
+      <button class="ci-reveal" id="cir-${gIdx}-${i}" onclick="revealWord(${gIdx},${i},this)">👁️ 看答案</button>
+      <button class="ci-btn ok" id="ciok-${gIdx}-${i}" onclick="markWord(${gIdx},${i},true,this)">✓</button>
+      <button class="ci-btn fail" id="cifail-${gIdx}-${i}" onclick="markWord(${gIdx},${i},false,this)">✗</button>
+      <span class="ci-result" id="cir-${gIdx}-${i}-result"></span>
+    `;
+    body.appendChild(div);
+  });
+
+  // Update score
+  updateScore(gIdx);
+}
+
+function revealWord(gIdx, idx, btn){
+  const wordEl = document.getElementById('ciw-'+gIdx+'-'+idx);
+  wordEl.classList.add('show');
+  btn.classList.add('revealed');
+  btn.textContent = '已完成核對';
+  // Show ✓ and ✗ buttons
+  document.getElementById('ciok-'+gIdx+'-'+idx).classList.add('show');
+  document.getElementById('cifail-'+gIdx+'-'+idx).classList.add('show');
+}
+
+function markWord(gIdx, idx, correct, btn){
+  if(btn.classList.contains('done')) return;
+  btn.classList.add('done');
+  const otherBtnId = correct ? 'cifail-'+gIdx+'-'+idx : 'ciok-'+gIdx+'-'+idx;
+  document.getElementById(otherBtnId).disabled = true;
+  document.getElementById(otherBtnId).style.opacity = '0.4';
+
+  const word = document.getElementById('ciw-'+gIdx+'-'+idx).textContent;
+  const resultEl = document.getElementById('cir-'+gIdx+'-'+idx+'-result');
+  resultEl.classList.add('show');
+  resultEl.textContent = correct ? '✅' : '❌';
+  resultEl.style.color = correct ? 'var(--g)' : 'var(--r2)';
+
+  if(!correct){
+    if(!wrongWords.includes(word)) wrongWords.push(word);
+    showWrongWords(gIdx);
+  }
+
+  updateScore(gIdx);
+}
+
+function updateScore(gIdx){
+  const okBtns = document.querySelectorAll('#check-area-'+gIdx+' .ci-btn.ok.done');
+  const failBtns = document.querySelectorAll('#check-area-'+gIdx+' .ci-btn.fail.done');
+  const total = okBtns.length + failBtns.length;
+  const correct = okBtns.length;
+  const pct = total > 0 ? Math.round(correct/total*100) : 0;
+
+  const fill = document.getElementById('sc-fill-'+gIdx);
+  const num = document.getElementById('sc-num-'+gIdx);
+  if(fill){ fill.style.width = pct+'%'; fill.textContent = pct+'%'; }
+  if(num) num.textContent = correct+'/'+total;
+}
+
+function showWrongWords(gIdx){
+  const wb = document.getElementById('wrong-box-'+gIdx);
+  if(wrongWords.length > 0){
+    wb.classList.add('show');
+    const container = wb.querySelector('.wb-words');
+    container.innerHTML = wrongWords.map(w => `<span class="wb-item">${w}</span>`).join('');
+  }
+}
+
+// ─── STOP ───
+function stopPlayback(gIdx){
+  if(window.speechSynthesis) window.speechSynthesis.cancel();
+  isPlaying = false;
+  const wordEl = document.getElementById('ps-word-'+gIdx);
+  if(wordEl) wordEl.classList.remove('show');
+  const btn = document.getElementById('play-btn-'+gIdx);
+  if(btn) btn.disabled = false;
+  const ps = document.getElementById('play-status-'+gIdx);
+  ps.querySelector('.ps-title').textContent = '⏹️ 已停止';
+}
+
+// ─── RESET ───
+function resetGroup(gIdx){
+  if(isPlaying){ stopPlayback(gIdx); }
+  const ca = document.getElementById('check-area-'+gIdx);
+  ca.style.display = 'none';
+  ca.querySelector('.ca-body').innerHTML = '';
+  const ps = document.getElementById('play-status-'+gIdx);
+  ps.classList.remove('show');
+  const wb = document.getElementById('wrong-box-'+gIdx);
+  wb.classList.remove('show');
+  wrongWords = [];
+  const fill = document.getElementById('sc-fill-'+gIdx);
+  const num = document.getElementById('sc-num-'+gIdx);
+  if(fill){ fill.style.width='0%'; fill.textContent='0%'; }
+  if(num) num.textContent='0/0';
+}
+
+// ─── GENERATE GROUP PAGES ───
+// This runs after DOM ready
+document.addEventListener('DOMContentLoaded',()=>{
+  // Inject control bars and check areas after each group
+  groups.forEach((g, gIdx)=>{
+    const page = document.getElementById('page-group'+gIdx);
+
+    // Play controls
+    const ctrl = document.createElement('div');
+    ctrl.className = 'ctrl-bar';
+    ctrl.innerHTML = `
+      <span class="ctrl-label">⏱️ 語速：</span>
+      <div class="speed-group">
+        <button class="speed-btn" onclick="setSpeed(0.8,this)">0.8x 慢</button>
+        <button class="speed-btn active" onclick="setSpeed(1.0,this)">1.0x 正常</button>
+        <button class="speed-btn" onclick="setSpeed(1.2,this)">1.2x 快</button>
+      </div>
+      <button class="action-btn" id="play-btn-${gIdx}" onclick="playGroup(${gIdx})">▶️ 開始播放</button>
+      <button class="action-btn" style="background:var(--t2)" onclick="stopPlayback(${gIdx})">⏹️ 停止</button>
+      <label style="display:flex;align-items:center;gap:0.3rem;font-size:0.8rem;font-weight:600;cursor:pointer;margin-left:auto;color:var(--accent)"><input type="checkbox" id="repeat-mode-${gIdx}" style="width:18px;height:18px;accent-color:var(--accent);cursor:pointer"> 👀 跟讀模式</label>
+    `;
+    page.appendChild(ctrl);
+
+    // Play status
+    const ps = document.createElement('div');
+    ps.className = 'play-status';
+    ps.id = 'play-status-'+gIdx;
+    ps.innerHTML = `
+      <div class="ps-title">🔊 準備播放</div>
+      <div class="ps-progress"><div class="ps-fill" style="width:0%"></div></div>
+      <div class="ps-count">0 / ${g.words.length}</div>
+      <div class="ps-word" id="ps-word-${gIdx}"><span id="ps-word-text-${gIdx}"></span><span class="ps-ph"></span></div>
+    `;
+    page.appendChild(ps);
+
+    // Score card
+    const sc = document.createElement('div');
+    sc.className = 'score-card';
+    sc.innerHTML = `
+      <span class="sc-label">🏆 得分</span>
+      <div class="sc-bar"><div class="sc-fill" id="sc-fill-${gIdx}" style="width:0%">0%</div></div>
+      <span class="sc-num" id="sc-num-${gIdx}">0/0</span>
+    `;
+    page.appendChild(sc);
+
+    // Wrong words
+    const wb = document.createElement('div');
+    wb.className = 'wrong-box';
+    wb.id = 'wrong-box-'+gIdx;
+    wb.innerHTML = `<div class="wb-hd">❌ 錯詞本（要重點複習）</div><div class="wb-words"></div>`;
+    page.appendChild(wb);
+
+    // Check area
+    const ca = document.createElement('div');
+    ca.className = 'check-area';
+    ca.id = 'check-area-'+gIdx;
+    ca.style.display = 'none';
+    ca.innerHTML = `
+      <div class="ca-hd"><span>📋 核對答案</span><span>0 <span class="ca-total">/ 0</span></span></div>
+      <div class="ca-body"></div>
+    `;
+    page.appendChild(ca);
+
+    // Reset
+    const reset = document.createElement('div');
+    reset.className = 'reset-row';
+    reset.innerHTML = `<button onclick="resetGroup(${gIdx})">🔄 重置本組</button>`;
+    page.appendChild(reset);
+  });
+});
+</script>
+</body>
+</html>
