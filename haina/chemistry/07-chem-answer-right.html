@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Answer Right</title>
+<style>
+:root{--bg:#0a0a14;--card:#121220;--card2:#181830;--border:#1e1e3a;--accent:#00e5ff;--success:#00ff88;--error:#ff4466;--warn:#ffb347;--text:#c8ccd4;--text2:#8890a0;--text3:#5a6070;--font-ui:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:var(--font-ui);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:16px}
+.container{max-width:700px;width:100%}
+.header{text-align:center;padding:16px 0 8px}
+.header h1{font-size:1.5rem;font-weight:700;color:var(--accent)}
+.header .sub{font-size:.9rem;color:var(--text2);margin-top:4px}
+
+.tab-bar{display:flex;gap:4px;margin-bottom:16px;background:var(--card);border-radius:10px;padding:4px;border:1px solid var(--border)}
+.tab-btn{flex:1;min-height:48px;border:none;border-radius:8px;font-size:.95rem;font-weight:600;cursor:pointer;background:transparent;color:var(--text2);font-family:var(--font-ui);transition:all .15s;-webkit-tap-highlight-color:transparent}
+.tab-btn.active{background:var(--accent);color:#000}
+.tab-btn:hover:not(.active){color:var(--text)}
+.panel{display:none}
+.panel.active{display:block}
+
+/* Command word cards */
+.cmd-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.cmd-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;cursor:pointer;transition:border .12s;-webkit-tap-highlight-color:transparent}
+.cmd-card:hover{border-color:var(--accent)}
+.cmd-card.expanded{border-color:var(--accent);grid-column:1/-1}
+.cmd-card .cmd-name{font-size:1.25rem;font-weight:700;color:var(--accent)}
+.cmd-card .cmd-formula{font-size:.95rem;color:var(--warn);margin:6px 0}
+.cmd-card .cmd-body{display:none;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
+.cmd-card.expanded .cmd-body{display:block}
+.cmd-card .cmd-body .label{font-size:.78rem;text-transform:uppercase;letter-spacing:1px;color:var(--text3);margin-top:8px;margin-bottom:2px}
+.cmd-card .cmd-body .val{font-size:.95rem;color:var(--text);line-height:1.55}
+.cmd-card .cmd-body .trap{font-size:.9rem;color:var(--error);margin-top:6px;padding:6px 10px;background:rgba(255,68,102,.06);border-radius:6px}
+
+/* Worked example */
+.ex-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:18px;margin-bottom:12px}
+.ex-card .ex-q{font-size:1rem;color:var(--text);line-height:1.55;margin-bottom:12px;padding:12px;background:var(--card2);border-radius:8px;border-left:3px solid var(--accent)}
+.ex-card .ex-cmd{display:inline-block;background:var(--accent);color:#000;padding:2px 10px;border-radius:4px;font-size:.72rem;font-weight:700;margin-bottom:8px}
+.ex-card .ex-ms-label{font-size:.7rem;text-transform:uppercase;letter-spacing:1px;color:var(--success);margin-bottom:4px}
+.ex-card .ex-ms{font-size:.88rem;color:var(--text);line-height:1.6}
+.ex-card .ex-ms li{margin-bottom:4px}
+.ex-card .ex-ms li::marker{color:var(--success)}
+.ex-card .ex-note{font-size:.82rem;color:var(--warn);margin-top:8px;padding:6px 10px;background:rgba(255,179,71,.06);border-radius:6px}
+
+/* Self-check */
+.sc-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:18px;margin-bottom:14px}
+.sc-card .sc-q{font-size:1.05rem;color:var(--text);line-height:1.6;margin-bottom:14px;padding:12px;background:var(--card2);border-radius:8px;border-left:3px solid var(--accent)}
+.sc-card .sc-cmd{display:inline-block;background:var(--accent);color:#000;padding:2px 10px;border-radius:4px;font-size:.78rem;font-weight:700;margin-bottom:10px}
+.sc-card textarea{width:100%;min-height:90px;background:var(--bg);color:var(--text);border:2px solid var(--border);border-radius:8px;padding:12px;font-size:1rem;font-family:var(--font-ui);resize:vertical;line-height:1.5}
+.sc-card textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(0,229,255,.15)}
+.sc-ms{display:none;margin-top:12px;padding:12px;background:rgba(0,255,136,.04);border:1px solid rgba(0,255,136,.15);border-radius:8px}
+.sc-ms.show{display:block}
+.sc-ms .sc-ms-title{font-size:.85rem;color:var(--success);font-weight:700;margin-bottom:6px}
+.sc-ms .sc-check-item{display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;font-size:.95rem;color:var(--text);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.sc-ms .sc-check-item input[type=checkbox]{margin-top:3px;width:18px;height:18px;accent-color:var(--success)}
+.btn{min-height:48px;padding:10px 20px;border:none;border-radius:8px;font-size:.95rem;font-weight:600;cursor:pointer;font-family:var(--font-ui);-webkit-tap-highlight-color:transparent;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:var(--accent);color:#000}
+.btn-ghost{background:transparent;color:var(--text2);border:1px solid var(--border);width:100%}
+
+@media(max-width:500px){
+  .cmd-grid{grid-template-columns:1fr}
+  .cmd-card.expanded{grid-column:1}
+  body{padding:8px}
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>📝 Answer Right</h1>
+    <div class="sub">How to turn knowledge into marks · Structured Question Workshop</div>
+  </div>
+
+  <div class="tab-bar">
+    <button class="tab-btn active" id="tabCmd" onclick="switchTab('cmd')">🔤 Command Words</button>
+    <button class="tab-btn" id="tabEx" onclick="switchTab('ex')">🔍 Worked Examples</button>
+    <button class="tab-btn" id="tabSc" onclick="switchTab('sc')">✏️ Self-Check</button>
+  </div>
+
+  <!-- ========== TAB 1: COMMAND WORDS ========== -->
+  <div class="panel active" id="panelCmd">
+    <div class="cmd-grid" id="cmdGrid"></div>
+  </div>
+
+  <!-- ========== TAB 2: WORKED EXAMPLES ========== -->
+  <div class="panel" id="panelEx">
+    <div id="exContainer"></div>
+  </div>
+
+  <!-- ========== TAB 3: SELF-CHECK ========== -->
+  <div class="panel" id="panelSc">
+    <div class="sc-card" id="scCard1">
+      <div class="sc-cmd">State</div>
+      <div class="sc-q">State TWO properties of non-metals.<br><br><em>(From 1st UT 25-26, Q2c — 2 marks)</em></div>
+      <textarea id="scAns1" placeholder="Write your answer here..."></textarea>
+      <button class="btn btn-primary" style="width:100%;margin-top:8px" onclick="revealSC(1)">Reveal Mark Scheme</button>
+      <div class="sc-ms" id="scMS1">
+        <div class="sc-ms-title">Mark Scheme — 2 marks</div>
+        <div class="sc-check-item" onclick="this.querySelector('input').click()"><input type="checkbox"><span>Any ONE property: low melting point / low boiling point / brittle / dull surface / poor conductor of heat / poor conductor of electricity / low density [1]</span></div>
+        <div class="sc-check-item" onclick="this.querySelector('input').click()"><input type="checkbox"><span>Any ONE different property from above (must not repeat the first) [1]</span></div>
+        <div class="sc-check-item" style="color:var(--warn);font-size:.82rem;margin-top:6px">💡 Lesson: <b>State</b> = give facts only. No explanation. No examples. Just list two distinct properties.</div>
+      </div>
+    </div>
+
+    <div class="sc-card" id="scCard2">
+      <div class="sc-cmd">Explain</div>
+      <div class="sc-q">Explain why the relative atomic size of Group II elements increases down the group.<br><br><em>(1st UT 25-26 Q4b — 1 mark)</em></div>
+      <textarea id="scAns2" placeholder="Write your answer here..."></textarea>
+      <button class="btn btn-primary" style="width:100%;margin-top:8px" onclick="revealSC(2)">Reveal Mark Scheme</button>
+      <div class="sc-ms" id="scMS2">
+        <div class="sc-ms-title">Mark Scheme — 1 mark</div>
+        <div class="sc-check-item" onclick="this.querySelector('input').click()"><input type="checkbox"><span>The number of occupied electron shells in atoms of Group II elements increases down the group, so the atomic size increases [1]</span></div>
+        <div class="sc-check-item" style="color:var(--warn);font-size:.82rem;margin-top:6px">💡 Lesson: <b>Explain</b> = Fact + Reason. Here the fact is "more electron shells" and the reason is "so atomic size increases". Both parts must be in one sentence with a causal link.</div>
+      </div>
+    </div>
+
+    <div class="sc-card" id="scCard3">
+      <div class="sc-cmd">Compare</div>
+      <div class="sc-q">Compare the reactivity of magnesium and calcium in the reaction with dilute hydrochloric acid. Explain your answer.<br><br><em>(1st UT 25-26 Q4c(i) — 2 marks)</em></div>
+      <textarea id="scAns3" placeholder="Write your answer here..."></textarea>
+      <button class="btn btn-primary" style="width:100%;margin-top:8px" onclick="revealSC(3)">Reveal Mark Scheme</button>
+      <div class="sc-ms" id="scMS3">
+        <div class="sc-ms-title">Mark Scheme — 2 marks</div>
+        <div class="sc-check-item" onclick="this.querySelector('input').click()"><input type="checkbox"><span>Calcium is more reactive than magnesium [1]</span></div>
+        <div class="sc-check-item" onclick="this.querySelector('input').click()"><input type="checkbox"><span>It is because the reactivity of Group II elements increases down the group [1]</span></div>
+        <div class="sc-check-item" style="color:var(--warn);font-size:.82rem;margin-top:6px">💡 Lesson: <b>Compare</b> = state which is more/less + give the scientific reason. "Calcium is more reactive" (comparison) → "because reactivity increases down Group II" (reason). Both halves needed.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// COMMAND WORD DATA (7 words)
+// ============================================================
+const commandWords = [
+  {
+    word:"State / Name / Give",
+    formula:"[Fact / Term / Number only]",
+    exampleQ:"State the number of protons in a copper atom. (1st UT Q1b)",
+    exampleA:"29",
+    trap:"Writing an explanation when only a fact is asked. If the question says State, do NOT add \"because…\". Extra explanation wastes time; a wrong explanation may lose marks even if the fact is correct.",
+    icon:"📌"
+  },
+  {
+    word:"Explain",
+    formula:"[Conclusion] because [scientific reason]",
+    exampleQ:"Explain whether silicon isotopes have the same chemical properties. (1st UT Q3d)",
+    exampleA:"Yes, because they have the same number of electrons / same electronic arrangement.",
+    trap:"Stating only the conclusion without the reason. Explain always has two halves — the examiner checks for the word 'because' or an equivalent causal link.",
+    icon:"💡"
+  },
+  {
+    word:"Describe",
+    formula:"Step 1 → Step 2 → Step 3. Add [reagent] to [sample], then [action]. Observe [result].",
+    exampleQ:"Describe a chemical test for chloride ions. State the observation. (2nd Exam Q2f)",
+    exampleA:"Add dilute nitric acid to the sample, then add silver nitrate solution. A white precipitate is formed.",
+    trap:"Mixing up the order of steps (e.g. adding AgNO₃ before dil HNO₃) or stating the observation without the procedure.",
+    icon:"🔬"
+  },
+  {
+    word:"Calculate",
+    formula:"Let x = [unknown] → set up equation → solve → state answer with units",
+    exampleQ:"Calculate the relative abundances of Si-29 and Si-30. (1st UT Q3c)",
+    exampleA:"Let z = abundance of ^29Si, (7.8% − z) = abundance of ^30Si. 28×92.2% + 29z + 30(7.8% − z) = 28.086 → z = 7.0% → ^29Si: 7.0%, ^30Si: 0.8%",
+    trap:"Giving only the final answer without showing the working steps. Marks are allocated for the equation setup AND the solution. No working = lost marks even if the answer is correct.",
+    icon:"🔢"
+  },
+  {
+    word:"Compare",
+    formula:"[A] is more/less [property] than [B] because [reason or trend]",
+    exampleQ:"Compare the reactivity of Mg and Ca with dilute HCl. Explain. (1st UT Q4c)",
+    exampleA:"Calcium is more reactive than magnesium because the reactivity of Group II elements increases down the group.",
+    trap:"Only stating the difference without the reason. Compare = what is different + why. Without the 'because' part, you lose half the marks.",
+    icon:"⚖️"
+  },
+  {
+    word:"Suggest",
+    formula:"[Proposal] because/due to [knowledge link] — reason must show you used science, not guessing",
+    exampleQ:"Suggest ONE use of fraction E (fuel oil) from fractional distillation. (2nd Exam Q3a-iv)",
+    exampleA:"As fuel for ships because fuel oil has a high boiling point and low volatility.",
+    trap:"Random guessing without connecting to scientific knowledge. Suggest is NOT 'say anything' — you must ground your proposal in chemical properties.",
+    icon:"💭"
+  },
+  {
+    word:"Write (chemical equation)",
+    formula:"[Reactants with states] → [Products with states], correctly balanced",
+    exampleQ:"Write a chemical equation for the reaction between marble (CaCO₃) and dilute HCl. (2nd Exam Q6a-iii)",
+    exampleA:"CaCO₃(s) + 2HCl(aq) → CaCl₂(aq) + CO₂(g) + H₂O(l)",
+    trap:"Missing state symbols (s/l/g/aq) or writing wrong products. Three layers: ① correct formulas → ② balanced coefficients → ③ state symbols. All three must be present.",
+    icon:"⚗️"
+  }
+];
+
+// ============================================================
+// WORKED EXAMPLE DATA (6 examples from TWGSS exams)
+// ============================================================
+const workedExamples = [
+  {
+    cmd:"State",
+    q:"State the number of protons and neutrons in the copper atom respectively.<br><em>(1st UT 25-26 Q1b — 2 marks)</em>",
+    msItems:[
+      "Number of protons = 29 [1 mark]",
+      "Number of neutrons = 63 − 29 = 34 [1 mark] — note: show the deduction, not just '34'"
+    ],
+    note:"State questions at S3 level often want you to show how you got the number. If the question says 'respectively', list answers in the same order as the question."
+  },
+  {
+    cmd:"Explain",
+    q:"Do the three isotopes of silicon have the same chemical properties? Explain your answer.<br><em>(1st UT 25-26 Q3d — 1 mark)</em>",
+    msItems:[
+      "Yes. They have the same chemical properties as they have the same number of electrons / same electronic arrangement [1 mark — conclusion + reason together]"
+    ],
+    note:"Even a 1-mark Explain question checks two halves: conclusion + reason. 'Yes' alone is insufficient. Always provide the scientific reason."
+  },
+  {
+    cmd:"Calculate",
+    q:"Calculate the relative abundances of <sup>29</sup>Si and <sup>30</sup>Si given: average atomic mass = 28.086, and abundance of <sup>28</sup>Si = 92.2%.<br><em>(1st UT 25-26 Q3c — 3 marks)</em>",
+    msItems:[
+      "Let z = abundance of <sup>29</sup>Si, then abundance of <sup>30</sup>Si = (7.8% − z) [1 mark — for defining variables]",
+      "Set up equation: 28×92.2% + 29z + 30(7.8% − z) = 28.086 [1 mark — for correct equation]",
+      "Solve: z = 7.0% → <sup>29</sup>Si = 7.0% and <sup>30</sup>Si = 0.8% [1 mark — for both correct answers]"
+    ],
+    note:"3 marks = 3 steps: define variables → write equation → solve. The equation balances the weighted average. Always define your unknown clearly."
+  },
+  {
+    cmd:"Describe",
+    q:"Describe a chemical test for chloride ions (Cl⁻). State the expected observation.<br><em>(2nd Exam 2425 Q2f — 2 marks)</em>",
+    msItems:[
+      "Add dilute nitric acid to the sample, then add silver nitrate solution [1 mark — for correct procedure with correct order]",
+      "A white precipitate is formed [1 mark — for the observation]"
+    ],
+    note:"The order matters: dil HNO₃ FIRST (to remove interfering ions like CO₃²⁻), THEN AgNO₃. If you reverse the order, you lose the procedure mark even if the observation is correct."
+  },
+  {
+    cmd:"Compare",
+    q:"Compare the reactivity of magnesium and calcium in the reaction with dilute hydrochloric acid. Explain your answer.<br><em>(1st UT 25-26 Q4c(i) — 2 marks)</em>",
+    msItems:[
+      "Calcium is more reactive than magnesium [1 mark — for the comparison]",
+      "It is because the reactivity of Group II elements increases down the group [1 mark — for the reason]"
+    ],
+    note:"Compare ≠ 'Calcium is reactive, magnesium is also reactive.' That's describing each separately. Compare means you must say which is MORE and WHY."
+  },
+  {
+    cmd:"Write equation",
+    q:"Write a chemical equation for the reaction between marble lumps (calcium carbonate) and dilute hydrochloric acid.<br><em>(2nd Exam 2425 Q6a(iii) — 1 mark)</em>",
+    msItems:[
+      "CaCO₃(s) + 2HCl(aq) → CaCl₂(aq) + CO₂(g) + H₂O(l) [1 mark — all three layers must be correct: formulas, balancing, state symbols]"
+    ],
+    note:"One equation = 1 mark, but it checks all three layers. Missing a state symbol or a coefficient = 0 marks. Double-check before moving on."
+  }
+];
+
+// ============================================================
+// TAB SWITCHING
+// ============================================================
+let currentTab = 'cmd';
+function switchTab(tab) {
+  currentTab = tab;
+  document.getElementById('tabCmd').classList.toggle('active', tab === 'cmd');
+  document.getElementById('tabEx').classList.toggle('active', tab === 'ex');
+  document.getElementById('tabSc').classList.toggle('active', tab === 'sc');
+  document.getElementById('panelCmd').classList.toggle('active', tab === 'cmd');
+  document.getElementById('panelEx').classList.toggle('active', tab === 'ex');
+  document.getElementById('panelSc').classList.toggle('active', tab === 'sc');
+  if (tab === 'cmd') renderCmdCards();
+  if (tab === 'ex') renderExamples();
+}
+
+// ============================================================
+// RENDER COMMAND WORD CARDS
+// ============================================================
+function renderCmdCards() {
+  let html = '';
+  commandWords.forEach((cw, i) => {
+    html += '<div class="cmd-card" id="cmdCard' + i + '" onclick="toggleCmdCard(' + i + ')">';
+    html += '<div class="cmd-name">' + cw.icon + ' ' + cw.word + '</div>';
+    html += '<div class="cmd-formula">' + cw.formula + '</div>';
+    html += '<div class="cmd-body">';
+    html += '<div class="label">Example from your exam</div>';
+    html += '<div class="val"><em>' + cw.exampleQ + '</em></div>';
+    html += '<div class="label">Model Answer</div>';
+    html += '<div class="val">' + cw.exampleA.replace(/\n/g,'<br>') + '</div>';
+    html += '<div class="trap">⚠ Common mistake: ' + cw.trap + '</div>';
+    html += '</div></div>';
+  });
+  document.getElementById('cmdGrid').innerHTML = html;
+}
+
+function toggleCmdCard(idx) {
+  let card = document.getElementById('cmdCard' + idx);
+  let wasExpanded = card.classList.contains('expanded');
+  // Close all
+  document.querySelectorAll('.cmd-card').forEach(c => c.classList.remove('expanded'));
+  // Re-open only if it was not previously expanded
+  if (!wasExpanded) card.classList.add('expanded');
+}
+
+// ============================================================
+// RENDER WORKED EXAMPLES
+// ============================================================
+function renderExamples() {
+  let html = '';
+  workedExamples.forEach((ex, i) => {
+    html += '<div class="ex-card">';
+    html += '<div class="ex-cmd">' + ex.cmd + '</div>';
+    html += '<div class="ex-q">' + ex.q + '</div>';
+    html += '<div class="ex-ms-label">▼ Mark Scheme</div>';
+    html += '<ul class="ex-ms">';
+    ex.msItems.forEach(item => { html += '<li>' + item + '</li>'; });
+    html += '</ul>';
+    html += '<div class="ex-note">💡 ' + ex.note + '</div>';
+    html += '</div>';
+  });
+  document.getElementById('exContainer').innerHTML = html;
+}
+
+// ============================================================
+// SELF-CHECK: REVEAL MARK SCHEME
+// ============================================================
+function revealSC(num) {
+  document.getElementById('scMS' + num).classList.add('show');
+}
+
+// ============================================================
+// INIT
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => {
+  renderCmdCards();
+  renderExamples();
+});
+</script>
+</body>
+</html>

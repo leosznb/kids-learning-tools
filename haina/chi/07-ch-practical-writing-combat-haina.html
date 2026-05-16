@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>20分攻防戰 — 實用文寫作訓練 · 海納</title>
+<style>
+:root {
+  --primary: #2563EB; --primary-bg: #EFF6FF; --primary-accent: #DBEAFE; --primary-dark: #1D4ED8;
+  --slate-50: #F8FAFC; --slate-100: #F1F5F9; --slate-200: #E2E8F0; --slate-300: #CBD5E1;
+  --slate-400: #94A3B8; --slate-500: #64748B; --slate-600: #475569; --slate-700: #334155; --slate-800: #1E293B; --slate-900: #0F172A;
+  --red: #DC2626; --red-bg: #FEF2F2; --amber: #D97706; --amber-bg: #FFFBEB; --green: #059669; --green-bg: #ECFDF5;
+  --radius: 10px; --radius-sm: 6px;
+  --font: -apple-system, BlinkMacSystemFont, "PingFang HK", "Noto Sans HK", "Microsoft YaHei", system-ui, sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font); background: var(--slate-50); color: var(--slate-800); line-height: 1.6; min-height: 100vh; }
+/* TOP BAR */
+.topbar { background: #fff; border-bottom: 1px solid var(--slate-200); padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; position: sticky; top: 0; z-index: 100; }
+.topbar .logo { font-weight: 800; font-size: 1.1rem; color: var(--slate-800); letter-spacing: -0.01em; }
+.topbar .logo .a{color:var(--primary);}
+.topbar .user-tag { padding: 4px 14px; border-radius: 20px; font-size: 0.82rem; font-weight: 700; color: #fff; background: var(--primary); white-space: nowrap; }
+.scoreboard { display: flex; gap: 16px; align-items: center; }
+.scoreboard .score-item { text-align: center; min-width: 46px; }
+.scoreboard .score-label { font-size: 0.68rem; color: var(--slate-500); text-transform: uppercase; letter-spacing: .05em; }
+.scoreboard .score-value { font-size: 1.5rem; font-weight: 800; color: var(--slate-800); }
+.scoreboard .score-value.max { color: var(--primary); }
+.scoreboard .score-divider { width: 1px; height: 28px; background: var(--slate-200); }
+/* MAIN */
+.main { max-width: 900px; margin: 0 auto; padding: 24px 20px 80px; }
+/* STAGE TABS */
+.stage-tabs { display: flex; gap: 4px; margin-bottom: 20px; background: var(--slate-100); border-radius: var(--radius); padding: 4px; }
+.stage-tab { flex: 1; padding: 12px 8px; text-align: center; border: none; background: transparent; border-radius: var(--radius-sm); font-size: 0.85rem; font-weight: 600; cursor: pointer; color: var(--slate-500); font-family: var(--font); transition: all .15s; white-space: nowrap; }
+.stage-tab.active { background: #fff; color: var(--primary); box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+.stage-tab .badge { font-size: 0.7rem; display: block; color: var(--slate-400); margin-top: 1px; }
+.stage-tab.active .badge { color: var(--primary); opacity: .6; }
+/* QUESTION SELECTOR */
+.q-selector { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 20px; }
+.q-btn { padding: 6px 14px; border-radius: 20px; border: 1.5px solid var(--slate-200); background: #fff; font-size: 0.8rem; cursor: pointer; font-family: var(--font); font-weight: 500; transition: all .15s; }
+.q-btn:hover { border-color: var(--primary); }
+.q-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+.q-btn.done { border-color: var(--primary); border-style: dashed; color: var(--primary); }
+.q-btn.done::after { content: " ✓"; }
+/* GAME CARD */
+.game-card { background: #fff; border-radius: var(--radius); border: 1px solid var(--slate-200); overflow: hidden; }
+.game-header { padding: 14px 20px; border-bottom: 1px solid var(--slate-100); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; }
+.game-header h2 { font-size: 1.05rem; font-weight: 700; }
+.game-header .meta { font-size: 0.78rem; color: var(--slate-500); }
+.game-body { padding: 20px; }
+/* Stage 1: Format Puzzle */
+.puzzle-instruction { font-size: 0.88rem; color: var(--slate-600); margin-bottom: 16px; padding: 12px; background: var(--primary-bg); border-radius: var(--radius-sm); }
+.puzzle-workspace { border: 2px dashed var(--slate-200); border-radius: var(--radius); padding: 16px; min-height: 200px; }
+.puzzle-slot { display: flex; align-items: center; gap: 8px; padding: 8px 10px; margin-bottom: 6px; border: 2px dotted var(--slate-300); border-radius: var(--radius-sm); min-height: 44px; transition: all .15s; cursor: pointer; background: var(--slate-50); }
+.puzzle-slot.filled { border-style: solid; border-color: var(--primary); background: var(--primary-bg); }
+.puzzle-slot.wrong { border-color: var(--red); background: var(--red-bg); animation: shake .4s ease; }
+.puzzle-slot .slot-label { font-size: 0.75rem; color: var(--slate-400); font-weight: 600; min-width: 70px; white-space: nowrap; }
+.puzzle-slot .slot-content { font-size: 0.86rem; color: var(--slate-800); flex: 1; word-break: break-all; }
+.puzzle-slot .slot-remove { width: 28px; height: 28px; border-radius: 50%; border: none; background: var(--slate-200); color: var(--slate-600); font-size: 0.8rem; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+.puzzle-pool { margin-top: 16px; display: flex; flex-wrap: wrap; gap: 8px; }
+.puzzle-chip { padding: 8px 14px; border-radius: 20px; border: 1.5px solid var(--slate-300); background: #fff; font-size: 0.82rem; cursor: pointer; font-family: var(--font); transition: all .15s; user-select: none; }
+.puzzle-chip:hover { border-color: var(--primary); background: var(--primary-bg); }
+.puzzle-chip.selected { background: var(--primary); color: #fff; border-color: var(--primary); }
+.puzzle-chip.used { opacity: .3; pointer-events: none; }
+.puzzle-feedback { margin-top: 12px; padding: 10px 14px; border-radius: var(--radius-sm); font-size: 0.85rem; display: none; }
+.puzzle-feedback.show { display: block; }
+.puzzle-feedback.ok { background: #ECFDF5; color: #065F46; border: 1px solid #A7F3D0; }
+.puzzle-feedback.err { background: var(--red-bg); color: #991B1B; border: 1px solid #FECACA; }
+@keyframes shake { 0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-4px)}40%,80%{transform:translateX(4px)} }
+/* Stage 2 */
+.content-passage { font-size: 0.92rem; line-height: 2.1; color: var(--slate-700); padding: 18px; background: var(--slate-50); border-radius: var(--radius-sm); margin-bottom: 16px; user-select: none; -webkit-user-select: none; }
+.content-passage .info-point { cursor: pointer; padding: 2px 5px; border-radius: 3px; transition: all .1s; border-bottom: 2px solid transparent; white-space: nowrap; }
+.content-passage .info-point:hover { background: var(--primary-accent); }
+.content-passage .info-point.marked { background: var(--primary-accent); border-bottom-color: var(--primary); font-weight: 700; color: var(--primary-dark); }
+.content-passage .info-point.reveal-missed { background: #FEF3C7; border-bottom-color: var(--amber); font-weight: 600; }
+.content-passage .info-point.reveal-correct { background: #D1FAE5; border-bottom-color: #059669; font-weight: 600; }
+.content-points-panel { margin-top: 14px; }
+.cp-header { font-weight: 700; font-size: 0.88rem; margin-bottom: 8px; color: var(--slate-600); }
+.found-points { display: flex; flex-wrap: wrap; gap: 6px; min-height: 36px; }
+.found-point-tag { padding: 4px 10px; border-radius: 12px; background: var(--primary-accent); font-size: 0.78rem; font-weight: 600; color: var(--primary); }
+/* Stage 3 */
+.style-versions { display: flex; flex-direction: column; gap: 12px; }
+.style-card { padding: 16px; border: 2px solid var(--slate-200); border-radius: var(--radius); background: #fff; transition: all .15s; }
+.style-card.rated-low { border-color: var(--red); background: var(--red-bg); }
+.style-card.rated-mid { border-color: var(--amber); background: var(--amber-bg); }
+.style-card.rated-high { border-color: #059669; background: #ECFDF5; }
+.style-card .style-text { font-size: 0.88rem; color: var(--slate-700); white-space: pre-wrap; line-height: 1.8; margin-bottom: 10px; }
+.style-rank-select { display: flex; gap: 8px; flex-wrap: wrap; }
+.rank-btn { padding: 6px 16px; border-radius: 14px; border: 1.5px solid var(--slate-300); background: #fff; font-size: 0.78rem; cursor: pointer; font-family: var(--font); font-weight: 600; transition: all .15s; }
+.rank-btn.low.active { background: var(--red); color: #fff; border-color: var(--red); }
+.rank-btn.mid.active { background: var(--amber); color: #fff; border-color: var(--amber); }
+.rank-btn.high.active { background: #059669; color: #fff; border-color: #059669; }
+/* BUTTONS */
+.btn { padding: 10px 22px; border-radius: var(--radius-sm); border: none; font-size: 0.88rem; font-weight: 700; cursor: pointer; font-family: var(--font); transition: all .15s; }
+.btn-primary { background: var(--primary); color: #fff; }
+.btn-primary:hover { filter: brightness(1.1); }
+.btn-ghost { background: transparent; color: var(--slate-500); border: 1.5px solid var(--slate-300); }
+.action-bar { display: flex; gap: 8px; margin-top: 18px; flex-wrap: wrap; align-items: center; }
+.action-feedback { flex: 1 0 100%; padding: 12px; border-radius: var(--radius-sm); font-size: 0.88rem; }
+.action-feedback.good { background: #ECFDF5; color: #065F46; }
+.action-feedback.info { background: var(--primary-bg); color: var(--primary-dark); }
+.action-feedback.warn { background: var(--red-bg); color: #991B1B; }
+/* RESULT OVERLAY */
+.result-overlay { display: none; position: fixed; inset: 0; background: rgba(15,23,42,.55); z-index: 200; align-items: center; justify-content: center; }
+.result-overlay.show { display: flex; }
+.result-panel { background: #fff; border-radius: var(--radius); padding: 28px; max-width: 420px; width: 90%; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,.15); }
+.result-panel .big-score { font-size: 4rem; font-weight: 900; color: var(--primary); line-height: 1; }
+.result-panel .big-label { font-size: 0.85rem; color: var(--slate-500); margin: 4px 0 16px; }
+.result-row { display: flex; justify-content: space-between; padding: 6px 0; font-size: 0.88rem; border-bottom: 1px solid var(--slate-100); }
+.result-row .rlabel { color: var(--slate-500); }
+.result-row .rval { font-weight: 700; }
+.score-bar { margin-top: 16px; }
+.score-bar .bar-bg { height: 8px; background: var(--slate-100); border-radius: 4px; overflow: hidden; }
+.score-bar .bar-fill { height: 100%; background: var(--primary); border-radius: 4px; transition: width .5s ease; }
+/* RESPONSIVE */
+@media (max-width: 640px) {
+  .topbar { padding: 10px 14px; }
+  .stage-tab { font-size: 0.75rem; padding: 10px 6px; }
+  .game-body { padding: 14px; }
+  .puzzle-chip { font-size: 0.74rem; padding: 6px 10px; }
+  .puzzle-slot .slot-label { min-width: 54px; font-size: 0.7rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo">⚔️ 實用文<span class="a">20分</span>攻防戰</div>
+  <div class="user-tag">🔵 海納</div>
+  <div class="scoreboard">
+    <div class="score-item"><div class="score-label">Format</div><div class="score-value" id="sc-f">—</div></div>
+    <div class="score-divider"></div>
+    <div class="score-item"><div class="score-label">Content</div><div class="score-value" id="sc-c">—</div></div>
+    <div class="score-divider"></div>
+    <div class="score-item"><div class="score-label">Style</div><div class="score-value" id="sc-s">—</div></div>
+    <div class="score-divider"></div>
+    <div class="score-item"><div class="score-label">TOTAL</div><div class="score-value max" id="sc-t">—</div></div>
+  </div>
+</div>
+
+<div class="main">
+  <div class="stage-tabs" id="stage-tabs"></div>
+  <div class="q-selector" id="q-selector"></div>
+  <div class="game-card">
+    <div class="game-header" id="game-header"></div>
+    <div class="game-body" id="game-body"></div>
+  </div>
+  <div class="action-bar" id="action-bar"></div>
+</div>
+
+<div class="result-overlay" id="result-overlay">
+  <div class="result-panel" id="result-panel"></div>
+</div>
+
+<script>
+(function(){
+'use strict';
+
+// ─── DATA ───
+var Q = [
+  // Q1: 會議紀錄
+  {
+    type:'會議紀錄', typeEn:'Meeting Minutes',
+    formatSlots: [
+      {l:'標題',h:'置中：年度 + 學會名 + 會議次數 +「會議紀錄」'},
+      {l:'日期',h:'YYYY年MM月DD日（星期X）'},
+      {l:'時間',h:'上午/下午 X 時'},
+      {l:'地點',h:'具體場地'},
+      {l:'主席',h:'主席姓名'},
+      {l:'記錄者',h:'文書姓名'},
+      {l:'出席者',h:'列出所有出席者及身份'},
+      {l:'討論事項一：標題',h:'事項名稱'},
+      {l:'討論事項一：內容',h:'誰建議 + 安排 + 誰負責'},
+      {l:'討論事項二：標題',h:'事項名稱'},
+      {l:'討論事項二：內容',h:'誰建議 + 內容 + 結果'},
+      {l:'下次開會日期',h:'YYYY年MM月DD日'},
+      {l:'散會時間',h:'下午X時XX分'},
+      {l:'主席簽署',h:'只簽名不寫姓名（寫出姓名扣0.5分❗）'},
+      {l:'文書簽署',h:'只簽名不寫姓名'},
+      {l:'通過日期',h:'寫「通過日期」非「簽核日期」（後者扣0.5分❗）'}
+    ],
+    formatAnswers: [
+      '中三級中文學會2025-2026年度第二次會議紀錄',
+      '2025年12月5日（星期五）','下午4時','205室','陳大明','李小文',
+      '張老師（顧問）、陳大明、李小文、黃美美、何志強及5位幹事',
+      '籌辦中三級朗誦比賽',
+      '黃美美建議於2026年2月20日舉辦朗誦比賽。全體通過。黃美美負責宣傳，何志強負責場地布置，預算港幣800元。',
+      '申請活動津貼',
+      '何志強動議向學校申請港幣800元津貼。全體一致通過。',
+      '2026年1月8日','下午5時30分',
+      '__________（主席簽署）','__________（文書簽署）','通過日期：__________'
+    ],
+    contentPassage: '你是中三級中文學會文書。學會於2025年12月5日（星期五）下午4時在205室召開第二次會議，由主席陳大明主持、你（李小文）記錄，出席者包括張老師（顧問）及8位幹事。會議通過了上次紀錄，並討論了兩件事：決定於2026年2月20日舉辦「中三級朗誦比賽」，由黃美美負責宣傳、何志強負責場地布置、預算$800；通過向學校申請$800活動津貼。下次開會日期：2026年1月8日。散會時間：下午5時30分。',
+    contentPoints: [
+      '2025年12月5日','下午4時','205室','陳大明','李小文',
+      '張老師（顧問）及8位幹事','2026年2月20日','中三級朗誦比賽',
+      '黃美美負責宣傳','何志強負責場地布置','預算$800',
+      '申請$800活動津貼','2026年1月8日','下午5時30分'
+    ],
+    styleVersions: [
+      '我哋傾咗啦，2月20號搞朗誦比賽，阿May做宣傳，阿強搞場地，使800蚊。跟住又話要問學校拎錢，大家都話OK。就係咁，散水～',
+      '會議通過舉辦朗誦比賽，日期為2月20日，黃美美負責宣傳，何志強負責場地布置，預算為800元。另通過向學校申請800元津貼。',
+      '經討論後，全體一致議決：定於2026年2月20日舉辦中三級朗誦比賽，委任黃美美同學統籌宣傳事宜，何志強同學負責場地布置，活動預算為港幣800元正。另通過由本會向校方正式申請活動津貼800元正。'
+    ]
+  },
+  // Q2: 會議紀錄
+  {
+    type:'會議紀錄', typeEn:'Meeting Minutes',
+    formatSlots: [
+      {l:'標題',h:'置中：年度 + 學會名 + 會議次數 +「會議紀錄」'},
+      {l:'日期',h:'YYYY年MM月DD日（星期X）'},
+      {l:'時間',h:'下午X時XX分'},
+      {l:'地點',h:'具體場地'},
+      {l:'主席',h:'主席姓名'},
+      {l:'記錄者',h:'記錄者姓名'},
+      {l:'出席者',h:'列出所有出席者及身份'},
+      {l:'報告事項',h:'上次會議跟進結果，要有數據'},
+      {l:'討論事項',h:'決議 + 負責人 + 時間'},
+      {l:'下次開會日期',h:'YYYY年MM月DD日'},
+      {l:'散會時間',h:'下午X時'},
+      {l:'簽署區',h:'主席簽署 + 文書簽署 + 通過日期（只簽不寫名❗）'}
+    ],
+    formatAnswers: [
+      '環保學會2025-2026年度第三次會議紀錄',
+      '2026年3月10日（星期二）','下午3時30分','304室','林志明','陳小麗',
+      '李老師（顧問）、林志明及6名會員',
+      '紙類回收量上升20%，塑膠回收量仍偏低',
+      '加設塑膠回收桶於各樓層，4月舉辦「環保週」。劉大文負責統籌。全體通過。',
+      '2026年4月14日','下午5時',
+      '__________（主席簽署）\n__________（文書簽署）\n通過日期：__________'
+    ],
+    contentPassage: '你是環保學會文書。學會於2026年3月10日（星期二）下午3時30分在304室舉行第三次會議，主席林志明主持、陳小麗記錄，出席者包括李老師及6名會員。會議檢討了全校垃圾分類計劃推行情況，發現紙類回收量上升20%但塑膠回收量仍偏低；決議加設塑膠回收桶於各樓層並於4月舉辦「環保週」加強宣傳，由劉大文負責統籌。下次開會：2026年4月14日。散會：下午5時。',
+    contentPoints: [
+      '2026年3月10日','下午3時30分','304室','林志明','陳小麗',
+      '李老師及6名會員','紙類回收量上升20%','塑膠回收量仍偏低',
+      '加設塑膠回收桶於各樓層','4月舉辦「環保週」','劉大文負責統籌',
+      '2026年4月14日','下午5時'
+    ],
+    styleVersions: [
+      '開完會啦，紙多咗膠少咗，要加多幾個膠桶，4月搞個環保週，阿文搞掂佢。完。',
+      '會議報告紙類回收量上升，塑膠回收量仍不足。決議加設塑膠回收桶及於4月舉辦環保週，由劉大文負責。',
+      '據報告，紙類回收量較上季上升兩成，惟塑膠回收情況未如理想。經商議後，全體通過：一、於各樓層增設塑膠專用回收桶；二、定於4月舉辦「環保週」以加強宣傳教育。上述項目統籌工作由劉大文同學負責。'
+    ]
+  },
+  // Q3: 建議書
+  {
+    type:'建議書', typeEn:'Proposal',
+    formatSlots: [
+      {l:'標題',h:'必須含有具體行動（不能只寫「建議書」❗）'},
+      {l:'受文者',h:'致：XXX'},
+      {l:'引言',h:'背景 + 寫作目的'},
+      {l:'建議一（行動）',h:'具體建議內容'},
+      {l:'建議一（理據）',h:'為何要這樣做'},
+      {l:'可行性方案',h:'如何實施'},
+      {l:'結語',h:'重申建議價值 + 期望跟進'},
+      {l:'署名及日期',h:'建議人身份+姓名+日期（年月日）'}
+    ],
+    formatAnswers: [
+      '建議延長學校閱覽室開放時間',
+      '致：陳大文中學校長',
+      '本校閱覽室目前開放至下午5時，但不少同學因課外活動約4時30分才結束，未能充分利用閱覽室資源。現建議延長開放時間，以惠及更多同學。',
+      '建議將閱覽室開放時間延長至晚上7時，讓課後有需要的同學可在安靜的環境中溫習及閱讀。',
+      '此安排能培養校園閱讀風氣，鼓勵同學善用課餘時間增值自己，對提升學業表現有正面作用。',
+      '建議招募家長義工輪流在延長時段協助管理，減輕校方人手壓力，使方案更具可行性。',
+      '上述建議若能實行，定能惠及廣大同學。懇請校長考慮並賜覆。',
+      '中三級學生會幹事 陳小明謹啟\n2026年1月15日'
+    ],
+    contentPassage: '你是中三級學生會幹事陳小明。你發現學校閱覽室開放至下午5時便關閉，但不少同學放學後（約4時30分）才完成課外活動，根本來不及使用。你決定向校長遞交建議書，建議將閱覽室開放時間延長至下午7時，理據包括有助課後溫習、培養閱讀風氣、並可招募家長義工協助管理。',
+    contentPoints: [
+      '中三級學生會幹事','陳小明','下午5時','4時30分','校長',
+      '延長至下午7時','課後溫習','培養閱讀風氣','招募家長義工協助管理'
+    ],
+    styleVersions: [
+      '校長，個閱覽室5點就關門，我哋放學搞完活動成4點半先去到，乜都睇唔到啦。不如開到7點啦，等我哋可以溫下書。仲可以叫啲家長嚟幫手睇住，好正㗎！',
+      '本校閱覽室開放至下午5時，不少同學未能使用。建議延長至7時，有助同學溫習及培養閱讀風氣。亦可招募家長義工協助管理。',
+      '鑒於本校閱覽室現行開放時間（至下午5時）未能配合大部分同學的課後安排（課外活動約於4時30分結束），現謹建議將開放時間延長至晚上7時。此舉既能提供課後溫習空間，亦有助營造校園閱讀氛圍。為確保方案可行，建議招募家長義工輪值協助管理。'
+    ]
+  },
+  // Q4: 建議書
+  {
+    type:'建議書', typeEn:'Proposal',
+    formatSlots: [
+      {l:'標題',h:'含具體行動'},
+      {l:'受文者',h:'致：中文科主任XXX'},
+      {l:'引言',h:'背景：閱讀興趣低，同儕推薦較有效'},
+      {l:'活動詳情',h:'活動名稱+頻率+形式'},
+      {l:'理據',h:'為何同儕推薦更有效'},
+      {l:'實施細節',h:'時間+輪流+投票'},
+      {l:'結語',h:'重申建議價值'},
+      {l:'署名及日期',h:'身份+姓名+日期'}
+    ],
+    formatAnswers: [
+      '建議舉辦中三級班際閱讀分享會',
+      '致：中文科主任李老師',
+      '班上不少同學反映對中文閱讀缺乏興趣，但同學之間的互相推薦往往比老師推薦更能引起共鳴。為此，我建議舉辦班際閱讀分享會。',
+      '建議每月舉辦一次「中三級班際閱讀分享會」，每次由兩班各派一名代表，以5分鐘短講形式分享一本好書。',
+      '同儕推薦能降低同學對閱讀的抗拒感，分享者以學生身分現身說法，比教師推薦更易引發共鳴和閱讀動機。',
+      '建議利用每月最後一個星期五的班主任課時段進行，每學期共4次，各班輪流派代表，活動後設簡單投票選出「最受歡迎好書」。',
+      '上述安排既能提升閱讀風氣，又能訓練同學口頭表達能力，一舉兩得。懇請考慮。',
+      '中三甲班班會主席 王大文謹啟\n2026年2月10日'
+    ],
+    contentPassage: '你是中三甲班班會主席王大文。你班上不少同學對中文閱讀缺乏興趣，但同學之間的互相推薦往往比老師推薦更能引起共鳴。你決定向中文科主任李老師建議舉辦「中三級班際閱讀分享會」，每月一次，每次兩班各派一名代表以5分鐘短講分享好書，利用每月最後一個星期五的班主任課時段進行，每學期4次，活動後設投票選出「最受歡迎好書」。',
+    contentPoints: [
+      '中三甲班班會主席','王大文','中文科主任李老師','中文閱讀缺乏興趣',
+      '同儕推薦','中三級班際閱讀分享會','每月一次','5分鐘短講',
+      '每月最後一個星期五的班主任課','最受歡迎好書'
+    ],
+    styleVersions: [
+      '老師，我班啲人覺得中文閱讀好悶。不如搞個分享會，每班搵人介紹下啲書，一個月搞一次，用班主任課嚟做。我覺得咁樣會work㗎！',
+      '鑑於部分同學對中文閱讀欠興趣，建議舉辦班際閱讀分享會，每月一次，由各班代表分享好書，以提升閱讀風氣。',
+      '部分同學對中文閱讀興趣不濃，惟同儕影響力不容忽視。現建議舉辦「中三級班際閱讀分享會」，暫定每月一次，利用班主任課時段進行，由各班輪流派代表作5分鐘好書短講，並設投票選出「最受歡迎好書」以增趣味。冀透過朋輩推薦，逐步建立閱讀氛圍。'
+    ]
+  },
+  // Q5: 報告
+  {
+    type:'報告', typeEn:'Report',
+    formatSlots: [
+      {l:'標題',h:'機構 + 主題 +「報告」'},
+      {l:'引言',h:'背景+報告期間+目的'},
+      {l:'活動一',h:'日期+內容+人數'},
+      {l:'活動二',h:'日期+內容+人數'},
+      {l:'活動三',h:'日期+內容+人數'},
+      {l:'總結數據',h:'總探訪長者數+總時數'},
+      {l:'展望',h:'未來計劃或建議'},
+      {l:'報告人及日期',h:'身份+姓名+日期（年月日）'}
+    ],
+    formatAnswers: [
+      '中三級義工服務隊2025-2026年度上學期工作報告',
+      '為培養同學的社會服務精神，本隊於2025年10月至12月期間，共組織3次安老院探訪活動。現將工作情況匯報如下。',
+      '第一次探訪：2025年10月18日，12名隊員前往幸福安老院，與長者進行互動遊戲並派發水果，長者反應熱烈。',
+      '第二次探訪：2025年11月15日，15名隊員協助打掃安老院公共空間及整理花園，改善院舍環境。',
+      '第三次探訪：2025年12月20日，18名隊員舉辦小型聖誕聯歡會，約40位長者參與，場面溫馨。',
+      '三次活動共探訪85位長者，義工服務總時數達180小時，隊員參與度和長者滿意度均高。',
+      '展望下學期，本隊計劃增至每月一次探訪，並招募更多中二級同學加入。',
+      '中三級義工服務隊隊長 林志恆謹呈\n2026年1月5日'
+    ],
+    contentPassage: '你是中三級義工服務隊隊長林志恆。服務隊於2025年10月至12月期間共進行3次探訪安老院活動。第一次（10月18日）：12名隊員參加，與長者玩遊戲及派發水果；第二次（11月15日）：15名隊員參加，協助打掃及整理院舍花園；第三次（12月20日）：18名隊員參加，舉辦小型聖誕聯歡會，約40位長者參與。三次活動共探訪85位長者，義工總時數達180小時。請撰寫工作報告向學校課外活動組匯報。',
+    contentPoints: [
+      '中三級義工服務隊','林志恆','2025年10月至12月','3次',
+      '10月18日','12名隊員','11月15日','15名隊員',
+      '12月20日','18名隊員','約40位長者參與','85位長者','180小時'
+    ],
+    styleVersions: [
+      '我哋10月去咗老人院同啲公公婆婆玩遊戲派生果，11月又去幫手掃地執花園，12月搞咗個聖誕party，total去咗3次，加加埋埋做咗180個鐘，都幾多㗎！',
+      '本隊共組織3次探訪：10月18日12人玩遊戲派水果；11月15日15人打掃整理；12月20日18人辦聖誕聯歡會。共服務85位長者，時數180小時。',
+      '本隊於2025年10月至12月期間，共安排三次安老院探訪活動，詳情如下：10月18日，12名隊員進行互動遊戲及派發水果；11月15日，15名隊員協助環境清潔及花園整理；12月20日，18名隊員舉行聖誕聯歡會，約40位長者出席。三次活動累計服務85位長者，義工總時數達180小時。'
+    ]
+  },
+  // Q6: 公函
+  {
+    type:'公函', typeEn:'Official Letter',
+    formatSlots: [
+      {l:'開頭語「敬啟者」',h:'公函以「敬啟者」開頭，非問候語❗'},
+      {l:'自我介紹',h:'你是誰？代表哪個學會？'},
+      {l:'活動詳情',h:'活動名稱+日期+時間+地點+目的'},
+      {l:'邀請請求',h:'明確邀請教授主講，語氣委婉'},
+      {l:'期望回覆',h:'懇請回覆+聯絡方法'},
+      {l:'「此致」+收信人',h:'上款移到信末：此致換行+收信人職銜姓名'},
+      {l:'署名',h:'自稱身份+姓名+「謹啟」'},
+      {l:'日期（另行頂格）',h:'年月日全寫，另起一行頂格'}
+    ],
+    formatAnswers: [
+      '敬啟者：',
+      '本人為荃灣官立中學中三級中文學會主席，現誠邀　閣下蒞臨本校主講實用文寫作工作坊。',
+      '該工作坊定於2026年3月15日（星期日）下午2時至4時在本校禮堂舉行，對象為中三級全體同學，旨在提升同學對實用文寫作的認識與技巧。',
+      '素仰　教授在中文寫作教學方面經驗豐富，若能撥冗蒞臨主講，定能使同學獲益良多。',
+      '懇請　教授於2026年2月28日前賜覆，以便跟進安排。如有垂詢，可致電12345678與本人聯絡。',
+      '此致\n香港中文大學中文系張偉明教授',
+      '荃灣官立中學中三級中文學會主席 陳大明謹啟',
+      '2026年2月1日'
+    ],
+    contentPassage: '你是荃灣官立中學中三級中文學會主席陳大明。學會計劃於2026年3月15日舉辦「實用文寫作工作坊」，想邀請香港中文大學中文系張偉明教授蒞臨主講。工作坊在學校禮堂舉行，下午2時至4時，對象為中三級全體同學。請用公函格式發出邀請，並請教授於2月28日前回覆，聯絡電話12345678。',
+    contentPoints: [
+      '荃灣官立中學中三級中文學會','陳大明','張偉明教授','香港中文大學中文系',
+      '2026年3月15日','下午2時至4時','學校禮堂','中三級全體同學',
+      '2026年2月28日前','12345678'
+    ],
+    styleVersions: [
+      'Hi Professor張，我係荃官中三中文學會主席，想請你3月15號嚟我哋學校做個talk，關於實用文寫作嘅，2點到4點，喺禮堂。你OK嗎？覆我呀，電話12345678。Thanks！',
+      '敬啟者：本人是荃灣官立中學中文學會主席，誠邀閣下於2026年3月15日下午2時至4時到本校禮堂主講實用文寫作工作坊，對象為中三同學。請於2月28日前回覆。此致張偉明教授。',
+      '敬啟者：\n\n本人為荃灣官立中學中三級中文學會主席陳大明。本會將於2026年3月15日（星期日）下午2時至4時，假本校禮堂舉辦「實用文寫作工作坊」，對象為中三級全體同學。素仰　教授在中文寫作教學方面學養深厚，經驗豐富，敢請撥冗蒞臨主講，指導後學。\n\n如蒙應允，懇請於2026年2月28日前賜覆。如有垂詢，請致電12345678。\n\n此致\n香港中文大學中文系張偉明教授\n\n荃灣官立中學中三級中文學會主席 陳大明謹啟\n2026年2月1日'
+    ]
+  }
+];
+
+// ─── STATE ───
+var curQ = 0, curStage = 1;
+var completed = {};  // {qId: true}
+var scores = { f:{}, c:{}, s:{} }; // {f: {qId: score}, ...}
+var LS_KEY = 'pw_haina';
+
+// Stage-specific
+var formatPlacements = {};  // {slotIdx: chipText}
+var selectedChipIdx = null;
+var formatAttempts = {}; // {slotIdx: failCount}
+var contentMarked = new Set();
+var styleRatings = {};  // {cardIdx: 'low'|'mid'|'high'}
+var styleSubmitted = false;
+var stageDoneThisQ = {};
+
+// ─── LOAD / SAVE ───
+function loadState(){
+  try {
+    var d = JSON.parse(localStorage.getItem(LS_KEY)||'{}');
+    completed = d.completed || {};
+    scores = d.scores || {f:{},c:{},s:{}};
+  } catch(e){}
+}
+function saveState(){
+  try { localStorage.setItem(LS_KEY, JSON.stringify({completed:completed, scores:scores})); } catch(e){}
+}
+function resetStageState(){
+  formatPlacements = {}; selectedChipIdx = null; formatAttempts = {};
+  contentMarked = new Set();
+  styleRatings = {}; styleSubmitted = false;
+  stageDoneThisQ = {};
+}
+
+// ─── RENDER ───
+function renderAll(){
+  renderTabs();
+  renderQSelector();
+  renderGame();
+  renderScoreboard();
+}
+
+function renderTabs(){
+  var tabs = document.getElementById('stage-tabs');
+  tabs.innerHTML = [1,2,3].map(function(s){
+    var names = ['','🧩 第一關<br><span class="badge">格式拼圖 · 8分</span>','🎯 第二關<br><span class="badge">內容踩點 · 9分</span>','✍️ 第三關<br><span class="badge">行文診斷 · 3分</span>'];
+    return '<button class="stage-tab'+(s===curStage?' active':'')+'" data-stage="'+s+'">'+names[s]+'</button>';
+  }).join('');
+}
+
+function renderQSelector(){
+  var qs = document.getElementById('q-selector');
+  qs.innerHTML = Q.map(function(q,i){
+    var cls = i===curQ ? 'active' : '';
+    if (completed[i]) cls += ' done';
+    return '<button class="q-btn '+cls+'" data-q="'+i+'">'+q.type.slice(0,2)+(i+1)+'</button>';
+  }).join('');
+}
+
+function renderGame(){
+  resetStageState();
+  var q = Q[curQ];
+  document.getElementById('game-header').innerHTML = '<h2>'+q.type+' <small style="font-weight:400;color:var(--slate-400);font-size:0.8em;">'+q.typeEn+'</small></h2><div class="meta">題 #'+(curQ+1)+'</div>';
+  if (curStage===1) renderStage1(q);
+  else if (curStage===2) renderStage2(q);
+  else renderStage3(q);
+  renderActionBar();
+}
+
+// ─── STAGE 1: Format Puzzle ───
+function renderStage1(q){
+  var body = document.getElementById('game-body');
+  var pool = shuffle(q.formatAnswers.slice());
+  var slotHTML = q.formatSlots.map(function(s,i){
+    return '<div class="puzzle-slot" data-slot="'+i+'"><span class="slot-label">'+s.l+'</span><span class="slot-content" id="sc-'+i+'"></span><button class="slot-remove" id="sr-'+i+'" style="display:none">✕</button></div>';
+  }).join('');
+  var poolHTML = pool.map(function(p,i){ return '<div class="puzzle-chip" data-chip="'+i+'">'+p+'</div>'; }).join('');
+  body.innerHTML = '<div class="puzzle-instruction">📋 點選下方元素，再點目標槽位放置。順序要正確！放錯有提示，3次後顯示答案。</div><div class="hint-box" id="hint-box" style="display:none;padding:10px 14px;background:#FFFBEB;border:1px solid #FDE68A;border-radius:6px;font-size:.82rem;color:#92400E;margin-bottom:12px;"></div><div class="puzzle-workspace" id="pz-workspace">'+slotHTML+'</div><div class="puzzle-pool" id="pz-pool">'+poolHTML+'</div><div class="puzzle-feedback" id="pz-fb"></div>';
+}
+
+function renderStage2(q){
+  var body = document.getElementById('game-body');
+  // Sort points by length descending to avoid nested matching
+  var pts = q.contentPoints.slice().sort(function(a,b){return b.length-a.length;});
+  var escaped = pts.map(escRegex);
+  var re = new RegExp('('+escaped.join('|')+')','g');
+  var spanned = q.contentPassage.replace(re, function(m){ return '<span class="info-point" data-cp="'+escHtml(m)+'">'+m+'</span>'; });
+  body.innerHTML = '<div class="puzzle-instruction">🎯 點選段落中<strong>你認為必須寫進文件的關鍵資訊</strong>。漏圈一個 = 內容分被扣。（共 '+q.contentPoints.length+' 個采分點）</div><div class="content-passage" id="cp-passage">'+spanned+'</div><div class="content-points-panel"><div class="cp-header">已標記：<span id="cp-count">0</span>/'+q.contentPoints.length+'</div><div class="found-points" id="cp-found"></div></div>';
+}
+
+function renderStage3(q){
+  var body = document.getElementById('game-body');
+  var shuffled = q.styleVersions.map(function(v,i){ return {text:v, orig:i}; });
+  shuffle(shuffled);
+  var cardsHTML = shuffled.map(function(v,i){
+    return '<div class="style-card" data-card="'+i+'" data-orig="'+v.orig+'"><div class="style-text">'+escHtml(v.text)+'</div><div class="style-rank-select"><button class="rank-btn low" data-rating="low">⬇️ 下品（1分）</button><button class="rank-btn mid" data-rating="mid">➖ 中品（2分）</button><button class="rank-btn high" data-rating="high">⬆️ 上品（3分）</button></div></div>';
+  }).join('');
+  body.innerHTML = '<div class="puzzle-instruction">✍️ 以下三段是同一內容的不同寫法。請為每段評級：<strong>下品（口語/囉嗦） → 中品（正確但平淡） → 上品（精簡得體/書面語）</strong></div><div class="style-versions">'+cardsHTML+'</div>';
+}
+
+function renderActionBar(){
+  var bar = document.getElementById('action-bar');
+  if (curStage===1) bar.innerHTML = '<button class="btn btn-primary" id="btn-submit-f">✅ 提交格式拼圖</button><button class="btn btn-ghost" id="btn-skip-f">跳過（顯示答案）</button>';
+  else if (curStage===2) bar.innerHTML = '<button class="btn btn-primary" id="btn-submit-c">✅ 提交內容踩點</button><button class="btn btn-ghost" id="btn-reveal-c">顯示所有采分點</button>';
+  else bar.innerHTML = '<button class="btn btn-primary" id="btn-submit-s">✅ 提交行文評級</button>';
+}
+
+// ─── EVENT DELEGATION ───
+document.addEventListener('click', function(e){
+  var target = e.target;
+
+  // Stage tabs
+  if (target.closest('.stage-tab')) {
+    curStage = parseInt(target.closest('.stage-tab').dataset.stage);
+    renderAll();
+    return;
+  }
+
+  // Question selector
+  if (target.closest('.q-btn')) {
+    curQ = parseInt(target.closest('.q-btn').dataset.q);
+    resetStageState();
+    renderAll();
+    return;
+  }
+
+  // Stage 1: select chip
+  if (target.classList.contains('puzzle-chip') && !target.classList.contains('used')) {
+    document.querySelectorAll('.puzzle-chip').forEach(function(c){c.classList.remove('selected');});
+    target.classList.add('selected');
+    selectedChipIdx = parseInt(target.dataset.chip);
+    return;
+  }
+
+  // Stage 1: place in slot
+  if (target.closest('.puzzle-slot')) {
+    var slotEl = target.closest('.puzzle-slot');
+    var slotIdx = parseInt(slotEl.dataset.slot);
+    if (selectedChipIdx !== null) {
+      placeInSlot(slotIdx);
+    }
+    return;
+  }
+
+  // Stage 1: remove from slot
+  if (target.classList.contains('slot-remove') || target.closest('.slot-remove')) {
+    var rmBtn = target.classList.contains('slot-remove') ? target : target.closest('.slot-remove');
+    var slotIdx = parseInt(rmBtn.parentElement.dataset.slot);
+    removeFromSlot(slotIdx);
+    e.stopPropagation();
+    return;
+  }
+
+  // Stage 2: toggle content point
+  if (target.classList.contains('info-point')) {
+    toggleContentPoint(target);
+    return;
+  }
+
+  // Stage 3: rate style
+  if (target.classList.contains('rank-btn')) {
+    if (styleSubmitted) return;
+    var cardEl = target.closest('.style-card');
+    var cardIdx = parseInt(cardEl.dataset.card);
+    var rating = target.dataset.rating;
+    rateStyle(cardIdx, rating);
+    return;
+  }
+
+  // Action buttons
+  if (target.id === 'btn-submit-f') { submitFormat(); return; }
+  if (target.id === 'btn-skip-f') { skipFormat(); return; }
+  if (target.id === 'btn-submit-c') { submitContent(); return; }
+  if (target.id === 'btn-reveal-c') { revealContent(); return; }
+  if (target.id === 'btn-submit-s') { submitStyle(); return; }
+
+  // Result overlay close
+  if (target.closest('.result-overlay') && !target.closest('.result-panel')) { closeResult(); return; }
+});
+
+// ─── STAGE 1 ACTIONS ───
+function placeInSlot(slotIdx){
+  var q = Q[curQ];
+  var chips = document.querySelectorAll('.puzzle-chip');
+  var chipEl = chips[selectedChipIdx];
+  var chipText = chipEl.textContent;
+
+  // Already placed elsewhere? Remove
+  Object.keys(formatPlacements).forEach(function(k){
+    if (formatPlacements[k]===chipText) {
+      delete formatPlacements[k];
+      document.getElementById('sc-'+k).textContent = '';
+      document.getElementById('sr-'+k).style.display = 'none';
+      document.getElementById(k).parentElement.classList.remove('filled','wrong');
+    }
+  });
+
+  formatPlacements[slotIdx] = chipText;
+  chipEl.classList.add('used');
+  chipEl.classList.remove('selected');
+  selectedChipIdx = null;
+
+  // Update UI
+  document.getElementById('sc-'+slotIdx).textContent = chipText;
+  document.getElementById('sr-'+slotIdx).style.display = 'flex';
+  document.querySelector('.puzzle-slot[data-slot="'+slotIdx+'"]').classList.add('filled');
+
+  // Show hint
+  var hintBox = document.getElementById('hint-box');
+  hintBox.style.display = 'block';
+  hintBox.textContent = '💡 '+q.formatSlots[slotIdx].h;
+}
+
+function removeFromSlot(slotIdx){
+  var val = formatPlacements[slotIdx];
+  delete formatPlacements[slotIdx];
+  document.getElementById('sc-'+slotIdx).textContent = '';
+  document.getElementById('sr-'+slotIdx).style.display = 'none';
+  document.querySelector('.puzzle-slot[data-slot="'+slotIdx+'"]').classList.remove('filled','wrong');
+
+  // Un-use the chip
+  document.querySelectorAll('.puzzle-chip').forEach(function(c){
+    if (c.textContent===val) c.classList.remove('used');
+  });
+}
+
+function submitFormat(){
+  var q = Q[curQ];
+  var fb = document.getElementById('pz-fb');
+  var allFilled = true, allCorrect = true;
+  q.formatSlots.forEach(function(s,i){
+    var slotEl = document.querySelector('.puzzle-slot[data-slot="'+i+'"]');
+    slotEl.classList.remove('wrong');
+    if (!formatPlacements[i]) { allFilled = false; allCorrect = false; slotEl.classList.add('wrong'); }
+    else if (formatPlacements[i] !== q.formatAnswers[i]) {
+      allCorrect = false; slotEl.classList.add('wrong');
+      formatAttempts[i] = (formatAttempts[i]||0) + 1;
+      if (formatAttempts[i] >= 3) {
+        // Auto-fix after 3 attempts
+        slotEl.classList.remove('wrong');
+        slotEl.classList.add('filled');
+        formatPlacements[i] = q.formatAnswers[i];
+        document.getElementById('sc-'+i).textContent = q.formatAnswers[i];
+        document.getElementById('sr-'+i).style.display = 'flex';
+        document.querySelectorAll('.puzzle-chip').forEach(function(c){ if(c.textContent===q.formatAnswers[i]) c.classList.add('used'); });
+      }
+    }
+  });
+  if (!allFilled) { fb.className='puzzle-feedback show err'; fb.textContent='❌ 有空位未填，請完成所有槽位再提交。'; return; }
+  if (!allCorrect) {
+    fb.className='puzzle-feedback show err';
+    var wrongLabels = q.formatSlots.filter(function(s,i){return formatPlacements[i]!==q.formatAnswers[i];}).map(function(s){return s.l;});
+    fb.textContent = '❌ '+wrongLabels.length+' 個位置不正確：'+wrongLabels.join('、')+'。請調整後再試。';
+    return;
+  }
+  fb.className='puzzle-feedback show ok';
+  fb.textContent = '🎉 格式拼圖全對！8分滿分！得分關鍵：每個格式元素的標籤和位置都要精準。';
+  scores.f[curQ] = 8;
+  stageDoneThisQ[1] = true;
+  saveState(); renderScoreboard(); renderQSelector();
+  checkCompletion();
+}
+
+function skipFormat(){
+  var q = Q[curQ];
+  q.formatSlots.forEach(function(s,i){
+    formatPlacements[i] = q.formatAnswers[i];
+    document.getElementById('sc-'+i).textContent = q.formatAnswers[i];
+    document.getElementById('sr-'+i).style.display = 'flex';
+    document.querySelector('.puzzle-slot[data-slot="'+i+'"]').classList.add('filled');
+  });
+  document.querySelectorAll('.puzzle-chip').forEach(function(c){ c.classList.add('used'); });
+  selectedChipIdx = null;
+  document.getElementById('pz-fb').className = 'puzzle-feedback show ok';
+  document.getElementById('pz-fb').textContent = '📖 已顯示正確答案，請對照學習。格式8分 = 每個元素的位置和措辭都要精準。';
+}
+
+// ─── STAGE 2 ACTIONS ───
+function toggleContentPoint(el){
+  var cp = el.dataset.cp;
+  if (contentMarked.has(cp)) { contentMarked.delete(cp); el.classList.remove('marked'); }
+  else { contentMarked.add(cp); el.classList.add('marked'); }
+  document.getElementById('cp-count').textContent = contentMarked.size;
+  var foundEl = document.getElementById('cp-found');
+  foundEl.innerHTML = '';
+  contentMarked.forEach(function(p){
+    var tag = document.createElement('span');
+    tag.className = 'found-point-tag';
+    tag.textContent = p;
+    foundEl.appendChild(tag);
+  });
+}
+
+function submitContent(){
+  var q = Q[curQ];
+  var allSet = new Set(q.contentPoints);
+  var hit = 0;
+  allSet.forEach(function(p){ if (contentMarked.has(p)) hit++; });
+  var score = Math.round(hit / allSet.size * 9);
+  var missed = [];
+  allSet.forEach(function(p){ if (!contentMarked.has(p)) missed.push(p); });
+
+  // Reveal
+  document.querySelectorAll('.info-point').forEach(function(el){
+    el.classList.remove('marked');
+    if (allSet.has(el.dataset.cp) && contentMarked.has(el.dataset.cp)) el.classList.add('reveal-correct');
+    if (allSet.has(el.dataset.cp) && !contentMarked.has(el.dataset.cp)) el.classList.add('reveal-missed');
+  });
+
+  scores.c[curQ] = score;
+  stageDoneThisQ[2] = true;
+  saveState(); renderScoreboard(); renderQSelector();
+
+  document.getElementById('action-bar').innerHTML = '<div class="action-feedback '+(score>=7?'good':'info')+'"><strong>內容得分：'+score+'/9</strong>（命中 '+hit+'/'+allSet.size+' 個采分點）<br>漏圈：'+ (missed.length?missed.join('、'):'無')+'<br><small>⚠️ 遺漏任何資訊點都會扣內容分——這就是「答不到點子上」。</small></div>';
+  checkCompletion();
+}
+
+function revealContent(){
+  var q = Q[curQ];
+  var allSet = new Set(q.contentPoints);
+  document.querySelectorAll('.info-point').forEach(function(el){
+    if (allSet.has(el.dataset.cp)) el.classList.add('reveal-missed');
+  });
+  document.getElementById('action-bar').innerHTML = '<div class="action-feedback warn"><strong>📖 黃色標記 = 全部 '+allSet.size+' 個采分點。</strong><br><small>考試時，從題目情境中提取所有這些資訊點，一個都不能漏。</small></div>';
+}
+
+// ─── STAGE 3 ACTIONS ───
+function rateStyle(cardIdx, rating){
+  styleRatings[cardIdx] = rating;
+  // Update UI
+  var cardEl = document.querySelector('.style-card[data-card="'+cardIdx+'"]');
+  cardEl.classList.remove('rated-low','rated-mid','rated-high');
+  cardEl.classList.add('rated-'+(rating==='low'?'low':rating==='mid'?'mid':'high'));
+  cardEl.querySelectorAll('.rank-btn').forEach(function(b){ b.classList.remove('active'); });
+  cardEl.querySelector('.rank-btn.'+rating).classList.add('active');
+}
+
+function submitStyle(){
+  var q = Q[curQ];
+  var cards = document.querySelectorAll('.style-card');
+  if (Object.keys(styleRatings).length < cards.length) { alert('請為每一段文字評級後再提交。'); return; }
+  styleSubmitted = true;
+
+  var correct = 0;
+  cards.forEach(function(card){
+    var cardIdx = parseInt(card.dataset.card);
+    var origIdx = parseInt(card.dataset.orig);  // 0=下品, 1=中品, 2=上品
+    var rating = styleRatings[cardIdx];
+    var ratingNum = rating==='low'?0:rating==='mid'?1:2;
+    if (ratingNum === origIdx) correct++;
+  });
+
+  var score = correct===3 ? 3 : correct===2 ? 2 : 1;
+  var msg = correct===3 ? '🎉 三段全對！行文 3 分滿分！' : correct===2 ? '👍 對兩段。行文 2 分。再看上品的寫法。' : '📖 行文 1 分。關鍵：下品有口語詞，上品用正式書面語。';
+
+  scores.s[curQ] = score;
+  stageDoneThisQ[3] = true;
+  saveState(); renderScoreboard(); renderQSelector();
+
+  document.getElementById('action-bar').innerHTML = '<div class="action-feedback '+(score===3?'good':'info')+'"><strong>'+msg+'</strong><br><small>每段原始排序：A=下品(1分)、B=中品(2分)、C=上品(3分)。口語化（如「OK」「搞掂」「好正」）= 行文直接跌到下品。</small></div>';
+  checkCompletion();
+}
+
+// ─── COMPLETION CHECK ───
+function checkCompletion(){
+  var allDone = scores.f[curQ]!=null && scores.c[curQ]!=null && scores.s[curQ]!=null;
+  if (allDone && !completed[curQ]) {
+    completed[curQ] = true;
+    saveState();
+    var total = scores.f[curQ] + scores.c[curQ] + scores.s[curQ];
+    setTimeout(function(){ showResult(total); }, 500);
+  }
+}
+
+function showResult(total){
+  var panel = document.getElementById('result-panel');
+  var maxTotal = 20;
+  panel.innerHTML = '<div class="big-score">'+total+'</div><div class="big-label">/20 分</div>'+
+    '<div class="result-row"><span class="rlabel">格式 Format</span><span class="rval">'+scores.f[curQ]+'/8</span></div>'+
+    '<div class="result-row"><span class="rlabel">內容 Content</span><span class="rval">'+scores.c[curQ]+'/9</span></div>'+
+    '<div class="result-row"><span class="rlabel">行文 Style</span><span class="rval">'+scores.s[curQ]+'/3</span></div>'+
+    '<div class="score-bar"><div class="bar-bg"><div class="bar-fill" style="width:'+(total/maxTotal*100)+'%"></div></div></div>'+
+    '<br><button class="btn btn-primary" onclick="closeResult()">👍 繼續練習</button>';
+  document.getElementById('result-overlay').classList.add('show');
+}
+function closeResult(){ document.getElementById('result-overlay').classList.remove('show'); }
+
+// ─── SCOREBOARD ───
+function renderScoreboard(){
+  document.getElementById('sc-f').textContent = scores.f[curQ]!=null ? scores.f[curQ] : '—';
+  document.getElementById('sc-c').textContent = scores.c[curQ]!=null ? scores.c[curQ] : '—';
+  document.getElementById('sc-s').textContent = scores.s[curQ]!=null ? scores.s[curQ] : '—';
+  if (scores.f[curQ]!=null && scores.c[curQ]!=null && scores.s[curQ]!=null) {
+    document.getElementById('sc-t').textContent = scores.f[curQ]+scores.c[curQ]+scores.s[curQ];
+  } else {
+    document.getElementById('sc-t').textContent = '—';
+  }
+}
+
+// ─── HELPERS ───
+function shuffle(arr){ for(var i=arr.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=arr[i];arr[i]=arr[j];arr[j]=t;} return arr; }
+function escRegex(s){ return String(s).replace(/[.*+?^${}()|[\]\\]/g,'\\$&'); }
+function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+// ─── INIT ───
+loadState();
+try { renderAll(); } catch(e) { document.getElementById('game-body').innerHTML = '<p style="color:red">載入失敗：'+e.message+'</p>'; console.error(e); }
+})();
+</script>
+</body>
+</html>

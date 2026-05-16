@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Geography Skills Workbench · Map/Data/Photo/Time Zone</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--g:#2d6a4f;--gm:#40916c;--gl:#d8f3dc;--e:#e07a5f;--el:#ffe8d6;--c:#fefae0;--sand:#faedcd;--bark:#582f0e;--t:#1b1b1b;--t2:#6b705c;--t3:#a5a58d;--w:#fffef7;--card:rgba(255,254,247,.92);--r:16px;--rs:10px;--f:system-ui,-apple-system,'Segoe UI',sans-serif;--fh:'Georgia','Times New Roman',serif;--sh:0 2px 12px rgba(88,47,14,.06);--shl:0 6px 28px rgba(88,47,14,.1)}
+html{font-size:16px;-webkit-text-size-adjust:100%}
+body{font-family:var(--f);background:linear-gradient(175deg,var(--c) 0%,var(--sand) 50%,#e9edc9 100%);color:var(--t);min-height:100vh;min-height:100dvh;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);overscroll-behavior:none;-webkit-touch-callout:none}
+.container{max-width:720px;margin:0 auto;padding:.75rem 1rem 6rem}
+.header{text-align:center;padding:1.25rem 0 .5rem}
+.header h1{font-family:var(--fh);font-size:1.4rem;color:var(--g);letter-spacing:-.01em}
+.header .sub{font-size:.76rem;color:var(--t2)}
+.dash-grid{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;margin:1rem 0}
+@media(max-width:420px){.dash-grid{grid-template-columns:1fr}}
+.dash-card{background:var(--card);border-radius:var(--r);padding:1rem;box-shadow:var(--sh);cursor:pointer;transition:.2s;text-align:center;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);-webkit-tap-highlight-color:transparent;touch-action:manipulation;border:1.5px solid transparent;position:relative;overflow:hidden}
+.dash-card:hover,.dash-card:active{border-color:var(--gm);box-shadow:var(--shl)}
+.dash-icon{font-size:2rem;margin-bottom:.3rem}
+.dash-lab{font-weight:700;font-size:.9rem;color:var(--bark)}
+.dash-stat{font-size:.72rem;color:var(--t2);margin-top:.25rem}
+.dash-bar-wrap{height:4px;background:rgba(0,0,0,.06);border-radius:2px;margin:.4rem 0;overflow:hidden}
+.dash-bar-fill{height:100%;background:var(--gm);border-radius:2px;transition:.6s}
+.dash-bar-fill.low{background:var(--e)}
+.dash-badge{display:inline-block;font-size:.58rem;padding:.1rem .4rem;border-radius:8px;font-weight:600;text-transform:uppercase;letter-spacing:.03em}
+.dash-badge.good{background:var(--gl);color:var(--g)}
+.dash-badge.warn{background:var(--el);color:var(--e)}
+.dash-badge.new{background:rgba(0,0,0,.04);color:var(--t3)}
+.dash-tip{margin-top:.75rem;padding:.5rem .8rem;background:var(--gl);border-radius:var(--rs);font-size:.72rem;color:var(--g);border-left:3px solid var(--g)}
+.lab-view{display:none}
+.lab-view.active{display:block}
+.lab-back{display:inline-flex;align-items:center;gap:.3rem;padding:.4rem .8rem;border-radius:20px;font-size:.78rem;font-weight:500;cursor:pointer;background:var(--gl);color:var(--g);border:none;margin-bottom:.75rem;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.lab-header{display:flex;align-items:center;gap:.6rem;margin-bottom:.75rem}
+.lab-header-icon{font-size:1.5rem}
+.lab-header h2{font-family:var(--fh);font-size:1.15rem;color:var(--g)}
+.tutorial{background:var(--card);border-radius:var(--r);padding:1rem 1.25rem;box-shadow:var(--sh);margin-bottom:.75rem;border-left:4px solid var(--gm);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+.tutorial h4{font-size:.82rem;color:var(--g);margin-bottom:.3rem}
+.tutorial p{font-size:.76rem;color:var(--t2);line-height:1.5}
+.exercise{background:var(--card);border-radius:var(--r);padding:1.25rem;box-shadow:var(--sh);margin-bottom:.75rem;transition:.3s;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border:1.5px solid transparent}
+.exercise.current{border-color:var(--gm);box-shadow:var(--shl)}
+.ex-done{border-color:var(--gl)}
+.ex-num{font-weight:700;font-size:.72rem;color:var(--g);text-transform:uppercase;margin-bottom:.4rem}
+.ex-q{font-size:.9rem;font-weight:600;color:var(--bark);line-height:1.5;margin-bottom:.75rem}
+.map-grid{display:grid;grid-template-columns:repeat(10,1fr);gap:0;width:100%;max-width:360px;margin:.5rem auto;border:2px solid var(--bark);background:var(--w);border-radius:4px;overflow:hidden}
+.map-cell{aspect-ratio:1;border:.5px solid rgba(88,47,14,.12);position:relative;display:flex;align-items:center;justify-content:center;font-size:.55rem;cursor:pointer;transition:.15s;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.map-cell:hover{background:var(--gl)}
+.map-cell.highlight{background:var(--gl)}
+.map-cell.landmark{background:var(--el);font-weight:700}
+.map-legend{display:flex;gap:.8rem;justify-content:center;flex-wrap:wrap;font-size:.65rem;color:var(--t2);margin:.3rem 0}
+.map-legend span{display:flex;align-items:center;gap:.2rem}
+.map-legend .dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+.map-legend .dot.lm{background:var(--e)}
+.map-legend .dot.hl{background:var(--gm)}
+.map-scale{text-align:center;font-size:.62rem;color:var(--t3);margin:.2rem 0}
+.input-row{display:flex;gap:.5rem;align-items:center;margin:.5rem 0;flex-wrap:wrap}
+.input-field{padding:.5rem .75rem;border:1.5px solid var(--t3);border-radius:var(--rs);font-size:.85rem;font-family:var(--f);width:100%;max-width:200px;background:var(--w);outline:none;transition:.2s}
+.input-field:focus{border-color:var(--gm);box-shadow:0 0 0 3px rgba(45,106,79,.12)}
+.input-field.correct{border-color:var(--g);background:rgba(45,106,79,.06)}
+.input-field.wrong{border-color:var(--e);background:rgba(224,122,95,.06)}
+.feedback{font-size:.78rem;font-weight:500;min-height:1.2em;margin:.3rem 0}
+.feedback.correct{color:var(--g)}.feedback.wrong{color:var(--e)}
+.btn{padding:.5rem 1.2rem;border-radius:20px;font-size:.8rem;font-weight:500;cursor:pointer;border:none;font-family:var(--f);transition:.2s;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.btn-p{background:var(--g);color:#fff}.btn-p:hover{opacity:.9}
+.btn-s{background:var(--gl);color:var(--g);border:1.5px solid var(--gm)}
+.btn-g{background:transparent;color:var(--t2);border:1.5px solid var(--t3)}
+.btn:disabled{opacity:.4;pointer-events:none}
+.btn-row{display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center;margin:.5rem 0}
+.data-table{width:100%;border-collapse:collapse;font-size:.72rem;margin:.5rem 0;background:var(--w);border-radius:var(--rs);overflow:hidden}
+.data-table th{background:var(--gl);color:var(--g);padding:.35rem .5rem;text-align:left;font-weight:600}
+.data-table td{padding:.3rem .5rem;border-bottom:1px solid rgba(0,0,0,.05)}
+.prog-wrap{display:flex;align-items:center;gap:.5rem;margin:.5rem 0}
+.prog-bar{flex:1;height:4px;background:rgba(0,0,0,.06);border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;background:var(--gm);border-radius:2px;transition:.4s}
+.prog-txt{font-size:.68rem;color:var(--t2);white-space:nowrap}
+.btm{position:fixed;bottom:0;left:0;right:0;padding:.5rem 1rem calc(.5rem + env(safe-area-inset-bottom));background:rgba(255,254,247,.95);border-top:1px solid rgba(0,0,0,.06);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);display:flex;justify-content:space-between;align-items:center;z-index:50}
+.btm-t{font-size:.68rem;color:var(--t2)}
+.toast{position:fixed;bottom:5rem;left:50%;transform:translateX(-50%);padding:.45rem 1rem;border-radius:20px;font-size:.74rem;font-weight:500;z-index:150;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap;background:var(--g);color:#fff}
+.toast.show{opacity:1}
+</style>
+</head>
+<body>
+<div class="container" id="appRoot">
+<div class="header"><h1>Geography Skills Workbench</h1><div class="sub">Map Skills · Data Lab · Photo Lab · Time Zone — TWGSS S3</div></div>
+<div id="dashView"><div class="dash-grid" id="dashGrid"></div><div class="dash-tip" id="dashTip"></div></div>
+<div class="lab-view" id="labMap"></div>
+<div class="lab-view" id="labData"></div>
+<div class="lab-view" id="labPhoto"></div>
+<div class="lab-view" id="labTime"></div>
+</div>
+<div class="btm" id="btmBar"><span class="btm-t" id="btmTxt">Select a lab to begin</span></div>
+<div class="toast" id="toast"></div>
+<script>
+/* ===== HELPERS ===== */
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},1800);}
+function rnd(n,d){return Math.round(n*Math.pow(10,d))/Math.pow(10,d);}
+
+/* ===== STATE + localStorage ===== */
+var SK='geo_skills_wb_v1';
+var state={currentLab:null,labData:{}};
+function loadState(){
+  try{var d=localStorage.getItem(SK);if(d)state.labData=JSON.parse(d);}catch(e){state.labData={};}
+  ['map','data','photo','time'].forEach(function(id){
+    if(!state.labData[id])state.labData[id]={ex:0,total:0,correct:0,attempts:0,answers:{}};
+  });
+  state.labData.map.total=7;state.labData.data.total=6;state.labData.photo.total=6;state.labData.time.total=8;
+}
+function saveState(){try{localStorage.setItem(SK,JSON.stringify(state.labData));}catch(e){}}
+loadState();
+function labPct(id){var d=state.labData[id];return d.total===0?0:Math.round((d.ex/d.total)*100);}
+function labScore(id){var d=state.labData[id];return d.attempts===0?null:Math.round((d.correct/d.attempts)*100);}
+function markEx(id,idx,ok){
+  var d=state.labData[id];d.answers[idx]=ok;d.attempts++;if(ok)d.correct++;
+  var done=0;for(var i=0;i<d.total;i++)if(d.answers[i]!==undefined)done++;
+  d.ex=done;saveState();renderDashboard();
+}
+
+/* ===== RENDER DASHBOARD ===== */
+function renderDashboard(){
+  document.getElementById('dashView').style.display='block';
+  document.querySelectorAll('.lab-view').forEach(function(v){v.classList.remove('active');v.innerHTML='';});
+  state.currentLab=null;document.getElementById('btmTxt').textContent='Select a lab to begin';
+  var labs=[
+    {id:'map',icon:'Map Skills',emoji:'#',name:'Map Skills',desc:'Distance · Direction · Grid Ref · Area',total:7},
+    {id:'data',icon:'Data Lab',emoji:'#',name:'Data Lab',desc:'Tables · % Change · Trend Writing',total:6},
+    {id:'photo',icon:'Photo Lab',emoji:'#',name:'Photo Lab',desc:'Landforms · Tourism · Conflict',total:6},
+    {id:'time',icon:'Time Zone',emoji:'#',name:'Time Zone Lab',desc:'GMT · Flight Time · Date Line',total:8}
+  ];
+  var html='';var lowest=null;
+  labs.forEach(function(l){
+    var pct=labPct(l.id);var scr=labScore(l.id);var d=state.labData[l.id];
+    var badge='';var barCls='';
+    if(pct===0)badge='<span class="dash-badge new">NEW</span>';
+    else if(scr!==null&&scr>=70)badge='<span class="dash-badge good">'+scr+'% correct</span>';
+    else if(scr!==null&&scr<50){badge='<span class="dash-badge warn">'+scr+'% correct</span>';barCls=' low';}
+    else if(scr!==null)badge='<span class="dash-badge good">'+scr+'% correct</span>';
+    if(scr!==null&&(lowest===null||scr<lowest.score))lowest={id:l.id,score:scr};
+    html+='<div class="dash-card" data-lab="'+l.id+'"><div class="dash-icon" style="font-size:2rem">'+getLabEmoji(l.id)+'</div><div class="dash-lab">'+l.name+'</div><div class="dash-stat">'+l.desc+'</div><div class="dash-bar-wrap"><div class="dash-bar-fill'+barCls+'" style="width:'+pct+'%"></div></div><div style="font-size:.65rem;color:var(--t3)">'+d.ex+'/'+d.total+' exercises &middot; '+pct+'%</div>'+badge+'</div>';
+  });
+  document.getElementById('dashGrid').innerHTML=html;
+  var tips={map:'Try the Map Skills lab first — master grid references and bearing conversions.',data:'Try the Data Lab — practise percentage change calculations and trend descriptions.',photo:'Try the Photo Lab — work on identifying landforms from key characteristics.',time:'Try the Time Zone Lab — master GMT conversions and date line crossings.'};
+  if(lowest&&lowest.score<70)document.getElementById('dashTip').innerHTML='<strong>Focus area:</strong> '+tips[lowest.id];
+  else document.getElementById('dashTip').innerHTML='<strong>Welcome!</strong> Start with any lab. Map Skills is a good first choice.';
+  document.getElementById('dashTip').style.display='block';
+}
+function getLabEmoji(id){return{map:'Map Skills',data:'Data Lab',photo:'Photo Lab',time:'Time Zone'}[id];}
+document.getElementById('dashGrid').addEventListener('click',function(e){var c=e.target.closest('.dash-card');if(c)openLab(c.dataset.lab);});
+
+/* ===== LAB NAVIGATION ===== */
+function openLab(id){
+  state.currentLab=id;document.getElementById('dashView').style.display='none';
+  document.querySelectorAll('.lab-view').forEach(function(v){v.classList.remove('active');v.innerHTML='';});
+  var ve=document.getElementById('lab'+id.charAt(0).toUpperCase()+id.slice(1));
+  ve.classList.add('active');
+  var titles={map:'Map Skills Lab',data:'Data Lab',photo:'Photo Lab',time:'Time Zone Lab'};
+  var st={map:'Distance · Direction · Grid Reference · Area',data:'Table Reading · % Change · Trend Writing',photo:'Landform ID · Tourism Type · Human-Environment Conflict',time:'GMT Conversion · Flight Time · International Date Line'};
+  ve.innerHTML='<button class="lab-back" id="btnBack">Dashboard</button><div class="lab-header"><div class="lab-header-icon" style="font-size:1.5rem">'+getLabEmoji(id)+'</div><div><h2>'+titles[id]+'</h2><div style="font-size:.72rem;color:var(--t2)">'+st[id]+'</div></div></div><div id="labContent"></div><div class="prog-wrap"><div class="prog-bar"><div class="prog-fill" id="labProgFill" style="width:'+labPct(id)+'%"></div></div><div class="prog-txt" id="labProgTxt">'+state.labData[id].ex+'/'+state.labData[id].total+'</div></div><div class="btn-row" id="labNavBtns"></div>';
+  document.getElementById('btnBack').addEventListener('click',function(){renderDashboard();});
+  if(id==='map')renderMapLab();else if(id==='data')renderDataLab();else if(id==='photo')renderPhotoLab();else if(id==='time')renderTimeLab();
+  document.getElementById('btmTxt').textContent=titles[id]+' · '+state.labData[id].ex+'/'+state.labData[id].total+' done';
+}
+function updProg(id){var d=state.labData[id];var pct=labPct(id);var f=document.getElementById('labProgFill');if(f)f.style.width=pct+'%';var t=document.getElementById('labProgTxt');if(t)t.textContent=d.ex+'/'+d.total;document.getElementById('btmTxt').textContent='Exercise '+Math.min(d.ex+1,d.total)+' of '+d.total;}
+
+/* ===== GENERIC LAB EXERCISES RENDERER ===== */
+function renderLab(id,prefix,exercises,tutHTML){
+  var d=state.labData[id];var cur=d.ex;if(cur>=exercises.length)cur=exercises.length-1;
+  var html=tutHTML;
+  for(var i=0;i<exercises.length;i++){
+    var ex=exercises[i];var cls='exercise';if(i===cur)cls+=' current';if(d.answers[i]!==undefined)cls+=' ex-done';
+    html+='<div class="'+cls+'" id="ex-'+prefix+'-'+i+'"><div class="ex-num">Exercise '+(i+1)+'/'+exercises.length+(d.answers[i]===true?' *':d.answers[i]===false?' *':'')+'</div><div class="ex-q">'+ex.q+'</div>';
+    html+=renderInput(id,prefix,i,ex,d);
+    html+='<div class="feedback" id="fb-'+prefix+'-'+i+'"></div>';
+    if(d.answers[i]===true&&ex.explain)html+='<div style="font-size:.72rem;color:var(--g);margin-top:.2rem">'+ex.explain+'</div>';
+    if(d.answers[i]===false&&ex.hint)html+='<div style="font-size:.72rem;color:var(--e);margin-top:.2rem">Hint: '+ex.hint+'</div>';
+    html+='</div>';
+  }
+  document.getElementById('labContent').innerHTML=html;
+  for(var i=0;i<exercises.length;i++){(function(j){
+    var btn=document.getElementById('btn-'+prefix+'-'+j);if(btn)btn.addEventListener('click',function(){doCheck(id,prefix,j,exercises[j]);});
+    var inp=document.getElementById('inp-'+prefix+'-'+j);if(inp)inp.addEventListener('keydown',function(e){if(e.key==='Enter')doCheck(id,prefix,j,exercises[j]);});
+  })(i);}
+  updProg(id);renderNav(id,prefix,exercises.length);
+  if(id==='map')setTimeout(function(){for(var i=0;i<exercises.length;i++)renderGridMap('mg-'+i,exercises[i]);},200);
+}
+function renderInput(id,prefix,i,ex,d){
+  if(d.answers[i]!==undefined){var ok=d.answers[i];return '<div class="input-row"><span>'+(ok?'*':'*')+'</span> <span style="color:var(--'+(ok?'g':'e')+');font-weight:600">'+(ok?'Correct!':'Wrong')+'</span></div><div style="font-size:.78rem;color:var(--t2)">Answer: <strong>'+esc(ex.a+(ex.unit||''))+'</strong></div>';}
+  var ph='Type your answer';if(ex.type==='calc')ph='e.g. 171.3';if(ex.type==='trend')ph='Describe the trend...';if(id==='photo')ph='Identify the feature...';if(id==='time')ph='e.g. '+ex.a;
+  return '<div class="input-row"><input class="input-field" id="inp-'+prefix+'-'+i+'" placeholder="'+ph+'" autocomplete="off" autocapitalize="off" spellcheck="false"'+(ex.type==='calc'?' inputmode="decimal"':'')+'> <button class="btn btn-p" id="btn-'+prefix+'-'+i+'">Check</button></div>';
+}
+function doCheck(id,prefix,i,ex){
+  if(state.labData[id].answers[i]!==undefined)return;
+  var inp=document.getElementById('inp-'+prefix+'-'+i);var fb=document.getElementById('fb-'+prefix+'-'+i);if(!inp||!fb)return;
+  var ua=inp.value.trim();if(ua.length===0){fb.textContent='Please enter an answer.';return;}
+  var ok=false;
+  if(ex.type==='calc'){var n=parseFloat(ua);if(!isNaN(n))ok=Math.abs(n-ex.a)<=(ex.tol||0.5);}
+  else if(ex.type==='trend'){var l=ua.toLowerCase();ok=ex.keys.some(function(k){return l.indexOf(k)>=0;})&&l.length>=5;if(ex.a==='increased'&&(l.indexOf('decreas')>=0||l.indexOf('fell')>=0||l.indexOf('dropped')>=0))ok=false;}
+  else if(id==='map'&&(ex.type==='bearing_wcb'||ex.type==='distance')){var n=parseFloat(ua);if(!isNaN(n))ok=Math.abs(n-ex.a)<=(ex.tol||3);}
+  else if(id==='map'){ok=ua.toUpperCase().replace(/\s+/g,'')===ex.a.toUpperCase().replace(/\s+/g,'');}
+  else{ok=ua.toLowerCase().replace(/\s+/g,' ')===(ex.a+'').toLowerCase().replace(/\s+/g,' ');}
+  if(ok){fb.textContent='Correct!';fb.className='feedback correct';inp.className='input-field correct';}
+  else{fb.textContent='Wrong. Answer: '+esc(ex.a+(ex.unit||''));fb.className='feedback wrong';inp.className='input-field wrong';}
+  inp.disabled=true;markEx(id,i,ok);
+  setTimeout(function(){redoEx(id,prefix,i,ex,ok);},600);
+}
+function redoEx(id,prefix,i,ex,ok){
+  var el=document.getElementById('ex-'+prefix+'-'+i);if(!el)return;var d=state.labData[id];
+  el.innerHTML='<div class="ex-num">Exercise '+(i+1)+'/'+d.total+' '+(ok?'*':'*')+'</div><div class="ex-q">'+ex.q+'</div><div class="feedback '+(ok?'correct':'wrong')+'">'+(ok?'Correct!':'Wrong. Answer: '+esc(ex.a+(ex.unit||'')))+'</div>'+(ok&&ex.explain?'<div style="font-size:.72rem;color:var(--g);margin-top:.2rem">'+ex.explain+'</div>':'')+(!ok&&ex.hint?'<div style="font-size:.72rem;color:var(--e);margin-top:.2rem">Hint: '+ex.hint+'</div>':'');
+  el.classList.add('ex-done');updProg(id);
+  if(d.ex>=d.total){document.getElementById('labNavBtns').innerHTML='<button class="btn btn-p" onclick="renderDashboard()">Lab Complete! Back to Dashboard</button>';toast('All done! ');}
+  else{renderNav(id,prefix,d.total);setTimeout(function(){var nx=document.getElementById('ex-'+prefix+'-'+d.ex);if(nx)nx.scrollIntoView({behavior:'smooth',block:'center'});},200);}
+}
+function renderNav(id,prefix,total){var d=state.labData[id];var h='';if(d.ex>0)h+='<button class="btn btn-g" onclick="document.getElementById(\'ex-'+prefix+'-'+(d.ex-1)+'\').scrollIntoView({behavior:\'smooth\',block:\'center\'})">Prev</button>';if(d.ex<total&&d.answers[d.ex]===undefined)h+='<button class="btn btn-p" onclick="document.getElementById(\'ex-'+prefix+'-'+d.ex+'\').scrollIntoView({behavior:\'smooth\',block:\'center\'})">Jump to current</button>';if(d.ex>=total)h+='<button class="btn btn-p" onclick="renderDashboard()">Back to Dashboard</button>';document.getElementById('labNavBtns').innerHTML=h;}
+
+/* ===== MAP GRID ===== */
+function renderGridMap(cid,ex){
+  var el=document.getElementById(cid);if(!el)return;
+  var lms=[{l:'H',x:2,y:7},{l:'C',x:5,y:6},{l:'P',x:7,y:4},{l:'M',x:3,y:3},{l:'FA',x:1,y:1},{l:'FB',x:4,y:8}];
+  var lmSet={};lms.forEach(function(ll){lmSet[ll.x+','+ll.y]=ll;});
+  var sel={};if(ex.type==='distance'||ex.type==='bearing_cp'||ex.type==='bearing_wcb'||ex.type==='bearing_rb'){sel['2,7']=1;sel['5,6']=1;}
+  else if(ex.q.indexOf('Farm A')>=0)sel['1,1']=1;else if(ex.q.indexOf('Police')>=0)sel['7,4']=1;else if(ex.type==='grid6')sel['3,3']=1;
+  var h='';
+  for(var y=9;y>=0;y--){for(var x=0;x<10;x++){var cls='map-cell';var key=x+','+y;var lbl='';if(lmSet[key]){cls+=' landmark';lbl=lmSet[key].l;}if(sel[key])cls+=' highlight';h+='<div class="'+cls+'">'+esc(lbl)+'</div>';}}
+  el.innerHTML=h;
+}
+
+/* ===== LAB 1: MAP SKILLS ===== */
+function renderMapLab(){
+  var tut='<div class="tutorial"><h4>How to Read a Grid Map</h4><p>Scale <strong>1:20,000</strong>. Each grid square = <strong>1 km x 1 km</strong>.<br> <strong>4-figure grid ref</strong>: bottom-left of square (e.g. 3247).<br> <strong>6-figure</strong>: estimate tenths inside square (e.g. 325478).<br> <strong>Bearing</strong>: measured clockwise from North.</p></div>';
+  var exs=[
+    {q:'Measure the straight-line distance between Hospital and Church.',type:'distance',a:0.6,unit:' km',tol:0.1,hint:'Grid distance: 3 cells x 0.2 km = 0.6 km',explain:'Hospital (2,7) to Church (5,6): horizontal=3 cells, vertical=1 cell. Straight-line distance is approx 0.6 km.'},
+    {q:'What is the direction of the Church from the Hospital in <strong>compass point</strong>?',type:'bearing_cp',a:'SE',hint:'Church is East and South of Hospital = Southeast (SE)'},
+    {q:'What is the direction of the Church from the Hospital in <strong>whole-circle bearing</strong>?',type:'bearing_wcb',a:135,unit:' degrees',tol:3,hint:'SE = 135 degrees (90+45)'},
+    {q:'What is the direction of the Church from the Hospital in <strong>reduced bearing</strong>?',type:'bearing_rb',a:'S45E',hint:'Southeast = S45E (45 degrees east of due South)'},
+    {q:'What is the <strong>4-figure grid reference</strong> of Farm A?',type:'grid4',a:'0010',hint:'Bottom-left corner: East=0, North=1. Format: EENN = 0010.'},
+    {q:'What is the <strong>4-figure grid reference</strong> of the Police Station?',type:'grid4',a:'0603',hint:'Square containing PS (x=7,y=4): bottom-left = 06 East, 03 North'},
+    {q:'What is the <strong>6-figure grid reference</strong> of the Monument?',type:'grid6',a:'035035',hint:'Monument at (3,3) inside square 0303. It is at the centre: 035035'}
+  ];
+  renderLab('map','map',exs,tut);
+}
+
+/* ===== LAB 2: DATA LAB ===== */
+function renderDataLab(){
+  var tut='<div class="tutorial"><h4>Working with Data Tables</h4><p><strong>% change</strong> = (New - Old) / Old x 100%<br><strong>% share</strong> = Part / Whole x 100%<br>Round to <strong>1 d.p.</strong> (e.g. 171.3%).<br>Trends: mention <strong>direction</strong> + <strong>magnitude</strong> + <strong>time period</strong>.</p></div>';
+  var exs=[
+    {q:'<table class="data-table"><tr><th>Year</th><th>Total Expenditure (million MOP)</th></tr><tr><td>2010</td><td>75,600</td></tr><tr><td>2015</td><td>205,300</td></tr></table>Calculate the <strong>percentage change</strong> in total expenditure from 2010 to 2015.',type:'calc',a:171.6,unit:'%',tol:0.5,hint:'(205300 - 75600) / 75600 x 100%',explain:'(205,300 - 75,600) / 75,600 x 100% = 171.6%'},
+    {q:'<table class="data-table"><tr><th>Category</th><th>2010 (million MOP)</th></tr><tr><td>Gambling</td><td>56,000</td></tr><tr><td>Total</td><td>75,600</td></tr></table>Calculate the <strong>percentage share</strong> of gambling in 2010.',type:'calc',a:74.1,unit:'%',tol:0.5,hint:'56000 / 75600 x 100%',explain:'56,000 / 75,600 x 100% = 74.1%'},
+    {q:'<table class="data-table"><tr><th>Category</th><th>2015 (million MOP)</th></tr><tr><td>Gambling</td><td>179,400</td></tr><tr><td>Total</td><td>205,300</td></tr></table>Calculate the <strong>percentage share</strong> of gambling in 2015.',type:'calc',a:87.4,unit:'%',tol:0.5,hint:'179400 / 205300 x 100%',explain:'179,400 / 205,300 x 100% = 87.4%'},
+    {q:'<strong>Describe the trend</strong> shown by the total expenditure data from the first exercise above.',type:'trend',a:'increased',keys:['increas','rose','grew','went up','climb'],hint:'Did total go up or down? From 2010 to 2015?'},
+    {q:'<strong>Describe the trend</strong> shown by the gambling share from the second and third exercises above.',type:'trend',a:'increased',keys:['increas','rose','grew','went up','climb'],hint:'Did the share go up? From 74.1% to 87.4%?'},
+    {q:'<table class="data-table"><tr><th>Year</th><th>Visitors (million)</th></tr><tr><td>2010</td><td>25.0</td></tr><tr><td>2015</td><td>30.7</td></tr></table>Calculate the <strong>percentage change</strong> in visitors from 2010 to 2015.',type:'calc',a:22.8,unit:'%',tol:0.5,hint:'(30.7 - 25.0) / 25.0 x 100%',explain:'(30.7 - 25.0) / 25.0 x 100% = 22.8%'}
+  ];
+  renderLab('data','data',exs,tut);
+}
+
+/* ===== LAB 3: PHOTO LAB ===== */
+function renderPhotoLab(){
+  var tut='<div class="tutorial"><h4>Identifying Landforms & Tourism Types from Descriptions</h4><p>In the exam, you will see a photo. Look for:<br> <strong>Shape/pattern</strong> (hexagonal? layered? curved?)<br> <strong>Colour/texture</strong> (dark grey? reddish?)<br> <strong>Location context</strong> (coastal? mountain?)<br> <strong>Scale</strong> (metres? kilometres?)</p></div>';
+  var exs=[
+    {q:'<strong>Feature:</strong> Dark grey rock with 6-sided columns (~30m tall), neatly stacked like organ pipes, located at a coastal area in Sai Kung.<br><br><em>Identify this geological feature.</em>',type:'photo',a:'columnar jointing',hint:'Key: hexagonal columns + dark grey + Sai Kung'},
+    {q:'<strong>Feature:</strong> A flat, gently sloping rock platform at the base of a cliff, exposed at low tide. Surface is smooth with rock pools. Located at Tung Ping Chau.<br><br><em>Identify this coastal landform.</em>',type:'photo',a:'wave-cut platform',hint:'Key: flat platform + base of cliff + exposed at low tide'},
+    {q:'<strong>Feature:</strong> A narrow strip of sand and gravel connecting an island to the mainland. Submerged at high tide, walkable at low tide. Near Sharp Island, Sai Kung.<br><br><em>Identify this coastal landform.</em>',type:'photo',a:'tombolo',hint:'Key: sand strip + island to mainland + submerged at high tide'},
+    {q:'<strong>Scene:</strong> A narrow traditional village street packed with tourists taking photos. A resident struggles past with groceries. Sign: "Please respect our home." Traditional homes now replaced by guesthouses.<br><br><em>Identify the tourism impact shown.</em>',type:'photo',a:'overtourism',hint:'Key: overcrowding + residents affected + homes turned into guesthouses'},
+    {q:'<strong>Scene:</strong> Small group with guide on a boardwalk through a mangrove forest. Binoculars and bird-watching. Educational signs about the ecosystem. No buildings visible.<br><br><em>Identify the tourism type shown.</em>',type:'photo',a:'ecotourism',hint:'Key: small group + nature + education + no development'},
+    {q:'<strong>Feature:</strong> A tall, isolated rock pillar standing in the sea, separated from the mainland cliff by wave erosion. Was once part of a headland. Eastern Hong Kong coast.<br><br><em>Identify this coastal landform.</em>',type:'photo',a:'sea stack',hint:'Key: isolated pillar in sea + once part of headland + wave erosion'}
+  ];
+  renderLab('photo','photo',exs,tut);
+}
+
+/* ===== LAB 4: TIME ZONE LAB ===== */
+function renderTimeLab(){
+  var tut='<div class="tutorial"><h4>Time Zone Calculations</h4><p><table class="data-table"><tr><th>City</th><th>GMT</th><th>City</th><th>GMT</th></tr><tr><td>Hong Kong</td><td>+8</td><td>London</td><td>+0</td></tr><tr><td>Tokyo</td><td>+9</td><td>New York</td><td>-5</td></tr><tr><td>Sydney</td><td>+10</td><td>Los Angeles</td><td>-8</td></tr><tr><td>Singapore</td><td>+8</td><td>Vancouver</td><td>-8</td></tr></table><br><strong>Formula:</strong> Arrival = Departure + (Dest GMT - Origin GMT) + Flight time<br> <strong>Date Line (180 deg):</strong> Eastbound = date -1. Westbound = date +1.</p></div>';
+  var exs=[
+    {q:'HKG->Tokyo: departs 08:00 (HKG). Flight = 4h.<br><em>Arrival local time in Tokyo?</em><br>(HKG +8, TYO +9)',type:'time',a:'13:00',hint:'Diff = +9-(+8) = +1h. 08:00 + 1h + 4h = 13:00.'},
+    {q:'HKG->London: departs 23:00 (HKG). Flight = 13h.<br><em>Arrival local time in London?</em><br>(HKG +8, LON +0)',type:'time',a:'04:00',hint:'Diff = 0-(+8) = -8h. 23:00 - 8h + 13h = 28:00 = 04:00 next day.'},
+    {q:'HKG->Vancouver: departs 10:00 on 15 May (HKG). Flight = 12h.<br><em>Arrival local date & time in Vancouver?</em><br>(HKG +8, YVR -8. Crosses IDL eastbound.)',type:'time',a:'06:00, 15 May',hint:'Diff = -8-(+8) = -16h. 10:00 - 16h + 12h = 06:00 same day.'},
+    {q:'LAX->HKG: departs 14:00 on 10 June (LAX). Flight = 15h.<br><em>Arrival local date & time in Hong Kong?</em><br>(LAX -8, HKG +8)',type:'time',a:'21:00, 11 June',hint:'Diff = +8-(-8) = +16h. 14:00 + 16h + 15h = 45:00 = 21:00 next day.'},
+    {q:'It is 12:00 noon Monday in Hong Kong (+8).<br><em>What time and day in New York (-5)?</em>',type:'time',a:'23:00, Sunday',hint:'Diff = -5-(+8) = -13h. 12:00 - 13h = -1:00 = 23:00 Sunday.'},
+    {q:'A tourist in HKG (+8) wants to call family in Sydney (+10) at 20:00 Sydney time.<br><em>What time should they call from HKG?</em>',type:'time',a:'18:00',hint:'Sydney is 2h ahead. 20:00 - 2h = 18:00 HKG time.'},
+    {q:'LON->HKG: departs 21:00 (London). Flight = 12h.<br><em>Arrival local time in Hong Kong?</em><br>(LON +0, HKG +8)',type:'time',a:'17:00',hint:'Diff = +8-(0) = +8h. 21:00 + 8h + 12h = 41:00 = 17:00 next day.'},
+    {q:'HKG->Singapore: departs 06:30 on 1 March (HKG). Flight = 3h30min.<br><em>Arrival local time in Singapore?</em><br>(HKG +8, SIN +8)',type:'time',a:'10:00',hint:'Same time zone. 06:30 + 3h30min = 10:00 same day.'}
+  ];
+  renderLab('time','time',exs,tut);
+}
+
+/* ===== INIT ===== */
+renderDashboard();
+if(window.visualViewport){window.visualViewport.addEventListener('resize',function(){var ae=document.activeElement;if(ae&&(ae.tagName==='INPUT'||ae.tagName==='TEXTAREA')){setTimeout(function(){ae.scrollIntoView({behavior:'smooth',block:'center'});},150);}});}
+</script>
+</body>
+</html>

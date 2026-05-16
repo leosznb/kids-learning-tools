@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+<title>DNA Exploration Lab · S3 IS Biology</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:18px;-webkit-text-size-adjust:100%}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:#fafafa;color:#1a1a1a;line-height:1.6;min-height:100dvh}
+.app{max-width:760px;margin:0 auto;padding:20px 20px 40px}
+.app-header{text-align:center;margin-bottom:20px}
+.app-header .icon{font-size:2.4rem;margin-bottom:4px;letter-spacing:2px}
+.app-header h1{font-size:1.35rem;font-weight:700;color:#111}
+.app-header .sub{font-size:.9rem;color:#666;margin-top:2px}
+.tabs{display:flex;gap:6px;margin-bottom:20px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px}
+.tab{flex:1;min-width:0;text-align:center;padding:12px 6px;border-radius:12px;border:2px solid #e5e5e5;background:#fff;cursor:pointer;font-family:inherit;font-size:.82rem;font-weight:600;line-height:1.3;color:#666;transition:border .15s,color .15s,background .15s;white-space:nowrap}
+.tab.active{border-color:#2563eb;background:#eff6ff;color:#2563eb}
+.tab .num{display:block;font-size:.7rem;font-weight:400;opacity:.7;margin-bottom:2px}
+.card{background:#fff;border-radius:16px;box-shadow:0 2px 12px rgba(0,0,0,.05);padding:28px 24px 28px;margin-bottom:24px}
+.section-title{font-size:1.15rem;font-weight:700;color:#111;margin-bottom:6px}
+.section-sub{font-size:.9rem;color:#666;margin-bottom:20px}
+.teach-block{margin-bottom:24px}
+.teach-block h3{font-size:1rem;font-weight:700;color:#2563eb;margin-bottom:8px}
+.teach-block p{font-size:1rem;line-height:1.65;margin-bottom:8px;color:#1a1a1a}
+.teach-block .zh{display:block;font-size:.9rem;color:#666;margin-top:4px}
+.info-box{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:16px 18px;margin-bottom:20px;font-size:1rem;line-height:1.6}
+.info-box .en{font-weight:600;color:#111}
+.info-box .zh{display:block;font-size:.9rem;color:#555;margin-top:4px}
+.diagram{background:#f8fafc;border-radius:12px;padding:20px;margin-bottom:18px;text-align:center}
+.diagram svg{max-width:100%;height:auto}
+.interact-zone{border:2px dashed #cbd5e1;border-radius:14px;padding:22px 18px;margin-top:18px;background:#fafbff}
+.interact-zone .prompt{font-size:1rem;font-weight:600;color:#111;margin-bottom:14px;text-align:center}
+.interact-zone .prompt .zh{display:block;font-size:.85rem;font-weight:400;color:#888;margin-top:2px}
+.build-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:16px}
+.build-chip{padding:10px 18px;border-radius:20px;font-size:1rem;font-weight:600;cursor:pointer;border:2px solid #cbd5e1;background:#fff;color:#333;transition:all .15s;font-family:inherit}
+.build-chip.selected{background:#eff6ff;border-color:#2563eb;color:#2563eb}
+.build-chip.placed{background:#d1fae5;border-color:#16a34a;color:#15803d;pointer-events:none}
+.build-slot{display:flex;gap:12px;justify-content:center;align-items:center;margin:16px 0;flex-wrap:wrap}
+.slot-box{width:100px;height:60px;border:2px dashed #cbd5e1;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:.82rem;color:#aaa;text-align:center;transition:all .2s}
+.slot-box.filled{border-color:#16a34a;background:#f0fdf4;color:#15803d;font-weight:700;font-size:.85rem}
+.build-feedback{margin-top:12px;padding:12px 16px;border-radius:10px;font-size:1rem;text-align:center;display:none;line-height:1.55}
+.build-feedback.show{display:block}
+.build-feedback.ok{background:#f0fdf4;color:#14532d;border:1px solid #bbf7d0}
+.build-feedback.no{background:#fef2f2;color:#991b1b;border:1px solid #fecaca}
+.pair-row{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin:14px 0}
+.pair-card{width:110px;text-align:center;background:#f8fafc;border-radius:10px;padding:14px 8px}
+.pair-card .bases{font-size:1.6rem;font-weight:800;margin-bottom:4px}
+.pair-card .label{font-size:.85rem;color:#555}
+.pair-card .label .zh{display:block;font-size:.78rem;color:#888}
+.gel-track{position:relative;background:#e8edf2;border-radius:10px;height:200px;margin:14px 0;overflow:hidden}
+.gel-well{position:absolute;left:8px;top:8px;bottom:8px;width:34px;background:#64748b;border-radius:6px 0 0 6px;display:flex;align-items:center;justify-content:center;font-size:.72rem;color:#fff;font-weight:700;writing-mode:vertical-rl;letter-spacing:2px}
+.gel-lane-wrap{position:absolute;left:46px;right:8px;top:8px;bottom:8px}
+.gel-lane{position:relative;height:25%;display:flex;align-items:center}
+.gel-band{position:absolute;height:18px;width:36px;border-radius:4px;transition:left 3s ease-out;left:0}
+.gel-band.b1{background:#ef4444;top:calc(50% - 9px)}
+.gel-band.b2{background:#f59e0b;top:calc(50% - 9px)}
+.gel-band.b3{background:#3b82f6;top:calc(50% - 9px)}
+.gel-band.b4{background:#10b981;top:calc(50% - 9px)}
+.gel-legend{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin:10px 0 16px;font-size:.85rem}
+.gel-legend span{display:inline-flex;align-items:center;gap:4px}
+.gel-dot{display:inline-block;width:12px;height:12px;border-radius:3px}
+.gel-controls{text-align:center;margin-bottom:12px}
+.btn-run{font-size:1rem;font-weight:700;padding:10px 32px;border:none;border-radius:12px;background:#2563eb;color:#fff;cursor:pointer;font-family:inherit;transition:background .15s}
+.btn-run:active{background:#1d4ed8}
+.btn-run:disabled{background:#94a3b8;pointer-events:none}
+.gel-explain{margin-top:12px;padding:12px 16px;border-radius:10px;background:#fffbeb;border:1px solid #fde68a;font-size:.95rem;line-height:1.55;display:none}
+.gel-explain.show{display:block}
+.gel-explain .zh{display:block;font-size:.88rem;color:#666;margin-top:4px}
+.step-list{display:flex;flex-direction:column;gap:12px}
+.step-item{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;background:#f8fafc;border-radius:10px;border-left:4px solid #2563eb}
+.step-num{width:32px;height:32px;border-radius:50%;background:#2563eb;color:#fff;font-weight:800;font-size:.9rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.step-body{font-size:1rem;line-height:1.5;flex:1}
+.step-body .zh{display:block;font-size:.85rem;color:#666;margin-top:2px}
+.pat-case{background:#f8fafc;border-radius:12px;padding:18px;margin-bottom:16px}
+.pat-case h4{font-size:.98rem;font-weight:700;color:#111;margin-bottom:10px}
+.pat-step{display:none;margin-top:10px;padding:12px 14px;border-radius:10px;background:#fff;border:1px solid #e2e8f0;font-size:1rem;line-height:1.55}
+.pat-step.show{display:block}
+.pat-step .zh{display:block;font-size:.85rem;color:#666;margin-top:3px}
+.pat-step.q{font-weight:600;color:#2563eb}
+.pat-step.a{color:#15803d;font-weight:500}
+.btn-pat{font-size:.88rem;font-weight:600;padding:8px 22px;border:none;border-radius:10px;background:#2563eb;color:#fff;cursor:pointer;font-family:inherit;margin-top:8px;transition:background .15s}
+.btn-pat:active{background:#1d4ed8}
+.btn-pat:disabled{background:#94a3b8;pointer-events:none}
+.btn-pat.hidden{display:none}
+@media(max-width:480px){
+  .app{padding:14px 12px 30px}
+  .card{padding:20px 14px 20px}
+  .tab{font-size:.75rem;padding:10px 4px}
+  .build-chip{font-size:.85rem;padding:8px 14px}
+  .slot-box{width:80px;height:50px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+<header class="app-header">
+  <div class="icon">🧬</div>
+  <h1>DNA Exploration Lab</h1>
+  <div class="sub">F3 IS · DNA Structure · Gel Electrophoresis · Fingerprinting · Paternity Testing</div>
+</header>
+
+<nav class="tabs" id="tabs">
+  <button class="tab active" data-station="0"><span class="num">Station 1</span>Structure Lab</button>
+  <button class="tab" data-station="1"><span class="num">Station 2</span>Gel Lab</button>
+  <button class="tab" data-station="2"><span class="num">Station 3</span>Fingerprint Lab</button>
+  <button class="tab" data-station="3"><span class="num">Station 4</span>Paternity Lab</button>
+</nav>
+
+<div class="card" id="card"></div>
+
+</div>
+
+<script>
+(function(){
+
+var station = 0;
+var buildSlots = [null,null,null];
+var buildCorrect = ['phosphate','sugar','base'];
+var gelRan = false;
+
+// ============ CONTENT GENERATORS ============
+
+function s0(){
+  var h = '';
+  h += '<div class="section-title">🧬 Station 1 · Structure Lab</div>';
+  h += '<div class="section-sub">Nucleotide Structure · Base Pairing · Condensation<br><span style="font-size:.85rem;color:#888">核苷酸結構 · 鹼基配對 · 縮合反應</span></div>';
+
+  h += '<div class="teach-block">';
+  h += '<h3>1. What is a nucleotide? 什麼是核苷酸？</h3>';
+  h += '<p>A nucleotide is the <b>building block of DNA</b>. Each nucleotide has <b>three parts</b>:<span class="zh">核苷酸是 DNA 的<b>基本單位</b>。每個核苷酸有<b>三個部分</b>：</span></p>';
+  h += '<div class="diagram"><svg viewBox="0 0 400 200" width="360">';
+  h += '<circle cx="200" cy="36" r="26" fill="#eef2ff" stroke="#2563eb" stroke-width="2.5"/><text x="200" y="40" text-anchor="middle" font-size="12" fill="#1e40af" font-weight="700">Phosphate</text><text x="200" y="54" text-anchor="middle" font-size="10" fill="#666">磷酸基團</text>';
+  h += '<polygon points="200,80 230,100 216,136 184,136 170,100" fill="#fef3c7" stroke="#b45309" stroke-width="2.5"/><text x="200" y="112" text-anchor="middle" font-size="11" fill="#92400e" font-weight="700">5C Sugar</text><text x="200" y="126" text-anchor="middle" font-size="9" fill="#666">五碳糖</text>';
+  h += '<rect x="170" y="152" width="60" height="36" rx="6" fill="#fce7f3" stroke="#be185d" stroke-width="2.5"/><text x="200" y="174" text-anchor="middle" font-size="11" fill="#9d174d" font-weight="700">N‑Base</text>';
+  h += '<line x1="200" y1="62" x2="200" y2="78" stroke="#64748b" stroke-width="2"/><polygon points="200,80 195,72 205,72" fill="#64748b"/>';
+  h += '<line x1="200" y1="138" x2="200" y2="150" stroke="#64748b" stroke-width="2"/><polygon points="200,152 195,144 205,144" fill="#64748b"/>';
+  h += '<text x="330" y="90" font-size="10" fill="#555">Phosphate group</text><text x="330" y="110" font-size="10" fill="#555">5C sugar (deoxyribose)</text><text x="330" y="130" font-size="10" fill="#555">Nitrogenous base</text><text x="330" y="150" font-size="10" fill="#555">(A / T / C / G)</text>';
+  h += '</svg></div>';
+  h += '<div class="info-box"><span class="en">The phosphate group and 5C sugar form the "backbone" of DNA. The nitrogenous base carries the genetic code.</span><span class="zh">磷酸基團和五碳糖構成 DNA 的「骨架」。含氮鹼基攜帶遺傳密碼。</span></div>';
+  h += '</div>';
+
+  h += '<div class="interact-zone">';
+  h += '<div class="prompt">🔧 Build a Nucleotide<span class="zh">點擊零件，按正確順序組裝核苷酸</span></div>';
+  h += '<div class="build-row">';
+  h += '<button class="build-chip" data-act="build" data-part="phosphate">🧪 Phosphate Group<br><span style="font-size:.72rem;color:#888">磷酸基團</span></button>';
+  h += '<button class="build-chip" data-act="build" data-part="sugar">⬠ 5C Sugar<br><span style="font-size:.72rem;color:#888">五碳糖</span></button>';
+  h += '<button class="build-chip" data-act="build" data-part="base">🔷 Nitrogenous Base<br><span style="font-size:.72rem;color:#888">含氮鹼基</span></button>';
+  h += '</div>';
+  h += '<div class="build-slot">';
+  h += '<div class="slot-box" id="slot1">Slot 1<br><span style="font-size:.7rem">Top 上</span></div><span style="font-size:1.2rem;color:#94a3b8">→</span>';
+  h += '<div class="slot-box" id="slot2">Slot 2<br><span style="font-size:.7rem">Middle 中</span></div><span style="font-size:1.2rem;color:#94a3b8">→</span>';
+  h += '<div class="slot-box" id="slot3">Slot 3<br><span style="font-size:.7rem">Bottom 下</span></div>';
+  h += '</div>';
+  h += '<div class="build-feedback" id="buildFb"></div>';
+  h += '<div style="text-align:center"><button class="btn-run" data-act="buildReset" style="font-size:.82rem;padding:8px 24px;margin-top:6px">↺ Reset 重置</button></div>';
+  h += '</div>';
+
+  h += '<div class="teach-block" style="margin-top:24px">';
+  h += '<h3>2. Complementary Base Pairing 互補鹼基配對</h3>';
+  h += '<p>Two DNA strands are held together by <b>hydrogen bonds</b> between complementary bases:<span class="zh">兩條 DNA 鏈通過互補鹼基之間的<b>氫鍵</b>連接：</span></p>';
+  h += '<div class="pair-row">';
+  h += '<div class="pair-card"><div class="bases" style="color:#2563eb">A = T</div><div class="label">Adenine ↔ Thymine<div class="zh">腺嘌呤 ↔ 胸腺嘧啶</div></div><div style="font-size:.82rem;color:#888;margin-top:4px">2 hydrogen bonds</div></div>';
+  h += '<div class="pair-card"><div class="bases" style="color:#16a34a">C ≡ G</div><div class="label">Cytosine ↔ Guanine<div class="zh">胞嘧啶 ↔ 鳥嘌呤</div></div><div style="font-size:.82rem;color:#888;margin-top:4px">3 hydrogen bonds</div></div>';
+  h += '</div>';
+  h += '<div class="info-box"><span class="en">A always pairs with T (2 H-bonds). C always pairs with G (3 H-bonds — stronger).</span><span class="zh">A 總是與 T 配對（2 條氫鍵）。C 總是與 G 配對（3 條氫鍵——更強）。</span><span class="zh" style="margin-top:8px"><b>⚠️ Common exam trap 常考陷阱：</b> Uracil (U) replaces Thymine in RNA — but <b>never</b> in DNA. 尿嘧啶 (U) 在 RNA 中取代胸腺嘧啶——但在 DNA 中<b>不會</b>出現。</span></div>';
+  h += '</div>';
+
+  h += '<div class="teach-block">';
+  h += '<h3>3. Condensation — Joining Nucleotides 縮合反應</h3>';
+  h += '<p>Nucleotides are linked into a polynucleotide chain by a <b>condensation reaction</b>:<span class="zh">核苷酸通過<b>縮合反應</b>連接成多核苷酸鏈：</span></p>';
+  h += '<div class="diagram"><svg viewBox="0 0 360 120" width="340">';
+  h += '<rect x="20" y="35" width="50" height="40" rx="6" fill="#eef2ff" stroke="#2563eb" stroke-width="2"/><text x="45" y="58" text-anchor="middle" font-size="11" fill="#1e40af" font-weight="600">Nuc-1</text>';
+  h += '<text x="108" y="45" font-size="14" fill="#2563eb" font-weight="800">+</text>';
+  h += '<rect x="130" y="35" width="50" height="40" rx="6" fill="#eef2ff" stroke="#2563eb" stroke-width="2"/><text x="155" y="58" text-anchor="middle" font-size="11" fill="#1e40af" font-weight="600">Nuc-2</text>';
+  h += '<text x="210" y="45" font-size="14" fill="#2563eb" font-weight="800">→</text>';
+  h += '<rect x="240" y="35" width="60" height="40" rx="6" fill="#d1fae5" stroke="#15803d" stroke-width="2"/><text x="270" y="55" text-anchor="middle" font-size="11" fill="#14532d" font-weight="600">Nuc‑Nuc</text>';
+  h += '<text x="330" y="45" font-size="14" fill="#2563eb" font-weight="800">+</text>';
+  h += '<circle cx="345" cy="55" r="12" fill="#bae6fd" stroke="#0ea5e9" stroke-width="2"/><text x="345" y="59" text-anchor="middle" font-size="10" fill="#0369a1" font-weight="700">H₂O</text>';
+  h += '</svg></div>';
+  h += '<div class="info-box"><span class="en"><b>Condensation</b>: two nucleotides join → a phosphodiester bond forms → <b>one water molecule (H₂O) is eliminated</b> each time.</span><span class="zh"><b>縮合反應</b>：兩個核苷酸連接 → 形成磷酸二酯鍵 → 每次<b>消除一個水分子（H₂O）</b>。</span></div>';
+  h += '</div>';
+  return h;
+}
+
+function s1(){
+  var h = '';
+  h += '<div class="section-title">🔬 Station 2 · Gel Lab</div>';
+  h += '<div class="section-sub">Gel Electrophoresis — How DNA Fragments Separate by Size<br><span style="font-size:.85rem;color:#888">凝膠電泳——DNA 片段如何按大小分離</span></div>';
+
+  h += '<div class="teach-block">';
+  h += '<h3>1. The Setup 裝置原理</h3>';
+  h += '<div class="diagram"><svg viewBox="0 0 440 190" width="100%" style="max-width:420px">';
+  // Tank outline
+  h += '<rect x="10" y="30" width="420" height="110" rx="10" fill="none" stroke="#94a3b8" stroke-width="3"/>';
+  h += '<text x="220" y="24" text-anchor="middle" font-size="11" fill="#64748b" font-weight="700">Electrophoresis Tank 電泳槽</text>';
+  // Gel block
+  h += '<rect x="55" y="55" width="310" height="60" rx="6" fill="#e8edf2" stroke="#64748b" stroke-width="2"/>';
+  h += '<text x="210" y="82" text-anchor="middle" font-size="13" fill="#475569" font-weight="700">Agarose Gel 瓊脂糖凝膠</text>';
+  h += '<text x="210" y="100" text-anchor="middle" font-size="10" fill="#64748b">(porous matrix — acts as molecular sieve)</text>';
+  // Wells
+  for(var i=0;i<5;i++){h += '<rect x="'+(75+i*24)+'" y="43" width="16" height="14" rx="3" fill="#fff" stroke="#64748b" stroke-width="1.8"/>';}
+  h += '<text x="115" y="40" text-anchor="middle" font-size="9" fill="#64748b" font-weight="600">WELLS (DNA loaded here)</text>';
+  // Negative terminal — wider, clearer
+  h += '<rect x="20" y="65" width="12" height="70" rx="4" fill="#dc2626"/>';
+  h += '<text x="26" y="25" text-anchor="middle" font-size="13" fill="#dc2626" font-weight="800">(−)</text>';
+  h += '<text x="26" y="155" text-anchor="middle" font-size="9" fill="#dc2626" font-weight="600">Negative</text>';
+  h += '<text x="26" y="168" text-anchor="middle" font-size="9" fill="#dc2626">負極</text>';
+  // Positive terminal
+  h += '<rect x="408" y="65" width="12" height="70" rx="4" fill="#2563eb"/>';
+  h += '<text x="414" y="25" text-anchor="middle" font-size="13" fill="#2563eb" font-weight="800">(+)</text>';
+  h += '<text x="414" y="155" text-anchor="middle" font-size="9" fill="#2563eb" font-weight="600">Positive</text>';
+  h += '<text x="414" y="168" text-anchor="middle" font-size="9" fill="#2563eb">正極</text>';
+  // Arrow from wells toward + terminal
+  h += '<defs><marker id="ar1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#2563eb"/></marker></defs>';
+  h += '<line x1="135" y1="95" x2="395" y2="95" stroke="#2563eb" stroke-width="2.5" stroke-dasharray="8,4" marker-end="url(#ar1)"/>';
+  h += '<text x="255" y="118" text-anchor="middle" font-size="10" fill="#2563eb" font-weight="700">DNA (−) moves this way →</text>';
+  h += '<text x="255" y="132" text-anchor="middle" font-size="9" fill="#666">DNA 帶負電，向正極移動</text>';
+  // Fragment size indication
+  h += '<text x="395" y="145" text-anchor="middle" font-size="9" fill="#666">smallest</text>';
+  h += '<text x="395" y="155" text-anchor="middle" font-size="8" fill="#888">最細</text>';
+  h += '<text x="130" y="145" text-anchor="middle" font-size="9" fill="#666">largest</text>';
+  h += '<text x="130" y="155" text-anchor="middle" font-size="8" fill="#888">最大</text>';
+  h += '</svg></div>';
+  h += '<div class="info-box"><span class="en"><b>Key principle 核心原理：</b> DNA is <b>negatively charged</b> (phosphate groups). When electric current flows, DNA migrates from <b>negative (−)</b> to <b>positive (+)</b> terminal. The gel acts as a sieve — <b>smaller fragments slip through faster, larger ones get stuck</b>.</span><span class="zh">DNA 帶<b>負電</b>（磷酸基團）。通電後，DNA 從<b>負極（−）</b>向<b>正極（+）</b>遷移。凝膠像篩子——<b>小片段穿得快，大片段被卡住</b>。</span></div>';
+  h += '</div>';
+
+  h += '<div class="teach-block">';
+  h += '<h3>2. 🏁 Gel Race — Watch fragments separate 見證片段分離</h3>';
+  h += '<p>The gel acts like a <b>molecular obstacle course</b>. Smaller fragments slip through easily — larger ones get stuck.<span class="zh">凝膠就像<b>分子障礙賽道</b>。小片段輕鬆穿過——大片段被卡住。</span></p>';
+  h += '<div class="gel-legend">';
+  h += '<span><span class="gel-dot" style="background:#ef4444"></span> 3,500 bp</span>';
+  h += '<span><span class="gel-dot" style="background:#f59e0b"></span> 6,980 bp</span>';
+  h += '<span><span class="gel-dot" style="background:#3b82f6"></span> 11,300 bp</span>';
+  h += '<span><span class="gel-dot" style="background:#10b981"></span> 16,070 bp</span>';
+  h += '</div>';
+  h += '<div class="gel-track" id="gelTrack">';
+  h += '<div class="gel-well">WELLS</div>';
+  h += '<div class="gel-lane-wrap">';
+  for(var i=0;i<4;i++){
+    h += '<div class="gel-lane"><div class="gel-band b'+(i+1)+'" id="band'+(i+1)+'" style="width:36px;height:18px"></div></div>';
+  }
+  h += '</div></div>';
+  h += '<div class="gel-controls"><button class="btn-run" id="btnRun" data-act="runGel">▶ Run Gel 開始電泳</button></div>';
+  h += '<div class="gel-explain" id="gelExplain">';
+  h += '<span class="en"><b>Result 結果：</b> Red (3,500 bp — smallest) travels <b>farthest</b>. Green (16,070 bp — largest) stays <b>closest to the well</b>. The smaller the fragment, the faster it moves through the gel matrix.</span>';
+  h += '<span class="zh"><b>結果：</b> 紅色（3,500 bp——最小）走得<b>最遠</b>。綠色（16,070 bp——最大）停在<b>最靠近 well</b> 處。片段越小，在凝膠基質中移動越快。</span>';
+  h += '</div>';
+  h += '</div>';
+
+  h += '<div class="info-box"><span class="en"><b>💡 The complete reasoning chain 完整推理鏈：</b><br>Smaller fragment → <b>less resistance</b> from gel matrix → moves <b>faster</b> → travels <b>farther</b> from well.<br>Larger fragment → <b>more resistance</b> → moves <b>slower</b> → stays <b>closer</b> to well.</span><span class="zh"><b>完整推理鏈：</b><br>較小片段 → 凝膠基質<b>阻力小</b> → 移動<b>較快</b> → 離 well <b>較遠</b>。<br>較大片段 → 凝膠基質<b>阻力大</b> → 移動<b>較慢</b> → 離 well <b>較近</b>。</span></div>';
+
+  h += '<div class="info-box" style="background:#fef2f2;border-color:#fecaca"><span class="en" style="color:#b91c1c">⚠️ <b>Exam tip 考試提示：</b> In the TWGSS 2nd Term Exam, you must <b>explain WHY</b> — not just which band. Always write: "smaller fragment → less resistance → moves faster → travels farther."</span><span class="zh">在荃官第二學期考試中，你必須<b>解釋為什麼</b>——不僅是說出哪個條帶。務必寫出：「較小片段 → 阻力較小 → 移動較快 → 走得更遠」。</span></div>';
+  return h;
+}
+
+function s2(){
+  var h = '';
+  h += '<div class="section-title">🩸 Station 3 · Fingerprint Lab</div>';
+  h += '<div class="section-sub">DNA Fingerprinting — The 4-Step Process &amp; Band Reading<br><span style="font-size:.85rem;color:#888">DNA 指紋圖譜——四步驟流程與條帶閱讀</span></div>';
+
+  h += '<div class="teach-block">';
+  h += '<h3>The 4 Steps of DNA Fingerprinting</h3>';
+  h += '<div class="step-list">';
+  h += '<div class="step-item"><div class="step-num">1</div><div class="step-body"><b>Extract 提取</b> — Obtain DNA from the sample (blood, saliva, hair root, skin cells).<span class="zh">從樣本（血液、唾液、髮根、皮膚細胞）中提取 DNA。</span></div></div>';
+  h += '<div class="step-item"><div class="step-num">2</div><div class="step-body"><b>Cut 切割</b> — Use <b>restriction enzymes</b> to cut DNA at specific sequences → fragments of different lengths.<span class="zh">使用<b>限制酶</b>在特定序列切割 DNA → 產生不同長度的片段。</span></div></div>';
+  h += '<div class="step-item"><div class="step-num">3</div><div class="step-body"><b>Separate 分離</b> — <b>Gel electrophoresis</b>: fragments are loaded into wells → electric current applied → fragments separate by size (small → far, large → near well).<span class="zh"><b>凝膠電泳</b>：片段加載到 well → 通電 → 按大小分離（小→遠，大→近 well）。</span></div></div>';
+  h += '<div class="step-item"><div class="step-num">4</div><div class="step-body"><b>Stain &amp; View 染色觀察</b> — Add <b>fluorescent dye</b> → expose to <b>UV light</b> → band pattern becomes visible.<span class="zh">添加<b>螢光染料</b> → 暴露於<b>紫外光</b> → 條帶模式可見。</span></div></div>';
+  h += '</div>';
+  h += '</div>';
+
+  h += '<div class="teach-block">';
+  h += '<h3>What is a DNA Ladder? 什麼是 DNA Ladder？</h3>';
+  h += '<div class="diagram"><svg viewBox="0 0 400 180" width="360">';
+  h += '<rect x="30" y="10" width="340" height="160" rx="6" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.5"/>';
+  h += '<text x="200" y="32" text-anchor="middle" font-size="11" fill="#475569" font-weight="700">Gel 凝膠</text>';
+  h += '<rect x="48" y="42" width="50" height="110" rx="3" fill="#fff" stroke="#94a3b8" stroke-width="1"/>';
+  h += '<text x="73" y="38" text-anchor="middle" font-size="9" fill="#666">Ladder</text><text x="73" y="165" text-anchor="middle" font-size="8" fill="#888">標記</text>';
+  var bands = [{y:55,w:46,t:'3,000 bp'},{y:75,w:46,t:'2,000 bp'},{y:95,w:46,t:'1,500 bp'},{y:115,w:46,t:'1,000 bp'},{y:135,w:46,t:'500 bp'}];
+  for(var i=0;i<bands.length;i++){
+    h += '<rect x="50" y="'+bands[i].y+'" width="'+bands[i].w+'" height="8" rx="3" fill="#64748b"/><text x="102" y="'+(bands[i].y+8)+'" font-size="9" fill="#666">'+bands[i].t+'</text>';
+  }
+  h += '<rect x="140" y="42" width="50" height="110" rx="3" fill="#fff" stroke="#94a3b8" stroke-width="1"/>';
+  h += '<text x="165" y="38" text-anchor="middle" font-size="9" fill="#666">Sample</text><text x="165" y="165" text-anchor="middle" font-size="8" fill="#888">樣本</text>';
+  var sb = [{y:65,w:46},{y:95,w:46},{y:135,w:46}];
+  for(var i=0;i<sb.length;i++){h += '<rect x="142" y="'+sb[i].y+'" width="'+sb[i].w+'" height="8" rx="3" fill="#2563eb"/>';}
+  h += '<text x="250" y="70" font-size="10" fill="#2563eb" font-weight="600">≈ 2,500 bp</text>';
+  h += '<text x="250" y="100" font-size="10" fill="#2563eb" font-weight="600">≈ 1,500 bp</text>';
+  h += '<text x="250" y="140" font-size="10" fill="#2563eb" font-weight="600">≈ 500 bp</text>';
+  h += '</svg></div>';
+  h += '<div class="info-box"><span class="en">The <b>DNA ladder</b> contains fragments of <b>known sizes</b>. By comparing sample bands to the ladder, you can <b>estimate the size</b> (in bp) of each DNA fragment.</span><span class="zh"><b>DNA ladder</b> 含有<b>已知大小</b>的片段。通過將樣本條帶與 ladder 比較，可以<b>估算</b>每個 DNA 片段的大小（bp）。</span></div>';
+  h += '</div>';
+
+  h += '<div class="teach-block">';
+  h += '<h3>Reading a Gel — Practice 讀片練習</h3>';
+  h += '<div class="diagram"><svg viewBox="0 0 360 200" width="340">';
+  h += '<rect x="20" y="10" width="320" height="180" rx="6" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>';
+  h += '<rect x="40" y="30" width="40" height="140" rx="3" fill="#fff" stroke="#94a3b8" stroke-width="1"/>';
+  h += '<text x="60" y="26" text-anchor="middle" font-size="9" fill="#666">Lane A</text>';
+  h += '<rect x="42" y="50" width="36" height="7" rx="3" fill="#ef4444"/><rect x="42" y="120" width="36" height="7" rx="3" fill="#ef4444"/>';
+  h += '<text x="60" y="180" text-anchor="middle" font-size="9" fill="#888" font-weight="600">Suspect</text>';
+  h += '<rect x="100" y="30" width="40" height="140" rx="3" fill="#fff" stroke="#94a3b8" stroke-width="1"/>';
+  h += '<text x="120" y="26" text-anchor="middle" font-size="9" fill="#666">Lane B</text>';
+  h += '<rect x="102" y="110" width="36" height="7" rx="3" fill="#2563eb"/><rect x="102" y="140" width="36" height="7" rx="3" fill="#2563eb"/>';
+  h += '<text x="120" y="180" text-anchor="middle" font-size="9" fill="#888" font-weight="600">Evidence</text>';
+  h += '<text x="220" y="50" font-size="10" fill="#111" font-weight="600">Q: Does Lane A match</text>';
+  h += '<text x="220" y="66" font-size="10" fill="#111" font-weight="600">the evidence (Lane B)?</text>';
+  h += '<text x="220" y="82" font-size="9" fill="#666">A vs 證據 B 是否吻合？</text>';
+  h += '<text x="220" y="105" font-size="10" fill="#dc2626" font-weight="700">✗ NO — bands at</text>';
+  h += '<text x="220" y="121" font-size="10" fill="#dc2626" font-weight="700">different positions</text>';
+  h += '<text x="220" y="140" font-size="10" fill="#16a34a" font-weight="700">✓ Match requires:</text>';
+  h += '<text x="220" y="156" font-size="10" fill="#16a34a">Same bands at same </text>';
+  h += '<text x="220" y="172" font-size="10" fill="#16a34a">positions on the gel</text>';
+  h += '</svg></div>';
+  h += '<div class="info-box"><span class="en"><b>Rule 規則：</b> Two samples match only if they have <b>identical band patterns</b> — same bands at the <b>same positions</b>. Even one band difference = no match.</span><span class="zh">兩個樣本吻合的條件：具有<b>完全相同的條帶模式</b>——在<b>相同位置</b>有相同條帶。即使只有一條不同 = 不吻合。</span></div>';
+  h += '</div>';
+  return h;
+}
+
+function s3(){
+  var h = '';
+  h += '<div class="section-title">🩺 Station 4 · Paternity Lab</div>';
+  h += '<div class="section-sub">DNA Paternity Testing — The Logic of Inheritance<br><span style="font-size:.85rem;color:#888">DNA 親子鑑定——遺傳邏輯推理</span></div>';
+
+  h += '<div class="teach-block">';
+  h += '<h3>The Golden Rule 黃金法則</h3>';
+  h += '<div class="info-box"><span class="en"><b>Child = Mother + Father</b><br>A child inherits <b>half</b> of their DNA from the mother and <b>half</b> from the father. Therefore, <b>every band in the child&rsquo;s DNA must be traceable to either the mother or the father</b>.</span><span class="zh"><b>孩子 = 母親 + 父親</b><br>孩子從母親繼承<b>一半</b> DNA，從父親繼承<b>一半</b>。因此，<b>孩子 DNA 中的每一條帶都必須能追溯到母親或父親</b>。</span></div>';
+  h += '</div>';
+
+  h += '<div class="teach-block">';
+  h += '<h3>The Reasoning Steps 推理步驟</h3>';
+  h += '<div class="step-list">';
+  h += '<div class="step-item"><div class="step-num">1</div><div class="step-body"><b>Check each child band against the mother</b> — which bands come from mum?<span class="zh"><b>逐條檢查孩子條帶 vs 母親</b>——哪些條帶來自家長？</span></div></div>';
+  h += '<div class="step-item"><div class="step-num">2</div><div class="step-body"><b>Identify non-maternal bands</b> — any band the child has that the mother does NOT have.<span class="zh"><b>識別非母系條帶</b>——孩子有但母親<b>沒有</b>的條帶。</span></div></div>';
+  h += '<div class="step-item"><div class="step-num">3</div><div class="step-body"><b>Match non-maternal bands to the father</b> — the biological father <b>must</b> have these bands.<span class="zh"><b>將非母系條帶與父親匹配</b>——親生父親<b>必須</b>有這些條帶。</span></div></div>';
+  h += '<div class="step-item"><div class="step-num">4</div><div class="step-body"><b>Verify</b> — if a potential father has ALL the non-maternal bands, he is the biological father.<span class="zh"><b>驗證</b>——如果疑似父親擁有<b>所有</b>非母系條帶，他就是親生父親。</span></div></div>';
+  h += '</div>';
+  h += '</div>';
+
+  // Case 1
+  h += '<div class="teach-block"><h3>📋 Case 1 — Guided Example 引導示範</h3>';
+  h += '<div class="pat-case" id="patCase1">';
+  h += '<h4>Mother 母: bands at 2, 5 &nbsp;|&nbsp; Father 父: 2, 8 &nbsp;|&nbsp; Child 子: 2, 5</h4>';
+  h += '<div style="display:flex;gap:10px;margin-bottom:10px;flex-wrap:wrap">';
+  h += '<div style="flex:1;min-width:80px;background:#f0fdf4;border-radius:8px;padding:10px;text-align:center"><div style="font-size:.78rem;color:#666;font-weight:600">Mother 👩</div><div style="display:flex;gap:6px;justify-content:center;margin-top:6px"><span style="background:#16a34a;color:#fff;padding:3px 10px;border-radius:6px;font-weight:700;font-size:.9rem">2</span><span style="background:#16a34a;color:#fff;padding:3px 10px;border-radius:6px;font-weight:700;font-size:.9rem">5</span></div></div>';
+  h += '<div style="flex:1;min-width:80px;background:#eef2ff;border-radius:8px;padding:10px;text-align:center"><div style="font-size:.78rem;color:#666;font-weight:600">Father 👨</div><div style="display:flex;gap:6px;justify-content:center;margin-top:6px"><span style="background:#2563eb;color:#fff;padding:3px 10px;border-radius:6px;font-weight:700;font-size:.9rem">2</span><span style="background:#2563eb;color:#fff;padding:3px 10px;border-radius:6px;font-weight:700;font-size:.9rem">8</span></div></div>';
+  h += '<div style="flex:1;min-width:80px;background:#fefce8;border-radius:8px;padding:10px;text-align:center"><div style="font-size:.78rem;color:#666;font-weight:600">Child 👶</div><div style="display:flex;gap:6px;justify-content:center;margin-top:6px"><span style="background:#eab308;color:#fff;padding:3px 10px;border-radius:6px;font-weight:700;font-size:.9rem">2</span><span style="background:#eab308;color:#fff;padding:3px 10px;border-radius:6px;font-weight:700;font-size:.9rem">5</span></div></div>';
+  h += '</div>';
+  h += '<button class="btn-pat" data-act="patStep" data-case="patCase1" data-step="1">Step 1 →</button>';
+  h += '<div class="pat-step q" id="patCase1-s1">Step 1: Check child bands against mother. Band 2 → mother has it ✓. Band 5 → mother has it ✓. <b>The child has NO band that is NOT in the mother.</b><span class="zh">步驟 1：逐條檢查孩子 vs 母親。條帶 2 → 母親有 ✓。條帶 5 → 母親有 ✓。<b>孩子沒有任何母親沒有的條帶。</b></span></div>';
+  h += '<button class="btn-pat hidden" data-act="patStep" data-case="patCase1" data-step="2" id="patCase1-b2">Step 2 →</button>';
+  h += '<div class="pat-step q" id="patCase1-s2">Step 2: Now check the father. Does the child share the father&rsquo;s band at position 8? <b>NO</b> — the child only has 2 and 5.<span class="zh">步驟 2：檢查父親。孩子是否有父親在位置 8 的條帶？<b>沒有</b>——孩子只有 2 和 5。</span></div>';
+  h += '<button class="btn-pat hidden" data-act="patStep" data-case="patCase1" data-step="3" id="patCase1-b3">Conclusion →</button>';
+  h += '<div class="pat-step a" id="patCase1-s3"><b>Conclusion 結論：</b> ✗ This man is <b>NOT</b> the biological father. The child has no band from him (band 8 is absent). 這名男子<b>不是</b>親生父親。孩子沒有他的條帶（位置 8 缺失）。</div>';
+  h += '</div></div>';
+
+  // Case 2
+  h += '<div class="teach-block"><h3>📋 Case 2 — Try It Yourself 自己試試</h3>';
+  h += '<div class="pat-case">';
+  h += '<h4>Mother 母: 1, 4 &nbsp;|&nbsp; Father 父: 1, 6 &nbsp;|&nbsp; Child A: 1, 6 &nbsp;|&nbsp; Child B: 3, 4</h4>';
+  h += '<p style="font-size:.95rem;margin-bottom:8px">Which child belongs to this couple?<br><span style="font-size:.85rem;color:#888">哪個孩子是這對夫婦的？</span></p>';
+  h += '<button class="btn-pat" data-act="toggleSib" data-target="patCase2Ans">Show Reasoning 顯示推理</button>';
+  h += '<div class="pat-step" id="patCase2Ans">';
+  h += '<p><b>Child A (1, 6):</b> Band 1 = both parents have it ✓. Band 6 = only father has it → must be from father ✓. <b>→ Belongs to couple ✓</b></p>';
+  h += '<p class="zh">孩子 A（1, 6）：條帶 1 = 父母都有 ✓。條帶 6 = 只有父親有 → 必定來自父親 ✓。<b>→ 是這對夫婦的 ✓</b></p>';
+  h += '<p style="margin-top:8px"><b>Child B (3, 4):</b> Band 4 = mother has it ✓. Band 3 = <b>NEITHER parent</b> has it ✗. <b>→ NOT their child ✗</b></p>';
+  h += '<p class="zh">孩子 B（3, 4）：條帶 4 = 母親有 ✓。條帶 3 = <b>父母都沒有</b> ✗。<b>→ 不是他們的孩子 ✗</b></p>';
+  h += '</div>';
+  h += '</div></div>';
+
+  // Case 3
+  h += '<div class="teach-block"><h3>📋 Case 3 — Find the Father 找出父親</h3>';
+  h += '<div class="pat-case">';
+  h += '<h4>Mother: 2, 5, 8 &nbsp;|&nbsp; Child: 2, 5, 7, 9</h4>';
+  h += '<p style="font-size:1rem">Which band(s) must the biological father have?<br><span style="font-size:.85rem;color:#888">親生父親必須有哪條/哪些帶？</span></p>';
+  h += '<button class="btn-pat" data-act="toggleSib" data-target="patCase3Ans">Show Reasoning 顯示推理</button>';
+  h += '<div class="pat-step" id="patCase3Ans">';
+  h += '<p><b>Step 1:</b> Child bands: 2, 5, 7, 9. Mother: 2, 5, 8.</p>';
+  h += '<p class="zh">步驟 1：孩子條帶：2、5、7、9。母親：2、5、8。</p>';
+  h += '<p><b>Step 2:</b> Bands from mother: 2 ✓, 5 ✓, 8 ✗ (child doesn&rsquo;t have 8). Non-maternal bands in child: <b>7 and 9</b>.</p>';
+  h += '<p class="zh">來自母親的條帶：2 ✓、5 ✓、8 ✗（孩子沒有 8）。孩子中非母系條帶：<b>7 和 9</b>。</p>';
+  h += '<p><b>Step 3:</b> The biological father <b>MUST</b> have both bands <b>7 and 9</b>.</p>';
+  h += '<p class="zh">親生父親<b>必須</b>同時有條帶 <b>7 和 9</b>。</p>';
+  h += '</div>';
+  h += '</div></div>';
+
+  h += '<div class="info-box" style="background:#fef2f2;border-color:#fecaca"><span class="en" style="color:#b91c1c">⚠️ <b>Exam tip 考試提示：</b> You must <b>explain your reasoning</b> step by step. Write: "Band ___ does not come from the mother → must come from the biological father → the father must have band ___."</span><span class="zh">你必須<b>逐步解釋推理過程</b>。寫出：「條帶 ___ 不來自母親 → 必須來自親生父親 → 父親必須有條帶 ___」。</span></div>';
+  return h;
+}
+
+var stations = [s0,s1,s2,s3];
+
+// ============ RENDER ============
+function render(){
+  document.getElementById('card').innerHTML = stations[station]();
+  var tabs = document.querySelectorAll('.tab');
+  for(var i=0;i<tabs.length;i++) tabs[i].classList.toggle('active', i===station);
+  gelRan = false;
+  buildSlots = [null,null,null];
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ============ EVENT DELEGATION ============
+document.getElementById('tabs').addEventListener('click',function(e){
+  var tab = e.target.closest('.tab');
+  if(!tab) return;
+  station = parseInt(tab.getAttribute('data-station'));
+  render();
+});
+
+document.getElementById('card').addEventListener('click',function(e){
+  var btn = e.target.closest('[data-act]');
+  if(!btn) return;
+  var act = btn.getAttribute('data-act');
+
+  if(act === 'build'){
+    var part = btn.getAttribute('data-part');
+    var idx = buildSlots.indexOf(null);
+    if(idx === -1) return;
+    buildSlots[idx] = part;
+    var sn = ['Phosphate\n磷酸','Sugar\n五碳糖','Base\n含氮鹼基'];
+    document.getElementById('slot'+(idx+1)).textContent = sn[idx];
+    document.getElementById('slot'+(idx+1)).classList.add('filled');
+    var chips = document.querySelectorAll('[data-act=\"build\"]');
+    for(var i=0;i<chips.length;i++){
+      if(chips[i].getAttribute('data-part')===part) chips[i].classList.add('placed');
+    }
+    if(buildSlots.indexOf(null)===-1) checkBuild();
+    return;
+  }
+
+  if(act === 'buildReset'){
+    buildSlots = [null,null,null];
+    for(var i=0;i<3;i++){
+      var s = document.getElementById('slot'+(i+1));
+      s.textContent = 'Slot '+(i+1)+'\n?';
+      s.classList.remove('filled');
+    }
+    var chips = document.querySelectorAll('[data-act=\"build\"]');
+    for(var i=0;i<chips.length;i++) chips[i].classList.remove('placed');
+    var fb = document.getElementById('buildFb');
+    if(fb) fb.className = 'build-feedback';
+    return;
+  }
+
+  if(act === 'runGel'){
+    if(gelRan) return;
+    gelRan = true;
+    var b = document.getElementById('btnRun');
+    if(b){b.disabled = true; b.textContent = 'Running... 分離中...';}
+    var sp = [
+      {id:'band1',pct:90,dur:1.2},
+      {id:'band2',pct:62,dur:1.8},
+      {id:'band3',pct:40,dur:2.4},
+      {id:'band4',pct:18,dur:3.0}
+    ];
+    for(var i=0;i<sp.length;i++){
+      var el = document.getElementById(sp[i].id);
+      if(el){el.style.transition = 'left '+sp[i].dur+'s ease-out';el.style.left = sp[i].pct+'%';}
+    }
+    setTimeout(function(){
+      var ge = document.getElementById('gelExplain');
+      if(ge) ge.classList.add('show');
+      var b2 = document.getElementById('btnRun');
+      if(b2){b2.textContent = '▶ Replay 重播';b2.disabled = false;}
+      gelRan = false;
+    },3200);
+    return;
+  }
+
+  if(act === 'patStep'){
+    var cs = btn.getAttribute('data-case');
+    var st = btn.getAttribute('data-step');
+    var sEl = document.getElementById(cs+'-s'+st);
+    if(sEl) sEl.classList.add('show');
+    btn.classList.add('hidden');
+    return;
+  }
+
+  if(act === 'toggleSib'){
+    var tid = btn.getAttribute('data-target');
+    var target = document.getElementById(tid);
+    if(target) target.classList.toggle('show');
+    return;
+  }
+});
+
+// Build check
+function checkBuild(){
+  var fb = document.getElementById('buildFb');
+  if(!fb) return;
+  var ok = true;
+  for(var i=0;i<3;i++){if(buildSlots[i] !== buildCorrect[i]) ok = false;}
+  fb.classList.add('show');
+  if(ok){
+    fb.className = 'build-feedback show ok';
+    fb.innerHTML = '<span class="en">✅ <b>Correct!</b> Phosphate group on top → 5C sugar in the middle → Nitrogenous base at the bottom. This is a nucleotide!</span><span class="zh">✅ <b>正確！</b>磷酸基團在上 → 五碳糖在中間 → 含氮鹼基在下。這就是一個核苷酸！</span>';
+  } else {
+    fb.className = 'build-feedback show no';
+    fb.innerHTML = '<span class="en">❌ <b>Not quite.</b> Remember: Phosphate is at the <b>top</b> (attached to the 5′ carbon of the sugar), sugar in the <b>middle</b>, base at the <b>bottom</b>.</span><span class="zh">❌ <b>不太對。</b>記住：磷酸基團在<b>上</b>（連接到糖的 5′ 碳），糖在<b>中間</b>，鹼基在<b>下</b>。</span>';
+  }
+}
+
+// ============ INIT ============
+render();
+
+})();
+</script>
+</body>
+</html>

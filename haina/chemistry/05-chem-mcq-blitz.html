@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MCQ Blitz</title>
+<style>
+:root{--bg:#0a0a14;--card:#121220;--card2:#181830;--border:#1e1e3a;--accent:#00e5ff;--success:#00ff88;--error:#ff4466;--warn:#ffb347;--text:#c8ccd4;--text2:#8890a0;--text3:#5a6070;--star:#ffd700;--font-ui:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:var(--font-ui);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:12px}
+.container{max-width:640px;width:100%}
+.header{text-align:center;padding:14px 0 8px}
+.header h1{font-size:1.5rem;font-weight:700;color:var(--accent)}
+.header .sub{font-size:.8rem;color:var(--text2);margin-top:2px}
+
+.tab-bar{display:flex;gap:4px;margin-bottom:14px;background:var(--card);border-radius:10px;padding:4px;border:1px solid var(--border)}
+.tab-btn{flex:1;min-height:48px;border:none;border-radius:8px;font-size:.95rem;font-weight:600;cursor:pointer;background:transparent;color:var(--text2);font-family:var(--font-ui);transition:all .15s;-webkit-tap-highlight-color:transparent}
+.tab-btn.active{background:var(--accent);color:#000}
+.tab-btn:hover:not(.active){color:var(--text)}
+
+.panel{display:none}
+.panel.active{display:block}
+
+/* Settings */
+.settings-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:12px}
+.settings-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+.settings-row label{font-size:.85rem;color:var(--text2);min-width:70px}
+.settings-row select{padding:8px 12px;background:var(--card2);color:var(--text);border:1px solid var(--border);border-radius:6px;font-size:.9rem;font-family:var(--font-ui);min-height:44px}
+.btn{min-height:48px;padding:10px 20px;border:none;border-radius:8px;font-size:.95rem;font-weight:600;cursor:pointer;font-family:var(--font-ui);-webkit-tap-highlight-color:transparent;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:var(--accent);color:#000;width:100%}
+.btn-ghost{background:transparent;color:var(--text2);border:1px solid var(--border)}
+.btn-sm{min-height:38px;padding:6px 14px;font-size:.75rem;border-radius:6px}
+.btn-tiny{min-height:30px;min-width:30px;padding:4px 6px;font-size:.68rem;border-radius:5px}
+
+/* Question card */
+.q-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px;margin-bottom:10px}
+.q-num{font-size:.78rem;color:var(--text3);margin-bottom:8px}
+.q-stem{font-size:1.1rem;line-height:1.6;margin-bottom:16px;color:var(--text)}
+.q-opts{display:flex;flex-direction:column;gap:10px}
+.opt-btn{width:100%;min-height:52px;padding:12px 16px;background:var(--card2);color:var(--text);border:2px solid var(--border);border-radius:8px;font-size:1.05rem;text-align:left;cursor:pointer;font-family:var(--font-ui);transition:border .12s;-webkit-tap-highlight-color:transparent}
+.opt-btn:hover{border-color:var(--accent)}
+.opt-btn.selected{border-color:var(--accent);background:rgba(0,229,255,.08)}
+.opt-btn.correct{border-color:var(--success);background:rgba(0,255,136,.08)}
+.opt-btn.wrong{border-color:var(--error);background:rgba(255,68,102,.08)}
+.opt-btn.dim{opacity:.45}
+
+/* Timer & progress */
+.timer-bar{display:flex;justify-content:space-between;align-items:center;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px 16px;margin-bottom:10px;font-size:.85rem;flex-wrap:wrap;gap:6px}
+.timer-bar .time{color:var(--accent);font-weight:700;font-size:1rem}
+.timer-bar .time.urgent{color:var(--error)}
+.progress-mini{display:flex;gap:3px;flex-wrap:wrap}
+.prog-dot{width:10px;height:10px;border-radius:3px;background:var(--text3)}
+.prog-dot.answered{background:var(--accent)}
+.prog-dot.current{background:var(--warn);box-shadow:0 0 6px var(--warn)}
+.prog-dot.marked{background:var(--warn);border:1px solid var(--warn)}
+
+/* Nav strip */
+.nav-strip{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px;padding:8px;background:var(--card);border:1px solid var(--border);border-radius:8px}
+.nav-dot{width:28px;height:28px;border-radius:5px;background:var(--card2);border:1px solid var(--border);color:var(--text2);font-size:.65rem;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent}
+.nav-dot.answered{background:var(--accent);color:#000;border-color:var(--accent)}
+.nav-dot.current{border-color:var(--warn);box-shadow:0 0 4px var(--warn)}
+.nav-dot.marked{border-color:var(--warn)}
+
+/* Feedback inline */
+.fb-inline{padding:12px 16px;border-radius:8px;margin-top:10px;font-size:.92rem;display:none;line-height:1.5}
+.fb-inline.show{display:block}
+.fb-inline.right{background:rgba(0,255,136,.06);border:1px solid rgba(0,255,136,.2);color:var(--success)}
+.fb-inline.wrong{background:rgba(255,68,102,.06);border:1px solid rgba(255,68,102,.2);color:var(--error)}
+
+/* Review */
+.review-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:8px}
+.review-card h3{font-size:.82rem;color:var(--accent);margin-bottom:8px}
+.review-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:.85rem}
+.review-row .bad{color:var(--error)}
+.review-row .good{color:var(--success)}
+
+/* Sprint topic cards */
+.topic-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.topic-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px;cursor:pointer;transition:border .12s;-webkit-tap-highlight-color:transparent}
+.topic-card:hover{border-color:var(--accent)}
+.topic-card:active{transform:scale(.98)}
+.topic-card .t-stars{font-size:.85rem;color:var(--star);margin-bottom:4px}
+.topic-card .t-name{font-size:.9rem;font-weight:600;color:var(--text);line-height:1.3;margin-bottom:4px}
+.topic-card .t-acc{font-size:.78rem;font-weight:600}
+.topic-card .t-acc.low{color:var(--error)}
+.topic-card .t-acc.mid{color:var(--warn)}
+.topic-card .t-acc.high{color:var(--success)}
+
+/* Report overlay */
+.overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.85);z-index:100;display:flex;align-items:center;justify-content:center;padding:16px}
+.overlay-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;max-width:500px;width:100%;max-height:85vh;overflow-y:auto}
+.overlay-card h2{font-size:1.05rem;color:var(--accent);margin-bottom:12px}
+
+@media(max-width:480px){
+  .topic-grid{grid-template-columns:1fr}
+  .q-card{padding:12px}
+  .opt-btn{font-size:.8rem;min-height:44px}
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>⚡ MCQ Blitz</h1>
+    <div class="sub">MCQ Blitz · Exam &amp; Sprint</div>
+  </div>
+
+  <div class="tab-bar">
+    <button class="tab-btn active" id="tabExam" onclick="switchMode('exam')">📝 Exam</button>
+    <button class="tab-btn" id="tabSprint" onclick="switchMode('sprint')">⚡ Sprint</button>
+  </div>
+
+  <!-- ========== EXAM PANEL ========== -->
+  <div class="panel active" id="panelExam">
+    <!-- Settings -->
+    <div id="examSettings" class="settings-card">
+      <div class="settings-row">
+        <label>Questions</label>
+        <select id="examQCount"><option value="15">15</option><option value="20">20</option><option value="30" selected>30</option></select>
+        <label>Time (min)</label>
+        <select id="examTime"><option value="15">15</option><option value="20">20</option><option value="30" selected>30</option></select>
+      </div>
+      <button class="btn btn-primary" onclick="examStart()">Start Exam</button>
+    </div>
+
+    <!-- Active exam -->
+    <div id="examActive" style="display:none">
+      <div class="timer-bar">
+        <span>Q <span id="examQIdx">1</span>/<span id="examQTotal">30</span></span>
+        <span class="time" id="examTimer">30:00</span>
+        <span id="examAnswered">0 answered</span>
+        <button class="btn btn-ghost btn-sm" onclick="examSubmit()">Submit</button>
+      </div>
+      <div class="nav-strip" id="examNavStrip"></div>
+      <div class="q-card" id="examQCard">
+        <div class="q-num" id="examQNum">Question 1</div>
+        <div class="q-stem" id="examQStem"></div>
+        <div class="q-opts" id="examQOpts"></div>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-ghost btn-sm" onclick="examToggleMark()" style="flex:1">☆ Mark</button>
+      </div>
+    </div>
+
+    <!-- Review -->
+    <div id="examReview" style="display:none"></div>
+  </div>
+
+  <!-- ========== SPRINT PANEL ========== -->
+  <div class="panel" id="panelSprint">
+    <!-- Topic menu -->
+    <div id="sprintMenu">
+      <div class="topic-grid" id="topicGrid"></div>
+    </div>
+    <!-- Active sprint -->
+    <div id="sprintActive" style="display:none">
+      <div class="timer-bar">
+        <span id="sprintTopicName">Topic</span>
+        <span class="time" id="sprintTimer">3:00</span>
+        <span id="sprintProgress">1/4</span>
+        <button class="btn btn-ghost btn-sm" onclick="sprintQuit()">Quit</button>
+      </div>
+      <div class="q-card">
+        <div class="q-num" id="sprintQNum">Q1</div>
+        <div class="q-stem" id="sprintQStem"></div>
+        <div class="q-opts" id="sprintQOpts"></div>
+        <div class="fb-inline" id="sprintFB"></div>
+      </div>
+    </div>
+    <!-- Sprint result -->
+    <div id="sprintResult" style="display:none"></div>
+  </div>
+</div>
+
+<div class="overlay" id="overlay" style="display:none" onclick="closeOverlay(event)">
+  <div class="overlay-card" id="overlayCard"></div>
+</div>
+
+<script>
+// ============================================================
+// QUESTION BANK (40 questions, 10 topics × 4)
+// ============================================================
+const topics = [
+  {id:"air",en:"Air & Element Classification",stars:4},
+  {id:"distillation",en:"Distillation & Chemical Formulas",stars:4},
+  {id:"metals",en:"Metal Extraction & Petroleum",stars:4},
+  {id:"isotopes",en:"Isotope Calculation",stars:5},
+  {id:"periodic",en:"Periodic Table",stars:5},
+  {id:"plastics",en:"Plastics & Polymers",stars:3},
+  {id:"equations",en:"Chemical Equations",stars:4},
+  {id:"flame-ion",en:"Flame Test & Ion Test",stars:3},
+  {id:"caco3",en:"CaCO₃ Decomposition",stars:3},
+  {id:"group-trends",en:"Group Trends",stars:4}
+];
+
+const questions = [
+  // === TOPIC: air (4) ===
+  {topic:"air",en:"Air is best described as a ...",opts:["A. compound","B. element","C. mixture","D. pure substance"],ans:2,explainEn:"Air is a mixture of gases (N₂, O₂, CO₂, etc.) — not chemically combined."},
+  {topic:"air",en:"Which hazard label should appear on a chlorine gas cylinder?",opts:["A. Flammable","B. Toxic","C. Corrosive","D. Explosive"],ans:1,explainEn:"Chlorine (Cl₂) is toxic — it attacks the respiratory system."},
+  {topic:"air",en:"Which of the following is classified as an element?",opts:["A. CO₂","B. O₂","C. H₂O","D. NaCl"],ans:1,explainEn:"O₂ contains only one type of atom (oxygen) → it is an element."},
+  {topic:"air",en:"The most abundant gas in the Earth's atmosphere is...",opts:["A. Oxygen","B. Carbon dioxide","C. Nitrogen","D. Argon"],ans:2,explainEn:"Nitrogen (N₂) makes up ~78% of air; oxygen ~21%."},
+
+  // === TOPIC: distillation (4) ===
+  {topic:"distillation",en:"Simple distillation involves two main processes:",opts:["A. Filtration + evaporation","B. Boiling + condensation","C. Freezing + melting","D. Dissolving + crystallisation"],ans:1,explainEn:"Distillation = boiling the liquid → condensing the vapour back to liquid."},
+  {topic:"distillation",en:"The chemical formula of methane is...",opts:["A. CH₃","B. C₂H₆","C. CH₄","D. CH₃OH"],ans:2,explainEn:"Methane = CH₄ — the simplest hydrocarbon (one carbon, four hydrogens)."},
+  {topic:"distillation",en:"Which of the following is a non-metal?",opts:["A. Sodium (Na)","B. Magnesium (Mg)","C. Sulfur (S)","D. Aluminium (Al)"],ans:2,explainEn:"Sulfur is a non-metal (Group VI). Na, Mg, Al are all metals."},
+  {topic:"distillation",en:"Distillation can separate a mixture of liquids that have different...",opts:["A. Colours","B. Densities","C. Boiling points","D. Masses"],ans:2,explainEn:"Distillation separates based on differences in boiling points."},
+
+  // === TOPIC: metals (4) ===
+  {topic:"metals",en:"Aluminium is extracted from its ore by...",opts:["A. Carbon reduction","B. Electrolysis","C. Heating alone","D. Reaction with acid"],ans:1,explainEn:"Al is too reactive for carbon reduction → extracted by electrolysis of molten Al₂O₃."},
+  {topic:"metals",en:"Iron is extracted from its ore in a blast furnace using...",opts:["A. Electrolysis","B. Carbon reduction","C. Thermal decomposition","D. Displacement"],ans:1,explainEn:"Fe₂O₃ + 3CO → 2Fe + 3CO₂ — carbon (as CO) reduces iron oxide."},
+  {topic:"metals",en:"Which product is NOT obtained from petroleum?",opts:["A. Petrol","B. Diesel","C. Rubber","D. Kerosene"],ans:2,explainEn:"Natural rubber comes from rubber trees. Petrol, diesel, kerosene are petroleum fractions."},
+  {topic:"metals",en:"Which metal is the most reactive?",opts:["A. Copper (Cu)","B. Iron (Fe)","C. Zinc (Zn)","D. Potassium (K)"],ans:3,explainEn:"K is at the top of the reactivity series — most reactive among these four."},
+
+  // === TOPIC: isotopes (4) ===
+  {topic:"isotopes",en:"An atom of chlorine has 17 protons and 18 neutrons. Its mass number is:",opts:["A. 17","B. 18","C. 35","D. 36"],ans:2,explainEn:"Mass number = protons + neutrons = 17 + 18 = 35."},
+  {topic:"isotopes",en:"A neutral atom of Cl-37 has 17 protons. How many electrons does it have?",opts:["A. 17","B. 20","C. 37","D. 18"],ans:0,explainEn:"In a neutral atom, number of electrons = number of protons = 17."},
+  {topic:"isotopes",en:"Which statement about isotopes is correct?",opts:["A. They have different chemical properties","B. They have different numbers of protons","C. They have the same chemical properties","D. They have the same mass number"],ans:2,explainEn:"Isotopes have the same electron arrangement → same chemical properties."},
+  {topic:"isotopes",en:"An element X has mass number 23 and atomic number 11. Its atomic symbol is:",opts:["A. ¹¹₂₃X","B. ²³₁₁X","C. ₂₃¹¹X","D. ₁₁²³X"],ans:1,explainEn:"Mass number (top left) = 23, atomic number (bottom left) = 11 → ²³₁₁X (sodium)."},
+
+  // === TOPIC: periodic (4) ===
+  {topic:"periodic",en:"Group I metals (e.g. Na, K) are stored in...",opts:["A. Water","B. Paraffin oil","C. Air","D. Dilute acid"],ans:1,explainEn:"Group I metals react vigorously with water and air → stored under paraffin oil."},
+  {topic:"periodic",en:"Going DOWN Group VII (halogens), reactivity...",opts:["A. Increases","B. Decreases","C. Stays the same","D. First increases then decreases"],ans:1,explainEn:"Down Group VII, atoms get larger → harder to attract an extra electron → reactivity decreases."},
+  {topic:"periodic",en:"An element has electronic arrangement 2,8,1. It belongs to Group...",opts:["A. 1","B. 2","C. 8","D. 11"],ans:0,explainEn:"Group number = number of outermost shell electrons = 1. This is sodium (Na)."},
+  {topic:"periodic",en:"Which element is a halogen?",opts:["A. Sodium (Na)","B. Magnesium (Mg)","C. Chlorine (Cl)","D. Argon (Ar)"],ans:2,explainEn:"Chlorine is in Group VII → a halogen. Argon is Group 0 (noble gas)."},
+
+  // === TOPIC: plastics (4) ===
+  {topic:"plastics",en:"Most plastics are...",opts:["A. Natural materials","B. Synthetic or semi-synthetic","C. Elements","D. Pure metals"],ans:1,explainEn:"Plastics are man-made polymers — synthetic or semi-synthetic materials."},
+  {topic:"plastics",en:"Polyethene (PE) and polypropene (PP) are both...",opts:["A. Thermosetting plastics","B. Thermoplastics","C. Natural fibres","D. Metals"],ans:1,explainEn:"PE and PP soften when heated → they are thermoplastics."},
+  {topic:"plastics",en:"Which plastic is commonly used for making plastic bags?",opts:["A. Polyvinyl chloride (PVC)","B. Polystyrene (PS)","C. Polyethene (PE)","D. Perspex"],ans:2,explainEn:"PE (polyethene) is the most common plastic for bags and packaging."},
+  {topic:"plastics",en:"When a thermosetting plastic is heated strongly, it...",opts:["A. Melts","B. Softens","C. Decomposes without melting","D. Evaporates"],ans:2,explainEn:"Thermosetting plastics have cross-links → they char and decompose, not melt."},
+
+  // === TOPIC: equations (4) ===
+  {topic:"equations",en:"CaCO₃(s) → ___ + CO₂(g)\nWhat is the missing product?",opts:["A. Ca","B. CaO","C. Ca(OH)₂","D. CaCl₂"],ans:1,explainEn:"CaCO₃ decomposes to CaO (calcium oxide) + CO₂ on heating."},
+  {topic:"equations",en:"Metal + acid → ?",opts:["A. Salt + O₂","B. Salt + H₂","C. Salt + CO₂","D. Oxide + H₂"],ans:1,explainEn:"General equation: Metal + Acid → Salt + Hydrogen gas (H₂)."},
+  {topic:"equations",en:"What state symbol is used for a substance dissolved in water?",opts:["A. (s)","B. (l)","C. (g)","D. (aq)"],ans:3,explainEn:"(aq) = aqueous solution — substance dissolved in water."},
+  {topic:"equations",en:"2Mg(s) + ___ → 2MgO(s)\nWhat is the missing reactant?",opts:["A. O(g)","B. O₂(g)","C. H₂O(l)","D. CO₂(g)"],ans:1,explainEn:"Magnesium burns in oxygen: 2Mg + O₂ → 2MgO."},
+
+  // === TOPIC: flame-ion (4) ===
+  {topic:"flame-ion",en:"The flame colour of sodium ions (Na⁺) is...",opts:["A. Lilac","B. Brick red","C. Golden yellow","D. Bluish green"],ans:2,explainEn:"Na⁺ gives a golden yellow flame — very intense, masks other colours."},
+  {topic:"flame-ion",en:"To test for chloride ions (Cl⁻), you should add:",opts:["A. AgNO₃(aq) only","B. BaCl₂(aq)","C. AgNO₃(aq) + dilute HNO₃","D. NaOH(aq)"],ans:2,explainEn:"Dilute HNO₃ removes interfering ions (e.g. CO₃²⁻). Then AgNO₃ gives white ppt = Cl⁻."},
+  {topic:"flame-ion",en:"Blue cobalt(II) chloride paper turns pink in the presence of...",opts:["A. Carbon dioxide","B. Water","C. Hydrogen","D. Oxygen"],ans:1,explainEn:"CoCl₂ paper tests for water — blue → pink when wet."},
+  {topic:"flame-ion",en:"The flame colour of potassium ions (K⁺) is...",opts:["A. Golden yellow","B. Lilac","C. Brick red","D. Bluish green"],ans:1,explainEn:"K⁺ gives a lilac (pale purple) flame."},
+
+  // === TOPIC: caco3 (4) ===
+  {topic:"caco3",en:"When CO₂ is bubbled through limewater, the solution...",opts:["A. Turns blue","B. Turns milky","C. Remains clear","D. Turns yellow"],ans:1,explainEn:"CO₂ + Ca(OH)₂ → CaCO₃(s) + H₂O. The white CaCO₃ precipitate makes it milky."},
+  {topic:"caco3",en:"CaO(s) + H₂O(l) → ?",opts:["A. CaCO₃","B. Ca(OH)₂","C. Ca + H₂","D. CaO₂"],ans:1,explainEn:"Calcium oxide + water → calcium hydroxide (slaked lime)."},
+  {topic:"caco3",en:"Oyster shells and eggshells are mainly composed of...",opts:["A. CaO","B. Ca(OH)₂","C. CaCO₃","D. CaCl₂"],ans:2,explainEn:"Both are primarily calcium carbonate (CaCO₃)."},
+  {topic:"caco3",en:"The reaction CaCO₃(s) → CaO(s) + CO₂(g) is an example of...",opts:["A. Combustion","B. Neutralisation","C. Thermal decomposition","D. Displacement"],ans:2,explainEn:"One compound breaks down into two simpler substances on heating → thermal decomposition."},
+
+  // === TOPIC: group-trends (4) ===
+  {topic:"group-trends",en:"Going DOWN Group II, the reactivity of metals...",opts:["A. Increases","B. Decreases","C. Stays the same","D. Depends on the metal"],ans:0,explainEn:"Down Group II: more electron shells → outer electrons further from nucleus → easier to lose → more reactive."},
+  {topic:"group-trends",en:"Which element is the most reactive?",opts:["A. Sodium (Na)","B. Potassium (K)","C. Calcium (Ca)","D. Magnesium (Mg)"],ans:1,explainEn:"K is in Group I, below Na → more electron shells → most reactive."},
+  {topic:"group-trends",en:"Group 0 elements (noble gases) are generally...",opts:["A. Very reactive","B. Unreactive","C. Radioactive","D. Metals"],ans:1,explainEn:"Noble gases have full outer electron shells → chemically unreactive."},
+  {topic:"group-trends",en:"An element has 3 electron shells and 2 outer electrons. It is in...",opts:["A. Group I, Period 2","B. Group II, Period 3","C. Group II, Period 2","D. Group III, Period 3"],ans:1,explainEn:"3 shells → Period 3. 2 outer electrons → Group II. This is magnesium (Mg)."}
+];
+
+// ============================================================
+// GLOBAL STATE
+// ============================================================
+let currentMode = 'exam';
+let examState = {questions:[],answers:{},marked:{},currentIdx:0,startTime:0,totalTime:0,timerId:null,phase:'settings'};
+let sprintState = {topic:null,questions:[],currentIdx:0,answers:[],timerId:null,startTime:0,totalTime:180,phase:'menu'};
+
+// ============================================================
+// MODE SWITCHING
+// ============================================================
+function switchMode(mode) {
+  if (currentMode === mode) return;
+  if (currentMode === 'exam' && examState.phase === 'active') {
+    if (!confirm('Exam in progress. Abandon?')) return;
+    clearInterval(examState.timerId);
+    examState.phase = 'settings';
+  }
+  if (currentMode === 'sprint' && sprintState.phase === 'active') {
+    clearInterval(sprintState.timerId);
+    sprintState.phase = 'menu';
+  }
+  currentMode = mode;
+  document.getElementById('tabExam').classList.toggle('active', mode === 'exam');
+  document.getElementById('tabSprint').classList.toggle('active', mode === 'sprint');
+  document.getElementById('panelExam').classList.toggle('active', mode === 'exam');
+  document.getElementById('panelSprint').classList.toggle('active', mode === 'sprint');
+  if (mode === 'exam') renderExamSettings();
+  if (mode === 'sprint') renderSprintMenu();
+}
+function renderExamSettings() {
+  if (examState.phase !== 'settings') return;
+  document.getElementById('examSettings').style.display = 'block';
+  document.getElementById('examActive').style.display = 'none';
+  document.getElementById('examReview').style.display = 'none';
+}
+
+// ============================================================
+// EXAM MODE
+// ============================================================
+function examStart() {
+  let qCount = parseInt(document.getElementById('examQCount').value);
+  let timeMin = parseInt(document.getElementById('examTime').value);
+  // Select questions: proportional from each topic
+  let pool = [];
+  topics.forEach(t => {
+    let tq = questions.filter(q => q.topic === t.id);
+    pool.push(...tq);
+  });
+  // Shuffle and pick
+  for (let i = pool.length - 1; i > 0; i--) { let j = Math.floor(Math.random()*(i+1)); [pool[i],pool[j]]=[pool[j],pool[i]]; }
+  examState.questions = pool.slice(0, Math.min(qCount, pool.length));
+  examState.answers = {};
+  examState.marked = {};
+  examState.currentIdx = 0;
+  examState.totalTime = timeMin * 60;
+  examState.startTime = Date.now();
+  examState.phase = 'active';
+
+  document.getElementById('examSettings').style.display = 'none';
+  document.getElementById('examActive').style.display = 'block';
+  document.getElementById('examReview').style.display = 'none';
+  document.getElementById('examQTotal').textContent = examState.questions.length;
+  document.getElementById('examAnswered').textContent = '0 answered';
+  examRenderNav();
+  examShowQuestion(0);
+  examStartTimer();
+}
+
+function examShowQuestion(idx) {
+  examState.currentIdx = idx;
+  let q = examState.questions[idx];
+  document.getElementById('examQIdx').textContent = idx + 1;
+  document.getElementById('examQNum').textContent = 'Question ' + (idx + 1);
+  document.getElementById('examQStem').innerHTML = q.en;
+  let chosen = examState.answers[idx];
+  let optsHTML = '';
+  q.opts.forEach((opt, i) => {
+    let cls = 'opt-btn';
+    if (chosen === i) cls += ' selected';
+    optsHTML += '<button class="' + cls + '" onclick="examChoose(' + i + ')">' + opt + '</button>';
+  });
+  document.getElementById('examQOpts').innerHTML = optsHTML;
+  examRenderNav();
+  examUpdateAnswered();
+}
+
+function examChoose(optIdx) {
+  examState.answers[examState.currentIdx] = optIdx;
+  examShowQuestion(examState.currentIdx);
+  document.getElementById('examAnswered').textContent = Object.keys(examState.answers).length + ' answered';
+}
+
+function examToggleMark() {
+  let idx = examState.currentIdx;
+  if (examState.marked[idx]) delete examState.marked[idx];
+  else examState.marked[idx] = true;
+  examRenderNav();
+}
+
+function examRenderNav() {
+  let html = '';
+  for (let i = 0; i < examState.questions.length; i++) {
+    let cls = 'nav-dot';
+    if (i === examState.currentIdx) cls += ' current';
+    if (examState.answers[i] !== undefined) cls += ' answered';
+    if (examState.marked[i]) cls += ' marked';
+    html += '<button class="' + cls + '" onclick="examShowQuestion(' + i + ')">' + (i+1) + '</button>';
+  }
+  document.getElementById('examNavStrip').innerHTML = html;
+}
+
+function examUpdateAnswered() {
+  document.getElementById('examAnswered').textContent = Object.keys(examState.answers).length + ' answered';
+}
+
+function examStartTimer() {
+  clearInterval(examState.timerId);
+  examState.timerId = setInterval(() => {
+    let elapsed = Math.floor((Date.now() - examState.startTime) / 1000);
+    let remaining = Math.max(0, examState.totalTime - elapsed);
+    let mins = Math.floor(remaining / 60);
+    let secs = remaining % 60;
+    let timeEl = document.getElementById('examTimer');
+    timeEl.textContent = mins + ':' + (secs < 10 ? '0' : '') + secs;
+    if (remaining < 300) timeEl.classList.add('urgent');
+    if (remaining <= 0) { clearInterval(examState.timerId); examSubmit(); }
+  }, 1000);
+}
+
+function examSubmit() {
+  clearInterval(examState.timerId);
+  examState.phase = 'review';
+  document.getElementById('examActive').style.display = 'none';
+
+  let correct = 0;
+  let total = examState.questions.length;
+  let unanswered = 0;
+  let topicStats = {};
+  topics.forEach(t => { topicStats[t.id] = {total:0,correct:0}; });
+
+  let reviewHTML = '<h2 style="color:var(--accent)">📊 Exam Results</h2>';
+  reviewHTML += '<div class="review-row"><span>Questions</span><span>' + total + '</span></div>';
+
+  examState.questions.forEach((q, i) => {
+    let chosen = examState.answers[i];
+    if (chosen === undefined) unanswered++;
+    else if (chosen === q.ans) correct++;
+    if (topicStats[q.topic]) {
+      topicStats[q.topic].total++;
+      if (chosen === q.ans) topicStats[q.topic].correct++;
+    }
+  });
+
+  let pct = Math.round(correct / total * 100);
+  let emoji = pct >= 80 ? '🌟' : pct >= 60 ? '👍' : pct >= 40 ? '📚' : '💪';
+  reviewHTML += '<div class="review-row"><span>Correct</span><span class="good">' + correct + ' (' + pct + '%)</span></div>';
+  if (unanswered > 0) reviewHTML += '<div class="review-row"><span>Unanswered</span><span class="bad">' + unanswered + '</span></div>';
+
+  reviewHTML += '<h3 style="margin-top:14px;color:var(--text)">By Topic</h3>';
+  topics.forEach(t => {
+    let ts = topicStats[t.id];
+    if (ts.total === 0) return;
+    let tpct = Math.round(ts.correct / ts.total * 100);
+    let cls = tpct >= 75 ? 'good' : tpct >= 50 ? '' : 'bad';
+    reviewHTML += '<div class="review-row"><span>' + t.en + '</span><span class="' + cls + '">' + ts.correct + '/' + ts.total + ' (' + tpct + '%)</span></div>';
+  });
+
+  reviewHTML += '<h3 style="margin-top:14px;color:var(--text)">Review Each Question</h3>';
+  examState.questions.forEach((q, i) => {
+    let chosen = examState.answers[i];
+    let isCorrect = chosen === q.ans;
+    reviewHTML += '<div class="review-card">';
+    reviewHTML += '<div class="q-num">Q' + (i+1) + ' · ' + (topics.find(t=>t.id===q.topic)||{}).en + '</div>';
+    reviewHTML += '<div class="q-stem">' + q.en + '</div>';
+    q.opts.forEach((opt, oi) => {
+      let cls = '';
+      if (oi === q.ans) cls = ' style="color:var(--success);font-weight:600"';
+      else if (oi === chosen && !isCorrect) cls = ' style="color:var(--error)"';
+      let prefix = oi === chosen ? '→ ' : '  ';
+      reviewHTML += '<div' + cls + '>' + prefix + opt + '</div>';
+    });
+    if (!isCorrect) reviewHTML += '<div style="color:var(--error);font-size:.75rem;margin-top:4px">✗ ' + q.explainEn + ' ' + q.explainCn + '</div>';
+    else reviewHTML += '<div style="color:var(--success);font-size:.75rem;margin-top:4px">✓ Correct</div>';
+    if (chosen === undefined) reviewHTML += '<div style="color:var(--warn);font-size:.8rem;margin-top:4px">⚠ Unanswered</div>';
+    reviewHTML += '</div>';
+  });
+
+  reviewHTML += '<button class="btn btn-primary" onclick="examReset()" style="margin-top:12px">New Exam</button>';
+  document.getElementById('examReview').innerHTML = reviewHTML;
+  document.getElementById('examReview').style.display = 'block';
+}
+
+function examReset() {
+  clearInterval(examState.timerId);
+  examState.phase = 'settings';
+  document.getElementById('examSettings').style.display = 'block';
+  document.getElementById('examActive').style.display = 'none';
+  document.getElementById('examReview').style.display = 'none';
+}
+
+// ============================================================
+// SPRINT MODE
+// ============================================================
+function renderSprintMenu() {
+  sprintState.phase = 'menu';
+  document.getElementById('sprintMenu').style.display = 'block';
+  document.getElementById('sprintActive').style.display = 'none';
+  document.getElementById('sprintResult').style.display = 'none';
+
+  // Load saved accuracy
+  let saved = {};
+  try { saved = JSON.parse(localStorage.getItem('mcqBlitz_sprint') || '{}'); } catch(e) {}
+
+  let html = '';
+  topics.forEach(t => {
+    let tq = questions.filter(q => q.topic === t.id);
+    let stars = '⭐'.repeat(t.stars);
+    let acc = saved[t.id];
+    let accHTML = '';
+    if (acc && acc.total >= 4) {
+      let pct = Math.round(acc.correct / acc.total * 100);
+      let cls = pct >= 75 ? 'high' : pct >= 50 ? 'mid' : 'low';
+      accHTML = '<div class="t-acc ' + cls + '">' + pct + '% (' + acc.correct + '/' + acc.total + ')</div>';
+    } else {
+      accHTML = '<div class="t-acc" style="color:var(--text3)">Not yet</div>';
+    }
+    html += '<div class="topic-card" onclick="sprintStart(\'' + t.id + '\')">';
+    html += '<div class="t-stars">' + stars + '</div>';
+    html += '<div class="t-name">' + t.en + '</div>';
+    html += accHTML;
+    html += '</div>';
+  });
+  document.getElementById('topicGrid').innerHTML = html;
+}
+
+function sprintStart(topicId) {
+  clearInterval(sprintState.timerId);
+  let topic = topics.find(t => t.id === topicId);
+  let pool = questions.filter(q => q.topic === topicId);
+  for (let i = pool.length - 1; i > 0; i--) { let j = Math.floor(Math.random()*(i+1)); [pool[i],pool[j]]=[pool[j],pool[i]]; }
+  sprintState.topic = topic;
+  sprintState.questions = pool;
+  sprintState.currentIdx = 0;
+  sprintState.answers = [];
+  sprintState.totalTime = 180;
+  sprintState.startTime = Date.now();
+  sprintState.phase = 'active';
+
+  document.getElementById('sprintMenu').style.display = 'none';
+  document.getElementById('sprintActive').style.display = 'block';
+  document.getElementById('sprintResult').style.display = 'none';
+  document.getElementById('sprintTopicName').textContent = topic.en;
+  sprintShowQuestion(0);
+  sprintStartTimer();
+}
+
+function sprintShowQuestion(idx) {
+  sprintState.currentIdx = idx;
+  let q = sprintState.questions[idx];
+  document.getElementById('sprintQNum').textContent = 'Q' + (idx + 1) + '/' + sprintState.questions.length;
+  document.getElementById('sprintQStem').innerHTML = q.en;
+  document.getElementById('sprintProgress').textContent = (idx + 1) + '/' + sprintState.questions.length;
+  let html = '';
+  q.opts.forEach((opt, i) => {
+    html += '<button class="opt-btn" onclick="sprintChoose(' + i + ')">' + opt + '</button>';
+  });
+  document.getElementById('sprintQOpts').innerHTML = html;
+  document.getElementById('sprintFB').className = 'fb-inline';
+  document.getElementById('sprintFB').innerHTML = '';
+}
+
+function sprintChoose(optIdx) {
+  // Disable all options
+  let btns = document.getElementById('sprintQOpts').querySelectorAll('.opt-btn');
+  btns.forEach(b => b.disabled = true);
+  let q = sprintState.questions[sprintState.currentIdx];
+  let correct = optIdx === q.ans;
+  sprintState.answers.push(correct);
+
+  // Highlight
+  btns[q.ans].classList.add('correct');
+  if (!correct) btns[optIdx].classList.add('wrong');
+
+  // Show feedback
+  let fb = document.getElementById('sprintFB');
+  fb.className = 'fb-inline show ' + (correct ? 'right' : 'wrong');
+  fb.innerHTML = (correct ? '✓ Correct!' : '✗ Wrong') + '<br>' + q.explainEn;
+
+  // Auto-advance after 2s
+  setTimeout(() => {
+    if (sprintState.phase !== 'active') return;
+    let nextIdx = sprintState.currentIdx + 1;
+    if (nextIdx >= sprintState.questions.length) {
+      sprintFinish();
+    } else {
+      sprintShowQuestion(nextIdx);
+    }
+  }, 2000);
+}
+
+function sprintStartTimer() {
+  clearInterval(sprintState.timerId);
+  sprintState.timerId = setInterval(() => {
+    if (sprintState.phase !== 'active') { clearInterval(sprintState.timerId); return; }
+    let elapsed = Math.floor((Date.now() - sprintState.startTime) / 1000);
+    let remaining = Math.max(0, sprintState.totalTime - elapsed);
+    let mins = Math.floor(remaining / 60);
+    let secs = remaining % 60;
+    let timeEl = document.getElementById('sprintTimer');
+    timeEl.textContent = mins + ':' + (secs < 10 ? '0' : '') + secs;
+    if (remaining < 60) timeEl.classList.add('urgent');
+    if (remaining <= 0) sprintFinish();
+  }, 1000);
+}
+
+function sprintFinish() {
+  clearInterval(sprintState.timerId);
+  sprintState.phase = 'done';
+  let correct = sprintState.answers.filter(a => a).length;
+  let total = sprintState.questions.length;
+  let elapsed = Math.floor((Date.now() - sprintState.startTime) / 1000);
+  let pct = Math.round(correct / total * 100);
+
+  // Save to localStorage
+  let saved = {};
+  try { saved = JSON.parse(localStorage.getItem('mcqBlitz_sprint') || '{}'); } catch(e) {}
+  let tid = sprintState.topic.id;
+  if (!saved[tid]) saved[tid] = {correct:0, total:0};
+  saved[tid].correct += correct;
+  saved[tid].total += total;
+  localStorage.setItem('mcqBlitz_sprint', JSON.stringify(saved));
+
+  document.getElementById('sprintActive').style.display = 'none';
+  document.getElementById('sprintResult').style.display = 'block';
+  let emoji = pct >= 75 ? '🌟' : pct >= 50 ? '👍' : '💪';
+  let html = '<div class="settings-card">';
+  html += '<h3 style="color:var(--accent);margin-bottom:8px">' + emoji + ' ' + sprintState.topic.en + '</h3>';
+  html += '<div class="review-row"><span>Score</span><span class="' + (pct>=75?'good':pct>=50?'':'bad') + '">' + correct + '/' + total + ' (' + pct + '%)</span></div>';
+  html += '<div class="review-row"><span>Time</span><span>' + elapsed + 's</span></div>';
+  html += '<div class="review-row"><span>All-time</span><span>' + saved[tid].correct + '/' + saved[tid].total + '</span></div>';
+  html += '</div>';
+  html += '<button class="btn btn-primary" onclick="sprintStart(\'' + sprintState.topic.id + '\')">Retry</button>';
+  html += '<button class="btn btn-ghost" style="width:100%;margin-top:6px" onclick="sprintQuit()">Back to Topics</button>';
+  document.getElementById('sprintResult').innerHTML = html;
+}
+
+function sprintQuit() {
+  clearInterval(sprintState.timerId);
+  sprintState.phase = 'menu';
+  document.getElementById('sprintActive').style.display = 'none';
+  document.getElementById('sprintResult').style.display = 'none';
+  document.getElementById('sprintMenu').style.display = 'block';
+  renderSprintMenu();
+}
+
+// ============================================================
+// OVERLAY
+// ============================================================
+function closeOverlay(e) {
+  if (e.target === document.getElementById('overlay')) {
+    document.getElementById('overlay').style.display = 'none';
+  }
+}
+
+// ============================================================
+// INIT
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => {
+  switchMode('exam');
+  renderSprintMenu(); // pre-render sprint menu
+  document.getElementById('panelSprint').classList.remove('active'); // but hide it
+});
+</script>
+</body>
+</html>

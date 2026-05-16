@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>文言翻譯逐字計分器 — 賣柑者言＋鄒忌</title>
+<style>
+:root {
+  --bg: #fafaf9; --text: #1c1c1c; --muted: #777;
+  --accent: #c0392b; --accent-soft: #fef0f0;
+  --border: #e0e0dc; --card-bg: #fff;
+  --correct: #1a7a2e; --correct-bg: #e8f5e9;
+  --miss: #c0392b; --miss-bg: #fef0f0;
+  --input-bg: #fffef5; --input-border: #d4c88c;
+  --radius: 6px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+  background: var(--bg); color: var(--text); line-height: 1.7;
+  padding: 24px 16px 60px; max-width: 760px; margin: 0 auto;
+  -webkit-font-smoothing: antialiased;
+}
+h1 { font-size: 1.5em; font-weight: 800; margin: 0 0 4px; }
+.subtitle { color: var(--muted); font-size: 0.92em; margin: 0 0 20px; }
+
+.source-select {
+  display: flex; gap: 8px; margin: 0 0 20px; flex-wrap: wrap;
+}
+.src-btn {
+  padding: 12px 20px; border: 1px solid var(--border); border-radius: 20px;
+  background: #fff; font-size: 0.9em; cursor: pointer; user-select: none;
+  transition: all 0.15s; -webkit-tap-highlight-color: transparent;
+}
+.src-btn:active { background: #e8e8e4; }
+.src-btn.active { background: #1c1c1c; color: #fff; border-color: #1c1c1c; }
+
+.card {
+  background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 20px; margin: 0 0 16px;
+}
+.original {
+  font-size: 1.3em; font-weight: 700; text-align: center;
+  padding: 14px; background: #f9f9f4; border-radius: var(--radius);
+  margin: 0 0 16px; letter-spacing: 0.05em;
+}
+
+/* Translation line with native inputs */
+.translation-line {
+  font-size: 1.05em; line-height: 2.8; padding: 10px 16px;
+  background: #fefefb; border: 1px dashed var(--border); border-radius: var(--radius);
+  margin: 0 0 12px;
+}
+.blank-input {
+  display: inline-block; vertical-align: middle;
+  min-width: 80px; max-width: 200px; height: 44px;
+  border: none; border-bottom: 2px solid var(--input-border);
+  background: var(--input-bg); font-size: 0.95em;
+  padding: 6px 8px; margin: 0 3px; text-align: center;
+  font-family: inherit; outline: none; border-radius: 0;
+  transition: border-color 0.2s, background 0.2s;
+  -webkit-appearance: none;
+}
+.blank-input:focus {
+  border-bottom-color: var(--accent); background: #fffef0;
+  box-shadow: 0 1px 0 var(--accent);
+}
+.blank-input.correct {
+  border-bottom-color: var(--correct); background: var(--correct-bg);
+  font-weight: 700; border-bottom-width: 3px;
+}
+.blank-input.wrong {
+  border-bottom-color: var(--miss); background: var(--miss-bg);
+  border-bottom-width: 3px;
+}
+
+.actions { display: flex; gap: 10px; margin: 12px 0; flex-wrap: wrap; }
+.btn {
+  padding: 14px 24px; border: 1px solid var(--border); border-radius: var(--radius);
+  background: #fff; font-size: 0.95em; cursor: pointer; user-select: none;
+  transition: all 0.15s; font-weight: 600; font-family: inherit;
+  -webkit-tap-highlight-color: transparent;
+  min-height: 44px;
+}
+.btn:active { background: #e8e8e4; }
+.btn.check { background: #1c1c1c; color: #fff; border-color: #1c1c1c; }
+.btn.check:active { opacity: 0.8; }
+.btn.reset { color: var(--muted); }
+
+.score-display {
+  text-align: center; font-size: 1.1em; padding: 14px; margin: 12px 0;
+  border-radius: var(--radius); display: none; line-height: 1.6;
+}
+.score-display.good { background: var(--correct-bg); color: var(--correct); display: block; }
+.score-display.ok { background: #fffbe6; color: #b85c00; display: block; }
+.score-display.low { background: var(--miss-bg); color: var(--miss); display: block; }
+
+.progress {
+  display: flex; align-items: center; gap: 10px; margin: 0 0 18px;
+  font-size: 0.88em; color: var(--muted);
+}
+.progress-bar {
+  flex: 1; height: 6px; background: #e8e8e4; border-radius: 3px; overflow: hidden;
+}
+.progress-fill {
+  height: 100%; background: var(--accent); border-radius: 3px; transition: width 0.3s;
+}
+
+.footnote {
+  font-size: 0.82em; color: var(--muted); margin: 32px 0 0;
+  padding: 16px; background: #fff; border: 1px solid var(--border); border-radius: var(--radius);
+}
+.footnote strong { color: var(--text); }
+
+@media (max-width: 600px) {
+  body { padding: 16px 10px 40px; font-size: 15px; }
+  .original { font-size: 1.15em; }
+  .translation-line { font-size: 0.92em; line-height: 2.5; padding: 10px 12px; }
+  .blank-input { min-width: 60px; height: 40px; font-size: 0.88em; }
+  .btn { padding: 12px 18px; font-size: 0.88em; }
+}
+@media print {
+  body { padding: 0; font-size: 11pt; }
+  .actions, .source-select, .progress { display: none; }
+  .card { break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+
+<h1>📜 文言翻譯逐字計分器</h1>
+<p class="subtitle">每個空白 = 一個計分點 | 寫到才得分 | 漏字就失分</p>
+
+<div class="source-select" id="sourceSelect"></div>
+
+<div class="progress" id="progressArea">
+  <span id="progLabel">第 1/5 句</span>
+  <div class="progress-bar"><div class="progress-fill" id="progFill" style="width:20%"></div></div>
+  <span id="totalScore" style="font-weight:700;">0分</span>
+</div>
+
+<div id="questionArea"></div>
+
+<div class="score-display" id="scoreDisplay"></div>
+
+<div class="actions">
+  <button class="btn check" onclick="checkAnswer()">✓ 核對答案</button>
+  <button class="btn reset" onclick="resetCurrent()">↺ 重做此題</button>
+  <button class="btn" onclick="nextQuestion()" id="nextBtn" style="display:none;">→ 下一題</button>
+</div>
+
+<div class="footnote">
+  <strong>💡 計分邏輯</strong>：每個空白 = 0.5或1分（按歷年真卷評分標準）。<br>
+  空白中的字必須<strong>精準</strong>。大意對但關鍵字不對 → 扣分。<br>
+  輸入後按「核對答案」或點下一題繼續。錯的空白會顯示正確答案，請抄到錯題本。<br>
+  在 iPad 上使用：輸入框已優化觸控尺寸，請用系統鍵盤直接輸入。
+</div>
+
+<script>
+const ALL = {
+  'mai': {
+    name: '《賣柑者言》',
+    sentences: [
+      {
+        original: '金玉其外，敗絮其中。',
+        template: '外表&lb;像&rb;金玉一樣&lb;華美&rb;，內裡&lb;卻&rb;是&lb;破爛&rb;的棉絮。',
+        blanks: [
+          { id: 0, answer: '像',   hint: '比喻詞',    score: 0.5 },
+          { id: 1, answer: '華美', hint: '≠昂貴≠漂亮', score: 0.5 },
+          { id: 2, answer: '卻',   hint: '轉折詞',    score: 0.5 },
+          { id: 3, answer: '破爛', hint: '≠爛≠壞',   score: 0.5 }
+        ]
+      },
+      {
+        original: '出之燁然，玉質而金色。',
+        template: '拿出來&lb;光彩鮮明&rb;，&lb;質地&rb;像玉，顏色像&lb;金&rb;。',
+        blanks: [
+          { id: 0, answer: '光彩鮮明', hint: '燁然的翻譯', score: 1 },
+          { id: 1, answer: '質地',     hint: '玉質的質',   score: 0.5 },
+          { id: 2, answer: '金',       hint: '顏色',       score: 0.5 }
+        ]
+      },
+      {
+        original: '世之為欺者不寡矣。',
+        template: '世上&lb;行騙&rb;的人&lb;並不少&rb;啊。',
+        blanks: [
+          { id: 0, answer: '行騙',  hint: '為欺=欺騙', score: 1 },
+          { id: 1, answer: '並不少', hint: '不寡≠很少', score: 1 }
+        ]
+      },
+      {
+        original: '將衒外以惑愚瞽乎？',
+        template: '難道要&lb;炫耀&rb;外表來&lb;迷惑&rb;&lb;瞎子&rb;和蠢人嗎？',
+        blanks: [
+          { id: 0, answer: '炫耀', hint: '衒=誇耀',  score: 1 },
+          { id: 1, answer: '迷惑', hint: '惑=蒙騙',  score: 0.5 },
+          { id: 2, answer: '瞎子', hint: '瞽=盲人',  score: 0.5 }
+        ]
+      },
+      {
+        original: '涉寒暑不潰。',
+        template: '經過寒冬酷暑也不&lb;腐爛&rb;。',
+        blanks: [
+          { id: 0, answer: '腐爛', hint: '潰≠崩潰≠潰敗', score: 1 }
+        ]
+      }
+    ]
+  },
+  'zou': {
+    name: '《鄒忌諷齊王納諫》',
+    sentences: [
+      {
+        original: '令初下，群臣進諫，門庭若市。',
+        template: '命令&lb;剛&rb;下達&lb;時&rb;，&lb;許多&rb;大臣都來進諫，宮門和庭院&lb;像集市一樣&rb;熱鬧。',
+        blanks: [
+          { id: 0, answer: '剛',        hint: '初=剛剛',     score: 0.5 },
+          { id: 1, answer: '時',        hint: '初下=剛下達時', score: 0.5 },
+          { id: 2, answer: '許多',      hint: '群=眾多',      score: 0.5 },
+          { id: 3, answer: '像集市一樣', hint: '若市=如市集',  score: 1 }
+        ]
+      },
+      {
+        original: '此所謂戰勝於朝廷。',
+        template: '這就是所說的在&lb;朝廷上&rb;&lb;戰勝&rb;（別國）。',
+        blanks: [
+          { id: 0, answer: '朝廷上', hint: '於朝廷=在朝廷', score: 0.5 },
+          { id: 1, answer: '戰勝',   hint: '戰勝於=在…取勝', score: 0.5 }
+        ]
+      },
+      {
+        original: '朝服衣冠。',
+        template: '早晨&lb;穿戴&rb;好衣帽。',
+        blanks: [
+          { id: 0, answer: '穿戴', hint: '服=穿（動詞）≠衣服', score: 1 }
+        ]
+      },
+      {
+        original: '王之蔽甚矣。',
+        template: '大王&lb;被蒙蔽&rb;得&lb;很厲害&rb;了。',
+        blanks: [
+          { id: 0, answer: '被蒙蔽', hint: '蔽=蒙蔽（被動）', score: 1 },
+          { id: 1, answer: '很厲害', hint: '甚=程度深',       score: 0.5 }
+        ]
+      },
+      {
+        original: '四境之內莫不有求於王。',
+        template: '&lb;全國&rb;之內&lb;沒有誰&rb;不對大王有所求。',
+        blanks: [
+          { id: 0, answer: '全國',   hint: '四境之內=全國疆域', score: 1 },
+          { id: 1, answer: '沒有誰', hint: '莫不=無人不',       score: 1 }
+        ]
+      }
+    ]
+  }
+};
+
+let currentSource = 'mai';
+let currentIdx = 0;
+let checked = false;
+let sessionScore = 0;
+
+function renderSources() {
+  document.getElementById('sourceSelect').innerHTML = Object.entries(ALL).map(([k, v]) =>
+    `<span class="src-btn${k === currentSource ? ' active' : ''}" onclick="switchSource('${k}')" role="button">${v.name}</span>`
+  ).join('');
+}
+
+function renderQuestion() {
+  checked = false;
+  const s = ALL[currentSource].sentences[currentIdx];
+  const total = ALL[currentSource].sentences.length;
+
+  document.getElementById('progLabel').textContent = `第 ${currentIdx+1}/${total} 句`;
+  document.getElementById('progFill').style.width = ((currentIdx+1)/total*100)+'%';
+  document.getElementById('scoreDisplay').className = 'score-display';
+  document.getElementById('scoreDisplay').style.display = 'none';
+  document.getElementById('nextBtn').style.display = 'none';
+
+  // Parse template: replace &lb;...&rb; with input fields
+  let html = `<div class="card">
+    <div class="original">「${s.original}」</div>
+    <div class="translation-line">`;
+
+  let parts = s.template.split('&lb;');
+  html += parts[0];
+  for (let i = 1; i < parts.length; i++) {
+    const endIdx = parts[i].indexOf('&rb;');
+    const after = parts[i].substring(endIdx + 4);
+    const shortHint = s.blanks[i-1].hint;
+    html += `<input type="text" class="blank-input" id="b${i-1}" 
+      placeholder="⋯"
+      aria-label="翻譯填空：提示：${shortHint}"
+      autocorrect="off" autocapitalize="off" spellcheck="false"
+      autocomplete="off" inputmode="text">${after}`;
+  }
+
+  html += `</div></div>`;
+  document.getElementById('questionArea').innerHTML = html;
+
+  // Auto-focus first blank
+  setTimeout(() => {
+    const first = document.getElementById('b0');
+    if (first) first.focus();
+  }, 100);
+}
+
+function checkAnswer() {
+  if (checked) return;
+  checked = true;
+  const s = ALL[currentSource].sentences[currentIdx];
+  let correctCount = 0;
+  let totalScore = 0;
+
+  s.blanks.forEach(b => {
+    const el = document.getElementById('b'+b.id);
+    if (!el) return;
+    const userAnswer = el.value.trim().replace(/\s+/g, '');
+    const expected = b.answer;
+    // Matching: exact match OR flexible (for answers ≥ 1 point with close match)
+    const match = userAnswer === expected ||
+      (b.score >= 1 && userAnswer.length >= expected.length - 1 && expected.includes(userAnswer));
+
+    el.disabled = true;
+    if (match) {
+      el.classList.add('correct');
+      correctCount++;
+      sessionScore += b.score;
+      totalScore += b.score;
+    } else {
+      el.classList.add('wrong');
+      if (!userAnswer) el.value = '（漏填）';
+      // After delay, show correct answer
+      setTimeout(() => {
+        el.value = expected;
+        el.style.color = 'var(--correct)';
+        el.style.fontWeight = '700';
+      }, 800);
+    }
+  });
+
+  document.getElementById('totalScore').textContent = sessionScore.toFixed(1) + '分';
+  document.getElementById('nextBtn').style.display = 'inline-block';
+
+  const ratio = correctCount / s.blanks.length;
+  const sd = document.getElementById('scoreDisplay');
+  sd.style.display = 'block';
+  if (ratio >= 0.8) {
+    sd.className = 'score-display good';
+    sd.innerHTML = `✅ 本題 ${correctCount}/${s.blanks.length} 正確（+${totalScore.toFixed(1)}分）<br><small>繼續保持！逐字精準是關鍵。</small>`;
+  } else if (ratio >= 0.5) {
+    sd.className = 'score-display ok';
+    sd.innerHTML = `⚠️ 本題 ${correctCount}/${s.blanks.length} 正確（+${totalScore.toFixed(1)}分）<br><small>錯的空白請抄到錯題本，這是你的失分點。</small>`;
+  } else {
+    sd.className = 'score-display low';
+    sd.innerHTML = `❌ 本題 ${correctCount}/${s.blanks.length} 正確（+${totalScore.toFixed(1)}分）<br><small>這句是你翻譯的弱項，務必反覆練習。</small>`;
+  }
+}
+
+function resetCurrent() {
+  sessionScore -= (() => {
+    const s = ALL[currentSource].sentences[currentIdx];
+    let t = 0;
+    if (checked) {
+      s.blanks.forEach(b => {
+        const el = document.getElementById('b'+b.id);
+        if (el && el.classList.contains('correct')) t += b.score;
+      });
+    }
+    return t;
+  })();
+  if (sessionScore < 0) sessionScore = 0;
+  document.getElementById('totalScore').textContent = sessionScore.toFixed(1) + '分';
+  renderQuestion();
+}
+
+function nextQuestion() {
+  const total = ALL[currentSource].sentences.length;
+  currentIdx = (currentIdx + 1) % total;
+  renderQuestion();
+}
+
+function switchSource(k) {
+  currentSource = k;
+  currentIdx = 0;
+  sessionScore = 0;
+  document.getElementById('totalScore').textContent = '0分';
+  renderSources();
+  renderQuestion();
+}
+
+renderSources();
+renderQuestion();
+</script>
+</body>
+</html>

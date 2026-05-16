@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lens Workshop · Drill Mode | S3 Physics Ch 14.5</title>
+<style>
+  :root {
+    --bg: #06080e;
+    --card: #0d1122;
+    --card2: #11172e;
+    --border: #1a2340;
+    --text: #c8d0e0;
+    --text-dim: #6b7394;
+    --accent: #00d0f0;
+    --accent-glow: rgba(0,208,240,0.18);
+    --green: #3de0a0;
+    --green-bg: rgba(61,224,160,0.08);
+    --red: #ff4267;
+    --red-bg: rgba(255,66,103,0.08);
+    --orange: #ff9642;
+    --radius: 10px;
+    --font: system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --mono: 'SF Mono', 'Cascadia Code', 'Consolas', 'Menlo', monospace;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{font-size:16px}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--font);
+    line-height:1.6;
+    min-height:100vh;
+    display:flex;flex-direction:column;align-items:center;
+    padding:1.2rem 1rem 2rem;
+  }
+  body::before{
+    content:'';position:fixed;inset:0;
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(0,208,240,0.05) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 80%, rgba(0,208,240,0.03) 0%, transparent 50%);
+    pointer-events:none;z-index:0;
+  }
+  .container{width:100%;max-width:640px;position:relative;z-index:1}
+
+  /* Header */
+  .header{
+    text-align:center;padding:1rem 0 1.2rem;
+    border-bottom:1px solid var(--border);margin-bottom:1rem;
+  }
+  .header h1{font-size:1.4rem;font-weight:700;color:#fff;letter-spacing:-0.01em}
+  .header h1 span{color:var(--accent)}
+  .header .sub{font-size:.82rem;color:var(--text-dim);margin-top:.25rem}
+  .header .mode-row{display:flex;gap:.4rem;justify-content:center;margin-top:.7rem}
+  .mode-btn{
+    padding:.35rem .85rem;border-radius:99px;font-size:.78rem;font-weight:600;
+    border:1px solid var(--border);background:transparent;color:var(--text-dim);
+    cursor:pointer;transition:all .2s;font-family:var(--font);
+  }
+  .mode-btn.active{background:var(--accent-glow);border-color:var(--accent);color:var(--accent)}
+  .mode-btn:hover:not(.active){border-color:#3a4070;color:#a0a8c0}
+
+  /* Cards */
+  .card{
+    background:var(--card);border:1px solid var(--border);
+    border-radius:var(--radius);padding:1.2rem;margin-bottom:.8rem;
+  }
+
+  /* Question */
+  .q-header{display:flex;align-items:center;gap:.6rem;margin-bottom:.8rem}
+  .lens-icon{
+    width:2.2rem;height:2.2rem;border-radius:8px;display:flex;align-items:center;
+    justify-content:center;font-size:1.2rem;font-weight:700;
+  }
+  .lens-convex{background:rgba(0,208,240,0.12);color:var(--accent);border:1px solid rgba(0,208,240,0.3)}
+  .lens-concave{background:rgba(255,150,66,0.12);color:var(--orange);border:1px solid rgba(255,150,66,0.3)}
+  .lens-label{font-size:1.05rem;font-weight:700;color:#fff}
+  .lens-label .cn{font-weight:400;color:var(--text-dim);font-size:.85rem;margin-left:.3rem}
+  .q-params{
+    display:flex;gap:.8rem;flex-wrap:wrap;margin-bottom:.3rem;
+  }
+  .param{
+    background:var(--card2);border:1px solid var(--border);
+    border-radius:8px;padding:.5rem .8rem;font-family:var(--mono);
+    font-size:.92rem;min-width:100px;text-align:center;
+  }
+  .param .val{font-size:1.25rem;font-weight:700;color:#fff}
+  .param .lbl{font-size:.7rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:.06em}
+
+  /* Input */
+  .input-grid{
+    display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:.6rem;
+  }
+  @media(max-width:480px){.input-grid{grid-template-columns:1fr}}
+  .inp-group{display:flex;flex-direction:column;gap:.25rem}
+  .inp-group label{font-size:.78rem;font-weight:600;color:var(--text-dim);text-transform:uppercase;letter-spacing:.04em}
+  .inp-group input,.inp-group select{
+    background:var(--card2);border:1px solid var(--border);border-radius:6px;
+    color:#fff;font-family:var(--mono);font-size:.95rem;padding:.5rem .65rem;
+    outline:none;transition:border-color .2s,box-shadow .2s;
+  }
+  .inp-group input:focus,.inp-group select:focus{
+    border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow);
+  }
+  .inp-group input::placeholder{color:#3a4060}
+  .nature-row{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.6rem}
+  .nature-group{flex:1;min-width:130px}
+  .nature-group label{font-size:.75rem;font-weight:600;color:var(--text-dim);display:block;margin-bottom:.2rem}
+  .nature-group select{width:100%}
+
+  /* Buttons */
+  .btn-row{display:flex;gap:.5rem;margin-top:.6rem;flex-wrap:wrap}
+  .btn{
+    padding:.55rem 1.2rem;border-radius:8px;font-size:.88rem;font-weight:600;
+    cursor:pointer;border:none;font-family:var(--font);transition:all .15s;
+    display:inline-flex;align-items:center;gap:.35rem;
+  }
+  .btn-check{background:var(--accent);color:#000;flex:1;min-width:120px}
+  .btn-check:hover{box-shadow:0 0 16px var(--accent-glow)}
+  .btn-skip{background:transparent;border:1px solid var(--border);color:var(--text-dim)}
+  .btn-skip:hover{border-color:#4a5080;color:#c0c8e0}
+  .btn-hint{background:transparent;border:1px solid var(--border);color:var(--text-dim);font-size:.82rem}
+  .btn-hint:hover{border-color:#4a5080}
+
+  /* Feedback */
+  .feedback{margin-top:.6rem;display:none}
+  .feedback.show{display:block}
+  .fb-correct{
+    padding:.7rem .9rem;border-radius:8px;background:var(--green-bg);
+    border:1px solid rgba(61,224,160,0.25);color:var(--green);
+    font-weight:600;font-size:.9rem;
+  }
+  .fb-incorrect{
+    padding:.7rem .9rem;border-radius:8px;background:var(--red-bg);
+    border:1px solid rgba(255,66,103,0.25);color:var(--red);
+    font-weight:600;font-size:.9rem;
+  }
+  .fb-steps{
+    margin-top:.6rem;padding:.8rem .9rem;border-radius:8px;
+    background:var(--card2);border:1px solid var(--border);
+    font-family:var(--mono);font-size:.84rem;line-height:1.8;
+    color:var(--text-dim);
+  }
+  .fb-steps .step{display:block}
+  .fb-steps .step.hl{color:#fff}
+  .fb-steps .step.err{color:var(--red)}
+  .fb-steps .step.ok{color:var(--green)}
+  .fb-steps .eq-highlight{color:var(--accent);font-weight:600}
+
+  /* Stats */
+  .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(80px,1fr));gap:.4rem}
+  .stat-cell{
+    background:var(--card2);border:1px solid var(--border);border-radius:6px;
+    padding:.4rem .5rem;text-align:center;
+  }
+  .stat-cell .num{font-size:1.15rem;font-weight:700;color:#fff;font-family:var(--mono)}
+  .stat-cell .tag{font-size:.68rem;color:var(--text-dim)}
+  .stat-cell.good .num{color:var(--green)}
+  .stat-cell.warn .num{color:var(--orange)}
+  .stat-cell.bad .num{color:var(--red)}
+
+  /* hint box */
+  .hint-box{
+    display:none;margin-top:.5rem;padding:.6rem .8rem;border-radius:6px;
+    background:rgba(255,150,66,0.06);border:1px solid rgba(255,150,66,0.2);
+    font-family:var(--mono);font-size:.82rem;color:var(--orange);
+  }
+  .hint-box.show{display:block}
+
+  /* Details */
+  details{margin-top:.6rem}
+  details summary{
+    cursor:pointer;color:var(--text-dim);font-size:.8rem;
+    font-weight:600;user-select:none;
+  }
+  details summary:hover{color:#c0c8e0}
+
+  /* Progress bar */
+  .progress-bar{
+    height:3px;background:var(--border);border-radius:2px;margin-top:.5rem;overflow:hidden;
+  }
+  .progress-bar .fill{
+    height:100%;background:var(--accent);transition:width .3s;
+    border-radius:2px;
+  }
+
+  @media(max-width:480px){
+    html{font-size:15px}
+    .header h1{font-size:1.2rem}
+    .card{padding:.9rem}
+    .q-params{gap:.4rem}
+    .param{padding:.4rem .55rem;min-width:80px}
+    .param .val{font-size:1.1rem}
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ===== HEADER ===== -->
+  <div class="header">
+    <h1>Lens Workshop · <span>Drill Mode</span></h1>
+    <p class="sub">Chapter 14.5 — Convex &amp; Concave Lens · Formula + Nature</p>
+    <div class="mode-row">
+      <button class="mode-btn active" onclick="setDifficulty('easy')">Easy · Integer</button>
+      <button class="mode-btn" onclick="setDifficulty('hard')">Hard · Decimal</button>
+    </div>
+  </div>
+
+  <!-- ===== QUESTION CARD ===== -->
+  <div class="card" id="questionCard">
+    <div class="q-header">
+      <div class="lens-icon" id="lensIcon">🔍</div>
+      <div class="lens-label" id="lensLabel">Convex Lens <span class="cn">凸透鏡</span></div>
+    </div>
+    <div class="q-params">
+      <div class="param"><div class="lbl">Focal Length f</div><div class="val" id="qF">10 cm</div></div>
+      <div class="param"><div class="lbl">Object Distance u</div><div class="val" id="qU">30 cm</div></div>
+    </div>
+
+    <!-- INPUTS -->
+    <div class="input-grid">
+      <div class="inp-group">
+        <label>Image Distance v (cm) <span style="color:var(--text-dim);font-weight:400">— use sign</span></label>
+        <input type="text" id="inpV" placeholder="e.g. 15 or -10" autocomplete="off">
+      </div>
+      <div class="inp-group">
+        <label>Magnification m <span style="color:var(--text-dim);font-weight:400">— |v|/|u|</span></label>
+        <input type="text" id="inpM" placeholder="e.g. 0.5 or 2" autocomplete="off">
+      </div>
+    </div>
+    <div class="nature-row">
+      <div class="nature-group">
+        <label>Real / Virtual</label>
+        <select id="selRV"><option value="">— select —</option><option value="real">Real 實像</option><option value="virtual">Virtual 虛像</option></select>
+      </div>
+      <div class="nature-group">
+        <label>Upright / Inverted</label>
+        <select id="selUI"><option value="">— select —</option><option value="upright">Upright 正立</option><option value="inverted">Inverted 倒立</option></select>
+      </div>
+      <div class="nature-group">
+        <label>Enlarged / Diminished / Same size</label>
+        <select id="selSize"><option value="">— select —</option><option value="enlarged">Enlarged 放大</option><option value="diminished">Diminished 縮小</option><option value="same">Same size 等大</option></select>
+      </div>
+    </div>
+
+    <!-- BUTTONS -->
+    <div class="btn-row">
+      <button class="btn btn-check" onclick="checkAnswer()">⚡ Check</button>
+      <button class="btn btn-skip" onclick="newQuestion()">Skip →</button>
+      <button class="btn btn-hint" onclick="showHint()">💡 Hint</button>
+    </div>
+
+    <!-- HINT -->
+    <div class="hint-box" id="hintBox"></div>
+
+    <!-- FEEDBACK -->
+    <div class="feedback" id="feedback"></div>
+  </div>
+
+  <!-- ===== STATS ===== -->
+  <div class="card">
+    <details>
+      <summary>📊 Stats &amp; History</summary>
+      <div style="margin-top:.6rem">
+        <div class="stats-grid">
+          <div class="stat-cell"><div class="num" id="stTotal">0</div><div class="tag">Attempted</div></div>
+          <div class="stat-cell"><div class="num" id="stCorrect">0</div><div class="tag">Correct</div></div>
+          <div class="stat-cell"><div class="num" id="stRate">—</div><div class="tag">Accuracy</div></div>
+          <div class="stat-cell"><div class="num" id="stStreak">0</div><div class="tag">Streak</div></div>
+          <div class="stat-cell"><div class="num" id="stBest">0</div><div class="tag">Best Streak</div></div>
+        </div>
+        <div style="margin-top:.6rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:.4rem">
+          <div class="stat-cell" id="case1"><div class="num">—</div><div class="tag">u &gt; 2f</div></div>
+          <div class="stat-cell" id="case2"><div class="num">—</div><div class="tag">u = 2f</div></div>
+          <div class="stat-cell" id="case3"><div class="num">—</div><div class="tag">f &lt; u &lt; 2f</div></div>
+          <div class="stat-cell" id="case4"><div class="num">—</div><div class="tag">u &lt; f</div></div>
+          <div class="stat-cell" id="case5"><div class="num">—</div><div class="tag">Concave</div></div>
+        </div>
+        <div class="progress-bar"><div class="fill" id="progressFill" style="width:0%"></div></div>
+        <button class="btn btn-skip" style="margin-top:.5rem;font-size:.78rem" onclick="resetStats()">↺ Reset Stats</button>
+      </div>
+    </details>
+  </div>
+
+</div>
+
+<script>
+/* ======== STATE ======== */
+let difficulty = 'easy';
+let currentQ = null;
+let stats = { total:0, correct:0, streak:0, bestStreak:0,
+  cases: {'convex_u_gt_2f':{t:0,c:0},'convex_u_eq_2f':{t:0,c:0},'convex_f_lt_u_lt_2f':{t:0,c:0},'convex_u_lt_f':{t:0,c:0},'concave':{t:0,c:0}}
+};
+let hintShown = false;
+
+/* ======== DIFFICULTY ======== */
+function setDifficulty(d) {
+  difficulty = d;
+  document.querySelectorAll('.mode-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelector(`.mode-btn:nth-child(${d==='easy'?1:2})`).classList.add('active');
+  newQuestion();
+}
+
+/* ======== QUESTION GENERATION ======== */
+function newQuestion() {
+  hintShown = false;
+  document.getElementById('hintBox').classList.remove('show');
+  document.getElementById('feedback').classList.remove('show');
+  document.getElementById('feedback').innerHTML = '';
+  clearInputs();
+
+  const cases = ['convex_u_gt_2f','convex_u_eq_2f','convex_f_lt_u_lt_2f','convex_u_lt_f','concave'];
+  const caseType = cases[Math.floor(Math.random() * cases.length)];
+
+  let f, u;
+  if (difficulty === 'easy') {
+    f = 10;
+    const easyU = {
+      convex_u_gt_2f: 30, convex_u_eq_2f: 20, convex_f_lt_u_lt_2f: 15, convex_u_lt_f: 5
+    };
+    if (caseType === 'concave') { f = -10; u = 8; }
+    else { u = easyU[caseType]; }
+  } else {
+    const absF = [8,10,12,15][Math.floor(Math.random()*4)];
+    if (caseType === 'concave') {
+      f = -absF;
+      u = +(3 + Math.random()*15).toFixed(1);
+    } else {
+      f = absF;
+      if (caseType === 'convex_u_gt_2f') u = +(2.1*f + Math.random()*2.4*f).toFixed(1);
+      else if (caseType === 'convex_u_eq_2f') u = 2*f;
+      else if (caseType === 'convex_f_lt_u_lt_2f') u = +(1.08*f + Math.random()*0.84*f).toFixed(1);
+      else u = +(0.18*f + Math.random()*0.74*f).toFixed(1);
+    }
+  }
+
+  if (difficulty === 'easy') { f = Math.round(f); u = Math.round(u); }
+
+  currentQ = { caseType, f, u };
+
+  // UI
+  const isConcave = f < 0;
+  const icon = document.getElementById('lensIcon');
+  icon.textContent = isConcave ? '🔽' : '🔍';
+  icon.className = 'lens-icon ' + (isConcave ? 'lens-concave' : 'lens-convex');
+  document.getElementById('lensLabel').innerHTML = isConcave
+    ? 'Concave Lens <span class="cn">凹透鏡</span>'
+    : 'Convex Lens <span class="cn">凸透鏡</span>';
+  document.getElementById('qF').textContent = f + ' cm';
+  document.getElementById('qU').textContent = u + ' cm';
+
+  document.getElementById('inpV').focus();
+}
+
+function clearInputs() {
+  document.getElementById('inpV').value = '';
+  document.getElementById('inpM').value = '';
+  document.getElementById('selRV').value = '';
+  document.getElementById('selUI').value = '';
+  document.getElementById('selSize').value = '';
+}
+
+/* ======== CALCULATE ======== */
+function calcAnswer(f, u) {
+  const v = (u*f)/(u-f);
+  const mAbs = Math.abs(v/u);
+  const isVirtual = v < 0;
+  const nature = {
+    realVirtual: isVirtual ? 'virtual' : 'real',
+    uprightInverted: isVirtual ? 'upright' : 'inverted',
+    size: Math.abs(mAbs - 1) < 0.001 ? 'same' : (mAbs > 1 ? 'enlarged' : 'diminished')
+  };
+  return { v, mAbs, ...nature };
+}
+
+/* ======== CHECK ======== */
+function checkAnswer() {
+  if (!currentQ) return newQuestion();
+
+  const { f, u, caseType } = currentQ;
+  const correct = calcAnswer(f, u);
+
+  const userV = parseFloat(document.getElementById('inpV').value);
+  const userM = parseFloat(document.getElementById('inpM').value);
+  const userRV = document.getElementById('selRV').value;
+  const userUI = document.getElementById('selUI').value;
+  const userSz = document.getElementById('selSize').value;
+
+  // Validate input
+  if (isNaN(userV) || isNaN(userM) || !userRV || !userUI || !userSz) {
+    document.getElementById('feedback').innerHTML =
+      '<div class="fb-incorrect">⚠ Please fill in all fields before checking.</div>';
+    document.getElementById('feedback').classList.add('show');
+    return;
+  }
+
+  const tol = difficulty === 'easy' ? 0.05 : 0.15;
+  const vOk = Math.abs(userV - correct.v) < tol;
+  const mOk = Math.abs(userM - correct.mAbs) < tol;
+  const rvOk = userRV === correct.realVirtual;
+  const uiOk = userUI === correct.uprightInverted;
+  const szOk = userSz === correct.size;
+
+  const allOk = vOk && mOk && rvOk && uiOk && szOk;
+
+  // Stats
+  stats.total++;
+  if (!stats.cases[caseType]) stats.cases[caseType] = {t:0,c:0};
+  stats.cases[caseType].t++;
+
+  if (allOk) {
+    stats.correct++;
+    stats.streak++;
+    if (stats.streak > stats.bestStreak) stats.bestStreak = stats.streak;
+    stats.cases[caseType].c++;
+  } else {
+    stats.streak = 0;
+  }
+
+  updateStats();
+
+  // Feedback HTML
+  let fb = '';
+  if (allOk) {
+    fb += '<div class="fb-correct">✅ Correct! All values and nature match.</div>';
+  } else {
+    fb += '<div class="fb-incorrect">❌ Incorrect — review the differences below.</div>';
+  }
+
+  // Step-by-step working
+  fb += '<div class="fb-steps">';
+  fb += '<span class="step hl">Working Steps:</span>';
+
+  const step1 = `1/f = 1/u + 1/v`;
+  const val1vu = +(1/f - 1/u).toFixed(4);
+  fb += `<span class="step">${step1}</span>`;
+  fb += `<span class="step">→ 1/v = 1/f − 1/u = 1/(${f}) − 1/(${u}) = <span class="eq-highlight">${val1vu.toFixed(4)}</span></span>`;
+  fb += `<span class="step">→ v = <span class="eq-highlight">${correct.v.toFixed(2)} cm</span> <span class="${vOk?'ok':'err'}">(your answer: ${userV} cm)</span></span>`;
+
+  fb += `<span class="step">→ m = |v|/|u| = |${correct.v.toFixed(2)}|/|${u}| = <span class="eq-highlight">${correct.mAbs.toFixed(3)}</span> <span class="${mOk?'ok':'err'}">(your answer: ${userM})</span></span>`;
+
+  fb += `<span class="step">→ v ${correct.v<0?'&lt; 0 → virtual':'&gt; 0 → real'} image <span class="${rvOk?'ok':'err'}">(your choice: ${userRV})</span></span>`;
+  fb += `<span class="step">→ ${correct.v<0?'Virtual → upright':'Real → inverted'} <span class="${uiOk?'ok':'err'}">(your choice: ${userUI})</span></span>`;
+  fb += `<span class="step">→ |m| = ${correct.mAbs.toFixed(3)} ${correct.size==='same'?'= 1 → same size':(correct.size==='enlarged'?'&gt; 1 → enlarged':'&lt; 1 → diminished')} <span class="${szOk?'ok':'err'}">(your choice: ${userSz})</span></span>`;
+
+  fb += '</div>';
+
+  if (!allOk) {
+    fb += `<div style="margin-top:.5rem;font-size:.82rem;color:var(--text-dim)">💡 Refer to <em>Overview → 🛠 Method 2 (Lens Formula)</em> for sign convention rules.</div>`;
+  }
+
+  document.getElementById('feedback').innerHTML = fb;
+  document.getElementById('feedback').classList.add('show');
+
+  // Scroll to feedback if on mobile
+  document.getElementById('feedback').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+/* ======== HINT ======== */
+function showHint() {
+  if (!currentQ) return;
+  hintShown = true;
+  const { f, u } = currentQ;
+  const box = document.getElementById('hintBox');
+  box.innerHTML = `
+    <strong>Hint:</strong> Use lens formula <code style="color:#fff">1/f = 1/u + 1/v</code><br>
+    → 1/v = 1/(${f}) − 1/(${u})<br>
+    → Then m = |v|/|u|<br>
+    → If v &lt; 0: virtual + upright. If v &gt; 0: real + inverted.<br>
+    → If |m| &gt; 1: enlarged. If |m| &lt; 1: diminished. If |m| = 1: same size.
+  `;
+  box.classList.add('show');
+}
+
+/* ======== STATS ======== */
+function updateStats() {
+  const rate = stats.total > 0 ? Math.round(stats.correct/stats.total*100) : '—';
+  document.getElementById('stTotal').textContent = stats.total;
+  document.getElementById('stCorrect').textContent = stats.correct;
+  document.getElementById('stRate').textContent = rate === '—' ? '—' : rate+'%';
+  document.getElementById('stStreak').textContent = stats.streak;
+  document.getElementById('stBest').textContent = stats.bestStreak;
+  document.getElementById('progressFill').style.width = (stats.total>0?rate:0)+'%';
+
+  const caseEls = {
+    convex_u_gt_2f: 'case1', convex_u_eq_2f: 'case2',
+    convex_f_lt_u_lt_2f: 'case3', convex_u_lt_f: 'case4', concave: 'case5'
+  };
+  for (const [k,id] of Object.entries(caseEls)) {
+    const c = stats.cases[k] || {t:0,c:0};
+    const el = document.getElementById(id);
+    el.className = 'stat-cell';
+    if (c.t === 0) { el.querySelector('.num').textContent = '—'; }
+    else {
+      const pct = Math.round(c.c/c.t*100);
+      el.querySelector('.num').textContent = pct+'%';
+      if (pct >= 80) el.classList.add('good');
+      else if (pct >= 50) el.classList.add('warn');
+      else el.classList.add('bad');
+    }
+  }
+}
+
+function resetStats() {
+  stats = { total:0, correct:0, streak:0, bestStreak:0,
+    cases: {'convex_u_gt_2f':{t:0,c:0},'convex_u_eq_2f':{t:0,c:0},'convex_f_lt_u_lt_2f':{t:0,c:0},'convex_u_lt_f':{t:0,c:0},'concave':{t:0,c:0}}
+  };
+  updateStats();
+  newQuestion();
+}
+
+/* ======== KEYBOARD ======== */
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' && document.activeElement?.tagName !== 'SELECT') {
+    e.preventDefault();
+    if (!currentQ) newQuestion();
+    else checkAnswer();
+  }
+  if (e.key === 'ArrowRight' && e.ctrlKey) { e.preventDefault(); newQuestion(); }
+});
+
+/* ======== INIT ======== */
+newQuestion();
+</script>
+</body>
+</html>

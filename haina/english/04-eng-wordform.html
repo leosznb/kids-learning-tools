@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Word Form Drill</title>
+<style>
+body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#0f172a;color:#e2e8f0;padding:16px;margin:0}
+h2{text-align:center;margin:0 0 4px;font-size:1.1rem}
+.sub{text-align:center;font-size:.75rem;color:#94a3b8;margin-bottom:12px}
+.row{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
+.row button{flex:1;min-width:100px;padding:8px;border-radius:8px;border:none;font-weight:600;font-size:.8rem;cursor:pointer;font-family:inherit}
+.btn-blue{background:#2563eb;color:#fff}
+.btn-green{background:#16a34a;color:#fff}
+.btn-gray{background:#334155;color:#94a3b8;border:1px solid #475569}
+.btn-red{background:#991b1b;color:#fca5a5}
+.btn-gold{background:#a16207;color:#fde68a}
+.progress{background:#1e293b;border-radius:8px;padding:8px 12px;margin-bottom:10px;text-align:center;font-size:.78rem}
+.card{background:#1e293b;border-radius:12px;padding:20px;margin-bottom:10px;min-height:180px;text-align:center}
+.card .badge{font-size:.68rem;color:#60a5fa;margin-bottom:6px}
+.card .sentence{font-size:1.15rem;line-height:1.7;margin-bottom:14px;text-align:left}
+.card .blank{color:#60a5fa;border-bottom:2px dashed #60a5fa;padding:0 6px;font-weight:600}
+.card .hint{color:#fbbf24;font-weight:700}
+.card input{font-size:1.1rem;padding:8px 14px;border-radius:8px;border:2px solid #475569;background:#0f172a;color:#fff;width:200px;text-align:center;outline:none}
+.card input:focus{border-color:#60a5fa}
+.card .msg{font-size:.85rem;margin-top:8px;min-height:20px}
+.card .explain{font-size:.75rem;color:#94a3b8;margin-top:6px}
+.btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:10px}
+.btns button{padding:8px 16px;border-radius:8px;border:none;font-weight:600;font-size:.82rem;cursor:pointer;font-family:inherit}
+.stats{display:flex;gap:8px;margin-top:8px}
+.stats div{flex:1;text-align:center;background:#1e293b;border-radius:8px;padding:10px}
+.stats .n{font-size:1.3rem;font-weight:700}
+.stats .l{font-size:.68rem;color:#94a3b8}
+</style>
+</head>
+<body>
+<h2>Word Form Drill</h2>
+<div class="sub">Fill in the correct word form</div>
+
+<div class="row" id="modeRow">
+  <button class="btn-blue" id="btnH" onclick="setMode('haina')">海納 A→Z</button>
+  <button class="btn-green" id="btnY" onclick="setMode('yourong')">有容 Textbook</button>
+</div>
+
+<div class="progress">
+  <span id="prog">0/55</span> done · <span id="pos">—</span>
+</div>
+
+<div class="card">
+  <div class="badge" id="badge">—</div>
+  <div class="sentence" id="sen">Ready. Tap Start.</div>
+  <input id="inp" placeholder="Type here" style="display:none" onkeydown="if(event.key==='Enter')doCheck()">
+  <div class="msg" id="msg"></div>
+  <div class="explain" id="ex"></div>
+  <div class="btns">
+    <button class="btn-blue" id="btnStart" onclick="doStart()">▶ Start</button>
+    <button class="btn-green" id="btnCheck" style="display:none" onclick="doCheck()">✓ Check</button>
+    <button class="btn-gray" id="btnShow" style="display:none" onclick="doShow()">👁 Show</button>
+    <button class="btn-gray" id="btnNext" style="display:none" onclick="doNext()">Next →</button>
+  </div>
+</div>
+
+<div class="stats">
+  <div><div class="n" style="color:#4ade80" id="nOk">0</div><div class="l">Correct</div></div>
+  <div><div class="n" style="color:#f87171" id="nBad">0</div><div class="l">Wrong</div></div>
+  <div><div class="n" style="color:#fbbf24" id="nLeft">55</div><div class="l">Left</div></div>
+</div>
+
+<button class="btn-red" id="btnWrong" style="display:none;width:100%;margin-top:8px;padding:10px;border-radius:8px;border:none;font-weight:600;cursor:pointer;font-family:inherit;font-size:.8rem" onclick="doReDrill()">
+  🧺 Wrong Pool (<span id="nWp">0</span>) — Re-drill
+</button>
+
+<script>
+// ═══ DATA ═══
+var Q=[
+{b:"fascinate",q:"The documentary was ______ (f) to watch.",a:"fascinating",h:"Adjective → fascinating",p:"v.→adj.",c:"使著迷"},
+{b:"problematic",q:"The plan has several ______ (p) aspects that need review.",a:"problematic",h:"Adjective stays same",p:"adj.",c:"有問題的"},
+{b:"inaccurate",q:"The data was ______ (i) recorded, leading to wrong conclusions.",a:"inaccurately",h:"Adverb: describes HOW recorded",p:"adj.→adv.",c:"不準確的"},
+{b:"insights",q:"The book offers a valuable ______ (i) into human behaviour.",a:"insight",h:"Singular: one key understanding",p:"n.pl.→sing.",c:"見解"},
+{b:"grave",q:"The patient was ______ (g) ill and needed immediate care.",a:"gravely",h:"Adverb: describes HOW ill",p:"adj.→adv.",c:"嚴重的"},
+{b:"threaten",q:"The species is ______ (t) by habitat loss and pollution.",a:"threatened",h:"Past participle, passive voice",p:"v.→p.p.",c:"威脅"},
+{b:"severe",q:"The building was ______ (s) damaged in the earthquake.",a:"severely",h:"Adverb: describes HOW damaged",p:"adj.→adv.",c:"嚴重的"},
+{b:"inhabitants",q:"Every ______ (i) of the village was evacuated before the storm.",a:"inhabitant",h:"Singular: every takes singular",p:"n.pl.→sing.",c:"居民"},
+{b:"remedy",q:"Doctors are searching for new ______ (r) to treat the disease.",a:"remedies",h:"Plural noun",p:"n.→pl.",c:"補救方法"},
+{b:"current",q:"She is ______ (c) working on a research paper about AI ethics.",a:"currently",h:"Adverb: at the present time",p:"adj.→adv.",c:"當前的"},
+{b:"occur",q:"The accident ______ (o) at around midnight last Saturday.",a:"occurred",h:"Past tense: double the r",p:"v.→past",c:"發生"},
+{b:"surge",q:"The number of visitors ______ (s) to over 10,000 during the festival.",a:"surged",h:"Past tense",p:"v.→past",c:"激增"},
+{b:"skyrocketed",q:"The price of vegetables is ______ (s) due to the supply shortage.",a:"skyrocketing",h:"Present participle",p:"v.→pres.p.",c:"飆升"},
+{b:"disrupted",q:"The heavy snowfall caused widespread ______ (d) to train services.",a:"disruption",h:"Noun form",p:"v.→n.",c:"擾亂"},
+{b:"adequate",q:"The room was not ______ (a) heated for the cold winter months.",a:"adequately",h:"Adverb: describes HOW heated",p:"adj.→adv.",c:"足夠的"},
+{b:"compound",q:"The problem was ______ (c) by a complete lack of communication.",a:"compounded",h:"Past participle, passive",p:"v.→p.p.",c:"加劇"},
+{b:"aggravating",q:"Loud noise can ______ (a) the symptoms of stress and anxiety.",a:"aggravate",h:"Base verb after modal can",p:"v.→base",c:"加劇、惡化"},
+{b:"dependent",q:"His ______ (d) on social media became a serious problem.",a:"dependence",h:"Noun form",p:"adj.→n.",c:"依賴的"},
+{b:"pragmatic",q:"She approached the issue very ______ (p), focusing on practical solutions.",a:"pragmatically",h:"Adverb: describes HOW approached",p:"adj.→adv.",c:"務實的"},
+{b:"ethical",q:"The company was accused of ______ (u) business practices.",a:"unethical",h:"Opposite adjective",p:"adj.→opp.",c:"道德的"},
+{b:"artificial intelligence",q:"Many routine jobs may be replaced by ______ (a) in the near future.",a:"artificial intelligence",h:"Noun phrase",p:"n.ph.",c:"人工智能"},
+{b:"so-called",q:"The ______ (s) expert turned out to have no real qualifications.",a:"so-called",h:"Hyphenated adjective",p:"adj.",c:"所謂的"},
+{b:"cognitive",q:"The child is developing ______ (c) at a normal rate for her age.",a:"cognitively",h:"Adverb: describes HOW developing",p:"adj.→adv.",c:"認知的"},
+{b:"sophisticated",q:"The ______ (s) of modern medical equipment is truly remarkable.",a:"sophistication",h:"Noun form",p:"adj.→n.",c:"精密的"},
+{b:"indistinguishable",q:"The fake painting was almost ______ (i) from the original.",a:"indistinguishable",h:"Adjective stays same",p:"adj.",c:"難以區分的"},
+{b:"concerned",q:"The test results showed some very ______ (c) trends that need attention.",a:"concerning",h:"Meaning worrying (not concerned)",p:"adj.→alt.",c:"關注的"},
+{b:"undoubtedly",q:"The discovery is ______ (u) the most important of this decade.",a:"undoubtedly",h:"Adverb: without doubt",p:"adv.",c:"毫無疑問地"},
+{b:"astonishing",q:"The scientists were ______ (a) by the completely unexpected results.",a:"astonished",h:"Past participle: feeling surprise",p:"adj.→alt.",c:"令人驚訝的"},
+{b:"manipulate",q:"The ______ (m) of public opinion through social media is a growing concern.",a:"manipulation",h:"Noun form",p:"v.→n.",c:"操控"},
+{b:"immersed",q:"Teachers try to ______ (i) students in real-life language situations.",a:"immerse",h:"Base verb after to",p:"v.→base",c:"沉浸於"},
+{b:"captured",q:"The photographer managed to ______ (c) the beauty of the sunset perfectly.",a:"capture",h:"Base verb after to",p:"v.→base",c:"捕獲"},
+{b:"envisions",q:"The architect ______ (e) a city where nature and buildings coexist.",a:"envisioned",h:"Past tense",p:"v.→past",c:"設想"},
+{b:"digital",q:"The documents are stored ______ (d) on a secure cloud server.",a:"digitally",h:"Adverb: describes HOW stored",p:"adj.→adv.",c:"數碼的"},
+{b:"embark on",q:"Last summer, the research team ______ (e) a three-month Arctic expedition.",a:"embarked on",h:"Past tense",p:"ph.v.→past",c:"著手"},
+{b:"deceased",q:"The award was accepted by the ______ (d) firefighter's wife and children.",a:"deceased",h:"Adjective stays same",p:"adj.",c:"已故的"},
+{b:"fathom",q:"The sheer scale of the universe is almost ______ (u) to the human mind.",a:"unfathomable",h:"Negative adjective",p:"v.→neg.adj.",c:"理解"},
+{b:"contemplate",q:"He is seriously ______ (c) a complete career change after fifteen years.",a:"contemplating",h:"Present participle",p:"v.→pres.p.",c:"沉思"},
+{b:"primates",q:"The mountain gorilla is the largest living ______ (p) on Earth.",a:"primate",h:"Singular noun",p:"n.pl.→sing.",c:"靈長類動物"},
+{b:"conservation",q:"We must ______ (c) water and energy during the dry summer months.",a:"conserve",h:"Verb form after must",p:"n.→v.",c:"保育"},
+{b:"haven",q:"National parks serve as safe ______ (h) for many endangered species.",a:"havens",h:"Plural noun",p:"n.→pl.",c:"避難所"},
+{b:"deplorable",q:"The prisoners were treated ______ (d) by the guards, causing international outrage.",a:"deplorably",h:"Adverb: describes HOW treated",p:"adj.→adv.",c:"可悲的"},
+{b:"trafficking",q:"The criminals ______ (t) rare animals across international borders for years.",a:"trafficked",h:"Past tense: double the k",p:"n.→v.past",c:"非法交易"},
+{b:"poaching",q:"______ (p) continue to threaten the survival of African elephants.",a:"Poachers",h:"Noun: the people who poach",p:"n.→agent",c:"偷獵"},
+{b:"exploitation",q:"Some factories ______ (e) workers by paying them extremely low wages.",a:"exploit",h:"Base verb",p:"n.→v.",c:"剝削"},
+{b:"industriously",q:"The ______ (i) student always completes her assignments well ahead of time.",a:"industrious",h:"Adjective form",p:"adv.→adj.",c:"勤奮的"},
+{b:"unarguably",q:"Whether this policy is truly effective remains ______ (a).",a:"arguable",h:"Meaning open to debate",p:"adv.→adj.",c:"無可爭辯的"},
+{b:"stimulate",q:"Young children need plenty of mental ______ (s) for healthy brain development.",a:"stimulation",h:"Noun form after mental",p:"v.→n.",c:"刺激"},
+{b:"trauma",q:"The car accident was a deeply ______ (t) experience for everyone involved.",a:"traumatic",h:"Adjective form",p:"n.→adj.",c:"創傷"},
+{b:"outraged",q:"The price increase was simply ______ (o); customers could not believe it.",a:"outrageous",h:"Meaning shockingly bad",p:"adj.→alt.",c:"憤怒的"},
+{b:"ignorantly",q:"He made an ______ (i) comment about the situation without knowing the full story.",a:"ignorant",h:"Adjective before a noun",p:"adv.→adj.",c:"無知的"},
+{b:"vulnerable",q:"The report highlighted the ______ (v) of coastal communities to rising sea levels.",a:"vulnerability",h:"Noun form",p:"adj.→n.",c:"脆弱的"},
+{b:"tolerate",q:"The school actively promotes ______ (t) and mutual respect among all students.",a:"tolerance",h:"Noun form",p:"v.→n.",c:"容忍"},
+{b:"solitary",q:"He enjoys the peace and ______ (s) of living alone in a remote mountain cabin.",a:"solitude",h:"Noun form",p:"adj.→n.",c:"孤獨的"},
+{b:"Yours faithfully",q:"She remained a loyal and ______ (f) friend throughout all the difficult times.",a:"faithful",h:"Adjective form",p:"ph.→adj.",c:"忠誠的"},
+{b:"brink",q:"The company is teetering on the ______ (b) of financial collapse.",a:"brink",h:"Noun stays same",p:"n.",c:"邊緣"}
+];
+
+// ═══ STATE ═══
+var mode="haina",idx=0,list=[],done=false,ok={},bad={};
+function lsK(){return "ewf-"+mode;}
+
+// ═══ HELPERS ═══
+function el(id){return document.getElementById(id);}
+function norm(s){return s.toLowerCase().replace(/\s+/g," ").trim();}
+function buildList(){
+  var all=[];
+  for(var i=0;i<Q.length;i++)all.push(i);
+  if(mode==="haina")all.sort(function(a,b){return Q[a].b.toLowerCase().localeCompare(Q[b].b.toLowerCase())});
+  var u=[];
+  for(var i=0;i<all.length;i++){if(!ok[Q[all[i]].b])u.push(all[i]);}
+  return u.length>0?u:all;
+}
+function updProg(){
+  var d=Object.keys(ok).length;
+  el("prog").textContent=d+"/55";
+  el("pos").textContent=done?"Done!":"Q"+(idx+1)+"/"+list.length;
+}
+function updStats(){
+  el("nOk").textContent=Object.keys(ok).length;
+  el("nBad").textContent=Object.keys(bad).length;
+  el("nLeft").textContent=Math.max(0,55-Object.keys(ok).length);
+  var wc=Object.keys(bad).length;
+  el("nWp").textContent=wc;
+  el("btnWrong").style.display=wc>0?"":"none";
+}
+function renderQ(){
+  var q=Q[list[idx]];
+  el("badge").textContent=q.p;
+  var parts=q.q.split("______");
+  var html=parts[0]+'<span class="blank">______</span>';
+  var m=q.q.match(/\(([a-zA-Z])\)/);
+  if(m){html+=' <span class="hint">('+m[1]+')</span>'+parts[1].replace(/ \([a-zA-Z]\)/,"");}
+  else{html+=parts[1]||"";}
+  el("sen").innerHTML=html;
+  el("inp").value="";
+  el("inp").disabled=false;
+  el("inp").style.borderColor="#475569";
+  el("msg").textContent="";
+  el("ex").textContent="";
+  el("btnCheck").style.display="";
+  el("btnShow").style.display="";
+  el("btnNext").style.display="none";
+}
+
+// ═══ ACTIONS ═══
+function setMode(m){
+  if(mode===m)return;mode=m;
+  el("btnH").style.background=m==="haina"?"#2563eb":"#334155";
+  el("btnH").style.color=m==="haina"?"#fff":"#94a3b8";
+  el("btnY").style.background=m==="yourong"?"#16a34a":"#334155";
+  el("btnY").style.color=m==="yourong"?"#fff":"#94a3b8";
+  doReset();
+}
+function doReset(){
+  done=false;idx=0;
+  el("badge").textContent="—";
+  el("sen").innerHTML="Ready. Tap Start.";
+  el("inp").style.display="none";
+  el("msg").textContent="";
+  el("ex").textContent="";
+  el("btnStart").style.display="";
+  el("btnCheck").style.display="none";
+  el("btnShow").style.display="none";
+  el("btnNext").style.display="none";
+  updProg();updStats();
+}
+function doStart(){
+  list=buildList();
+  if(list.length===0){doFinish();return;}
+  idx=0;done=false;
+  el("sen").innerHTML="";
+  el("inp").style.display="";
+  el("btnStart").style.display="none";
+  el("btnCheck").style.display="";
+  el("btnShow").style.display="";
+  updStats();updProg();renderQ();
+  el("inp").focus();
+}
+function doCheck(){
+  if(done)return;
+  var q=Q[list[idx]];
+  var ans=el("inp").value.trim();
+  var isOk=norm(ans)===norm(q.a);
+  if(isOk){
+    el("msg").innerHTML='✅ Correct!';
+    el("msg").style.color="#4ade80";
+    el("inp").style.borderColor="#4ade80";
+    ok[q.b]=true;delete bad[q.b];
+    el("ex").textContent="";
+  }else{
+    el("msg").innerHTML='❌ Not yet. Answer: <b>'+q.a+'</b>';
+    el("msg").style.color="#f87171";
+    el("inp").style.borderColor="#f87171";
+    bad[q.b]={b:q.b,q:q.q,a:q.a,h:q.h,your:ans};
+    delete ok[q.b];
+    el("ex").textContent="💡 "+q.h;
+  }
+  el("inp").disabled=true;
+  el("btnCheck").style.display="none";
+  el("btnShow").style.display="none";
+  el("btnNext").style.display="";
+  el("btnNext").focus();
+  updStats();updProg();
+}
+function doShow(){
+  if(done)return;
+  var q=Q[list[idx]];
+  el("msg").innerHTML='🔍 Answer: <b>'+q.a+'</b>';
+  el("msg").style.color="#f87171";
+  el("inp").style.borderColor="#f87171";
+  el("inp").disabled=true;
+  bad[q.b]={b:q.b,q:q.q,a:q.a,h:q.h,your:"(shown)"};
+  delete ok[q.b];
+  el("ex").textContent="💡 "+q.h;
+  el("btnCheck").style.display="none";
+  el("btnShow").style.display="none";
+  el("btnNext").style.display="";
+  el("btnNext").focus();
+  updStats();updProg();
+}
+function doNext(){
+  idx++;
+  if(idx>=list.length){doFinish();return;}
+  el("btnNext").style.display="none";
+  updProg();renderQ();
+  el("inp").focus();
+}
+function doFinish(){
+  done=true;
+  el("sen").innerHTML="All Done! 🎉";
+  el("inp").style.display="none";
+  el("btnCheck").style.display="none";
+  el("btnShow").style.display="none";
+  el("btnNext").style.display="none";
+  el("btnStart").style.display="";
+  el("msg").textContent="";
+  var wc=Object.keys(bad).length;
+  el("ex").textContent=wc>0?wc+" word(s) in wrong pool.":"";
+  el("badge").textContent="🏁";
+  updStats();updProg();
+}
+function doReDrill(){
+  var keys=Object.keys(bad);if(keys.length===0)return;
+  list=[];for(var i=0;i<Q.length;i++){if(keys.indexOf(Q[i].b)>=0)list.push(i);}
+  idx=0;done=false;
+  el("inp").style.display="";el("inp").disabled=false;el("inp").value="";
+  el("btnStart").style.display="none";
+  el("btnCheck").style.display="";
+  el("btnShow").style.display="";
+  el("btnNext").style.display="none";
+  el("msg").textContent="";el("ex").textContent="";
+  updStats();updProg();renderQ();el("inp").focus();
+}
+
+// ═══ INIT ═══
+el("btnH").style.background="#2563eb";el("btnH").style.color="#fff";
+el("btnY").style.background="#334155";el("btnY").style.color="#94a3b8";
+updStats();updProg();
+</script>
+</body>
+</html>

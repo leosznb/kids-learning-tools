@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Probability Simulator — Expected Value</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family:"PingFang SC","Microsoft YaHei","Noto Sans SC",sans-serif;
+    background:linear-gradient(160deg,#e8eaf6,#c5cae9);
+    min-height:100vh; display:flex; justify-content:center; padding:20px;
+  }
+  .app { max-width:720px; width:100%; }
+  h1 { text-align:center; font-size:24px; color:#1a237e; letter-spacing:1px; margin-bottom:2px; }
+  .subtitle { text-align:center; font-size:13px; color:#666; margin-bottom:18px; }
+  .subtitle span { background:#1a237e; color:#fff; padding:2px 10px; border-radius:3px; font-size:11px; }
+
+  .dashboard {
+    display:flex; gap:16px; margin-bottom:16px; flex-wrap:wrap;
+  }
+  .panel {
+    flex:1; min-width:200px; background:#fff; border-radius:14px;
+    padding:18px 20px; box-shadow:0 2px 12px rgba(0,0,0,.06);
+    text-align:center;
+  }
+  .panel .label { font-size:12px; color:#999; text-transform:uppercase; letter-spacing:1px; margin-bottom:4px; }
+  .panel .value { font-size:42px; font-weight:700; color:#1a237e; }
+  .panel .value.converged { color:#4caf50; }
+  .panel .target { font-size:13px; color:#888; }
+  .panel .target strong { color:#e91e63; }
+
+  .controls {
+    display:flex; gap:8px; justify-content:center; margin-bottom:16px;
+    flex-wrap:wrap;
+  }
+  .controls button {
+    padding:10px 20px; border-radius:8px; border:2px solid #c5cae9;
+    background:#fff; font-size:14px; font-weight:700; cursor:pointer;
+    color:#3949ab; transition:all .15s;
+  }
+  .controls button:hover { background:#e8eaf6; }
+  .controls button.active { background:#3949ab; color:#fff; border-color:#3949ab; }
+  .controls button.go {
+    background:#e91e63; color:#fff; border-color:#e91e63; font-size:16px;
+    padding:10px 32px;
+  }
+  .controls button.go:hover { background:#c2185b; }
+  .controls button.go:disabled { background:#ccc; border-color:#ccc; cursor:not-allowed; }
+
+  .chart-area { background:#fff; border-radius:14px; padding:20px; box-shadow:0 2px 12px rgba(0,0,0,.06); margin-bottom:14px; }
+  .chart-title { font-size:14px; font-weight:700; color:#333; margin-bottom:12px; }
+  .chart-title .cn { font-size:12px; font-weight:400; color:#888; }
+
+  .bar-row { display:flex; align-items:center; margin:6px 0; gap:8px; }
+  .bar-face {
+    width:44px; height:44px; border-radius:8px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:18px; font-weight:700; color:#fff; flex-shrink:0;
+  }
+  .b1{background:#ef5350}.b2{background:#ff7043}.b3{background:#ffa726}
+  .b4{background:#66bb6a}.b5{background:#42a5f5}.b6{background:#7e57c2}
+  .bar-track { flex:1; height:28px; background:#f5f5f5; border-radius:6px; overflow:hidden; position:relative; }
+  .bar-fill { height:100%; background:linear-gradient(90deg,#7986cb,#3949ab); border-radius:6px; transition:width .3s; display:flex; align-items:center; padding-left:8px; }
+  .bar-fill .count { font-size:12px; font-weight:700; color:#fff; }
+  .bar-pct { width:50px; font-size:12px; font-weight:600; color:#555; text-align:right; }
+  .target-line { position:relative; margin:10px 0; }
+  .target-line .line { border-top:2px dashed #e91e63; }
+  .target-line .label { position:absolute; right:0; top:-18px; font-size:11px; font-weight:700; color:#e91e63; background:#fff; padding:2px 6px; }
+
+  .avg-visual { margin-top:14px; text-align:center; }
+  .avg-needle { font-size:14px; color:#555; }
+  .avg-needle .val { font-size:28px; font-weight:700; }
+  .avg-track { height:8px; background:#e0e0e0; border-radius:4px; margin:8px 0; position:relative; }
+  .avg-dot { position:absolute; top:-6px; width:20px; height:20px; background:#e91e63; border-radius:50%; border:3px solid #fff; box-shadow:0 1px 4px rgba(0,0,0,.2); transition:left .5s; }
+  .avg-target-dot { position:absolute; top:-6px; left:50%; width:20px; height:20px; background:#4caf50; border-radius:50%; border:3px solid #fff; box-shadow:0 1px 4px rgba(0,0,0,.2); }
+  .avg-scale { display:flex; justify-content:space-between; font-size:10px; color:#999; }
+
+  .insight-box {
+    background:linear-gradient(135deg,#fff8e1,#fff9c4);
+    border-left:4px solid #ffc107; border-radius:6px;
+    padding:14px 18px; margin-top:14px; font-size:14px;
+  }
+  .insight-box .cn { display:block; font-size:12px; color:#888; margin-top:4px; }
+
+  .dice-row { display:flex; justify-content:center; gap:8px; margin:10px 0; flex-wrap:wrap; }
+  .dice-dot { width:36px; height:36px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; color:#fff; animation:pop .3s; }
+  @keyframes pop { 0%{transform:scale(1.4)} 100%{transform:scale(1)} }
+</style>
+</head>
+<body>
+<div class="app">
+  <h1>🎲 Dice Roll Probability Simulator</h1>
+  <div class="subtitle">
+    Watch the average converge to the <strong>expected value: 3.5</strong><br>
+    <span>EN first · 中文輔助</span>
+  </div>
+
+  <div class="controls">
+    <button class="active" data-n="10" onclick="setTrials(10,this)">10 rolls</button>
+    <button data-n="100" onclick="setTrials(100,this)">100 rolls</button>
+    <button data-n="1000" onclick="setTrials(1000,this)">1,000 rolls</button>
+    <button data-n="10000" onclick="setTrials(10000,this)">10,000 rolls</button>
+    <button class="go" id="goBtn" onclick="startSim()">🎯 Roll!</button>
+  </div>
+
+  <div class="dashboard">
+    <div class="panel">
+      <div class="label">Total Rolls<span class="cn">總次數</span></div>
+      <div class="value" id="totalRolls">0</div>
+    </div>
+    <div class="panel">
+      <div class="label">Running Average<span class="cn">當前平均</span></div>
+      <div class="value" id="runningAvg">—</div>
+      <div class="target">Target expected value: <strong>3.5</strong></div>
+    </div>
+    <div class="panel">
+      <div class="label">Difference from 3.5<span class="cn">與期望值的差距</span></div>
+      <div class="value" id="diff" style="color:#e91e63;">—</div>
+    </div>
+  </div>
+
+  <div class="chart-area">
+    <div class="chart-title">Distribution of results<span class="cn">結果分佈</span></div>
+    <div id="barChart"></div>
+    <div class="avg-visual">
+      <div class="avg-needle">
+        Running average: <span class="val" id="avgBig">—</span>
+        <span style="font-size:13px;color:#999;"> / target: 3.5</span>
+      </div>
+      <div class="avg-track">
+        <div class="avg-dot" id="avgDot" style="left:0%"></div>
+        <div class="avg-target-dot" style="left:50%"></div>
+      </div>
+      <div class="avg-scale">
+        <span>1</span><span>2</span><span>3</span><span>3.5 🎯</span><span>4</span><span>5</span><span>6</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="dice-row" id="dicePreview"></div>
+
+  <div class="insight-box" id="insight">
+    <strong>💡 Try this:</strong> Roll 10 times → notice the average jumps around.<br>
+    Then roll 10,000 times → watch it settle near <strong>3.5</strong>.<br>
+    <span class="cn">試試看：先擲10次，平均值跳來跳去。再擲10000次，看它穩定在3.5附近。</span>
+  </div>
+</div>
+
+<script>
+let counts = [0,0,0,0,0,0]; // index 0-5 for faces 1-6
+let totalRolls = 0;
+let totalSum = 0;
+let selectedTrials = 100;
+let running = false;
+const colors = ['ef5350','ff7043','ffa726','66bb6a','42a5f5','7e57c2'];
+
+function setTrials(n, btn) {
+  if (running) return;
+  selectedTrials = n;
+  document.querySelectorAll('.controls button[data-n]').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function startSim() {
+  if (running) return;
+  running = true;
+  document.getElementById('goBtn').disabled = true;
+
+  if (selectedTrials > 500) {
+    simLarge();
+  } else {
+    simSmall(0);
+  }
+}
+
+function simSmall(i) {
+  if (i >= selectedTrials) { finish(); return; }
+  const roll = Math.floor(Math.random()*6)+1;
+  counts[roll-1]++;
+  totalRolls++;
+  totalSum += roll;
+  updateDisplay();
+  document.getElementById('dicePreview').innerHTML =
+    `<div class="dice-dot b${roll}">${roll}</div>`;
+  setTimeout(()=>simSmall(i+1), selectedTrials <= 50 ? 80 : selectedTrials <= 100 ? 25 : 5);
+}
+
+function simLarge() {
+  const n = selectedTrials;
+  for (let i=0;i<n;i++) {
+    const roll = Math.floor(Math.random()*6)+1;
+    counts[roll-1]++;
+    totalSum += roll;
+  }
+  totalRolls += n;
+  updateDisplay();
+  finish();
+}
+
+function updateDisplay() {
+  document.getElementById('totalRolls').textContent = totalRolls;
+  const avg = totalRolls === 0 ? 0 : totalSum / totalRolls;
+  document.getElementById('runningAvg').textContent = avg.toFixed(3);
+  const diff = Math.abs(avg - 3.5);
+  const diffEl = document.getElementById('diff');
+  diffEl.textContent = diff.toFixed(4);
+  diffEl.style.color = diff < 0.05 ? '#4caf50' : diff < 0.2 ? '#ff9800' : '#e91e63';
+  document.getElementById('avgBig').textContent = avg.toFixed(3);
+  const dotPos = ((avg-1)/5)*100;
+  document.getElementById('avgDot').style.left = Math.max(0,Math.min(100,dotPos))+'%';
+
+  let barHTML = '';
+  const maxCount = Math.max(...counts,1);
+  for (let i=0;i<6;i++) {
+    const w = (counts[i]/maxCount*100);
+    const pct = totalRolls===0 ? 0 : (counts[i]/totalRolls*100);
+    barHTML += `<div class="bar-row">
+      <div class="bar-face b${i+1}">${i+1}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${w}%"><span class="count">${counts[i]}</span></div></div>
+      <div class="bar-pct">${pct.toFixed(1)}%</div>
+    </div>`;
+  }
+  document.getElementById('barChart').innerHTML = barHTML;
+
+  // Update insight
+  const insightEl = document.getElementById('insight');
+  if (totalRolls >= 1000 && diff < 0.05) {
+    insightEl.innerHTML = `<strong>✅ Converged!</strong> After ${totalRolls} rolls, the average (${avg.toFixed(3)}) is extremely close to 3.5.<br>The expected value <strong>is</strong> the long-term average. <em>That</em> is what "3.5" means.<br><span class="cn">平均已收斂到3.5附近！期望值就是長期平均——這就是3.5的真正含義。</span>`;
+  } else if (totalRolls >= 100) {
+    insightEl.innerHTML = `<strong>👀 Getting closer...</strong> After ${totalRolls} rolls, average = ${avg.toFixed(3)}. Keep going — more rolls = closer to 3.5.<br><span class="cn">繼續擲！越多擲，越接近3.5。</span>`;
+  }
+}
+
+function finish() {
+  running = false;
+  document.getElementById('goBtn').disabled = false;
+}
+
+updateDisplay();
+</script>
+</body>
+</html>

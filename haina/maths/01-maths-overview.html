@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S3 Maths · 2nd Term Exam Overview</title>
+<style>
+:root {
+  --bg: #0a0e14;
+  --card: #131a24;
+  --border: #1e2d3d;
+  --accent: #00e5ff;
+  --accent2: #ff6e40;
+  --accent3: #76ff03;
+  --warn: #ffd740;
+  --text: #cdd6e0;
+  --text-dim: #7a8ba0;
+  --text-bright: #e6edf5;
+  --header-bg: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
+  --card-hover: #182230;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'SF Mono', 'JetBrains Mono', 'Consolas', 'Monaco', monospace;
+  line-height: 1.7;
+  padding: 0;
+  min-height: 100vh;
+}
+.container { max-width: 1100px; margin: 0 auto; padding: 24px 20px; }
+
+/* Header */
+.hero {
+  background: var(--header-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 32px 36px;
+  margin-bottom: 28px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent3));
+}
+.hero .badge {
+  display: inline-block;
+  background: rgba(0,229,255,0.12);
+  color: var(--accent);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  padding: 4px 14px;
+  border-radius: 4px;
+  border: 1px solid rgba(0,229,255,0.25);
+  margin-bottom: 14px;
+  text-transform: uppercase;
+}
+.hero h1 {
+  font-size: 1.9rem;
+  font-weight: 800;
+  color: var(--text-bright);
+  letter-spacing: -0.5px;
+  margin-bottom: 4px;
+}
+.hero h1 .sub {
+  display: block;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text-dim);
+  margin-top: 4px;
+}
+.hero .meta-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px,1fr));
+  gap: 14px;
+  margin-top: 20px;
+}
+.hero .meta-item {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 16px;
+}
+.hero .meta-item .label {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.hero .meta-item .value {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-bright);
+  margin-top: 2px;
+}
+.hero .days-left {
+  color: var(--accent2);
+  font-size: 2rem;
+  font-weight: 900;
+}
+.hero .exam-seq {
+  margin-top: 14px;
+  padding: 10px 16px;
+  background: rgba(255,109,64,0.08);
+  border: 1px solid rgba(255,109,64,0.2);
+  border-radius: 8px;
+  font-size: 0.85rem;
+  color: var(--accent2);
+}
+
+/* Section cards */
+.section {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  margin-bottom: 22px;
+  overflow: hidden;
+  transition: background 0.2s;
+}
+.section:hover { background: var(--card-hover); }
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+}
+.section-header .num {
+  font-size: 0.8rem;
+  font-weight: 900;
+  color: var(--accent);
+  min-width: 42px;
+}
+.section-header h2 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-bright);
+  flex: 1;
+}
+.section-body { padding: 20px 24px; }
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  margin: 12px 0;
+}
+th {
+  background: rgba(0,229,255,0.08);
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 10px 12px;
+  text-align: left;
+  border-bottom: 2px solid var(--border);
+}
+td {
+  padding: 9px 12px;
+  border-bottom: 1px solid rgba(30,45,61,0.6);
+  color: var(--text);
+  vertical-align: top;
+}
+tr:hover td { background: rgba(255,255,255,0.02); }
+td.num { text-align: center; font-weight: 700; color: var(--text-bright); }
+td.marks { text-align: center; font-weight: 700; }
+
+/* Star ratings */
+.stars { color: var(--warn); font-weight: 700; white-space: nowrap; }
+
+/* Highlight */
+.highlight-box {
+  background: rgba(0,229,255,0.06);
+  border: 1px solid rgba(0,229,255,0.2);
+  border-radius: 8px;
+  padding: 14px 18px;
+  margin: 14px 0;
+  font-size: 0.85rem;
+}
+.highlight-box.warn {
+  background: rgba(255,109,64,0.06);
+  border-color: rgba(255,109,64,0.2);
+}
+.highlight-box.green {
+  background: rgba(118,255,3,0.05);
+  border-color: rgba(118,255,3,0.15);
+}
+.highlight-box strong { color: var(--accent); }
+.highlight-box.warn strong { color: var(--accent2); }
+.highlight-box.green strong { color: var(--accent3); }
+
+/* Tags */
+.tag {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  margin: 2px 4px 2px 0;
+}
+.tag-new { background: rgba(255,109,64,0.15); color: var(--accent2); border: 1px solid rgba(255,109,64,0.3); }
+.tag-hot { background: rgba(255,215,64,0.12); color: var(--warn); border: 1px solid rgba(255,215,64,0.25); }
+.tag-safe { background: rgba(118,255,3,0.1); color: var(--accent3); border: 1px solid rgba(118,255,3,0.2); }
+
+/* Formula card */
+.formula-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 12px;
+  margin: 14px 0;
+}
+.formula-card {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px 16px;
+}
+.formula-card .title {
+  font-size: 0.75rem;
+  color: var(--accent);
+  font-weight: 700;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.formula-card .eq {
+  font-size: 1.1rem;
+  font-family: 'Georgia', 'Times New Roman', serif;
+  color: var(--text-bright);
+  letter-spacing: 0.5px;
+}
+
+/* Trap list */
+.trap-list { list-style: none; }
+.trap-list li {
+  padding: 10px 14px;
+  margin: 6px 0;
+  background: rgba(255,109,64,0.04);
+  border-left: 3px solid var(--accent2);
+  border-radius: 0 6px 6px 0;
+  font-size: 0.85rem;
+}
+.trap-list li .trap-title { font-weight: 700; color: var(--accent2); }
+.trap-list li .trap-fix { color: var(--accent3); font-weight: 600; }
+
+/* Plan */
+.plan-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 12px;
+  margin: 14px 0;
+}
+.plan-card {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+  position: relative;
+}
+.plan-card .day-num {
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: var(--accent);
+  color: #0a0e14;
+  font-weight: 900;
+  font-size: 0.7rem;
+  padding: 3px 10px;
+  border-radius: 4px;
+}
+.plan-card h4 { font-size: 0.95rem; margin: 8px 0 6px; color: var(--text-bright); }
+.plan-card .focus { font-size: 0.8rem; color: var(--text-dim); }
+.plan-card .tasks { font-size: 0.8rem; color: var(--text); margin-top: 6px; }
+
+/* Teacher quote */
+.teacher-quote {
+  background: rgba(255,215,64,0.05);
+  border: 1px solid rgba(255,215,64,0.15);
+  border-radius: 8px;
+  padding: 14px 18px;
+  margin: 12px 0;
+  font-style: italic;
+  color: var(--warn);
+}
+.teacher-quote .name {
+  display: block;
+  margin-top: 6px;
+  font-style: normal;
+  font-size: 0.75rem;
+  color: var(--text-dim);
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .hero { padding: 20px; }
+  .hero h1 { font-size: 1.4rem; }
+  .formula-grid, .plan-grid { grid-template-columns: 1fr; }
+  table { font-size: 0.75rem; }
+  th, td { padding: 6px 8px; }
+}
+
+/* Chapter list */
+.chapter-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 8px;
+  margin: 12px 0;
+}
+.chapter-item {
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 0.8rem;
+}
+.chapter-item .ch-num { font-weight: 800; color: var(--accent); }
+
+/* Print */
+@media print {
+  body { background: white; color: #111; }
+  .section { break-inside: avoid; border: 1px solid #ccc; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<!-- ====== HERO ====== -->
+<div class="hero">
+  <div class="badge">EXAM PATTERN ANALYSIS</div>
+  <h1>S3 Maths <span class="sub">Secondary 3 Mathematics — 命题模式深度分析与复习策略</span></h1>
+
+  <div class="meta-grid">
+    <div class="meta-item">
+      <div class="label">Exam Date</div>
+      <div class="value">2026-06-12 (Fri)</div>
+    </div>
+    <div class="meta-item">
+      <div class="label">Duration</div>
+      <div class="value">1 hr 45 min</div>
+    </div>
+    <div class="meta-item">
+      <div class="label">Total Marks</div>
+      <div class="value">100 → 200</div>
+    </div>
+    <div class="meta-item">
+      <div class="label">Days Left</div>
+      <div class="value days-left">28</div>
+    </div>
+    <div class="meta-item">
+      <div class="label">Syllabus</div>
+      <div class="value">Ch.1–13 + 5 New Topics</div>
+    </div>
+    <div class="meta-item">
+      <div class="label">Teacher</div>
+      <div class="value">TSE Chun-piu</div>
+    </div>
+  </div>
+
+  <div class="exam-seq">
+    ⚡ 6/10 Physics → 6/11 English → 6/12 Maths · 连续三天考试！
+  </div>
+</div>
+
+<!-- ====== 01 EXAM SCOPE ====== -->
+<div class="section">
+  <div class="section-header">
+    <span class="num">01</span>
+    <h2>Exam Scope 考试范围</h2>
+  </div>
+  <div class="section-body">
+
+    <div class="teacher-quote">
+      "All previous knowledge · Textbook: Chapter 1–13 · Additional topics: Fractional Indices, Area of Triangle (½ab sin C), Sine Formula & Cosine Formula"
+      <span class="name">— TSE Chun-piu, 8 May 2026, 2:00 PM (Google Classroom)</span>
+    </div>
+
+    <div style="margin:16px 0;">
+      <strong style="color:var(--accent);">📘 Textbook Chapters (Ch.1–13 全考)</strong>
+    </div>
+
+    <div class="chapter-list">
+      <div class="chapter-item"><span class="ch-num">Ch.1</span> More about Factorization 因式分解进阶</div>
+      <div class="chapter-item"><span class="ch-num">Ch.2</span> Laws of Integral Indices 整数指数定律</div>
+      <div class="chapter-item"><span class="ch-num">Ch.3</span> Percentages & Interest 百分法与利息</div>
+      <div class="chapter-item"><span class="ch-num">Ch.4</span> Linear Inequalities 一元一次不等式</div>
+      <div class="chapter-item"><span class="ch-num">Ch.5</span> Linear Equations 线性方程</div>
+      <div class="chapter-item"><span class="ch-num">Ch.6</span> Measure of Central Tendency 集中趋势</div>
+      <div class="chapter-item"><span class="ch-num">Ch.7</span> More about Triangles 三角形进阶</div>
+      <div class="chapter-item"><span class="ch-num">Ch.8</span> Quadrilaterals 四边形</div>
+      <div class="chapter-item"><span class="ch-num">Ch.9</span> Trigonometric Relations 三角关系</div>
+      <div class="chapter-item"><span class="ch-num">Ch.10</span> Mensuration (3D) 求积法</div>
+      <div class="chapter-item"><span class="ch-num">Ch.11</span> Trig Applications · Bearing 三角应用·方位角</div>
+      <div class="chapter-item"><span class="ch-num">Ch.12</span> Similar Solids & Volume 相似立体与体积</div>
+      <div class="chapter-item"><span class="ch-num">Ch.13</span> Coordinate Geometry 坐标几何</div>
+    </div>
+
+    <div class="highlight-box warn">
+      <strong>⚠ 2026 新增考点 (旧三年真题从未出现)：</strong><br>
+      <span class="tag tag-new">NEW</span> Fractional Indices 分数指数<br>
+      <span class="tag tag-new">NEW</span> Area of Triangle = ½ab sin C<br>
+      <span class="tag tag-new">NEW</span> Sine Formula (正弦公式)<br>
+      <span class="tag tag-new">NEW</span> Cosine Formula (余弦公式)<br>
+      <span class="tag tag-new">NEW</span> 3D Figures & Cross Sections 立体截面<br>
+      <strong>这些考点无法靠操卷预测考法，必须从课本和作业中准备！</strong>
+    </div>
+  </div>
+</div>
+
+<!-- ====== 02 PAPER STRUCTURE ====== -->
+<div class="section">
+  <div class="section-header">
+    <span class="num">02</span>
+    <h2>Paper Structure 试卷结构 (三年一致)</h2>
+  </div>
+  <div class="section-body">
+    <table>
+      <tr>
+        <th>Section</th><th>Question Type</th><th>Questions</th><th>Marks</th><th>Time Strategy</th>
+      </tr>
+      <tr>
+        <td class="num">A</td>
+        <td>Multiple Choice 选择题</td>
+        <td class="num">20 Qs × 2</td>
+        <td class="marks">40</td>
+        <td>≤ 20 min (1 min/Q)</td>
+      </tr>
+      <tr>
+        <td class="num">B</td>
+        <td>Conventional 常规题</td>
+        <td class="num">12–13 Qs</td>
+        <td class="marks">60</td>
+        <td>~85 min (按分值分配)</td>
+      </tr>
+      <tr style="border-top:2px solid var(--accent);">
+        <td class="num"><strong>Total</strong></td>
+        <td>换算比例</td>
+        <td class="num">~33 Qs</td>
+        <td class="marks">100 → 200</td>
+        <td>1 hr 45 min</td>
+      </tr>
+    </table>
+
+    <div style="margin-top:18px;">
+      <strong style="color:var(--accent);">📋 Marking Scheme 评分结构</strong>
+    </div>
+    <table>
+      <tr>
+        <th>代号</th><th>含义</th><th>策略</th>
+      </tr>
+      <tr>
+        <td class="num">M</td>
+        <td>Method mark 方法分</td>
+        <td>写出关键公式/步骤即有分，即使最终答案错</td>
+      </tr>
+      <tr>
+        <td class="num">A</td>
+        <td>Answer mark 答案分</td>
+        <td>最终正确答案得分</td>
+      </tr>
+      <tr>
+        <td class="num">f.t.</td>
+        <td>Follow through 容错分</td>
+        <td>前一步算错但方法对，后续答案仍有分（常见于几何/三角/坐标）</td>
+      </tr>
+    </table>
+
+    <div class="highlight-box green">
+      <strong>💡 核心策略：</strong>即使不确定答案，也要写出公式和代入步骤 → 拿 M 分。计算题不可只写最终答案。
+    </div>
+  </div>
+</div>
+
+<!-- ====== 03 TOPIC WEIGHT ====== -->
+<div class="section">
+  <div class="section-header">
+    <span class="num">03</span>
+    <h2>Topic Weight 三年权重矩阵</h2>
+  </div>
+  <div class="section-body">
+    <table>
+      <tr>
+        <th>Topic 主题</th><th>Chapters</th><th>2223</th><th>2324</th><th>2425</th><th>3-Yr Avg</th><th>Hit Rate</th>
+      </tr>
+      <tr>
+        <td>Algebra 代数（因式分解/分式/公式/不等式/指数）</td>
+        <td class="num">1–5</td>
+        <td class="marks">~20</td><td class="marks">~18</td><td class="marks">~17</td>
+        <td class="marks"><strong>~18</strong></td>
+        <td class="stars">★★★</td>
+      </tr>
+      <tr>
+        <td>Trigonometry 三角学（恒等式/正弦余弦/仰角俯角/方位角）</td>
+        <td class="num">9, 11</td>
+        <td class="marks">~20</td><td class="marks">~14</td><td class="marks">~14</td>
+        <td class="marks"><strong>~16</strong></td>
+        <td class="stars">★★★</td>
+      </tr>
+      <tr>
+        <td>Coordinate Geometry 坐标几何（距离/斜率/中点/方程/面积）</td>
+        <td class="num">13</td>
+        <td class="marks">~14</td><td class="marks">~13</td><td class="marks">~13</td>
+        <td class="marks"><strong>~13</strong></td>
+        <td class="stars">★★★</td>
+      </tr>
+      <tr>
+        <td>Mensuration 求积法（体积/表面积/相似立体）</td>
+        <td class="num">12</td>
+        <td class="marks">~14</td><td class="marks">~14</td><td class="marks">~11</td>
+        <td class="marks"><strong>~13</strong></td>
+        <td class="stars">★★★</td>
+      </tr>
+      <tr>
+        <td>Statistics & Probability 统计与概率</td>
+        <td class="num">6, +</td>
+        <td class="marks">~9</td><td class="marks">~12</td><td class="marks">~13</td>
+        <td class="marks"><strong>~11</strong></td>
+        <td class="stars">★★★</td>
+      </tr>
+      <tr>
+        <td>Geometry 几何（四心/相似/截距定理/面积比）</td>
+        <td class="num">7–8</td>
+        <td class="marks">~12</td><td class="marks">~10</td><td class="marks">~8</td>
+        <td class="marks"><strong>~10</strong></td>
+        <td class="stars">★★★</td>
+      </tr>
+      <tr>
+        <td>Percentages & Interest 百分法与利息</td>
+        <td class="num">3</td>
+        <td class="marks">~5</td><td class="marks">~9</td><td class="marks">~6</td>
+        <td class="marks"><strong>~7</strong></td>
+        <td class="stars">★★★</td>
+      </tr>
+      <tr>
+        <td>3D Figures 立体图形</td>
+        <td class="num">10</td>
+        <td class="marks">—</td><td class="marks">—</td><td class="marks">~3</td>
+        <td class="marks"><strong>~3</strong></td>
+        <td class="stars">✓ 3</td>
+      </tr>
+    </table>
+
+    <div class="highlight-box">
+      <strong>📊 权重解读：</strong>Algebra + Trigonometry 合共 ~34 分（占 34%），是绝对核心。Coordinate Geometry 和 Mensuration 各 ~13 分稳定出现。Statistics & Probability 权重逐年上升（9→12→13），值得关注。
+    </div>
+  </div>
+</div>
+
+<!-- ====== 04 MC FIXED PATTERN ====== -->
+<div class="section">
+  <div class="section-header">
+    <span class="num">04</span>
+    <h2>Section A: MC Fixed Pattern 选择题固定分布</h2>
+  </div>
+  <div class="section-body">
+    <table>
+      <tr>
+        <th style="width:10%">Q# Range</th>
+        <th style="width:38%">High-Frequency Topic</th>
+        <th style="width:12%">3-Year Hit</th>
+        <th style="width:40%">Key Point</th>
+      </tr>
+      <tr>
+        <td class="num">1–2</td>
+        <td>Laws of Indices · Irrational Numbers · Sci Notation</td>
+        <td class="stars">✓✓✓</td>
+        <td>Simplify expressions with negative/fractional indices; identify rational vs irrational</td>
+      </tr>
+      <tr>
+        <td class="num">3–4</td>
+        <td>Ratio · Factorization · Polynomial Identity</td>
+        <td class="stars">✓✓✓</td>
+        <td>Find unknown coefficient in identity; factor recognition</td>
+      </tr>
+      <tr>
+        <td class="num">5–6</td>
+        <td>% Change · Inequalities · Simultaneous Eq</td>
+        <td class="stars">✓✓✓</td>
+        <td>Successive % change (e.g. +15% then −10%); inequality direction</td>
+      </tr>
+      <tr>
+        <td class="num">7–8</td>
+        <td>Triangle Centres · Polygon Angles · Mensuration</td>
+        <td class="stars">✓✓✓</td>
+        <td>Centroid vs Incentre vs Circumcentre vs Orthocentre; polygon exterior angle sum = 360°</td>
+      </tr>
+      <tr>
+        <td class="num">9–10</td>
+        <td>Statistics (Mean/Median) · Probability</td>
+        <td class="stars">✓✓✓</td>
+        <td>Mean/Median from frequency table; experimental probability</td>
+      </tr>
+      <tr>
+        <td class="num">11–12</td>
+        <td>Probability · Expected Value · Sequences · Trig Basics</td>
+        <td class="stars">✓✓✓</td>
+        <td>Expected frequency = prob × n; sector area</td>
+      </tr>
+      <tr>
+        <td class="num">13–14</td>
+        <td>Bearing · Trig Applications · Compound Interest · Gradient</td>
+        <td class="stars">✓✓✓</td>
+        <td>Bearing measured clockwise from North; contour map gradient</td>
+      </tr>
+      <tr>
+        <td class="num">15–17</td>
+        <td>Coordinate Geometry (Midpoint · Distance · Slope · Line Eq)</td>
+        <td class="stars">✓✓✓</td>
+        <td>3 consecutive coordinate Qs every year; section formula; x/y-intercept</td>
+      </tr>
+      <tr>
+        <td class="num">18–20</td>
+        <td>Similar Figures · Volume/Mensuration · Area Ratio</td>
+        <td class="stars">✓✓✓</td>
+        <td>Area ratio = (length ratio)²; volume ratio = (length ratio)³; frustum</td>
+      </tr>
+    </table>
+
+    <div class="highlight-box warn">
+      <strong>⚡ MC 时间管理：</strong>20 题共 20 分钟，每题 ≤1 分钟。遇到 1 分钟做不出的题果断跳过，最后回头。MC 只需答案不需步骤 — 用排除法、代入法、特殊值法快速求解。
+    </div>
+  </div>
+</div>
+
+<!-- ====== 05 SECTION B PATTERNS ====== -->
+<div class="section">
+  <div class="section-header">
+    <span class="num">05</span>
+    <h2>Section B: Conventional Question Patterns 常规题出题规律</h2>
+  </div>
+  <div class="section-body">
+    <table>
+      <tr>
+        <th style="width:12%">Q# Range</th>
+        <th style="width:25%">Topic</th>
+        <th style="width:10%">Typical Marks</th>
+        <th style="width:28%">What to Expect</th>
+        <th style="width:25%">Strategy</th>
+      </tr>
+      <tr>
+        <td class="num">1–3</td>
+        <td>Basic Algebra (Indices, Factorization, Fractions)</td>
+        <td class="marks">3–4 each</td>
+        <td>Simplify with negative indices; factorize (提取+十字); algebraic fraction</td>
+        <td><span class="tag tag-safe">必拿分</span> 基础送分题，不可出错</td>
+      </tr>
+      <tr>
+        <td class="num">4–6</td>
+        <td>Change of Subject · Inequality · Ratio</td>
+        <td class="marks">3–4 each</td>
+        <td>Make x the subject; solve inequality + max integer; compound ratio</td>
+        <td>注意 inequality 方向 & Change of subject 分母不为零</td>
+      </tr>
+      <tr>
+        <td class="num">7–8</td>
+        <td>Probability · Interest / Financial Math</td>
+        <td class="marks">3–5 each</td>
+        <td>Two-step probability; compound interest (年/半年/季复利); simple interest</td>
+        <td>复利公式 A=P(1+r%)ⁿ；看清楚 compounding period</td>
+      </tr>
+      <tr>
+        <td class="num">9</td>
+        <td>Statistics (Stem-and-leaf, Mean, Median, Mode)</td>
+        <td class="marks">5–6</td>
+        <td>Read stem-and-leaf; find mean/median/mode; compare distributions</td>
+        <td>Median 先排序；Mean 可能受 outlier 影响</td>
+      </tr>
+      <tr>
+        <td class="num">10–11</td>
+        <td>Geometry Proof · Trigonometry (Identities / Applications)</td>
+        <td class="marks">5–7 each</td>
+        <td>Prove similarity/congruence; prove trig identity; solve trig equation; bearing/elevation</td>
+        <td>相似用 AAA/SAS/SSS；三角恒等式用 sin²θ+cos²θ=1</td>
+      </tr>
+      <tr>
+        <td class="num">12</td>
+        <td>Mensuration (Volume / Similar Solids / Frustum)</td>
+        <td class="marks">7</td>
+        <td>Cone/sphere/cylinder volume; similar solids area/volume ratio; water displacement</td>
+        <td>体积比=(长度比)³；frustum = 大锥−小锥</td>
+      </tr>
+      <tr>
+        <td class="num">13</td>
+        <td>Coordinate Geometry (综合)</td>
+        <td class="marks">7–9</td>
+        <td>Distance, slope, midpoint, line equation, triangle area, section formula</td>
+        <td><span class="tag tag-hot">大题</span> 分值最高，步骤必须完整</td>
+      </tr>
+    </table>
+
+    <div class="highlight-box green">
+      <strong>💡 Section B 核心策略：</strong>Q1–Q8 是基础分（~30 marks），力争全对；Q9–Q13 是区分度所在（~30 marks），必须展示完整步骤拿 M 分。f.t. 容错分机制意味着前一步算错后面仍可能得分 — 不要因一步错放弃整题。
+    </div>
+  </div>
+</div>
+
+<!-- ====== 06 THREE-YEAR COMPARISON ====== -->
+<div class="section">
+  <div class="section-header">
+    <span class="num">06</span>
+    <h2>Three-Year Topic Comparison 三年对比 + 2526 预测</h2>
+  </div>
+  <div class="section-body">
+    <table>
+      <tr>
+        <th>Sub-Topic</th><th>2223</th><th>2324</th><th>2425</th><th>2526 Predict</th>
+      </tr>
+      <tr>
+        <td>Indices Simplification 指数化简</td>
+        <td>✓</td><td>✓</td><td>✓</td><td class="stars">Certain ✓</td>
+      </tr>
+      <tr>
+        <td>Factorization (a)(b)(c) 因式分解</td>
+        <td>✓</td><td>✓</td><td>✓</td><td class="stars">Certain ✓</td>
+      </tr>
+      <tr>
+        <td>Algebraic Fraction 代数分式</td>
+        <td>✓</td><td>✓</td><td>✓</td><td class="stars">Certain ✓</td>
+      </tr>
+      <tr>
+        <td>Change of Subject 主项变换</td>
+        <td>—</td><td>✓</td><td>✓</td><td class="stars">Likely ✓</td>
+      </tr>
+      <tr>
+        <td>Linear Inequality 不等式</td>
+        <td>✓</td><td>✓</td><td>✓</td><td class="stars">Certain ✓</td>
+      </tr>
+      <tr>
+        <td>Probability 概率</td>
+        <td>✓</td><td>✓</td><td>✓</td><td class="stars">Certain ✓</td>
+      </tr>
+      <tr>
+        <td>Compound Interest 复利息</td>
+        <td>✓</td><td>✓</td><td>✓</td><td class="stars">Certain ✓</td>
+      </tr>
+      <tr>
+        <td>Statistics (Stem-and-leaf / Mean / Median) 统计</td>
+        <td>✓</td><td>✓</td><td>✓</td><td class="stars">Certain ✓</td>
+      </tr>
+      <tr>
+        <td>Geometry Proof (Intercept Theorem / Similar) 几何证明</td>
+        <td>✓</td><td>✓</td><td>—</td><td class="stars">Likely ✓</td>
+      </tr>
+      <tr>
+        <td>Trig Application (Elevation / Bearing) 三角应用</td>
+        <td>✓</td><td>✓</td><td>✓</td><td class="stars">Certain ✓</td>
+      </tr>
+      <tr>
+        <td>Coordinate Geometry (Slope / Area / Section) 坐标几何</td>
+        <td>✓</td><td>✓</td><td>✓</td><td class="stars">Certain ✓</td>
+      </tr>
+      <tr>
+        <td>Mensuration (Cone / Sphere / Frustum) 求积法</td>
+        <td>✓</td><td>✓</td><td>✓</td><td class="stars">Certain ✓</td>
+      </tr>
+      <tr style="border-top: 2px solid var(--accent2);">
+        <td><span class="tag tag-new">NEW</span> Fractional Indices 分数指数</td><td>—</td><td>—</td><td>△</td><td class="stars" style="color:var(--accent2);">First Full Test!</td>
+      </tr>
+      <tr>
+        <td><span class="tag tag-new">NEW</span> Area of Triangle (½ab sin C)</td><td>—</td><td>—</td><td>—</td><td class="stars" style="color:var(--accent2);">First Ever!</td>
+      </tr>
+      <tr>
+        <td><span class="tag tag-new">NEW</span> Cosine Formula 余弦公式</td><td>—</td><td>—</td><td>✓</td><td class="stars" style="color:var(--accent2);">强化出题</td>
+      </tr>
+      <tr>
+        <td><span class="tag tag-new">NEW</span> 3D Figures & Cross Sections 立体截面</td><td>—</td><td>—</td><td>—</td><td class="stars" style="color:var(--accent2);">First Ever!</td>
+      </tr>
+    </table>
+
+    <div class="highlight-box warn">
+      <strong>🔮 2526 预测要点：</strong><br>
+      ① 今年首次加入 5 个新考点，旧三年真题完全无覆盖，出题方式没有历史参考。<br>
+      ② Cosine Formula 在 2425 已试水（Q11b），2526 大概率强化。<br>
+      ③ Fractional Indices 在 2425 仅 MC 浅层触及，2526 必出计算题。<br>
+      ④ Area of Triangle (½ab sin C) 和 3D Cross Sections 是全新考点，建议重点复习课本例题和作业题。
+    </div>
+  </div>
+</div>
+
+<!-- ====== 07 KEY FORMULA ARSENAL ====== -->
+<div class="section">
+  <div class="section-header">
+    <span class="num">07</span>
+    <h2>Key Formula Arsenal 核心公式武器库</h2>
+  </div>
+  <div class="section-body">
+
+    <div class="formula-grid">
+
+      <div class="formula-card">
+        <div class="title">📐 Indices · Laws 指数定律</div>
+        <div class="eq">aᵐ × aⁿ = aᵐ⁺ⁿ</div>
+        <div class="eq">aᵐ ÷ aⁿ = aᵐ⁻ⁿ</div>
+        <div class="eq">(aᵐ)ⁿ = aᵐⁿ</div>
+        <div class="eq">a⁻ⁿ = 1/aⁿ</div>
+        <div class="eq">a^(m/n) = ⁿ√(aᵐ) <span class="tag tag-new">NEW</span></div>
+      </div>
+
+      <div class="formula-card">
+        <div class="title">💹 Compound Interest 复利息</div>
+        <div class="eq">A = P(1 + r%)ⁿ</div>
+        <div style="font-size:0.75rem;color:var(--text-dim);margin-top:4px;">
+          P = principal 本金<br>
+          r% = interest rate per period<br>
+          n = number of periods<br>
+          Half-yearly: r% ÷ 2, n × 2
+        </div>
+      </div>
+
+      <div class="formula-card">
+        <div class="title">📏 Coordinate Geometry 坐标几何</div>
+        <div class="eq">d = √[(x₂−x₁)² + (y₂−y₁)²]</div>
+        <div class="eq">slope m = (y₂−y₁)/(x₂−x₁)</div>
+        <div class="eq">Midpoint = ((x₁+x₂)/2, (y₁+y₂)/2)</div>
+        <div class="eq">Section: (nx₁+mx₂)/(m+n)</div>
+      </div>
+
+      <div class="formula-card">
+        <div class="title">🔺 Trigonometry · Basic 三角基础</div>
+        <div class="eq">sin θ = opp/hyp</div>
+        <div class="eq">cos θ = adj/hyp</div>
+        <div class="eq">tan θ = opp/adj</div>
+        <div class="eq">sin²θ + cos²θ = 1</div>
+        <div class="eq">tan θ = sin θ / cos θ</div>
+      </div>
+
+      <div class="formula-card">
+        <div class="title">🔺 Special Angles 特殊角</div>
+        <table style="font-size:0.78rem;margin:0;">
+          <tr><th></th><th>30°</th><th>45°</th><th>60°</th></tr>
+          <tr><td>sin</td><td>1/2</td><td>1/√2</td><td>√3/2</td></tr>
+          <tr><td>cos</td><td>√3/2</td><td>1/√2</td><td>1/2</td></tr>
+          <tr><td>tan</td><td>1/√3</td><td>1</td><td>√3</td></tr>
+        </table>
+      </div>
+
+      <div class="formula-card">
+        <div class="title">🔺 Sine & Cosine Formula <span class="tag tag-new">NEW</span></div>
+        <div class="eq">a/sin A = b/sin B = c/sin C</div>
+        <div class="eq">a² = b² + c² − 2bc·cos A</div>
+        <div class="eq">Area = ½ab·sin C <span class="tag tag-new">NEW</span></div>
+      </div>
+
+      <div class="formula-card">
+        <div class="title">📐 Pythagoras 勾股定理</div>
+        <div class="eq">a² + b² = c² (∠C = 90°)</div>
+        <div class="eq">Converse: if a²+b²=c² → ∠C=90°</div>
+      </div>
+
+      <div class="formula-card">
+        <div class="title">📦 Mensuration 求积法</div>
+        <div class="eq">Cone V = ⅓πr²h</div>
+        <div class="eq">Sphere V = ⁴⁄₃πr³</div>
+        <div class="eq">Cylinder V = πr²h</div>
+        <div class="eq">Pyramid V = ⅓ × base area × h</div>
+        <div class="eq">Area ratio = k², Vol ratio = k³</div>
+      </div>
+
+      <div class="formula-card">
+        <div class="title">📊 Statistics 统计</div>
+        <div class="eq">Mean x̄ = Σx/n</div>
+        <div class="eq">Median = middle value (sorted)</div>
+        <div class="eq">Mode = most frequent value</div>
+        <div style="font-size:0.75rem;color:var(--text-dim);">Stem-and-leaf: stem=十位, leaf=个位</div>
+      </div>
+
+      <div class="formula-card">
+        <div class="title">🎲 Probability 概率</div>
+        <div class="eq">P(E) = n(E)/n(S)</div>
+        <div class="eq">Expected value = Σ[value × P]</div>
+        <div class="eq">Expected frequency = P × n</div>
+        <div class="eq">P(A and B) = P(A) × P(B) (independent)</div>
+      </div>
+
+      <div class="formula-card">
+        <div class="title">📐 Triangle Centres 三角形四心</div>
+        <div style="font-size:0.78rem;">
+          <strong>Centroid 重心</strong> → 中线交点，2:1<br>
+          <strong>Incentre 内心</strong> → 角平分线交点，内切圆圆心<br>
+          <strong>Circumcentre 外心</strong> → 垂直平分线交点，外接圆圆心<br>
+          <strong>Orthocentre 垂心</strong> → 高的交点
+        </div>
+      </div>
+
+      <div class="formula-card">
+        <div class="title">📐 Similar Figures 相似形</div>
+        <div class="eq">ΔABC ~ ΔXYZ (AAA / SAS / SSS)</div>
+        <div style="font-size:0.78rem;color:var(--text-dim);">
+          Length ratio = k<br>
+          Area ratio = k²<br>
+          Volume ratio = k³
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ====== 08 COMMON TRAPS ====== -->
+<div class="section">
+  <div class="section-header">
+    <span class="num">08</span>
+    <h2>Common Traps 常见扣分陷阱</h2>
+  </div>
+  <div class="section-body">
+    <ul class="trap-list">
+      <li>
+        <span class="trap-title">🚫 只写答案不写步骤</span><br>
+        后果：<strong>M 分全部丢失</strong>。Section B 必须展示公式→代入→计算→答案四步。<br>
+        <span class="trap-fix">✅ 即使答案很简单也写「By the formula... = ...」</span>
+      </li>
+      <li>
+        <span class="trap-title">🚫 因式分解不彻底</span><br>
+        后果：漏提公因式（如 4x²−4 = 4(x²−1) 未再做 (x+1)(x−1)）— 扣 A 分。<br>
+        <span class="trap-fix">✅ 分解后自查：每个因式还能再分吗？HCF 提干净了吗？</span>
+      </li>
+      <li>
+        <span class="trap-title">🚫 不等式乘除负数不反转符号</span><br>
+        后果：−2x > 6 → x < −3（不是 x > −3），整题 0 分。<br>
+        <span class="trap-fix">✅ 每次遇到负系数立即画箭头提醒自己</span>
+      </li>
+      <li>
+        <span class="trap-title">🚫 三角形四心概念混淆</span><br>
+        后果：把 centroid 的性质（2:1）用到 orthocentre 上 — 全错。<br>
+        <span class="trap-fix">✅ 记忆口诀：Centroid→median→2:1 / Incentre→angle bisector→内切圆 / Circumcentre→⊥ bisector→外接圆 / Orthocentre→altitude</span>
+      </li>
+      <li>
+        <span class="trap-title">🚫 Bearing 方位角混淆</span><br>
+        后果：把 bearing 当成普通角度，没从正北顺时针量。<br>
+        <span class="trap-fix">✅ Bearing = clockwise angle from North (000° to 360°)，三位数表示</span>
+      </li>
+      <li>
+        <span class="trap-title">🚫 复利息 compounding period 搞错</span><br>
+        后果：半年复利时忘记 r% ÷ 2 和 n × 2。<br>
+        <span class="trap-fix">✅ 审题圈出 compounding period，换算 r 和 n</span>
+      </li>
+      <li>
+        <span class="trap-title">🚫 坐标几何斜率公式分母为零</span><br>
+        后果：竖直线 m = undefined，用了 (y₂−y₁)/(x₂−x₁) 直接除零。<br>
+        <span class="trap-fix">✅ 先判断 x₁ = x₂？→ 垂直线，m undefined</span>
+      </li>
+      <li>
+        <span class="trap-title">🚫 Similar Solids 面积比/体积比混淆</span><br>
+        后果：length ratio = 2 → area ratio 写成 2（应该是 4），volume ratio 写成 4（应该是 8）。<br>
+        <span class="trap-fix">✅ 面积比 = k²，体积比 = k³ — 双重确认指数</span>
+      </li>
+      <li>
+        <span class="trap-title">🚫 新考点 ½ab sin C 用错条件</span><br>
+        后果：不知道什么时候用这个公式，乱套。<br>
+        <span class="trap-fix">✅ 当已知两边及其夹角时使用；如果知道三边，先用 Cosine Formula 求角</span>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- ====== 09 REVISION PLAN ====== -->
+<div class="section">
+  <div class="section-header">
+    <span class="num">09</span>
+    <h2>28-Day Revision Plan 复习计划</h2>
+  </div>
+  <div class="section-body">
+
+    <div style="margin-bottom:16px;">
+      <strong style="color:var(--accent);">📅 Phase 1: Foundation (Day 1–9) · 基础夯实</strong>
+      <span style="font-size:0.78rem;color:var(--text-dim);"> (5/16–5/24)</span>
+    </div>
+    <div class="plan-grid">
+      <div class="plan-card">
+        <div class="day-num">D1</div>
+        <h4>Algebra I: Indices & Factorization</h4>
+        <div class="focus">Ch.1–2 · 权重 ~18</div>
+        <div class="tasks">✓ Laws of Indices (含 Fractional Indices) ✓ Factorization (提取+十字+恒等式) ✓ 操卷: 2425 Q1–3</div>
+      </div>
+      <div class="plan-card">
+        <div class="day-num">D2</div>
+        <h4>Algebra II: Fractions & Formulae</h4>
+        <div class="focus">Ch.1,4,5 · 权重 ~18</div>
+        <div class="tasks">✓ Algebraic Fractions 通分约分 ✓ Change of Subject ✓ Linear Inequalities ✓ 操卷: 2324 Q3–6</div>
+      </div>
+      <div class="plan-card">
+        <div class="day-num">D3</div>
+        <h4>Percentages & Interest</h4>
+        <div class="focus">Ch.3 · 权重 ~7</div>
+        <div class="tasks">✓ % Change (successive) ✓ Simple & Compound Interest ✓ 不同 compounding period ✓ 操卷: 2425 Q6–7</div>
+      </div>
+      <div class="plan-card">
+        <div class="day-num">D4</div>
+        <h4>Statistics & Probability</h4>
+        <div class="focus">Ch.6 · 权重 ~11</div>
+        <div class="tasks">✓ Mean/Median/Mode ✓ Stem-and-leaf ✓ Probability two-step ✓ Expected Value ✓ 操卷: 2223 Q3,8,9</div>
+      </div>
+      <div class="plan-card">
+        <div class="day-num">D5</div>
+        <h4>Geometry I: Triangles</h4>
+        <div class="focus">Ch.7 · 权重 ~10</div>
+        <div class="tasks">✓ Congruence (SSS/SAS/ASA/AAS/RHS) ✓ Similarity (AAA/SAS/SSS) ✓ Triangle Centres (四心) ✓ Intercept Theorem</div>
+      </div>
+      <div class="plan-card">
+        <div class="day-num">D6</div>
+        <h4>Geometry II: Quadrilaterals</h4>
+        <div class="focus">Ch.8 · 权重 ~10</div>
+        <div class="tasks">✓ Parallelogram properties & tests ✓ Rhombus/Rectangle/Square ✓ Trapezium ✓ Proof questions 操卷: 2324 Q10</div>
+      </div>
+      <div class="plan-card">
+        <div class="day-num">D7</div>
+        <h4>Trigonometry I: Relations</h4>
+        <div class="focus">Ch.9 · 权重 ~16</div>
+        <div class="tasks">✓ sin/cos/tan definitions ✓ Special angles (30°/45°/60°) ✓ sin²θ+cos²θ=1 ✓ Proving identities ✓ 操卷: 2425 Q10</div>
+      </div>
+      <div class="plan-card">
+        <div class="day-num">D8</div>
+        <h4>Trigonometry II: Applications</h4>
+        <div class="focus">Ch.11 · 权重 ~16</div>
+        <div class="tasks">✓ Angle of Elevation/Depression ✓ Bearing (方位角) ✓ Gradient ✓ 操卷: 2425 Q11 (含 Cosine Formula)</div>
+      </div>
+      <div class="plan-card">
+        <div class="day-num">D9</div>
+        <h4>Coordinate Geometry</h4>
+        <div class="focus">Ch.13 · 权重 ~13</div>
+        <div class="tasks">✓ Distance, Slope, Midpoint ✓ Line Equation ✓ Section Formula ✓ Triangle Area in coordinates ✓ 操卷: 2425 Q13</div>
+      </div>
+    </div>
+
+    <div style="margin: 22px 0 16px;">
+      <strong style="color:var(--accent2);">🔥 Phase 2: New Topics & Integration (Day 10–18) · 新考点突破+综合</strong>
+      <span style="font-size:0.78rem;color:var(--text-dim);"> (5/25–6/2)</span>
+    </div>
+    <div class="plan-grid">
+      <div class="plan-card">
+        <div class="day-num">D10</div>
+        <h4>NEW: Fractional Indices</h4>
+        <div class="focus">新增考点 · 必出</div>
+        <div class="tasks">✓ a^(m/n) = ⁿ√(aᵐ) ✓ 所有指数定律扩展到分数指数 ✓ 课本例题+作业题全部重做</div>
+      </div>
+      <div class="plan-card">
+        <div class="day-num">D11</div>
+        <h4>NEW: Sine Formula & Area</h4>
+        <div class="focus">新增考点 · 必出</div>
+        <div class="tasks">✓ a/sin A = b/sin B = c/sin C ✓ Area = ½ab·sin C ✓ 什么时候用 Sine Formula vs Cosine Formula ✓ 课本例题</div>
+      </div>
+      <div class="plan-card">
+        <div class="day-num">D12</div>
+        <h4>NEW: Cosine Formula + 3D</h4>
+        <div class="focus">新增考点 · 必出</div>
+        <div class="tasks">✓ a² = b²+c²−2bc·cos A ✓ 3D Figures & Cross Sections ✓ 结合 Sine/Cosine Formula 解立体问题</div>
+      </div>
+      <div class="plan-card">
+        <div class="day-num">D13</div>
+        <h4>Mensuration 求积法</h4>
+        <div class="focus">Ch.10,12 · 权重 ~16</div>
+        <div class="tasks">✓ Cone/Sphere/Cylinder/Pyramid volume ✓ Similar solids ✓ Frustum ✓ Water displacement ✓ 操卷: 2425 Q12</div>
+      </div>
+      <div class="plan-card">
+        <div class="day-num">D14</div>
+        <h4>Full MC Drill 选择题特训</h4>
+        <div class="focus">Section A · 40 marks</div>
+        <div class="tasks">✓ 计时 20 min 做 2425 MC ✓ 分析错题 ✓ 针对性复习薄弱 topic ✓ 再做 2324 MC 计时</div>
+      </div>
+      <div class="plan-card">
+        <div class="day-num">D15</div>
+        <h4>Full Paper: 2223 Past Paper</h4>
+        <div class="focus">Full Mock · 1hr 45min</div>
+        <div class="tasks">✓ 完整计时做 2223 2nd Term Exam ✓ 自批改 ✓ 错题分类（是粗心/不会/时间不够？）</div>
+      </div>
+      <div class="plan-card">
+        <div class="day-num">D16</div>
+        <h4>Full Paper: 2324 Past Paper</h4>
+        <div class="focus">Full Mock · 1hr 45min</div>
+        <div class="tasks">✓ 完整计时做 2324 2nd Term Exam ✓ 自批改 ✓ 对比 2223 找出重复错误模式</div>
+      </div>
+      <div class="plan-card">
+        <div class="day-num">D17</div>
+        <h4>Full Paper: 2425 Past Paper</h4>
+        <div class="focus">Full Mock · 1hr 45min</div>
+        <div class="tasks">✓ 完整计时做 2425 2nd Term Exam ✓ 自批改 ✓ 重点分析 New Topics 部分的答题质量</div>
+      </div>
+      <div class="plan-card">
+        <div class="day-num">D18</div>
+        <h4>Weak Point Attack 弱点攻坚</h4>
+        <div class="focus">Customized · 查漏补缺</div>
+        <div class="tasks">✓ 整理三套卷子错题 ✓ 按 topic 归类 ✓ 针对最弱 3 个 topic 重做课本练习 ✓ 默写所有公式</div>
+      </div>
+    </div>
+
+    <div style="margin: 22px 0 16px;">
+      <strong style="color:var(--accent3);">🎯 Phase 3: Final Sprint (Day 19–28) · 冲刺+保温</strong>
+      <span style="font-size:0.78rem;color:var(--text-dim);"> (6/3–6/12)</span>
+    </div>
+    <div class="plan-grid">
+      <div class="plan-card">
+        <div class="day-num">D19</div>
+        <h4>MC Speed Drill ×2</h4>
+        <div class="focus">Speed + Accuracy</div>
+        <div class="tasks">✓ 两套 MC (2223+2425) 计时各 18 min ✓ Target: 36+/40 each</div>
+      </div>
+      <div class="plan-card">
+        <div class="day-num">D20</div>
+        <h4>Geometry Proof Review</h4>
+        <div class="focus">几何证明专项</div>
+        <div class="tasks">✓ Review all theorems (定理列表过一遍) ✓ 重做 3 套卷子的几何证明题 ✓ 背诵 abbreviation</div>
+      </div>
+      <div class="plan-card">
+        <div class="day-num">D21</div>
+        <h4>Trig + New Topics 综合</h4>
+        <div class="focus">重点 + 新考点</div>
+        <div class="tasks">✓ 正弦/余弦公式综合题 ✓ ½ab sin C 面积 ✓ 课本新考点所有例题重做</div>
+      </div>
+      <div class="plan-card">
+        <div class="day-num">D22</div>
+        <h4>Coordinate + Mensuration</h4>
+        <div class="focus">大题综合</div>
+        <div class="tasks">✓ Co-Geo Q13 类型题 (Section formula + Area) ✓ Mensuration Frustum/Similar solids 综合</div>
+      </div>
+      <div class="plan-card">
+        <div class="day-num">D23</div>
+        <h4>Formula Dictation 默写</h4>
+        <div class="focus">零失误</div>
+        <div class="tasks">✓ 默写全部公式武器库 ✓ 对照 checklist 查漏 ✓ 特别关注新公式 (Sine/Cosine Law)</div>
+      </div>
+      <div class="plan-card">
+        <div class="day-num">D24</div>
+        <h4>Trap Review 陷阱回顾</h4>
+        <div class="focus">避免低级错误</div>
+        <div class="tasks">✓ 复习 08 Common Traps ✓ 回顾所有错题中的 trap ✓ 制作「我的易错清单」考前看</div>
+      </div>
+      <div class="plan-card">
+        <div class="day-num">D25</div>
+        <h4>Section B Only Drill</h4>
+        <div class="focus">60 marks</div>
+        <div class="tasks">✓ 只做 2425 Section B 计时 80 min ✓ 重点：展示完整步骤确保 M 分 ✓ 自批改</div>
+      </div>
+      <div class="plan-card">
+        <div class="day-num">D26</div>
+        <h4>Final Mock: Mixed Paper</h4>
+        <div class="focus">模拟实战</div>
+        <div class="tasks">✓ 混合三年题目自制一套卷 ✓ 完整计时 1hr 45min ✓ 模拟考试环境</div>
+      </div>
+      <div class="plan-card">
+        <div class="day-num">D27</div>
+        <h4>Light Review 轻复习</h4>
+        <div class="focus">Physics Exam Day</div>
+        <div class="tasks">✓ 仅看公式卡+错题清单 ✓ 不做新题 ✓ 早睡！（6/10 Physics）</div>
+      </div>
+      <div class="plan-card" style="border-color: var(--accent2);">
+        <div class="day-num" style="background:var(--accent2);">D28</div>
+        <h4>Final Warm-Up 考前热身</h4>
+        <div class="focus">6/11 English → 6/12 Maths</div>
+        <div class="tasks">✓ 英语考试后做 5 道基础 MC 保持手感 ✓ 过一遍「我的易错清单」 ✓ 检查计算器电池 ✓ 10:30PM 前睡觉</div>
+      </div>
+    </div>
+
+    <div class="highlight-box green" style="margin-top:18px;">
+      <strong>🏁 复习原则：</strong><br>
+      ① 每天至少完成计划中列出的 tasks，有余力可以加练。<br>
+      ② 操卷一定要计时 — 不計時的操卷是假的。<br>
+      ③ 错题必须分析原因（粗心？不会？时间不够？），同类错误不犯第二次。<br>
+      ④ D27–D28 是 Physics + English 考試日，Maths 只需轻复习保持手感。<br>
+      ⑤ 考试前一天晚上：检查计算器、铅笔、橡皮、直尺、量角器、圆规。
+    </div>
+  </div>
+</div>
+
+<!-- ====== FOOTER ====== -->
+<div style="text-align:center;padding:30px;color:var(--text-dim);font-size:0.75rem;">
+  Generated 2026-05-15 · Data from Tsuen Wan Government Secondary School 2223/2324/2425 Past Papers & Teacher Announcements<br>
+  ⚡ Good luck on 6/12 — you've got this. ⚡
+</div>
+
+</div>
+
+</body>
+</html>

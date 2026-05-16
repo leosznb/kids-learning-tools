@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>踩分點解碼器 — 中文科閱讀答題訓練</title>
+<style>
+:root {
+  --bg: #fafaf9; --text: #1c1c1c; --muted: #777;
+  --accent: #c0392b; --accent-soft: #fef0f0;
+  --border: #e0e0dc; --card-bg: #fff;
+  --correct: #1a7a2e; --correct-bg: #e8f5e9;
+  --miss: #c0392b; --miss-bg: #fef0f0;
+  --radius: 6px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+  background: var(--bg); color: var(--text); line-height: 1.7;
+  padding: 24px 16px 60px; max-width: 760px; margin: 0 auto;
+  -webkit-font-smoothing: antialiased;
+}
+h1 { font-size: 1.5em; font-weight: 800; margin: 0 0 4px; }
+.subtitle { color: var(--muted); font-size: 0.92em; margin: 0 0 24px; }
+
+/* Tabs */
+.tabs { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 20px; }
+.tab {
+  padding: 10px 18px; border: 1px solid var(--border); border-radius: 20px;
+  background: #fff; font-size: 0.88em; cursor: pointer; user-select: none;
+  transition: all 0.15s; white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+}
+.tab:active { background: #e8e8e4; }
+.tab.active { background: #1c1c1c; color: #fff; border-color: #1c1c1c; }
+
+/* Cards */
+.card {
+  background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 18px 20px; margin: 0 0 16px;
+}
+.q-label {
+  display: inline-block; background: var(--accent); color: #fff;
+  font-size: 0.75em; font-weight: 700; padding: 2px 10px; border-radius: 10px;
+  margin: 0 0 8px;
+}
+.answer-text {
+  background: #f9f9f6; padding: 14px 16px; border-radius: var(--radius);
+  font-size: 0.95em; line-height: 1.8; margin: 8px 0;
+}
+.answer-text.student { border-left: 3px solid #e0c040; }
+.answer-text.model { border-left: 3px solid var(--correct); }
+
+/* Score annotations - click to toggle (touch+desktop) */
+.score-hit {
+  background: var(--correct-bg); border-bottom: 2px solid var(--correct);
+  padding: 2px 3px; border-radius: 2px; cursor: pointer;
+  position: relative; font-weight: 600; display: inline-block;
+  -webkit-tap-highlight-color: transparent; user-select: none;
+  transition: background 0.15s;
+}
+.score-hit:active { background: #bfdebf; }
+.score-hit .tip-bubble {
+  display: none; position: absolute; bottom: calc(100% + 8px); left: 50%;
+  transform: translateX(-50%); z-index: 100;
+  background: #1c1c1c; color: #fff; font-size: 0.8em; font-weight: 400;
+  padding: 6px 14px; border-radius: 6px; white-space: nowrap;
+  pointer-events: none; white-space: nowrap;
+}
+.score-hit .tip-bubble::after {
+  content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+  border: 6px solid transparent; border-top-color: #1c1c1c;
+}
+.score-hit.show-tip .tip-bubble { display: block; }
+.score-hit.show-tip { background: #bfdebf; }
+
+.score-miss {
+  background: var(--miss-bg); border-bottom: 2px dashed var(--miss);
+  padding: 2px 3px; border-radius: 2px; cursor: pointer;
+  position: relative; display: inline-block;
+  -webkit-tap-highlight-color: transparent; user-select: none;
+}
+.score-miss .tip-bubble {
+  display: none; position: absolute; bottom: calc(100% + 8px); left: 50%;
+  transform: translateX(-50%); z-index: 100;
+  background: #1c1c1c; color: #fff; font-size: 0.8em; font-weight: 400;
+  padding: 6px 14px; border-radius: 6px; white-space: nowrap;
+  pointer-events: none;
+}
+.score-miss .tip-bubble::after {
+  content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+  border: 6px solid transparent; border-top-color: #1c1c1c;
+}
+.score-miss.show-tip .tip-bubble { display: block; }
+.score-miss.show-tip { background: #fdd; }
+
+.comparison {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0;
+}
+@media (max-width: 600px) { .comparison { grid-template-columns: 1fr; } }
+
+.footnote {
+  font-size: 0.82em; color: var(--muted); margin: 32px 0 0;
+  padding: 16px; background: #fff; border: 1px solid var(--border); border-radius: var(--radius);
+}
+.footnote strong { color: var(--text); }
+
+@media (hover: hover) {
+  .score-hit:hover .tip-bubble { display: block; }
+  .score-hit:hover { background: #bfdebf; }
+  .score-miss:hover .tip-bubble { display: block; }
+  .score-miss:hover { background: #fdd; }
+}
+@media print {
+  body { padding: 0; font-size: 11pt; }
+  .tabs { display: none; }
+  .card { break-inside: avoid; border: none; padding: 8px 0; }
+  .tip-bubble { display: none !important; }
+}
+</style>
+</head>
+<body>
+
+<h1>🎯 踩分點解碼器</h1>
+<p class="subtitle">60→80分的關鍵：把話說到「計分點」的深度</p>
+
+<div class="tabs" id="tabs"></div>
+
+<div id="content"></div>
+
+<div class="footnote">
+  <strong>💡 使用提示</strong><br>
+  ① 先遮住右邊「滿分答案」，看左邊「學生常寫」→ 你能說出它漏了什麼嗎？<br>
+  ② <strong>點擊黃綠色底線的字</strong>，可以看到每個計分點的得分要訣<br>
+  ③ 每個綠色底線 = 1個計分點，寫到才得分<br>
+  ④ 在 iPad 上點擊底線字即可顯示說明；桌面用滑鼠懸停
+</div>
+
+<script>
+const DATA = [
+  {
+    id: 'struct',
+    title: '結構作用',
+    subtitle: '「承上啟下」只寫四個字 → 0分',
+    examples: [{
+      q: '2324年 Q4（以畫為喻）：作者如何使讀者不會誤把主題視作談繪畫？（4分）',
+      student: '作者在文章開頭和結尾都提醒讀者，這篇文章是借繪畫來比喻寫作。',
+      model: [
+        {t:'文章開首即點明「以畫為喻」這一題目', tip:'1分：點出開頭手法'},
+        {t:'提醒讀者文章是借繪畫說明寫作道理', tip:'1分：具體寫出提醒內容'},
+        {t:'文末又重申文章主題', tip:'1分：點出結尾手法'},
+        {t:'前後呼應，使讀者清楚全文用意', tip:'1分：說明效果，不能只寫手法名稱'}
+      ]
+    },{
+      q: '常見乙部題型：某段在結構上的作用是什麼？（4分）',
+      student: '這段是承上啟下的過渡段。',
+      model: [
+        {t:'起承上啟下的過渡作用', tip:'1分：必須先說出結構作用的名稱'},
+        {t:'「承上」總結了上文______的內容', tip:'1分：必須寫出承上的具體內容'},
+        {t:'「啟下」引出下文______的論述', tip:'1分：必須寫出啟下的具體內容'},
+        {t:'使文章結構嚴密，層次分明', tip:'1分：必須評價效果'}
+      ]
+    }]
+  },
+  {
+    id: 'argue',
+    title: '論證方法',
+    subtitle: '只寫名稱不寫作用 → 扣一半',
+    examples: [{
+      q: '《最苦與最樂》：文中如何論證「未盡責任是最大苦事」？（3分）',
+      student: '作者用了比喻論證。',
+      model: [
+        {t:'運用比喻論證', tip:'1分：說出論證方法名稱'},
+        {t:'以「千斤重擔壓在肩頭」比喻未盡責任帶來的心理壓力', tip:'1分：說出具體比喻（什麼比什麼）'},
+        {t:'生動形象地說明了責任之重，使讀者易於體會', tip:'1分：說出效果，不能只寫名稱'}
+      ]
+    },{
+      q: '《最苦與最樂》：文中另一種論證方法並說明。（3分）',
+      student: '作者也用了舉例論證來證明自己的觀點。',
+      model: [
+        {t:'採用對比論證', tip:'1分：說出方法名稱'},
+        {t:'以「欠債未還、受恩未報、得罪人未賠禮」為例', tip:'1分：舉出具體例子'},
+        {t:'從日常經驗出發，使論點更具說服力', tip:'1分：說明效果'}
+      ]
+    }]
+  },
+  {
+    id: 'theme',
+    title: '主旨歸納',
+    subtitle: '只寫關鍵詞 → 漏邏輯鏈',
+    examples: [{
+      q: '2223年 Q5：《最苦與最樂》全文主旨是什麼？（5分）',
+      student: '本文說明了責任很重要，人應該負責任。',
+      model: [
+        {t:'「未盡責任是人生最大的痛苦」', tip:'1分：先定義「苦」'},
+        {t:'「完成責任是人生最大的快樂」', tip:'1分：再定義「樂」'},
+        {t:'從苦到樂的關鍵在於「盡」', tip:'1分：苦→樂的轉化機制'},
+        {t:'勸勉讀者應勇於承擔責任', tip:'1分：結論/立場'},
+        {t:'不要逃避責任', tip:'1分：完整主旨鏈'}
+      ]
+    },{
+      q: '《賣柑者言》的主旨是什麼？（4分）',
+      student: '文章諷刺了那些金玉其外、敗絮其中的官員。',
+      model: [
+        {t:'借賣柑者之口', tip:'1分：點出敘事角度'},
+        {t:'以「金玉其外，敗絮其中」的柑比喻徒有威儀外表、實則尸位素餐的官員', tip:'1分：說出具體比喻對象'},
+        {t:'揭露了元末官場表裡不一的腐敗現實', tip:'1分：說出社會背景/諷刺目的'},
+        {t:'諷刺手法辛辣', tip:'1分：評價寫作手法'}
+      ]
+    }]
+  },
+  {
+    id: 'open',
+    title: '開放題',
+    subtitle: '只有立場 → 內容分最多拿一半',
+    examples: [{
+      q: '乙部常見：「你是否同意作者的說法？試結合生活經驗說明。」（4分）',
+      student: '我同意作者的說法，因為這個觀點很有道理。在現實生活中也經常發生這樣的事。',
+      model: [
+        {t:'我同意作者的說法', tip:'1分：明確立場'},
+        {t:'作者認為憂患環境能促人成長，這確有道理', tip:'1分：結合文章的具體觀點'},
+        {t:'例如我在學習中遇到難題時，起初覺得辛苦，但克服後能力明顯提升', tip:'1分：舉出自己的生活例子'},
+        {t:'因此，適度的挑戰確實有助個人進步', tip:'1分：回扣立場，形成閉合'}
+      ]
+    }]
+  },
+  {
+    id: 'trans',
+    title: '文言翻譯',
+    subtitle: '大意對但漏關鍵字 → 逐字失分',
+    examples: [{
+      q: '翻譯：令初下，群臣進諫，門庭若市。',
+      student: '命令下達之後，很多大臣都來進諫，門口很多人。',
+      model: [
+        {t:'剛', tip:'0.5分：初＝剛'},
+        {t:'時', tip:'0.5分：初下＝剛下達時'},
+        {t:'許多', tip:'0.5分：群＝眾多'},
+        {t:'像集市一樣', tip:'1分：若市＝如集市，比喻不可漏'}
+      ]
+    },{
+      q: '翻譯：金玉其外，敗絮其中。',
+      student: '外面是金和玉，裡面是爛棉花。',
+      model: [
+        {t:'像', tip:'0.5分：比喻詞不可漏'},
+        {t:'華美', tip:'0.5分：≠昂貴≠漂亮'},
+        {t:'卻', tip:'0.5分：轉折詞'},
+        {t:'破爛', tip:'0.5分：≠爛≠壞'}
+      ]
+    }]
+  }
+];
+
+let currentIdx = 0;
+
+function renderTabs() {
+  document.getElementById('tabs').innerHTML = DATA.map((d, i) =>
+    `<span class="tab${i === currentIdx ? ' active' : ''}" onclick="switchTab(${i})" role="button" aria-pressed="${i === currentIdx}">${d.title}</span>`
+  ).join('');
+}
+
+function renderContent() {
+  const d = DATA[currentIdx];
+  let html = `<h2 style="font-size:1.15em;margin:0 0 4px;">${d.title}</h2>
+    <p style="color:var(--muted);font-size:0.9em;margin:0 0 16px;">⚠️ ${d.subtitle}</p>`;
+  d.examples.forEach((ex, ei) => {
+    // Build model answer with clickable score hits
+    let modelHtml = ex.model.map((m, mi) => {
+      return `<span class="score-hit" onclick="toggleTip(event)" role="button" aria-label="計分點">
+        ${m.t}<span class="tip-bubble">${m.tip}</span></span>`;
+    }).join('，');
+
+    html += `<div class="card">
+      <span class="q-label">例${ei+1}</span>
+      <p style="margin:6px 0 10px;font-size:0.92em;"><strong>📝 ${ex.q}</strong></p>
+      <div class="comparison">
+        <div>
+          <div style="font-size:0.8em;color:var(--muted);font-weight:700;margin:0 0 4px;">❌ 學生常寫（60分段）</div>
+          <div class="answer-text student">${ex.student}</div>
+        </div>
+        <div>
+          <div style="font-size:0.8em;color:var(--correct);font-weight:700;margin:0 0 4px;">✅ 滿分答案（點擊底線看計分點 👇）</div>
+          <div class="answer-text model">${modelHtml}</div>
+        </div>
+      </div>
+    </div>`;
+  });
+  document.getElementById('content').innerHTML = html;
+}
+
+function toggleTip(e) {
+  e.stopPropagation();
+  e.preventDefault();
+  const el = e.currentTarget;
+  el.classList.toggle('show-tip');
+  // Auto-close after 3 seconds on touch devices
+  if (el.classList.contains('show-tip') && 'ontouchstart' in window) {
+    setTimeout(() => el.classList.remove('show-tip'), 3000);
+  }
+}
+
+// Close all tips when clicking elsewhere
+document.addEventListener('click', function(e) {
+  if (!e.target.classList.contains('score-hit') && !e.target.classList.contains('score-miss')) {
+    document.querySelectorAll('.show-tip').forEach(el => el.classList.remove('show-tip'));
+  }
+});
+
+function switchTab(i) {
+  currentIdx = i;
+  renderTabs();
+  renderContent();
+}
+
+renderTabs();
+renderContent();
+</script>
+</body>
+</html>

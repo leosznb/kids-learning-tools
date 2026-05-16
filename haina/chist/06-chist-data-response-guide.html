@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>中史資料題 — 答題框架教學</title>
+<style>
+:root {
+  --bg: #fafaf7; --card: #fff; --fg: #1a1a1a; --muted: #78716c;
+  --red: #c41e3a; --red-bg: #fef2f2; --red-line: #fecaca;
+  --blue: #2563eb; --blue-bg: #eff6ff;
+  --green: #16a34a; --green-bg: #f0fdf4;
+  --amber: #d97706; --amber-bg: #fffbeb;
+  --purple: #7c3aed;
+  --radius: 14px;
+  --font: -apple-system, "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: var(--font); background: var(--bg); color: var(--fg);
+  line-height: 1.72; max-width: 780px; margin: 0 auto; padding: 36px 20px 80px;
+}
+.hero { text-align: center; margin-bottom: 36px; }
+.hero .icon { font-size: 3rem; margin-bottom: 6px; }
+.hero h1 { font-size: 1.9rem; font-weight: 800; letter-spacing: -0.03em; }
+.hero .meta { font-size: 0.88rem; color: var(--muted); margin-top: 6px; }
+
+.sec { margin-bottom: 42px; }
+.sec-title { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+.sec-title .s-icon { font-size: 1.4rem; width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; background: var(--card); border-radius: 10px; border: 1px solid #e5e5e0; }
+.sec-title h2 { font-size: 1.2rem; font-weight: 700; }
+
+.card { background: var(--card); border: 1px solid #e5e5e0; border-radius: var(--radius); padding: 20px 24px; margin-bottom: 14px; }
+.card.red { border-left: 4px solid var(--red); }
+.card.green { border-left: 4px solid var(--green); }
+.card.blue { border-left: 4px solid var(--blue); }
+.card.amber { border-left: 4px solid var(--amber); }
+
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 540px) { .two-col { grid-template-columns: 1fr; } }
+
+/* Steps */
+.steps { list-style: none; counter-reset: step; }
+.steps li { counter-increment: step; padding: 14px 0 14px 44px; position: relative; font-size: 0.9rem; border-bottom: 1px solid #f0f0ec; }
+.steps li:last-child { border-bottom: none; }
+.steps li::before { content: counter(step); position: absolute; left: 0; top: 14px; width: 28px; height: 28px; background: var(--red); color: #fff; border-radius: 99px; text-align: center; line-height: 28px; font-size: 0.8rem; font-weight: 700; }
+.steps li .step-label { display: block; font-weight: 700; font-size: 0.92rem; margin-bottom: 2px; }
+.steps li .step-detail { color: var(--muted); font-size: 0.85rem; }
+
+/* Table */
+.tbl { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin: 10px 0; }
+.tbl th { background: #f5f5f2; text-align: left; padding: 9px 12px; font-weight: 600; font-size: 0.75rem; letter-spacing: 0.04em; color: var(--muted); }
+.tbl td { padding: 9px 12px; border-bottom: 1px solid #f0f0ec; vertical-align: top; }
+.tbl tr:last-child td { border-bottom: none; }
+
+/* Type cards */
+.type-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin: 14px 0; }
+@media (max-width: 640px) { .type-row { grid-template-columns: 1fr; } }
+.type-card { background: var(--card); border: 1px solid #e5e5e0; border-radius: var(--radius); padding: 20px 18px; text-align: center; }
+.type-card .t-icon { font-size: 2.2rem; margin-bottom: 6px; }
+.type-card .t-name { font-weight: 700; font-size: 0.95rem; margin-bottom: 4px; }
+.type-card .t-features { font-size: 0.8rem; color: var(--muted); line-height: 1.6; }
+
+/* Do / Don't */
+.do-dont { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 12px 0; }
+@media (max-width: 500px) { .do-dont { grid-template-columns: 1fr; } }
+.do-box { padding: 14px 18px; border-radius: 10px; font-size: 0.85rem; }
+.do-box.do { background: var(--green-bg); border: 1px solid #bbf7d0; }
+.do-box.dont { background: var(--red-bg); border: 1px solid var(--red-line); }
+.do-box h4 { margin-bottom: 4px; font-size: 0.82rem; }
+
+/* Frame visual */
+.frame-box { background: var(--card); border: 2px dashed #d0d0d0; border-radius: var(--radius); padding: 22px 24px; margin: 14px 0; }
+.frame-box .f-label { font-size: 0.73rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); font-weight: 700; margin-bottom: 8px; }
+.frame-box .f-blank { display: inline-block; min-width: 60px; border-bottom: 2px dashed var(--red); padding: 0 6px; color: var(--red); font-weight: 600; margin: 0 2px; }
+
+/* Answer reveal */
+.answer-box { background: #fafaf7; border: 1px solid #e5e5e0; border-radius: 10px; padding: 18px 20px; margin: 12px 0; }
+.answer-box .a-sub { font-weight: 700; font-size: 0.85rem; margin-bottom: 4px; }
+.answer-box .a-text { font-size: 0.86rem; }
+.answer-box .a-score { display: inline-block; background: var(--green); color: #fff; font-size: 0.7rem; font-weight: 700; padding: 1px 8px; border-radius: 99px; margin-left: 6px; }
+
+.note { background: var(--amber-bg); border: 1px solid #fcd34d; border-radius: 10px; padding: 14px 18px; font-size: 0.86rem; margin: 12px 0; }
+.kw { font-weight: 700; background: linear-gradient(180deg, transparent 60%, #fde68a 60%); padding: 0 2px; }
+.bad { color: #dc2626; text-decoration: line-through; text-decoration-color: #fca5a5; }
+.good { color: var(--green); font-weight: 600; }
+
+hr { border: none; border-top: 1px solid #e5e5e0; margin: 28px 0; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="icon">🔍</div>
+  <h1>資料題 · 從零開始</h1>
+  <div class="meta">22–27分 · 三小題 (a)(b)(c) · 三種資料類型 · 一套萬能框架</div>
+</div>
+
+<!-- ═══════════ 1. WHAT IS IT ═══════════ -->
+<div class="sec">
+  <div class="sec-title"><span class="s-icon">📋</span><h2>資料題是什麼</h2></div>
+
+  <div class="card">
+    <p>考試給你一段<strong>歷史資料</strong>（可能是宣傳畫、數據表、文字摘錄），然後問你三個小題 (a)(b)(c)，從簡單到深入。你要做的不是憑空回憶，而是<strong>從資料出發</strong>，一步步分析。</p>
+
+    <table class="tbl" style="margin-top:12px;">
+      <tr><th style="width:40px">小題</th><th style="width:70px">分值</th><th>考什麼</th><th>你的任務</th></tr>
+      <tr><td><strong>(a)</strong></td><td>2–4 分</td><td>資料理解</td><td>用自己的話概括資料內容</td></tr>
+      <tr><td><strong>(b)</strong></td><td>3–6 分</td><td>資料分析</td><td>指出資料特徵＋引用證據說明</td></tr>
+      <tr><td><strong>(c)</strong></td><td>3–6 分</td><td>綜合論述</td><td>跳出資料，用課本知識分析因果／目的／影響</td></tr>
+    </table>
+  </div>
+
+  <div class="type-row">
+    <div class="type-card">
+      <div class="t-icon">🖼️</div>
+      <div class="t-name">宣傳畫／海報</div>
+      <div class="t-features">最常見！<br>考人物關係、政治宣傳目的、時代背景</div>
+    </div>
+    <div class="type-card">
+      <div class="t-icon">📊</div>
+      <div class="t-name">數據表格</div>
+      <div class="t-features">人均GDP、糧產量對比<br>考原因分析和政策影響</div>
+    </div>
+    <div class="type-card">
+      <div class="t-icon">📝</div>
+      <div class="t-name">文字史料</div>
+      <div class="t-features">講話摘錄、歷史記載<br>考史料解讀和背景推斷</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ 2. CORE FRAMEWORK ═══════════ -->
+<div class="sec">
+  <div class="sec-title"><span class="s-icon">🧠</span><h2>核心心法：三層遞進</h2></div>
+
+  <p style="margin-bottom:16px;">資料題的 (a)(b)(c) 不是三個獨立的問題——它們是一條<strong>由淺入深的鏈</strong>。每層都建立在上一層的基礎上。</p>
+
+  <ol class="steps">
+    <li>
+      <span class="step-label">第一層 · 我看到什麼（對應 a 小題）</span>
+      <span class="step-detail">眼睛看到什麼就寫什麼。不要分析、不要解釋、不要加入課本知識。引用資料中的具體細節——數字、人名、文字、畫面元素。</span>
+    </li>
+    <li>
+      <span class="step-label">第二層 · 這說明了什麼（對應 b 小題）</span>
+      <span class="step-detail">從資料細節推斷出結論。必須引用資料作為證據。不是憑空說「二人關係親密」，而是「資料中林彪站在毛身旁、手持《毛主席語錄》，反映二人關係親密」。</span>
+    </li>
+    <li>
+      <span class="step-label">第三層 · 為什麼會這樣（對應 c 小題）</span>
+      <span class="step-detail">跳出資料，運用課本知識。分析歷史背景、因果關係、政策目的。這是唯一需要你「背過的知識」的小題。</span>
+    </li>
+  </ol>
+
+  <div class="note" style="margin-top:16px;">
+    <strong>🔑 最重要的規則</strong>：(a) 和 (b) 的答案必須<strong>來自資料</strong>。如果你在 (a) 或 (b) 寫了資料中沒有的東西，得分可能很低。(c) 才是你展示課本知識的地方。
+  </div>
+</div>
+
+<!-- ═══════════ 3. EACH TYPE STRATEGY ═══════════ -->
+<div class="sec">
+  <div class="sec-title"><span class="s-icon">🎯</span><h2>三種類型 · 各自打法</h2></div>
+
+  <!-- Type 1: Poster -->
+  <h3 style="font-size:1rem; margin:24px 0 10px;">🖼️ 類型一：宣傳畫／海報</h3>
+  <div class="card">
+    <table class="tbl">
+      <tr><th style="width:40px">小題</th><th>你要做的事</th><th>常用句式</th></tr>
+      <tr><td>(a)</td><td>描述畫面中的人物、動作、文字、背景</td><td>「資料中可見______，畫面中有______，下方寫著『______』」</td></tr>
+      <tr><td>(b)</td><td>分析畫面傳達的訊息／人物關係／宣傳目的</td><td>「資料反映______，從______可見______」</td></tr>
+      <tr><td>(c)</td><td>解釋歷史背景或目的（為何畫這張畫？當時發生什麼？）</td><td>「______（事件背景），因此______（繪製目的）」</td></tr>
+    </table>
+
+    <div class="do-dont" style="margin-top:12px;">
+      <div class="do-box do"><h4>✅ 要這樣寫</h4>「資料一顯示林彪站在毛澤東身旁，手持《毛主席語錄》，面帶笑容。反映林彪擁護毛澤東，二人關係親密。」</div>
+      <div class="do-box dont"><h4>❌ 不要這樣寫</h4>「林彪是毛澤東的接班人，後來想奪權。」——這是 (c) 的內容，不能放在 (a) 或 (b)。而且資料裡看不出奪權。</div>
+    </div>
+  </div>
+
+  <!-- Type 2: Data -->
+  <h3 style="font-size:1rem; margin:28px 0 10px;">📊 類型二：數據表格</h3>
+  <div class="card">
+    <table class="tbl">
+      <tr><th style="width:40px">小題</th><th>你要做的事</th><th>常用句式</th></tr>
+      <tr><td>(a)</td><td>讀出數字、做簡單比較（誰高誰低、差多少）</td><td>「資料顯示，______的______是______，與______相比，相差約______倍」</td></tr>
+      <tr><td>(b)</td><td>分析數據反映的問題或趨勢，引用數據作為證據</td><td>「數據反映______（問題／趨勢），從______（具體數據）可見」</td></tr>
+      <tr><td>(c)</td><td>解釋造成數據現象的原因或後果</td><td>「造成此現象的原因包括______……因此______」</td></tr>
+    </table>
+
+    <div class="do-dont" style="margin-top:12px;">
+      <div class="do-box do"><h4>✅ 要這樣寫</h4>「資料顯示1978年中國人均GDP僅為156美元，與日本相差約56倍，與馬來西亞相差約8倍。」</div>
+      <div class="do-box dont"><h4>❌ 不要這樣寫</h4>「中國很窮。」——沒有引用任何數字。評卷老師怎麼知道你看懂了資料？</div>
+    </div>
+  </div>
+
+  <!-- Type 3: Text -->
+  <h3 style="font-size:1rem; margin:28px 0 10px;">📝 類型三：文字史料</h3>
+  <div class="card">
+    <table class="tbl">
+      <tr><th style="width:40px">小題</th><th>你要做的事</th><th>常用句式</th></tr>
+      <tr><td>(a)</td><td>歸納文字的主要內容（誰說了什麼、記錄了什麼事）</td><td>「資料記載了______，指出______」</td></tr>
+      <tr><td>(b)</td><td>分析文字的觀點、立場或史料價值</td><td>「資料反映了______的觀點／立場，從『______（引文）』可見」</td></tr>
+      <tr><td>(c)</td><td>結合背景，分析事件原因或影響</td><td>「______（歷史背景），因此______」</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════ 4. COMMON MISTAKES ═══════════ -->
+<div class="sec">
+  <div class="sec-title"><span class="s-icon">⚠️</span><h2>五大扣分陷阱</h2></div>
+
+  <table class="tbl">
+    <tr><th style="width:30px">#</th><th>錯誤</th><th>為什麼扣分</th><th>正確做法</th></tr>
+    <tr>
+      <td>1</td>
+      <td>(a) 小題就開始分析</td>
+      <td>(a) 只要求概括，不要求分析。提前分析不僅浪費時間，寫錯方向還會誤導後面的答案</td>
+      <td>(a) 只描述資料中<strong>看得見</strong>的內容</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>(b) 寫結論但不引用資料</td>
+      <td>(b) 的得分點一半在結論、一半在<strong>引用證據</strong>。光說「二人關係親密」不引用畫面細節 = 只得一半分</td>
+      <td>每寫一個結論，後面必須跟一句「從______可見」</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>三道小題寫成三道獨立的答案</td>
+      <td>資料題是連貫的——(b) 應該建立在 (a) 的觀察上，(c) 應該建立在 (b) 的分析上。各寫各的顯得思路斷裂</td>
+      <td>讓答案有遞進感：(a) 的內容自然被 (b) 引用，(b) 的結論自然導向 (c)</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>數據題不寫具體數字</td>
+      <td>「相差很大」不給分。「相差約56倍」才給分</td>
+      <td>數據題的 (a) 必須寫出 <strong>至少兩個具體數字</strong></td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>把資料中沒有的內容當成資料寫</td>
+      <td>例如資料是一張1970年的宣傳畫，你在 (a) 寫「林彪死於1971年」——資料根本沒顯示這件事</td>
+      <td>(a)(b) 嚴格守住在資料範圍內；(c) 才用課外知識</td>
+    </tr>
+  </table>
+</div>
+
+<!-- ═══════════ 5. SCORING GUIDE ═══════════ -->
+<div class="sec">
+  <div class="sec-title"><span class="s-icon">📊</span><h2>怎樣的答案能拿滿分</h2></div>
+
+  <p style="margin-bottom:12px;">以下用 <strong>2425 年真題</strong>（林彪宣傳照＋人均GDP表）示範滿分答案應該長什麼樣。</p>
+
+  <div class="card red">
+    <strong>📌 真題還原 · 資料一：林彪與毛澤東的宣傳照片</strong>
+    <p style="font-size:0.84rem;color:var(--muted);margin-top:4px;">照片中林彪站在毛澤東身旁，手持《毛主席語錄》，二人面帶笑容。</p>
+
+    <div class="answer-box" style="margin-top:12px;">
+      <div class="a-sub">(a) 資料一反映了什麼？ <span class="a-score">3分</span></div>
+      <div class="a-text">資料一反映林彪擁護毛主席，二人關係親密。<span class="kw">（1分）</span>林彪因支持發動文化大革命，提升為黨內第二號人物，更被毛澤東選定為接班人。<span class="kw">（2分）</span></div>
+    </div>
+    <div class="answer-box">
+      <div class="a-sub">(b) 援引資料一，說明林彪與毛澤東的關係其後有何變化。 <span class="a-score">6分</span></div>
+      <div class="a-text">二人的關係其後惡化。<span class="kw">（1分）</span>1971年林彪企圖提前取代毛澤東，密謀策動政變，事敗身亡。<span class="kw">（3分）</span>林彪垮台後，四人幫發起「批林批孔」運動批鬥他。<span class="kw">（2分）</span></div>
+    </div>
+    <div class="answer-box">
+      <div class="a-sub">(c) 就你所知，四人幫發起「批林批孔」運動有何目的？ <span class="a-score">3分</span></div>
+      <div class="a-text">四人幫提出批判林彪的同時批判孔子、周公，<span class="kw">（1分）</span>以周公影射周恩來，<span class="kw">（1分）</span>希望藉批林批孔運動打擊周恩來。<span class="kw">（1分）</span></div>
+    </div>
+
+    <p style="font-size:0.82rem;color:var(--muted);margin-top:8px;">👆 留意：(a) 的後半句已經用了課本知識（林彪是接班人），因為這題的 (a) 分值是3分，不只是簡單描述——分數愈高，需要的課本知識愈多。但核心邏輯不變：先講資料內容，再擴展。</p>
+  </div>
+
+  <div class="card blue" style="margin-top:14px;">
+    <strong>📌 真題還原 · 資料二：1978年各國人均GDP對比表</strong>
+    <p style="font-size:0.84rem;color:var(--muted);margin-top:4px;">中國 $156｜日本 $8,800｜馬來西亞 $1,200｜南韓 $1,700</p>
+
+    <div class="answer-box" style="margin-top:12px;">
+      <div class="a-sub">(a) 資料二反映中國經濟處於什麼狀況？ <span class="a-score">4分</span></div>
+      <div class="a-text">中國的人均GDP與其他亞洲國家相比大幅落後。<span class="kw">（2分）</span>例如中國人均GDP與日本相差約56倍，與馬來西亞也相差約8倍。<span class="kw">（2分）</span></div>
+    </div>
+    <div class="answer-box">
+      <div class="a-sub">(b) 為何中國要推行改革開放政策？援引資料二加以說明。 <span class="a-score">4分</span></div>
+      <div class="a-text">中國民眾在1958至1978年整整二十年間收入增加很少，故人均GDP與其他國家相比大為落後。<span class="kw">（2分）</span>因此中國總結經濟建設的經驗，推行改革開放政策，以建設社會主義，提升人民生活水平。<span class="kw">（2分）</span></div>
+    </div>
+    <div class="answer-box">
+      <div class="a-sub">(c) 改革開放初期，中國提出了哪些建設目標？試列舉兩項。 <span class="a-score">3分</span></div>
+      <div class="a-text">建設有中國特色的社會主義<span class="kw">（1.5分）</span>／實現四個現代化<span class="kw">（1.5分）</span>／建設小康社會<span class="kw">（1.5分）</span>（任寫兩項）</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ 6. FRAMEWORK TEMPLATE ═══════════ -->
+<div class="sec">
+  <div class="sec-title"><span class="s-icon">📝</span><h2>萬能答題模板</h2></div>
+
+  <p>把下面模板記在心裡，考試直接套用。填空處換成實際內容。</p>
+
+  <div class="frame-box">
+    <div class="f-label">(a) 資料理解</div>
+    <p style="font-size:0.9rem; line-height:2;">
+      資料<span class="f-blank">一／二</span>顯示<span class="f-blank">（資料的主要內容）</span>。<br>
+      <span style="color:var(--muted);">【如為數據】</span>其中<span class="f-blank">（具體數字對比）</span>。<br>
+      <span style="color:var(--muted);">【如為宣傳畫】</span>畫面中有<span class="f-blank">（人物／動作／文字）</span>。
+    </p>
+  </div>
+
+  <div class="frame-box">
+    <div class="f-label">(b) 資料分析</div>
+    <p style="font-size:0.9rem; line-height:2;">
+      資料反映<span class="f-blank">（從資料推斷的結論）</span>。<br>
+      從<span class="f-blank">（引用資料具體細節）</span>可見，<span class="f-blank">（解釋為何這個細節支持你的結論）</span>。
+    </p>
+  </div>
+
+  <div class="frame-box">
+    <div class="f-label">(c) 綜合論述</div>
+    <p style="font-size:0.9rem; line-height:2;">
+      <span class="f-blank">（歷史背景：當時發生了什麼）</span>，<br>
+      因此<span class="f-blank">（目的／原因／影響）</span>。<br>
+      <span style="color:var(--muted);">【需要時補充】</span>這導致<span class="f-blank">（後續發展或深層影響）</span>。
+    </p>
+  </div>
+</div>
+
+<!-- ═══════════ 7. PRACTICE ═══════════ -->
+<div class="sec">
+  <div class="sec-title"><span class="s-icon">🏋️</span><h2>實戰練習</h2></div>
+
+  <p style="margin-bottom:16px;">下面三組練習題，對應三種資料類型。先自己思考答案（可以在紙上寫），然後對照參考答案。</p>
+
+  <div class="card amber" style="margin-bottom:24px;">
+    <strong>📌 練習一 · 抗美援朝宣傳畫</strong>
+    <p style="font-size:0.84rem;color:var(--muted);margin-top:6px;">資料：1950年代的抗美援朝宣傳畫，畫中中國志願軍戰士高舉旗幟跨過鴨綠江，下方標語寫著「保家衛國」。</p>
+
+    <div class="answer-box" style="margin-top:14px;">
+      <div class="a-sub">(a) 描述資料中的畫面內容。 <span class="a-score">2分</span></div>
+      <div class="a-text">資料是一幅抗美援朝宣傳畫。畫面中中國志願軍戰士高舉旗幟，跨過鴨綠江，下方寫有「保家衛國」的標語。<span class="kw">（描述三個元素：志願軍、鴨綠江、標語——各1分，但總分只有2分，描述到位即可）</span></div>
+    </div>
+    <div class="answer-box">
+      <div class="a-sub">(b) 這幅宣傳畫想傳達什麼訊息？援引資料說明。 <span class="a-score">4分</span></div>
+      <div class="a-text">宣傳畫想傳達「中國出兵朝鮮是正義之舉」的訊息。<span class="kw">（2分）</span>從畫面中志願軍高舉旗幟的姿態和「保家衛國」的標語可見，畫作強調中國參戰是為了保衛國家安全，而非侵略。<span class="kw">（2分——必須引用畫面細節和標語文字作為證據）</span></div>
+    </div>
+    <div class="answer-box">
+      <div class="a-sub">(c) 抗美援朝對新中國的國際地位和國內建設有何影響？ <span class="a-score">6分</span></div>
+      <div class="a-text">
+        抗美援朝是新中國首次與西方強國正面對抗並取得平手，大大提高了中國的國際威望，確立了軍事大國形象。<span class="kw">（2分）</span><br>
+        戰爭使中國獲得蘇聯的信任，蘇聯開始向中國提供大規模經濟援助，包括援建156項重點工程。<span class="kw">（2分）</span><br>
+        蘇聯的援助為中國工業化奠定了基礎，推動了一五計劃的順利開展。<span class="kw">（2分）</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card amber" style="margin-bottom:24px;">
+    <strong>📌 練習二 · 大躍進宣傳畫</strong>
+    <p style="font-size:0.84rem;color:var(--muted);margin-top:6px;">資料：1958年大躍進時期的宣傳畫。畫中農民站在比人還高的稻穗旁，稻穗上坐著幾個小孩。畫面上方寫著「人有多大膽，地有多大產」。</p>
+
+    <div class="answer-box" style="margin-top:14px;">
+      <div class="a-sub">(a) 描述資料中的畫面內容。 <span class="a-score">2分</span></div>
+      <div class="a-text">資料是大躍進時期的宣傳畫，畫中稻穗比人還高，小孩可坐在稻穗上，上方寫有「人有多大膽，地有多大產」的標語。<span class="kw">（1分描述畫面＋1分引用標語文字）</span></div>
+    </div>
+    <div class="answer-box">
+      <div class="a-sub">(b) 這幅宣傳畫反映了大躍進期間的什麼現象？援引資料說明。 <span class="a-score">4分</span></div>
+      <div class="a-text">宣傳畫反映了大躍進期間嚴重的<span class="kw">浮誇風</span>。<span class="kw">（2分）</span>從畫面中比人還高的稻穗和「人有多大膽，地有多大產」的口號可見，當時在宣傳上誇大農業產量，鼓吹不切實際的高產目標。<span class="kw">（2分——必須引用畫面細節和標語）</span></div>
+    </div>
+    <div class="answer-box">
+      <div class="a-sub">(c) 大躍進期間的浮誇風造成了什麼後果？ <span class="a-score">4分</span></div>
+      <div class="a-text">各地幹部為迎合上級，虛報農業產量，導致中央誤判糧食形勢，下令「放開肚皮吃飯」。<span class="kw">（2分）</span>虛報產量疊加自然災害，造成1959至1961年的三年經濟困難，數以千萬計的人口非正常死亡。<span class="kw">（2分）</span></div>
+    </div>
+  </div>
+
+  <div class="card amber">
+    <strong>📌 練習三 · 鄧小平講話摘錄</strong>
+    <p style="font-size:0.84rem;color:var(--muted);margin-top:6px;">資料：1978年鄧小平在一次會議上說：「如果現在再不實行改革，我們的現代化事業和社會主義事業就會被葬送。」</p>
+
+    <div class="answer-box" style="margin-top:14px;">
+      <div class="a-sub">(a) 資料中鄧小平表達了什麼觀點？ <span class="a-score">2分</span></div>
+      <div class="a-text">鄧小平認為中國必須立即實行改革，否則現代化事業和社會主義事業將面臨失敗。<span class="kw">（直接概括引文內容，不添加課外知識）</span></div>
+    </div>
+    <div class="answer-box">
+      <div class="a-sub">(b) 鄧小平為什麼會說這番話？援引當時中國的情況加以說明。 <span class="a-score">4分</span></div>
+      <div class="a-text">因為當時中國經濟極度落後。<span class="kw">（1分）</span>1978年中國人均GDP遠遠低於日本、南韓等亞洲國家，民眾收入在過去二十年幾乎沒有增長。<span class="kw">（2分）</span>鄧小平意識到若不改革開放，中國與世界的差距只會愈來愈大。<span class="kw">（1分）</span></div>
+    </div>
+    <div class="answer-box">
+      <div class="a-sub">(c) 1978年中共召開了什麼會議來推行改革開放？該會議有什麼歷史意義？ <span class="a-score">4分</span></div>
+      <div class="a-text">1978年12月召開了<span class="kw">十一屆三中全會</span>。<span class="kw">（1分）</span>會議決定把黨和國家的工作重心從階級鬥爭轉移到經濟建設上，<span class="kw">（1分）</span>確立了改革開放的基本國策。<span class="kw">（1分）</span>十一屆三中全會是中國現代化進程的重大轉折點，標誌著中國進入改革開放新時期。<span class="kw">（1分）</span></div>
+    </div>
+  </div>
+</div>
+
+<hr>
+<p style="text-align:center; color:var(--muted); font-size:0.78rem;">
+  荃灣官立中學 · 中三中國歷史 · 資料題答題框架<br>
+  題材來源：2425 真題、抗美援朝閱讀材料、課堂照片辨識練習
+</p>
+
+</body>
+</html>

@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>DNA Puzzle Decoder &mdash; S3 IS Biology</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:18px;-webkit-text-size-adjust:100%}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:#fafafa;color:#1a1a1a;line-height:1.6;min-height:100dvh;display:flex;flex-direction:column;align-items:center}
+/* ---- header ---- */
+.app-header{width:100%;max-width:680px;padding:28px 24px 0;text-align:center}
+.app-header .icon{font-size:2.4rem;margin-bottom:4px;letter-spacing:2px}
+.app-header h1{font-size:1.35rem;font-weight:700;color:#111;margin-bottom:2px}
+.app-header .sub{font-size:.9rem;color:#666;margin-bottom:8px}
+.progress-wrap{display:flex;align-items:center;gap:10px;max-width:680px;width:100%;padding:0 24px;margin:12px 0 16px}
+.progress-bar{flex:1;height:7px;background:#e5e5e5;border-radius:10px;overflow:hidden}
+.progress-fill{height:100%;background:#2563eb;border-radius:10px;transition:width .25s}
+.progress-txt{font-size:.8rem;color:#888;white-space:nowrap;min-width:52px;text-align:right}
+/* ---- card ---- */
+.card-wrap{width:100%;max-width:680px;padding:0 24px;flex:1}
+.card{background:#fff;border-radius:16px;box-shadow:0 2px 12px rgba(0,0,0,.06);padding:28px 24px 24px;margin-bottom:16px}
+.card .type-badge{display:inline-block;font-size:.72rem;font-weight:600;padding:3px 12px;border-radius:20px;margin-bottom:14px;letter-spacing:.5px}
+.type-dna{background:#eef2ff;color:#4f46e5}
+.type-gel{background:#fef3c7;color:#b45309}
+.type-pat{background:#fce7f3;color:#be185d}
+.type-lab{background:#d1fae5;color:#047857}
+.question{font-size:1.1rem;font-weight:600;color:#111;margin-bottom:20px;line-height:1.5}
+.question .zh{display:block;font-size:.9rem;font-weight:400;color:#666;margin-top:4px}
+.options{display:flex;flex-direction:column;gap:10px}
+.opt-btn{display:block;width:100%;text-align:left;font-size:1rem;padding:14px 18px;border:2px solid #e5e5e5;border-radius:12px;background:#fafafa;color:#1a1a1a;cursor:pointer;transition:border .15s,background .15s;font-family:inherit;line-height:1.4}
+.opt-btn:active{background:#f0f0f0}
+.opt-btn.correct{border-color:#16a34a;background:#f0fdf4;color:#15803d}
+.opt-btn.wrong{border-color:#dc2626;background:#fef2f2;color:#b91c1c}
+.opt-btn.reveal-correct{border-color:#16a34a;background:#f0fdf4;color:#15803d}
+.opt-btn:disabled{pointer-events:none}
+/* ---- feedback ---- */
+.feedback{margin-top:16px;padding:16px 18px;border-radius:12px;font-size:1rem;line-height:1.55;display:none}
+.feedback.show{display:block}
+.feedback.correct{background:#f0fdf4;border-left:4px solid #16a34a;color:#14532d}
+.feedback.wrong{background:#fef2f2;border-left:4px solid #dc2626;color:#7f1d1d}
+.feedback .en{font-weight:500;margin-bottom:6px}
+.feedback .zh{color:#555;font-size:.85rem;margin-top:6px;display:block}
+/* ---- next btn ---- */
+.next-wrap{text-align:center;margin-top:10px;display:none}
+.next-wrap.show{display:block}
+.next-btn{font-size:1rem;font-weight:600;padding:12px 36px;border:none;border-radius:12px;background:#2563eb;color:#fff;cursor:pointer;transition:background .15s;font-family:inherit}
+.next-btn:active{background:#1d4ed8}
+/* ---- score ---- */
+.score-wrap{text-align:center;padding:40px 24px;display:none}
+.score-wrap.show{display:block}
+.score-wrap .big{font-size:2.8rem;font-weight:800;color:#2563eb;margin-bottom:8px}
+.score-wrap .msg{font-size:1.05rem;color:#555;margin-bottom:24px}
+.score-wrap .restart{font-size:.95rem;font-weight:600;padding:10px 32px;border:2px solid #2563eb;border-radius:12px;background:#fff;color:#2563eb;cursor:pointer;font-family:inherit}
+/* ---- responsive ---- */
+@media(max-width:480px){
+  .app-header{padding:20px 16px 0}
+  .card{padding:22px 16px 20px}
+  .question{font-size:1rem}
+  .opt-btn{font-size:.95rem;padding:12px 14px}
+}
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <div class="icon">🧬</div>
+  <h1>DNA Puzzle Decoder</h1>
+  <div class="sub">F3 IS &middot; DNA Structure &amp; Gel Electrophoresis</div>
+</header>
+
+<div class="progress-wrap" id="progressWrap">
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-txt" id="progressTxt">0/22</div>
+</div>
+
+<div class="card-wrap">
+  <div class="card" id="card">
+    <div class="type-badge" id="typeBadge"></div>
+    <div class="question" id="question"></div>
+    <div class="options" id="options"></div>
+    <div class="feedback" id="feedback"></div>
+    <div class="next-wrap" id="nextWrap">
+      <button class="next-btn" id="nextBtn">Next Question →</button>
+    </div>
+  </div>
+
+  <div class="score-wrap" id="scoreWrap">
+    <div class="big" id="scoreBig"></div>
+    <div class="msg" id="scoreMsg"></div>
+    <button class="restart" id="restartBtn">Try Again ↻</button>
+  </div>
+</div>
+
+<script>
+(function(){
+var VERSION = 'v3-haina';
+var SCORE_KEY = 'dna-decoder-score-' + VERSION;
+
+// ===== QUESTION BANK (22 questions, 4 types) =====
+var Q = [];
+
+// Type 1: DNA Structure (5)
+Q.push({type:'dna',q:'In a nucleotide, the component labelled <b>P</b> (attached to the sugar) is the ___.',zh:'核苷酸中，標記為 <b>P</b> 的組件（連接在糖上）是 ___。',opts:['Phosphate group / 磷酸基團','5C sugar (deoxyribose) / 五碳糖','Nitrogenous base / 含氮鹼基','Amino acid / 氨基酸'],ans:0,exp:'The nucleotide has three parts: a <b>phosphate group</b>, a 5-carbon sugar (deoxyribose), and a nitrogenous base. The phosphate group is attached to the 5C sugar — it is component P.<br><span class="zh">核苷酸由三部分組成：<b>磷酸基團</b>、五碳糖（脫氧核糖）和含氮鹼基。磷酸基團連接在五碳糖上——即組件 P。</span>'});
+
+Q.push({type:'dna',q:'The middle component of a nucleotide, linking phosphate and base, is the ___.',zh:'核苷酸中間連接磷酸與鹼基的組件是 ___。',opts:['Phosphate group / 磷酸基團','5C sugar (deoxyribose) / 五碳糖（脫氧核糖）','Nitrogenous base / 含氮鹼基','Lipid / 脂質'],ans:1,exp:'The <b>5C sugar (deoxyribose)</b> sits in the middle of each nucleotide. It links the phosphate group on one side and the nitrogenous base on the other — forming the backbone of DNA.<br><span class="zh"><b>五碳糖（脫氧核糖）</b>位於每個核苷酸的中間。一側連接磷酸基團，另一側連接含氮鹼基——構成 DNA 的骨架。</span>'});
+
+Q.push({type:'dna',q:'In DNA, adenine (A) always pairs with ___.',zh:'在 DNA 中，腺嘌呤（A）總是與 ___ 配對。',opts:['Guanine (G) / 鳥嘌呤','Cytosine (C) / 胞嘧啶','Thymine (T) / 胸腺嘧啶','Uracil (U) / 尿嘧啶'],ans:2,exp:'<b>Complementary base pairing</b>: A pairs with T, C pairs with G. Held by hydrogen bonds — 2 between A-T, 3 between C-G. (Uracil is found in RNA, not DNA.)<br><span class="zh"><b>互補鹼基配對</b>：A 配 T，C 配 G。由氫鍵連接——A-T 之間 2 條，C-G 之間 3 條。（尿嘧啶存在於 RNA，不存在於 DNA。）</span>'});
+
+Q.push({type:'dna',q:'The reaction that joins nucleotides to form a polynucleotide chain is called ___.',zh:'將核苷酸連接成多核苷酸鏈的反應稱為 ___。',opts:['Hydrolysis / 水解','Condensation / 縮合','Oxidation / 氧化','Reduction / 還原'],ans:1,exp:'<b>Condensation</b> reaction joins two nucleotides by forming a phosphodiester bond. One water molecule is eliminated each time two nucleotides are joined.<br><span class="zh"><b>縮合</b>反應通過形成磷酸二酯鍵連接兩個核苷酸。每次兩個核苷酸連接時，消除一個水分子。</span>'});
+
+Q.push({type:'dna',q:'What is the overall charge of a DNA molecule?',zh:'DNA 分子的整體電荷是什麼？',opts:['Positive / 正電','Negative / 負電','Neutral / 中性','Depends on the sequence / 取決於序列'],ans:1,exp:'DNA is <b>negatively charged</b> because every nucleotide contains a phosphate group (PO₄³⁻). This is why DNA moves toward the <b>positive</b> terminal in gel electrophoresis.<br><span class="zh">DNA 帶<b>負電</b>，因為每個核苷酸都含有磷酸基團（PO₄³⁻）。這就是為什麼 DNA 在凝膠電泳中向<b>正</b>極移動。</span>'});
+
+// Type 2: Gel Race (6)
+Q.push({type:'gel',q:'Fragment <b>P</b>: 3,500 bp. Fragment <b>Q</b>: 8,000 bp. Which fragment travels <b>farther</b> in the gel?',zh:'片段 <b>P</b>：3,500 bp。片段 <b>Q</b>：8,000 bp。哪個片段在凝膠中走得更<b>遠</b>？',opts:['Fragment P (3,500 bp)','Fragment Q (8,000 bp)','Both travel the same distance / 兩者相同'],ans:0,exp:'<b>Smaller DNA fragments</b> experience less resistance from the gel matrix → they move faster → they travel <b>farther</b> from the well. P (3,500 bp) is smaller than Q (8,000 bp), so P travels farther.<br><span class="zh"><b>較小的 DNA 片段</b>在凝膠基質中遇到較少阻力 → 移動較快 → 離 well <b>更遠</b>。P（3,500 bp）比 Q（8,000 bp）小，所以 P 走得更遠。</span>'});
+
+Q.push({type:'gel',q:'In a gel, Band <b>X</b> is positioned closest to the well. Band X contains the ___ DNA fragment.',zh:'在凝膠中，條帶 <b>X</b> 位於最靠近 well 的位置。條帶 X 含有 ___ 的 DNA 片段。',opts:['Smallest / 最小','Largest / 最大','Medium-sized / 中等大小','Cannot determine / 無法判斷'],ans:1,exp:'Bands closest to the well represent the <b>largest</b> DNA fragments. They experience the most resistance → move the slowest → stay near the well. The smallest fragments travel farthest.<br><span class="zh">最靠近 well 的條帶代表<b>最大</b>的 DNA 片段。它們遇到的阻力最大 → 移動最慢 → 停留在 well 附近。最小的片段走得最遠。</span>'});
+
+Q.push({type:'gel',q:'In gel electrophoresis, the wells (where DNA is loaded) must be placed near the ___ terminal.',zh:'在凝膠電泳中，well（DNA 加載處）必須放在 ___ 極附近。',opts:['Positive / 正極','Negative / 負極','Either one works / 都可以','No terminal is needed / 不需要接電'],ans:1,exp:'DNA is <b>negatively</b> charged → it moves toward the <b>positive</b> terminal. Therefore, wells must be placed at the <b>negative</b> end so DNA migrates through the gel toward the positive end.<br><span class="zh">DNA 帶<b>負</b>電 → 向<b>正</b>極移動。因此，well 必須放在<b>負</b>極端，DNA 才能穿過凝膠向正極端遷移。</span>'});
+
+Q.push({type:'gel',q:'Four fragments: <b>W</b> (2.1 kb), <b>X</b> (5.5 kb), <b>Y</b> (9.3 kb), <b>Z</b> (15.0 kb). Which band appears <b>farthest</b> from the well?',zh:'四個片段：<b>W</b>（2.1 kb）、<b>X</b>（5.5 kb）、<b>Y</b>（9.3 kb）、<b>Z</b>（15.0 kb）。哪個條帶離 well <b>最遠</b>？',opts:['W (2.1 kb)','X (5.5 kb)','Y (9.3 kb)','Z (15.0 kb)'],ans:0,exp:'<b>W</b> is the smallest (2.1 kb) → least resistance → moves <b>fastest</b> → travels <b>farthest</b>. Order from well: Z (largest, closest) → Y → X → W (smallest, farthest).<br><span class="zh"><b>W</b> 最小（2.1 kb）→ 阻力最小 → 移動<b>最快</b> → 走<b>最遠</b>。從 well 起順序：Z（最大，最近）→ Y → X → W（最小，最遠）。</span>'});
+
+Q.push({type:'gel',q:'A fragment of <b>11.30 kb</b> runs between fragments of 6.98 kb and 16.07 kb. Its band position is ___.',zh:'一個 <b>11.30 kb</b> 的片段在 6.98 kb 和 16.07 kb 片段之間運行。它的條帶位置是 ___。',opts:['Between them, closer to 6.98 kb / 在兩者之間，較接近 6.98 kb','Between them, closer to 16.07 kb / 在兩者之間，較接近 16.07 kb','Closer to the well than the 16.07 kb band / 比 16.07 kb 更靠近 well','Farther than the 6.98 kb band / 比 6.98 kb 更遠'],ans:0,exp:'Size order: 16.07k (largest, closest to well) → 11.30k → 6.98k (smallest, farthest). 11.30k is closer in size to 6.98k, so its band appears closer to the 6.98k band &mdash; but slightly nearer the well because it is larger.<br><span class="zh">大小順序：16.07k（最大，最靠近 well）→ 11.30k → 6.98k（最小，最遠）。11.30k 的大小較接近 6.98k，因此其條帶較接近 6.98k 的條帶——但因較大而略靠近 well。</span>'});
+
+Q.push({type:'gel',q:'After electrophoresis, how are DNA bands made visible?',zh:'電泳後，如何使 DNA 條帶可視？',opts:['Iodine solution / 碘液','Benedict\'s solution / 本立德溶液','Fluorescent dye + UV light / 螢光染料 + 紫外光','Litmus paper / 石蕊試紙'],ans:2,exp:'DNA fragments are colourless. A <b>fluorescent dye</b> (e.g. ethidium bromide) binds to DNA and glows under <b>UV light</b>, revealing the band pattern on the gel.<br><span class="zh">DNA 片段是無色的。<b>螢光染料</b>（如溴化乙錠）與 DNA 結合，在<b>紫外光</b>下發光，顯示凝膠上的條帶模式。</span>'});
+
+// Type 3: Parentage Test (6)
+Q.push({type:'pat',q:'<b>Mother</b> bands: positions 2, 5. <b>Father</b> bands: positions 2, 8. <b>Child</b> bands: positions 2, 5.<br>Is this man the biological father?',zh:'<b>母親</b>條帶：位置 2、5。<b>父親</b>條帶：位置 2、8。<b>孩子</b>條帶：位置 2、5。<br>這名男子是親生父親嗎？',opts:['Yes / 是','No / 不是','Cannot determine / 無法確定'],ans:1,exp:'Child&rsquo;s bands: 2, 5. Band 2 = from either parent. Band 5 = from mother only. The child has <b>NO band from the father</b> (position 8). This man is <b>NOT</b> the biological father.<br><span class="zh">孩子的條帶：2、5。條帶 2 = 父母皆可。條帶 5 = 只來自母親。孩子<b>沒有父親的條帶</b>（位置 8）。這名男子<b>不是</b>親生父親。</span>'});
+
+Q.push({type:'pat',q:'<b>Mother</b>: 1, 4. <b>Father</b>: 1, 6. <b>Child A</b>: 1, 6. <b>Child B</b>: 3, 4.<br>Which child(ren) belong to this couple?',zh:'<b>母親</b>：1、4。<b>父親</b>：1、6。<b>孩子 A</b>：1、6。<b>孩子 B</b>：3、4。<br>哪個/哪些孩子是這對夫婦的？',opts:['Child A only / 只有 A','Child B only / 只有 B','Both / 兩者皆是','Neither / 都不是'],ans:0,exp:'<b>Child A</b>: Band 1 = from both parents, Band 6 = from father only → ✓ theirs.<br><b>Child B</b>: Band 4 = from mother. Band 3 = from <b>NEITHER</b> parent → ✗ not theirs.<br><span class="zh"><b>孩子 A</b>：條帶 1 = 父母皆可，條帶 6 = 只來自父親 → ✓ 是他們的。<br><b>孩子 B</b>：條帶 4 = 來自母親。條帶 3 = 父母<b>都</b>沒有 → ✗ 不是。</span>'});
+
+Q.push({type:'pat',q:'In a paternity test, the child has a band that does <b>NOT</b> appear in the mother&rsquo;s DNA. What must be true?',zh:'在親子鑑定中，孩子有一條帶<b>不</b>在母親的 DNA 中出現。以下哪項必然成立？',opts:['The child is adopted / 孩子是領養的','The band is from the biological father / 該條帶來自親生父親','The test is invalid / 測試無效','This is a random mutation / 這是隨機突變'],ans:1,exp:'A child inherits DNA from both parents. Any band NOT from the mother <b>must</b> come from the biological father. This is the core principle of paternity testing.<br><span class="zh">孩子從父母雙方繼承 DNA。任何不來自母親的條帶<b>必定</b>來自親生父親。這是親子鑑定的核心原理。</span>'});
+
+Q.push({type:'pat',q:'<b>Suspect 1</b>: 2, 4, 6. <b>Suspect 2</b>: 1, 4, 8. <b>Suspect 3</b>: 2, 5, 7.<br><b>Mother</b>: 2, 5. <b>Child</b>: 2, 5, 7. Who is the father?',zh:'<b>嫌疑人 1</b>：2、4、6。<b>嫌疑人 2</b>：1、4、8。<b>嫌疑人 3</b>：2、5、7。<br><b>母親</b>：2、5。<b>孩子</b>：2、5、7。誰是父親？',opts:['Suspect 1 / 嫌疑人 1','Suspect 2 / 嫌疑人 2','Suspect 3 / 嫌疑人 3','None of them / 都不是'],ans:2,exp:'Child has bands 2, 5, 7. Mother has 2, 5 → band 7 must be from father. Only <b>Suspect 3</b> has band 7. Also, Suspect 3 shares bands 2 and 5 with the child, confirming the match.<br><span class="zh">孩子有條帶 2、5、7。母親有 2、5 → 條帶 7 必須來自父親。只有<b>嫌疑人 3</b> 有 7。且嫌疑人 3 與孩子共有 2 和 5，確認匹配。</span>'});
+
+Q.push({type:'pat',q:'Why do siblings from the same parents have <b>different</b> DNA band patterns?',zh:'為什麼同一對父母的兄弟姐妹會有<b>不同</b>的 DNA 條帶模式？',opts:['Mutations during development / 發育過程中的突變','They inherit different combinations of parental DNA / 他們繼承了父母 DNA 的不同組合','The test is not precise enough / 測試不夠精確','DNA changes over time within one person / DNA 在一個人體內會隨時間改變'],ans:1,exp:'Each child receives a <b>random half</b> of each parent&rsquo;s DNA during fertilisation. Different combinations → different band patterns. However, every band should still be traceable to either the mother or father.<br><span class="zh">每個孩子在受精過程中<b>隨機</b>獲得父母各一半的 DNA。不同組合 → 不同條帶模式。但每條帶仍應可追溯至母親或父親。</span>'});
+
+Q.push({type:'pat',q:'<b>Mother</b>: 3, 6. <b>Child</b>: 3, 6, 9. What must the biological father&rsquo;s DNA contain?',zh:'<b>母親</b>：3、6。<b>孩子</b>：3、6、9。親生父親的 DNA 必須有什麼？',opts:['Band 3 only / 只有 3','Band 6 only / 只有 6','Band 9 / 條帶 9','Bands 3 and 6 / 條帶 3 和 6'],ans:2,exp:'Mother provides bands 3 and 6. <b>Band 9</b> does not come from the mother → must come from the biological father. The father <b>must</b> have band 9 in his DNA.<br><span class="zh">母親提供條帶 3 和 6。<b>條帶 9</b> 不來自母親 → 必須來自親生父親。父親<b>必須</b>在其 DNA 中有條帶 9。</span>'});
+
+// Type 4: Lab Procedure (5)
+Q.push({type:'lab',q:'What is the <b>first</b> step in producing a DNA fingerprint?',zh:'製作 DNA 指紋的<b>第一步</b>是什麼？',opts:['Apply electric current / 通電','Extract DNA from the sample / 從樣本提取 DNA','Load DNA into gel wells / 將 DNA 加載到凝膠 well','Stain the gel with fluorescent dye / 用螢光染料染色'],ans:1,exp:'First, DNA must be <b>extracted</b> from the sample (blood, saliva, hair, etc.). Without extraction, there is no DNA to work with. Cutting, loading, and electrophoresis come after.<br><span class="zh">首先，必須從樣本（血液、唾液、頭髮等）中<b>提取</b> DNA。沒有提取就沒有 DNA 可用。切割、加載和電泳在之後進行。</span>'});
+
+Q.push({type:'lab',q:'After DNA is extracted, what happens next?',zh:'提取 DNA 之後，下一步是什麼？',opts:['Stain with fluorescent dye / 用螢光染料染色','Cut the DNA into fragments using restriction enzymes / 用限制酶將 DNA 切成片段','Load DNA directly into the gel / 將 DNA 直接加載到凝膠','Apply electric current / 通電'],ans:1,exp:'<b>Restriction enzymes</b> cut DNA at specific sequences, producing fragments of different lengths. Without cutting, DNA is too long to separate properly in the gel.<br><span class="zh"><b>限制酶</b>在特定序列處切割 DNA，產生不同長度的片段。不切割的話，DNA 太長，無法在凝膠中有效分離。</span>'});
+
+Q.push({type:'lab',q:'After loading DNA samples into the wells, the next step is to ___.',zh:'將 DNA 樣本加載到 well 後，下一步是 ___。',opts:['Stain the gel / 染色','Apply electric current / 通電','Add more restriction enzymes / 添加更多限制酶','Wait for the DNA to settle / 等待 DNA 沉澱'],ans:1,exp:'Once DNA is loaded, an <b>electric current</b> is applied. Negatively charged DNA moves toward the positive terminal, and fragments separate by size.<br><span class="zh">DNA 加載後，通入<b>電流</b>。帶負電的 DNA 向正極移動，片段按大小分離。</span>'});
+
+Q.push({type:'lab',q:'Why are different DNA samples placed in <b>separate, adjacent wells</b>?',zh:'為什麼要將不同的 DNA 樣本放在<b>分開但相鄰的 well</b> 中？',opts:['To prevent contamination / 防止污染','To save gel space / 節省凝膠空間','To allow side-by-side band comparison / 以便並排比較條帶','To make the dye work faster / 讓染料更快生效'],ans:2,exp:'Samples (mother, child, suspects) are placed in adjacent wells so their band patterns can be compared <b>side by side</b>. This is essential for paternity testing and forensic analysis.<br><span class="zh">樣本（母親、孩子、嫌疑人）放在相鄰 well 中，以便<b>並排</b>比較條帶模式。這對親子鑑定和法證分析至關重要。</span>'});
+
+Q.push({type:'lab',q:'What is the purpose of including a <b>DNA ladder (marker)</b> in one well?',zh:'在一個 well 中加入 <b>DNA ladder（標記）</b> 的目的是什麼？',opts:['To help DNA move faster / 幫助 DNA 移動更快','To provide known fragment sizes for comparison / 提供已知片段大小以供比較','To stain the gel evenly / 均勻染色','To prevent the gel from drying / 防止凝膠乾燥'],ans:1,exp:'A <b>DNA ladder</b> contains fragments of known sizes (in bp). By comparing sample bands to the ladder, scientists estimate the size of each DNA fragment in the sample.<br><span class="zh"><b>DNA ladder</b> 含有已知大小（bp）的片段。通過將樣本條帶與 ladder 比較，科學家可以估算樣本中每個 DNA 片段的大小。</span>'});
+
+// ===== STATE =====
+var idx = 0;          // current question index
+var score = 0;
+var answered = false;
+var order = [];
+
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+
+function buildOrder(){
+  order = [];
+  for(var i=0;i<Q.length;i++) order.push(i);
+  shuffle(order);
+}
+
+// ===== RENDER =====
+function renderQuestion(){
+  answered = false;
+  var qi = order[idx];
+  var q = Q[qi];
+
+  // badge
+  var badge = document.getElementById('typeBadge');
+  var badgeMap = {dna:['🧬 DNA Structure · DNA結構','type-dna'], gel:['🔬 Gel Race · 凝膠競速','type-gel'], pat:['🩸 Parentage Test · 親子鑑定','type-pat'], lab:['⚗️ Lab Procedure · 實驗流程','type-lab']};
+  var b = badgeMap[q.type];
+  badge.textContent = b[0];
+  badge.className = 'type-badge '+b[1];
+
+  // question
+  var qDiv = document.getElementById('question');
+  qDiv.innerHTML = q.q + (q.zh ? '<span class="zh">'+q.zh+'</span>' : '');
+
+  // options
+  var optsDiv = document.getElementById('options');
+  optsDiv.innerHTML = '';
+  for(var i=0;i<q.opts.length;i++){
+    var btn = document.createElement('button');
+    btn.className = 'opt-btn';
+    btn.textContent = q.opts[i];
+    btn.onclick = (function(idx){return function(){answer(idx);};})(i);
+    optsDiv.appendChild(btn);
+  }
+
+  // feedback
+  var fb = document.getElementById('feedback');
+  fb.className = 'feedback';
+  fb.innerHTML = '';
+
+  // next
+  var nw = document.getElementById('nextWrap');
+  nw.className = 'next-wrap';
+
+  // progress
+  updateProgress();
+}
+
+function updateProgress(){
+  document.getElementById('progressFill').style.width = ((idx/Q.length)*100)+'%';
+  document.getElementById('progressTxt').textContent = idx+'/'+Q.length;
+}
+
+// ===== ANSWER =====
+function answer(choice){
+  if(answered) return;
+  answered = true;
+
+  var qi = order[idx];
+  var q = Q[qi];
+  var correct = (choice === q.ans);
+
+  if(correct) score++;
+
+  // highlight buttons
+  var btns = document.querySelectorAll('.opt-btn');
+  for(var i=0;i<btns.length;i++){
+    btns[i].disabled = true;
+    if(i === q.ans) btns[i].classList.add('correct');
+    else if(i === choice && !correct) btns[i].classList.add('wrong');
+  }
+  if(!correct){
+    btns[q.ans].classList.add('reveal-correct');
+  }
+
+  // feedback
+  var fb = document.getElementById('feedback');
+  fb.className = 'feedback show ' + (correct ? 'correct' : 'wrong');
+  var icon = correct ? '✅' : '❌';
+  fb.innerHTML = icon + ' <span class="en">' + q.exp + '</span>';
+
+  // show next button
+  var nw = document.getElementById('nextWrap');
+  nw.className = 'next-wrap show';
+  var nb = document.getElementById('nextBtn');
+  if(idx >= Q.length - 1){
+    nb.textContent = 'See Results →';
+  } else {
+    nb.textContent = 'Next Question → 下一題';
+  }
+}
+
+// ===== NEXT =====
+function nextQuestion(){
+  idx++;
+  if(idx >= Q.length){
+    showScore();
+  } else {
+    renderQuestion();
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+}
+
+// ===== SCORE =====
+function showScore(){
+  documnt.getElementById('card').style.display = 'none';
+  document.getElementById('progressWrap').style.display = 'none';
+  document.getElementById('scoreWrap').classList.add('show');
+
+  var pct = Math.round(score/Q.length*100);
+  var big = document.getElementById('scoreBig');
+  big.textContent = pct + '%';
+  big.style.color = pct >= 80 ? '#16a34a' : pct >= 60 ? '#2563eb' : '#dc2626';
+
+  var msg = document.getElementById('scoreMsg');
+  if(pct >= 90) msg.textContent = 'Outstanding! You really understand DNA and gel electrophoresis. 出色！你真正理解了 DNA 和凝膠電泳。';
+  else if(pct >= 70) msg.textContent = 'Good work! Review the questions you got wrong — especially the gel race reasoning. 做得好！重溫答錯的題目——尤其是凝膠競速的推理。';
+  else if(pct >= 50) msg.textContent = 'Keep practicing. Focus on WHY smaller fragments travel farther — not just the answer. 繼續練習。重點理解「為什麼」較小片段走得更遠——不僅是答案。';
+  else msg.textContent = 'Don\'t give up. Read each explanation carefully — the reasoning is more important than the score. 不要放棄。仔細閱讀每條解釋——推理過程比分數更重要。';
+
+  // save score
+  try{var d=JSON.parse(localStorage.getItem(SCORE_KEY)||'{}');d.last=pct;d.count=(d.count||0)+1;d.best=Math.max(d.best||0,pct);localStorage.setItem(SCORE_KEY,JSON.stringify(d));}catch(e){}
+}
+
+function restart(){
+  idx = 0;
+  score = 0;
+  answered = false;
+  buildOrder();
+  document.getElementById('card').style.display = '';
+  document.getElementById('progressWrap').style.display = '';
+  document.getElementById('scoreWrap').classList.remove('show');
+  renderQuestion();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ===== INIT =====
+document.getElementById('nextBtn').onclick = nextQuestion;
+document.getElementById('restartBtn').onclick = restart;
+buildOrder();
+renderQuestion();
+})();
+</script>
+</body>
+</html>

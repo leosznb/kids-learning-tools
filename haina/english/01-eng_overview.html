@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>English Exam Prep Guide · S3 · TWGSS</title>
+<style>
+:root {
+  --bg: #fafaf7; --card: #fff; --fg: #1a1a1a; --muted: #78716c;
+  --red: #c41e3a; --red-bg: #fef2f2;
+  --blue: #2563eb; --blue-bg: #eff6ff;
+  --green: #16a34a; --green-bg: #f0fdf4;
+  --amber: #d97706; --amber-bg: #fffbeb;
+  --purple: #7c3aed; --purple-bg: #faf5ff;
+  --radius: 14px;
+  --font: -apple-system, "Noto Sans TC", "PingFang TC", "Inter", "Segoe UI", sans-serif;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: var(--font); background: var(--bg); color: var(--fg);
+  line-height: 1.7; max-width: 800px; margin: 0 auto; padding: 36px 20px 72px;
+}
+.hero { text-align: center; margin-bottom: 36px; }
+.hero .icon { font-size: 3rem; margin-bottom: 6px; }
+.hero h1 { font-size: 1.9rem; font-weight: 800; letter-spacing: -0.03em; }
+.hero .meta { display: flex; justify-content: center; gap: 14px; margin-top: 8px; flex-wrap: wrap; }
+.hero .meta span { font-size: 0.84rem; color: var(--muted); background: var(--card); padding: 4px 12px; border-radius: 99px; border: 1px solid #e5e5e0; }
+
+.stat-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-bottom: 36px; }
+@media (max-width: 540px) { .stat-row { grid-template-columns: repeat(2,1fr); } }
+.stat-card { background: var(--card); border: 1px solid #e5e5e0; border-radius: var(--radius); padding: 18px 14px; text-align: center; }
+.stat-card .n { font-size: 1.7rem; font-weight: 800; }
+.stat-card .l { font-size: 0.77rem; color: var(--muted); margin-top: 2px; }
+.stat-card.c1 .n { color: var(--red); }
+.stat-card.c2 .n { color: var(--blue); }
+.stat-card.c3 .n { color: var(--green); }
+.stat-card.c4 .n { color: var(--amber); }
+
+.sec { margin-bottom: 38px; }
+.sec-title { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.sec-title .s-icon { font-size: 1.3rem; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; background: var(--card); border-radius: 10px; border: 1px solid #e5e5e0; }
+.sec-title h2 { font-size: 1.15rem; font-weight: 700; }
+
+.card { background: var(--card); border: 1px solid #e5e5e0; border-radius: var(--radius); padding: 18px 22px; margin-bottom: 12px; }
+.card.red { border-left: 4px solid var(--red); }
+.card.blue { border-left: 4px solid var(--blue); }
+.card.green { border-left: 4px solid var(--green); }
+.card.amber { border-left: 4px solid var(--amber); }
+
+.tbl { width: 100%; border-collapse: collapse; font-size: 0.84rem; margin: 10px 0; }
+.tbl th { background: #f5f5f2; text-align: left; padding: 9px 10px; font-weight: 600; font-size: 0.74rem; letter-spacing: 0.04em; color: var(--muted); }
+.tbl td { padding: 8px 10px; border-bottom: 1px solid #f0f0ec; vertical-align: top; }
+.tbl tr:last-child td { border-bottom: none; }
+
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 540px) { .two-col { grid-template-columns: 1fr; } }
+
+.grammar-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px,1fr)); gap: 8px; margin: 10px 0; }
+.grammar-card { background: var(--card); border: 1px solid #e5e5e0; border-radius: 10px; padding: 14px 16px; }
+.grammar-card .g-unit { font-size: 0.72rem; color: var(--muted); font-weight: 600; }
+.grammar-card .g-name { font-weight: 700; font-size: 0.9rem; margin-top: 2px; }
+.grammar-card .g-marks { font-size: 0.78rem; color: var(--red); margin-top: 4px; }
+
+.vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px,1fr)); gap: 4px; }
+.vocab-item { font-size: 0.8rem; padding: 3px 0; }
+
+.note { background: var(--amber-bg); border: 1px solid #fcd34d; border-radius: 10px; padding: 12px 16px; font-size: 0.85rem; margin: 12px 0; }
+.kw { font-weight: 700; background: linear-gradient(180deg, transparent 60%, #fde68a 60%); padding: 0 2px; }
+
+.profile-box { background: var(--card); border-radius: var(--radius); padding: 20px 22px; border: 1px solid #e5e5e0; }
+.profile-box .p-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.profile-box .p-avatar { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.1rem; color: #fff; }
+.profile-box .p-name { font-weight: 700; font-size: 0.95rem; }
+.profile-box .p-score { font-size: 0.8rem; color: var(--muted); }
+.profile-box ul { list-style: none; font-size: 0.84rem; }
+.profile-box ul li { padding: 5px 0; border-bottom: 1px solid #f5f5f2; display: flex; gap: 6px; }
+.profile-box ul li:last-child { border-bottom: none; }
+
+hr { border: none; border-top: 1px solid #e5e5e0; margin: 28px 0; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="icon">📖</div>
+  <h1>English · Exam Prep Guide</h1>
+  <div class="meta">
+    <span>📅 June 8 (Mon)</span>
+    <span>📝 Paper 1 + 2 + 3</span>
+    <span>💯 193 marks</span>
+    <span>⚖️ 200 weighting</span>
+  </div>
+</div>
+
+<div class="stat-row">
+  <div class="stat-card c1"><div class="n">100</div><div class="l">Paper 1<br>Reading + Vocab + Grammar</div></div>
+  <div class="stat-card c2"><div class="n">21</div><div class="l">Paper 2<br>Writing (≥200 words)</div></div>
+  <div class="stat-card c3"><div class="n">72</div><div class="l">Paper 3<br>Listening + Integrated</div></div>
+  <div class="stat-card c4"><div class="n">55</div><div class="l">Vocab Words<br>Edge 3B Units 6–7</div></div>
+</div>
+
+<!-- ═══════ 1. EXAM STRUCTURE ═══════ -->
+<div class="sec">
+  <div class="sec-title"><span class="s-icon">📋</span><h2>Exam Structure</h2></div>
+  
+  <table class="tbl">
+    <tr><th>Paper</th><th>Marks</th><th>Weight</th><th>Time</th><th>What's tested</th></tr>
+    <tr>
+      <td><strong>Paper 1</strong><br>General English</td>
+      <td>100</td><td>50/200</td><td>1 hour</td>
+      <td>
+        <strong>Part A: Reading Comprehension</strong> (30 marks) — 1 passage, mixed question types<br>
+        <strong>Part B: Vocabulary</strong> (20 marks) — fill-in-blanks, first letter given<br>
+        <strong>Part C: Grammar</strong> (50 marks) — 5 sections (see below)
+      </td>
+    </tr>
+    <tr>
+      <td><strong>Paper 2</strong><br>Writing</td>
+      <td>21</td>
+      <td>60/200</td>
+      <td>1 hour</td>
+      <td>3 prompts, choose <strong>ONE</strong>. ≥200 words. Common formats: speech, feature article, letter to editor. Use 'Chris Wong' if a name is needed.</td>
+    </tr>
+    <tr>
+      <td><strong>Paper 3</strong><br>Listening & Integrated</td>
+      <td>72</td>
+      <td>90/200</td>
+      <td>~1 hour</td>
+      <td>Part A: Listening tasks (compulsory, use pencil). Part B: Integrated writing task (use pen, reference materials provided).</td>
+    </tr>
+  </table>
+</div>
+
+<!-- ═══════ 2. SCOPE ═══════ -->
+<div class="sec">
+  <div class="sec-title"><span class="s-icon">🎯</span><h2>2025–26 Scope</h2></div>
+
+  <div class="card blue">
+    <strong>📚 Vocabulary</strong> — 55 words from Edge High-flyer 3B, Units 6 &amp; 7<br>
+    <span style="font-size:0.82rem;color:var(--muted);">First letter will be provided in the test. You may need to change word form (singular/plural, verb tense).</span>
+  </div>
+
+  <div class="vocab-grid" style="margin-top:8px;">
+    <div class="vocab-item">fascinate (v.)</div><div class="vocab-item">problematic (adj.)</div><div class="vocab-item">inaccurate (adj.)</div><div class="vocab-item">insights (n.)</div>
+    <div class="vocab-item">grave (adj.)</div><div class="vocab-item">threaten (v.)</div><div class="vocab-item">severe (adj.)</div><div class="vocab-item">inhabitants (n.)</div>
+    <div class="vocab-item">remedy (n.)</div><div class="vocab-item">current (adj.)</div><div class="vocab-item">occur (v.)</div><div class="vocab-item">surge (v.)</div>
+    <div class="vocab-item">skyrocketed (v.)</div><div class="vocab-item">disrupted (v.)</div><div class="vocab-item">adequate (adj.)</div><div class="vocab-item">compound (v.)</div>
+    <div class="vocab-item">aggravating (v.)</div><div class="vocab-item">dependent (adj.)</div><div class="vocab-item">pragmatic (adj.)</div><div class="vocab-item">ethical (adj.)</div>
+    <div class="vocab-item">artificial intelligence</div><div class="vocab-item">so-called (adj.)</div><div class="vocab-item">cognitive (adj.)</div><div class="vocab-item">sophisticated (adj.)</div>
+    <div class="vocab-item">indistinguishable</div><div class="vocab-item">concerned (adj.)</div><div class="vocab-item">undoubtedly (adv.)</div><div class="vocab-item">astonishing (adj.)</div>
+    <div class="vocab-item">manipulate (v.)</div><div class="vocab-item">immersed (v.)</div><div class="vocab-item">captured (v.)</div><div class="vocab-item">envisions (v.)</div>
+    <div class="vocab-item">digital (adj.)</div><div class="vocab-item">embark on (ph.v.)</div><div class="vocab-item">deceased (adj.)</div><div class="vocab-item">fathom (v.)</div>
+    <div class="vocab-item">contemplate (v.)</div><div class="vocab-item">primates (n.)</div><div class="vocab-item">conservation (n.)</div><div class="vocab-item">haven (n.)</div>
+    <div class="vocab-item">deplorable (adj.)</div><div class="vocab-item">trafficking (n.)</div><div class="vocab-item">poaching (n.)</div><div class="vocab-item">exploitation (n.)</div>
+    <div class="vocab-item">industriously (adv.)</div><div class="vocab-item">unarguably (adv.)</div><div class="vocab-item">stimulate (v.)</div><div class="vocab-item">trauma (n.)</div>
+    <div class="vocab-item">outraged (adj.)</div><div class="vocab-item">ignorantly (adv.)</div><div class="vocab-item">vulnerable (adj.)</div><div class="vocab-item">tolerate (v.)</div>
+    <div class="vocab-item">solitary (adj.)</div><div class="vocab-item">Yours faithfully</div><div class="vocab-item">brink (n.)</div>
+  </div>
+
+  <div class="card red" style="margin-top:14px;">
+    <strong>📐 Grammar — Paper 1 Section C (50 marks)</strong>
+    <div class="grammar-grid" style="margin-top:8px;">
+      <div class="grammar-card">
+        <div class="g-unit">Grammar Book 3 · Unit 13</div>
+        <div class="g-name">Conditionals<br>Type 2 &amp; 3</div>
+        <div class="g-marks">~12 marks</div>
+      </div>
+      <div class="grammar-card">
+        <div class="g-unit">Grammar Book 3 · Unit 14</div>
+        <div class="g-name">Gerunds &amp;<br>to-infinitives</div>
+        <div class="g-marks">~10 marks</div>
+      </div>
+      <div class="grammar-card">
+        <div class="g-unit">Grammar Book 3 · Unit 17</div>
+        <div class="g-name">Adjective<br>Patterns</div>
+        <div class="g-marks">~12 marks</div>
+      </div>
+      <div class="grammar-card">
+        <div class="g-unit">Grammar Book 3 · Unit 19</div>
+        <div class="g-name">Inversion</div>
+        <div class="g-marks">~8 marks</div>
+      </div>
+      <div class="grammar-card">
+        <div class="g-unit">Grammar Book 3 · Unit 20</div>
+        <div class="g-name">Useful<br>Expressions</div>
+        <div class="g-marks">~8 marks</div>
+      </div>
+    </div>
+    <p style="font-size:0.8rem;color:var(--muted);margin-top:8px;">Plus: Edge 3B Textbook & Workbook Units 6–7, <em>Miscellaneous (any prior S3 knowledge)</em>. Proofreading is a consistent section across years — expect ~8 marks of proofreading.</p>
+  </div>
+</div>
+
+<!-- ═══════ 3. PAPER 2 WRITING ═══════ -->
+<div class="sec">
+  <div class="sec-title"><span class="s-icon">✍️</span><h2>Paper 2 · Writing Strategy</h2></div>
+
+  <div class="card">
+    <p><strong>Format:</strong> 3 prompts. Choose ONE. ≥200 words. 21 marks (weight 60/200). 1 hour.</p>
+    <p style="margin-top:6px;"><strong>Recent topics (2425):</strong> Speech (STEAM education) · Feature article (wildlife protection) · Letter to editor (career choice)</p>
+    <p style="margin-top:6px;"><strong>Recent topics (2324):</strong> Similar pattern — 3 different text types, real-world themes.</p>
+  </div>
+
+  <div class="two-col" style="margin-top:12px;">
+    <div class="card green">
+      <strong>✅ Do</strong>
+      <ul style="font-size:0.84rem; margin-left:16px; margin-top:4px;">
+        <li>Read all 3 prompts before choosing — pick the one you know most vocabulary for</li>
+        <li>Spend 5 min planning: write 3–4 paragraph topic sentences</li>
+        <li>Match the tone to the format (formal for letter to editor, engaging for speech)</li>
+        <li>Leave 5 min to proofread for grammar and spelling</li>
+        <li>Use 'Chris Wong' if you need a name</li>
+      </ul>
+    </div>
+    <div class="card red">
+      <strong>❌ Don't</strong>
+      <ul style="font-size:0.84rem; margin-left:16px; margin-top:4px;">
+        <li>Write below 200 words — automatic penalty</li>
+        <li>Use your real name</li>
+        <li>Write in point form — must be continuous prose</li>
+        <li>Ignore the format requirements (e.g. a speech needs a greeting)</li>
+        <li>Spend more than 55 min — save time for Paper 1 grammar check</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ 4. PAPER 1 GRAMMAR FOCUS ═══════ -->
+<div class="sec">
+  <div class="sec-title"><span class="s-icon">🔧</span><h2>Grammar Topics · Key Rules</h2></div>
+
+  <div class="two-col">
+    <div class="card">
+      <strong>Conditionals Type 2 &amp; 3</strong>
+      <p style="font-size:0.83rem;color:var(--muted);margin-top:4px;">Type 2 (unreal present): <em>If I were you, I would study more.</em><br>
+      Type 3 (unreal past): <em>If I had studied, I would have passed.</em><br>
+      Watch for mixed conditionals and inverted forms (<em>Had I known…</em>).</p>
+    </div>
+    <div class="card">
+      <strong>Gerunds vs to-infinitives</strong>
+      <p style="font-size:0.83rem;color:var(--muted);margin-top:4px;">Some verbs take gerund (<em>enjoy reading</em>), some take infinitive (<em>want to read</em>), some take both with meaning change (<em>stop to smoke vs stop smoking</em>).</p>
+    </div>
+    <div class="card">
+      <strong>Adjective Patterns</strong>
+      <p style="font-size:0.83rem;color:var(--muted);margin-top:4px;"><em>It is + adj + for + noun + to-infinitive</em><br>
+      <em>It is + adj + that + clause</em><br>
+      Common adjectives: important, necessary, difficult, possible, likely.</p>
+    </div>
+    <div class="card">
+      <strong>Inversion</strong>
+      <p style="font-size:0.83rem;color:var(--muted);margin-top:4px;">Negative adverbs at sentence start trigger inversion:<br>
+      <em>Rarely do I see…</em> · <em>Not only does he…</em> · <em>Never have I…</em> · <em>Hardly had we…</em></p>
+    </div>
+  </div>
+
+  <div class="card amber" style="margin-top:12px;">
+    <strong>Proofreading</strong> (consistent section, ~8 marks) — One error per numbered line. Three types: wrong word (underline + correct above), missing word (mark ∧ + insert), extra word (cross out). Train by reading the sentence aloud — your ear often catches errors before your eye does.
+  </div>
+</div>
+
+<!-- ═══════ 5. READING STRATEGY ═══════ -->
+<div class="sec">
+  <div class="sec-title"><span class="s-icon">📖</span><h2>Reading Comprehension · Question Types</h2></div>
+  
+  <table class="tbl">
+    <tr><th>Type</th><th>Marks</th><th>Strategy</th></tr>
+    <tr><td><strong>Summary blanks</strong></td><td>4–5</td><td>Read the summary sentence FIRST to know what info you're looking for. One word per blank, must be grammatically correct.</td></tr>
+    <tr><td><strong>Find words</strong> (synonyms / meanings)</td><td>3–4</td><td>Scan the specified paragraph for the word. If asked for "similar meaning", the answer is in the text — don't use your own vocabulary.</td></tr>
+    <tr><td><strong>MC questions</strong></td><td>4–6</td><td>Eliminate 2 obviously wrong answers first. Watch for distractors that use words from the text but twist the meaning.</td></tr>
+    <tr><td><strong>T / F / NG</strong></td><td>4–8</td><td>True = text says it. False = text says the opposite. Not Given = text doesn't say either way. This is the hardest type — when in doubt, it's usually NG.</td></tr>
+    <tr><td><strong>Referencing</strong> (what does 'it' refer to?)</td><td>2–4</td><td>Go back ONE sentence. The answer is usually the subject or object of the previous sentence.</td></tr>
+    <tr><td><strong>Venn diagram / matching</strong></td><td>5</td><td>Read all descriptions first, then sort. Items in the overlap apply to BOTH countries/people.</td></tr>
+  </table>
+</div>
+
+<!-- ═══════ 6. YOU TWO ═══════ -->
+<div class="sec">
+  <div class="sec-title"><span class="s-icon">👤</span><h2>Your Strengths &amp; Weaknesses</h2></div>
+
+  <div class="two-col">
+    <div class="profile-box">
+      <div class="p-head"><div class="p-avatar" style="background: var(--blue);">N</div><div><div class="p-name">Haina</div><div class="p-score">2nd UT · English</div></div></div>
+      <ul>
+        <li>✅ Vocabulary: most answers correct</li>
+        <li>⚠️ <strong>Grammar tenses</strong>: errors in past tense, past perfect, future perfect — drew→drawn, had enjoyed→had been enjoying, will be→would be</li>
+        <li>⚠️ <strong>Linking words</strong>: structure errors (e.g. "because of the price was reasonable" — should be "because the price was reasonable")</li>
+        <li>⚠️ <strong>Reading comp</strong>: some comprehension gaps (florist→"flower fram", leader→wrong word for summary blanks)</li>
+        <li>🎯 <strong>Focus:</strong> Grammar workbook drills (esp. conditionals & gerunds) + proofreading practice</li>
+      </ul>
+    </div>
+    <div class="profile-box">
+      <div class="p-head"><div class="p-avatar" style="background: var(--green);">Y</div><div><div class="p-name">Yourong</div><div class="p-score">2nd UT · English</div></div></div>
+      <ul>
+        <li>⚠️ <strong>Reading:</strong> many blanks left empty — needs practice reading passages under time pressure</li>
+        <li>⚠️ <strong>Grammar:</strong> severe errors in tenses (all future-related answers wrong), linking words, articles</li>
+        <li>⚠️ <strong>Vocabulary:</strong> several blanks left empty — needs to memorise the 55-word list</li>
+        <li>🎯 <strong>Focus:</strong> Memorise the 55-word vocab list first. Then grammar workbook Units 13–14 (conditionals & gerunds). Practice completing ALL reading questions — even guessing is better than leaving blanks.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ 7. STUDY PLAN ═══════ -->
+<div class="sec">
+  <div class="sec-title"><span class="s-icon">🗓️</span><h2>Study Plan</h2></div>
+
+  <div class="card">
+    <p>English is on <strong>June 8</strong> — the third exam, after Biology (6/4) and Chinese (6/5). You have from now until then, but your main battle is <strong>daily accumulation</strong>, not last-minute cramming.</p>
+  </div>
+
+  <table class="tbl">
+    <tr><th style="width:80px">Phase</th><th>Time</th><th>What to do</th></tr>
+    <tr><td><strong>Now → 6/5</strong></td><td>Daily 20 min</td><td>Alternate: vocab memorisation (10 words/day from the 55 list) and grammar workbook (1 unit/week). Haina: focus on Grammar Book Units 13–14. Yourong: start with vocab first.</td></tr>
+    <tr><td><strong>6/6–6/7</strong></td><td>2 days</td><td>Paper 1 practice: complete one past paper under timed conditions. Review all grammar errors. Paper 2 practice: write one essay (pick any prompt from past paper) and self-mark against the scoring guidelines.</td></tr>
+    <tr><td><strong>6/8 morning</strong></td><td>30 min</td><td>Quick review: scan the 55-word vocab list. Read one model essay for structure. Don't do new questions.</td></tr>
+  </table>
+
+  <div class="note">
+    <strong>Note:</strong> English is a skill built over time, not a subject you can cram. The 55-word vocab list and 5 grammar topics are finite — mastering them guarantees at least 70/100 on Paper 1. Start early.
+  </div>
+</div>
+
+<hr>
+<p style="text-align:center; color:var(--muted); font-size:0.78rem;">
+  Tsuen Wan Government Secondary School · S3 English Language · June 2026 Exam<br>
+  Sources: 2425/2324 Papers 1–3, 2025–26 Exam Scope, 2nd UT papers (Haina & Yourong)
+</p>
+
+</body>
+</html>

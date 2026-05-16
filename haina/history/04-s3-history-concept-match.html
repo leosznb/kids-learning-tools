@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S3 History — Concept Matching Game</title>
+<style>
+  :root {
+    --bg: #fafafa; --card: #fff; --border: #e5e5e5; --text: #1a1a1a;
+    --text-dim: #666; --accent: #7c3aed; --accent-light: #f5f3ff;
+    --warn: #d97706; --danger: #dc2626; --success: #059669;
+    --radius: 8px; --gap: 16px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: -apple-system, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif;
+    line-height: 1.7; padding: 20px 16px 48px;
+  }
+  .container { max-width: 750px; margin: 0 auto; }
+
+  .header {
+    text-align: center; padding: 28px 16px 20px;
+    border-bottom: 2px solid var(--accent); margin-bottom: 24px;
+  }
+  .header h1 { font-size: 1.45rem; font-weight: 700; color: var(--accent); }
+  .header .sub { color: var(--text-dim); font-size: 0.85rem; margin-top: 4px; }
+  .scoreboard {
+    display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px;
+  }
+  .score {
+    padding: 8px 20px; border-radius: 20px; font-size: 0.84rem; font-weight: 600;
+    background: var(--card); border: 1px solid var(--border);
+  }
+  .score .num { font-size: 1.1rem; font-weight: 700; }
+  .score.correct .num { color: var(--success); }
+  .score.wrong .num { color: var(--danger); }
+
+  .section {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 24px; margin-bottom: var(--gap);
+  }
+  .section h2 { font-size: 1rem; font-weight: 700; color: var(--accent); margin-bottom: 4px; }
+  .section h2 .zh { font-size: 0.78rem; color: var(--text-dim); font-weight: 400; margin-left: 8px; }
+  .section .desc { font-size: 0.8rem; color: var(--text-dim); margin-bottom: 14px; }
+
+  /* Match grid */
+  .match-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+    margin-bottom: 14px;
+  }
+  @media (max-width: 550px) {
+    .match-grid { grid-template-columns: 1fr; }
+  }
+
+  .col-label {
+    font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.05em; color: var(--accent); margin-bottom: 6px;
+  }
+  .col-label.right { text-align: right; }
+
+  .item {
+    padding: 10px 14px; border: 2px solid var(--border); border-radius: 8px;
+    background: #fff; cursor: pointer; font-size: 0.84rem; line-height: 1.4;
+    margin-bottom: 6px; transition: all 0.15s;
+    user-select: none; -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    position: relative;
+  }
+  .item:hover { border-color: var(--accent); background: var(--accent-light); }
+
+  .item.left-selected { border-color: var(--accent); background: var(--accent-light); box-shadow: 0 0 0 2px rgba(124,58,237,0.25); }
+  .item.right-selected { border-color: var(--accent); background: var(--accent-light); box-shadow: 0 0 0 2px rgba(124,58,237,0.25); }
+
+  .item.matched {
+    border-color: var(--success); background: #f0fdf4; cursor: default;
+  }
+  .item.matched:hover { border-color: var(--success); background: #f0fdf4; }
+
+  .item.wrong-flash {
+    animation: shake 0.4s; border-color: var(--danger); background: #fef2f2;
+  }
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    75% { transform: translateX(6px); }
+  }
+
+  .btn-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+  .btn {
+    padding: 7px 18px; border: 1px solid var(--accent); border-radius: 6px;
+    font-size: 0.84rem; font-weight: 600; cursor: pointer;
+    background: #fff; color: var(--accent); transition: background 0.15s;
+  }
+  .btn:hover { background: var(--accent-light); }
+  .btn.primary { background: var(--accent); color: #fff; }
+  .btn.primary:hover { background: #6d28d9; }
+  .btn.reset { border-color: #d1d5db; color: var(--text-dim); }
+
+  .result {
+    display: none; margin-top: 12px; padding: 14px 16px;
+    border-radius: 6px; font-size: 0.84rem;
+  }
+  .result.show { display: block; }
+  .result.correct { background: #f0fdf4; border: 1px solid #bbf7d0; }
+  .result.partial { background: #fffbeb; border: 1px solid #fde68a; }
+  .result .res-title { font-weight: 700; font-size: 0.9rem; margin-bottom: 6px; }
+  .result .res-title.c { color: var(--success); }
+  .result .res-title.p { color: var(--warn); }
+  .result table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+  .result td { padding: 6px 8px; border-bottom: 1px solid #f0f0f0; vertical-align: top; }
+  .result .pair-correct { color: var(--success); }
+  .result .pair-wrong { color: var(--danger); }
+  .result .pair-missing { color: var(--text-dim); }
+  .tip {
+    background: var(--accent-light); border: 1px solid #ddd6fe; border-radius: 6px;
+    padding: 10px 14px; font-size: 0.82rem; color: #6d28d9; margin-top: 8px;
+  }
+  .tip strong { color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <h1>🔗 S3 History · Concept Matching Game</h1>
+  <div class="sub">Section III — Matching (7 marks / 14% of exam)</div>
+</div>
+
+<div class="scoreboard">
+  <div class="score correct">✅ Correct: <span class="num" id="scoreC">0</span></div>
+  <div class="score wrong">❌ Wrong: <span class="num" id="scoreW">0</span></div>
+</div>
+<p style="text-align:center;font-size:0.72rem;color:var(--text-dim);margin-bottom:16px;">Scores accumulate across all rounds.</p>
+
+<!-- ===== ROUND 1 ===== -->
+<div class="section" id="r1">
+  <h2>Round 1: WWII — Key Concepts <span class="zh">二戰核心概念</span></h2>
+  <p class="desc">Click a term on the left, then click its matching definition on the right. Matched pairs will be locked.</p>
+  <div class="match-grid">
+    <div>
+      <div class="col-label">Terms</div>
+      <div id="left1"></div>
+    </div>
+    <div>
+      <div class="col-label right">Definitions</div>
+      <div id="right1"></div>
+    </div>
+  </div>
+  <div class="btn-row">
+    <button class="btn primary" onclick="check(1)">Check Answers</button>
+    <button class="btn reset" onclick="reset(1)">Reset</button>
+  </div>
+  <div class="result" id="result1"></div>
+</div>
+
+<!-- ===== ROUND 2 ===== -->
+<div class="section" id="r2">
+  <h2>Round 2: Cold War — Policies &amp; Events <span class="zh">冷戰政策與事件</span></h2>
+  <p class="desc">Click a term on the left, then click its matching definition on the right.</p>
+  <div class="match-grid">
+    <div>
+      <div class="col-label">Terms</div>
+      <div id="left2"></div>
+    </div>
+    <div>
+      <div class="col-label right">Definitions</div>
+      <div id="right2"></div>
+    </div>
+  </div>
+  <div class="btn-row">
+    <button class="btn primary" onclick="check(2)">Check Answers</button>
+    <button class="btn reset" onclick="reset(2)">Reset</button>
+  </div>
+  <div class="result" id="result2"></div>
+</div>
+
+<!-- ===== ROUND 3 ===== -->
+<div class="section" id="r3">
+  <h2>Round 3: Hong Kong — Transformation <span class="zh">香港轉型</span></h2>
+  <p class="desc">Click a term on the left, then click its matching definition on the right.</p>
+  <div class="match-grid">
+    <div>
+      <div class="col-label">Terms</div>
+      <div id="left3"></div>
+    </div>
+    <div>
+      <div class="col-label right">Definitions</div>
+      <div id="right3"></div>
+    </div>
+  </div>
+  <div class="btn-row">
+    <button class="btn primary" onclick="check(3)">Check Answers</button>
+    <button class="btn reset" onclick="reset(3)">Reset</button>
+  </div>
+  <div class="result" id="result3"></div>
+</div>
+
+<!-- ===== ROUND 4 ===== -->
+<div class="section" id="r4">
+  <h2>Round 4: Mixed — WWII, Cold War &amp; HK <span class="zh">混合練習</span></h2>
+  <p class="desc">Click a term on the left, then click its matching definition on the right. 5 pairs.</p>
+  <div class="match-grid">
+    <div>
+      <div class="col-label">Terms</div>
+      <div id="left4"></div>
+    </div>
+    <div>
+      <div class="col-label right">Definitions</div>
+      <div id="right4"></div>
+    </div>
+  </div>
+  <div class="btn-row">
+    <button class="btn primary" onclick="check(4)">Check Answers</button>
+    <button class="btn reset" onclick="reset(4)">Reset</button>
+  </div>
+  <div class="result" id="result4"></div>
+</div>
+
+<div style="text-align:center;padding:20px 16px 8px;color:var(--text-dim);font-size:0.78rem;">
+  Concept Matching Game for <strong>海納 &amp; 有容</strong> · Tsuen Wan Government Secondary School S3 History 2nd Term Exam 2025-2026
+</div>
+
+</div>
+
+<script>
+var rounds = {
+  1: {
+    pairs: [
+      {term:"Appeasement", def:"Making concessions to an aggressor in order to avoid war. Example: Munich Agreement (1938)."},
+      {term:"Nazi-Soviet Non-aggression Pact", def:"1939 agreement between Hitler and Stalin: not to attack each other and to divide Poland."},
+      {term:"D-Day", def:"Allied invasion of Normandy, France on 6 June 1944. Launched the counter-offensive against Nazi Germany."},
+      {term:"Nuremberg Trials", def:"1945-46 prosecution of Nazi leaders for war crimes and crimes against humanity."}
+    ]
+  },
+  2: {
+    pairs: [
+      {term:"Truman Doctrine", def:"1947 US policy declaring support for any country resisting communism. Marked the start of the Cold War."},
+      {term:"Marshall Plan", def:"US economic aid programme to rebuild Western Europe after WWII and counter Soviet influence."},
+      {term:"Iron Curtain", def:"Churchill's 1946 term describing the division between communist and non-communist Europe."},
+      {term:"Cuban Missile Crisis", def:"1962 confrontation: USSR placed nuclear missiles in Cuba → US naval blockade → negotiated removal. Closest to nuclear war."}
+    ]
+  },
+  3: {
+    pairs: [
+      {term:"Shek Kip Mei Fire", def:"1953 disaster that left ~50,000 homeless. Triggered the colonial government to start public housing."},
+      {term:"Home Ownership Scheme", def:"1978 programme allowing public housing residents to buy their own flats. Helped people climb the social ladder."},
+      {term:"Japanisation", def:"Japanese occupation policy: forced Japanese language learning, renamed streets, imposed Japanese customs."},
+      {term:"Sino-British Joint Declaration", def:"1984 agreement between China and Britain for Hong Kong's return to China on 1 July 1997 under \"One Country, Two Systems\"."}
+    ]
+  },
+  4: {
+    pairs: [
+      {term:"Détente", def:"1970s period of reduced tensions between the US and USSR. SALT agreements limited nuclear arms."},
+      {term:"Decolonisation", def:"Post-WWII process: European powers weakened → Asian and African colonies gained independence."},
+      {term:"Truman Doctrine – Containment", def:"US Cold War strategy: prevent the spread of communism beyond its existing borders."},
+      {term:"MacLehose Ten-Year Housing Programme", def:"1972 HK policy aiming to provide housing for 1.8 million people. Improved living standards and social stability."},
+      {term:"Military Notes (軍票)", def:"Japanese military currency forced on HK residents during occupation. Unlimited printing → hyperinflation → became worthless."}
+    ]
+  }
+};
+
+var state = {}; // round -> { selectedLeft: null, matches: [{leftIdx, rightIdx}], submitted: bool }
+
+function initRound(r) {
+  var pairs = rounds[r].pairs;
+  var n = pairs.length;
+
+  // Shuffle left and right independently
+  var leftIndices = [];
+  var rightIndices = [];
+  for (var i = 0; i < n; i++) { leftIndices.push(i); rightIndices.push(i); }
+  shuffle(leftIndices);
+  shuffle(rightIndices);
+
+  state[r] = {
+    selectedLeft: null,
+    matches: [],
+    submitted: false,
+    leftShuffle: leftIndices,
+    rightShuffle: rightIndices
+  };
+
+  // Render left
+  var leftEl = document.getElementById('left'+r);
+  leftEl.innerHTML = '';
+  leftIndices.forEach(function(origI, displayIdx) {
+    var div = document.createElement('div');
+    div.className = 'item';
+    div.textContent = pairs[origI].term;
+    div.setAttribute('data-side', 'left');
+    div.setAttribute('data-orig', origI);
+    div.onclick = function() { clickItem(r, 'left', displayIdx); };
+    leftEl.appendChild(div);
+  });
+
+  // Render right
+  var rightEl = document.getElementById('right'+r);
+  rightEl.innerHTML = '';
+  rightIndices.forEach(function(origI, displayIdx) {
+    var div = document.createElement('div');
+    div.className = 'item';
+    div.textContent = pairs[origI].def;
+    div.setAttribute('data-side', 'right');
+    div.setAttribute('data-orig', origI);
+    div.onclick = function() { clickItem(r, 'right', displayIdx); };
+    rightEl.appendChild(div);
+  });
+
+  // Clear result
+  var resEl = document.getElementById('result'+r);
+  resEl.innerHTML = '';
+  resEl.classList.remove('show','correct','partial');
+}
+
+function shuffle(arr) {
+  for (var i = arr.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var t = arr[i]; arr[i] = arr[j]; arr[j] = t;
+  }
+}
+
+function clickItem(r, side, displayIdx) {
+  var s = state[r];
+  if (s.submitted) return;
+
+  if (side === 'left') {
+    // Ignore if this display index is already matched
+    for (var m = 0; m < s.matches.length; m++) {
+      if (s.matches[m].leftDisplay === displayIdx) return;
+    }
+    // Clear previous left selection
+    var leftItems = document.getElementById('left'+r).querySelectorAll('.item');
+    leftItems.forEach(function(item) { item.classList.remove('left-selected'); });
+
+    // If same left clicked again, deselect
+    if (s.selectedLeft === displayIdx) {
+      s.selectedLeft = null;
+      return;
+    }
+
+    s.selectedLeft = displayIdx;
+    leftItems[displayIdx].classList.add('left-selected');
+
+  } else if (side === 'right') {
+    if (s.selectedLeft === null) return; // Must select left first
+
+    var leftDisplayIdx = s.selectedLeft;
+    var rightDisplayIdx = displayIdx;
+
+    // Check left not already matched
+    var leftAlreadyMatched = false;
+    for (var n = 0; n < s.matches.length; n++) {
+      if (s.matches[n].leftDisplay === leftDisplayIdx) { leftAlreadyMatched = true; break; }
+    }
+    if (leftAlreadyMatched) { s.selectedLeft = null; return; }
+
+    // Check right not already matched
+    for (var j = 0; j < s.matches.length; j++) {
+      if (s.matches[j].rightDisplay === rightDisplayIdx) {
+        var rightItems = document.getElementById('right'+r).querySelectorAll('.item');
+        rightItems[rightDisplayIdx].classList.add('wrong-flash');
+        (function(idx) {
+          setTimeout(function() {
+            document.getElementById('right'+r).querySelectorAll('.item')[idx].classList.remove('wrong-flash');
+          }, 400);
+        })(rightDisplayIdx);
+        s.selectedLeft = null;
+        var li = document.getElementById('left'+r).querySelectorAll('.item');
+        li[leftDisplayIdx].classList.remove('left-selected');
+        return;
+      }
+    }
+
+    // Create match
+    s.matches.push({
+      leftDisplay: leftDisplayIdx,
+      rightDisplay: rightDisplayIdx,
+      leftOrig: s.leftShuffle[leftDisplayIdx],
+      rightOrig: s.rightShuffle[rightDisplayIdx]
+    });
+
+    // Visual feedback
+    var leftItems = document.getElementById('left'+r).querySelectorAll('.item');
+    var rightItems = document.getElementById('right'+r).querySelectorAll('.item');
+    leftItems[leftDisplayIdx].classList.remove('left-selected');
+    leftItems[leftDisplayIdx].classList.add('matched');
+    rightItems[rightDisplayIdx].classList.add('matched');
+
+    s.selectedLeft = null;
+  }
+}
+
+function check(r) {
+  var s = state[r];
+  if (s.submitted) return;
+  s.submitted = true;
+
+  var pairs = rounds[r].pairs;
+  var totalPairs = pairs.length;
+  var correctCount = 0;
+
+  var resultEl = document.getElementById('result'+r);
+
+  // Count correct matches
+  s.matches.forEach(function(m) {
+    if (m.leftOrig === m.rightOrig) correctCount++;
+  });
+
+  // Update scoreboard
+  if (correctCount === totalPairs) {
+    var prev = parseInt(document.getElementById('scoreC').textContent);
+    document.getElementById('scoreC').textContent = prev + 1;
+  } else {
+    var prev = parseInt(document.getElementById('scoreW').textContent);
+    document.getElementById('scoreW').textContent = prev + 1;
+  }
+
+  resultEl.classList.add('show');
+
+  if (correctCount === totalPairs) {
+    resultEl.classList.add('correct');
+    var html = '<div class="res-title c">✅ Perfect! All ' + totalPairs + ' pairs correct.</div>';
+    html += '<table><tr><th>Term</th><th>Definition</th></tr>';
+    pairs.forEach(function(p) {
+      html += '<tr><td class="pair-correct">' + p.term + '</td><td class="pair-correct">' + p.def + '</td></tr>';
+    });
+    html += '</table>';
+    resultEl.innerHTML = html;
+  } else {
+    resultEl.classList.add('partial');
+    var html = '<div class="res-title p">⚠️ ' + correctCount + ' of ' + totalPairs + ' pairs correct.</div>';
+
+    // Show which pairs are right/wrong
+    html += '<table><tr><th>Term</th><th style="width:110px;">Status</th><th>Correct Definition</th></tr>';
+    pairs.forEach(function(p, origIdx) {
+      // Find if this term was matched
+      var matched = null;
+      s.matches.forEach(function(m) {
+        if (m.leftOrig === origIdx) matched = m;
+      });
+
+      if (matched) {
+        if (matched.leftOrig === matched.rightOrig) {
+          html += '<tr><td>' + p.term + '</td><td class="pair-correct">✅ Correct</td><td>' + p.def + '</td></tr>';
+        } else {
+          html += '<tr><td>' + p.term + '</td><td class="pair-wrong">❌ Wrong</td><td>' + p.def + '</td></tr>';
+        }
+      } else {
+        html += '<tr><td>' + p.term + '</td><td class="pair-missing">Not matched</td><td>' + p.def + '</td></tr>';
+      }
+    });
+    html += '</table>';
+    resultEl.innerHTML = html;
+  }
+}
+
+function reset(r) {
+  state[r] = null;
+  var resEl = document.getElementById('result'+r);
+  resEl.innerHTML = '';
+  resEl.classList.remove('show','correct','partial');
+  initRound(r);
+}
+
+// Init all
+for (var r = 1; r <= 4; r++) { initRound(r); }
+</script>
+</body>
+</html>

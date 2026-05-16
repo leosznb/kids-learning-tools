@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>English Grammar Drill · S3 · TWGSS</title>
+<style>
+:root {
+  --bg: #fafaf7; --card: #fff; --fg: #1a1a1a; --muted: #78716c;
+  --red: #c41e3a; --red-bg: #fef2f2;
+  --blue: #2563eb; --blue-bg: #eff6ff;
+  --green: #16a34a; --green-bg: #f0fdf4;
+  --amber: #d97706; --amber-bg: #fffbeb;
+  --radius: 14px;
+  --font: -apple-system, "Noto Sans TC", "PingFang TC", "Inter", "Segoe UI", sans-serif;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: var(--font); background: var(--bg); color: var(--fg);
+  line-height: 1.7; max-width: 700px; margin: 0 auto; padding: 24px 16px 80px;
+  -webkit-tap-highlight-color: transparent;
+}
+header { text-align: center; margin-bottom: 20px; }
+header h1 { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em; }
+header p { font-size: 0.84rem; color: var(--muted); margin-top: 2px; }
+
+/* Tabs */
+.tab-bar { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 14px; }
+.tab {
+  flex: 1; min-width: 60px; padding: 8px 10px; border-radius: 10px; border: 1px solid #e5e5e0;
+  background: var(--card); font-size: 0.76rem; font-weight: 600; cursor: pointer; text-align: center;
+  transition: all 0.2s; font-family: var(--font); color: var(--fg);
+}
+.tab:hover { background: #f5f5f2; }
+.tab.active { background: var(--blue); color: #fff; border-color: var(--blue); }
+.tab .t-icon { display: block; font-size: 1.1rem; margin-bottom: 2px; }
+
+/* Mode toggle */
+.mode-bar { display: flex; gap: 8px; margin-bottom: 14px; }
+.mode-btn {
+  padding: 8px 20px; border-radius: 99px; border: 1px solid #e5e5e0; background: var(--card);
+  font-size: 0.83rem; font-weight: 600; cursor: pointer; font-family: var(--font); transition: all 0.2s;
+}
+.mode-btn.active { background: var(--red); color: #fff; border-color: var(--red); }
+.mode-btn:hover { background: #f5f5f2; }
+.mode-btn.active:hover { background: var(--red); }
+
+/* Learn section */
+.learn-block { margin-bottom: 16px; }
+.rule-card {
+  background: var(--card); border: 1px solid #e5e5e0; border-radius: var(--radius);
+  padding: 18px 20px; margin-bottom: 10px;
+}
+.rule-card h3 { font-size: 0.95rem; margin-bottom: 6px; }
+.rule-card .formula {
+  background: #f5f5f2; padding: 10px 14px; border-radius: 8px;
+  font-family: "SF Mono","Cascadia Code","Consolas",monospace; font-size: 0.82rem; margin: 8px 0;
+}
+.rule-card ul { margin-left: 18px; font-size: 0.85rem; }
+.rule-card ul li { margin-bottom: 4px; }
+.trap-box { background: var(--red-bg); border: 1px solid #fecaca; border-radius: 10px; padding: 12px 16px; margin: 8px 0; font-size: 0.84rem; }
+.trap-box strong { color: var(--red); }
+.examples { font-size: 0.84rem; margin-top: 8px; }
+.examples .ex { padding: 3px 0; }
+.examples .ex .correct { color: var(--green); }
+.examples .ex .wrong { color: var(--red); text-decoration: line-through; text-decoration-color: #fca5a5; }
+
+/* Practice */
+.question-card {
+  background: var(--card); border: 1px solid #e5e5e0; border-radius: var(--radius);
+  padding: 20px 22px; margin-bottom: 12px;
+}
+.question-card .q-num { font-size: 0.78rem; color: var(--muted); margin-bottom: 4px; }
+.question-card .q-text { font-size: 0.92rem; font-weight: 500; margin-bottom: 12px; line-height: 1.8; }
+.question-card .q-blank {
+  display: inline-block; min-width: 70px; border-bottom: 2px dashed var(--blue);
+  padding: 0 8px; margin: 0 3px;
+}
+.question-card input { 
+  font-size: 0.9rem; padding: 6px 10px; border: 1.5px solid #d0d0d0; border-radius: 6px;
+  width: 220px; font-family: var(--font);
+}
+.question-card input:focus { outline: none; border-color: var(--blue); }
+.question-card input.correct-input { border-color: var(--green); background: var(--green-bg); }
+.question-card input.wrong-input { border-color: var(--red); background: var(--red-bg); }
+
+.feedback { display: none; margin-top: 10px; padding: 10px 14px; border-radius: 8px; font-size: 0.83rem; }
+.feedback.show { display: block; }
+.feedback.correct { background: var(--green-bg); border: 1px solid #bbf7d0; }
+.feedback.wrong { background: var(--red-bg); border: 1px solid #fecaca; }
+
+.btn {
+  display: inline-flex; align-items: center; gap: 4px; padding: 7px 16px;
+  border-radius: 99px; border: 1px solid #e5e5e0; background: var(--card);
+  font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: all 0.2s; font-family: var(--font);
+}
+.btn:hover { background: #f5f5f2; }
+.btn:active { transform: scale(0.97); }
+.btn.accent { background: var(--red); color: #fff; border-color: var(--red); }
+
+/* Wrong pool */
+.wrong-pool { display: none; }
+.wrong-pool.show { display: block; }
+.wrong-item {
+  background: var(--card); border: 1px solid #e5e5e0; border-radius: 10px;
+  padding: 14px 16px; margin-bottom: 8px; font-size: 0.85rem;
+}
+.wrong-item .wi-q { font-weight: 500; }
+.wrong-item .wi-your { color: var(--red); }
+.wrong-item .wi-correct { color: var(--green); font-weight: 600; }
+
+/* Review mode */
+.review-panel { display: none; }
+.review-panel.active { display: block; }
+.review-q {
+  background: var(--card); border: 1px solid #e5e5e0; border-radius: var(--radius);
+  padding: 18px 20px; margin-bottom: 10px;
+}
+
+/* Progress bar */
+.prog-bar { height: 4px; background: #f0f0ec; border-radius: 99px; margin-bottom: 12px; overflow: hidden; }
+.prog-fill { height: 100%; background: var(--green); border-radius: 99px; transition: width 0.3s; }
+
+.top-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+.top-row .wrong-btn { margin-left: auto; }
+
+.note { background: var(--amber-bg); border: 1px solid #fcd34d; border-radius: 10px; padding: 10px 14px; font-size: 0.83rem; margin: 10px 0; }
+
+hr { border: none; border-top: 1px solid #e5e5e0; margin: 20px 0; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🔧 Grammar Drill Workshop</h1>
+  <p>Paper 1 Section C · 50 marks · 5 topics · Learn → Practice → Retry</p>
+</header>
+
+<!-- Topic tabs -->
+<div class="tab-bar" id="tabBar">
+  <button class="tab active" onclick="switchTopic(0)"><span class="t-icon">①</span>Conditionals</button>
+  <button class="tab" onclick="switchTopic(1)"><span class="t-icon">②</span>Gerunds</button>
+  <button class="tab" onclick="switchTopic(2)"><span class="t-icon">③</span>Adj Patterns</button>
+  <button class="tab" onclick="switchTopic(3)"><span class="t-icon">④</span>Inversion</button>
+  <button class="tab" onclick="switchTopic(4)"><span class="t-icon">⑤</span>Mixed</button>
+</div>
+
+<!-- Mode toggle -->
+<div class="mode-bar" id="modeBar">
+  <button class="mode-btn active" onclick="switchMode('learn')">📖 Learn</button>
+  <button class="mode-btn" onclick="switchMode('practice')">✏️ Practice</button>
+</div>
+
+<!-- Progress -->
+<div class="prog-bar"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+
+<!-- Top row with wrong pool button -->
+<div class="top-row">
+  <span id="scoreLabel" style="font-size:0.82rem;color:var(--muted);"></span>
+  <button class="btn wrong-btn" id="wrongBtn" onclick="openWrongPool()" style="display:none;">🧺 Wrong Pool</button>
+</div>
+
+<!-- Content area -->
+<div id="contentArea"></div>
+
+<!-- Wrong pool panel -->
+<div class="wrong-pool" id="wrongPool"></div>
+
+<!-- Review panel -->
+<div class="review-panel" id="reviewPanel"></div>
+
+<script>
+// ═══════════════ TOPICS DATA ═══════════════
+const TOPICS = [
+  {
+    id: 'conditionals',
+    title: 'Conditionals Type 2 & 3',
+    marks: '~12 marks',
+    learn: `
+      <div class="rule-card">
+        <h3>Type 2 — Unreal Present / Future</h3>
+        <div class="formula">If + past simple , would + base verb</div>
+        <p style="font-size:0.85rem;">Used for imaginary or unlikely situations now or in the future.</p>
+        <div class="examples">
+          <div class="ex"><span class="correct">✓</span> If I <strong>had</strong> more time, I <strong>would learn</strong> Japanese.</div>
+          <div class="ex"><span class="correct">✓</span> If she <strong>were</strong> here, she <strong>would know</strong> what to do. (use <em>were</em> for all subjects in formal English)</div>
+        </div>
+      </div>
+      <div class="rule-card">
+        <h3>Type 3 — Unreal Past</h3>
+        <div class="formula">If + past perfect , would have + past participle</div>
+        <p style="font-size:0.85rem;">Used for imaginary situations in the past — things that did NOT happen.</p>
+        <div class="examples">
+          <div class="ex"><span class="correct">✓</span> If I <strong>had studied</strong> harder, I <strong>would have passed</strong> the exam.</div>
+          <div class="ex"><span class="correct">✓</span> If they <strong>had left</strong> earlier, they <strong>would not have missed</strong> the train.</div>
+        </div>
+      </div>
+      <div class="trap-box">
+        <strong>⚠️ Common Mistakes</strong><br>
+        ❶ <strong>NEVER put "would" in the IF-clause:</strong> <span class="wrong">If I would have money</span> → <span class="correct">If I had money</span><br>
+        ❷ <strong>Mixing Type 2 and Type 3:</strong> If the situation is past (= didn't happen), use Type 3, not Type 2.<br>
+        ❸ <strong>Inverted conditionals:</strong> <em>Had I known</em> = <em>If I had known</em> (drop "if", invert subject and auxiliary). Exam may test this!
+      </div>
+    `,
+    questions: [
+      { q: 'If I ______ (be) you, I would accept the offer.', a: 'were', hint: 'Type 2 — unreal present. Use "were" for all subjects.' },
+      { q: 'If she ______ (study) harder, she would have passed the test.', a: 'had studied', hint: 'Type 3 — unreal past. Past perfect in the if-clause.' },
+      { q: 'They would have arrived on time if they ______ (not miss) the bus.', a: ['had not missed', "hadn't missed"], hint: 'Type 3. Past perfect negative in the if-clause.' },
+      { q: 'If we ______ (live) in London, we would speak English every day.', a: 'lived', hint: 'Type 2 — unreal present. Past simple in the if-clause.' },
+      { q: 'He would not have fallen asleep if he ______ (drink) coffee.', a: 'had drunk', hint: 'Type 3. Past perfect of "drink" is "had drunk".' },
+      { q: '______ I known about the meeting, I would have attended.', a: 'Had', hint: 'Inverted Type 3 conditional. Drop "if" and invert: Had I known = If I had known.' },
+      { q: 'If the weather ______ (be) better tomorrow, we would go hiking.', a: 'were', hint: 'Type 2 — future unreal. "were" for all subjects.' },
+      { q: 'She would be happier if she ______ (have) a pet.', a: 'had', hint: 'Type 2. Past simple "had" in the if-clause.' },
+      { q: 'If they ______ (listen) to my advice, they would not have lost the game.', a: 'had listened', hint: 'Type 3. Past perfect in if-clause.' },
+      { q: '______ she not been so tired, she would have finished the report.', a: 'Had', hint: 'Inverted Type 3: Had she not been = If she had not been.' },
+    ],
+  },
+  {
+    id: 'gerunds',
+    title: 'Gerunds & to-infinitives',
+    marks: '~10 marks',
+    learn: `
+      <div class="rule-card">
+        <h3>Verbs Followed by Gerund (-ing)</h3>
+        <p style="font-size:0.85rem;">These verbs MUST be followed by -ing form, NOT to-infinitive:</p>
+        <p style="font-size:0.83rem;"><strong>enjoy, finish, mind, suggest, avoid, consider, delay, deny, keep, miss, practise, risk, admit, appreciate, imagine, recommend</strong></p>
+        <div class="examples"><div class="ex"><span class="correct">✓</span> I enjoy <strong>reading</strong>. <span class="wrong">✗ I enjoy to read.</span></div></div>
+      </div>
+      <div class="rule-card">
+        <h3>Verbs Followed by to-infinitive</h3>
+        <p style="font-size:0.85rem;">These verbs MUST be followed by to-infinitive:</p>
+        <p style="font-size:0.83rem;"><strong>want, hope, decide, plan, expect, promise, agree, refuse, learn, manage, offer, seem, afford, attempt, choose, intend, pretend, tend</strong></p>
+        <div class="examples"><div class="ex"><span class="correct">✓</span> She decided <strong>to leave</strong>. <span class="wrong">✗ She decided leaving.</span></div></div>
+      </div>
+      <div class="trap-box">
+        <strong>⚠️ Verbs That Change Meaning</strong><br>
+        <strong>stop + gerund</strong> = quit an activity: <em>He stopped smoking.</em> (he quit)<br>
+        <strong>stop + to-infinitive</strong> = stop in order to do something: <em>He stopped to smoke.</em> (he paused to light a cigarette)<br>
+        <strong>remember / forget + gerund</strong> = actual past action: <em>I remember locking the door.</em><br>
+        <strong>remember / forget + to-infinitive</strong> = obligation: <em>Remember to lock the door.</em><br>
+        <strong>try + gerund</strong> = experiment: <em>Try studying in the morning.</em><br>
+        <strong>try + to-infinitive</strong> = attempt, make an effort: <em>I tried to open the window.</em>
+      </div>
+    `,
+    questions: [
+      { q: 'She enjoys ______ (read) novels in her free time.', a: 'reading', hint: '"enjoy" is always followed by gerund (-ing).' },
+      { q: 'He decided ______ (apply) for the scholarship.', a: 'to apply', hint: '"decide" is followed by to-infinitive.' },
+      { q: 'Would you mind ______ (close) the window?', a: 'closing', hint: '"mind" is followed by gerund.' },
+      { q: 'She stopped ______ (smoke) because of her health.', a: 'smoking', hint: 'She quit the activity → gerund. If she paused to light a cigarette, it would be "stopped to smoke".' },
+      { q: 'I forgot ______ (bring) my textbook. Can I borrow yours?', a: 'to bring', hint: 'Obligation I failed to do → to-infinitive.' },
+      { q: 'He tried ______ (call) her, but the line was busy.', a: 'to call', hint: 'He attempted → to-infinitive.' },
+      { q: 'Try ______ (use) a different approach if this one does not work.', a: 'using', hint: 'Experiment with a method → gerund.' },
+      { q: 'The teacher suggested ______ (review) the notes before the test.', a: 'reviewing', hint: '"suggest" is followed by gerund.' },
+      { q: 'I remember ______ (meet) her at the party last year.', a: 'meeting', hint: 'Actual past memory → gerund.' },
+      { q: 'Remember ______ (submit) the assignment by Friday.', a: 'to submit', hint: 'Obligation to remember → to-infinitive.' },
+    ],
+  },
+  {
+    id: 'adjpat',
+    title: 'Adjective Patterns',
+    marks: '~12 marks',
+    learn: `
+      <div class="rule-card">
+        <h3>Pattern 1: It is + adj + for + noun + to-infinitive</h3>
+        <div class="formula">It is important for students to revise regularly.</div>
+        <p style="font-size:0.85rem;">Used when the adjective describes the action (for someone to do something). Common adjectives: <strong>important, necessary, essential, difficult, easy, possible, impossible, common, usual, rare</strong></p>
+      </div>
+      <div class="rule-card">
+        <h3>Pattern 2: It is + adj + that + clause</h3>
+        <div class="formula">It is essential that every student brings a calculator.</div>
+        <p style="font-size:0.85rem;">Used when the adjective describes a situation/fact. Common adjectives: <strong>important, essential, vital, necessary, likely, unlikely, surprising, clear, obvious, true, possible</strong></p>
+      </div>
+      <div class="rule-card">
+        <h3>Pattern 3: It is + adj + <em>of</em> + noun + to-infinitive</h3>
+        <div class="formula">It is kind of you to help me.</div>
+        <p style="font-size:0.85rem;">Used when the adjective describes the <strong>person's character</strong> (not the action). Common adjectives: <strong>kind, nice, foolish, clever, rude, brave, generous, selfish, careless, thoughtful</strong></p>
+      </div>
+      <div class="trap-box">
+        <strong>⚠️ of vs for — The #1 Trap</strong><br>
+        Use <strong>of + noun</strong> when the adjective describes the PERSON.<br>
+        Use <strong>for + noun</strong> when the adjective describes the ACTION.<br>
+        <span class="correct">✓</span> It is kind <strong>of you to help</strong> me. (You are kind → describes YOU the person)<br>
+        <span class="correct">✓</span> It is important <strong>for you to study</strong>. (Studying is important → describes the ACTION)<br>
+        <span class="correct">✓</span> It is important <strong>that everyone arrives</strong> on time. (general fact → that-clause)<br>
+        <span class="wrong">✗</span> It is kind <strong>for you to help</strong> me. (wrong! "kind" describes the person → must use of)<br>
+        <span class="wrong">✗</span> It is clever <strong>for him to solve</strong> the puzzle. (wrong! "clever" describes him → must use of)
+      </div>
+    `,
+    questions: [
+      { q: 'It is necessary ______ students to complete the form.', a: 'for', hint: 'Pattern: It is + adj + for + noun + to-infinitive.' },
+      { q: 'It is important ______ you submit the report by Monday.', a: 'that', hint: '"that + clause" — stating a general requirement.' },
+      { q: 'It is difficult ______ beginners to learn a new language.', a: 'for', hint: 'for + noun (beginners) + to-infinitive pattern.' },
+      { q: 'It is likely ______ the train will be delayed.', a: 'that', hint: '"likely" is almost always followed by "that + clause".' },
+      { q: 'It was impossible ______ him to finish the work in one day.', a: 'for', hint: 'for + him + to-infinitive. The action belongs to him.' },
+      { q: 'It is essential ______ every student brings a pencil.', a: 'that', hint: 'Stating a general requirement → that-clause.' },
+      { q: 'Is it common ______ teenagers to feel stressed about exams?', a: 'for', hint: 'for + noun + to-infinitive describing a specific group\'s action.' },
+      { q: 'It is surprising ______ she did not recognise you.', a: 'that', hint: '"surprising" describes a situation/fact → that-clause.' },
+      { q: 'It was kind ______ you to lend me your notes.', a: 'of', hint: '"kind" describes YOU the person → of, not for.' },
+      { q: 'It is foolish ______ drivers to ignore the warning signs.', a: 'of', hint: '"foolish" describes the drivers → of. Describes the person, not the action.' },
+      { q: 'It is careless ______ students to forget their homework.', a: 'of', hint: '"careless" describes the students\' character → of.' },
+      { q: 'It is dangerous ______ children to play near the road.', a: 'for', hint: 'Playing near the road is dangerous (describes the action, not the children). → for.' },
+    ],
+  },
+  {
+    id: 'inversion',
+    title: 'Inversion',
+    marks: '~8 marks',
+    learn: `
+      <div class="rule-card">
+        <h3>What Is Inversion?</h3>
+        <p style="font-size:0.85rem;">When a negative or restrictive adverb is placed at the beginning of a sentence, the subject and auxiliary verb swap positions — just like in a question.</p>
+        <div class="formula">Adverb + auxiliary verb + subject + main verb</div>
+      </div>
+      <div class="rule-card">
+        <h3>Common Inversion Triggers</h3>
+        <p style="font-size:0.83rem;"><strong>Never · Rarely · Seldom · Hardly · Scarcely · No sooner · Not only · Not until · Under no circumstances · On no account · Little · Only then</strong></p>
+        <div class="examples">
+          <div class="ex"><span class="correct">✓</span> <strong>Never have I seen</strong> such a beautiful sunset.</div>
+          <div class="ex"><span class="correct">✓</span> <strong>Rarely does he complain</strong> about his workload.</div>
+          <div class="ex"><span class="correct">✓</span> <strong>Not only did she pass</strong> the exam, but she also got the highest score.</div>
+          <div class="ex"><span class="correct">✓</span> <strong>Hardly had we arrived</strong> when the show started.</div>
+          <div class="ex"><span class="correct">✓</span> <strong>Under no circumstances should you</strong> open that door.</div>
+        </div>
+      </div>
+      <div class="trap-box">
+        <strong>⚠️ Common Mistakes</strong><br>
+        ❶ Forgetting the auxiliary: <span class="wrong">Never I have seen</span> → <span class="correct">Never have I seen</span><br>
+        ❷ Using inversion after "Not until" in the wrong clause: <span class="correct">Not until I arrived did I realise the mistake.</span> (inversion in the MAIN clause, not after "not until")<br>
+        ❸ "Only" — inversion only when "only" modifies a time/condition at the start: <em>Only then did I understand.</em> But: <em>Only John knows the answer.</em> (no inversion — "only" modifies the subject)
+      </div>
+    `,
+    questions: [
+      { q: 'Never ______ I seen such a mess! (fill in the auxiliary)', a: 'have', hint: '只填助動詞。Inversion: Never + auxiliary + subject + main verb. Present perfect → "have".' },
+      { q: 'Rarely ______ she complain about her workload. (fill in the auxiliary)', a: 'does', hint: '只填助動詞。Present simple with "she" → auxiliary "does".' },
+      { q: 'Not only ______ he pass the test, but he also got full marks.', a: 'did', hint: '只填助動詞。Past simple → auxiliary "did". Main verb remains base form.' },
+      { q: 'Hardly ______ we sat down when the phone rang.', a: 'had', hint: '"Hardly...when" = one action barely completed before another. Past perfect → "had".' },
+      { q: 'Under no circumstances ______ you open that door.', a: 'should', hint: '只填助動詞。"Under no circumstances" expresses prohibition → modal "should".' },
+      { q: 'No sooner ______ the teacher entered than the students fell silent.', a: 'had', hint: '"No sooner...than" pattern. Past perfect → "had".' },
+      { q: 'Seldom ______ we encounter such a talented musician.', a: 'do', hint: '只填助動詞。Present simple with "we" → auxiliary "do".' },
+      { q: 'Only after the meeting ______ I realise my mistake.', a: 'did', hint: '只填助動詞。"Only after..." at the start triggers inversion in the main clause.' },
+    ],
+  },
+  {
+    id: 'proofread',
+    title: 'Proofreading',
+    marks: '~8 marks',
+    learn: `
+      <div class="rule-card">
+        <h3>How Proofreading Works</h3>
+        <p style="font-size:0.85rem;">One numbered line = ONE error. Three types:</p>
+        <ul>
+          <li><strong>Wrong word:</strong> underline the wrong word, write the correct word above it</li>
+          <li><strong>Missing word:</strong> mark ∧ where the word is missing, write the missing word above</li>
+          <li><strong>Extra word:</strong> cross out the extra word</li>
+        </ul>
+      </div>
+      <div class="trap-box">
+        <strong>⚠️ Top Error Types to Look For</strong><br>
+        ❶ Subject-verb agreement: <em>He go</em> → <em>He goes</em><br>
+        ❷ Wrong preposition: <em>depend in</em> → <em>depend on</em><br>
+        ❸ Wrong article: <em>a apple</em> → <em>an apple</em><br>
+        ❹ Wrong tense: <em>I have went</em> → <em>I have gone</em><br>
+        ❺ Wrong word form: <em>He runs quick</em> → <em>He runs quickly</em><br>
+        ❻ Missing/extra preposition: <em>discuss about</em> → <em>discuss</em>
+      </div>
+      <p style="font-size:0.84rem;margin-top:8px;"><strong>Strategy:</strong> Read each line aloud silently — your ear often catches the error before your eye does.</p>
+    `,
+    questions: [
+      { q: 'Find the error: "She do not like spicy food."', a: 'does', hint: 'Subject-verb agreement. "She" → "does".' },
+      { q: 'Find the error: "He depends in his parents for money."', a: 'on', hint: 'Wrong preposition. "depend on", not "depend in".' },
+      { q: 'Find the error: "I have went to that restaurant before."', a: ['gone', 'been'], hint: 'Wrong past participle. "have gone" or "have been", not "have went".' },
+      { q: 'Find the error: "She runs very quick."', a: ['quickly', 'fast'], hint: 'Adverb needed, not adjective. "runs" (verb) → "quickly" or "fast" (adverb).' },
+      { q: 'What is the EXTRA word? "We discussed about the project."', a: 'about', hint: '"discuss" does not take a preposition. The extra word is "about".' },
+      { q: 'Find the error: "He bought a apple from the store."', a: 'an', hint: 'Article. "apple" starts with a vowel sound → "an".' },
+      { q: 'Find the error: "The children was playing in the park."', a: 'were', hint: 'Subject-verb agreement. "children" is plural → "were".' },
+      { q: 'What is the EXTRA word? "She is more taller than her sister."', a: 'more', hint: 'Double comparative. "taller" already has -er. The extra word is "more".' },
+    ],
+  },
+];
+
+// ═══════════════ STATE ═══════════════
+const STORAGE_KEY = 'eng_grammar_v1';
+function loadState() {
+  try { const r = localStorage.getItem(STORAGE_KEY); if (r) return JSON.parse(r); } catch(e) {}
+  return { mastered: {}, wrong: {} };
+}
+function saveState() { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {} }
+
+let state = loadState();
+let currentTopic = 0;
+let currentMode = 'learn'; // 'learn' | 'practice'
+let userAnswers = {};
+
+// ═══════════════ RENDER ═══════════════
+function switchTopic(i) {
+  currentTopic = i;
+  userAnswers = {};
+  render();
+}
+
+function switchMode(m) {
+  currentMode = m;
+  userAnswers = {};
+  render();
+}
+
+function render() {
+  const t = TOPICS[currentTopic];
+
+  // Tabs
+  document.querySelectorAll('#tabBar .tab').forEach((el, i) => el.classList.toggle('active', i === currentTopic));
+  // Mode buttons
+  document.querySelectorAll('#modeBar .mode-btn').forEach(el => {
+    el.classList.toggle('active', el.textContent.includes(currentMode === 'learn' ? 'Learn' : 'Practice'));
+  });
+
+  // Score
+  const totalQ = t.questions.length;
+  const mastered = t.questions.filter((_, i) => state.mastered[`${currentTopic}_${i}`]).length;
+  document.getElementById('scoreLabel').textContent = currentMode === 'practice' ? `✅ ${mastered}/${totalQ} correct` : '';
+
+  // Progress bar
+  const totalAll = TOPICS.reduce((s, tp) => s + tp.questions.length, 0);
+  const masteredAll = Object.keys(state.mastered).length;
+  document.getElementById('progFill').style.width = (totalAll > 0 ? masteredAll / totalAll * 100 : 0) + '%';
+
+  // Wrong pool button
+  const hasWrong = Object.keys(state.wrong).length > 0;
+  document.getElementById('wrongBtn').style.display = hasWrong ? '' : 'none';
+
+  // Content
+  const area = document.getElementById('contentArea');
+  if (currentMode === 'learn') {
+    area.innerHTML = `<div class="learn-block"><div class="rule-card"><h3>${t.title} <span style="font-weight:400;font-size:0.8rem;color:var(--muted);">(${t.marks})</span></h3></div>${t.learn}</div>`;
+    document.getElementById('wrongPool').classList.remove('show');
+    document.getElementById('reviewPanel').classList.remove('active');
+  } else {
+    let html = '';
+    for (let i = 0; i < t.questions.length; i++) {
+      const q = t.questions[i];
+      const key = `${currentTopic}_${i}`;
+      const isMastered = state.mastered[key];
+      const userAns = userAnswers[i];
+      const checked = userAns !== undefined;
+      const qAccepted = Array.isArray(q.a) ? q.a : [q.a];
+      const isCorrect = checked && qAccepted.some(a => userAns.toLowerCase().trim() === a.toLowerCase().trim());
+
+      if (isMastered) {
+        html += `<div class="question-card" style="opacity:0.7;">
+          <div class="q-num">Q${i + 1} / ${t.questions.length} ✅ Mastered</div>
+          <div class="q-text">${q.q.replace(/______/g, '<span class="q-blank">______</span>')}</div>
+          <div style="padding:8px 0;font-size:0.88rem;color:var(--green);font-weight:600;">✔ Answer: ${Array.isArray(q.a) ? q.a.join(' / ') : q.a}</div>
+          <div style="font-size:0.8rem;color:var(--muted);">${q.hint}</div>
+          <button class="btn" onclick="retryQ('${key}',${i})" style="margin-top:6px;font-size:0.75rem;">🔁 Retry this question</button>
+        </div>`;
+      } else {
+        html += `<div class="question-card">
+          <div class="q-num">Q${i + 1} / ${t.questions.length}</div>
+          <div class="q-text">${q.q.replace(/______/g, '<span class="q-blank">______</span>')}</div>
+          <input type="text" id="input${i}" placeholder="Type your answer" onkeydown="if(event.key==='Enter')check(${i})" ${checked ? 'disabled' : ''} class="${checked ? (isCorrect ? 'correct-input' : 'wrong-input') : ''}" value="${checked ? userAns : ''}">
+          <button class="btn accent" onclick="check(${i})" style="margin-left:6px;" ${checked ? 'disabled' : ''}>Check</button>
+          <button class="btn" onclick="showAnswer(${i})" style="margin-left:2px;font-size:0.78rem;${checked ? 'display:none' : ''}">👁 Show</button>
+          <div class="feedback ${checked ? 'show ' + (isCorrect ? 'correct' : 'wrong') : ''}" id="fb${i}">
+            ${checked ? (isCorrect ? '✅ Correct! ' + q.hint : '❌ The correct answer is: <strong>' + (Array.isArray(q.a) ? q.a.join(' / ') : q.a) + '</strong><br>' + q.hint) : ''}
+          </div>
+        </div>`;
+      }
+    }
+    area.innerHTML = html;
+    // Restore input values
+    for (let i = 0; i < t.questions.length; i++) {
+      if (userAnswers[i] !== undefined) {
+        const inp = document.getElementById('input' + i);
+        if (inp) inp.value = userAnswers[i];
+      }
+    }
+    document.getElementById('wrongPool').classList.remove('show');
+    document.getElementById('reviewPanel').classList.remove('active');
+  }
+}
+
+function check(i) {
+  const inp = document.getElementById('input' + i);
+  if (!inp) return;
+  const ans = inp.value;
+  userAnswers[i] = ans;
+  const t = TOPICS[currentTopic];
+  const q = t.questions[i];
+  const key = `${currentTopic}_${i}`;
+  const accepted = Array.isArray(q.a) ? q.a : [q.a];
+  const isCorrect = accepted.some(a => ans.toLowerCase().trim() === a.toLowerCase().trim());
+
+  if (isCorrect) {
+    state.mastered[key] = true;
+    delete state.wrong[key];
+  } else {
+    state.wrong[key] = { topic: t.title, q: q.q, your: ans, correct: q.a, hint: q.hint };
+  }
+  saveState();
+  render();
+}
+
+function showAnswer(i) {
+  const t = TOPICS[currentTopic];
+  const q = t.questions[i];
+  const key = `${currentTopic}_${i}`;
+  userAnswers[i] = '(shown)';
+  state.wrong[key] = { topic: t.title, q: q.q, your: '(shown)', correct: q.a, hint: q.hint };
+  saveState();
+  render();
+  // Scroll to the feedback
+  setTimeout(() => {
+    const fb = document.getElementById('fb' + i);
+    if (fb) fb.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, 100);
+}
+
+function retryQ(key, i) {
+  delete state.mastered[key];
+  userAnswers[i] = undefined;
+  saveState();
+  render();
+  setTimeout(() => {
+    const inp = document.getElementById('input' + i);
+    if (inp) inp.focus();
+  }, 100);
+}
+
+function openWrongPool() {
+  const wrongKeys = Object.keys(state.wrong);
+  if (wrongKeys.length === 0) {
+    document.getElementById('wrongPool').innerHTML = '<p style="text-align:center;color:var(--muted);">🎉 No wrong answers yet!</p>';
+  } else {
+    let html = '<h3 style="margin-bottom:10px;">🧺 Wrong Answers Pool (' + wrongKeys.length + ')</h3><button class="btn" onclick="clearWrongPool()" style="margin-bottom:10px;margin-left:8px;font-size:0.75rem;color:var(--red);">🗑 Clear all</button>';
+    html += '<button class="btn accent" onclick="reviewWrong()" style="margin-bottom:12px;">🔄 Review All Wrong</button>';
+    for (const key of wrongKeys) {
+      const w = state.wrong[key];
+      html += `<div class="wrong-item">
+        <div class="wi-q">${w.topic}: ${w.q}</div>
+        <div class="wi-your">Your answer: <strong>${w.your}</strong></div>
+        <div class="wi-correct">Correct: ${w.correct}</div>
+      </div>`;
+    }
+    document.getElementById('wrongPool').innerHTML = html;
+  }
+  document.getElementById('wrongPool').classList.add('show');
+  document.getElementById('reviewPanel').classList.remove('active');
+  document.getElementById('contentArea').innerHTML = '';
+  document.getElementById('wrongPool').scrollIntoView({ behavior: 'smooth' });
+}
+
+function reviewWrong() {
+  const wrongKeys = Object.keys(state.wrong);
+  if (wrongKeys.length === 0) return;
+  let html = '<h3 style="margin-bottom:10px;">🔄 Review Mode</h3>';
+  html += '<p style="font-size:0.84rem;color:var(--muted);margin-bottom:12px;">Re-answer each question. Correct answers will be removed from the wrong pool.</p>';
+  for (let i = 0; i < wrongKeys.length; i++) {
+    const key = wrongKeys[i];
+    const w = state.wrong[key];
+    html += `<div class="review-q">
+      <div class="q-text" style="font-size:0.88rem;margin-bottom:8px;">${w.q}</div>
+      <input type="text" id="rev${i}" placeholder="Your answer" style="font-size:0.9rem;padding:6px 10px;border:1.5px solid #d0d0d0;border-radius:6px;width:220px;font-family:var(--font);" onkeydown="if(event.key==='Enter')reviewCheck('${key}',${i})">
+      <button class="btn accent" onclick="reviewCheck('${key}',${i})" style="margin-left:6px;">Check</button>
+      <div class="feedback" id="revFb${i}" style="margin-top:6px;"></div>
+    </div>`;
+  }
+  document.getElementById('reviewPanel').innerHTML = html;
+  document.getElementById('reviewPanel').classList.add('active');
+  document.getElementById('contentArea').innerHTML = '';
+  document.getElementById('wrongPool').classList.remove('show');
+  document.getElementById('reviewPanel').scrollIntoView({ behavior: 'smooth' });
+}
+
+function reviewCheck(key, i) {
+  const inp = document.getElementById('rev' + i);
+  if (!inp) return;
+  const ans = inp.value;
+  const w = state.wrong[key];
+  const accepted = Array.isArray(w.correct) ? w.correct : [w.correct];
+  const isCorrect = accepted.some(a => ans.toLowerCase().trim() === a.toLowerCase().trim());
+  const fb = document.getElementById('revFb' + i);
+  if (isCorrect) {
+    fb.innerHTML = '<div class="feedback show correct">✅ Correct! Removing from wrong pool.</div>';
+    state.mastered[key] = true;
+    delete state.wrong[key];
+    saveState();
+    setTimeout(() => reviewWrong(), 800);
+  } else {
+    fb.innerHTML = '<div class="feedback show wrong">❌ Not yet. Correct: <strong>' + (Array.isArray(w.correct) ? w.correct.join(' / ') : w.correct) + '</strong><br>' + w.hint + '</div>';
+  }
+}
+
+function clearWrongPool() {
+  if (confirm('Clear all wrong answers from the pool?')) {
+    state.wrong = {};
+    saveState();
+    document.getElementById('wrongPool').classList.remove('show');
+    render();
+  }
+}
+
+// ═══════════════ INIT ═══════════════
+render();
+</script>
+</body>
+</html>

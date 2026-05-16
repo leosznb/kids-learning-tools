@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>🔬 Food Test Lab — S3 Biology Virtual Bench</title>
+<style>
+:root {
+  --bg: #060d17;
+  --bench: #1a1f2e;
+  --glass: rgba(255,255,255,0.04);
+  --glass2: rgba(255,255,255,0.07);
+  --border: rgba(255,255,255,0.08);
+  --text: #dce3f0;
+  --text-dim: #6b7794;
+  --accent: #00c9a7;
+  --accent2: #4da6ff;
+  --warn: #f59e0b;
+  --danger: #ef4444;
+  --success: #10b981;
+  --kw: #e8890c;
+  --tube-glass: rgba(180,200,220,0.15);
+}
+* { box-sizing:border-box; margin:0; padding:0; }
+body {
+  font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+  background: radial-gradient(ellipse at 50% 0%, #0f1a2e 0%, #060d17 60%);
+  color: var(--text);
+  min-height: 100vh; min-height: 100dvh;
+  display:flex; flex-direction:column; align-items:center;
+  padding: 12px; overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none; -webkit-user-select: none;
+}
+
+/* ── HEADER ── */
+.header {
+  text-align:center; padding:16px 0 4px; width:100%; max-width:800px;
+}
+.header h1 { font-size:1.5em; font-weight:800; letter-spacing:-0.01em; }
+.header .sub { color:var(--text-dim); font-size:0.78em; margin-top:2px; }
+.header .food-tag {
+  display:inline-block; margin-top:6px; padding:3px 10px; border-radius:99px;
+  font-size:0.75em; font-weight:600;
+  background:rgba(0,201,167,0.12); color:var(--accent); border:1px solid rgba(0,201,167,0.2);
+}
+
+/* ── LAB BENCH ── */
+.bench-wrap {
+  width:100%; max-width:800px; position:relative;
+  margin:8px auto 12px;
+}
+.bench-surface {
+  background: linear-gradient(180deg, rgba(20,28,45,0.95) 0%, rgba(15,22,38,0.98) 100%);
+  border:1px solid var(--border); border-radius:20px;
+  padding:16px 12px 20px; position:relative; overflow:hidden;
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 4px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.03);
+}
+.bench-surface::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:1px;
+  background: linear-gradient(90deg, transparent, rgba(0,201,167,0.3), transparent);
+}
+
+/* ── RACK ── */
+.rack-area { position:relative; margin-bottom:16px; }
+.rack-label {
+  text-align:center; font-size:0.7em; color:var(--text-dim); text-transform:uppercase;
+  letter-spacing:0.12em; margin-bottom:8px;
+}
+.rack {
+  display:flex; justify-content:center; align-items:flex-end; gap:10px;
+  padding:12px 8px 18px;
+  background:rgba(0,0,0,0.25); border-radius:16px;
+  border:1px solid rgba(255,255,255,0.04);
+  position:relative; flex-wrap:wrap;
+}
+.rack::after {
+  content:''; position:absolute; bottom:0; left:5%; right:5%; height:6px;
+  background:linear-gradient(90deg, #2a3040, #3a4050, #2a3040);
+  border-radius:3px;
+}
+
+/* ── TUBE SLOT ── */
+.tube-slot {
+  display:flex; flex-direction:column; align-items:center; gap:6px;
+  position:relative; cursor:default; transition:transform 0.3s;
+  min-width:56px;
+}
+.tube-slot.highlight { transform:translateY(-4px); }
+
+.slot-label {
+  font-size:0.62em; color:var(--text-dim); text-align:center;
+  letter-spacing:0.03em; line-height:1.3; margin-top:4px;
+}
+.slot-status {
+  font-size:0.58em; color:var(--text-dim); text-align:center;
+  margin-top:2px; opacity:0; transition:opacity 0.4s;
+}
+.slot-status.visible { opacity:1; }
+
+/* ── TUBE VISUAL ── */
+.tube-container { position:relative; width:48px; height:100px; }
+.tube-outer {
+  width:48px; height:100px; border-radius:10px 10px 24px 24px;
+  border:2px solid rgba(180,200,220,0.2);
+  background:var(--tube-glass);
+  position:relative; overflow:hidden;
+  box-shadow: inset 0 0 20px rgba(255,255,255,0.02);
+  transition: border-color 0.6s, box-shadow 0.6s;
+}
+.tube-liquid {
+  position:absolute; bottom:0; left:2px; right:2px;
+  height:55px; border-radius:0 0 20px 20px;
+  background:rgba(180,200,220,0.08);
+  transition: background 0.4s, height 0.3s;
+}
+.tube-liquid.colored { height:55px; }
+.tube-meniscus {
+  position:absolute; top:45px; left:4px; right:4px; height:2px;
+  background:rgba(255,255,255,0.1); border-radius:1px;
+}
+
+/* For Benedict's staged colors */
+.tube-liquid.benedict-stage1 { background:rgba(41,128,185,0.50); }
+.tube-liquid.benedict-stage2 { background:rgba(39,174,96,0.50); }
+.tube-liquid.benedict-stage3 { background:rgba(241,196,15,0.50); }
+.tube-liquid.benedict-stage4 { background:rgba(230,126,34,0.55); }
+.tube-liquid.benedict-stage5 { background:rgba(192,57,43,0.60); box-shadow:inset 0 0 20px rgba(192,57,43,0.4); }
+
+.tube-liquid.iodine-positive { background:rgba(10,15,30,0.85); box-shadow:inset 0 0 24px rgba(30,40,80,0.8); }
+.tube-liquid.dcpip-clear { background:rgba(220,240,235,0.35); box-shadow:inset 0 0 16px rgba(180,220,210,0.3); }
+.tube-liquid.negative { background:rgba(100,120,150,0.12); }
+
+/* Paper / strip visuals for non-tube tests */
+.paper-slot {
+  width:48px; height:80px; border-radius:8px;
+  border:1px solid rgba(180,200,220,0.15);
+  background:rgba(245,240,230,0.08);
+  position:relative; overflow:hidden; display:flex;
+  align-items:center; justify-content:center;
+}
+.paper-spot {
+  width:20px; height:20px; border-radius:50%;
+  background:transparent; transition:background 0.6s;
+}
+.paper-spot.grease-positive { background:rgba(245,158,11,0.35); }
+.paper-spot.protein-positive { background:rgba(108,52,131,0.50); }
+.paper-spot.glucose-positive {
+  width:22px; height:10px; border-radius:3px;
+  background:var(--success);
+}
+
+/* ── BUNSEN BURNER ── */
+.burner {
+  position:absolute; bottom:-30px; left:50%; transform:translateX(-50%);
+  width:20px; height:28px; opacity:0; transition:opacity 0.5s, bottom 0.5s;
+  pointer-events:none; z-index:5;
+}
+.burner.active { opacity:1; bottom:-18px; }
+.burner-body {
+  width:14px; height:18px; background:#4a5568; border-radius:3px 3px 6px 6px;
+  margin:0 auto;
+}
+.burner-flame {
+  width:10px; height:16px; margin:0 auto;
+  background:linear-gradient(180deg, #f6e05e, #ed8936, #e53e3e);
+  border-radius:50% 50% 30% 30%;
+  animation: flicker 0.15s infinite alternate;
+  box-shadow: 0 0 12px rgba(237,137,54,0.6);
+}
+@keyframes flicker {
+  0% { transform:scaleY(1) scaleX(1); opacity:0.9; }
+  100% { transform:scaleY(1.15) scaleX(0.9); opacity:1; }
+}
+
+/* ── DROPPER ANIMATION ── */
+.dropper-overlay {
+  position:fixed; top:0; left:0; width:100%; height:100%;
+  pointer-events:none; z-index:100; display:none;
+}
+.dropper-overlay.active { display:block; }
+.dropper {
+  position:absolute; width:6px; height:40px;
+  background:linear-gradient(180deg, rgba(200,210,220,0.9), rgba(160,170,190,0.6));
+  border-radius:3px 3px 0 0;
+  transform:translate(-50%,-100%);
+  transition: top 0.4s cubic-bezier(0.22,1,0.36,1);
+}
+.dropper.bulb {
+  width:14px; height:20px; border-radius:50% 50% 30% 30%;
+  background:rgba(220,180,140,0.7);
+  top:-48px;
+}
+
+.drop-particle {
+  position:absolute; width:4px; height:4px; border-radius:50%;
+  background:rgba(200,210,230,0.8);
+  animation: dropFall 0.5s ease-in forwards;
+}
+@keyframes dropFall {
+  0% { transform:translateY(0); opacity:1; }
+  80% { opacity:0.6; }
+  100% { transform:translateY(50px); opacity:0; }
+}
+
+/* ── IODINE DIFFUSION ── */
+.diffusion-ripple {
+  position:absolute; bottom:30px; left:50%; transform:translateX(-50%);
+  width:4px; height:4px; border-radius:50%;
+  background:rgba(20,30,60,0.9);
+  animation: rippleOut 1s ease-out forwards;
+  pointer-events:none; z-index:3;
+}
+@keyframes rippleOut {
+  0% { width:4px; height:4px; opacity:1; }
+  100% { width:40px; height:40px; opacity:0.3; }
+}
+
+/* ── SHAKE FOR NEGATIVE ── */
+@keyframes shake {
+  0%,100% { transform:translateX(0); }
+  20% { transform:translateX(-3px); }
+  40% { transform:translateX(3px); }
+  60% { transform:translateX(-2px); }
+  80% { transform:translateX(2px); }
+}
+.shaking { animation:shake 0.4s ease-out; }
+
+/* ── SELECTORS ── */
+.selectors {
+  display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px;
+}
+@media (max-width:500px) { .selectors { grid-template-columns:1fr; } }
+
+.selector-panel {
+  background:rgba(0,0,0,0.2); border-radius:14px;
+  border:1px solid var(--border); padding:10px;
+}
+.selector-panel h4 {
+  font-size:0.72em; color:var(--text-dim); text-transform:uppercase;
+  letter-spacing:0.08em; margin-bottom:8px; text-align:center;
+}
+.selector-grid {
+  display:flex; flex-wrap:wrap; gap:5px; justify-content:center;
+}
+.sel-chip {
+  padding:7px 12px; border-radius:8px; font-size:0.75em;
+  border:1px solid var(--border); background:var(--glass);
+  color:var(--text); cursor:pointer; font-family:inherit;
+  transition:all 0.2s; text-align:center; line-height:1.3;
+}
+.sel-chip:hover { background:var(--glass2); }
+.sel-chip.selected {
+  background:rgba(0,201,167,0.15); border-color:var(--accent);
+  color:var(--accent); font-weight:700;
+  box-shadow: 0 0 12px rgba(0,201,167,0.15);
+}
+.sel-chip .sub { display:block; font-size:0.75em; color:var(--text-dim); font-weight:400; }
+
+/* ── RUN BUTTON ── */
+.run-section { text-align:center; margin-top:14px; }
+.btn-run {
+  padding:14px 48px; border-radius:14px; border:none;
+  background:linear-gradient(135deg, #0d9488, #0891b2);
+  color:#fff; font-size:1em; font-weight:700; cursor:pointer;
+  font-family:inherit; letter-spacing:0.02em;
+  box-shadow: 0 4px 24px rgba(8,145,178,0.3);
+  transition:all 0.2s; position:relative; overflow:hidden;
+}
+.btn-run:hover { transform:translateY(-1px); box-shadow:0 6px 32px rgba(8,145,178,0.4); }
+.btn-run:active { transform:scale(0.97); }
+.btn-run:disabled { opacity:0.35; cursor:default; transform:none; box-shadow:none; }
+.btn-run .pulse {
+  position:absolute; inset:0; border-radius:14px;
+  background:transparent; border:2px solid rgba(255,255,255,0.3);
+  animation: btnPulse 2s ease-out infinite;
+  pointer-events:none;
+}
+@keyframes btnPulse {
+  0% { transform:scale(1); opacity:0.6; }
+  100% { transform:scale(1.08); opacity:0; }
+}
+
+.btn-reset {
+  padding:8px 20px; border-radius:10px; border:1px solid var(--border);
+  background:var(--glass); color:var(--text-dim); font-size:0.78em;
+  cursor:pointer; font-family:inherit; margin-top:6px;
+}
+.btn-reset:hover { background:var(--glass2); color:var(--text); }
+
+/* ── RESULT PANEL ── */
+.result-panel {
+  margin-top:14px; padding:14px 16px; border-radius:14px;
+  background:rgba(0,0,0,0.3); border:1px solid var(--border);
+  display:none; animation: slideUp 0.35s ease-out;
+}
+.result-panel.active { display:block; }
+.result-panel.positive { border-color:rgba(16,185,129,0.3); background:rgba(16,185,129,0.06); }
+.result-panel.negative { border-color:rgba(239,68,68,0.2); background:rgba(239,68,68,0.04); }
+@keyframes slideUp {
+  from { opacity:0; transform:translateY(12px); }
+  to { opacity:1; transform:translateY(0); }
+}
+
+.result-icon { font-size:1.6em; margin-bottom:4px; }
+.result-title { font-size:1em; font-weight:700; margin-bottom:4px; }
+.result-detail { font-size:0.82em; color:var(--text-dim); line-height:1.6; }
+.result-detail .kw { font-weight:700; color:var(--kw); }
+.result-trap {
+  margin-top:8px; padding:8px 12px; border-radius:8px;
+  background:rgba(245,158,11,0.08); border-left:3px solid var(--warn);
+  font-size:0.78em; color:var(--text-dim); line-height:1.5; display:none;
+}
+.result-trap.show { display:block; }
+
+/* ── SCORE STRIP ── */
+.score-strip {
+  display:flex; align-items:center; gap:6px; flex-wrap:wrap;
+  margin-top:10px; justify-content:center; font-size:0.75em; color:var(--text-dim);
+}
+.score-dot { width:8px; height:8px; border-radius:50%; }
+.score-dot.done { background:var(--success); box-shadow:0 0 6px var(--success); }
+.score-dot.pending { background:rgba(255,255,255,0.1); }
+
+/* ── COMPLETE TOAST ── */
+.celebrate-toast {
+  position:fixed; top:50%; left:50%; transform:translate(-50%,-50%) scale(0);
+  background:rgba(6,13,23,0.95); border:2px solid var(--accent);
+  border-radius:20px; padding:32px 40px; text-align:center;
+  z-index:200; pointer-events:none; transition:transform 0.5s cubic-bezier(0.175,0.885,0.32,1.275);
+  box-shadow: 0 0 60px rgba(0,201,167,0.3);
+}
+.celebrate-toast.show { transform:translate(-50%,-50%) scale(1); }
+.celebrate-toast h2 { font-size:1.4em; margin-bottom:4px; }
+.celebrate-toast p { font-size:0.85em; color:var(--text-dim); }
+
+@media (max-width:500px) {
+  .rack { gap:6px; padding:10px 4px 14px; }
+  .tube-container { width:40px; height:84px; }
+  .tube-outer { width:40px; height:84px; }
+  .tube-liquid { height:46px; }
+  .tube-meniscus { top:38px; }
+  .sel-chip { padding:6px 9px; font-size:0.7em; }
+  .bench-surface { padding:12px 8px 16px; }
+  .header h1 { font-size:1.3em; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🔬 Food Test Laboratory</h1>
+  <div class="sub">S3 Biology · Virtual Bench · Select food → Choose reagent → Run test</div>
+  <div class="food-tag" id="currentFoodTag" style="display:none"></div>
+</div>
+
+<div class="bench-wrap">
+  <div class="bench-surface" id="benchSurface">
+
+    <!-- TEST TUBE RACK -->
+    <div class="rack-area">
+      <div class="rack-label">🧪 Test Rack — 6 Reagents</div>
+      <div class="rack" id="rack"></div>
+      <div class="score-strip" id="scoreStrip"></div>
+    </div>
+
+    <!-- SELECTORS -->
+    <div class="selectors">
+      <div class="selector-panel">
+        <h4>🍎 Step 1: Pick Food Sample</h4>
+        <div class="selector-grid" id="foodGrid"></div>
+      </div>
+      <div class="selector-panel">
+        <h4>🧴 Step 2: Choose Reagent</h4>
+        <div class="selector-grid" id="reagentGrid"></div>
+      </div>
+    </div>
+
+    <!-- RUN -->
+    <div class="run-section">
+      <button class="btn-run" id="btnRun" disabled onclick="runTest()">
+        <span class="pulse"></span>⚗️ Run Test
+      </button>
+      <br>
+      <button class="btn-reset" onclick="resetAll()">🔄 Clear Bench</button>
+    </div>
+
+    <!-- RESULT -->
+    <div class="result-panel" id="resultPanel">
+      <div class="result-icon" id="resultIcon"></div>
+      <div class="result-title" id="resultTitle"></div>
+      <div class="result-detail" id="resultDetail"></div>
+      <div class="result-trap" id="resultTrap"></div>
+    </div>
+  </div>
+</div>
+
+<div class="celebrate-toast" id="celebrateToast">
+  <h2>🏆 Bench Complete!</h2>
+  <p>All 6 tests done · Panoramic view locked in memory</p>
+</div>
+
+<div class="dropper-overlay" id="dropperOverlay"></div>
+
+<script>
+// ==================== DATA ====================
+const REAGENTS = [
+  {id:'benedict',   name:'Benedict\'s',     full:'Benedict\'s solution',    tests:'Reducing sugars', icon:'🧪', type:'tube', needsHeat:true},
+  {id:'iodine',      name:'Iodine',          full:'Iodine solution',         tests:'Starch',            icon:'🟤', type:'tube', needsHeat:false},
+  {id:'dcpip',       name:'DCPIP',           full:'DCPIP solution',          tests:'Vitamin C',         icon:'🔵', type:'tube', needsHeat:false},
+  {id:'grease',      name:'Grease spot',     full:'Filter paper (grease)',   tests:'Lipids (fats/oils)',icon:'📄', type:'paper',needsHeat:false},
+  {id:'protein',     name:'Protein paper',   full:'Protein test paper',      tests:'Protein',           icon:'📋', type:'strip',needsHeat:false},
+  {id:'glucose',     name:'Glucose paper',   full:'Glucose test paper',      tests:'Glucose (specific)',icon:'📋', type:'strip',needsHeat:false},
+];
+
+const FOODS = [
+  {id:'orange',    name:'Orange juice',      emoji:'🍊', contains:['glucose','vitC'],     tag:'Rich in Vitamin C + glucose'},
+  {id:'milk',      name:'Milk',              emoji:'🥛', contains:['protein','lipid'],    tag:'COMPOSITE: protein + lipid'},
+  {id:'potato',    name:'Potato',            emoji:'🥔', contains:['starch','vitC_trace'],tag:'COMPOSITE: starch + trace Vit C'},
+  {id:'egg',       name:'Egg white',         emoji:'🥚', contains:['protein'],            tag:'Almost pure protein (albumin)'},
+  {id:'oil',       name:'Cooking oil',       emoji:'🫒', contains:['lipid'],              tag:'Pure lipid'},
+  {id:'rice',      name:'Rice porridge',     emoji:'🍚', contains:['starch'],             tag:'Mainly starch'},
+  {id:'glucose_s', name:'Glucose solution',  emoji:'🧪', contains:['glucose'],            tag:'Reducing sugar'},
+  {id:'sucrose_s', name:'Sucrose solution',  emoji:'🧪', contains:['sucrose'],            tag:'⚠️ NON-reducing sugar'},
+  {id:'starch_s',  name:'Starch solution',   emoji:'🧪', contains:['starch'],             tag:'Pure starch'},
+  {id:'water',     name:'Distilled water',   emoji:'💧', contains:[],                     tag:'Control — all negative'},
+];
+
+// Reaction mapping: reagent+component → result
+const REACTIONS = {
+  'benedict+glucose':    {pos:true,  stages:['stage1','stage2','stage3','stage4','stage5'], tubeFinal:'benedict-stage5', result:'Positive: Blue → green → yellow → orange → <span class="kw">brick-red precipitate</span>', explain:'Benedict\'s test detects <span class="kw">reducing sugars</span>. Glucose is a reducing sugar — it donates electrons to Cu²⁺ → Cu⁺ (red Cu₂O). <b>Heating in water bath is required</b>.', trap:''},
+  'benedict+sucrose':    {pos:false, tubeFinal:'negative', result:'Negative: Solution remains <b>blue</b>', explain:'<span class="kw">Sucrose is a NON-reducing sugar!</span> Unlike glucose or maltose, sucrose cannot donate electrons to Benedict\'s reagent unless first <span class="kw">hydrolysed with acid → neutralised → retested</span>. This is a classic exam trap.', trap:'⚠️ Exam trap: To test sucrose, you MUST hydrolyse it first (boil with dilute HCl, then neutralise with NaHCO₃). Only then does Benedict\'s test turn positive.'},
+  'benedict+starch':     {pos:false, tubeFinal:'negative', result:'Negative: Solution remains blue', explain:'Starch is a <span class="kw">polysaccharide</span> — not a reducing sugar. To test starch, use <b>Iodine solution</b> instead (turns blue-black).', trap:''},
+  'benedict+protein':    {pos:false, tubeFinal:'negative', result:'Negative: Solution remains blue', explain:'Proteins are <b>not reducing sugars</b>. Use <b>Protein test paper</b> to detect protein.', trap:''},
+  'benedict+lipid':      {pos:false, tubeFinal:'negative', result:'Negative: Solution remains blue', explain:'Lipids are <b>not reducing sugars</b>. Use <b>Grease spot test</b> (filter paper) to detect lipids.', trap:''},
+  'benedict+vitC':       {pos:false, tubeFinal:'negative', result:'Negative: Solution remains blue', explain:'Vitamin C is <b>not a reducing sugar</b> in the Benedict\'s sense. Use <b>DCPIP</b> to test Vitamin C.', trap:''},
+  'benedict+vitC_trace': {pos:false, tubeFinal:'negative', result:'Negative: Solution remains blue', explain:'Trace Vitamin C does not react with Benedict\'s. Use <b>DCPIP</b> for Vitamin C detection.', trap:''},
+
+  'iodine+starch':       {pos:true,  tubeFinal:'iodine-positive', result:'Positive: Brown → <span class="kw">blue-black</span>', explain:'Iodine solution interacts with the <span class="kw">amylose</span> in starch — iodine molecules fit inside the amylose helix → blue-black colour. <b>No heating needed.</b>', trap:''},
+  'iodine+glucose':      {pos:false, tubeFinal:'negative', result:'Negative: Solution remains brown', explain:'Glucose is a <b>monosaccharide</b>, not starch. Iodine only detects the amylose helix in starch. Use <b>Benedict\'s test</b> for glucose.', trap:''},
+  'iodine+protein':      {pos:false, tubeFinal:'negative', result:'Negative: Solution remains brown', explain:'Proteins do not form the amylose-iodine complex. Use <b>Protein test paper</b>.', trap:''},
+  'iodine+lipid':        {pos:false, tubeFinal:'negative', result:'Negative: Solution remains brown', explain:'Lipids do not react with iodine (for starch detection). Use <b>Grease spot test</b>.', trap:''},
+  'iodine+vitC':         {pos:false, tubeFinal:'negative', result:'Negative: Solution remains brown', explain:'Vitamin C does not react with iodine (for starch detection). Use <b>DCPIP</b>.', trap:''},
+  'iodine+vitC_trace':   {pos:false, tubeFinal:'negative', result:'Negative: Solution remains brown', explain:'No starch detected by iodine. Try <b>DCPIP</b> to detect the trace Vitamin C in potato.', trap:''},
+  'iodine+sucrose':      {pos:false, tubeFinal:'negative', result:'Negative: Solution remains brown', explain:'Sucrose is a disaccharide — iodine only detects starch (polysaccharide).', trap:''},
+
+  'dcpip+vitC':          {pos:true,  tubeFinal:'dcpip-clear', result:'Positive: Blue → <span class="kw">colourless</span> (decolorized)', explain:'DCPIP (blue) is <span class="kw">reduced by Vitamin C</span> (ascorbic acid) → colourless. This is a <b>semi-quantitative</b> test: fewer drops needed = higher Vitamin C concentration. <b>No heating needed.</b>', trap:'⚠️ Reverse logic: The FEWER drops of juice needed to decolorize DCPIP → the HIGHER the Vitamin C concentration. Students often get this backwards in data-analysis questions.'},
+  'dcpip+vitC_trace':    {pos:true,  tubeFinal:'dcpip-clear', result:'Weak Positive: Blue → <span class="kw">pale blue</span> (partial decolorization)', explain:'Trace Vitamin C detected — only <b>slight decolorization</b>. Much weaker than pure Vitamin C sources (e.g. orange juice fully decolorizes). This is exactly what you\'d see testing potato.', trap:''},
+  'dcpip+starch':        {pos:false, tubeFinal:'negative', result:'Negative: Solution remains blue', explain:'Starch does <b>not</b> decolorize DCPIP. Use <b>Iodine solution</b> to test starch.', trap:''},
+  'dcpip+glucose':       {pos:false, tubeFinal:'negative', result:'Negative: Solution remains blue', explain:'Glucose does <b>not</b> decolorize DCPIP. DCPIP is specific to Vitamin C. Use <b>Benedict\'s test</b> for glucose.', trap:''},
+  'dcpip+protein':       {pos:false, tubeFinal:'negative', result:'Negative: Solution remains blue', explain:'Protein does <b>not</b> reduce DCPIP. Use <b>Protein test paper</b>.', trap:''},
+  'dcpip+lipid':         {pos:false, tubeFinal:'negative', result:'Negative: Solution remains blue', explain:'Lipids do <b>not</b> reduce DCPIP. Use <b>Grease spot test</b>.', trap:''},
+  'dcpip+sucrose':       {pos:false, tubeFinal:'negative', result:'Negative: Solution remains blue', explain:'Sucrose does <b>not</b> decolorize DCPIP. DCPIP tests Vitamin C only.', trap:''},
+
+  'grease+lipid':        {pos:true,  tubeFinal:'grease-positive', result:'Positive: <span class="kw">Permanent translucent spot</span> on filter paper', explain:'Lipids leave a <span class="kw">permanent translucent mark</span> on filter paper. <b>Critical distinction:</b> water spots disappear after drying — lipid spots <b>remain</b>. Always let the paper dry before concluding.', trap:'⚠️ Exam trap: After rubbing food on filter paper, you MUST wait for it to dry. A water spot looks translucent when wet but disappears — only a lipid spot is PERMANENT.'},
+  'grease+protein':      {pos:false, tubeFinal:'negative', result:'Negative: No permanent translucent spot', explain:'Proteins do not leave a grease spot. Use <b>Protein test paper</b>.', trap:''},
+  'grease+starch':       {pos:false, tubeFinal:'negative', result:'Negative: No permanent translucent spot', explain:'Starch is not a lipid. Use <b>Iodine solution</b>.', trap:''},
+  'grease+glucose':      {pos:false, tubeFinal:'negative', result:'Negative: No permanent translucent spot', explain:'Glucose is not a lipid. Use <b>Benedict\'s test</b>.', trap:''},
+  'grease+vitC':         {pos:false, tubeFinal:'negative', result:'Negative: No permanent translucent spot', explain:'Vitamin C is not a lipid. Use <b>DCPIP</b>.', trap:''},
+  'grease+vitC_trace':   {pos:false, tubeFinal:'negative', result:'Negative: No permanent translucent spot', explain:'No lipid detected on potato. Use <b>Iodine</b> (starch) and <b>DCPIP</b> (trace Vitamin C).', trap:''},
+  'grease+sucrose':      {pos:false, tubeFinal:'negative', result:'Negative: No permanent translucent spot', explain:'Sucrose is a <b>carbohydrate</b>, not a lipid. Grease spot test only detects lipids. Use <b>Benedict\'s test</b> (after hydrolysis) for sucrose.', trap:''},
+
+  'protein+protein':     {pos:true,  tubeFinal:'protein-positive', result:'Positive: <span class="kw">Colour change</span> on test paper', explain:'Protein test paper detects <span class="kw">peptide bonds</span> in proteins. A colour change on the paper indicates the presence of protein.', trap:''},
+  'protein+starch':      {pos:false, tubeFinal:'negative', result:'Negative: No colour change', explain:'Starch is a carbohydrate, not a protein. Use <b>Iodine solution</b>.', trap:''},
+  'protein+glucose':     {pos:false, tubeFinal:'negative', result:'Negative: No colour change', explain:'Glucose is a monosaccharide, not a protein. Use <b>Benedict\'s test</b>.', trap:''},
+  'protein+lipid':       {pos:false, tubeFinal:'negative', result:'Negative: No colour change', explain:'Lipids are not proteins. Use <b>Grease spot test</b> for lipids. But remember: milk contains BOTH — so you need TWO tests!', trap:''},
+  'protein+vitC':        {pos:false, tubeFinal:'negative', result:'Negative: No colour change', explain:'Vitamin C is not a protein. Use <b>DCPIP</b>.', trap:''},
+  'protein+vitC_trace':  {pos:false, tubeFinal:'negative', result:'Negative: No colour change', explain:'No protein detected in potato. Use <b>Iodine</b> (starch) and <b>DCPIP</b> (trace Vitamin C).', trap:''},
+  'protein+sucrose':     {pos:false, tubeFinal:'negative', result:'Negative: No colour change', explain:'Sucrose is a <b>carbohydrate</b>, not a protein. Protein test paper only detects peptide bonds. Use <b>Benedict\'s test</b> (after hydrolysis) for sucrose.', trap:''},
+
+  'glucose+glucose':     {pos:true,  tubeFinal:'glucose-positive', result:'Positive: <span class="kw">Specific colour zone</span> on test strip', explain:'Glucose test paper is <span class="kw">specific to glucose only</span>. Other reducing sugars (maltose, lactose) give a <b>negative</b> result. <b>No heating needed.</b>', trap:'⚠️ Glucose test paper ≠ Benedict\'s! Benedict\'s detects ALL reducing sugars; glucose test paper detects glucose specifically. A food can be Benedict\'s-positive but glucose-paper-negative (e.g. maltose).'},
+  'glucose+sucrose':     {pos:false, tubeFinal:'negative', result:'Negative: No colour match on test strip', explain:'Sucrose is <b>not glucose</b>. Glucose test paper is specific to glucose. Even though sucrose contains a glucose unit, it is bound to fructose → not detected.', trap:''},
+  'glucose+starch':      {pos:false, tubeFinal:'negative', result:'Negative: No colour match on test strip', explain:'Starch is a polysaccharide — not free glucose. Use <b>Iodine solution</b>.', trap:''},
+  'glucose+protein':     {pos:false, tubeFinal:'negative', result:'Negative: No colour match on test strip', explain:'Proteins are not glucose. Use <b>Protein test paper</b>.', trap:''},
+  'glucose+lipid':       {pos:false, tubeFinal:'negative', result:'Negative: No colour match on test strip', explain:'Lipids are not glucose. Use <b>Grease spot test</b>.', trap:''},
+  'glucose+vitC':        {pos:false, tubeFinal:'negative', result:'Negative: No colour match on test strip', explain:'Vitamin C is not glucose. Use <b>DCPIP</b>.', trap:''},
+  'glucose+vitC_trace':  {pos:false, tubeFinal:'negative', result:'Negative: No colour match on test strip', explain:'No free glucose detected. Use <b>Iodine</b> (starch) and <b>DCPIP</b> (trace Vitamin C).', trap:''},
+};
+
+// ==================== STATE ====================
+let selectedFood = null;
+let selectedReagent = null;
+let tubeResults = {}; // reagentId → {foodId, pos, tubeFinal}
+let testLog = [];
+let animationLocked = false;
+
+// ==================== BUILD UI ====================
+function buildRack() {
+  const rack = document.getElementById('rack');
+  rack.innerHTML = REAGENTS.map((r,i) => {
+    const isTube = r.type === 'tube';
+    const isPaper = r.type === 'paper';
+    const isStrip = r.type === 'strip';
+    let visual = '';
+    if (isTube) {
+      visual = `<div class="tube-outer" id="tube-${r.id}">
+        <div class="tube-liquid" id="liquid-${r.id}"></div>
+        <div class="tube-meniscus"></div>
+        <div class="burner" id="burner-${r.id}"><div class="burner-flame"></div><div class="burner-body"></div></div>
+      </div>`;
+    } else if (isPaper) {
+      visual = `<div class="paper-slot" id="tube-${r.id}">
+        <div class="paper-spot" id="liquid-${r.id}"></div>
+      </div>`;
+    } else {
+      visual = `<div class="paper-slot" id="tube-${r.id}" style="background:rgba(245,240,230,0.04);">
+        <div class="paper-spot" id="liquid-${r.id}"></div>
+      </div>`;
+    }
+    return `<div class="tube-slot" id="slot-${r.id}" onclick="quickSelectReagent('${r.id}')">
+      <div class="tube-container">${visual}</div>
+      <div class="slot-label">${r.icon}<br>${r.name}</div>
+      <div class="slot-status" id="status-${r.id}"></div>
+    </div>`;
+  }).join('');
+  updateScoreStrip();
+}
+
+function buildFoodGrid() {
+  const grid = document.getElementById('foodGrid');
+  grid.innerHTML = FOODS.map(f =>
+    `<button class="sel-chip" data-food="${f.id}" onclick="selectFood('${f.id}')">
+      ${f.emoji} ${f.name}<span class="sub">${f.tag}</span>
+    </button>`
+  ).join('');
+}
+
+function buildReagentGrid() {
+  const grid = document.getElementById('reagentGrid');
+  grid.innerHTML = REAGENTS.map(r =>
+    `<button class="sel-chip" data-reagent="${r.id}" onclick="selectReagent('${r.id}')">
+      ${r.icon} ${r.name}<span class="sub">Tests: ${r.tests}</span>
+    </button>`
+  ).join('');
+}
+
+function updateScoreStrip() {
+  const strip = document.getElementById('scoreStrip');
+  let done = 0;
+  const dots = REAGENTS.map(r => {
+    const isDone = !!tubeResults[r.id];
+    if (isDone) done++;
+    return `<span class="score-dot ${isDone ? 'done' : 'pending'}"></span>`;
+  }).join('');
+  strip.innerHTML = `${dots} <span style="margin-left:4px;">${done}/6 tests completed</span>`;
+
+  if (done === 6) {
+    setTimeout(() => {
+      const toast = document.getElementById('celebrateToast');
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2500);
+    }, 600);
+  }
+}
+
+// ==================== SELECTION ====================
+function selectFood(id) {
+  selectedFood = FOODS.find(f=>f.id===id);
+  document.querySelectorAll('.sel-chip[data-food]').forEach(b=>b.classList.remove('selected'));
+  document.querySelector(`.sel-chip[data-food="${id}"]`)?.classList.add('selected');
+  document.getElementById('currentFoodTag').style.display='inline-block';
+  document.getElementById('currentFoodTag').textContent = `${selectedFood.emoji} Testing: ${selectedFood.name}`;
+  updateRunBtn();
+  hideResult();
+}
+
+function selectReagent(id) {
+  selectedReagent = REAGENTS.find(r=>r.id===id);
+  document.querySelectorAll('.sel-chip[data-reagent]').forEach(b=>b.classList.remove('selected'));
+  document.querySelector(`.sel-chip[data-reagent="${id}"]`)?.classList.add('selected');
+  updateRunBtn();
+  hideResult();
+}
+
+function quickSelectReagent(id) {
+  selectReagent(id);
+  if (selectedFood && !animationLocked) runTest();
+}
+
+function updateRunBtn() {
+  document.getElementById('btnRun').disabled = !(selectedFood && selectedReagent) || animationLocked;
+}
+
+function hideResult() {
+  document.getElementById('resultPanel').classList.remove('active','positive','negative');
+  document.getElementById('resultTrap').classList.remove('show');
+}
+
+// ==================== ANIMATION HELPERS ====================
+function getSlotCenter(reagentId) {
+  const slot = document.getElementById(`slot-${reagentId}`);
+  if (!slot) return {x:window.innerWidth/2, y:window.innerHeight/2};
+  const rect = slot.getBoundingClientRect();
+  const tube = document.getElementById(`tube-${reagentId}`);
+  const tubeRect = tube ? tube.getBoundingClientRect() : rect;
+  return {x:tubeRect.left + tubeRect.width/2, y:tubeRect.top + 20};
+}
+
+async function animateDropper(reagentId) {
+  const pos = getSlotCenter(reagentId);
+  const overlay = document.getElementById('dropperOverlay');
+  overlay.innerHTML = `
+    <div class="dropper bulb" style="left:${pos.x}px; top:${pos.y-30}px;"></div>
+    <div class="dropper" style="left:${pos.x}px; top:${pos.y}px;"></div>
+  `;
+  overlay.classList.add('active');
+
+  // Drop particles
+  for (let i=0; i<3; i++) {
+    await sleep(300);
+    const particle = document.createElement('div');
+    particle.className = 'drop-particle';
+    particle.style.left = (pos.x-2)+'px';
+    particle.style.top = (pos.y+16)+'px';
+    overlay.appendChild(particle);
+  }
+  await sleep(400);
+  overlay.classList.remove('active');
+  overlay.innerHTML = '';
+}
+
+async function animateHeating(reagentId) {
+  const burner = document.getElementById(`burner-${reagentId}`);
+  if (!burner) return;
+  burner.classList.add('active');
+  await sleep(2500);
+  burner.classList.remove('active');
+}
+
+async function stagedBenedict(reagentId) {
+  const liquid = document.getElementById(`liquid-${reagentId}`);
+  if (!liquid) return;
+  const stages = ['benedict-stage1','benedict-stage2','benedict-stage3','benedict-stage4','benedict-stage5'];
+  for (const stage of stages) {
+    liquid.className = 'tube-liquid colored ' + stage;
+    await sleep(500);
+  }
+}
+
+async function iodineDiffusion(reagentId) {
+  const tube = document.getElementById(`tube-${reagentId}`);
+  if (!tube) return;
+  // Burst of blue-black from center
+  const ripple = document.createElement('div');
+  ripple.className = 'diffusion-ripple';
+  tube.appendChild(ripple);
+  await sleep(1000);
+  ripple.remove();
+  const liquid = document.getElementById(`liquid-${reagentId}`);
+  if (liquid) liquid.className = 'tube-liquid colored iodine-positive';
+}
+
+async function shakeTube(reagentId) {
+  const slot = document.getElementById(`slot-${reagentId}`);
+  if (!slot) return;
+  slot.classList.add('shaking');
+  await sleep(500);
+  slot.classList.remove('shaking');
+}
+
+function sleep(ms) { return new Promise(r=>setTimeout(r,ms)); }
+
+// ==================== RUN TEST ====================
+async function runTest() {
+  if (!selectedFood || !selectedReagent || animationLocked) return;
+  animationLocked = true;
+  updateRunBtn();
+  hideResult();
+
+  const food = selectedFood;
+  const reagent = selectedReagent;
+  const slot = document.getElementById(`slot-${reagent.id}`);
+  slot?.classList.add('highlight');
+
+  // Find the best matching reaction
+  let bestReaction = null;
+  for (const comp of food.contains) {
+    const key = reagent.id + '+' + comp;
+    if (REACTIONS[key]) {
+      bestReaction = REACTIONS[key];
+      if (bestReaction.pos) break; // Prefer positive match
+    }
+  }
+
+  // If no direct match found
+  if (!bestReaction) {
+    bestReaction = {pos:false, tubeFinal:'negative', result:'Negative: No reaction', explain:`${reagent.full} does not react with any component in ${food.emoji} ${food.name}.`, trap:''};
+  }
+
+  // Animate: dropper
+  await animateDropper(reagent.id);
+
+  // Animate: heating (if Benedict's)
+  if (reagent.needsHeat && reagent.id==='benedict') {
+    await animateHeating(reagent.id);
+  }
+
+  // Animate: color change
+  if (bestReaction.pos) {
+    if (reagent.id==='benedict' && bestReaction.stages) {
+      await stagedBenedict(reagent.id);
+    } else if (reagent.id==='iodine') {
+      await iodineDiffusion(reagent.id);
+    } else {
+      // Generic positive: apply tube final class
+      const liquid = document.getElementById(`liquid-${reagent.id}`);
+      if (liquid && bestReaction.tubeFinal) {
+        liquid.className = 'tube-liquid colored ' + bestReaction.tubeFinal;
+      }
+      await sleep(600);
+    }
+  } else {
+    await shakeTube(reagent.id);
+    const liquid = document.getElementById(`liquid-${reagent.id}`);
+    if (liquid) liquid.className = 'tube-liquid colored negative';
+    await sleep(300);
+  }
+
+  // Store result
+  tubeResults[reagent.id] = {
+    foodId: food.id,
+    foodName: food.name,
+    foodEmoji: food.emoji,
+    pos: bestReaction.pos,
+    tubeFinal: bestReaction.tubeFinal
+  };
+  testLog.push({food:food.name, reagent:reagent.name, pos:bestReaction.pos});
+
+  // Update slot status
+  const statusEl = document.getElementById(`status-${reagent.id}`);
+  if (statusEl) {
+    statusEl.textContent = bestReaction.pos ? `✅ ${food.emoji}` : `❌ ${food.emoji}`;
+    statusEl.classList.add('visible');
+  }
+
+  updateScoreStrip();
+  slot?.classList.remove('highlight');
+
+  // Show result
+  showResult(bestReaction, food, reagent);
+
+  // Clean up
+  selectedReagent = null;
+  document.querySelectorAll('.sel-chip[data-reagent]').forEach(b=>b.classList.remove('selected'));
+  animationLocked = false;
+  updateRunBtn();
+}
+
+function showResult(reaction, food, reagent) {
+  const panel = document.getElementById('resultPanel');
+  const icon = document.getElementById('resultIcon');
+  const title = document.getElementById('resultTitle');
+  const detail = document.getElementById('resultDetail');
+  const trap = document.getElementById('resultTrap');
+
+  panel.classList.add('active');
+  panel.classList.remove('positive','negative');
+  panel.classList.add(reaction.pos ? 'positive' : 'negative');
+
+  if (reaction.pos) {
+    icon.textContent = '✅';
+    title.innerHTML = `${food.emoji} ${food.name} + ${reagent.icon} ${reagent.name} → <span style="color:var(--success)">POSITIVE</span>`;
+  } else {
+    icon.textContent = '❌';
+    title.innerHTML = `${food.emoji} ${food.name} + ${reagent.icon} ${reagent.name} → <span style="color:var(--danger)">NEGATIVE</span>`;
+  }
+
+  detail.innerHTML = `<p>${reaction.result}</p><p style="margin-top:6px;">${reaction.explain}</p>`;
+
+  if (reaction.trap) {
+    trap.innerHTML = reaction.trap;
+    trap.classList.add('show');
+  } else {
+    trap.classList.remove('show');
+  }
+
+  // Re-trigger animation
+  panel.style.animation = 'none';
+  panel.offsetHeight;
+  panel.style.animation = 'slideUp 0.35s ease-out';
+}
+
+function resetAll() {
+  tubeResults = {};
+  testLog = [];
+  selectedFood = null;
+  selectedReagent = null;
+  animationLocked = false;
+
+  // Clear all tubes
+  REAGENTS.forEach(r => {
+    const liquid = document.getElementById(`liquid-${r.id}`);
+    if (liquid) liquid.className = 'tube-liquid';
+    const status = document.getElementById(`status-${r.id}`);
+    if (status) { status.textContent = ''; status.classList.remove('visible'); }
+  });
+
+  document.querySelectorAll('.sel-chip').forEach(b=>b.classList.remove('selected'));
+  document.getElementById('currentFoodTag').style.display = 'none';
+  hideResult();
+  updateRunBtn();
+  updateScoreStrip();
+}
+
+// ==================== INIT ====================
+buildRack();
+buildFoodGrid();
+buildReagentGrid();
+</script>
+</body>
+</html>

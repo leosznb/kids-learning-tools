@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trap Killer | 陷阱殺手</title>
+<style>
+:root {
+  --bg:#0a0a14; --card:#121220; --card2:#181830;
+  --border:#1e1e3a; --accent:#00e5ff; --success:#00ff88;
+  --error:#ff4466; --warn:#ffb347;
+  --text:#c8ccd4; --text2:#8890a0;
+  --font-ui:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  background:var(--bg);color:var(--text);font-family:var(--font-ui);
+  min-height:100vh;display:flex;flex-direction:column;align-items:center;
+  padding:16px;
+}
+.container{max-width:600px;width:100%}
+
+.header{text-align:center;padding:16px 0;margin-bottom:12px;border-bottom:1px solid var(--border)}
+.header h1{font-size:1.3rem;font-weight:700;color:var(--accent)}
+.header .sub{font-size:.75rem;color:var(--text2);margin-top:2px}
+
+.bar{
+  display:flex;justify-content:space-between;align-items:center;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:8px;padding:8px 14px;margin-bottom:12px;font-size:.78rem;
+  flex-wrap:wrap;gap:6px;
+}
+.bar span{color:var(--accent);font-weight:600}
+.bar .dim{color:var(--text2)}
+
+.case-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:10px;padding:18px;margin-bottom:12px;
+}
+.case-label{font-size:.68rem;text-transform:uppercase;letter-spacing:1px;color:var(--accent);margin-bottom:8px;font-weight:700}
+.case-scenario{
+  background:var(--bg);border:1px solid var(--border);
+  border-radius:6px;padding:14px;font-size:.92rem;line-height:1.5;
+  color:var(--text);white-space:pre-wrap;font-family:monospace;
+  margin-bottom:14px;
+}
+
+.options-row{display:flex;flex-direction:column;gap:8px;margin-bottom:8px}
+.opt-btn{
+  width:100%;min-height:48px;padding:10px 14px;
+  background:var(--card2);color:var(--text);border:2px solid var(--border);
+  border-radius:8px;font-size:.85rem;text-align:left;cursor:pointer;
+  transition:border .15s;font-family:var(--font-ui);
+  -webkit-tap-highlight-color:transparent;
+}
+.opt-btn:hover{border-color:var(--accent)}
+.opt-btn:active{transform:scale(.98)}
+.opt-btn.selected{border-color:var(--accent);background:rgba(0,229,255,.08)}
+.opt-btn.correct{border-color:var(--success);background:rgba(0,255,136,.08);color:var(--success)}
+.opt-btn.wrong{border-color:var(--error);background:rgba(255,68,102,.08);color:var(--error)}
+
+.feedback-box{
+  padding:12px 14px;border-radius:8px;margin-top:8px;font-size:.82rem;
+  line-height:1.5;display:none;
+}
+.feedback-box.show{display:block}
+.feedback-box.trap{background:rgba(255,68,102,.06);border:1px solid rgba(255,68,102,.2)}
+.feedback-box.safe{background:rgba(0,255,136,.06);border:1px solid rgba(0,255,136,.2)}
+.feedback-box .why{color:var(--error);margin-bottom:4px}
+.feedback-box .correct-ans{color:var(--success)}
+.feedback-box .safe-text{color:var(--success)}
+
+.btn-row{display:flex;gap:8px;margin-top:8px}
+.btn{
+  flex:1;min-height:48px;padding:10px 16px;border:none;border-radius:8px;
+  font-size:.85rem;font-weight:600;cursor:pointer;
+  font-family:var(--font-ui);-webkit-tap-highlight-color:transparent;
+}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:var(--accent);color:#000}
+.btn-primary:hover{opacity:.9}
+.btn-ghost{background:transparent;color:var(--text2);border:1px solid var(--border)}
+
+.matrix-wrap{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px}
+.matrix-wrap h3{font-size:.85rem;color:var(--accent);margin-bottom:10px}
+.matrix-row{display:flex;align-items:center;padding:6px 0;border-bottom:1px solid var(--border);font-size:.75rem;gap:8px}
+.matrix-id{width:28px;flex-shrink:0;color:var(--text2);font-weight:600}
+.matrix-name{flex:1;color:var(--text);font-size:.78rem}
+.matrix-dots{display:flex;gap:3px;flex-shrink:0}
+.matrix-dot{width:10px;height:10px;border-radius:50%;background:var(--text3)}
+.matrix-dot.hit{background:var(--success)}
+.matrix-dot.miss{background:var(--error)}
+.matrix-dot.skip{background:var(--warn)}
+.matrix-dot.safe{background:var(--accent)}
+
+@media(max-width:480px){
+  body{padding:8px}
+  .case-card{padding:12px}
+  .case-scenario{font-size:.82rem;padding:10px}
+  .opt-btn{font-size:.78rem;min-height:44px}
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>🪤 Trap Killer</h1>
+    <div class="sub">陷阱殺手 · Identify &amp; Avoid 識別與避免</div>
+  </div>
+
+  <div class="bar">
+    <span>Round <span id="roundDisp">1</span>/<span id="totalDisp">12</span></span>
+    <span>Score <span id="scoreDisp">0</span></span>
+    <span class="dim" id="phaseDisp">Step 1: Safe or Trap?</span>
+    <button class="btn btn-ghost" style="flex:0;min-width:60px;padding:6px 10px;font-size:.7rem" onclick="resetAll()">↻ Reset</button>
+  </div>
+
+  <div class="case-card" id="caseCard">
+    <div class="case-label" id="caseLabel">📋 Case 案件</div>
+    <div class="case-scenario" id="caseScenario">—</div>
+
+    <div class="options-row" id="safeTrapOpts">
+      <button class="opt-btn" onclick="chooseSafeTrap('safe')">✓ Safe — No problem 安全無誤</button>
+      <button class="opt-btn" onclick="chooseSafeTrap('trap')">✗ Trap! — Something is wrong 有陷阱</button>
+    </div>
+
+    <div class="options-row" id="classifyOpts" style="display:none"></div>
+
+    <div class="feedback-box" id="feedbackBox">
+      <div id="feedbackContent"></div>
+    </div>
+
+    <div class="btn-row" id="nextRow" style="display:none">
+      <button class="btn btn-primary" onclick="nextCase()">Next Case → 下一題</button>
+    </div>
+  </div>
+
+  <div class="matrix-wrap" id="matrixWrap" style="display:none">
+    <h3>📊 Trap Matrix 陷阱命中率</h3>
+    <div id="matrixContent"></div>
+    <div class="btn-row" style="margin-top:12px">
+      <button class="btn btn-primary" onclick="resetAll()">New Round 新一輪</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// TRAP DEFINITIONS (12 traps from §08)
+// ============================================================
+const traps = [
+  {id:"T1",en:"State symbols omitted",cn:"漏寫狀態符號"},
+  {id:"T2",en:"Charge vs mass confusion",cn:"混淆電荷與質量"},
+  {id:"T3",en:"Isotope chemical properties",cn:"同位素化學性質判錯"},
+  {id:"T4",en:"Si classification error",cn:"矽分類錯誤"},
+  {id:"T5",en:"O₂ classified as compound",cn:"O₂ 歸入化合物"},
+  {id:"T6",en:"Metal+acid product wrong",cn:"金屬+酸產物錯誤"},
+  {id:"T7",en:"Skipping working steps",cn:"只寫最終答案"},
+  {id:"T8",en:"Flame test procedure order",cn:"火焰測試步驟錯"},
+  {id:"T9",en:"AgNO₃ test without dil HNO₃",cn:"漏加稀硝酸"},
+  {id:"T10",en:"Fractional distillation = chemical change",cn:"分餾誤判為化學變化"},
+  {id:"T11",en:"Polymer repeating unit drawing",cn:"聚合物重複單元畫法"},
+  {id:"T12",en:"Definition missing keywords",cn:"定義缺關鍵詞"}
+];
+
+// ============================================================
+// CASE BANK (12 traps × 2 + 6 safe = 30)
+// ============================================================
+const allCases = [
+  // T1: State symbols omitted
+  {trapId:"T1",scenario:"CaCO₃ → CaO + CO₂\n\n(A student wrote this equation for thermal decomposition)",isTrap:true,
+   why:"All three species are missing state symbols: (s) for CaCO₃ and CaO, (g) for CO₂.",
+   whyCn:"三種物質都漏寫狀態符號：CaCO₃(s)、CaO(s)、CO₂(g)。",
+   correctAns:"CaCO₃(s) → CaO(s) + CO₂(g)"},
+  {trapId:"T1",scenario:"2Mg(s) + O₂ → 2MgO(s)\n\n(A student wrote this for magnesium burning in air)",isTrap:true,
+   why:"O₂ is a gas — it needs state symbol (g). Only Mg and MgO have correct states.",
+   whyCn:"氧氣是氣體 → 需標 O₂(g)。Mg 和 MgO 狀態正確但 O₂ 漏標。",
+   correctAns:"2Mg(s) + O₂(g) → 2MgO(s)"},
+
+  // T2: Charge vs mass confusion
+  {trapId:"T2",scenario:"A neutron has:\nCharge: -1\nRelative mass: ≈ 0\n\n(A student filled this in a subatomic particle table)",isTrap:true,
+   why:"A neutron has charge 0 (neutral) and relative mass ≈ 1. The student confused neutron with electron.",
+   whyCn:"中子電荷為 0（中性），相對質量 ≈ 1。學生把中子跟電子搞混了。",
+   correctAns:"Neutron: charge 0, mass ≈ 1\nElectron: charge -1, mass ≈ 0"},
+  {trapId:"T2",scenario:"A proton has relative mass ≈ 0.\n\n(From a student's answer about subatomic particles)",isTrap:true,
+   why:"A proton has relative mass = 1, not ≈ 0. Only the electron has mass ≈ 0.",
+   whyCn:"質子相對質量 = 1，不是 ≈ 0。只有電子質量 ≈ 0。",
+   correctAns:"Proton: charge +1, mass = 1"},
+
+  // T3: Isotope chemical properties
+  {trapId:"T3",scenario:"Cl-35 and Cl-37 have different chemical properties because they have different mass numbers.\n\n(A student's explanation)",isTrap:true,
+   why:"Isotopes have the SAME electron arrangement → SAME chemical properties. Only nuclear properties (radioactivity) differ.",
+   whyCn:"同位素有相同電子排佈 → 相同化學性質。只有核性質（放射性）不同。",
+   correctAns:"Isotopes have the same chemical properties (same no. of electrons)"},
+  {trapId:"T3",scenario:"Cl-35 reacts faster with sodium than Cl-37 because it is lighter.\n\n(A student's prediction)",isTrap:true,
+   why:"Reaction rate depends on electron arrangement, which is identical for isotopes. Mass difference does not affect chemical reactivity.",
+   whyCn:"反應速率取決於電子排佈，同位素電子排佈相同，反應速率相同。",
+   correctAns:"Cl-35 and Cl-37 react at the same rate (same chemical properties)"},
+
+  // T4: Si classification
+  {trapId:"T4",scenario:"Silicon (Si) is a non-metal.\n\n(A student's classification)",isTrap:true,
+   why:"Si is a semi-metal (metalloid). It sits on the staircase line in the periodic table — conducts electricity but is brittle.",
+   whyCn:"Si 是半金屬（metalloid），位於週期表階梯線上。導電但脆。",
+   correctAns:"Silicon (Si) = semi-metal / metalloid"},
+  {trapId:"T4",scenario:"Silicon conducts electricity, therefore it is a metal.\n\n(A student's reasoning)",isTrap:true,
+   why:"Conductivity alone does not make a substance a metal. Graphite (carbon) also conducts but is a non-metal. Si is a semi-metal.",
+   whyCn:"導電不等於金屬。石墨（碳）也導電但是非金屬。Si 是半金屬。",
+   correctAns:"Si = semi-metal. Conductivity ≠ metal (graphite also conducts)"},
+
+  // T5: O₂ as compound
+  {trapId:"T5",scenario:"O₂ is a compound because it contains two oxygen atoms chemically joined.\n\n(A student's answer)",isTrap:true,
+   why:"O₂ is an element — it contains only ONE type of atom (oxygen). A compound must contain ≥2 DIFFERENT elements chemically joined.",
+   whyCn:"O₂ 是元素（單質），只含一種原子。化合物必須含 ≥2 種不同元素化合。",
+   correctAns:"O₂ = element (contains only oxygen atoms)"},
+  {trapId:"T5",scenario:"Ozone (O₃) is an element, but O₂ is a compound.\n\n(A student's comparison)",isTrap:true,
+   why:"Both O₂ and O₃ are elements (allotropes of oxygen). Neither is a compound.",
+   whyCn:"O₂ 和 O₃ 都是元素（氧的同素異形體），都不是化合物。",
+   correctAns:"Both O₂ and O₃ are elements (allotropes)"},
+
+  // T6: Metal+acid product
+  {trapId:"T6",scenario:"Ca(s) + 2HCl(aq) → CaCl₂(aq) + CO₂(g)\n\n(A student wrote this equation)",isTrap:true,
+   why:"Metal + acid → salt + HYDROGEN (H₂), never CO₂. CO₂ comes from carbonate + acid, not metal + acid.",
+   whyCn:"金屬+酸→鹽+氫氣(H₂)，絕不是CO₂。CO₂ 來自碳酸鹽+酸，不是金屬+酸。",
+   correctAns:"Ca(s) + 2HCl(aq) → CaCl₂(aq) + H₂(g)"},
+  {trapId:"T6",scenario:"Zn(s) + H₂SO₄(aq) → ZnSO₄(aq) + CO₂(g)\n\n(A student's equation for zinc + sulfuric acid)",isTrap:true,
+   why:"Same trap — metal + acid always gives H₂. Product should be H₂(g), not CO₂(g).",
+   whyCn:"同樣陷阱。金屬+酸永遠產生 H₂。產物應為 H₂(g)。",
+   correctAns:"Zn(s) + H₂SO₄(aq) → ZnSO₄(aq) + H₂(g)"},
+
+  // T7: Skipping steps
+  {trapId:"T7",scenario:"For a 3-mark equation question, I wrote:\n2Mg + O₂ → 2MgO\nThat's the full answer.\n\n(A student's approach)",isTrap:true,
+   why:"3 marks = 3 layers: ① correct formulas ② balanced coefficients ③ state symbols. Writing only the balanced equation loses marks for state symbols.",
+   whyCn:"3分=3層：①化學式正確 ②配平 ③狀態符號。只寫配平方程式會漏狀態符號分。",
+   correctAns:"2Mg(s) + O₂(g) → 2MgO(s) — all 3 layers needed"},
+  {trapId:"T7",scenario:"I wrote the balanced equation directly. The working steps are not needed.\n\n(A student in an exam)",isTrap:true,
+   why:"Each layer is marked independently. If you skip showing the formulas first, you risk losing marks even if the final answer is correct.",
+   whyCn:"每層獨立計分。跳過化學式步驟，即使最終答案對也可能失分。",
+   correctAns:"Always show: ① formulas → ② balance → ③ states"},
+
+  // T8: Flame test procedure
+  {trapId:"T8",scenario:"Flame test procedure:\n1. Dip Pt wire in sample\n2. Clean with conc HCl\n3. Place in flame\n\n(A student's steps)",isTrap:true,
+   why:"Wrong order! Clean the wire FIRST with conc HCl, THEN dip in sample. Otherwise the sample is contaminated.",
+   whyCn:"順序錯誤！先清潔（conc HCl），再沾樣品。否則樣品被污染。",
+   correctAns:"1. Clean Pt wire with conc HCl → 2. Dip in sample → 3. Non-luminous flame"},
+  {trapId:"T8",scenario:"For the flame test, use a luminous (yellow) Bunsen flame for best visibility.\n\n(A student's suggestion)",isTrap:true,
+   why:"Use a NON-LUMINOUS (blue) flame. A luminous flame has its own yellow colour which masks the test result.",
+   whyCn:"必須用非發光焰（藍色）。發光焰本身是黃色，會掩蓋測試顏色。",
+   correctAns:"Use non-luminous (blue) flame"},
+
+  // T9: AgNO₃ without dil HNO₃
+  {trapId:"T9",scenario:"To test for chloride ions (Cl⁻):\nAdd a few drops of AgNO₃(aq) to the sample.\n\n(A student's procedure)",isTrap:true,
+   why:"Must add dilute HNO₃ FIRST to remove interfering ions (e.g. CO₃²⁻ forms Ag₂CO₃ white ppt, not just Cl⁻). Then add AgNO₃.",
+   whyCn:"必須先加稀 HNO₃ 去除干擾離子（如 CO₃²⁻ 會形成 Ag₂CO₃ 白色沉澱），再加 AgNO₃。",
+   correctAns:"Add dil HNO₃ first → then AgNO₃(aq) → white ppt = Cl⁻"},
+  {trapId:"T9",scenario:"Add dil HNO₃ AFTER adding AgNO₃ to confirm the white precipitate is AgCl.\n\n(A student's reasoning)",isTrap:true,
+   why:"Wrong order! Dil HNO₃ must be added BEFORE AgNO₃ to prevent other insoluble silver salts from forming.",
+   whyCn:"順序錯誤！稀 HNO₃ 必須在 AgNO₃ 之前加，防止其他不溶銀鹽干擾。",
+   correctAns:"Dil HNO₃ BEFORE AgNO₃, not after"},
+
+  // T10: Fractional distillation
+  {trapId:"T10",scenario:"Fractional distillation of petroleum is a chemical change because different fractions are produced.\n\n(A student's answer)",isTrap:true,
+   why:"Fractional distillation is a PHYSICAL change. No new substances are formed — fractions are separated by boiling point. The molecules themselves do not change.",
+   whyCn:"分餾是物理變化。無新物質生成，只是按沸點分離。分子本身未改變。",
+   correctAns:"Fractional distillation = physical change (separation by boiling point)"},
+  {trapId:"T10",scenario:"The fractions from fractional distillation are chemically different from crude oil.\n\n(A student's statement)",isTrap:true,
+   why:"The fractions have the SAME chemical composition as the original molecules in crude oil. Only physical separation occurs.",
+   whyCn:"各餾分的化學組成與原油中原本的分子相同，只有物理分離。",
+   correctAns:"Fractions are physically separated, not chemically changed"},
+
+  // T11: Polymer repeating unit
+  {trapId:"T11",scenario:"When drawing the repeating unit of polyethene:\nKeep the C=C double bond to show it came from ethene.\n\n(A student's drawing rule)",isTrap:true,
+   why:"The double bond OPENS during polymerisation. The repeating unit shows single bonds only. The C=C becomes C-C in the polymer.",
+   whyCn:"聚合時雙鍵打開。重複單元只顯示單鍵。C=C 在聚合物中變成 C-C。",
+   correctAns:"Repeating unit: single bonds only; show brackets + subscript n"},
+  {trapId:"T11",scenario:"Draw the repeating unit without brackets — just show the structure.\n\n(A student's approach)",isTrap:true,
+   why:"The repeating unit MUST be enclosed in brackets [ ] with subscript n outside, to show it repeats. Without brackets = incomplete.",
+   whyCn:"重複單元必須用括號 [ ] 包住並在外面標下標 n，表示重複。無括號 = 不完整。",
+   correctAns:"[ repeating unit ]ₙ — brackets essential"},
+
+  // T12: Definition half-written
+  {trapId:"T12",scenario:"A compound is two or more elements joined together.\n\n(A student's definition)",isTrap:true,
+   why:"Missing the keyword 'chemically'. Without 'chemically joined', it could describe a mixture. 1-mark definition → lose 0.5 marks.",
+   whyCn:"缺關鍵詞 'chemically'（化學結合）。沒有它就變成描述混合物。1分定義失0.5分。",
+   correctAns:"A compound = two or more elements CHEMICALLY joined together"},
+  {trapId:"T12",scenario:"An element is a substance that cannot be broken down.\n\n(A student's definition)",isTrap:true,
+   why:"Incomplete — must specify 'by chemical means'. Without this, the definition is too broad (nuclear reactions can split atoms).",
+   whyCn:"不完整 — 必須指明 'by chemical means'（用化學方法）。否則定義太寬。",
+   correctAns:"An element = a substance that cannot be broken down into simpler substances by CHEMICAL means"},
+
+  // === SAFE CASES (6) ===
+  {trapId:null,scenario:"CaCO₃(s) → CaO(s) + CO₂(g)\n\n(This equation for thermal decomposition)",isTrap:false,
+   why:"",whyCn:"",
+   correctAns:"All state symbols present and correct. Balanced correctly."},
+  {trapId:null,scenario:"A proton has charge +1 and relative mass 1.\n\n(From a student's subatomic particle table)",isTrap:false,
+   why:"",whyCn:"",
+   correctAns:"Correct. Proton: charge +1, mass = 1."},
+  {trapId:null,scenario:"Isotopes have the same chemical properties because they have the same electron arrangement.\n\n(A student's explanation)",isTrap:false,
+   why:"",whyCn:"",
+   correctAns:"Correct. Same electron arrangement = same chemical properties."},
+  {trapId:null,scenario:"Silicon is a semi-metal (metalloid), located on the staircase line of the periodic table.\n\n(A student's classification)",isTrap:false,
+   why:"",whyCn:"",
+   correctAns:"Correct. Si = semi-metal / metalloid."},
+  {trapId:null,scenario:"O₂ is an element — it contains only one type of atom (oxygen).\n\n(A student's classification)",isTrap:false,
+   why:"",whyCn:"",
+   correctAns:"Correct. O₂ = element."},
+  {trapId:null,scenario:"Fractional distillation is a physical change because no new substances are formed.\n\n(A student's explanation)",isTrap:false,
+   why:"",whyCn:"",
+   correctAns:"Correct. Physical change = no new substance formed."}
+];
+
+// ============================================================
+// STATE
+// ============================================================
+let state = {
+  roundCases: [],       // 12 cases for this round
+  currentIdx: 0,
+  phase: 'safeTrap',    // 'safeTrap' | 'classify' | 'feedback'
+  userSafeTrap: null,   // 'safe' | 'trap'
+  userClassify: null,   // trap ID
+  scores: {safeTrap:0, classify:0},
+  results: [],          // [{case, userSafeTrap, userClassify, correct}]
+};
+
+function initRound() {
+  // Shuffle all cases, pick 12 (roughly 10 traps + 2 safe)
+  let shuffled = [...allCases];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    let j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  // Ensure at least 8 trap cases and at least 1 safe case
+  let traps = shuffled.filter(c => c.isTrap);
+  let safes = shuffled.filter(c => !c.isTrap);
+  let selected = traps.slice(0, 10);
+  selected.push(...safes.slice(0, 2));
+  // Shuffle again
+  for (let i = selected.length - 1; i > 0; i--) {
+    let j = Math.floor(Math.random() * (i + 1));
+    [selected[i], selected[j]] = [selected[j], selected[i]];
+  }
+  state.roundCases = selected;
+  state.currentIdx = 0;
+  state.phase = 'safeTrap';
+  state.userSafeTrap = null;
+  state.userClassify = null;
+  state.scores = {safeTrap:0, classify:0};
+  state.results = [];
+  showCase(0);
+}
+
+function showCase(idx) {
+  state.currentIdx = idx;
+  state.phase = 'safeTrap';
+  state.userSafeTrap = null;
+  state.userClassify = null;
+  let c = state.roundCases[idx];
+
+  document.getElementById('caseLabel').textContent = '📋 Case ' + (idx + 1) + ' / ' + state.roundCases.length + ' 案件';
+  document.getElementById('caseScenario').textContent = c.scenario;
+  document.getElementById('phaseDisp').textContent = 'Step 1: Safe or Trap? 判斷對錯';
+
+  // Show safe/trap options
+  let stOpts = document.getElementById('safeTrapOpts');
+  stOpts.style.display = 'flex';
+  stOpts.querySelectorAll('.opt-btn').forEach(b => {
+    b.className = 'opt-btn';
+    b.disabled = false;
+  });
+
+  // Hide classify and feedback
+  document.getElementById('classifyOpts').style.display = 'none';
+  document.getElementById('feedbackBox').className = 'feedback-box';
+  document.getElementById('feedbackContent').innerHTML = '';
+  document.getElementById('nextRow').style.display = 'none';
+  document.getElementById('matrixWrap').style.display = 'none';
+  document.getElementById('caseCard').style.display = 'block';
+
+  updateBar();
+}
+
+function chooseSafeTrap(choice) {
+  if (state.phase !== 'safeTrap') return;
+  state.userSafeTrap = choice;
+  let c = state.roundCases[state.currentIdx];
+
+  // Highlight selected
+  let stOpts = document.getElementById('safeTrapOpts');
+  stOpts.querySelectorAll('.opt-btn').forEach(b => b.disabled = true);
+  let selBtn = choice === 'safe' ? stOpts.children[0] : stOpts.children[1];
+  selBtn.classList.add('selected');
+
+  // Check correctness
+  let safeTrapCorrect = (choice === 'safe' && !c.isTrap) || (choice === 'trap' && c.isTrap);
+  if (safeTrapCorrect) {
+    state.scores.safeTrap++;
+  }
+
+  if (choice === 'safe') {
+    // No classify needed — go directly to feedback
+    state.phase = 'feedback';
+    showFeedback(c, choice, null);
+  } else if (!c.isTrap) {
+    // User said "Trap" on a safe case — go directly to feedback
+    state.phase = 'feedback';
+    showFeedback(c, choice, null);
+  } else {
+    // Show classification options
+    state.phase = 'classify';
+    document.getElementById('phaseDisp').textContent = 'Step 2: Which trap? 哪個陷阱？';
+    showClassifyOptions(c);
+  }
+  updateBar();
+}
+
+function showClassifyOptions(c) {
+  let container = document.getElementById('classifyOpts');
+  container.style.display = 'flex';
+  container.innerHTML = '';
+
+  // Correct option
+  let correctTrap = traps.find(t => t.id === c.trapId);
+  // 3 random distractors from other traps
+  let others = traps.filter(t => t.id !== c.trapId);
+  for (let i = others.length - 1; i > 0; i--) {
+    let j = Math.floor(Math.random() * (i + 1));
+    [others[i], others[j]] = [others[j], others[i]];
+  }
+  let distractors = others.slice(0, 3);
+  let allOpts = [correctTrap, ...distractors];
+  for (let i = allOpts.length - 1; i > 0; i--) {
+    let j = Math.floor(Math.random() * (i + 1));
+    [allOpts[i], allOpts[j]] = [allOpts[j], allOpts[i]];
+  }
+
+  allOpts.forEach(opt => {
+    let btn = document.createElement('button');
+    btn.className = 'opt-btn';
+    btn.textContent = opt.en + ' · ' + opt.cn;
+    btn.onclick = () => chooseClassify(opt.id, c, allOpts);
+    container.appendChild(btn);
+  });
+}
+
+function chooseClassify(trapId, c, allOpts) {
+  if (state.phase !== 'classify') return;
+  state.userClassify = trapId;
+  state.phase = 'feedback';
+
+  // Highlight all options
+  let container = document.getElementById('classifyOpts');
+  container.querySelectorAll('.opt-btn').forEach(b => b.disabled = true);
+
+  let correct = (trapId === c.trapId);
+  if (correct) state.scores.classify++;
+
+  // Show which ones are correct/wrong
+  container.querySelectorAll('.opt-btn').forEach(b => {
+    let txt = b.textContent;
+    let tid = allOpts.find(o => (o.en + ' · ' + o.cn) === txt)?.id;
+    if (tid === c.trapId) b.classList.add('correct');
+    else if (tid === trapId && !correct) b.classList.add('wrong');
+  });
+
+  showFeedback(c, 'trap', correct);
+}
+
+function showFeedback(c, safeTrapChoice, classifyCorrect) {
+  let fb = document.getElementById('feedbackBox');
+  let fc = document.getElementById('feedbackContent');
+  fc.innerHTML = ''; // Clear any previous content
+
+  if (!c.isTrap) {
+    // Safe case
+    fb.className = 'feedback-box safe show';
+    if (safeTrapChoice === 'safe') {
+      fc.innerHTML = '<div class="safe-text">✓ Correct! This statement is safe. 正確！此陳述無誤。</div><div class="correct-ans">' + escapeHTML(c.correctAns) + '</div>';
+    } else {
+      fc.innerHTML = '<div class="why">✗ False alarm — this statement is actually correct. 誤報——此陳述其實是正確的。</div><div class="correct-ans">' + escapeHTML(c.correctAns) + '</div>';
+    }
+  } else {
+    // Trap case
+    fb.className = 'feedback-box trap show';
+    if (safeTrapChoice === 'safe') {
+      fc.innerHTML = '<div class="why">✗ Missed! There IS a trap here. 漏了！這裡有陷阱。</div>';
+    }
+    fc.innerHTML += '<div class="why">❌ Why wrong 為什麼錯: ' + c.whyCn + '</div>';
+    fc.innerHTML += '<div class="correct-ans">✅ Correct 正確: ' + escapeHTML(c.correctAns) + '</div>';
+
+    if (classifyCorrect === true) {
+      fc.innerHTML += '<div style="color:var(--success);margin-top:4px">✓ Trap correctly identified! 陷阱識別正確！</div>';
+    } else if (classifyCorrect === false) {
+      let realName = traps.find(t => t.id === c.trapId);
+      fc.innerHTML += '<div style="color:var(--error);margin-top:4px">✗ Wrong classification. Real trap: ' + realName.en + ' · ' + realName.cn + '</div>';
+    }
+  }
+
+  document.getElementById('nextRow').style.display = 'flex';
+  document.getElementById('phaseDisp').textContent = 'Review 查看解析';
+
+  // Record result
+  state.results.push({
+    trapId: c.trapId,
+    isTrap: c.isTrap,
+    safeTrapCorrect: (safeTrapChoice === 'safe' && !c.isTrap) || (safeTrapChoice === 'trap' && c.isTrap),
+    classifyCorrect: c.isTrap ? classifyCorrect : null,
+  });
+  updateBar();
+}
+
+function nextCase() {
+  let nextIdx = state.currentIdx + 1;
+  if (nextIdx >= state.roundCases.length) {
+    showMatrix();
+  } else {
+    showCase(nextIdx);
+  }
+}
+
+function showMatrix() {
+  document.getElementById('caseCard').style.display = 'none';
+  document.getElementById('matrixWrap').style.display = 'block';
+  document.getElementById('phaseDisp').textContent = 'Round complete 本輪完成';
+
+  // Build matrix: for each trap, count hits/misses
+  let matrix = {};
+  traps.forEach(t => { matrix[t.id] = {hits:0, misses:0, safeMiss:0, skip:0, total:0}; });
+
+  state.results.forEach(r => {
+    if (!r.isTrap) return; // safe cases don't count toward trap matrix
+    let m = matrix[r.trapId];
+    if (!m) return;
+    m.total++;
+    if (r.safeTrapCorrect && r.classifyCorrect) m.hits++;
+    else if (!r.safeTrapCorrect) m.misses++;
+    else if (!r.classifyCorrect) m.safeMiss++;
+  });
+
+  let html = '';
+  traps.forEach(t => {
+    let m = matrix[t.id];
+    if (m.total === 0) {
+      html += '<div class="matrix-row"><div class="matrix-id">' + t.id + '</div><div class="matrix-name">' + t.en + ' · ' + t.cn + '</div><span style="color:var(--text3);font-size:.7rem">not tested 未測</span></div>';
+    } else {
+      html += '<div class="matrix-row"><div class="matrix-id">' + t.id + '</div><div class="matrix-name">' + t.en + ' · ' + t.cn + '</div><div class="matrix-dots">';
+      for (let i = 0; i < m.hits; i++) html += '<div class="matrix-dot hit" title="Hit"></div>';
+      for (let i = 0; i < m.misses; i++) html += '<div class="matrix-dot miss" title="Missed trap"></div>';
+      for (let i = 0; i < m.safeMiss; i++) html += '<div class="matrix-dot safe" title="Wrong classification"></div>';
+      html += '</div></div>';
+    }
+  });
+
+  document.getElementById('matrixContent').innerHTML = html;
+  document.getElementById('scoreDisp').textContent = state.scores.safeTrap + '(+' + state.scores.classify + ')';
+}
+
+function updateBar() {
+  document.getElementById('roundDisp').textContent = state.currentIdx + 1;
+  document.getElementById('totalDisp').textContent = state.roundCases.length;
+  document.getElementById('scoreDisp').textContent = state.scores.safeTrap + '(+' + state.scores.classify + ')';
+}
+
+function resetAll() {
+  initRound();
+  document.getElementById('caseCard').style.display = 'block';
+  document.getElementById('matrixWrap').style.display = 'none';
+}
+
+function escapeHTML(str) {
+  let d = document.createElement('div');
+  d.textContent = str;
+  return d.innerHTML;
+}
+
+// ============================================================
+// INIT
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => {
+  initRound();
+});
+</script>
+</body>
+</html>

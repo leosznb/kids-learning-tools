@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Reading Strategy Guide</title>
+<style>
+body{font-family:-apple-system,sans-serif;background:#f8fafc;color:#1e293b;padding:16px;margin:0}
+h2{text-align:center;margin:0 0 2px;font-size:1.1rem;color:#1e40af}
+.sub{text-align:center;font-size:.75rem;color:#64748b;margin-bottom:12px}
+.passage{background:#fff;border-radius:10px;padding:18px;margin-bottom:10px;font-size:.87rem;line-height:1.85;color:#334155;border:1px solid #e2e8f0;max-height:220px;overflow-y:auto}
+.passage p{margin:0 0 8px}
+.passage .ln{color:#94a3b8;font-size:.65rem;margin-right:6px}
+
+.qwrap{background:#fff;border-radius:12px;padding:18px;border:1px solid #e2e8f0;min-height:200px}
+.qwrap .qtype{font-size:.72rem;font-weight:700;padding:3px 10px;border-radius:10px;display:inline-block;margin-bottom:8px}
+.qwrap .qtype.main{background:#eff6ff;color:#2563eb}
+.qwrap .qtype.detail{background:#f0fdf4;color:#16a34a}
+.qwrap .qtype.infer{background:#fefce8;color:#a16207}
+.qwrap .qtype.ref{background:#fdf2f8;color:#be185d}
+.qwrap .qtype.vocab{background:#f5f3ff;color:#7c3aed}
+.qwrap .qtype.tone{background:#fff7ed;color:#c2410c}
+
+.strat-tip{background:#eff6ff;border-radius:8px;padding:10px 14px;margin-bottom:10px;font-size:.8rem;color:#1e40af;line-height:1.5;border:1px solid #bfdbfe}
+.strat-tip b{color:#1d4ed8}
+
+.qtext{font-size:.95rem;line-height:1.6;margin-bottom:10px;color:#1e293b}
+.options{display:flex;flex-direction:column;gap:5px;margin-bottom:10px}
+.opt{padding:8px 12px;border-radius:8px;font-size:.84rem;cursor:pointer;background:#f8fafc;border:1.5px solid #e2e8f0;transition:all .12s}
+.opt:hover{background:#eff6ff;border-color:#2563eb}
+.opt.chosen{background:#2563eb;color:#fff;border-color:#2563eb}
+.opt.correct-show{background:#16a34a;color:#fff;border-color:#16a34a}
+.opt.wrong-show{background:#dc2626;color:#fff;border-color:#dc2626}
+
+.result{font-size:.82rem;line-height:1.6;min-height:20px;margin-top:4px}
+.result .strat-feedback{display:inline-block;padding:4px 10px;border-radius:8px;font-size:.75rem;margin-top:4px;background:#f1f5f9;color:#475569}
+
+.btns{display:flex;gap:8px;justify-content:center;margin-top:10px}
+.btn-blue{background:#2563eb;color:#fff;border:none;padding:10px 24px;border-radius:8px;font-weight:600;font-size:.84rem;cursor:pointer;font-family:inherit}
+.btn-gray{background:#f1f5f9;color:#475569;border:1px solid #cbd5e1;padding:10px 24px;border-radius:8px;font-weight:600;font-size:.84rem;cursor:pointer;font-family:inherit}
+
+.progress{background:#fff;border-radius:8px;padding:10px 14px;margin-bottom:8px;text-align:center;font-size:.78rem;color:#475569;border:1px solid #e2e8f0}
+.progress span{font-weight:700;color:#1e293b}
+
+.fold{background:#fff;border-radius:8px;border:1px solid #e2e8f0;margin-bottom:8px;overflow:hidden}
+.fold h4{padding:10px 14px;margin:0;font-size:.82rem;cursor:pointer;color:#1e40af;display:flex;justify-content:space-between;align-items:center}
+.fold .body{padding:0 14px 12px;font-size:.76rem;color:#475569;line-height:1.6;display:none}
+.fold.open .body{display:block}
+</style>
+</head>
+<body>
+<h2>Reading Strategy Guide</h2>
+<div class="sub">Learn strategies by doing — each question teaches you HOW to find the answer</div>
+
+<!-- Collapsible strategy reference -->
+<div class="fold" id="foldRef">
+  <h4 onclick="document.getElementById('foldRef').classList.toggle('open')">📖 Quick Strategy Reference ▾</h4>
+  <div class="body">
+    <b>3-Step Method:</b> ① Read questions first → ② Skim passage → ③ Answer with precision<br>
+    <b>Main Idea:</b> First + last paragraphs. <b>Detail:</b> Locate key word, read ±2 lines.<br>
+    <b>Inference:</b> Combine clues, not stated directly. <b>Reference:</b> Look at the sentence before the pronoun.<br>
+    <b>Vocabulary:</b> Read surrounding sentences. <b>Tone:</b> Focus on adjectives/adverbs.<br>
+    <b>⚠️ Traps:</b> Near-identical but one word off · Extreme words (must/never/all) · True IRL but not in passage
+  </div>
+</div>
+
+<!-- Passage -->
+<div class="passage">
+<p><span class="ln">[1]</span>For most of human history, people slept when the sun went down and woke when it rose. But in the past century, artificial light, screens, and packed schedules have pushed bedtimes later and later. Today, the average teenager sleeps only 6.5 to 7 hours per night — far below the 8 to 10 hours recommended by doctors.</p>
+<p><span class="ln">[2]</span>Sleep is not simply "rest." During deep sleep, the brain clears out toxins, strengthens memories, and regulates emotions. Without enough deep sleep, teenagers become more irritable, find it harder to concentrate, and perform worse in exams — even if they have studied just as much.</p>
+<p><span class="ln">[3]</span>One notable culprit is the smartphone. The blue light emitted by screens tricks the brain into thinking it is still daytime, suppressing melatonin — the hormone that makes us feel sleepy. A 2023 study found that teenagers who used their phones within one hour of bedtime took an average of 45 minutes longer to fall asleep than those who put their devices away earlier.</p>
+<p><span class="ln">[4]</span>Schools around the world are beginning to respond. In California, a law now requires middle and high schools to start no earlier than 8:30 a.m. Early results show improved attendance and higher test scores. However, critics argue that later starts merely shift the problem rather than solving it, since teenagers simply stay up even later.</p>
+<p><span class="ln">[5]</span>The solution, most experts agree, lies in a combination of better habits and smarter policies. Putting away screens an hour before bed, keeping a consistent sleep schedule, and avoiding caffeine in the afternoon can make a remarkable difference. At the same time, schools and parents must recognise that sleep is not a luxury — it is a biological necessity.</p>
+</div>
+
+<!-- Progress -->
+<div class="progress">Answered: <span id="prog">0/6</span></div>
+
+<!-- Question -->
+<div class="qwrap" id="qwrap">
+  <div class="qtype" id="qtype">—</div>
+  <div class="strat-tip" id="strattip"></div>
+  <div class="qtext" id="qtext"></div>
+  <div class="options" id="opts"></div>
+  <div class="result" id="result"></div>
+  <div class="btns">
+    <button class="btn-blue" id="btnStart" onclick="startRound()">▶ Start Practice</button>
+    <button class="btn-gray" id="btnNext" style="display:none" onclick="nextQ()">Next →</button>
+  </div>
+</div>
+
+<script>
+var Q = [
+  {
+    type:'main', typeLabel:'Main Idea / Purpose',
+    strategy:'<b>Strategy:</b> Read the <b>first and last paragraphs</b>. The main idea is usually in the opening or closing sentence. Ask yourself: what is the whole article about — not just one paragraph?',
+    q:'What is the main purpose of this article?',
+    opts:['A. To argue that schools should start later in the morning',
+          'B. To explain why sleep is important and how to improve it',
+          'C. To describe how smartphones damage teenagers\' health',
+          'D. To compare teenagers\' sleep habits across different countries'],
+    ans:1,
+    explain:'<b>Why B?</b> Paragraph 1 introduces the sleep problem. Paragraph 5 concludes with solutions — combining habits and policies. This is the thread that runs through the whole article. <b>Strategy check:</b> A & C are too narrow (only one paragraph each). D is not mentioned at all.'
+  },
+  {
+    type:'detail', typeLabel:'Detail / Factual',
+    strategy:'<b>Strategy:</b> <b>Locate the key word</b> in the question — here it\'s "how many hours" + "doctors recommend." Scan paragraph 1 for numbers. Read the sentence with the number — the answer is stated directly.',
+    q:'According to paragraph 1, how many hours of sleep do doctors recommend for teenagers?',
+    opts:['A. 6.5 to 7 hours','B. 7 to 8 hours','C. 8 to 10 hours','D. More than 10 hours'],
+    ans:2,
+    explain:'<b>Why C?</b> Paragraph 1 line 4: "8 to 10 hours recommended by doctors." Directly stated. <b>Strategy check:</b> The detail is in the passage word-for-word. You just need to find it — don\'t guess from memory.'
+  },
+  {
+    type:'infer', typeLabel:'Inference',
+    strategy:'<b>Strategy:</b> The answer is <b>NOT written directly</b>. Look at the evidence: "45 minutes longer to fall asleep." Combine this with: phones suppress melatonin. What does this imply about putting phones away?',
+    q:'What can be inferred from paragraph 3 about the 2023 study?',
+    opts:['A. All teenagers who use phones before bed cannot fall asleep',
+          'B. Putting phones away earlier helps teenagers fall asleep faster',
+          'C. Blue light has no real effect on teenagers\' sleep patterns',
+          'D. The study was conducted only on teenagers in California'],
+    ans:1,
+    explain:'<b>Why B?</b> The study says phone users took 45 min longer. This implies: no phone = faster sleep. <b>Strategy check:</b> A uses "all" (extreme word — Trap 2!). C contradicts the passage. D is not mentioned.'
+  },
+  {
+    type:'ref', typeLabel:'Reference',
+    strategy:'<b>Strategy:</b> Look at the <b>sentence before the pronoun</b>. Here "the problem" appears in paragraph 4. Read the whole paragraph: what is the problem that the California law tries to address? What are the critics saying "shifts the problem"?',
+    q:'In paragraph 4, what does "the problem" refer to?',
+    opts:['A. California\'s new law','B. Teenagers not getting enough sleep','C. Schools starting too early','D. Teenagers staying up too late'],
+    ans:1,
+    explain:'<b>Why B?</b> The entire article is about teenagers\' sleep deprivation. The law tries to fix it, critics say later starts don\'t fix it. "The problem" = the central issue of the whole passage. <b>Strategy check:</b> Reference questions ask about the BIG topic, not just the immediate previous sentence.'
+  },
+  {
+    type:'vocab', typeLabel:'Vocabulary in Context',
+    strategy:'<b>Strategy:</b> Read the <b>surrounding sentences</b> in paragraph 2. The word "irritable" is followed by "find it harder to concentrate, and perform worse in exams." These are all negative effects. What kind of mood fits this pattern?',
+    q:'In paragraph 2, the word "irritable" is closest in meaning to:',
+    opts:['A. easily annoyed','B. extremely tired','C. physically weak','D. very forgetful'],
+    ans:0,
+    explain:'<b>Why A?</b> Context clues: "more irritable, find it harder to concentrate" — irritability is about mood and patience, not physical tiredness or memory. <b>Strategy check:</b> You can figure out the meaning even without knowing the word — the surrounding text gives you the answer.'
+  },
+  {
+    type:'tone', typeLabel:'Tone / Attitude',
+    strategy:'<b>Strategy:</b> Focus on the <b>adjectives and adverbs</b> in the concluding paragraph. Look for words like "remarkable," "must recognise," "not a luxury — a necessity." Are these positive, negative, or neutral?',
+    q:'What is the writer\'s overall attitude toward improving teenage sleep?',
+    opts:['A. Pessimistic — the situation is hopeless',
+          'B. Neutral — the writer presents facts without taking a side',
+          'C. Optimistic and solution-focused — there are practical ways to improve',
+          'D. Angry — the writer blames schools for the problem'],
+    ans:2,
+    explain:'<b>Why C?</b> Paragraph 5 uses words like "remarkable difference" and urges action. The writer believes solutions exist and are achievable. <b>Strategy check:</b> Tone is in the word choice — "remarkable," "must recognise," "necessity" all signal optimism + urgency.'
+  }
+];
+
+var idx = -1, answered = 0;
+var chosen = {};
+
+function el(id){return document.getElementById(id);}
+
+function startRound(){
+  idx = 0; answered = 0; chosen = {};
+  el('btnStart').style.display = 'none';
+  el('btnNext').style.display = 'none';
+  updateProg();
+  showQ();
+}
+
+function showQ(){
+  if(idx >= Q.length){ finish(); return; }
+  var q = Q[idx];
+  
+  // Set type badge
+  var badge = el('qtype');
+  badge.textContent = q.typeLabel;
+  badge.className = 'qtype ' + q.type;
+  
+  // Strategy tip
+  el('strattip').innerHTML = q.strategy;
+  
+  // Question text
+  el('qtext').textContent = q.q;
+  
+  // Options
+  var html = '';
+  for(var i=0;i<q.opts.length;i++){
+    var cls = 'opt';
+    if(chosen[idx] !== undefined){
+      if(i === q.ans) cls += ' correct-show';
+      if(i === chosen[idx] && i !== q.ans) cls += ' wrong-show';
+      if(i === chosen[idx]) cls += ' chosen';
+    }
+    html += '<div class="' + cls + '" onclick="' + (chosen[idx]===undefined?'pick('+i+')':'') + '">' + q.opts[i] + '</div>';
+  }
+  el('opts').innerHTML = html;
+  
+  // Result
+  if(chosen[idx] !== undefined){
+    var isCorrect = chosen[idx] === q.ans;
+    el('result').innerHTML = (isCorrect ? '<span style="color:#16a34a">✅ Correct!</span> ' : '<span style="color:#dc2626">❌ Not quite.</span> ') +
+      '<span class="strat-feedback">' + q.explain + '</span>';
+    el('btnNext').style.display = '';
+  } else {
+    el('result').innerHTML = '';
+    el('btnNext').style.display = 'none';
+  }
+}
+
+function pick(optIdx){
+  var q = Q[idx];
+  chosen[idx] = optIdx;
+  answered++;
+  updateProg();
+  showQ(); // re-render to show result
+}
+
+function nextQ(){
+  idx++;
+  showQ();
+}
+
+function finish(){
+  el('qtype').textContent = '🏁';
+  el('qtype').className = 'qtype main';
+  el('strattip').innerHTML = '';
+  el('qtext').textContent = 'All 6 questions answered!';
+  el('opts').innerHTML = '';
+  var correct = 0;
+  for(var i=0;i<Q.length;i++){ if(chosen[i]===Q[i].ans) correct++; }
+  el('result').innerHTML = 'You got <b>' + correct + '/6</b> correct. ' +
+    (correct===6 ? 'Perfect!' : 'Review the strategies above and try again.') +
+    '<br><br><button class="btn-blue" onclick="startRound()">🔄 Try Again</button>';
+  el('btnNext').style.display = 'none';
+}
+
+function updateProg(){
+  el('prog').textContent = answered + '/6';
+}
+</script>
+</body>
+</html>
