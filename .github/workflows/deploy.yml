@@ -1,1 +1,39 @@
+name: Deploy to GitHub Pages with Azure Key
 
+on:
+  push:
+    branches: [main]  # 你 push 到 main 時觸發
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Inject Azure Speech Key
+        run: |
+          # 將所有 HTML 中的佔位符替換為真實 Key
+          find . -name '*.html' -exec sed -i \
+            's/YOUR_AZURE_SPEECH_KEY/${{ secrets.AZURE_SPEECH_KEY }}/g' {} \;
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
+      - name: Deploy to Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
