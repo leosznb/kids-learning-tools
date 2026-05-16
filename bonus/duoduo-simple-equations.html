@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>簡易方程 — 多多專屬練習</title>
+<style>
+  @media print {
+    @page { margin: 1.5cm; size: A4; }
+    body { background: #fff !important; padding: 0 !important; }
+    .paper { box-shadow: none !important; border: none !important; margin: 0 !important; }
+    .btn-print { display: none !important; }
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", "Helvetica Neue", sans-serif;
+    background: #f5f5f5;
+    padding: 20px 16px;
+    line-height: 1.6;
+  }
+
+  .paper {
+    max-width: 780px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 32px 36px 28px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+
+  /* 頁首 */
+  .header {
+    text-align: center;
+    border-bottom: 2px solid #000;
+    padding-bottom: 12px;
+    margin-bottom: 20px;
+  }
+
+  .header h1 {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 4px;
+  }
+
+  .header .sub {
+    font-size: 13px;
+    color: #555;
+    margin-top: 4px;
+  }
+
+  /* 信息欄 */
+  .info-row {
+    display: flex;
+    gap: 40px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    font-size: 14px;
+  }
+
+  .info-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .info-item .blank {
+    display: inline-block;
+    border-bottom: 1px solid #000;
+    min-width: 100px;
+    height: 20px;
+  }
+
+  /* 大題標題 */
+  .part-title {
+    font-size: 15px;
+    font-weight: 700;
+    margin: 20px 0 12px;
+    padding: 4px 0;
+    border-bottom: 1px solid #000;
+  }
+
+  /* 小題 */
+  .question {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 14px;
+    align-items: flex-start;
+    page-break-inside: avoid;
+  }
+
+  .q-num {
+    font-weight: 700;
+    min-width: 24px;
+    text-align: right;
+    flex-shrink: 0;
+    padding-top: 2px;
+  }
+
+  .q-body {
+    flex: 1;
+  }
+
+  .q-text {
+    font-size: 14.5px;
+    margin-bottom: 6px;
+  }
+
+  .q-formula {
+    font-family: "Georgia", "Times New Roman", serif;
+    font-size: 16px;
+    font-weight: 600;
+    margin: 4px 0 8px;
+  }
+
+  /* 答題線 */
+  .answer-line {
+    display: inline-block;
+    border-bottom: 1px solid #000;
+    min-width: 80px;
+    height: 20px;
+    text-align: center;
+    margin: 0 4px;
+  }
+
+  .answer-line.long { min-width: 160px; }
+
+  /* 運算空間 */
+  .work-space {
+    border: 1px solid #ccc;
+    min-height: 44px;
+    margin-top: 6px;
+    width: 100%;
+  }
+
+  .work-space.lg { min-height: 60px; }
+
+  /* 選項 */
+  .options {
+    margin: 8px 0;
+    line-height: 2;
+    font-size: 14px;
+  }
+
+  .options label {
+    display: block;
+  }
+
+  /* 分數欄 */
+  .score-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 2px solid #000;
+    margin-top: 24px;
+    padding-top: 12px;
+    font-size: 14px;
+  }
+
+  .score-blank {
+    border-bottom: 1px solid #000;
+    display: inline-block;
+    min-width: 60px;
+    height: 20px;
+    text-align: center;
+  }
+
+  /* 打印按鈕 */
+  .btn-print {
+    text-align: center;
+    margin-top: 20px;
+  }
+
+  .btn-print button {
+    background: #000;
+    color: #fff;
+    border: none;
+    padding: 8px 24px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+<div class="paper">
+
+  <div class="header">
+    <h1>簡易方程</h1>
+    <div class="sub">P5 數學　　滿分 100 分　　限時 45 分鐘</div>
+  </div>
+
+  <div class="info-row">
+    <div class="info-item">姓名：<span class="blank"></span></div>
+    <div class="info-item">日期：<span class="blank"></span></div>
+    <div class="info-item">用時：<span class="blank"></span></div>
+  </div>
+
+  <!-- A -->
+  <div class="part-title">一、解簡易方程（每題 5 分，共 40 分）</div>
+
+  <div class="question">
+    <div class="q-num">1.</div>
+    <div class="q-body">
+      <div class="q-formula">x + 28 = 55</div>
+      <div>x = <span class="answer-line"></span></div>
+      <div class="work-space"></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="q-num">2.</div>
+    <div class="q-body">
+      <div class="q-formula">y − 36 = 49</div>
+      <div>y = <span class="answer-line"></span></div>
+      <div class="work-space"></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="q-num">3.</div>
+    <div class="q-body">
+      <div class="q-formula">6m = 78</div>
+      <div>m = <span class="answer-line"></span></div>
+      <div class="work-space"></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="q-num">4.</div>
+    <div class="q-body">
+      <div class="q-formula">n ÷ 8 = 12</div>
+      <div>n = <span class="answer-line"></span></div>
+      <div class="work-space"></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="q-num">5.</div>
+    <div class="q-body">
+      <div class="q-formula">x/4 − 11 = 33</div>
+      <div>x = <span class="answer-line"></span></div>
+      <div class="work-space"></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="q-num">6.</div>
+    <div class="q-body">
+      <div class="q-formula">18 = k/3 + 9</div>
+      <div>k = <span class="answer-line"></span></div>
+      <div class="work-space"></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="q-num">7.</div>
+    <div class="q-body">
+      <div class="q-formula">7 + m/5 = 16</div>
+      <div>m = <span class="answer-line"></span></div>
+      <div class="work-space"></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="q-num">8.</div>
+    <div class="q-body">
+      <div class="q-formula">5y − 9 = 56</div>
+      <div>y = <span class="answer-line"></span></div>
+      <div class="work-space"></div>
+    </div>
+  </div>
+
+  <!-- B -->
+  <div class="part-title">二、列方程解應用題（每題 7 分，共 42 分）</div>
+
+  <div class="question">
+    <div class="q-num">9.</div>
+    <div class="q-body">
+      <div class="q-text">媽媽買一袋米，付了 100 元，找回 12 元。這袋米售多少元？</div>
+      <div>設：<span class="answer-line"></span></div>
+      <div>方程：<span class="answer-line long"></span></div>
+      <div>答：<span class="answer-line"></span></div>
+      <div class="work-space"></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="q-num">10.</div>
+    <div class="q-body">
+      <div class="q-text">便利店有 3 箱蘋果汁，售出 12 瓶後，還餘 36 瓶。設每箱有 n 瓶，列出方程並求解。</div>
+      <div>方程：<span class="answer-line long"></span></div>
+      <div>答：每箱 <span class="answer-line"></span> 瓶</div>
+      <div class="work-space"></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="q-num">11.</div>
+    <div class="q-body">
+      <div class="q-text">一包手工紙平均分給 12 人，敏兒原本有 8 張，分得手工紙後共有 20 張。設一包手工紙有 y 張，列出方程並求解。</div>
+      <div>方程：<span class="answer-line long"></span></div>
+      <div>答：一包 <span class="answer-line"></span> 張</div>
+      <div class="work-space"></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="q-num">12.</div>
+    <div class="q-body">
+      <div class="q-text">包裝小蛋糕：上午包裝了 99 袋，下午每 7 個裝一袋，全日共包裝了 200 袋。設下午包裝了 x 個蛋糕，列出方程並求解。</div>
+      <div>方程：<span class="answer-line long"></span></div>
+      <div>答：下午包裝了 <span class="answer-line"></span> 個蛋糕</div>
+      <div class="work-space"></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="q-num">13.</div>
+    <div class="q-body">
+      <div class="q-text">佩如今年身高 130 cm，比去年高了 8 cm。設佩如去年身高 h cm，列出方程並求解。</div>
+      <div>方程：<span class="answer-line long"></span></div>
+      <div>答：去年 <span class="answer-line"></span> cm</div>
+      <div class="work-space"></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="q-num">14.</div>
+    <div class="q-body">
+      <div class="q-text">哥哥的體重是弟弟的 3 倍少 5 公斤，弟弟重 28 公斤。設哥哥體重為 w 公斤，列出方程並求解。</div>
+      <div>方程：<span class="answer-line long"></span></div>
+      <div>答：<span class="answer-line"></span> 公斤</div>
+      <div class="work-space"></div>
+    </div>
+  </div>
+
+  <!-- C -->
+  <div class="part-title">三、方程比較（8 分）</div>
+
+  <div class="question">
+    <div class="q-num">15.</div>
+    <div class="q-body">
+      <div class="q-text">哪一個方程的解與其他三個不同？（圈出答案）</div>
+      <div class="options">
+        <label>A. x + 15 = 40</label>
+        <label>B. 2x + 5 = 55</label>
+        <label>C. 3x − 15 = 60</label>
+        <label>D. 100 − 3x = 10</label>
+      </div>
+      <div class="work-space lg"></div>
+    </div>
+  </div>
+
+  <!-- D -->
+  <div class="part-title">四、挑戰題（10 分）</div>
+
+  <div class="question">
+    <div class="q-num">16.</div>
+    <div class="q-body">
+      <div class="q-text">爸爸的年齡是兒子的 4 倍。5 年後，爸爸仍然比兒子大 30 歲。設兒子現在 x 歲，列出方程並求出爸爸和兒子現在各多少歲。</div>
+      <div>方程：<span class="answer-line long"></span></div>
+      <div class="work-space lg"></div>
+      <div>答：兒子 <span class="answer-line"></span> 歲，爸爸 <span class="answer-line"></span> 歲</div>
+    </div>
+  </div>
+
+  <!-- 分數 -->
+  <div class="score-bar">
+    <div>得分：<span class="score-blank"></span> / 100</div>
+    <div>家長簽名：<span class="score-blank"></span>　　覆查日期：<span class="score-blank"></span></div>
+  </div>
+
+  <div class="btn-print">
+    <button onclick="window.print()">打印試卷</button>
+  </div>
+
+</div>
+
+</body>
+</html>

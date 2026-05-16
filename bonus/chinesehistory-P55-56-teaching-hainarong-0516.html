@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>改革開放政策｜答案與解題方法</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --primary: #1a1a2e;
+    --accent: #e94560;
+    --accent-light: #f5a0b0;
+    --bg: #f8f9fa;
+    --card: #ffffff;
+    --border: #dee2e6;
+    --text: #2d3436;
+    --text-light: #636e72;
+    --success: #00b894;
+    --method-bg: #f0f4ff;
+    --method-border: #4a6fa5;
+    --font-sans: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Noto Sans HK', sans-serif;
+    --radius: 10px;
+    --shadow: 0 2px 10px rgba(0,0,0,0.06);
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ===== Header ===== */
+  .header {
+    background: var(--primary);
+    color: #fff;
+    padding: 28px 24px 20px;
+    text-align: center;
+  }
+  .header h1 { font-size: 1.5rem; font-weight: 600; letter-spacing: 0.5px; }
+  .header .sub { font-size: 0.85rem; opacity: 0.65; margin-top: 4px; }
+  .header .badge {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    font-size: 0.7rem;
+    padding: 3px 14px;
+    border-radius: 20px;
+    margin-top: 8px;
+    font-weight: 500;
+  }
+
+  .container { max-width: 780px; margin: 0 auto; padding: 20px 16px 60px; }
+
+  /* ===== Section ===== */
+  .section-divider {
+    display: flex; align-items: center; gap: 14px;
+    margin: 44px 0 20px;
+    font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px;
+    color: var(--text-light);
+  }
+  .section-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  .section-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 4px;
+  }
+  .section-subtitle {
+    font-size: 0.9rem;
+    color: var(--text-light);
+    margin-bottom: 18px;
+  }
+
+  /* ===== Question Card ===== */
+  .q-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 24px 22px;
+    margin-bottom: 22px;
+    border: 1px solid var(--border);
+  }
+
+  .q-num {
+    display: inline-block;
+    background: var(--primary);
+    color: #fff;
+    font-size: 0.68rem;
+    font-weight: 600;
+    padding: 2px 10px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    letter-spacing: 0.3px;
+  }
+  .q-tag {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    font-size: 0.62rem;
+    font-weight: 600;
+    padding: 1px 8px;
+    border-radius: 4px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+
+  .question-text {
+    font-size: 0.95rem;
+    line-height: 1.9;
+    margin-bottom: 16px;
+    padding: 12px 16px;
+    background: #f8f9fa;
+    border-radius: 6px;
+    border-left: 3px solid var(--border);
+  }
+  .question-text strong { color: var(--primary); }
+
+  /* ===== Method Box ===== */
+  .method-box {
+    background: var(--method-bg);
+    border-left: 4px solid var(--method-border);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin-bottom: 16px;
+  }
+  .method-box .label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--method-border);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 6px;
+  }
+  .method-box .content {
+    font-size: 0.9rem;
+    line-height: 1.9;
+  }
+  .method-box .step-list {
+    list-style: none;
+    padding: 0;
+  }
+  .method-box .step-list li {
+    position: relative;
+    padding-left: 26px;
+    margin-bottom: 6px;
+    font-size: 0.88rem;
+  }
+  .method-box .step-list li::before {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: 8px;
+    width: 10px;
+    height: 10px;
+    background: var(--method-border);
+    border-radius: 50%;
+    opacity: 0.3;
+  }
+
+  /* ===== Answer Box ===== */
+  .answer-box {
+    background: #e8f8f5;
+    border: 1px solid rgba(0,184,148,0.2);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 12px;
+  }
+  .answer-box .label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--success);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 4px;
+  }
+  .answer-box .content {
+    font-size: 0.92rem;
+    line-height: 1.9;
+  }
+  .answer-box .content strong { color: var(--primary); }
+  .kw { font-weight: 700; color: #b85c00; border-bottom: 2px solid transparent; border-image: linear-gradient(90deg, #e94560, #fdcb6e) 1; }
+
+  /* ===== Table ===== */
+  .data-table-wrap { overflow-x: auto; margin: 12px 0 16px; }
+  .data-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+  .data-table th { background: var(--primary); color: #fff; font-weight: 500; padding: 8px 14px; text-align: center; font-size: 0.82rem; }
+  .data-table td { padding: 8px 14px; text-align: center; border-bottom: 1px solid var(--border); }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:nth-child(even) td { background: #f8f9fa; }
+
+  /* ===== Source Block ===== */
+  .source-block {
+    background: #f1f3f5;
+    border-left: 3px solid var(--primary);
+    padding: 14px 18px;
+    margin: 10px 0 16px;
+    border-radius: 0 var(--radius) var(--radius) 0;
+    font-size: 0.88rem;
+    line-height: 1.9;
+  }
+  .source-block .src-label {
+    font-weight: 600;
+    font-size: 0.78rem;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+  .source-block .src-ref {
+    font-size: 0.75rem;
+    color: var(--text-light);
+    margin-top: 6px;
+  }
+
+  /* ===== Essay Framework ===== */
+  .essay-framework {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 12px 0;
+    border: 1px solid var(--border);
+  }
+  .essay-framework .step {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .essay-framework .step:last-child { margin-bottom: 0; }
+  .essay-framework .step-num {
+    width: 26px; height: 26px;
+    background: var(--primary); color: #fff;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.72rem; font-weight: 700;
+    flex-shrink: 0; margin-top: 2px;
+  }
+  .essay-framework .step-text { flex: 1; line-height: 1.8; font-size: 0.9rem; }
+  .essay-framework .step-text strong { color: var(--primary); }
+
+  .note {
+    font-size: 0.82rem;
+    color: var(--text-light);
+    background: #fffde7;
+    border-radius: 6px;
+    padding: 10px 14px;
+    margin-top: 12px;
+    border-left: 3px solid #fdd835;
+  }
+  .note strong { color: var(--text); }
+
+  /* ===== Progress ==== */
+  .progress-bar { height: 4px; background: var(--border); border-radius: 2px; margin: 16px 0; overflow: hidden; }
+  .progress-bar .fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--success)); border-radius: 2px; width: 0%; transition: width 0.5s ease; }
+
+  /* ===== Footer ===== */
+  .footer { text-align: center; padding: 20px; font-size: 0.7rem; color: var(--text-light); opacity: 0.5; }
+
+  /* ===== Responsive ===== */
+  @media (max-width: 600px) {
+    .header h1 { font-size: 1.3rem; }
+    .q-card { padding: 18px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ====== HEADER ====== -->
+<div class="header">
+  <h1>改革開放政策</h1>
+  <div class="sub">第2章 · 地圖閱讀 + 進階探究</div>
+  <span class="badge">第55–56頁 · 答案與解題方法</span>
+</div>
+
+<div class="container">
+
+  <!-- ============================================================ -->
+  <!-- SECTION 1: 地圖閱讀 — 經濟特區 -->
+  <!-- ============================================================ -->
+  <div class="section-divider">第一部分 · 地圖閱讀</div>
+  <h2 class="section-title">經濟特區的設立</h2>
+  <p class="section-subtitle">以下是每一題的思考方法和完整答案。</p>
+
+  <!-- 地圖 -->
+  <div class="q-card" style="text-align:center; padding:20px;">
+    <div style="background:#e9ecef; border-radius:8px; padding:32px 20px; color:var(--text-light); font-size:0.85rem;">
+      🗺️ 中國東南沿海地圖（示意）<br>
+      <span style="display:block; font-size:0.78rem; margin-top:6px;">A · B · C · D · E 分別代表五個經濟特區的位置</span>
+    </div>
+  </div>
+
+  <!-- === Q1 === -->
+  <div class="q-card">
+    <div><span class="q-num">Q1</span></div>
+    <div class="question-text">試寫出地圖中英文字母分別代表的<strong>經濟特區名稱</strong>。</div>
+
+    <div class="method-box">
+      <div class="label">🧠 解題方法</div>
+      <div class="content">
+        <strong>第一步：記清五個經濟特區的方位</strong><br>
+        中國的五個經濟特區全部集中在<strong>東南沿海</strong>，由北到南依次是：<br>
+        <span class="kw">廈門</span>（福建）→ <span class="kw">汕頭</span>（廣東）→ <span class="kw">深圳</span>（廣東，毗鄰香港）→ <span class="kw">珠海</span>（廣東，毗鄰澳門）→ <span class="kw">海南</span>（海南省，最大的一個）<br><br>
+        <strong>第二步：看字母順序推位置</strong><br>
+        地圖上的字母通常按從上到下（由北到南）排列。<br>
+        A 在最北 → 廈門　　B 在廈門南邊 → 汕頭<br>
+        C 在廣東中部沿海 → 深圳　　D 在珠江西岸 → 珠海<br>
+        E 在下方島嶼 → 海南
+      </div>
+    </div>
+
+    <div class="answer-box">
+      <div class="label">✓ 答案</div>
+      <div class="content">
+        <span style="font-size:1rem;"><strong>A 廈門</strong> · <strong>B 汕頭</strong> · <strong>C 深圳</strong> · <strong>D 珠海</strong> · <strong>E 海南</strong></span>
+      </div>
+    </div>
+
+    <div class="note">
+      💡 <strong>記憶法：</strong>「廈汕深珠海」—— 用「下（廈）山（汕）深珠海」的口訣記住五個名字。1980年先設立深圳、珠海、汕頭、廈門四個，1988年海南全省成為第五個經濟特區。
+    </div>
+  </div>
+
+  <!-- === Q2 === -->
+  <div class="q-card">
+    <div><span class="q-num">Q2</span></div>
+    <div class="question-text"><strong>承上題</strong>，試說明中央政府設立經濟特區的<strong>目的</strong>和<strong>相關措施</strong>。</div>
+
+    <div class="method-box">
+      <div class="label">🧠 解題方法</div>
+      <div class="content">
+        <strong>「目的」怎麼答？</strong>（問：為什麼要做這件事？）<br>
+        改革開放之初，中國缺乏資金、缺乏先進技術、缺乏現代管理經驗。設立經濟特區就是為了打開一扇<span class="kw">對外窗口</span>——<br>
+        → 讓外國資本進來（<span class="kw">吸引外資</span>）<br>
+        → 讓外國技術和管理方法進來（<span class="kw">引進先進技術和管理經驗</span>）<br>
+        → 最終<span class="kw">加快經濟發展</span><br><br>
+        <strong>「措施」怎麼答？</strong>（問：具體做了什麼？）<br>
+        如果只是把一個地方叫「特區」而沒有實質政策，根本沒用。所以中央政府在特區內實行了與內地不同的<span class="kw">特殊政策</span>——<br>
+        → <span class="kw">減免稅收</span>（降低企業稅率）<br>
+        → <span class="kw">放寬外資准入</span>（外國人更容易來投資設廠）<br>
+        → 統稱「特殊的經濟政策和優惠措施」
+      </div>
+    </div>
+
+    <div class="answer-box">
+      <div class="label">✓ 答案</div>
+      <div class="content">
+        <strong>目的：</strong><span class="kw">吸引外資</span>、<span class="kw">引進先進技術和管理經驗</span>，以<span class="kw">加快經濟發展</span>。<br><br>
+        <strong>措施：</strong>在經濟特區內實行<span class="kw">特殊的經濟政策和優惠措施</span>（如減免稅收、放寬外資准入等）。
+      </div>
+    </div>
+
+    <div class="note">
+      💡 <strong>考試技巧：</strong>重點詞一個都不能漏——「吸引外資」「先進技術」「管理經驗」「特殊政策」「優惠措施」。用書面用語，不要寫口語。
+    </div>
+  </div>
+
+  <!-- === Q3 === -->
+  <div class="q-card">
+    <div><span class="q-num">Q3</span></div>
+    <div class="question-text">除了設立經濟特區外，中央政府還制定了甚麼措施，以達至<strong>全方位的對外開放格局</strong>？</div>
+
+    <div class="method-box">
+      <div class="label">🧠 解題方法</div>
+      <div class="content">
+        <strong>關鍵詞：「全方位」</strong><br>
+        如果只看經濟特區，那只有東南沿海的幾個城市。要「全方位開放」，就必須往更多地方拓展。<br><br>
+        <strong>中央政府的步驟（由點到面）：</strong><br>
+        <span class="kw">① 經濟特區</span>（1980年）→ 四個試點城市<br>
+        <span class="kw">② 沿海開放城市</span>（1984年）→ 大連、天津、上海、廣州等14個沿海港口城市<br>
+        <span class="kw">③ 沿海經濟開放區</span>（1985年）→ 長三角、珠三角、閩南三角等<br>
+        <span class="kw">④ 沿江及內陸城市</span>（1990年代）→ 武漢、重慶等<br><br>
+        <strong>題目問的是第②步：</strong>「除了經濟特區外」——所以答案是第二步的措施，但完整的理解需要知道整個層次。
+      </div>
+    </div>
+
+    <div class="answer-box">
+      <div class="label">✓ 答案</div>
+      <div class="content">
+        中央政府除了在東南沿海設經濟特區外，又<span class="kw">開放沿海港口城市</span>（如大連、天津、上海、廣州等14個城市），以及<span class="kw">開放沿江及內陸城市</span>。形成「經濟特區 → 沿海開放城市 → 沿海經濟開放區 → 內陸」的多層次、全方位開放格局。
+      </div>
+    </div>
+
+    <div class="note">
+      💡 <strong>記憶層次：</strong>「特區→沿海城市→沿海地區→內陸」——由點到線、由線到面，這就是「全方位」的意思。
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- SECTION 2: 進階探究 — 改革開放的利弊 -->
+  <!-- ============================================================ -->
+  <div class="section-divider">第二部分 · 進階探究</div>
+  <div style="text-align:center; margin-bottom:14px;">
+    <span style="font-size:0.72rem; color:var(--text-light); letter-spacing:2px;">史事研習</span>
+    <h2 class="section-title" style="font-size:1.4rem; text-align:center;">改革開放的利弊</h2>
+  </div>
+
+  <!-- 資料展示 -->
+  <div class="q-card">
+    <div><span class="q-num" style="background:var(--accent);">資料一</span></div>
+    <div class="source-block" style="border-left-color:var(--accent);">
+      「現在我國的經濟管理體制權力過於集中，應該有計劃地大膽下放，否則不利於充分發揮國家、地方、企業和勞動者個人四個方面的積極性，也不利於實行現代化的經濟管理和提高勞動生產率。應該讓地方和企業、生產隊有更多的經營管理的自主權。」
+      <div class="src-ref">—— 鄧小平〈解放思想·實事求是·團結一致向前看〉（1978年12月13日）</div>
+    </div>
+
+    <div><span class="q-num" style="background:var(--accent); margin-top:12px;">資料二</span></div>
+    <div style="font-size:0.82rem; font-weight:600; margin:8px 0 4px;">中國國有企業的虧損情況（1980–1994年）</div>
+    <div class="data-table-wrap">
+      <table class="data-table">
+        <thead><tr><th>年份</th><th>虧損額（人民幣）</th></tr></thead>
+        <tbody>
+          <tr><td>1980年</td><td>34億元</td></tr>
+          <tr><td>1989年</td><td>180億元</td></tr>
+          <tr><td>1991年</td><td>367億元</td></tr>
+          <tr><td>1994年</td><td>483億元</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="src-ref" style="font-size:0.72rem; color:var(--text-light);">整理自楊繼鎬《鄧小平時代：中國改革開放二十年紀實》</div>
+  </div>
+
+  <!-- === Q1（第56頁）=== -->
+  <div class="q-card">
+    <div><span class="q-num">Q1</span> <span class="q-tag">理解分析</span></div>
+    <div class="question-text">中央政府推行了下列哪些措施，以達至<strong>資料一</strong>所示的改革方針？</div>
+    <div style="font-size:0.88rem; color:var(--text-light); margin-bottom:12px;">選項：加强各行業集體所有制／容許農村建設鄉鎮企業／擴大國營企業的自主權／取消國有企業的經營權</div>
+
+    <div class="method-box">
+      <div class="label">🧠 解題方法</div>
+      <div class="content">
+        <strong>第一步：讀懂資料一的關鍵信息</strong><br>
+        鄧小平這段話的核心觀點是——現在的權力<span class="kw">「過於集中」</span>，需要<span class="kw">「下放」</span>，讓地方和企業有更多<span class="kw">「自主權」</span>。<br>
+        所以，與這個方向一致的選項就是正確答案。<br><br>
+        <strong>第二步：逐項分析</strong><br>
+        ❌ <strong>加强各行業集體所有制</strong> → 「加强」意味集中管理，與「下放權力」相反。❌<br>
+        ✅ <strong>容許農村建設鄉鎮企業</strong> → 鄉鎮企業由農民集體自辦，自主經營，是權力下放的一種形式。✅<br>
+        ✅ <strong>擴大國營企業的自主權</strong> → 直接對應資料一的「讓企業有更多的經營管理自主權」。✅<br>
+        ❌ <strong>取消國有企業的經營權</strong> → 改革是「擴大」自主權，不是「取消」經營權。❌
+      </div>
+    </div>
+
+    <div class="answer-box">
+      <div class="label">✓ 正確答案</div>
+      <div class="content">
+        ✅ <span class="kw">容許農村建設鄉鎮企業</span><br>
+        ✅ <span class="kw">擴大國營企業的自主權</span><br><br>
+        ❌ 加强各行業集體所有制<br>
+        ❌ 取消國有企業的經營權
+      </div>
+    </div>
+
+    <div class="note">
+      💡 <strong>判斷原則：</strong>凡是符合「<span class="kw">放權</span>」方向的措施就是對的，凡是「<span class="kw">收權</span>」或「走極端」的措施就是錯的。記住：改革開放的精髓就是「放開手腳」。
+    </div>
+  </div>
+
+  <!-- === Q2（第56頁）=== -->
+  <div class="q-card">
+    <div><span class="q-num">Q2</span> <span class="q-tag">理解分析</span></div>
+    <div class="question-text">根據<strong>資料二</strong>，改革開放期間出現了甚麼問題？試加以說明。</div>
+
+    <div class="method-box">
+      <div class="label">🧠 解題方法</div>
+      <div class="content">
+        這類題的答題結構是<span class="kw">三步曲</span>：<br><br>
+        <strong>① 指出問題（趨勢）：</strong><br>
+        先看表格數據的變化——<br>
+        34億 → 180億 → 367億 → 483億<br>
+        數字在<span class="kw">持續增大</span>，說明問題在<span class="kw">惡化</span>。<br>
+        → 所以答案是：國有企業虧損額持續大幅上升<strong>（或：虧損嚴重）</strong><br><br>
+        <strong>② 引用具體數據：</strong><br>
+        不要只說「增加了」，要給出起點和終點——<br>
+        → 由1980年的34億元增至1994年的483億元，14年間增長超過14倍<br><br>
+        <strong>③ 分析深層原因：</strong><br>
+        為什麼國企會虧損？因為改革開放引入了市場競爭，但國企還用舊體制運作——<br>
+        → 國有企業未能適應市場經濟的競爭環境，經營效率低下
+      </div>
+    </div>
+
+    <div class="answer-box">
+      <div class="label">✓ 答案</div>
+      <div class="content">
+        根據資料二，改革開放期間<strong>國有企業虧損額持續大幅上升</strong>，由1980年的34億元急增至1994年的483億元，14年間增長超過14倍。這反映在改革過程中，<strong>國有企業未能適應市場經濟的競爭環境，經營效率低下，改革措施未能從根本上解決國企的經營問題</strong>。
+      </div>
+    </div>
+
+    <div class="note">
+      💡 <strong>答題框架三步曲（記住它！）：</strong><br>
+      ① <strong>指出趨勢</strong>（上升/下降/波動）→ ② <strong>引用數據</strong>（具體數字）→ ③ <strong>分析原因</strong>（為什麼會這樣）
+    </div>
+  </div>
+
+  <!-- === Q3（第56頁）=== -->
+  <div class="q-card">
+    <div><span class="q-num">Q3</span> <span class="q-tag">析論 · 8分題</span></div>
+    <div class="question-text">有人認為資料一所見的<strong>工商業改革方針</strong>，是促使中國經濟於改革開放後高速增長的<strong>關鍵</strong>。你同意嗎？試根據資料及就你所知，加以析論。</div>
+
+    <div class="method-box">
+      <div class="label">🧠 答題框架（三步曲）</div>
+      <div class="content">
+        這是一道8分論述題，需要你發表看法並用證據支持。<strong>千萬不要只答「同意」或「不同意」就完結</strong>。<br><br>
+        <strong>完整結構如下：</strong>
+      </div>
+    </div>
+
+    <div class="essay-framework">
+      <div class="step">
+        <div class="step-num">①</div>
+        <div class="step-text">
+          <strong>表明立場 + 分析資料一的利弊</strong><br>
+          ✅ 先說同意哪部分：工商業改革確實在哪些方面帶來了正面影響<br>
+          ❌ 也要說弊端：資料二顯示國企虧損加劇，說明改革也有代價
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">②</div>
+        <div class="step-text">
+          <strong>提出其他重要因素（不只靠工商業改革）</strong><br>
+          • 農村改革（家庭聯產承包責任制，1978年）—— 解放農業勞動力<br>
+          • 對外開放（經濟特區、引進外資）—— 帶來資金和技術<br>
+          • 鄉鎮企業異軍突起 —— 成為經濟增長的重要引擎<br>
+          • 基礎設施建設 — 拉動內需和就業
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">③</div>
+        <div class="step-text">
+          <strong>總結立場</strong><br>
+          工商業改革是重要一環，但改革開放的成功是<strong>多層次、多領域共同作用</strong>的結果，不應誇大為唯一關鍵。
+        </div>
+      </div>
+    </div>
+
+    <div class="answer-box">
+      <div class="label">✓ 參考答案</div>
+      <div class="content">
+        <strong>立場：部分同意，工商業改革是重要因素，但不是唯一關鍵。</strong><br><br>
+
+        <strong>資料一的改革方針對經濟的正面作用：</strong><br>
+        擴大企業自主權、發展鄉鎮企業，直接推動了工業生產和商品經濟發展，引入市場機制提高了資源配置效率。<br><br>
+
+        <strong>但也存在問題：</strong><br>
+        資料二顯示國企虧損由34億增至483億，反映改革過程中部分國企未能適應市場競爭。<br><br>
+
+        <strong>其他促進經濟高速增長的因素：</strong><br>
+        ① <strong>農村改革</strong>——家庭聯產承包責任制極大釋放了農業生產力，為工業化提供勞動力和資金<br>
+        ② <strong>對外開放</strong>——設立經濟特區、引進外資和先進技術，使中國融入全球供應鏈<br>
+        ③ <strong>鄉鎮企業</strong>——異軍突起，成為經濟增長重要引擎<br>
+        ④ <strong>基礎設施與人口紅利</strong>——政府主導的基建投資、大量廉價勞動力<br><br>
+
+        <strong>結論：</strong>改革開放的成就是農村改革、工商業改革、對外開放、制度創新等多方面因素疊加的結果。
+      </div>
+    </div>
+
+    <div class="note">
+      💡 <strong>8分題答題要點：</strong><br>
+      ① 一定要有<span class="kw">立場</span>（同意/不同意/部分同意）<br>
+      ② 引用<span class="kw">資料</span>（至少各引用一次資料一和資料二）<br>
+      ③ 展示<span class="kw">課外知識</span>（農村改革、鄉鎮企業等）<br>
+      ④ 有<span class="kw">結論</span>（最後總結一句）
+    </div>
+  </div>
+
+  <!-- ===== Progress Bar ===== -->
+  <div class="progress-bar"><div class="fill" id="progressFill" style="width:100%;"></div></div>
+
+  <div class="footer">
+    本教材根據教科書第55–56頁內容整理 · 答案與解題方法
+  </div>
+
+</div>
+
+</body>
+</html>
