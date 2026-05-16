@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S3 History — Essay Trainer</title>
+<style>
+  :root {
+    --bg: #fafafa; --card: #fff; --border: #e5e5e5; --text: #1a1a1a;
+    --text-dim: #666; --accent: #7c3aed; --accent-light: #f5f3ff;
+    --warn: #d97706; --warn-light: #fffbeb; --danger: #dc2626; --success: #059669;
+    --radius: 8px; --gap: 18px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: -apple-system, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif;
+    line-height: 1.7; padding: 20px 16px 48px;
+  }
+  .container { max-width: 800px; margin: 0 auto; }
+
+  .header {
+    text-align: center; padding: 28px 16px 20px;
+    border-bottom: 2px solid var(--accent); margin-bottom: 24px;
+  }
+  .header h1 { font-size: 1.45rem; font-weight: 700; color: var(--accent); }
+  .header .sub { color: var(--text-dim); font-size: 0.85rem; margin-top: 4px; }
+
+  /* Essay card */
+  .essay {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 24px; margin-bottom: var(--gap);
+  }
+  .essay h2 { font-size: 1.05rem; font-weight: 700; color: var(--accent); margin-bottom: 4px; }
+  .essay h2 .zh { font-size: 0.78rem; color: var(--text-dim); font-weight: 400; margin-left: 8px; }
+
+  /* Question box */
+  .q-box {
+    background: #f9fafb; border-left: 4px solid var(--accent);
+    border-radius: 0 6px 6px 0; padding: 14px 16px; margin: 12px 0;
+    font-size: 0.88rem; line-height: 1.65;
+  }
+  .q-box .q-label {
+    font-size: 0.72rem; font-weight: 700; color: var(--accent);
+    text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px;
+  }
+  .q-box .q-text { font-size: 0.88rem; }
+  .q-box .q-marks {
+    display: inline-block; font-size: 0.76rem; color: var(--warn); font-weight: 600;
+    margin-left: 4px; white-space: nowrap;
+  }
+
+  /* Framework toggle */
+  .framework-toggle {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 14px; border: 1px solid var(--warn); border-radius: 6px;
+    font-size: 0.82rem; font-weight: 600; color: var(--warn);
+    background: var(--warn-light); cursor: pointer; margin-bottom: 8px;
+    transition: background 0.15s; user-select: none;
+  }
+  .framework-toggle:hover { background: #fef3c7; }
+  .framework-toggle .arrow { transition: transform 0.2s; font-size: 0.7rem; }
+  .framework-toggle.open .arrow { transform: rotate(90deg); }
+
+  .framework {
+    display: none; background: #fffbeb; border: 1px solid #fde68a;
+    border-radius: 6px; padding: 14px 16px; margin-bottom: 14px; font-size: 0.84rem;
+  }
+  .framework.show { display: block; }
+  .framework h4 { font-size: 0.82rem; color: var(--warn); margin-bottom: 8px; }
+  .framework ol { padding-left: 20px; }
+  .framework li { margin-bottom: 4px; color: #78350f; }
+  .framework li span { color: var(--text); }
+
+  /* Textarea */
+  textarea {
+    width: 100%; min-height: 130px; padding: 10px 12px;
+    border: 1px solid var(--border); border-radius: 6px;
+    font-family: inherit; font-size: 0.85rem; line-height: 1.6;
+    resize: vertical; background: #fafafa;
+  }
+  textarea:focus { outline: none; border-color: var(--accent); background: #fff; }
+
+  .btn-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+  .btn {
+    padding: 7px 18px; border: 1px solid var(--accent); border-radius: 6px;
+    font-size: 0.84rem; font-weight: 600; cursor: pointer;
+    background: #fff; color: var(--accent); transition: background 0.15s;
+  }
+  .btn:hover { background: var(--accent-light); }
+  .btn.show { border-color: #059669; color: #059669; }
+  .btn.show:hover { background: #f0fdf4; }
+  .btn.clear { border-color: #d1d5db; color: var(--text-dim); }
+
+  /* Model answer */
+  .model {
+    display: none; margin-top: 12px; padding: 16px;
+    border: 1px solid #bbf7d0; border-radius: 6px;
+    background: #f0fdf4; font-size: 0.86rem; line-height: 1.65;
+  }
+  .model.show { display: block; }
+  .model .ma-label { font-weight: 700; color: var(--success); margin-bottom: 8px; font-size: 0.88rem; }
+  .model .breakdown {
+    margin-top: 10px; padding: 10px 12px; background: #d1fae5;
+    border-radius: 4px; font-size: 0.8rem; color: #065f46;
+  }
+
+  /* Self-check */
+  .self-check {
+    margin-top: 14px; padding: 12px 16px; background: #f9fafb;
+    border: 1px solid var(--border); border-radius: 6px; font-size: 0.82rem;
+  }
+  .self-check h4 { font-size: 0.8rem; color: var(--text-dim); margin-bottom: 8px; }
+  .self-check label {
+    display: flex; align-items: flex-start; gap: 8px; margin-bottom: 5px;
+    cursor: pointer; color: var(--text-dim);
+  }
+  .self-check input[type="checkbox"] { margin-top: 3px; accent-color: var(--success); }
+  .self-check label.checked { color: var(--success); text-decoration: line-through; }
+
+  /* Tips */
+  .tip {
+    background: var(--accent-light); border: 1px solid #ddd6fe; border-radius: 6px;
+    padding: 10px 14px; font-size: 0.82rem; color: #6d28d9; margin-top: 8px;
+  }
+  .tip strong { color: var(--accent); }
+
+  /* Rubric summary at top */
+  .rubric-bar {
+    display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px;
+  }
+  .rubric-item {
+    flex: 1; min-width: 100px; padding: 10px 14px; border-radius: 6px;
+    background: var(--card); border: 1px solid var(--border); text-align: center;
+  }
+  .rubric-item .r-label { font-size: 0.72rem; color: var(--text-dim); text-transform: uppercase; }
+  .rubric-item .r-val { font-size: 1.1rem; font-weight: 700; color: var(--accent); }
+
+  /* Word count */
+  .wc { text-align: right; font-size: 0.72rem; color: var(--text-dim); margin-top: 2px; }
+
+  /* Knowledge Bank — fact reference panel */
+  .kb-toggle {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 14px; border: 1px solid #2563eb; border-radius: 6px;
+    font-size: 0.82rem; font-weight: 600; color: #2563eb;
+    background: #eff6ff; cursor: pointer; margin: 14px 0 4px;
+    transition: background 0.15s; user-select: none;
+  }
+  .kb-toggle:hover { background: #dbeafe; }
+  .kb-toggle .arrow { transition: transform 0.2s; font-size: 0.7rem; }
+  .kb-toggle.open .arrow { transform: rotate(90deg); }
+
+  .kb {
+    display: none; background: #eff6ff; border: 1px solid #bfdbfe;
+    border-radius: 6px; padding: 14px 16px; margin-bottom: 12px; font-size: 0.84rem;
+  }
+  .kb.show { display: block; }
+  .kb h4 { font-size: 0.82rem; color: #2563eb; margin-bottom: 10px; }
+  .kb .fact-group { margin-bottom: 10px; }
+  .kb .fact-group:last-child { margin-bottom: 0; }
+  .kb .fact-label {
+    font-weight: 700; color: #1e40af; font-size: 0.78rem;
+    display: inline-block; background: #dbeafe; padding: 1px 8px; border-radius: 4px;
+    margin-bottom: 4px;
+  }
+  .kb .fact-list { list-style: none; padding-left: 0; font-size: 0.82rem; color: #1e3a5f; }
+  .kb .fact-list li { padding: 3px 0 3px 18px; position: relative; line-height: 1.5; }
+  .kb .fact-list li::before { content: "▸"; position: absolute; left: 0; color: #2563eb; font-size: 0.7rem; }
+  .kb .fact-list li .date { color: #2563eb; font-weight: 600; font-size: 0.76rem; }
+  .kb .fact-list li .kw { font-weight: 700; color: #1e40af; }
+
+  /* Sentence Stretcher */
+  .ss-toggle {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 14px; border: 1px solid #0891b2; border-radius: 6px;
+    font-size: 0.82rem; font-weight: 600; color: #0891b2;
+    background: #ecfeff; cursor: pointer; margin: 4px 0;
+    transition: background 0.15s; user-select: none;
+  }
+  .ss-toggle:hover { background: #cffafe; }
+  .ss-toggle .arrow { transition: transform 0.2s; font-size: 0.7rem; }
+  .ss-toggle.open .arrow { transform: rotate(90deg); }
+
+  .ss {
+    display: none; background: #ecfeff; border: 1px solid #a5f3fc;
+    border-radius: 6px; padding: 14px 16px; margin-bottom: 12px; font-size: 0.84rem;
+  }
+  .ss.show { display: block; }
+  .ss h4 { font-size: 0.82rem; color: #0891b2; margin-bottom: 10px; }
+  .ss .stretch-demo {
+    background: #fff; border: 1px solid #cffafe; border-radius: 6px;
+    padding: 12px 14px; margin-top: 10px;
+  }
+  .ss .stretch-demo .short { color: #dc2626; font-size: 0.82rem; margin-bottom: 6px; }
+  .ss .stretch-demo .short::before { content: "❌ Short: "; font-weight: 700; }
+  .ss .stretch-demo .long { color: #059669; font-size: 0.84rem; line-height: 1.6; }
+  .ss .stretch-demo .long::before { content: "✅ Stretched: "; font-weight: 700; }
+  .ss .connector-grid {
+    display: flex; flex-wrap: wrap; gap: 4px; margin: 8px 0;
+  }
+  .ss .connector-tag {
+    padding: 3px 10px; background: #cffafe; border-radius: 14px;
+    font-size: 0.78rem; color: #0e7490; font-weight: 500;
+  }
+  .ss .frame-list { list-style: none; padding-left: 0; margin: 8px 0; }
+  .ss .frame-list li {
+    padding: 4px 0 4px 20px; position: relative; color: #164e63; font-size: 0.82rem;
+  }
+  .ss .frame-list li::before { content: "✏️"; position: absolute; left: 0; font-size: 0.7rem; }
+
+  @media (max-width: 600px) {
+    .essay { padding: 16px; }
+    .header h1 { font-size: 1.3rem; }
+    .rubric-bar { flex-direction: column; gap: 8px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- ===== HEADER ===== -->
+<div class="header">
+  <h1>📝 S3 History · Essay Trainer</h1>
+  <div class="sub">Section IV — Short Essay (8 marks / 16% of exam)</div>
+</div>
+
+<!-- ===== RUBRIC BAR ===== -->
+<div class="rubric-bar">
+  <div class="rubric-item">
+    <div class="r-label">Content Accuracy</div>
+    <div class="r-val">4 marks</div>
+  </div>
+  <div class="rubric-item">
+    <div class="r-label">Argument Structure</div>
+    <div class="r-val">2 marks</div>
+  </div>
+  <div class="rubric-item">
+    <div class="r-label">Use of Examples</div>
+    <div class="r-val">2 marks</div>
+  </div>
+</div>
+
+<div class="tip">
+  <strong>💡 Essay Strategy:</strong> <strong>Position → Factor 1 + evidence → Factor 2 + evidence → (Factor 3 if needed) → Conclusion.</strong> Always rank factors by importance if the question asks "most important." Link causes with specific examples.
+</div>
+
+<!-- ==================== ESSAY 1 ==================== -->
+<div class="essay" id="essay1">
+  <h2>Essay 1: Causes of WWII <span class="zh">二戰起因</span></h2>
+
+  <div class="q-box">
+    <div class="q-label">Question <span class="q-marks">[8 marks]</span></div>
+    <div class="q-text">
+      Explain the causes of the Second World War. Which of the following do you think was the <strong>MOST important</strong>?
+      <br>(a) The Great Depression
+      <br>(b) The rise of totalitarianism
+      <br>(c) The policy of appeasement
+      <br><br>Explain your answer with reference to <strong>ALL THREE</strong> factors and using your own knowledge.
+    </div>
+  </div>
+
+  <button class="framework-toggle" onclick="toggleFramework('fw1',this)">
+    <span class="arrow">▶</span> PEEL Framework &amp; Key Points
+  </button>
+  <div class="framework" id="fw1">
+    <h4>🧠 Structure: PEEL × 3 Factors</h4>
+    <ol>
+      <li><strong>Position:</strong> <span>State which factor is MOST important and why (e.g. "The Great Depression was the most important because it created the conditions for totalitarianism and made appeasement seem necessary.")</span></li>
+      <li><strong>Factor 1 – Great Depression:</strong> <span>Mass unemployment in Germany → Hitler's rise (1933); Japan invaded Manchuria (1931) for resources; US isolationism → weakened collective security.</span></li>
+      <li><strong>Factor 2 – Rise of Totalitarianism:</strong> <span>Hitler's expansionist aims (Lebensraum); Mussolini's imperial ambitions; Japan's militarism → aggressive foreign policies.</span></li>
+      <li><strong>Factor 3 – Appeasement:</strong> <span>Munich Agreement (1938) gave Hitler Sudetenland → emboldened further aggression; Nazi-Soviet Pact (1939) → invasion of Poland.</span></li>
+      <li><strong>Conclusion:</strong> <span>Reinforce your ranking — link back to how the Depression enabled the other two factors.</span></li>
+    </ol>
+  </div>
+
+  <!-- 📚 Knowledge Bank -->
+  <button class="kb-toggle" onclick="toggleFramework('kb1',this)">
+    <span class="arrow">▶</span> 📚 Knowledge Bank — Facts You Need <span class="zh" style="font-weight:400;font-size:0.76rem;color:#64748b;margin-left:4px;">知識庫 · 寫作時隨時查閱</span>
+  </button>
+  <div class="kb" id="kb1">
+    <h4>Use these facts in your essay. Keep this panel open while you write!</h4>
+    <div class="fact-group">
+      <span class="fact-label">Great Depression 大蕭條</span>
+      <ul class="fact-list">
+        <li><span class="date">1929</span> — Wall Street Crash triggered worldwide economic crisis</li>
+        <li>Germany: <span class="kw">6 million unemployed</span> by 1932</li>
+        <li>Destroyed faith in <span class="kw">Weimar Republic</span> → people turned to extreme parties</li>
+        <li>Japan: invaded <span class="kw">Manchuria (1931)</span> to secure resources</li>
+        <li>US: adopted <span class="kw">isolationism</span>, weakened collective security</li>
+      </ul>
+    </div>
+    <div class="fact-group">
+      <span class="fact-label">Rise of Totalitarianism 極權主義興起</span>
+      <ul class="fact-list">
+        <li><span class="kw">Hitler</span> became Chancellor of Germany <span class="date">1933</span></li>
+        <li>Pursued <span class="kw">Lebensraum</span> (living space), remilitarised Rhineland <span class="date">1936</span></li>
+        <li><span class="kw">Mussolini</span> (Italy): invaded Abyssinia <span class="date">1935</span></li>
+        <li>Japan: militarist government, invaded China <span class="date">1937</span></li>
+        <li>All aimed to <span class="kw">overturn Treaty of Versailles</span> and expand territory</li>
+      </ul>
+    </div>
+    <div class="fact-group">
+      <span class="fact-label">Appeasement 綏靖政策</span>
+      <ul class="fact-list">
+        <li><span class="kw">Munich Agreement</span> <span class="date">1938</span> — Britain &amp; France gave Hitler Sudetenland</li>
+        <li><span class="kw">Nazi-Soviet Non-Aggression Pact</span> <span class="date">1939</span> — Hitler &amp; Stalin agreed not to attack each other, divided Poland</li>
+        <li>Appeasement <span class="kw">emboldened</span> Hitler to demand more</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 🔧 Sentence Stretcher -->
+  <button class="ss-toggle" onclick="toggleFramework('ss1',this)">
+    <span class="arrow">▶</span> 🔧 Sentence Stretcher — Make Your Sentences Longer <span class="zh" style="font-weight:400;font-size:0.76rem;color:#64748b;margin-left:4px;">句型拉伸 · 把短句變長句</span>
+  </button>
+  <div class="ss" id="ss1">
+    <h4>🔑 The Secret: 短句 → 加because → 加for example → 加as a result</h4>
+    <div class="stretch-demo">
+      <div class="short">The Great Depression caused problems in Germany.</div>
+      <div class="long">The Great Depression caused serious problems in Germany <span style="color:#0891b2;font-weight:600;">because</span> the Wall Street Crash of 1929 triggered mass unemployment, which reached 6 million by 1932. <span style="color:#0891b2;font-weight:600;">For example,</span> many Germans lost faith in the Weimar Republic and turned to extreme parties. <span style="color:#0891b2;font-weight:600;">As a result,</span> Hitler and the Nazi Party were able to rise to power in 1933.</div>
+    </div>
+    <div style="margin-top:8px;"><strong>Connectors 連接詞 — pick 3 and use them:</strong></div>
+    <div class="connector-grid">
+      <span class="connector-tag">because</span><span class="connector-tag">since</span><span class="connector-tag">as</span>
+      <span class="connector-tag">which led to</span><span class="connector-tag">resulting in</span>
+      <span class="connector-tag">for example</span><span class="connector-tag">such as</span>
+      <span class="connector-tag">as a result</span><span class="connector-tag">therefore</span>
+      <span class="connector-tag">however</span><span class="connector-tag">on the other hand</span>
+      <span class="connector-tag">furthermore</span><span class="connector-tag">in addition</span>
+    </div>
+    <div style="margin-top:8px;"><strong>Sentence Starters 開頭句 — copy and use:</strong></div>
+    <ul class="frame-list">
+      <li>The most important factor was <strong>___</strong> because...</li>
+      <li>This was caused by <strong>___</strong>, which led to...</li>
+      <li>For example, in <strong>[year]</strong>, <strong>[who]</strong> <strong>[did what]</strong>...</li>
+      <li>As a result, <strong>___</strong> happened...</li>
+      <li>Without <strong>___</strong>, <strong>___</strong> would not have happened.</li>
+      <li>Therefore, we can see that <strong>___</strong> was the most important because...</li>
+    </ul>
+  </div>
+
+  <textarea id="q1" placeholder="Write your essay here...&#10;&#10;Start with a clear position: which factor is most important?&#10;Then explain each factor with specific examples and dates."></textarea>
+  <div class="wc">Word count: <span id="wc1">0</span></div>
+
+  <div class="btn-row">
+    <button class="btn show" onclick="toggleModel('m1')">Show Model Answer</button>
+    <button class="btn clear" onclick="clearText('q1')">Clear</button>
+  </div>
+
+  <div class="model" id="m1">
+    <div class="ma-label">✅ Model Answer (8 marks)</div>
+    <div>
+      <strong>I believe the Great Depression was the most important cause of the Second World War.</strong>
+    </div>
+    <div style="margin-top:8px;">
+      <strong>Great Depression (most important):</strong> The Wall Street Crash of 1929 triggered a worldwide economic crisis. In Germany, mass unemployment reached 6 million by 1932, destroying faith in the Weimar Republic. This economic desperation allowed Hitler and the Nazi Party to rise to power in 1933. Without the Depression, Hitler would likely have remained a fringe politician. Similarly, Japan invaded Manchuria in 1931 partly to secure resources during the economic downturn, and the US adopted isolationism, weakening the collective security system. <em>(3 marks)</em>
+    </div>
+    <div style="margin-top:8px;">
+      <strong>Rise of Totalitarianism:</strong> Once in power, Hitler pursued aggressive expansionist policies (Lebensraum), remilitarised the Rhineland (1936), and aimed to overturn the Treaty of Versailles. Mussolini's Italy invaded Abyssinia (1935), and militarist Japan expanded into China (1937). These totalitarian regimes actively sought war. However, totalitarianism itself was enabled by the Depression — economic crisis gave these leaders their opportunity. <em>(2 marks)</em>
+    </div>
+    <div style="margin-top:8px;">
+      <strong>Policy of Appeasement:</strong> Britain and France, weakened by the Depression and fearing another war, adopted appeasement. The Munich Agreement (1938) gave Hitler the Sudetenland without resistance, which emboldened him to demand more. The Nazi-Soviet Non-Aggression Pact (1939) then allowed Germany to invade Poland without fear of Soviet intervention, directly triggering WWII. However, appeasement was a response to the conditions created by the Depression — had economies been stronger, Britain and France might have confronted Hitler earlier. <em>(2 marks)</em>
+    </div>
+    <div style="margin-top:8px;">
+      <strong>Conclusion:</strong> While all three factors contributed to WWII, the Great Depression was the root cause. It created the economic desperation that enabled totalitarian leaders to rise, weakened the democracies' will to resist, and destroyed the collective security system. Without the Depression, neither totalitarianism nor appeasement would have been as powerful. <em>(1 mark)</em>
+    </div>
+    <div class="breakdown">
+      <strong>Scoring:</strong> 3 marks (Great Depression explanation + ranking) + 2 marks (Totalitarianism) + 2 marks (Appeasement) + 1 mark (Conclusion linking factors). Accept alternative rankings if logically defended.
+    </div>
+  </div>
+
+  <div class="self-check">
+    <h4>📋 Self-Check — Did you…</h4>
+    <label onclick="this.classList.toggle('checked')"><input type="checkbox"> State a clear position on which factor is most important?</label>
+    <label onclick="this.classList.toggle('checked')"><input type="checkbox"> Explain the Great Depression with specific facts (e.g. Wall Street Crash 1929, 6M unemployed in Germany)?</label>
+    <label onclick="this.classList.toggle('checked')"><input type="checkbox"> Explain totalitarianism with examples (e.g. Hitler 1933, Lebensraum, Rhineland 1936)?</label>
+    <label onclick="this.classList.toggle('checked')"><input type="checkbox"> Explain appeasement with specific events (e.g. Munich Agreement 1938, Nazi-Soviet Pact 1939)?</label>
+    <label onclick="this.classList.toggle('checked')"><input type="checkbox"> Write a conclusion that links the factors together?</label>
+    <label onclick="this.classList.toggle('checked')"><input type="checkbox"> Use your own knowledge (specific dates, names, events)?</label>
+  </div>
+</div>
+
+<!-- ==================== ESSAY 2 ==================== -->
+<div class="essay" id="essay2">
+  <h2>Essay 2: Cold War Origins <span class="zh">冷戰起源</span></h2>
+
+  <div class="q-box">
+    <div class="q-label">Question <span class="q-marks">[8 marks]</span></div>
+    <div class="q-text">
+      "The Cold War was caused by the <strong>ideological differences</strong> between the US and the USSR." Do you agree? Explain your answer with reference to ideological differences <strong>AND other factors</strong>, using your own knowledge.
+    </div>
+  </div>
+
+  <button class="framework-toggle" onclick="toggleFramework('fw2',this)">
+    <span class="arrow">▶</span> PEEL Framework &amp; Key Points
+  </button>
+  <div class="framework" id="fw2">
+    <h4>🧠 Structure: Balanced Argument</h4>
+    <ol>
+      <li><strong>Position:</strong> <span>Agree OR partially agree — state your stance clearly. (e.g. "While ideology was a fundamental cause, other factors such as the power vacuum and mutual suspicion were equally important.")</span></li>
+      <li><strong>Ideological Differences:</strong> <span>Capitalism vs Communism; democracy vs one-party rule; US feared communist expansion (Domino Theory); USSR saw capitalism as exploitative.</span></li>
+      <li><strong>Power Vacuum in Europe:</strong> <span>WWII devastated Europe → US and USSR emerged as superpowers competing for influence; division of Germany; Soviet control of Eastern Europe.</span></li>
+      <li><strong>USSR's actions:</strong> <span>Soviet expansion into Eastern Europe (satellite states); breaking Yalta promises on free elections.</span></li>
+      <li><strong>US response:</strong> <span>Truman Doctrine (1947); Marshall Plan (1948); Berlin Airlift (1948-49); NATO formation (1949).</span></li>
+      <li><strong>Conclusion:</strong> <span>Summarise — ideology was the foundation, but the power vacuum and specific actions turned ideological rivalry into Cold War.</span></li>
+    </ol>
+  </div>
+
+  <!-- 📚 Knowledge Bank -->
+  <button class="kb-toggle" onclick="toggleFramework('kb2',this)">
+    <span class="arrow">▶</span> 📚 Knowledge Bank — Facts You Need <span class="zh" style="font-weight:400;font-size:0.76rem;color:#64748b;margin-left:4px;">知識庫</span>
+  </button>
+  <div class="kb" id="kb2">
+    <h4>Use these facts in your essay. Keep this panel open while you write!</h4>
+    <div class="fact-group">
+      <span class="fact-label">Ideological Differences 意識形態對立</span>
+      <ul class="fact-list">
+        <li>US: <span class="kw">capitalism</span> + <span class="kw">democracy</span> (free elections, free market)</li>
+        <li>USSR: <span class="kw">communism</span> + <span class="kw">one-party rule</span> (state controls economy)</li>
+        <li>US feared communist expansion — <span class="kw">Domino Theory</span></li>
+        <li>USSR saw capitalism as exploitative, wanted worldwide revolution</li>
+      </ul>
+    </div>
+    <div class="fact-group">
+      <span class="fact-label">Power Vacuum in Europe 歐洲權力真空</span>
+      <ul class="fact-list">
+        <li>WWII devastated Europe → Britain, France, Germany weakened</li>
+        <li>US and USSR emerged as <span class="kw">two superpowers</span></li>
+        <li>Germany divided into <span class="kw">4 occupation zones</span> → flashpoint</li>
+        <li><span class="kw">Berlin Blockade</span> <span class="date">1948-49</span>: USSR blocked access → US <span class="kw">Berlin Airlift</span></li>
+      </ul>
+    </div>
+    <div class="fact-group">
+      <span class="fact-label">US Response &amp; Escalation 美國回應與升級</span>
+      <ul class="fact-list">
+        <li><span class="kw">Truman Doctrine</span> <span class="date">1947</span> — US supports any country resisting communism</li>
+        <li><span class="kw">Marshall Plan</span> <span class="date">1948</span> — US economic aid to rebuild Western Europe</li>
+        <li><span class="kw">NATO</span> formed <span class="date">1949</span> — Western military alliance</li>
+        <li><span class="kw">Warsaw Pact</span> <span class="date">1955</span> — Soviet military alliance in response</li>
+        <li>USSR established <span class="kw">satellite states</span>: Poland, Czechoslovakia, Hungary</li>
+        <li>USSR broke <span class="kw">Yalta Conference</span> promises of free elections in Eastern Europe</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 🔧 Sentence Stretcher -->
+  <button class="ss-toggle" onclick="toggleFramework('ss2',this)">
+    <span class="arrow">▶</span> 🔧 Sentence Stretcher <span class="zh" style="font-weight:400;font-size:0.76rem;color:#64748b;margin-left:4px;">句型拉伸</span>
+  </button>
+  <div class="ss" id="ss2">
+    <h4>🔑 The Secret: 短句 → 加because → 加for example → 加as a result</h4>
+    <div class="stretch-demo">
+      <div class="short">The US and USSR had different ideologies.</div>
+      <div class="long">The US and USSR had fundamentally different ideologies <span style="color:#0891b2;font-weight:600;">because</span> the US believed in capitalism and democracy <span style="color:#0891b2;font-weight:600;">while</span> the USSR was a communist one-party state. <span style="color:#0891b2;font-weight:600;">For example,</span> the US feared the spread of communism through the Domino Theory, and the USSR saw capitalism as exploitative. <span style="color:#0891b2;font-weight:600;">As a result,</span> the two sides found it almost impossible to cooperate after WWII.</div>
+    </div>
+    <div style="margin-top:8px;"><strong>Connectors 連接詞 — pick 3 and use them:</strong></div>
+    <div class="connector-grid">
+      <span class="connector-tag">because</span><span class="connector-tag">while</span><span class="connector-tag">since</span>
+      <span class="connector-tag">which led to</span><span class="connector-tag">resulting in</span>
+      <span class="connector-tag">for example</span><span class="connector-tag">such as</span>
+      <span class="connector-tag">as a result</span><span class="connector-tag">therefore</span>
+      <span class="connector-tag">in response</span><span class="connector-tag">however</span>
+      <span class="connector-tag">furthermore</span><span class="connector-tag">in addition</span>
+    </div>
+    <div style="margin-top:8px;"><strong>Sentence Starters 開頭句:</strong></div>
+    <ul class="frame-list">
+      <li>One key cause of the Cold War was <strong>___</strong> because...</li>
+      <li>Although ideology was important, <strong>___</strong> was also a major factor...</li>
+      <li>For example, in <strong>[year]</strong>, the US/USSR <strong>[did what]</strong>...</li>
+      <li>This action led to <strong>___</strong>, which further increased tensions.</li>
+      <li>Therefore, I (partially) agree/disagree because...</li>
+    </ul>
+  </div>
+
+  <textarea id="q2" placeholder="Write your essay here...&#10;&#10;Do you agree or disagree? Explain ideological differences AND at least one other factor."></textarea>
+  <div class="wc">Word count: <span id="wc2">0</span></div>
+
+  <div class="btn-row">
+    <button class="btn show" onclick="toggleModel('m2')">Show Model Answer</button>
+    <button class="btn clear" onclick="clearText('q2')">Clear</button>
+  </div>
+
+  <div class="model" id="m2">
+    <div class="ma-label">✅ Model Answer (8 marks)</div>
+    <div>
+      <strong>I partially agree that ideological differences were a major cause, but they alone were not sufficient — the power vacuum in post-WWII Europe and mutual suspicion were equally important.</strong>
+    </div>
+    <div style="margin-top:8px;">
+      <strong>Ideological Differences:</strong> The US represented capitalism and democracy, while the USSR was a communist one-party state. These systems were fundamentally opposed. The US feared the spread of communism (the Domino Theory), especially after the USSR expanded its influence in Eastern Europe. The USSR viewed capitalism as exploitative and believed in worldwide proletarian revolution. This ideological clash made cooperation extremely difficult. <em>(3 marks)</em>
+    </div>
+    <div style="margin-top:8px;">
+      <strong>Power Vacuum in Europe:</strong> WWII devastated the traditional European powers (Britain, France, Germany). The US and USSR emerged as the two remaining superpowers, each seeking to fill the power vacuum. The division of Germany into four occupation zones created a flashpoint — the USSR wanted a weak Germany while the Western powers wanted reconstruction. This led to the Berlin Blockade (1948-49) and the Berlin Airlift. <em>(2 marks)</em>
+    </div>
+    <div style="margin-top:8px;">
+      <strong>Mutual Suspicion and Specific Actions:</strong> The USSR broke its Yalta Conference promises of free elections in Eastern Europe, establishing satellite states (Poland, Czechoslovakia, Hungary). In response, the US issued the Truman Doctrine (1947) pledging support for any country resisting communism, and launched the Marshall Plan (1948) to rebuild Western Europe economically — which the USSR saw as "dollar imperialism." The formation of NATO (1949) and the Warsaw Pact (1955) formalised the division. <em>(2 marks)</em>
+    </div>
+    <div style="margin-top:8px;">
+      <strong>Conclusion:</strong> While ideological differences created the underlying tension, the Cold War was triggered by the specific circumstances of the post-WWII power vacuum and the actions both sides took in response. Ideology alone does not explain why the Cold War began when it did — the power vacuum turned potential rivalry into actual confrontation. <em>(1 mark)</em>
+    </div>
+    <div class="breakdown">
+      <strong>Scoring:</strong> 3 marks (ideological differences explained) + 2 marks (power vacuum factor) + 2 marks (mutual suspicion &amp; specific actions) + 1 mark (conclusion). Accept both "agree" and "partially agree" positions if well-argued.
+    </div>
+  </div>
+
+  <div class="self-check">
+    <h4>📋 Self-Check — Did you…</h4>
+    <label onclick="this.classList.toggle('checked')"><input type="checkbox"> State whether you agree, disagree, or partially agree?</label>
+    <label onclick="this.classList.toggle('checked')"><input type="checkbox"> Explain ideological differences (capitalism vs communism)?</label>
+    <label onclick="this.classList.toggle('checked')"><input type="checkbox"> Explain the post-WWII power vacuum in Europe?</label>
+    <label onclick="this.classList.toggle('checked')"><input type="checkbox"> Mention specific events (e.g. Truman Doctrine 1947, Marshall Plan 1948, Berlin Blockade 1948-49, NATO 1949)?</label>
+    <label onclick="this.classList.toggle('checked')"><input type="checkbox"> Explain USSR's actions (satellite states, breaking Yalta promises)?</label>
+    <label onclick="this.classList.toggle('checked')"><input type="checkbox"> Write a conclusion that weighs the factors?</label>
+  </div>
+</div>
+
+<!-- ==================== ESSAY 3 ==================== -->
+<div class="essay" id="essay3">
+  <h2>Essay 3: Hong Kong's Post-WWII Transformation <span class="zh">香港戰後轉型</span></h2>
+
+  <div class="q-box">
+    <div class="q-label">Question <span class="q-marks">[8 marks]</span></div>
+    <div class="q-text">
+      How did the colonial government's response to social problems <strong>promote the transformation of Hong Kong</strong> after the Second World War? Explain your answer with reference to <strong>housing AND education</strong>, using your own knowledge.
+    </div>
+  </div>
+
+  <button class="framework-toggle" onclick="toggleFramework('fw3',this)">
+    <span class="arrow">▶</span> PEEL Framework &amp; Key Points
+  </button>
+  <div class="framework" id="fw3">
+    <h4>🧠 Structure: Two-Factor Analysis</h4>
+    <ol>
+      <li><strong>Position:</strong> <span>The colonial government's response to housing and education crises was the key driver of HK's post-WWII transformation.</span></li>
+      <li><strong>Housing:</strong> <span>Shek Kip Mei Fire (1953) → resettlement estates; MacLehose's Ten-Year Housing Programme (1972); Home Ownership Scheme (1978). Impact: better living standards → eased social discontent → enhanced colonial gov't credibility.</span></li>
+      <li><strong>Education:</strong> <span>Free primary education (1971); 9-year compulsory education (1978). Impact: a skilled workforce → supported economic growth; social mobility for the poor.</span></li>
+      <li><strong>Link to Transformation:</strong> <span>Housing + education together lifted living standards, created a stable society, and built human capital that fuelled HK's economic miracle.</span></li>
+      <li><strong>Conclusion:</strong> <span>Without these social policies, HK could not have transformed from a refugee society into a prosperous international city.</span></li>
+    </ol>
+  </div>
+
+  <!-- 📚 Knowledge Bank -->
+  <button class="kb-toggle" onclick="toggleFramework('kb3',this)">
+    <span class="arrow">▶</span> 📚 Knowledge Bank — Facts You Need <span class="zh" style="font-weight:400;font-size:0.76rem;color:#64748b;margin-left:4px;">知識庫</span>
+  </button>
+  <div class="kb" id="kb3">
+    <h4>Use these facts in your essay. Keep this panel open while you write!</h4>
+    <div class="fact-group">
+      <span class="fact-label">Housing Crisis &amp; Response 房屋危機與回應</span>
+      <ul class="fact-list">
+        <li><span class="kw">Shek Kip Mei Fire</span> <span class="date">1953</span> — ~50,000 homeless</li>
+        <li>Turning point: colonial gov't started <span class="kw">public housing</span> (resettlement estates)</li>
+        <li><span class="kw">Ten-Year Housing Programme</span> <span class="date">1972</span> — MacLehose, aim to house 1.8M people</li>
+        <li><span class="kw">Home Ownership Scheme (HOS)</span> <span class="date">1978</span> — allowed residents to buy their flats</li>
+      </ul>
+    </div>
+    <div class="fact-group">
+      <span class="fact-label">Impact on Governance 對管治的影響</span>
+      <ul class="fact-list">
+        <li>Better living conditions → <span class="kw">eased social discontent</span></li>
+        <li>Enhanced <span class="kw">colonial government's credibility</span></li>
+        <li>Greater <span class="kw">public support</span> for governance</li>
+        <li>HOS helped people <span class="kw">climb the social ladder</span> → stake in HK's stability</li>
+      </ul>
+    </div>
+    <div class="fact-group">
+      <span class="fact-label">Education Reform 教育改革</span>
+      <ul class="fact-list">
+        <li><span class="kw">Free primary education</span> introduced <span class="date">1971</span></li>
+        <li><span class="kw">9-year free compulsory education</span> (primary + junior secondary) <span class="date">1978</span></li>
+        <li>Created a <span class="kw">literate, skilled workforce</span> → supported economic growth</li>
+        <li>Provided <span class="kw">social mobility</span> — children from poor families could move up</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 🔧 Sentence Stretcher -->
+  <button class="ss-toggle" onclick="toggleFramework('ss3',this)">
+    <span class="arrow">▶</span> 🔧 Sentence Stretcher <span class="zh" style="font-weight:400;font-size:0.76rem;color:#64748b;margin-left:4px;">句型拉伸</span>
+  </button>
+  <div class="ss" id="ss3">
+    <h4>🔑 The Secret: 短句 → 加because → 加for example → 加as a result</h4>
+    <div class="stretch-demo">
+      <div class="short">The government built public housing.</div>
+      <div class="long">The colonial government began building public housing <span style="color:#0891b2;font-weight:600;">because</span> the Shek Kip Mei Fire of 1953 left approximately 50,000 people homeless. <span style="color:#0891b2;font-weight:600;">For example,</span> Governor MacLehose later launched the Ten-Year Housing Programme in 1972, aiming to house 1.8 million people. <span style="color:#0891b2;font-weight:600;">As a result,</span> living standards improved and social discontent was eased, which enhanced the colonial government's credibility.</div>
+    </div>
+    <div style="margin-top:8px;"><strong>Connectors 連接詞 — pick 3 and use them:</strong></div>
+    <div class="connector-grid">
+      <span class="connector-tag">because</span><span class="connector-tag">since</span><span class="connector-tag">as</span>
+      <span class="connector-tag">which led to</span><span class="connector-tag">resulting in</span>
+      <span class="connector-tag">for example</span><span class="connector-tag">such as</span>
+      <span class="connector-tag">as a result</span><span class="connector-tag">therefore</span>
+      <span class="connector-tag">in addition</span><span class="connector-tag">furthermore</span>
+      <span class="connector-tag">this meant that</span><span class="connector-tag">in turn</span>
+    </div>
+    <div style="margin-top:8px;"><strong>Sentence Starters 開頭句:</strong></div>
+    <ul class="frame-list">
+      <li>The colonial government responded to <strong>___</strong> by...</li>
+      <li>A key turning point was <strong>___</strong> in <strong>[year]</strong>, which led to...</li>
+      <li>For example, the <strong>[programme name]</strong> introduced in <strong>[year]</strong>...</li>
+      <li>This policy had a significant impact because...</li>
+      <li>Together, housing and education transformed Hong Kong by...</li>
+    </ul>
+  </div>
+
+  <textarea id="q3" placeholder="Write your essay here...&#10;&#10;Explain how the government's housing AND education policies changed Hong Kong.&#10;Include specific dates, names of programmes, and their impacts."></textarea>
+  <div class="wc">Word count: <span id="wc3">0</span></div>
+
+  <div class="btn-row">
+    <button class="btn show" onclick="toggleModel('m3')">Show Model Answer</button>
+    <button class="btn clear" onclick="clearText('q3')">Clear</button>
+  </div>
+
+  <div class="model" id="m3">
+    <div class="ma-label">✅ Model Answer (8 marks)</div>
+    <div>
+      <strong>The colonial government's responses to the housing crisis and the need for an educated workforce were the most important factors driving Hong Kong's post-WWII transformation from a refugee society to a prosperous international city.</strong>
+    </div>
+    <div style="margin-top:8px;">
+      <strong>Housing (key factor):</strong> The Shek Kip Mei Fire (1953) left approximately 50,000 people homeless, forcing the colonial government to begin public housing through resettlement estates. This was a turning point — before 1953, the government had largely ignored the housing needs of the massive refugee population. Later, Governor MacLehose launched the Ten-Year Housing Programme (1972) aiming to house 1.8 million people, followed by the Home Ownership Scheme (1978) which allowed public housing residents to buy their own flats. These policies had multiple effects: (1) they improved living standards for the poor; (2) they eased social discontent and reduced the risk of unrest; (3) they enhanced the colonial government's credibility and public support; (4) the Home Ownership Scheme helped people climb the social ladder, creating a stake in Hong Kong's stability. <em>(4 marks)</em>
+    </div>
+    <div style="margin-top:8px;">
+      <strong>Education:</strong> The government introduced free primary education in 1971 and extended it to nine years of free compulsory education (primary + junior secondary) in 1978. This had profound effects: it created a literate, skilled workforce that could support Hong Kong's shift from entrepôt trade to manufacturing in the 1950s-60s, and later to financial services. Education also provided a pathway for children from poor families to move up the social ladder — a key part of the "Hong Kong dream." <em>(3 marks)</em>
+    </div>
+    <div style="margin-top:8px;">
+      <strong>Conclusion:</strong> Together, housing and education policies addressed both the immediate humanitarian crisis and the long-term need for human capital. These social investments stabilised Hong Kong society, built a productive workforce, and gave ordinary people a stake in Hong Kong's success — laying the foundation for its transformation into a global financial centre by the 1980s. <em>(1 mark)</em>
+    </div>
+    <div class="breakdown">
+      <strong>Scoring:</strong> 4 marks (housing: Shek Kip Mei Fire 1953, resettlement estates, Ten-Year Programme 1972, HOS 1978, impact on governance) + 3 marks (education: 1971 free primary, 1978 compulsory 9-year, impact on workforce and social mobility) + 1 mark (conclusion linking both to transformation). Also accept discussion of economic policies or welfare expansion.
+    </div>
+  </div>
+
+  <div class="self-check">
+    <h4>📋 Self-Check — Did you…</h4>
+    <label onclick="this.classList.toggle('checked')"><input type="checkbox"> Mention the Shek Kip Mei Fire (1953) as the trigger for public housing?</label>
+    <label onclick="this.classList.toggle('checked')"><input type="checkbox"> Name specific housing programmes (Ten-Year Housing Programme 1972, Home Ownership Scheme 1978)?</label>
+    <label onclick="this.classList.toggle('checked')"><input type="checkbox"> Explain how housing policies improved governance and social stability?</label>
+    <label onclick="this.classList.toggle('checked')"><input type="checkbox"> Mention free primary education (1971) and 9-year compulsory education (1978)?</label>
+    <label onclick="this.classList.toggle('checked')"><input type="checkbox"> Explain how education created a skilled workforce and supported economic transformation?</label>
+    <label onclick="this.classList.toggle('checked')"><input type="checkbox"> Write a conclusion linking housing + education to HK's overall transformation?</label>
+  </div>
+</div>
+
+<div style="text-align:center;padding:20px 16px 8px;color:var(--text-dim);font-size:0.78rem;">
+  Essay Trainer for <strong>海納 &amp; 有容</strong> · Tsuen Wan Government Secondary School S3 History 2nd Term Exam 2025-2026
+</div>
+
+</div>
+
+<script>
+function toggleFramework(id, btn) {
+  var el = document.getElementById(id);
+  if (el.classList.contains('show')) {
+    el.classList.remove('show');
+    btn.classList.remove('open');
+  } else {
+    el.classList.add('show');
+    btn.classList.add('open');
+  }
+}
+
+function toggleModel(id) {
+  var el = document.getElementById(id);
+  el.classList.toggle('show');
+}
+
+function clearText(id) {
+  document.getElementById(id).value = '';
+  updateWc(id);
+}
+
+// Word count
+function updateWc(textareaId) {
+  var ta = document.getElementById(textareaId);
+  var wcId = 'wc' + textareaId.replace('q','');
+  var wcEl = document.getElementById(wcId);
+  if (!ta || !wcEl) return;
+  var text = ta.value.trim();
+  var count = text ? text.split(/\s+/).length : 0;
+  wcEl.textContent = count;
+}
+
+['q1','q2','q3'].forEach(function(id) {
+  var ta = document.getElementById(id);
+  if (ta) {
+    ta.addEventListener('input', function() { updateWc(id); });
+    updateWc(id);
+  }
+});
+</script>
+
+</body>
+</html>

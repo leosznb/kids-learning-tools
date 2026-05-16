@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S3 History — DBQ Interactive Trainer</title>
+<style>
+  :root {
+    --bg: #fafafa; --card: #fff; --border: #e5e5e5; --text: #1a1a1a;
+    --text-dim: #666; --accent: #7c3aed; --accent-light: #f5f3ff;
+    --warn: #d97706; --danger: #dc2626; --success: #059669;
+    --radius: 8px; --gap: 18px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: -apple-system, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif;
+    line-height: 1.7; padding: 20px 16px 48px;
+  }
+  .container { max-width: 800px; margin: 0 auto; }
+
+  .header {
+    text-align: center; padding: 28px 16px 20px;
+    border-bottom: 2px solid var(--accent); margin-bottom: 24px;
+  }
+  .header h1 { font-size: 1.45rem; font-weight: 700; color: var(--accent); }
+  .header .sub { color: var(--text-dim); font-size: 0.85rem; margin-top: 4px; }
+
+  /* DBQ Card */
+  .dbq {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 24px; margin-bottom: var(--gap);
+  }
+  .dbq h2 { font-size: 1.05rem; font-weight: 700; color: var(--accent); margin-bottom: 4px; }
+  .dbq h2 .zh { font-size: 0.78rem; color: var(--text-dim); font-weight: 400; margin-left: 8px; }
+
+  /* Source box */
+  .source-box {
+    background: #f9fafb; border-left: 4px solid var(--accent);
+    border-radius: 0 6px 6px 0; padding: 14px 16px; margin: 12px 0;
+    font-size: 0.86rem;
+  }
+  .source-box .src-label {
+    font-size: 0.72rem; font-weight: 700; color: var(--accent);
+    text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px;
+  }
+  .source-box .src-desc {
+    color: var(--text-dim); font-size: 0.76rem; font-style: italic; margin-bottom: 8px;
+  }
+
+  /* Sub-question */
+  .subq { margin-top: 16px; }
+  .subq .q-label {
+    font-weight: 700; font-size: 0.9rem; color: var(--text);
+    display: flex; gap: 8px; align-items: baseline;
+  }
+  .subq .q-label .marks {
+    font-size: 0.76rem; color: var(--warn); font-weight: 600;
+    white-space: nowrap;
+  }
+  .subq .q-label .marks::before { content: "["; }
+  .subq .q-label .marks::after { content: " marks]"; }
+
+  .subq .q-text { font-size: 0.85rem; margin: 4px 0 8px; }
+
+  textarea {
+    width: 100%; min-height: 80px; padding: 10px 12px;
+    border: 1px solid var(--border); border-radius: 6px;
+    font-family: inherit; font-size: 0.85rem; line-height: 1.6;
+    resize: vertical; background: #fafafa;
+  }
+  textarea:focus { outline: none; border-color: var(--accent); background: #fff; }
+
+  .btn-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+  .btn {
+    padding: 7px 18px; border: 1px solid var(--accent); border-radius: 6px;
+    font-size: 0.84rem; font-weight: 600; cursor: pointer;
+    background: #fff; color: var(--accent);
+    transition: background 0.15s;
+  }
+  .btn:hover { background: var(--accent-light); }
+  .btn.show { background: var(--accent); color: #fff; }
+  .btn.show:hover { background: #6d28d9; }
+  .btn.clear { border-color: #d1d5db; color: var(--text-dim); }
+
+  /* Model answer */
+  .model {
+    display: none; margin-top: 10px;
+    background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 6px;
+    padding: 14px 16px; font-size: 0.84rem;
+  }
+  .model.show { display: block; }
+  .model .ma-label {
+    font-size: 0.72rem; font-weight: 700; color: var(--success);
+    text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px;
+  }
+  .model .breakdown { margin-top: 8px; font-size: 0.8rem; color: var(--text-dim); border-top: 1px dashed #bbf7d0; padding-top: 8px; }
+  .model .breakdown strong { color: var(--success); }
+
+  /* Strategy box */
+  .tip {
+    background: var(--accent-light); border: 1px solid #ddd6fe; border-radius: 6px;
+    padding: 10px 14px; font-size: 0.82rem; color: #6d28d9; margin-top: 4px;
+  }
+  .tip strong { color: var(--accent); }
+
+  /* Q-nav */
+  .q-nav {
+    display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px;
+    justify-content: center;
+  }
+  .q-nav a {
+    display: inline-block; padding: 6px 16px; border: 1px solid var(--border);
+    border-radius: 20px; font-size: 0.82rem; text-decoration: none;
+    color: var(--text); background: var(--card);
+  }
+  .q-nav a:hover, .q-nav a.active { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
+
+  @media (max-width: 600px) {
+    textarea { min-height: 60px; }
+    .dbq { padding: 16px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <h1>📜 S3 History · DBQ Interactive Trainer</h1>
+  <div class="sub">3 Complete Data-Based Questions · Real Sources · Marking Scheme Answers</div>
+</div>
+
+<!-- Q-nav -->
+<div class="q-nav">
+  <a href="#dbq1">DBQ 1: Cold War — US-USSR Relations</a>
+  <a href="#dbq2">DBQ 2: Hong Kong — Industry &amp; Housing</a>
+  <a href="#dbq3">DBQ 3: Cold War — Marshall Plan</a>
+</div>
+
+<!-- ==================== DBQ 1 ==================== -->
+<div class="dbq" id="dbq1">
+  <h2>DBQ 1: Cold War — US-USSR Relations <span class="zh">冷戰美蘇關係（1959–1970s）</span></h2>
+  <p style="font-size:0.84rem;color:var(--text-dim);">Based on 2024-25 S3 History 2nd Term Exam • Total: 12 marks</p>
+
+  <div class="source-box">
+    <div class="src-label">Source A</div>
+    <div class="src-desc">A report published on 25 July 1959 in a US newspaper. Khrushchev visited the American National Exhibition held in Moscow.</div>
+    <div style="font-size:0.88rem;line-height:1.8;">
+      <em>"Very refreshing!"</em> was Mr. Khrushchev's comment after drinking several cups of cola during his visit. The Soviet leader walked to the display of the American kitchen, a model of what a typical working-class family would possess in America. While looking at the dishwasher and electric appliances displayed, he enthusiastically praised the exhibition as a sign of the <strong>progress in American technology</strong>.
+    </div>
+  </div>
+
+  <div class="source-box">
+    <div class="src-label">Source B</div>
+    <div class="src-desc">A cartoon published in 1962 after the Cuban Missile Crisis. The man on the left represents the US leader (President Kennedy) and the man on the right represents the USSR leader (Khrushchev).</div>
+    <div style="font-size:0.88rem;line-height:1.8;">
+      The cartoon shows the two leaders each sitting on large missiles pointing at each other. Between them is a trunk labelled <strong>"NUCLEAR WAR"</strong> with a monster peeking out. Kennedy says: <strong>"LET'S GET A LOCK FOR THIS THING."</strong> Both leaders are sweating nervously, trying to shut the trunk together.
+    </div>
+  </div>
+
+  <!-- (a) -->
+  <div class="subq">
+    <div class="q-label"><span>(a)</span><span class="marks">3</span></div>
+    <div class="q-text">According to the US newspaper report, what was the <strong>attitude of Khrushchev</strong> towards the US commercial product mentioned in Source A? Explain your answer with reference to Source A.</div>
+    <textarea id="q1a" placeholder="Write your answer here...&#10;&#10;Hint: Identify the attitude first, then quote from Source A to prove it."></textarea>
+    <div class="btn-row">
+      <button class="btn show" onclick="toggleModel('m1a')">Show Model Answer</button>
+      <button class="btn clear" onclick="clearText('q1a')">Clear</button>
+    </div>
+    <div class="model" id="m1a">
+      <div class="ma-label">✅ Model Answer (3 marks)</div>
+      <div><strong>Positive / Favourable attitude.</strong></div>
+      <div style="margin-top:4px;">"Very refreshing!" was Mr. Khrushchev's comment after drinking several cups of cola. This shows he was <strong>satisfied with the taste of the cola</strong> and held a positive view of the American commercial product.</div>
+      <div class="breakdown"><strong>Scoring:</strong> 1 mark for attitude (Positive) + 1 mark for quoting "Very refreshing!" + 1 mark for explaining what it shows (satisfied/enjoyed)</div>
+    </div>
+  </div>
+
+  <!-- (b) -->
+  <div class="subq">
+    <div class="q-label"><span>(b)</span><span class="marks">3</span></div>
+    <div class="q-text">What was the <strong>form of conflict</strong> between the US and the USSR as shown in Source B? Explain your answer with reference to Source B.</div>
+    <textarea id="q1b" placeholder="Write your answer here...&#10;&#10;Hint: Look at what both leaders are sitting on. What does that symbolise?"></textarea>
+    <div class="btn-row">
+      <button class="btn show" onclick="toggleModel('m1b')">Show Model Answer</button>
+      <button class="btn clear" onclick="clearText('q1b')">Clear</button>
+    </div>
+    <div class="model" id="m1b">
+      <div class="ma-label">✅ Model Answer (3 marks)</div>
+      <div><strong>Arms race / Military competition.</strong></div>
+      <div style="margin-top:4px;">In Source B, both Kennedy and Khrushchev are sitting on large missiles pointing at each other. This symbolises that the US and USSR engaged in an <strong>intense arms race and military rivalry</strong> during the Cold War, each trying to out-arm the other. The trunk labelled "NUCLEAR WAR" further shows that this arms race threatened to escalate into nuclear conflict.</div>
+      <div class="breakdown"><strong>Scoring:</strong> 1 mark for form (arms race) + 1 mark for citing missiles in cartoon + 1 mark for explaining what it represents (military competition/confrontation)</div>
+    </div>
+  </div>
+
+  <!-- (c) -->
+  <div class="subq">
+    <div class="q-label"><span>(c)</span><span class="marks">6</span></div>
+    <div class="q-text"><strong>"In the 1950s–70s, the relationship between the US and the USSR experienced ups and downs."</strong> Do you agree? Explain your answer with reference to Sources A and B, <strong>and using your own knowledge</strong>.</div>
+    <textarea id="q1c" placeholder="Write your answer here...&#10;&#10;Structure:&#10;① State your position (agree/disagree)&#10;② Evidence from Source A (ups)&#10;③ Evidence from Source B (downs)&#10;④ Your own knowledge (at least one event)&#10;⑤ Conclusion"></textarea>
+    <div class="btn-row">
+      <button class="btn show" onclick="toggleModel('m1c')">Show Model Answer</button>
+      <button class="btn clear" onclick="clearText('q1c')">Clear</button>
+    </div>
+    <div class="model" id="m1c">
+      <div class="ma-label">✅ Model Answer (6 marks)</div>
+      <div><strong>Agree.</strong></div>
+      <div style="margin-top:6px;">
+        <strong>Ups (improved relations):</strong> Source A shows in 1959, Khrushchev had a positive attitude towards American commercial products and praised US technology. This reflects a period of relatively improved relations—Khrushchev was open to American culture. (2 marks)<br><br>
+        <strong>Downs (worsened relations):</strong> Source B, published in 1962 after the Cuban Missile Crisis, shows both leaders sitting on missiles and trying to lock away "nuclear war." This reflects that tensions had escalated to the point of potential nuclear confrontation—the most dangerous moment of the Cold War. (2 marks)<br><br>
+        <strong>Own knowledge:</strong> After the Cuban Missile Crisis, both sides recognised the danger and took steps to reduce tensions. For example, the US and USSR held the <strong>Strategic Arms Limitation Talks (SALT)</strong> in the 1970s to limit nuclear weapons. This Détente period showed relations improved again. (2 marks)
+      </div>
+      <div class="breakdown"><strong>Scoring:</strong> 2 marks (Source A interpretation) + 2 marks (Source B interpretation) + 2 marks (own knowledge). Accept both "agree" and "disagree" if logically argued.</div>
+    </div>
+  </div>
+
+  <div class="tip">
+    <strong>💡 Strategy:</strong> For (c), always: <strong>position → Source A → Source B → own knowledge</strong>. Never give own knowledge without first citing the sources. 2+2+2 = 6 marks.
+  </div>
+</div>
+
+<!-- ==================== DBQ 2 ==================== -->
+<div class="dbq" id="dbq2">
+  <h2>DBQ 2: Hong Kong — Industry &amp; Housing (1960s–1970s) <span class="zh">香港工業與房屋</span></h2>
+  <p style="font-size:0.84rem;color:var(--text-dim);">Based on 2024-25 S3 History 2nd Term Exam • Total: 12 marks</p>
+
+  <div class="source-box">
+    <div class="src-label">Source C</div>
+    <div class="src-desc">A cartoon drawn in the 1960s about a family using their bed spaces as a processing station for industrial production in Hong Kong.</div>
+    <div style="font-size:0.88rem;line-height:1.8;">
+      The cartoon depicts a small flat where <strong>a family of six</strong> sits squeezed onto the bed spaces of one room. Each family member is engaged in different tasks: one is assembling plastic flowers, another sewing garments, a third packing toys. The bed itself serves as a workbench. Stacks of semi-finished products pile up in every corner. A factory owner stands at the door collecting the finished goods.
+    </div>
+  </div>
+
+  <div class="source-box">
+    <div class="src-label">Source D</div>
+    <div class="src-desc">Adapted from a commentary about former Governor MacLehose (洪督麥理浩).</div>
+    <div style="font-size:0.88rem;line-height:1.8;">
+      MacLehose launched the <strong>Ten-Year Housing Programme (1972)</strong> which allowed people living in small huts to move to public housing, and then those living in housing estates to purchase <strong>Home Ownership Scheme (1978)</strong> flats. Residents could gradually improve their lives and use this kind of housing as their <strong>"stepping stone"</strong> to buy larger flats and move to higher-income areas. MacLehose knew that there were a lot of poor people in Hong Kong, which would <strong>not be a problem</strong> as long as they had a chance to <strong>move upward in society</strong>.
+    </div>
+  </div>
+
+  <!-- (a) -->
+  <div class="subq">
+    <div class="q-label"><span>(a)</span><span class="marks">3</span></div>
+    <div class="q-text">Infer from Source C <strong>ONE characteristic of Hong Kong industry</strong> in the 1960s. Explain your answer with reference to Source C.</div>
+    <textarea id="q2a" placeholder="Write your answer here...&#10;&#10;Hint: What type of industry is shown? What does the family scene tell you about the nature of HK manufacturing?"></textarea>
+    <div class="btn-row">
+      <button class="btn show" onclick="toggleModel('m2a')">Show Model Answer</button>
+      <button class="btn clear" onclick="clearText('q2a')">Clear</button>
+    </div>
+    <div class="model" id="m2a">
+      <div class="ma-label">✅ Model Answer (3 marks)</div>
+      <div><strong>Light industries / Labour-intensive industries prospered in 1960s Hong Kong.</strong></div>
+      <div style="margin-top:4px;">In Source C, a family of six squeezes into the bed spaces of the same room and produces different light-industry products such as plastic flowers, garments and toys. The high demand for manual labour reflects the <strong>thriving development of labour-intensive light industries</strong> in Hong Kong at that time. The small-scale, home-based production also shows that many factories relied on <strong>cheap, flexible labour</strong>.</div>
+      <div class="breakdown"><strong>Scoring:</strong> 1 mark for identifying "light/labour-intensive industries" + 1 mark for citing evidence from Source C + 1 mark for explaining how the evidence supports the characteristic</div>
+    </div>
+  </div>
+
+  <!-- (b) -->
+  <div class="subq">
+    <div class="q-label"><span>(b)</span><span class="marks">3</span></div>
+    <div class="q-text">What was the <strong>impact of the implementation of various housing programmes on the governance</strong> of the colonial government of Hong Kong? Explain your answer with reference to Source D.</div>
+    <textarea id="q2b" placeholder="Write your answer here...&#10;&#10;Hint: How did better housing help the government control HK society?"></textarea>
+    <div class="btn-row">
+      <button class="btn show" onclick="toggleModel('m2b')">Show Model Answer</button>
+      <button class="btn clear" onclick="clearText('q2b')">Clear</button>
+    </div>
+    <div class="model" id="m2b">
+      <div class="ma-label">✅ Model Answer (3 marks)</div>
+      <div><strong>The housing programmes enhanced the effectiveness of governance.</strong></div>
+      <div style="margin-top:4px;">In Source D, MacLehose stated: "there were a lot of poor people in Hong Kong, which would not be a problem as long as they had a chance to move upward in society." The housing programmes provided a <strong>better living environment</strong> and a <strong>chance for people to climb the social ladder</strong>, which helped to <strong>ease social discontent</strong>. As a result, the government's <strong>credibility among citizens would increase</strong>, leading to greater public support for colonial rule.</div>
+      <div class="breakdown"><strong>Scoring:</strong> 1 mark for impact (enhanced governance) + 1 mark for citing from Source D + 1 mark for explaining the causal link (better living → less discontent → more support)</div>
+    </div>
+  </div>
+
+  <!-- (c) -->
+  <div class="subq">
+    <div class="q-label"><span>(c)</span><span class="marks">6</span></div>
+    <div class="q-text"><strong>"The living standards of the people in Hong Kong had experienced a drastic change in the second half of the 20th century."</strong> Do you agree? Explain your answer with reference to Sources C and D, <strong>and using your own knowledge</strong>.</div>
+    <textarea id="q2c" placeholder="Write your answer here...&#10;&#10;Structure:&#10;① Position (agree/disagree)&#10;② Source C — poor living in 1960s&#10;③ Source D — improvement through housing&#10;④ Your own knowledge — economic transformation&#10;⑤ Conclusion"></textarea>
+    <div class="btn-row">
+      <button class="btn show" onclick="toggleModel('m2c')">Show Model Answer</button>
+      <button class="btn clear" onclick="clearText('q2c')">Clear</button>
+    </div>
+    <div class="model" id="m2c">
+      <div class="ma-label">✅ Model Answer (6 marks)</div>
+      <div><strong>Agree.</strong></div>
+      <div style="margin-top:6px;">
+        <strong>Before improvement (1960s):</strong> Source C shows that in the 1960s, a family of six squeezed into the bed spaces of one room, which was <strong>crowded and lacked privacy</strong>. They had to use their living space for work, reflecting poor living conditions and low living standards. (2 marks)<br><br>
+        <strong>After improvement (1970s onwards):</strong> Source D shows the Ten-Year Housing Programme and Home Ownership Scheme provided better housing options for the grassroots class. People could use public housing as a <strong>"stepping stone"</strong> to buy larger flats, reflecting improved living standards. (2 marks)<br><br>
+        <strong>Own knowledge:</strong> Hong Kong's economic transformation contributed significantly to this drastic change. Between the 1950s and 1990s, HK shifted from an entrepôt to a light-industry manufacturing centre, and eventually to an <strong>international financial centre</strong>. This economic prosperity allowed people to enjoy a <strong>higher standard of living</strong>, further supporting the claim of a drastic change in living conditions. (2 marks)
+      </div>
+      <div class="breakdown"><strong>Scoring:</strong> 2 marks (Source C — poor conditions) + 2 marks (Source D — improvement through housing) + 2 marks (own knowledge — economic transformation). Accept both views if logically argued.</div>
+    </div>
+  </div>
+
+  <div class="tip">
+    <strong>💡 Strategy:</strong> "Drastic change" = contrast between BEFORE and AFTER. Show the bad (Source C) → show the better (Source D) → explain WHY it got better (own knowledge: economic transformation).
+  </div>
+</div>
+
+<!-- ==================== DBQ 3 ==================== -->
+<div class="dbq" id="dbq3">
+  <h2>DBQ 3: Cold War — The Marshall Plan <span class="zh">冷戰馬歇爾計劃</span></h2>
+  <p style="font-size:0.84rem;color:var(--text-dim);">Adapted from 2023-24 S3 History 2nd Term Exam • Total: 13 marks • <span style="color:var(--warn);">⚠️ Sources reconstructed from OCR; historical content accurate, wording may differ from original exam</span></p>
+
+  <div class="source-box">
+    <div class="src-label">Source A — Extract 1</div>
+    <div class="src-desc">A speech by a US official in 1947 promoting the Marshall Plan.</div>
+    <div style="font-size:0.88rem;line-height:1.8;">
+      "Our policy is directed not against any country or doctrine but against <strong>hunger, poverty, desperation and chaos</strong>. Its purpose should be the <strong>revival of a working economy</strong> in the world so as to permit the emergence of political and social conditions in which free institutions can exist. The Marshall Plan is a gesture of American goodwill to help our European friends <strong>rebuild their shattered economies</strong> after the devastation of war."
+    </div>
+  </div>
+
+  <div class="source-box">
+    <div class="src-label">Source A — Extract 2</div>
+    <div class="src-desc">A statement from a Soviet newspaper, Pravda, 1947, criticising the Marshall Plan.</div>
+    <div style="font-size:0.88rem;line-height:1.8;">
+      "The Marshall Plan is nothing but a scheme of <strong>American economic imperialism</strong>. By offering 'aid,' the United States seeks to <strong>control the economies</strong> of European nations, making them <strong>dependent on Washington</strong>. The real aim is to create a bloc of states bound by obligations to the US, and to use this bloc as a tool against the Soviet Union. It is a plan for <strong>interference in the internal affairs</strong> of other countries."
+    </div>
+  </div>
+
+  <div class="source-box">
+    <div class="src-label">Source B</div>
+    <div class="src-desc">A Soviet propaganda poster published c. 1949. The poster caption labels the Marshall Plan as the "Marshall-Stalin Plan."</div>
+    <div style="font-size:0.88rem;line-height:1.8;">
+      The poster depicts Uncle Sam (representing the US) handing over bags of money labelled <strong>"Marshall Plan Aid"</strong> to Western European countries. Behind Uncle Sam stands the shadow of Joseph Stalin, the Soviet leader, <strong>pulling the strings</strong> of Uncle Sam like a puppet master. The caption reads: <strong>"The Marshall-'Stalin' Plan — Two Sides of the Same Coin."</strong> The implication is that the US, like the USSR, uses economic control to dominate other nations — thereby discrediting American aid by equating it with Soviet-style domination.
+    </div>
+  </div>
+
+  <!-- (a) -->
+  <div class="subq">
+    <div class="q-label"><span>(a)</span><span class="marks">4</span></div>
+    <div class="q-text">Do Extract 1 and Extract 2 in Source A have a <strong>similar view</strong> towards the motive of the Marshall Plan? Cite 1 clue from Extract 1 and 1 clue from Extract 2 to explain your answer.</div>
+    <textarea id="q3a" placeholder="Write your answer here...&#10;&#10;Hint: Compare their views. Do they agree or disagree about the motive? Quote from both to prove your point."></textarea>
+    <div class="btn-row">
+      <button class="btn show" onclick="toggleModel('m3a')">Show Model Answer</button>
+      <button class="btn clear" onclick="clearText('q3a')">Clear</button>
+    </div>
+    <div class="model" id="m3a">
+      <div class="ma-label">✅ Model Answer (4 marks)</div>
+      <div><strong>No, they have opposite views.</strong></div>
+      <div style="margin-top:4px;">
+        <strong>Extract 1 (US view):</strong> The Marshall Plan aims at "<strong>revival of a working economy</strong>" and is described as "American goodwill to help European friends rebuild." → The US presents it as a humanitarian and economic recovery programme. (2 marks)<br><br>
+        <strong>Extract 2 (Soviet view):</strong> The Marshall Plan is described as "<strong>American economic imperialism</strong>" that seeks to "control the economies of European nations" and create "a tool against the Soviet Union." → The USSR sees it as a political weapon for US domination. (2 marks)
+      </div>
+      <div class="breakdown"><strong>Scoring:</strong> 1 mark for "No/opposite views" + 1 mark for Extract 1 quote & explanation + 1 mark for Extract 2 quote & explanation + 1 mark for contrasting analysis</div>
+    </div>
+  </div>
+
+  <!-- (b) -->
+  <div class="subq">
+    <div class="q-label"><span>(b)</span><span class="marks">3</span></div>
+    <div class="q-text">Infer the <strong>purpose of the Soviet propaganda</strong> shown in Source B. Explain your answer with reference to Source B.</div>
+    <textarea id="q3b" placeholder="Write your answer here...&#10;&#10;Hint: Why would the USSR label it the 'Marshall-Stalin Plan'? What message are they trying to send?"></textarea>
+    <div class="btn-row">
+      <button class="btn show" onclick="toggleModel('m3b')">Show Model Answer</button>
+      <button class="btn clear" onclick="clearText('q3b')">Clear</button>
+    </div>
+    <div class="model" id="m3b">
+      <div class="ma-label">✅ Model Answer (3 marks)</div>
+      <div><strong>To discredit the Marshall Plan by equating it with Soviet-style control.</strong></div>
+      <div style="margin-top:4px;">By renaming it the "Marshall-Stalin Plan," the Soviet propaganda poster implies that the US, like the USSR, uses economic aid as <strong>a tool to control and dominate other nations</strong>. The image of Stalin pulling Uncle Sam's strings suggests both superpowers are equally imperialist. The purpose is to <strong>undermine Western European trust in US aid</strong> and to present the USSR's criticism as justified—"both sides are the same."</div>
+      <div class="breakdown"><strong>Scoring:</strong> 1 mark for purpose (discredit/undermine US aid) + 1 mark for citing specific element from Source B + 1 mark for explaining how the propaganda works</div>
+    </div>
+  </div>
+
+  <!-- (c) -->
+  <div class="subq">
+    <div class="q-label"><span>(c)</span><span class="marks">6</span></div>
+    <div class="q-text"><strong>Which country, the United States or the USSR, should be more responsible for the tensions between them during the Cold War period?</strong> Explain your answer with reference to Sources A and B, <strong>and using your own knowledge</strong>.</div>
+    <textarea id="q3c" placeholder="Write your answer here...&#10;&#10;Structure:&#10;① State which side is more responsible (or both equally)&#10;② Source A: US actions VS Soviet actions&#10;③ Source B: Soviet propaganda approach&#10;④ Your own knowledge: key Cold War events&#10;⑤ Conclusion"></textarea>
+    <div class="btn-row">
+      <button class="btn show" onclick="toggleModel('m3c')">Show Model Answer</button>
+      <button class="btn clear" onclick="clearText('q3c')">Clear</button>
+    </div>
+    <div class="model" id="m3c">
+      <div class="ma-label">✅ Model Answer (6 marks)</div>
+      <div><strong>Both the US and USSR shared responsibility</strong>, but arguments can be made for either side. Marks are awarded for logical reasoning with source evidence and own knowledge.</div>
+      <div style="margin-top:6px;">
+        <strong>US responsibility:</strong> Source A Extract 1 shows the US claimed the Marshall Plan was purely for economic recovery, but the Soviet view in Extract 2 saw it as "American economic imperialism" and a tool against the USSR. Own knowledge: the US adopted the <strong>Truman Doctrine (1947)</strong> to contain communism globally, established <strong>NATO (1949)</strong> as an anti-Soviet military alliance, and engaged in an arms race.<br><br>
+        <strong>USSR responsibility:</strong> Source B shows the USSR actively spreading anti-US propaganda to undermine Western unity. Own knowledge: the USSR expanded communist control over <strong>Eastern European satellite states</strong> (Poland, Czechoslovakia, Hungary), initiated the <strong>Berlin Blockade (1948-49)</strong>, formed the <strong>Warsaw Pact (1955)</strong>, and placed nuclear missiles in Cuba leading to the <strong>Cuban Missile Crisis (1962)</strong>.<br><br>
+        <strong>Balanced view:</strong> Both sides escalated tensions—the US through containment and military alliances, and the USSR through expansion and proxy conflicts. The Cold War was a product of <strong>mutual suspicion</strong> rather than one side's aggression alone.
+      </div>
+      <div class="breakdown"><strong>Scoring:</strong> 2 marks (Source A interpretation: either US or USSR actions) + 2 marks (Source B: Soviet propaganda) + 2 marks (own knowledge examples). Any logically supported position is accepted — the key is using BOTH sources AND own knowledge.</div>
+    </div>
+  </div>
+
+  <div class="tip">
+    <strong>💡 Strategy:</strong> For "which is more responsible" questions, the exam DOES NOT expect a single correct answer. Focus on <strong>balanced argument</strong> — show evidence from BOTH sides, then state your own reasoned conclusion. You can argue "both equally" if well-supported.
+  </div>
+</div>
+
+<!-- ===== SCORING SUMMARY ===== -->
+<div class="dbq" style="border: 2px solid var(--accent);">
+  <h2>📊 DBQ Scoring Summary <span class="zh">DBQ 配分總表</span></h2>
+  <table style="width:100%;font-size:0.84rem;border-collapse:collapse;border:1px solid #d1d5db;">
+    <tr><th style="background:#f5f3ff;">DBQ</th><th style="background:#f5f3ff;">Topic</th><th style="background:#f5f3ff;">(a)</th><th style="background:#f5f3ff;">(b)</th><th style="background:#f5f3ff;">(c)</th><th style="background:#f5f3ff;">Total</th></tr>
+    <tr><td>1</td><td>Cold War — US-USSR Relations</td><td>3</td><td>3</td><td>6</td><td><strong>12</strong></td></tr>
+    <tr><td>2</td><td>Hong Kong — Industry &amp; Housing</td><td>3</td><td>3</td><td>6</td><td><strong>12</strong></td></tr>
+    <tr><td>3</td><td>Cold War — Marshall Plan</td><td>4</td><td>3</td><td>6</td><td><strong>13</strong></td></tr>
+  </table>
+  <div class="tip" style="margin-top:12px;">
+    <strong>📌 Pattern:</strong> In the real exam, expect <strong>2 DBQs = 24 marks (48%)</strong>. Typically: one on <strong>Cold War</strong> (US-USSR relations / ideology) and one on <strong>Hong Kong</strong> (economy / housing / Japanese occupation). Structure your time: ~20 minutes per DBQ.
+  </div>
+</div>
+
+<div style="text-align:center;padding:20px 16px 8px;color:var(--text-dim);font-size:0.78rem;">
+  DBQ Interactive Trainer for <strong>海納 &amp; 有容</strong> · Tsuen Wan Government Secondary School S3 History 2nd Term Exam 2025-2026
+</div>
+
+</div>
+
+<script>
+function toggleModel(id) {
+  var el = document.getElementById(id);
+  el.classList.toggle('show');
+  var btn = el.previousElementSibling.querySelector('.show');
+  if (btn) {
+    btn.textContent = el.classList.contains('show') ? 'Hide Model Answer' : 'Show Model Answer';
+  }
+}
+function clearText(id) {
+  document.getElementById(id).value = '';
+}
+</script>
+</body>
+</html>

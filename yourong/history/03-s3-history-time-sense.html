@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S3 History — Time Sense Trainer</title>
+<style>
+  :root {
+    --bg: #fafafa; --card: #fff; --border: #e5e5e5; --text: #1a1a1a;
+    --text-dim: #666; --accent: #7c3aed; --accent-light: #f5f3ff;
+    --warn: #d97706; --danger: #dc2626; --success: #059669;
+    --radius: 8px; --gap: 16px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: -apple-system, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif;
+    line-height: 1.7; padding: 20px 16px 48px;
+  }
+  .container { max-width: 720px; margin: 0 auto; }
+
+  .header {
+    text-align: center; padding: 28px 16px 20px;
+    border-bottom: 2px solid var(--accent); margin-bottom: 24px;
+  }
+  .header h1 { font-size: 1.45rem; font-weight: 700; color: var(--accent); }
+  .header .sub { color: var(--text-dim); font-size: 0.85rem; margin-top: 4px; }
+
+  .section {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 24px; margin-bottom: var(--gap);
+  }
+  .section h2 { font-size: 1rem; font-weight: 700; color: var(--accent); margin-bottom: 4px; }
+  .section h2 .zh { font-size: 0.78rem; color: var(--text-dim); font-weight: 400; margin-left: 8px; }
+
+  /* Event pool — clickable scrambled events */
+  .pool {
+    display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0;
+  }
+  .ev {
+    padding: 10px 16px; border: 2px solid var(--border); border-radius: 8px;
+    background: #fff; cursor: pointer; font-size: 0.85rem; line-height: 1.4;
+    transition: all 0.15s; user-select: none; -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .ev:hover { border-color: var(--accent); background: var(--accent-light); }
+  .ev.selected { border-color: var(--accent); background: var(--accent-light); opacity: 0.4; pointer-events: none; }
+
+  /* Answer row — ordered by user */
+  .answer-row {
+    display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 16px;
+    min-height: 52px; padding: 10px 12px; border: 2px dashed #d1d5db;
+    border-radius: 8px; background: #fafafa;
+  }
+  .answer-row .placeholder {
+    color: var(--text-dim); font-size: 0.84rem; display: flex; align-items: center;
+  }
+  .answer-row .ev {
+    cursor: pointer; border-color: var(--accent); background: var(--accent-light); opacity: 1;
+  }
+  .answer-row .ev:hover { background: #ede9fe; }
+
+  /* Buttons */
+  .btn-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+  .btn {
+    padding: 7px 18px; border: 1px solid var(--accent); border-radius: 6px;
+    font-size: 0.84rem; font-weight: 600; cursor: pointer;
+    background: #fff; color: var(--accent); transition: background 0.15s;
+  }
+  .btn:hover { background: var(--accent-light); }
+  .btn.primary { background: var(--accent); color: #fff; }
+  .btn.primary:hover { background: #6d28d9; }
+  .btn.reset { border-color: #d1d5db; color: var(--text-dim); }
+
+  /* Result */
+  .result {
+    display: none; margin-top: 12px; padding: 14px 16px;
+    border-radius: 6px; font-size: 0.84rem;
+  }
+  .result.show { display: block; }
+  .result.correct { background: #f0fdf4; border: 1px solid #bbf7d0; }
+  .result.incorrect { background: #fef2f2; border: 1px solid #fecaca; }
+  .result .res-title { font-weight: 700; font-size: 0.9rem; margin-bottom: 6px; }
+  .result .res-title.c { color: var(--success); }
+  .result .res-title.i { color: var(--danger); }
+  .result ol { padding-left: 20px; }
+  .result ol li { margin-bottom: 2px; }
+  .result .correct-ev { color: var(--success); }
+  .result .wrong-ev { color: var(--danger); text-decoration: line-through; }
+  .result .missing-ev { color: var(--warn); }
+
+  /* Scoreboard */
+  .scoreboard {
+    display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+  .score {
+    padding: 8px 20px; border-radius: 20px; font-size: 0.84rem; font-weight: 600;
+    background: var(--card); border: 1px solid var(--border);
+  }
+  .score .num { font-size: 1.1rem; font-weight: 700; }
+  .score.correct .num { color: var(--success); }
+  .score.wrong .num { color: var(--danger); }
+
+  @media (max-width: 600px) {
+    .ev { padding: 8px 14px; font-size: 0.8rem; }
+    .section { padding: 16px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <h1>⏱️ S3 History · Time Sense Trainer</h1>
+  <div class="sub">Section II — Chronological Ordering (5 marks / 10% of exam)</div>
+</div>
+
+<div class="scoreboard">
+  <div class="score correct">✅ Correct: <span class="num" id="scoreC">0</span></div>
+  <div class="score wrong">❌ Wrong: <span class="num" id="scoreW">0</span></div>
+</div>
+<p style="text-align:center;font-size:0.72rem;color:var(--text-dim);margin-bottom:16px;">Scores accumulate across all attempts. Reset only shuffles the events — score stays.</p>
+
+<!-- ===== ROUND 1: WWII European Theatre ===== -->
+<div class="section" id="r1">
+  <h2>Round 1: WWII — European Theatre <span class="zh">歐洲戰場</span></h2>
+  <p style="font-size:0.78rem;color:var(--text-dim);margin-bottom:4px;">Click events in chronological order (earliest → latest) to build the timeline.</p>
+  <div class="pool" id="pool1"></div>
+  <div class="answer-row" id="answer1">
+    <span class="placeholder">Click events above &mdash; click here to undo</span>
+  </div>
+  <div class="btn-row">
+    <button class="btn primary" onclick="check(1)">Check Answer</button>
+    <button class="btn reset" onclick="reset(1)">Reset</button>
+  </div>
+  <div class="result" id="result1"></div>
+</div>
+
+<!-- ===== ROUND 2: WWII Asia-Pacific ===== -->
+<div class="section" id="r2">
+  <h2>Round 2: WWII — Asia-Pacific Theatre <span class="zh">亞太戰場</span></h2>
+  <p style="font-size:0.78rem;color:var(--text-dim);margin-bottom:4px;">Click events in chronological order (earliest → latest).</p>
+  <div class="pool" id="pool2"></div>
+  <div class="answer-row" id="answer2">
+    <span class="placeholder">Click events above &mdash; click here to undo</span>
+  </div>
+  <div class="btn-row">
+    <button class="btn primary" onclick="check(2)">Check Answer</button>
+    <button class="btn reset" onclick="reset(2)">Reset</button>
+  </div>
+  <div class="result" id="result2"></div>
+</div>
+
+<!-- ===== ROUND 3: Cold War ===== -->
+<div class="section" id="r3">
+  <h2>Round 3: Cold War Milestones <span class="zh">冷戰里程碑</span></h2>
+  <p style="font-size:0.78rem;color:var(--text-dim);margin-bottom:4px;">Click events in chronological order (earliest → latest).</p>
+  <div class="pool" id="pool3"></div>
+  <div class="answer-row" id="answer3">
+    <span class="placeholder">Click events above &mdash; click here to undo</span>
+  </div>
+  <div class="btn-row">
+    <button class="btn primary" onclick="check(3)">Check Answer</button>
+    <button class="btn reset" onclick="reset(3)">Reset</button>
+  </div>
+  <div class="result" id="result3"></div>
+</div>
+
+<!-- ===== ROUND 4: Hong Kong ===== -->
+<div class="section" id="r4">
+  <h2>Round 4: Hong Kong Key Dates <span class="zh">香港關鍵日期</span></h2>
+  <p style="font-size:0.78rem;color:var(--text-dim);margin-bottom:4px;">Click events in chronological order (earliest → latest).</p>
+  <div class="pool" id="pool4"></div>
+  <div class="answer-row" id="answer4">
+    <span class="placeholder">Click events above &mdash; click here to undo</span>
+  </div>
+  <div class="btn-row">
+    <button class="btn primary" onclick="check(4)">Check Answer</button>
+    <button class="btn reset" onclick="reset(4)">Reset</button>
+  </div>
+  <div class="result" id="result4"></div>
+</div>
+
+<div style="text-align:center;padding:20px 16px 8px;color:var(--text-dim);font-size:0.78rem;">
+  Time Sense Trainer for <strong>海納 &amp; 有容</strong> · Tsuen Wan Government Secondary School S3 History 2nd Term Exam 2025-2026
+</div>
+
+</div>
+
+<script>
+// ===== DATA =====
+// Each round: { label, isScenario: false, order: number } — order determines correct position (0-based)
+// label: event description (English)
+
+var rounds = {
+  1: {
+    title:"WWII European Theatre",
+    events: [
+       {label:"Germany invades Poland — WWII begins", order:0},
+       {label:"Dunkirk evacuation", order:1},
+       {label:"Germany occupies Paris; France surrenders", order:2},
+       {label:"Germany attacks USSR", order:3},
+       {label:"D-Day (Normandy landings)", order:4},
+       {label:"Germany surrenders (VE Day)", order:5}
+    ],
+    correctOrder: [
+       "Germany invades Poland — WWII begins (Sep 1939)",
+       "Dunkirk evacuation (May 1940)",
+       "Germany occupies Paris; France surrenders (Jun 1940)",
+       "Germany attacks USSR (Jun 1941)",
+       "D-Day (Normandy landings) (Jun 1944)",
+       "Germany surrenders (VE Day) (May 1945)"
+    ]
+  },
+  2: {
+    title:"WWII Asia-Pacific Theatre",
+    events: [
+       {label:"Lugouqiao Incident — War of Resistance begins", order:0},
+       {label:"Japan occupies Nanjing", order:1},
+       {label:"Japan attacks Pearl Harbour; Pacific War begins", order:2},
+       {label:"Japan occupies Hong Kong (Black Christmas)", order:3},
+       {label:"Battle of Midway — turning point", order:4},
+       {label:"Atomic bombs on Hiroshima & Nagasaki", order:5},
+       {label:"Japan surrenders (VJ Day) — WWII ends", order:6}
+    ],
+    correctOrder: [
+       "Lugouqiao Incident — War of Resistance begins (Jul 1937)",
+       "Japan occupies Nanjing (Dec 1937)",
+       "Japan attacks Pearl Harbour; Pacific War begins (Dec 1941)",
+       "Japan occupies Hong Kong / Black Christmas (25 Dec 1941)",
+       "Battle of Midway — turning point (Jun 1942)",
+       "Atomic bombs on Hiroshima & Nagasaki (Aug 1945)",
+       "Japan surrenders / VJ Day — WWII ends (15 Aug 1945)"
+    ]
+  },
+  3: {
+    title:"Cold War Milestones",
+    events: [
+       {label:"Truman Doctrine — containment policy begins", order:0},
+       {label:"Marshall Plan launched", order:1},
+       {label:"Berlin Blockade & Airlift", order:2},
+       {label:"NATO established", order:3},
+       {label:"Korean War begins", order:4},
+       {label:"Warsaw Pact formed", order:5},
+       {label:"Cuban Missile Crisis", order:6}
+    ],
+    correctOrder: [
+       "Truman Doctrine — containment policy begins (1947)",
+       "Marshall Plan launched (1947)",
+       "Berlin Blockade & Airlift (1948-49)",
+       "NATO established (1949)",
+       "Korean War begins (1950)",
+       "Warsaw Pact formed (1955)",
+       "Cuban Missile Crisis (1962)"
+    ]
+  },
+  4: {
+    title:"Hong Kong Key Dates",
+    events: [
+       {label:"Japan occupies Hong Kong (Black Christmas)", order:0},
+       {label:"Shek Kip Mei Fire — public housing begins", order:1},
+       {label:"Free primary education introduced", order:2},
+       {label:"MacLehose Ten-Year Housing Programme", order:3},
+       {label:"Home Ownership Scheme (HOS)", order:4},
+       {label:"Sino-British Joint Declaration signed", order:5},
+       {label:"Hong Kong returns to China (Handover)", order:6}
+    ],
+    correctOrder: [
+       "Japan occupies Hong Kong / Black Christmas (1941)",
+       "Shek Kip Mei Fire — public housing begins (1953)",
+       "Free primary education introduced (1971)",
+       "MacLehose Ten-Year Housing Programme (1972)",
+       "Home Ownership Scheme / HOS (1978)",
+       "Sino-British Joint Declaration signed (1984)",
+       "Hong Kong returns to China / Handover (1 Jul 1997)"
+    ]
+  }
+};
+
+// ===== STATE =====
+var userAnswers = {}; // round -> [event objects]
+
+// ===== INIT =====
+function initRound(r) {
+  var events = rounds[r].events.slice();
+  // Shuffle
+  for (var i = events.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var t = events[i]; events[i] = events[j]; events[j] = t;
+  }
+  // Store shuffled
+  rounds[r]._shuffled = events;
+  // Clear state
+  userAnswers[r] = [];
+  // Render pool
+  var poolEl = document.getElementById('pool'+r);
+  poolEl.innerHTML = '';
+  events.forEach(function(ev, idx) {
+    var div = document.createElement('div');
+    div.className = 'ev';
+    div.textContent = ev.label;
+    div.setAttribute('data-idx', idx);
+    div.setAttribute('data-label', ev.label);
+    div.onclick = function() { selectEvent(r, idx); };
+    poolEl.appendChild(div);
+  });
+  // Clear answer row
+  var ansEl = document.getElementById('answer'+r);
+  ansEl.innerHTML = '<span class="placeholder">Click events above — click here to undo last selection</span>';
+  ansEl.onclick = function(e) {
+    if (e.target === ansEl && userAnswers[r].length > 0) {
+      undoLast(r);
+    }
+  };
+  // Clear result
+  document.getElementById('result'+r).innerHTML = '';
+  document.getElementById('result'+r).classList.remove('show','correct','incorrect');
+  // Re-enable all pool events
+  var poolDivs = poolEl.querySelectorAll('.ev');
+  poolDivs.forEach(function(d) { d.classList.remove('selected'); });
+}
+
+function selectEvent(r, idx) {
+  var shuffled = rounds[r]._shuffled;
+  var ev = shuffled[idx];
+  // Check not already selected
+  for (var i = 0; i < userAnswers[r].length; i++) {
+    if (userAnswers[r][i].label === ev.label) return;
+  }
+  userAnswers[r].push(ev);
+  // Mark as selected in pool
+  var poolEl = document.getElementById('pool'+r);
+  var poolDivs = poolEl.querySelectorAll('.ev');
+  poolDivs.forEach(function(d) {
+    if (d.getAttribute('data-label') === ev.label) d.classList.add('selected');
+  });
+  // Update answer row
+  renderAnswerRow(r);
+}
+
+function undoLast(r) {
+  if (userAnswers[r].length === 0) return;
+  var removed = userAnswers[r].pop();
+  // Unmark in pool
+  var poolEl = document.getElementById('pool'+r);
+  var poolDivs = poolEl.querySelectorAll('.ev');
+  poolDivs.forEach(function(d) {
+    if (d.getAttribute('data-label') === removed.label) d.classList.remove('selected');
+  });
+  renderAnswerRow(r);
+}
+
+function renderAnswerRow(r) {
+  var ansEl = document.getElementById('answer'+r);
+  ansEl.innerHTML = '';
+  userAnswers[r].forEach(function(ev) {
+    var div = document.createElement('div');
+    div.className = 'ev';
+    div.textContent = ev.label;
+    div.onclick = function(e) {
+      e.stopPropagation();
+      // Undo this specific one by removing from userAnswers
+      var idx = userAnswers[r].indexOf(ev);
+      if (idx > -1) {
+        userAnswers[r].splice(idx, 1);
+        var poolEl = document.getElementById('pool'+r);
+        var poolDivs = poolEl.querySelectorAll('.ev');
+        poolDivs.forEach(function(d) {
+          if (d.getAttribute('data-label') === ev.label) d.classList.remove('selected');
+        });
+        renderAnswerRow(r);
+      }
+    };
+    ansEl.appendChild(div);
+  });
+  if (userAnswers[r].length === 0) {
+    ansEl.innerHTML = '<span class="placeholder">Click events above — click here to undo last selection</span>';
+  }
+  ansEl.onclick = function(e) {
+    if (e.target === ansEl && userAnswers[r].length > 0) {
+      undoLast(r);
+    }
+  };
+}
+
+function check(r) {
+  var resultEl = document.getElementById('result'+r);
+  var ordered = userAnswers[r].map(function(ev) { return ev.order; });
+  var expected = rounds[r].events.map(function(ev) { return ev.order; });
+
+  var isCorrect = true;
+  if (ordered.length !== expected.length) {
+    isCorrect = false;
+  } else {
+    for (var i = 0; i < ordered.length; i++) {
+      if (ordered[i] !== expected[i]) { isCorrect = false; break; }
+    }
+  }
+
+  resultEl.classList.add('show');
+  if (isCorrect) {
+    resultEl.classList.add('correct');
+    resultEl.classList.remove('incorrect');
+    var prev = parseInt(document.getElementById('scoreC').textContent);
+    document.getElementById('scoreC').textContent = prev + 1;
+
+    var html = '<div class="res-title c">✅ Correct!</div>';
+    html += '<ol>';
+    rounds[r].correctOrder.forEach(function(line) {
+      html += '<li>' + line + '</li>';
+    });
+    html += '</ol>';
+    html += '<p style="margin-top:6px;color:var(--success);font-size:0.82rem;">All events in perfect order!</p>';
+    resultEl.innerHTML = html;
+  } else {
+    resultEl.classList.add('incorrect');
+    resultEl.classList.remove('correct');
+    var prev = parseInt(document.getElementById('scoreW').textContent);
+    document.getElementById('scoreW').textContent = prev + 1;
+
+    var html = '<div class="res-title i">❌ Not quite right</div>';
+    if (ordered.length !== expected.length) {
+      html += '<p style="color:var(--warn);font-weight:600;margin-bottom:6px;">⚠️ You have only selected <strong>' + ordered.length + ' of ' + expected.length + '</strong> events. Arrange ALL events in the correct order.</p>';
+    }
+    html += '<p>Your order:</p><ol>';
+    userAnswers[r].forEach(function(ev, i) {
+      html += '<li class="' + (ordered[i] === expected[i] ? 'correct-ev' : 'wrong-ev') + '">' + ev.label + '</li>';
+    });
+    html += '</ol>';
+    html += '<p style="margin-top:8px;">Correct order:</p><ol>';
+    rounds[r].correctOrder.forEach(function(line) {
+      html += '<li>' + line + '</li>';
+    });
+    html += '</ol>';
+    resultEl.innerHTML = html;
+  }
+}
+
+function reset(r) {
+  document.getElementById('result'+r).classList.remove('show','correct','incorrect');
+  document.getElementById('result'+r).innerHTML = '';
+  initRound(r);
+}
+
+// ===== INIT ALL =====
+for (var r = 1; r <= 4; r++) { initRound(r); }
+</script>
+</body>
+</html>

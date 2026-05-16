@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Equation Speed Trainer | 方程式速練器</title>
+<style>
+:root {
+  --bg: #0a0a14;
+  --card: #121220;
+  --card2: #181830;
+  --border: #1e1e3a;
+  --accent: #00e5ff;
+  --accent2: #b847ff;
+  --success: #00ff88;
+  --warn: #ffb347;
+  --error: #ff4466;
+  --text: #c8ccd4;
+  --text2: #8890a0;
+  --text3: #5a6070;
+  --glow: rgba(0,229,255,0.25);
+  --glow-purple: rgba(184,71,255,0.2);
+  --font-mono: 'SF Mono','Cascadia Code','Consolas','Courier New',monospace;
+  --font-ui: -apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--font-ui);
+  min-height:100vh;
+  display:flex;flex-direction:column;align-items:center;
+  padding:12px;
+  background-image:
+    radial-gradient(ellipse at 20% 20%, rgba(0,229,255,0.04) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(184,71,255,0.04) 0%, transparent 50%),
+    linear-gradient(rgba(30,30,58,0.3) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(30,30,58,0.3) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 32px 32px, 32px 32px;
+}
+.container{max-width:680px;width:100%}
+
+/* Header */
+.header{
+  text-align:center;padding:20px 0 16px;
+  border-bottom:1px solid var(--border);margin-bottom:16px;
+}
+.header h1{
+  font-size:1.5rem;font-weight:700;letter-spacing:.5px;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.header .sub{font-size:.82rem;color:var(--text2);margin-top:4px}
+
+/* Session bar */
+.session-bar{
+  display:flex;justify-content:space-between;align-items:center;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:10px;padding:10px 14px;margin-bottom:12px;
+  flex-wrap:wrap;gap:8px;
+}
+.session-stat{font-size:.8rem;color:var(--text2)}
+.session-stat span{color:var(--accent);font-weight:600}
+.btn-sm{
+  background:var(--card2);color:var(--text2);border:1px solid var(--border);
+  padding:6px 12px;border-radius:6px;font-size:.75rem;cursor:pointer;
+  transition:all .2s;min-height:44px;min-width:44px;
+  display:inline-flex;align-items:center;justify-content:center;
+}
+.btn-sm:hover{background:var(--border);color:var(--text)}
+.btn-sm:active{transform:scale(.96)}
+
+/* Main card */
+.main-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:12px;padding:20px;margin-bottom:12px;
+  position:relative;overflow:hidden;
+}
+.main-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--accent),var(--accent2),transparent);
+  opacity:.6;
+}
+
+/* Layer indicator */
+.layer-indicator{
+  display:flex;align-items:center;gap:6px;margin-bottom:16px;
+}
+.layer-dot{
+  width:10px;height:10px;border-radius:50%;background:var(--text3);
+  transition:all .3s;
+}
+.layer-dot.active{background:var(--accent);box-shadow:0 0 10px var(--glow)}
+.layer-dot.done{background:var(--success);box-shadow:0 0 6px rgba(0,255,136,.3)}
+.layer-label{
+  font-size:.75rem;color:var(--text3);margin-left:2px;margin-right:10px;
+}
+.layer-label.active{color:var(--accent);font-weight:600}
+
+/* Equation name display */
+.eq-name-display{
+  background:var(--card2);border:1px solid var(--border);
+  border-radius:8px;padding:14px 16px;margin-bottom:16px;
+}
+.eq-name-display .en{font-size:1.05rem;font-weight:600;color:var(--text)}
+.eq-name-display .cn{font-size:.85rem;color:var(--text2);margin-top:2px}
+
+/* Layer instruction */
+.layer-instruction{
+  font-size:.85rem;color:var(--text2);margin-bottom:8px;
+  display:flex;align-items:center;gap:6px;
+}
+.layer-instruction .icon{font-size:1.1rem}
+
+/* Textarea */
+.input-area{
+  width:100%;min-height:72px;background:var(--bg);
+  border:2px solid var(--border);border-radius:8px;
+  color:var(--text);font-family:var(--font-mono);
+  font-size:1rem;padding:12px;resize:vertical;
+  transition:border .2s;line-height:1.6;
+  -webkit-appearance:none;
+}
+.input-area:focus{
+  outline:none;border-color:var(--accent);
+  box-shadow:0 0 0 3px var(--glow);
+}
+.input-area.error{
+  border-color:var(--error);
+  box-shadow:0 0 0 3px rgba(255,68,102,.15);
+}
+.input-area.correct{
+  border-color:var(--success);
+  box-shadow:0 0 0 3px rgba(0,255,136,.15);
+}
+
+/* Chemistry keyboard */
+.chem-kb{
+  display:flex;flex-wrap:wrap;gap:5px;margin:8px 0 0;
+  padding:8px;background:var(--card2);border-radius:8px;
+  border:1px solid var(--border);
+}
+.kb-btn{
+  min-width:40px;min-height:40px;padding:4px 8px;
+  background:var(--bg);color:var(--text2);border:1px solid var(--border);
+  border-radius:6px;font-size:.82rem;font-family:var(--font-mono);
+  cursor:pointer;transition:all .15s;
+  display:inline-flex;align-items:center;justify-content:center;
+  -webkit-tap-highlight-color:transparent;
+  user-select:none;
+}
+.kb-btn:hover{background:var(--border);color:var(--text)}
+.kb-btn:active{background:var(--accent);color:#000;transform:scale(.93)}
+.kb-btn.state{color:var(--accent2);border-color:rgba(184,71,255,.3)}
+.kb-btn.arrow{color:var(--accent);border-color:rgba(0,229,255,.3)}
+.kb-btn.plus{font-size:1.2rem;font-weight:700}
+
+/* Buttons */
+.btn-row{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.btn{
+  flex:1;min-width:100px;min-height:48px;padding:12px 20px;
+  border:none;border-radius:8px;font-size:.9rem;font-weight:600;
+  cursor:pointer;transition:all .2s;letter-spacing:.3px;
+  font-family:var(--font-ui);
+  -webkit-tap-highlight-color:transparent;
+  display:inline-flex;align-items:center;justify-content:center;
+}
+.btn:active{transform:scale(.96)}
+.btn-primary{
+  background:linear-gradient(135deg,var(--accent),#0099cc);
+  color:#000;box-shadow:0 4px 15px var(--glow);
+}
+.btn-primary:hover{box-shadow:0 6px 20px rgba(0,229,255,.4)}
+.btn-skip{background:transparent;color:var(--text2);border:1px solid var(--border)}
+.btn-skip:hover{background:var(--card2);color:var(--text)}
+.btn-next{background:var(--card2);color:var(--accent);border:1px solid var(--border)}
+.btn-next:hover{background:var(--border)}
+
+/* Feedback */
+.feedback{
+  margin-top:12px;padding:12px 14px;border-radius:8px;
+  font-size:.85rem;line-height:1.5;display:none;
+  animation:fadeIn .25s ease;
+}
+.feedback.show{display:block}
+.feedback.correct-fb{background:rgba(0,255,136,.08);border:1px solid rgba(0,255,136,.2);color:var(--success)}
+.feedback.error-fb{background:rgba(255,68,102,.08);border:1px solid rgba(255,68,102,.2);color:var(--error)}
+.feedback .correct-ans{color:var(--success);font-family:var(--font-mono);display:block;margin-top:6px;font-size:.92rem}
+.feedback .trap-tag{
+  display:inline-block;background:var(--error);color:#fff;
+  padding:2px 8px;border-radius:4px;font-size:.72rem;font-weight:700;
+  margin-right:6px;vertical-align:middle;
+}
+
+/* Score bars */
+.score-section{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:12px;padding:16px;
+}
+.score-title{font-size:.8rem;color:var(--text2);margin-bottom:10px;font-weight:600}
+.score-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.score-label{width:60px;font-size:.75rem;color:var(--text2);text-align:right;flex-shrink:0}
+.score-bar-bg{flex:1;height:8px;background:var(--bg);border-radius:4px;overflow:hidden}
+.score-bar-fill{height:100%;border-radius:4px;transition:width .4s ease}
+.score-bar-fill.l1{background:linear-gradient(90deg,#00e5ff,#0099cc)}
+.score-bar-fill.l2{background:linear-gradient(90deg,#b847ff,#7b2fff)}
+.score-bar-fill.l3{background:linear-gradient(90deg,#ffb347,#ff8c00)}
+.score-val{width:50px;font-size:.75rem;color:var(--text);text-align:center;flex-shrink:0}
+.score-total{
+  display:flex;justify-content:space-between;padding-top:8px;
+  margin-top:8px;border-top:1px solid var(--border);
+  font-size:.85rem;font-weight:600;
+}
+.score-total .val{color:var(--accent)}
+
+/* Session report */
+.report-overlay{
+  position:fixed;top:0;left:0;right:0;bottom:0;
+  background:rgba(0,0,0,.85);z-index:100;
+  display:flex;align-items:center;justify-content:center;
+  padding:20px;animation:fadeIn .3s;
+}
+.report-card{
+  background:var(--card);border:1px solid var(--border);border-radius:14px;
+  padding:24px;max-width:500px;width:100%;max-height:85vh;overflow-y:auto;
+}
+.report-card h2{font-size:1.2rem;color:var(--accent);margin-bottom:12px}
+.report-stat{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:.85rem}
+.report-stat .bad{color:var(--error)}
+.report-stat .good{color:var(--success)}
+.report-mistakes{margin-top:12px}
+.report-mistake{
+  background:var(--card2);border:1px solid var(--border);border-radius:8px;
+  padding:10px 12px;margin-bottom:8px;font-size:.82rem;
+}
+.report-mistake .eq-name{color:var(--accent);font-weight:600}
+.report-mistake .detail{color:var(--text2);margin-top:4px;font-family:var(--font-mono);font-size:.78rem}
+
+/* Animations */
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 var(--glow)}50%{box-shadow:0 0 0 8px transparent}}
+.pulse{animation:pulse 1.5s infinite}
+
+/* Responsive */
+@media(max-width:480px){
+  .container{padding:0}
+  .header h1{font-size:1.25rem}
+  .main-card{padding:14px}
+  .btn{font-size:.82rem;padding:12px 14px}
+  .chem-kb{gap:4px;padding:6px}
+  .kb-btn{min-width:44px;min-height:44px;font-size:.75rem;padding:3px 6px}
+  .btn-sm{min-width:44px;min-height:44px}
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>🧪 Equation Speed Trainer</h1>
+    <div class="sub">方程式速練器 · Layer-by-Layer Lab 三層進階實驗室</div>
+  </div>
+
+  <div class="session-bar">
+    <div class="session-stat">Round <span id="roundNum">1</span>/9</div>
+    <div class="session-stat">Done <span id="doneCount">0</span></div>
+    <button class="btn-sm" onclick="resetSession()" title="Reset session">↻ Reset 重置</button>
+    <button class="btn-sm" onclick="showReport()" title="View report">📊 Report 報告</button>
+  </div>
+
+  <div class="main-card" id="mainCard">
+    <div class="layer-indicator" id="layerIndicator">
+      <div class="layer-dot active" id="dot1"></div>
+      <span class="layer-label active" id="label1">L1 Formula 化學式</span>
+      <div class="layer-dot" id="dot2"></div>
+      <span class="layer-label" id="label2">L2 Balance+State 配平+狀態</span>
+      <div class="layer-dot" id="dot3"></div>
+      <span class="layer-label" id="label3">L3 Knowledge 知識</span>
+    </div>
+
+    <div class="eq-name-display">
+      <div class="en" id="eqNameEn">—</div>
+      <div class="cn" id="eqNameCn">—</div>
+    </div>
+
+    <div class="layer-instruction">
+      <span class="icon" id="layerIcon">①</span>
+      <span id="layerInstruction">Write the chemical formulas of reactants and products 寫出反應物和產物的化學式</span>
+    </div>
+
+    <textarea class="input-area" id="userInput"
+      placeholder="e.g. CaCO₃ → CaO + CO₂"
+      rows="3"
+      autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+    ></textarea>
+
+    <div class="chem-kb" id="chemKb">
+      <button class="kb-btn" onclick="insertAtCursor('₀')">₀</button>
+      <button class="kb-btn" onclick="insertAtCursor('₁')">₁</button>
+      <button class="kb-btn" onclick="insertAtCursor('₂')">₂</button>
+      <button class="kb-btn" onclick="insertAtCursor('₃')">₃</button>
+      <button class="kb-btn" onclick="insertAtCursor('₄')">₄</button>
+      <button class="kb-btn" onclick="insertAtCursor('₅')">₅</button>
+      <button class="kb-btn" onclick="insertAtCursor('₆')">₆</button>
+      <button class="kb-btn" onclick="insertAtCursor('₇')">₇</button>
+      <button class="kb-btn" onclick="insertAtCursor('₈')">₈</button>
+      <button class="kb-btn" onclick="insertAtCursor('₉')">₉</button>
+      <button class="kb-btn arrow" onclick="insertAtCursor('→')">→</button>
+      <button class="kb-btn plus" onclick="insertAtCursor(' + ')">+</button>
+      <button class="kb-btn state" onclick="insertAtCursor('(s)')">(s)</button>
+      <button class="kb-btn state" onclick="insertAtCursor('(l)')">(l)</button>
+      <button class="kb-btn state" onclick="insertAtCursor('(g)')">(g)</button>
+      <button class="kb-btn state" onclick="insertAtCursor('(aq)')">(aq)</button>
+      <button class="kb-btn" onclick="insertAtCursor('=')">=</button>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-primary" id="btnSubmit" onclick="submitAnswer()">Submit 提交</button>
+      <button class="btn btn-skip" onclick="skipLayer()">Skip 跳過</button>
+    </div>
+    <div class="btn-row" id="btnRowNext" style="display:none">
+      <button class="btn btn-next" onclick="nextLayer()">Next Layer → 下一層</button>
+    </div>
+
+    <div class="feedback" id="feedback"></div>
+  </div>
+
+  <div class="score-section">
+    <div class="score-title">📈 Scoreboard 計分板</div>
+    <div class="score-row">
+      <div class="score-label">L1 Formula</div>
+      <div class="score-bar-bg"><div class="score-bar-fill l1" id="barL1" style="width:0%"></div></div>
+      <div class="score-val" id="valL1">0/9</div>
+    </div>
+    <div class="score-row">
+      <div class="score-label">L2 Bal+St</div>
+      <div class="score-bar-bg"><div class="score-bar-fill l2" id="barL2" style="width:0%"></div></div>
+      <div class="score-val" id="valL2">0/9</div>
+    </div>
+    <div class="score-row">
+      <div class="score-label">L3 Knowl</div>
+      <div class="score-bar-bg"><div class="score-bar-fill l3" id="barL3" style="width:0%"></div></div>
+      <div class="score-val" id="valL3">0/9</div>
+    </div>
+    <div class="score-total">
+      <span>Total Score 總分</span>
+      <span class="val" id="valTotal">0/27</span>
+    </div>
+  </div>
+</div>
+
+<div class="report-overlay" id="reportOverlay" style="display:none" onclick="closeReport(event)">
+  <div class="report-card" id="reportCard"></div>
+</div>
+
+<script>
+// ============================================================
+// DATA: 9 Must-Memorise Equations from §07
+// ============================================================
+const equations = [
+  {
+    id:1,
+    nameEn:"Thermal decomposition of calcium carbonate",
+    nameCn:"碳酸鈣熱分解",
+    l1Reactants:["CaCO₃"], l1Products:["CaO","CO₂"],
+    l2Canonical:"CaCO₃(s) → CaO(s) + CO₂(g)",
+    l2Species:{
+      R:[{c:1,f:"CaCO₃",s:"s"}],
+      P:[{c:1,f:"CaO",s:"s"},{c:1,f:"CO₂",s:"g"}]
+    },
+    l3Pool:[
+      {qEn:"Reaction type?", qCn:"反應類型？", ak:["thermal decomposition","熱分解","decomposition"]},
+      {qEn:"How to test the gas produced?", qCn:"如何檢驗產生的氣體？", ak:["limewater","milky","turns milky","石灰水","渾濁","變渾濁"]}
+    ],
+    traps:[]
+  },
+  {
+    id:2,
+    nameEn:"Calcium oxide reacts with water",
+    nameCn:"氧化鈣與水反應",
+    l1Reactants:["CaO","H₂O"], l1Products:["Ca(OH)₂"],
+    l2Canonical:"CaO(s) + H₂O(l) → Ca(OH)₂(aq)",
+    l2Species:{
+      R:[{c:1,f:"CaO",s:"s"},{c:1,f:"H₂O",s:"l"}],
+      P:[{c:1,f:"Ca(OH)₂",s:"aq"}]
+    },
+    l3Pool:[
+      {qEn:"Reaction type?", qCn:"反應類型？", ak:["combination","化合","exothermic","放熱"]},
+      {qEn:"What is Ca(OH)₂ commonly called?", qCn:"Ca(OH)₂ 俗稱？", ak:["slaked lime","熟石灰","消石灰"]}
+    ],
+    traps:[]
+  },
+  {
+    id:3,
+    nameEn:"Limewater test for carbon dioxide",
+    nameCn:"石灰水測試二氧化碳",
+    l1Reactants:["Ca(OH)₂","CO₂"], l1Products:["CaCO₃","H₂O"],
+    l2Canonical:"Ca(OH)₂(aq) + CO₂(g) → CaCO₃(s) + H₂O(l)",
+    l2Species:{
+      R:[{c:1,f:"Ca(OH)₂",s:"aq"},{c:1,f:"CO₂",s:"g"}],
+      P:[{c:1,f:"CaCO₃",s:"s"},{c:1,f:"H₂O",s:"l"}]
+    },
+    l3Pool:[
+      {qEn:"What is the observation?", qCn:"觀察到什麼現象？", ak:["white precipitate","白色沉澱","white solid","milky","渾濁"]},
+      {qEn:"Which gas is being tested?", qCn:"正在檢測什麼氣體？", ak:["carbon dioxide","CO₂","二氧化碳"]}
+    ],
+    traps:[]
+  },
+  {
+    id:4,
+    nameEn:"Calcium reacts with hydrochloric acid",
+    nameCn:"鈣與鹽酸反應",
+    l1Reactants:["Ca","HCl"], l1Products:["CaCl₂","H₂"],
+    l2Canonical:"Ca(s) + 2HCl(aq) → CaCl₂(aq) + H₂(g)",
+    l2Species:{
+      R:[{c:1,f:"Ca",s:"s"},{c:2,f:"HCl",s:"aq"}],
+      P:[{c:1,f:"CaCl₂",s:"aq"},{c:1,f:"H₂",s:"g"}]
+    },
+    l3Pool:[
+      {qEn:"How to test the gas produced?", qCn:"如何檢驗產生的氣體？", ak:["burning splint","pop","pop sound","燃燒木條","爆鳴聲"]},
+      {qEn:"What is the salt formed?", qCn:"生成什麼鹽？", ak:["calcium chloride","CaCl₂","氯化鈣"]}
+    ],
+    traps:["E5"]
+  },
+  {
+    id:5,
+    nameEn:"Carbon reduction of lead(II) oxide",
+    nameCn:"碳還原氧化鉛(II)",
+    l1Reactants:["PbO","C"], l1Products:["Pb","CO₂"],
+    l2Canonical:"2PbO(s) + C(s) → 2Pb(s) + CO₂(g)",
+    l2Species:{
+      R:[{c:2,f:"PbO",s:"s"},{c:1,f:"C",s:"s"}],
+      P:[{c:2,f:"Pb",s:"s"},{c:1,f:"CO₂",s:"g"}]
+    },
+    l3Pool:[
+      {qEn:"What is the reducing agent?", qCn:"還原劑是什麼？", ak:["carbon","C","碳"]},
+      {qEn:"What type of reaction?", qCn:"什麼反應類型？", ak:["reduction","redox","氧化還原","還原"]}
+    ],
+    traps:[]
+  },
+  {
+    id:6,
+    nameEn:"Iron reacts with steam",
+    nameCn:"鐵與水蒸氣反應",
+    l1Reactants:["Fe","H₂O"], l1Products:["Fe₃O₄","H₂"],
+    l2Canonical:"3Fe(s) + 4H₂O(g) → Fe₃O₄(s) + 4H₂(g)",
+    l2Species:{
+      R:[{c:3,f:"Fe",s:"s"},{c:4,f:"H₂O",s:"g"}],
+      P:[{c:1,f:"Fe₃O₄",s:"s"},{c:4,f:"H₂",s:"g"}]
+    },
+    l3Pool:[
+      {qEn:"What is Fe₃O₄ also called?", qCn:"Fe₃O₄ 又稱？", ak:["iron(II,III) oxide","triiron tetroxide","四氧化三鐵"]},
+      {qEn:"Why NOT Fe₂O₃?", qCn:"為什麼不是 Fe₂O₃？", ak:["steam","not rusting","水蒸氣","不是生鏽","rusting is Fe₂O₃"]}
+    ],
+    traps:[]
+  },
+  {
+    id:7,
+    nameEn:"Aluminium displaces silver from silver nitrate",
+    nameCn:"鋁置換硝酸銀中的銀",
+    l1Reactants:["Al","AgNO₃"], l1Products:["Al(NO₃)₃","Ag"],
+    l2Canonical:"Al(s) + 3AgNO₃(aq) → Al(NO₃)₃(aq) + 3Ag(s)",
+    l2Species:{
+      R:[{c:1,f:"Al",s:"s"},{c:3,f:"AgNO₃",s:"aq"}],
+      P:[{c:1,f:"Al(NO₃)₃",s:"aq"},{c:3,f:"Ag",s:"s"}]
+    },
+    l3Pool:[
+      {qEn:"Why does this reaction occur?", qCn:"為什麼會發生此反應？", ak:["Al more reactive","Al higher in reactivity series","鋁更活潑","鋁活性較高"]},
+      {qEn:"What is the observation?", qCn:"觀察到什麼？", ak:["grey solid","silver deposit","灰色固體","銀色沉積"]}
+    ],
+    traps:[]
+  },
+  {
+    id:8,
+    nameEn:"Complete combustion of methane",
+    nameCn:"甲烷完全燃燒",
+    l1Reactants:["CH₄","O₂"], l1Products:["CO₂","H₂O"],
+    l2Canonical:"CH₄(g) + 2O₂(g) → CO₂(g) + 2H₂O(l)",
+    l2Species:{
+      R:[{c:1,f:"CH₄",s:"g"},{c:2,f:"O₂",s:"g"}],
+      P:[{c:1,f:"CO₂",s:"g"},{c:2,f:"H₂O",s:"l"}]
+    },
+    l3Pool:[
+      {qEn:"Products of complete combustion?", qCn:"完全燃燒的產物？", ak:["CO₂","H₂O","carbon dioxide","water","二氧化碳","水"]},
+      {qEn:"What would incomplete combustion produce?", qCn:"不完全燃燒會產生什麼？", ak:["CO","carbon monoxide","C","soot","一氧化碳","碳"]}
+    ],
+    traps:[]
+  },
+  {
+    id:9,
+    nameEn:"Electrolysis of water",
+    nameCn:"水的電解",
+    l1Reactants:["H₂O"], l1Products:["H₂","O₂"],
+    l2Canonical:"2H₂O(l) → 2H₂(g) + O₂(g)",
+    l2Species:{
+      R:[{c:2,f:"H₂O",s:"l"}],
+      P:[{c:2,f:"H₂",s:"g"},{c:1,f:"O₂",s:"g"}]
+    },
+    l3Pool:[
+      {qEn:"At which electrode is H₂ collected?", qCn:"氫氣在哪個電極收集？", ak:["cathode","negative","陰極","負極"]},
+      {qEn:"Volume ratio H₂ : O₂?", qCn:"H₂ 與 O₂ 的體積比？", ak:["2:1","2 to 1"]}
+    ],
+    traps:[]
+  }
+];
+
+// ============================================================
+// UTILITY: Normalisation & Matching
+// ============================================================
+const SUB_MAP = {'₀':'0','₁':'1','₂':'2','₃':'3','₄':'4','₅':'5','₆':'6','₇':'7','₈':'8','₉':'9'};
+
+function normFormula(f) {
+  // Normalise formula: strip spaces, convert unicode subscripts to digits, lowercase
+  return f.replace(/\s+/g,'')
+    .replace(/[₀₁₂₃₄₅₆₇₈₉]/g, m => SUB_MAP[m]||m)
+    .toLowerCase();
+}
+
+function parseEquationL1(input) {
+  // Parse L1 input: "CaCO3 → CaO + CO2"
+  // Returns {reactants:[], products:[]} with normalised formulas
+  let arrow = '→';
+  let parts = input.split(/→|=/);
+  if (parts.length < 2) parts = input.split(/->|=>/);
+  if (parts.length < 2) return null;
+
+  let parseSide = (s) => s.split('+').map(x => normFormula(x.trim())).filter(x => x.length > 0);
+
+  return {
+    reactants: parseSide(parts[0]),
+    products: parseSide(parts[1])
+  };
+}
+
+function parseEquationL2(input) {
+  // Parse L2 input: "Ca(s) + 2HCl(aq) → CaCl₂(aq) + H₂(g)"
+  // Returns {R:[{c,f,s}], P:[{c,f,s}]} or null
+  let parts = input.split(/→|=/);
+  if (parts.length < 2) parts = input.split(/->|=>/);
+  if (parts.length < 2) return null;
+
+  function parseSide(s) {
+    let terms = s.split('+');
+    let result = [];
+    for (let t of terms) {
+      t = t.trim();
+      if (!t) continue;
+      // Extract state symbol: (...)
+      let state = '';
+      let stateMatch = t.match(/\(([slgaq]+)\)$/i);
+      if (stateMatch) {
+        state = stateMatch[1].toLowerCase();
+        t = t.substring(0, stateMatch.index).trim();
+      }
+      // Extract coefficient
+      let coeff = 1;
+      let coeffMatch = t.match(/^(\d+)\s*/);
+      if (coeffMatch) {
+        coeff = parseInt(coeffMatch[1]);
+        t = t.substring(coeffMatch[0].length).trim();
+      }
+      let formula = normFormula(t);
+      if (!formula) continue;
+      result.push({c:coeff, f:formula, s:state});
+    }
+    return result;
+  }
+
+  return {
+    R: parseSide(parts[0]),
+    P: parseSide(parts[1])
+  };
+}
+
+function speciesKey(sp) {
+  return `${sp.c}:${sp.f}:${sp.s}`;
+}
+
+function matchL1(parsed, eq) {
+  // Compare parsed L1 against expected
+  if (!parsed) return {correct:false, msg:'Cannot parse input 無法解析輸入'};
+
+  let expR = eq.l1Reactants.map(f => normFormula(f)).sort();
+  let expP = eq.l1Products.map(f => normFormula(f)).sort();
+  let gotR = [...parsed.reactants].sort();
+  let gotP = [...parsed.products].sort();
+
+  let rMatch = arraysEqual(expR, gotR);
+  let pMatch = arraysEqual(expP, gotP);
+
+  // Check for trap E5 (metal+acid → CO₂ instead of H₂)
+  let trapE5 = false;
+  if (eq.traps.includes('E5') && parsed.products.includes('co2')) {
+    trapE5 = true;
+  }
+  // Check for trap: Fe₃O₄ vs Fe₂O₃ confusion (Eq6)
+  let trapFeOxide = false;
+  if (eq.id === 6 && parsed.products.includes('fe2o3')) {
+    trapFeOxide = true;
+  }
+
+  if (rMatch && pMatch) return {correct:true};
+  if (trapE5) return {correct:false, trap:'E5', msg:'Metal + Acid → Salt + H₂ (NOT CO₂!) 金屬+酸→鹽+氫氣，不是CO₂！'};
+  if (trapFeOxide) return {correct:false, trap:'Fe₃O₄', msg:'Fe + steam → Fe₃O₄ (NOT Fe₂O₃!) 鐵+水蒸氣→四氧化三鐵，不是氧化鐵(III)！'};
+
+  // Give specific feedback
+  let issues = [];
+  if (!rMatch) issues.push('Reactants 反應物 incorrect');
+  if (!pMatch) issues.push('Products 產物 incorrect');
+  return {correct:false, msg:issues.join('; ')};
+}
+
+function matchL2(parsed, eq) {
+  if (!parsed) return {correct:false, msg:'Cannot parse input 無法解析輸入'};
+
+  // Build expected and got key sets, separated by side
+  let expR = new Set(eq.l2Species.R.map(s => speciesKey({c:s.c, f:normFormula(s.f), s:s.s})));
+  let expP = new Set(eq.l2Species.P.map(s => speciesKey({c:s.c, f:normFormula(s.f), s:s.s})));
+  let gotR = new Set(parsed.R.map(s => speciesKey(s)));
+  let gotP = new Set(parsed.P.map(s => speciesKey(s)));
+
+  let rMatch = setsEqual(expR, gotR);
+  let pMatch = setsEqual(expP, gotP);
+
+  // Check for missing states (trap E4)
+  let hasMissingState = false;
+  for (let sp of [...parsed.R, ...parsed.P]) {
+    if (!sp.s) { hasMissingState = true; break; }
+  }
+
+  if (rMatch && pMatch) {
+    if (hasMissingState) return {correct:false, trap:'E4'};
+    return {correct:true};
+  }
+
+  let issues = [];
+  if (!rMatch) issues.push('Reactants side incorrect 反應物側不正確');
+  if (!pMatch) issues.push('Products side incorrect 產物側不正確');
+  if (hasMissingState) issues.push('State symbols missing 缺少狀態符號');
+  return {correct:false, msg:issues.join('; '), trap: hasMissingState?'E4':null};
+}
+
+function matchL3(input, poolItem) {
+  let norm = input.toLowerCase().trim();
+  if (!norm) return false;
+  for (let kw of poolItem.ak) {
+    if (norm.includes(kw.toLowerCase())) return true;
+  }
+  return false;
+}
+
+function arraysEqual(a, b) {
+  if (a.length !== b.length) return false;
+  for (let i = 0; i < a.length; i++) {
+    if (a[i] !== b[i]) return false;
+  }
+  return true;
+}
+
+function setsEqual(a, b) {
+  if (a.size !== b.size) return false;
+  for (let v of a) { if (!b.has(v)) return false; }
+  return true;
+}
+
+// ============================================================
+// STATE
+// ============================================================
+let state = {
+  currentEqIdx: 0,
+  currentLayer: 1,         // 1, 2, or 3
+  currentL3Item: null,     // selected L3 question
+  submitted: false,        // has submitted current layer?
+  layerResult: null,       // {correct, trap?, msg?}
+  sessionDone: new Set(),  // equation ids that completed all 3 layers
+  scores: { l1:0, l2:0, l3:0, total:0 },
+  mistakes: [],            // {eqName, layer, userInput, correctAns}
+  eqQueue: [],             // shuffled queue of eq indices
+  roundNum: 0
+};
+
+function initSession() {
+  // Shuffle equations, bias toward unpracticed
+  let pool = equations.map((_,i) => i);
+  shuffleArray(pool);
+  // Load past scores from localStorage to bias
+  try {
+    let past = JSON.parse(localStorage.getItem('eqTrainer_v1') || '{}');
+    if (past.scores) {
+      // Move low-score equations to front
+      pool.sort((a,b) => {
+        let sa = (past.scores[a]||{}).total || 0;
+        let sb = (past.scores[b]||{}).total || 0;
+        return sa - sb; // low score first
+      });
+    }
+  } catch(e) {}
+  state.eqQueue = pool;
+  state.currentEqIdx = pool[0];
+  state.roundNum = 0;
+  state.currentLayer = 1;
+  state.submitted = false;
+  state.layerResult = null;
+  state.sessionDone = new Set();
+  state.scores = {l1:0,l2:0,l3:0,total:0};
+  state.mistakes = [];
+  loadEquation(state.currentEqIdx);
+  updateUI();
+}
+
+function loadEquation(idx) {
+  state.currentEqIdx = idx;
+  state.currentLayer = 1;
+  state.submitted = false;
+  state.layerResult = null;
+  state.currentL3Item = null;
+  // Pick random L3 item
+  let eq = equations[idx];
+  state.currentL3Item = eq.l3Pool[Math.floor(Math.random() * eq.l3Pool.length)];
+
+  document.getElementById('eqNameEn').textContent = eq.nameEn;
+  document.getElementById('eqNameCn').textContent = eq.nameCn;
+  document.getElementById('userInput').value = '';
+  document.getElementById('userInput').className = 'input-area';
+  document.getElementById('feedback').className = 'feedback';
+  document.getElementById('feedback').innerHTML = '';
+  document.getElementById('btnRowNext').style.display = 'none';
+  document.getElementById('btnSubmit').style.display = '';
+  document.getElementById('btnSubmit').textContent = 'Submit 提交';
+  updateLayerDisplay();
+}
+
+function updateLayerDisplay() {
+  let l = state.currentLayer;
+  let eq = equations[state.currentEqIdx];
+
+  // Dots
+  for (let i = 1; i <= 3; i++) {
+    let dot = document.getElementById('dot'+i);
+    let label = document.getElementById('label'+i);
+    dot.className = 'layer-dot';
+    label.className = 'layer-label';
+    if (i < l) { dot.classList.add('done'); }
+    if (i === l) { dot.classList.add('active'); label.classList.add('active'); }
+  }
+
+  // Instruction
+  let icon = document.getElementById('layerIcon');
+  let instr = document.getElementById('layerInstruction');
+  if (l === 1) {
+    icon.textContent = '①';
+    instr.textContent = 'Write the chemical formulas of reactants and products 寫出反應物和產物的化學式';
+    document.getElementById('userInput').placeholder = 'e.g. CaCO₃ → CaO + CO₂';
+  } else if (l === 2) {
+    icon.textContent = '②';
+    instr.textContent = 'Balance the equation and add state symbols 配平方程式並加入狀態符號';
+    document.getElementById('userInput').placeholder = 'e.g. CaCO₃(s) → CaO(s) + CO₂(g)';
+  } else {
+    icon.textContent = '③';
+    let l3 = state.currentL3Item;
+    instr.textContent = (l3.qEn + ' ' + l3.qCn);
+    document.getElementById('userInput').placeholder = 'Type your answer 輸入你的答案...';
+  }
+
+  // Adjust submit button text for L3
+  if (l === 3) {
+    document.getElementById('btnSubmit').textContent = 'Submit 提交 (Bonus)';
+  } else {
+    document.getElementById('btnSubmit').textContent = 'Submit 提交';
+  }
+
+  // Clear feedback
+  document.getElementById('feedback').className = 'feedback';
+  document.getElementById('feedback').innerHTML = '';
+  document.getElementById('btnRowNext').style.display = 'none';
+  document.getElementById('btnSubmit').style.display = '';
+  state.submitted = false;
+  state.layerResult = null;
+}
+
+// ============================================================
+// ACTIONS
+// ============================================================
+function submitAnswer() {
+  if (state.submitted) return;
+
+  let input = document.getElementById('userInput').value.trim();
+  let eq = equations[state.currentEqIdx];
+  let l = state.currentLayer;
+
+  if (!input) {
+    showFeedback(false, 'Please enter an answer 請輸入答案', null, eq);
+    return;
+  }
+
+  if (l === 1) {
+    let parsed = parseEquationL1(input);
+    let result = matchL1(parsed, eq);
+    state.layerResult = result;
+    state.submitted = true;
+
+    if (result.correct) {
+      showFeedback(true, '✓ Correct! 正確！', null, eq);
+      document.getElementById('userInput').classList.add('correct');
+      state.scores.l1++;
+      state.scores.total++;
+    } else {
+      let msg;
+      if (result.trap === 'E5') {
+        msg = '❌ Trap E5: Metal + Acid → Salt + H₂ (NOT CO₂!) 金屬+酸→鹽+氫氣，不是CO₂！';
+      } else if (result.trap === 'Fe₃O₄') {
+        msg = '❌ Trap: Fe + steam → Fe₃O₄ (NOT Fe₂O₃!) 鐵+水蒸氣→四氧化三鐵，不是氧化鐵(III)！';
+      } else {
+        msg = '❌ ' + (result.msg || 'Incorrect 不正確');
+      }
+      showFeedback(false, msg, result.trap, eq);
+      document.getElementById('userInput').classList.add('error');
+      // Show correct L1 answer
+      let correctL1 = eq.l1Reactants.join(' + ') + ' → ' + eq.l1Products.join(' + ');
+      appendCorrectAns(correctL1);
+      addMistake(eq, 1, input, correctL1);
+    }
+  } else if (l === 2) {
+    let parsed = parseEquationL2(input);
+    let result = matchL2(parsed, eq);
+    state.layerResult = result;
+    state.submitted = true;
+
+    if (result.correct) {
+      showFeedback(true, '✓ Correct! 正確！', null, eq);
+      document.getElementById('userInput').classList.add('correct');
+      state.scores.l2++;
+      state.scores.total++;
+    } else {
+      let msg = result.trap === 'E4'
+        ? '❌ Trap E4: State symbols required! 狀態符號必須標註！'
+        : '❌ ' + (result.msg || 'Incorrect 不正確');
+      showFeedback(false, msg, result.trap, eq);
+      document.getElementById('userInput').classList.add('error');
+      appendCorrectAns(eq.l2Canonical);
+      addMistake(eq, 2, input, eq.l2Canonical);
+    }
+  } else if (l === 3) {
+    let result = matchL3(input, state.currentL3Item);
+    state.layerResult = {correct: result};
+    state.submitted = true;
+
+    if (result) {
+      showFeedback(true, '✓ Correct! Bonus +1! 正確！獎勵分 +1！', null, eq);
+      document.getElementById('userInput').classList.add('correct');
+      state.scores.l3++;
+      state.scores.total++;
+    } else {
+      let correctAns = state.currentL3Item.ak.join(' / ');
+      showFeedback(false, 'Not quite. 不太對。', null, eq);
+      document.getElementById('userInput').classList.add('error');
+      appendCorrectAns(correctAns);
+      addMistake(eq, 3, input, correctAns);
+    }
+  }
+
+  document.getElementById('btnSubmit').style.display = 'none';
+  document.getElementById('btnRowNext').style.display = 'flex';
+  updateScoreboard();
+}
+
+function skipLayer() {
+  if (state.submitted) return;
+  state.layerResult = {correct: false, skipped: true};
+  state.submitted = true;
+
+  let l = state.currentLayer;
+  let eq = equations[state.currentEqIdx];
+
+  let skipMsg = l === 1
+    ? 'Skipped. Correct formulas: 正確化學式：' + eq.l1Reactants.join(' + ') + ' → ' + eq.l1Products.join(' + ')
+    : l === 2
+      ? 'Skipped. Correct equation: 正確方程式：' + eq.l2Canonical
+      : 'Skipped. Acceptable answers: 可接受答案：' + state.currentL3Item.ak.join(' / ');
+
+  showFeedback(false, '⏭ ' + skipMsg, null, eq);
+  document.getElementById('btnSubmit').style.display = 'none';
+  document.getElementById('btnRowNext').style.display = 'flex';
+  updateScoreboard();
+}
+
+function nextLayer() {
+  let eq = equations[state.currentEqIdx];
+  let l = state.currentLayer;
+
+  if (l < 3) {
+    // Advance to next layer
+    state.currentLayer = l + 1;
+    state.submitted = false;
+    state.layerResult = null;
+    document.getElementById('userInput').value = '';
+    document.getElementById('userInput').className = 'input-area';
+    document.getElementById('feedback').className = 'feedback';
+    document.getElementById('feedback').innerHTML = '';
+    document.getElementById('btnRowNext').style.display = 'none';
+    document.getElementById('btnSubmit').style.display = '';
+    updateLayerDisplay();
+  } else {
+    // Equation complete, move to next
+    state.sessionDone.add(eq.id);
+    nextEquation();
+  }
+}
+
+function nextEquation() {
+  state.roundNum++;
+  document.getElementById('roundNum').textContent = state.roundNum + 1;
+  document.getElementById('doneCount').textContent = state.sessionDone.size;
+
+  // Check if all 9 done
+  if (state.sessionDone.size >= equations.length) {
+    showReport();
+    return;
+  }
+
+  // Find next un-done equation from queue
+  let nextIdx = null;
+  for (let idx of state.eqQueue) {
+    if (!state.sessionDone.has(equations[idx].id)) {
+      nextIdx = idx;
+      break;
+    }
+  }
+  if (nextIdx === null) {
+    // All done (shouldn't happen due to check above, but safe)
+    showReport();
+    return;
+  }
+
+  loadEquation(nextIdx);
+  updateUI();
+  document.getElementById('userInput').focus();
+}
+
+function updateUI() {
+  document.getElementById('roundNum').textContent = state.roundNum + 1;
+  document.getElementById('doneCount').textContent = state.sessionDone.size;
+  updateScoreboard();
+}
+
+function updateScoreboard() {
+  let max = equations.length;
+  let s = state.scores;
+  document.getElementById('valL1').textContent = s.l1 + '/' + max;
+  document.getElementById('valL2').textContent = s.l2 + '/' + max;
+  document.getElementById('valL3').textContent = s.l3 + '/' + max;
+  document.getElementById('valTotal').textContent = s.total + '/' + (max * 3);
+
+  document.getElementById('barL1').style.width = (s.l1 / max * 100) + '%';
+  document.getElementById('barL2').style.width = (s.l2 / max * 100) + '%';
+  document.getElementById('barL3').style.width = (s.l3 / max * 100) + '%';
+}
+
+function showFeedback(correct, msg, trap, eq) {
+  let fb = document.getElementById('feedback');
+  fb.className = 'feedback show ' + (correct ? 'correct-fb' : 'error-fb');
+  let html = '';
+  if (trap) {
+    html += '<span class="trap-tag">⚠ TRAP ' + trap + '</span> ';
+  }
+  html += msg;
+  fb.innerHTML = html;
+}
+
+function appendCorrectAns(ans) {
+  let fb = document.getElementById('feedback');
+  fb.innerHTML += '<span class="correct-ans">✓ ' + ans + '</span>';
+}
+
+function addMistake(eq, layer, userInput, correctAns) {
+  state.mistakes.push({
+    eqName: eq.nameEn + ' / ' + eq.nameCn,
+    layer: layer,
+    userInput: userInput,
+    correctAns: correctAns
+  });
+}
+
+// ============================================================
+// REPORT
+// ============================================================
+function showReport() {
+  let overlay = document.getElementById('reportOverlay');
+  let card = document.getElementById('reportCard');
+
+  let total = equations.length * 3;
+  let s = state.scores;
+  let pct = Math.round(s.total / total * 100);
+
+  let emoji = pct >= 80 ? '🌟' : pct >= 60 ? '👍' : pct >= 40 ? '📚' : '💪';
+
+  let html = '<h2>' + emoji + ' Session Report 練習報告</h2>';
+  html += '<div class="report-stat"><span>L1 Formula 化學式</span><span class="' + (s.l1>=7?'good':'bad') + '">'+s.l1+'/9</span></div>';
+  html += '<div class="report-stat"><span>L2 Balance+State 配平+狀態</span><span class="' + (s.l2>=7?'good':'bad') + '">'+s.l2+'/9</span></div>';
+  html += '<div class="report-stat"><span>L3 Knowledge 知識</span><span class="' + (s.l3>=7?'good':'bad') + '">'+s.l3+'/9</span></div>';
+  html += '<div class="report-stat" style="font-weight:700;border-top:1px solid var(--accent);margin-top:4px;padding-top:8px"><span>Total 總分</span><span>'+s.total+'/'+total+' ('+pct+'%)</span></div>';
+
+  if (state.mistakes.length > 0) {
+    html += '<div class="report-mistakes"><h3 style="font-size:.9rem;color:var(--warn);margin-bottom:8px">⚠ Mistakes to Review 需要複習的錯誤</h3>';
+    let shown = new Set();
+    for (let m of state.mistakes) {
+      let key = m.eqName + '|L' + m.layer;
+      if (shown.has(key)) continue;
+      shown.add(key);
+      html += '<div class="report-mistake">';
+      html += '<div class="eq-name">' + m.eqName + ' — Layer ' + m.layer + '</div>';
+      html += '<div class="detail">Your answer 你的答案: ' + escapeHTML(m.userInput) + '</div>';
+      html += '<div class="detail" style="color:var(--success)">Correct 正確: ' + escapeHTML(m.correctAns) + '</div>';
+      html += '</div>';
+    }
+    html += '</div>';
+  } else if (state.sessionDone.size > 0) {
+    html += '<div style="text-align:center;padding:20px;color:var(--success);font-size:1.1rem">🎉 Perfect! All correct! 全部正確！</div>';
+  }
+
+  html += '<div style="text-align:center;margin-top:16px">';
+  html += '<button class="btn btn-primary" style="width:100%;max-width:200px" onclick="resetSession()">Start New Session 新一輪練習</button>';
+  html += '</div>';
+
+  card.innerHTML = html;
+  overlay.style.display = 'flex';
+
+  // Save to localStorage
+  saveProgress();
+}
+
+function closeReport(e) {
+  if (e.target === document.getElementById('reportOverlay')) {
+    document.getElementById('reportOverlay').style.display = 'none';
+  }
+}
+
+function saveProgress() {
+  try {
+    let data = JSON.parse(localStorage.getItem('eqTrainer_v1') || '{}');
+    if (!data.scores) data.scores = {};
+    // Per-equation cumulative scores
+    for (let eq of equations) {
+      if (!data.scores[eq.id]) data.scores[eq.id] = {l1:0,l2:0,l3:0,total:0};
+    }
+    // Add current session scores
+    // We track per-equation from mistakes? Actually we track session-level.
+    // For simplicity, save session totals to bias next session
+    data.lastSession = {
+      date: new Date().toISOString(),
+      scores: state.scores,
+      total: state.scores.total,
+      maxTotal: equations.length * 3
+    };
+    // Increment per-equation practice count
+    for (let eqId of state.sessionDone) {
+      if (!data.scores[eqId]) data.scores[eqId] = {total:0};
+      data.scores[eqId].total = (data.scores[eqId].total || 0) + 1;
+    }
+    localStorage.setItem('eqTrainer_v1', JSON.stringify(data));
+  } catch(e) {}
+}
+
+function resetSession() {
+  document.getElementById('reportOverlay').style.display = 'none';
+  initSession();
+  document.getElementById('userInput').focus();
+}
+
+function escapeHTML(str) {
+  let d = document.createElement('div');
+  d.textContent = str;
+  return d.innerHTML;
+}
+
+// ============================================================
+// CHEMISTRY KEYBOARD
+// ============================================================
+function insertAtCursor(text) {
+  let ta = document.getElementById('userInput');
+  let start = ta.selectionStart;
+  let end = ta.selectionEnd;
+  let before = ta.value.substring(0, start);
+  let after = ta.value.substring(end);
+  ta.value = before + text + after;
+  ta.selectionStart = ta.selectionEnd = start + text.length;
+  ta.focus();
+}
+
+// ============================================================
+// HELPERS
+// ============================================================
+function shuffleArray(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    let j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+}
+
+// ============================================================
+// INIT
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => {
+  initSession();
+  document.getElementById('userInput').focus();
+
+  // Keyboard shortcut: Ctrl+Enter / Cmd+Enter to submit
+  document.getElementById('userInput').addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+      e.preventDefault();
+      if (!state.submitted) submitAnswer();
+      else nextLayer();
+    }
+  });
+
+  // iOS: prevent double-tap zoom on buttons
+  document.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('touchstart', function(e) {
+      // Don't prevent default, but add active state quickly
+    }, {passive: true});
+  });
+});
+</script>
+</body>
+</html>

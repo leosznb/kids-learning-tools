@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>論證方法辨識擂台 — 三段闖關</title>
+<style>
+:root {
+  --bg: #fafaf9; --text: #1c1c1c; --muted: #777;
+  --accent: #c0392b; --accent-soft: #fef0f0;
+  --border: #e0e0dc; --card-bg: #fff;
+  --correct: #1a7a2e; --correct-bg: #e8f5e9;
+  --miss: #c0392b; --miss-bg: #fef0f0;
+  --input-bg: #fffef5; --input-border: #d4c88c;
+  --radius: 6px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+  background: var(--bg); color: var(--text); line-height: 1.7;
+  padding: 20px 16px 60px; max-width: 760px; margin: 0 auto;
+  -webkit-font-smoothing: antialiased;
+}
+h1 { font-size: 1.35em; font-weight: 800; margin: 0 0 2px; }
+.subtitle { color: var(--muted); font-size: 0.85em; margin: 0 0 16px; }
+
+/* Stage progress */
+.stage-bar {
+  display: flex; gap: 6px; margin: 0 0 18px; align-items: center; flex-wrap: wrap;
+}
+.stage-step {
+  display: flex; align-items: center; gap: 8px; padding: 8px 14px;
+  border-radius: 20px; border: 2px solid var(--border); font-size: 0.82em;
+  font-weight: 600; transition: all 0.3s; background: #fff;
+}
+.stage-step .num {
+  width: 24px; height: 24px; border-radius: 50%; display: flex;
+  align-items: center; justify-content: center; font-size: 0.78em;
+  background: var(--border); color: #fff;
+}
+.stage-step.active { border-color: var(--accent); }
+.stage-step.active .num { background: var(--accent); }
+.stage-step.done { border-color: var(--correct); background: var(--correct-bg); }
+.stage-step.done .num { background: var(--correct); }
+.stage-step.locked { opacity: 0.5; }
+.stage-arrow { color: var(--muted); font-size: 0.8em; margin: 0 2px; }
+
+/* Stage summary */
+.stage-summary {
+  display: none; background: #fff; border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 14px 18px; margin: 0 0 14px;
+  font-size: 0.9em; text-align: center;
+}
+.stage-summary.show { display: block; }
+.stage-summary.pass { border-color: var(--correct); background: var(--correct-bg); color: var(--correct); }
+.stage-summary.fail { border-color: var(--miss); background: var(--miss-bg); color: var(--miss); }
+
+/* Card */
+.card {
+  background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 18px 20px; margin: 0 0 14px;
+}
+.card h3 { font-size: 0.92em; font-weight: 700; margin: 0 0 8px; }
+.question-text {
+  font-size: 1.05em; padding: 14px; background: #f9f9f4;
+  border-radius: var(--radius); margin: 0 0 14px; text-align: center;
+  font-weight: 500; border-left: 4px solid var(--border);
+}
+.source-tag {
+  display: inline-block; font-size: 0.72em; color: var(--muted);
+  background: #f0f0ec; padding: 2px 8px; border-radius: 8px; margin: 0 0 8px;
+}
+
+/* Stage1: option buttons */
+.options {
+  display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 10px;
+}
+.opt-btn {
+  padding: 12px 20px; border: 2px solid var(--border); border-radius: var(--radius);
+  background: #fff; font-size: 0.9em; cursor: pointer; user-select: none;
+  font-weight: 600; font-family: inherit; transition: all 0.15s;
+  -webkit-tap-highlight-color: transparent; min-height: 44px;
+}
+.opt-btn:active { background: #e8e8e4; }
+.opt-btn.chosen { border-color: var(--accent); background: var(--accent-soft); }
+.opt-btn.correct { border-color: var(--correct); background: var(--correct-bg); }
+.opt-btn.wrong { border-color: var(--miss); background: var(--miss-bg); }
+
+/* Stage2: fill */
+.fill-line {
+  font-size: 0.95em; line-height: 2.6; padding: 12px 16px;
+  background: #fefefb; border: 1px dashed var(--border); border-radius: var(--radius);
+  margin: 0 0 10px;
+}
+.fill-input {
+  display: inline-block; vertical-align: middle;
+  min-width: 70px; max-width: 200px; height: 42px;
+  border: none; border-bottom: 2px solid var(--input-border);
+  background: var(--input-bg); font-size: 0.88em;
+  padding: 4px 8px; margin: 0 2px; text-align: center;
+  font-family: inherit; outline: none; border-radius: 0;
+  transition: border-color 0.2s;
+  -webkit-appearance: none;
+}
+.fill-input:focus { border-bottom-color: var(--accent); box-shadow: 0 1px 0 var(--accent); }
+.fill-input.correct { border-bottom-color: var(--correct); background: var(--correct-bg); font-weight: 700; }
+.fill-input.wrong { border-bottom-color: var(--miss); background: var(--miss-bg); }
+
+/* Stage3: free text */
+.textarea-wrap textarea {
+  width: 100%; min-height: 110px; padding: 14px; font-size: 0.92em;
+  font-family: inherit; line-height: 1.8; border: 1px solid var(--border);
+  border-radius: var(--radius); background: var(--input-bg); outline: none;
+  resize: vertical; -webkit-appearance: none;
+}
+.textarea-wrap textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-soft); }
+
+/* Buttons */
+.actions { display: flex; gap: 10px; margin: 12px 0; flex-wrap: wrap; }
+.btn {
+  padding: 14px 24px; border: 1px solid var(--border); border-radius: var(--radius);
+  background: #fff; font-size: 0.92em; cursor: pointer; user-select: none;
+  font-weight: 600; font-family: inherit; min-height: 44px;
+  -webkit-tap-highlight-color: transparent; transition: all 0.15s;
+}
+.btn:active { background: #e8e8e4; }
+.btn.submit { background: #1c1c1c; color: #fff; border-color: #1c1c1c; }
+.btn.submit:active { opacity: 0.8; }
+
+/* Answer feedback (Stage1) */
+.answer-note {
+  display: none; font-size: 0.85em; padding: 10px 14px;
+  border-radius: var(--radius); margin: 8px 0; line-height: 1.6;
+}
+.answer-note.show { display: block; }
+.answer-note.right { background: var(--correct-bg); border: 1px solid var(--correct); color: var(--correct); }
+.answer-note.wrong-note { background: var(--miss-bg); border: 1px solid var(--miss); color: var(--miss); }
+
+/* Comparison for Stage3 */
+.model-answer {
+  display: none; margin: 14px 0; padding: 14px;
+  background: var(--correct-bg); border: 1px solid var(--correct);
+  border-radius: var(--radius); font-size: 0.9em; line-height: 1.7;
+}
+.model-answer.show { display: block; }
+
+/* Score hit tips (Stage 3) */
+.score-hit {
+  background: var(--correct-bg); border-bottom: 2px solid var(--correct);
+  padding: 2px 4px; border-radius: 2px; cursor: pointer;
+  font-weight: 600; display: inline-block; position: relative;
+  user-select: none; -webkit-tap-highlight-color: transparent;
+}
+.score-hit .tip-bubble {
+  display: none; position: absolute; bottom: calc(100% + 8px); left: 50%;
+  transform: translateX(-50%); z-index: 100;
+  background: #1c1c1c; color: #fff; font-size: 0.78em; font-weight: 400;
+  padding: 6px 14px; border-radius: 6px; white-space: nowrap; pointer-events: none;
+}
+.score-hit .tip-bubble::after {
+  content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+  border: 6px solid transparent; border-top-color: #1c1c1c;
+}
+.score-hit.show-tip .tip-bubble { display: block; }
+.score-hit.show-tip { background: #bfdebf; }
+
+/* Bar chart */
+.chart-section {
+  background: #fff; border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 20px; margin: 20px 0;
+}
+.chart-section h3 { margin: 0 0 14px; font-size: 0.95em; }
+.bar-row {
+  display: flex; align-items: center; gap: 10px; margin: 6px 0; font-size: 0.85em;
+}
+.bar-label {
+  width: 80px; text-align: right; font-weight: 600; flex-shrink: 0;
+}
+.bar-track {
+  flex: 1; height: 22px; background: #f0f0ec; border-radius: 11px; overflow: hidden;
+}
+.bar-fill {
+  height: 100%; border-radius: 11px; transition: width 0.6s ease;
+  display: flex; align-items: center; justify-content: flex-end; padding: 0 8px;
+  font-size: 0.75em; font-weight: 700; color: #fff; min-width: 30px;
+}
+.bar-fill.high { background: var(--correct); }
+.bar-fill.mid { background: #e6a817; }
+.bar-fill.low { background: var(--miss); }
+
+.footnote {
+  font-size: 0.78em; color: var(--muted); margin: 28px 0 0;
+  padding: 14px; background: #fff; border: 1px solid var(--border); border-radius: var(--radius);
+}
+
+@media (max-width: 600px) {
+  body { padding: 14px 10px 40px; font-size: 15px; }
+  .opt-btn { padding: 10px 14px; font-size: 0.84em; }
+  .fill-input { min-width: 55px; height: 38px; font-size: 0.82em; }
+  .bar-label { width: 65px; font-size: 0.78em; }
+  .stage-step { padding: 6px 10px; font-size: 0.75em; }
+}
+@media print {
+  body { padding: 0; font-size: 11pt; }
+  .actions, .stage-bar { display: none; }
+  .card { break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+
+<h1>🏟️ 論證方法辨識擂台</h1>
+<p class="subtitle">三段闖關：辨識 → 填空 → 完整寫 | 過關才解鎖下一段</p>
+
+<div class="stage-bar" id="stageBar"></div>
+<div class="stage-summary" id="stageSummary"></div>
+<div id="questionArea"></div>
+<div class="actions" id="actionsArea"></div>
+
+<!-- Final chart area -->
+<div id="chartArea"></div>
+
+<div class="footnote">
+  <strong>💡 規則</strong><br>
+  <strong>Stage 1</strong>（辨識）：8題選對 ≥6題 解鎖 Stage 2<br>
+  <strong>Stage 2</strong>（填空）：6題完成後解鎖 Stage 3<br>
+  <strong>Stage 3</strong>（完整寫）：4題完成後生成弱項雷達圖<br>
+  全部完成後可點「重設」從頭挑戰。
+</div>
+
+<script>
+// === DATA ===
+const METHODS = ['比喻論證','對比論證','舉例論證','引用論證','類比論證'];
+
+const S1 = [ // Stage 1: 辨識關 — 8 questions
+  {
+    text:'「未盡的責任像千斤重擔壓在肩頭」',
+    source:'最苦與最樂',
+    answer:0, // 比喻論證
+    explain:'比喻詞「像」→ 把責任比作重擔，讓抽象壓力具體化',
+    distract:'容易誤判為舉例論證，但這是比喻（有「像」字），不是舉具體事例'
+  },
+  {
+    text:'「欠債未還、受恩未報、得罪人未賠禮」',
+    source:'最苦與最樂',
+    answer:2, // 舉例論證
+    explain:'列舉三個日常生活中的具體事例來證明觀點',
+    distract:'容易誤判為對比，但這裡只有列舉事例，沒有正反對照結構'
+  },
+  {
+    text:'「君子無所爭，必也射乎！揖讓而升，下而飲，其爭也君子」',
+    source:'運動家的風度',
+    answer:3, // 引用論證
+    explain:'引用《論語》原文，以經典權威支持「君子之爭」的論點',
+    distract:'容易誤判為舉例論證，但這是引用古籍經典，不是舉真實事例'
+  },
+  {
+    text:'鄒忌以自己「被妻妾客蒙蔽」的親身經歷，讓齊王明白「王之蔽甚矣」',
+    source:'鄒忌諷齊王納諫',
+    answer:4, // 類比論證
+    explain:'以家事（妻妾客蒙蔽自己）類比國事（宮婦朝廷蒙蔽齊王），層層遞進',
+    distract:'容易和比喻混淆。比喻是「A像B」，類比是「A的道理→B的道理」，結構性映射'
+  },
+  {
+    text:'「金玉其外，敗絮其中」',
+    source:'賣柑者言',
+    answer:0, // 比喻論證
+    explain:'以柑的外表金玉、內裡敗絮，比喻官員外強中乾',
+    distract:'這是借物喻理（比喻的一種），不是舉例——柑不是真實人物事例'
+  },
+  {
+    text:'「生老病死可以達觀排解，責任未盡到死也痛苦」',
+    source:'最苦與最樂',
+    answer:1, // 對比論證
+    explain:'正面（可排解）vs反面（無法排解）的對照結構，突出責任之重',
+    distract:'容易和舉例混淆。關鍵判斷：有沒有「正↔反」的對比結構？有→對比'
+  },
+  {
+    text:'歐文斯明知自己不及火車快，仍盡全力奔跑直到終點',
+    source:'運動家的風度',
+    answer:2, // 舉例論證
+    explain:'舉歐文斯（真實人物）為例，證明超越勝敗的精神',
+    distract:'注意：舉例必須是真實人物/事件；引用是經典/名言'
+  },
+  {
+    text:'「以繪畫之道比喻寫作之道」——全篇文章的結構',
+    source:'以畫為喻',
+    answer:4, // 類比論證
+    explain:'全文以「繪畫」類比「寫作」，這不是一個比喻句，而是貫穿全文的結構類比',
+    distract:'終極陷阱題：和Q1比喻不同，這是結構性類比（A領域→B領域），不是「A像B」'
+  }
+];
+
+const S2 = [ // Stage 2: 填空關 — 6 questions
+  {
+    text:'「未盡的責任像千斤重擔壓在肩頭」',
+    source:'最苦與最樂',
+    method:'比喻',
+    template:'這是&lb;比喻&rb;論證，以&lb;千斤重擔&rb;比喻&lb;未盡責任的心理壓力&rb;，&lb;生動形象&rb;地說明了責任之重。',
+    blanks:[
+      {id:0, ans:'比喻', hint:'方法名稱', score:0.5},
+      {id:1, ans:'千斤重擔', hint:'用什麼來比喻', score:1},
+      {id:2, ans:'未盡責任的心理壓力', hint:'比喻說明了什麼', score:1},
+      {id:3, ans:'生動形象', hint:'效果形容詞（4字）', score:0.5}
+    ]
+  },
+  {
+    text:'「生老病死可以達觀排解，責任未盡到死也痛苦」',
+    source:'最苦與最樂',
+    method:'對比',
+    template:'這是&lb;對比&rb;論證，將&lb;生老病死可排解&rb;與&lb;責任未盡不可排解&rb;對比，&lb;鮮明地突出&rb;了未盡責任之痛苦。',
+    blanks:[
+      {id:0, ans:'對比', hint:'方法名稱', score:0.5},
+      {id:1, ans:'生老病死可排解', hint:'對比的正面', score:1},
+      {id:2, ans:'責任未盡不可排解', hint:'對比的反面', score:1},
+      {id:3, ans:'鮮明地突出', hint:'效果詞', score:0.5}
+    ]
+  },
+  {
+    text:'「欠債未還、受恩未報、得罪人未賠禮」',
+    source:'最苦與最樂',
+    method:'舉例',
+    template:'這是&lb;舉例&rb;論證，以&lb;欠債、受恩、得罪人&rb;等日常事例，&lb;具體地證明&rb;了&lb;未盡責任令人痛苦&rb;。',
+    blanks:[
+      {id:0, ans:'舉例', hint:'方法名稱', score:0.5},
+      {id:1, ans:'欠債、受恩、得罪人', hint:'列舉了哪些事例', score:1},
+      {id:2, ans:'具體地證明', hint:'效果詞', score:0.5},
+      {id:3, ans:'未盡責任令人痛苦', hint:'說明了什麼結論', score:1}
+    ]
+  },
+  {
+    text:'鄒忌以自己「被妻妾客蒙蔽」的經歷，使齊王明白「朝廷之蔽」',
+    source:'鄒忌諷齊王納諫',
+    method:'類比',
+    template:'這是&lb;類比&rb;論證，以&lb;家事（妻妾客蒙蔽自己）&rb;類比&lb;國事（宮婦朝廷蒙蔽齊王）&rb;，&lb;深入淺出&rb;地說明了君主易被蒙蔽的道理。',
+    blanks:[
+      {id:0, ans:'類比', hint:'方法名稱', score:0.5},
+      {id:1, ans:'家事（妻妾客蒙蔽自己）', hint:'類比的來源（A）', score:1},
+      {id:2, ans:'國事（宮婦朝廷蒙蔽齊王）', hint:'類比的目標（B）', score:1},
+      {id:3, ans:'深入淺出', hint:'效果形容詞（4字）', score:0.5}
+    ]
+  },
+  {
+    text:'「君子無所爭，必也射乎⋯其爭也君子」',
+    source:'運動家的風度',
+    method:'引用',
+    template:'這是&lb;引用&rb;論證，&lb;引用《論語》經典&rb;，&lb;權威地證明&rb;了&lb;君子之爭光明正大&rb;。',
+    blanks:[
+      {id:0, ans:'引用', hint:'方法名稱', score:0.5},
+      {id:1, ans:'引用《論語》經典', hint:'引用了什麼', score:1},
+      {id:2, ans:'權威地證明', hint:'效果詞', score:0.5},
+      {id:3, ans:'君子之爭光明正大', hint:'證明了什麼', score:1}
+    ]
+  },
+  {
+    text:'「金玉其外，敗絮其中」',
+    source:'賣柑者言',
+    method:'比喻',
+    template:'這是&lb;比喻&rb;論證，以&lb;金玉其外的柑&rb;比喻&lb;徒有外表的官員&rb;，&lb;生動形象&rb;地說明了&lb;官場表裡不一的現實&rb;。',
+    blanks:[
+      {id:0, ans:'比喻', hint:'方法名稱', score:0.5},
+      {id:1, ans:'金玉其外的柑', hint:'用什麼來比喻', score:1},
+      {id:2, ans:'徒有外表的官員', hint:'比喻說明了什麼對象', score:0.5},
+      {id:3, ans:'生動形象', hint:'效果詞（4字）', score:0.5},
+      {id:4, ans:'官場表裡不一的現實', hint:'最終說明了什麼', score:0.5}
+    ]
+  }
+];
+
+const S3 = [ // Stage 3: 完整寫 — 4 questions
+  {
+    text:'「運動場是人生的縮影。在運動場上養成了光明正大的態度，到人生舞台上，便會排斥暗箭傷人的行為。」',
+    source:'運動家的風度',
+    model:[
+      {t:'運用比喻論證', tip:'1分：說出方法'},
+      {t:'以「運動場」比喻「人生」', tip:'1分：說出具體比喻'},
+      {t:'說明在運動場養成的品格可應用於人生', tip:'1分：說出比喻的含義'},
+      {t:'使道理深入淺出，讀者易於理解', tip:'1分：說出效果'}
+    ]
+  },
+  {
+    text:'「處處盡責任，便處處快樂；時時盡責任，便時時快樂。」',
+    source:'最苦與最樂',
+    model:[
+      {t:'運用對比論證', tip:'1分：說出方法'},
+      {t:'將「未盡責任之苦」（上文）與「完成責任之樂」（本句）對比', tip:'1分：說出對比雙方 *需結合前文理解'},
+      {t:'以對偶句式強化「處處/時時」的反覆', tip:'1分：說出特殊手法'},
+      {t:'鮮明地突出了「盡責任即快樂」的中心論點', tip:'1分：說出效果'}
+    ]
+  },
+  {
+    text:'「妻曰：『君美甚，徐公何能及君也？』妾曰：『徐公何能及君也？』客曰：『徐公不若君之美也。』」',
+    source:'鄒忌諷齊王納諫',
+    model:[
+      {t:'運用舉例論證和排比', tip:'1分：說出方法'},
+      {t:'以妻、妾、客三人的回答為例', tip:'1分：說出具體例子'},
+      {t:'三人回答相似但動機不同（私、畏、有求）', tip:'1分：點出深層含義'},
+      {t:'具體有力地說明了人容易被身邊人蒙蔽的道理', tip:'1分：說出效果'}
+    ]
+  },
+  {
+    text:'「孟子曰：『人皆有不忍人之心。』又曰：『惻隱之心，仁之端也；羞惡之心，義之端也。』」',
+    source:'論四端（校本課程）',
+    model:[
+      {t:'運用引用論證', tip:'1分：說出方法'},
+      {t:'引用《孟子》經典語錄', tip:'1分：說出引用來源'},
+      {t:'以權威經典支持「人皆有善性」的論點', tip:'1分：說出引用的目的'},
+      {t:'增強說服力和可信度', tip:'1分：說出效果'}
+    ]
+  }
+];
+
+// === STATE ===
+let stage = 1; // 1, 2, or 3
+let s1Idx = 0, s2Idx = 0, s3Idx = 0;
+let s1Submitted = false, s2Submitted = false, s3Submitted = false;
+let s1Correct = 0; // Stage 1 correct count
+let s2Score = 0;   // Stage 2 total score
+let methodStats = {}; // {method: {correct:0, total:0, s2score:0, s2max:0}}
+let overallDone = false;
+
+METHODS.forEach(m => { methodStats[m] = {s1c:0, s1t:0, s2s:0, s2m:0, s3s:0, s3t:0}; });
+
+function init() {
+  overallDone = false;
+  stage = 1; s1Idx = 0; s2Idx = 0; s3Idx = 0;
+  s1Submitted = false; s2Submitted = false; s3Submitted = false;
+  s1Correct = 0; s2Score = 0;
+  METHODS.forEach(m => { methodStats[m] = {s1c:0, s1t:0, s2s:0, s2m:0, s3s:0, s3t:0}; });
+  document.getElementById('chartArea').innerHTML = '';
+  document.getElementById('stageSummary').className = 'stage-summary';
+  document.getElementById('stageSummary').innerHTML = '';
+  renderStageBar();
+  renderStage1();
+}
+
+function renderStageBar() {
+  let html = '';
+  const stages = [
+    {n:1, label:'辨識關 (8題)', status: stage===1 ? 'active' : (stage>1||overallDone ? 'done' : 'locked')},
+    {n:2, label:'填空關 (6題)', status: stage===2 ? 'active' : (stage>2||overallDone ? 'done' : 'locked')},
+    {n:3, label:'完整寫 (4題)', status: stage===3 ? 'active' : (overallDone ? 'done' : 'locked')}
+  ];
+  stages.forEach((s, i) => {
+    html += `<span class="stage-step ${s.status}"><span class="num">${s.n}</span>${s.label}</span>`;
+    if (i < 2) html += '<span class="stage-arrow">→</span>';
+  });
+  document.getElementById('stageBar').innerHTML = html;
+}
+
+// === STAGE 1: 辨識關 ===
+function renderStage1() {
+  s1Submitted = false;
+  const q = S1[s1Idx];
+  let html = `<div class="card">
+    <span class="source-tag">📖 ${q.source}</span>
+    <h3>Stage 1 · 第 ${s1Idx+1}/8 題 · 這是什麼論證方法？</h3>
+    <div class="question-text">「${q.text}」</div>
+    <div class="options" id="s1options">`;
+  METHODS.forEach((m, i) => {
+    html += `<button class="opt-btn" onclick="s1Choose(${i})" id="s1opt${i}">${m}</button>`;
+  });
+  html += `</div><div class="answer-note" id="s1note"></div></div>`;
+  document.getElementById('questionArea').innerHTML = html;
+  document.getElementById('actionsArea').innerHTML = `
+    <button class="btn submit" id="s1submit" onclick="s1Submit()" disabled>✓ 確認答案</button>
+    <button class="btn" onclick="s1Next()" id="s1next" style="display:none;">→ 下一題</button>`;
+  document.getElementById('stageSummary').className = 'stage-summary';
+}
+
+let s1Chosen = -1;
+function s1Choose(i) {
+  if (s1Submitted) return;
+  s1Chosen = i;
+  document.querySelectorAll('#s1options .opt-btn').forEach((b, j) => {
+    b.className = 'opt-btn' + (j === i ? ' chosen' : '');
+  });
+  document.getElementById('s1submit').disabled = false;
+}
+
+function s1Submit() {
+  if (s1Submitted || s1Chosen < 0) return;
+  s1Submitted = true;
+  const q = S1[s1Idx];
+  const correct = s1Chosen === q.answer;
+  methodStats[METHODS[q.answer]].s1t++;
+  if (correct) {
+    s1Correct++;
+    methodStats[METHODS[q.answer]].s1c++;
+  }
+  // Highlight buttons
+  document.getElementById('s1opt'+q.answer).classList.add('correct');
+  if (!correct) document.getElementById('s1opt'+s1Chosen).classList.add('wrong');
+  // Show explanation
+  const note = document.getElementById('s1note');
+  note.className = 'answer-note show ' + (correct ? 'right' : 'wrong-note');
+  note.innerHTML = correct
+    ? `✅ 正確！${q.explain}`
+    : `❌ 正確答案是「${METHODS[q.answer]}」。${q.explain}<br><small>💡 ${q.distract}</small>`;
+  document.getElementById('s1submit').style.display = 'none';
+  document.getElementById('s1next').style.display = 'inline-block';
+}
+
+function s1Next() {
+  s1Idx++; s1Chosen = -1;
+  if (s1Idx >= S1.length) {
+    // Stage 1 complete
+    if (s1Correct >= 6) {
+      stageDone(1, true);
+      stage = 2; s2Idx = 0; renderStageBar(); renderStage2();
+    } else {
+      stageDone(1, false);
+    }
+  } else {
+    renderStage1();
+  }
+}
+
+function stageDone(n, passed) {
+  const sd = document.getElementById('stageSummary');
+  sd.className = 'stage-summary show ' + (passed ? 'pass' : 'fail');
+  if (n === 1) {
+    sd.innerHTML = passed
+      ? `✅ Stage 1 通過！${s1Correct}/8 正確。Stage 2 已解鎖！`
+      : `❌ Stage 1 未通過（${s1Correct}/8，需 ≥6 題）。<br><button class="btn" onclick="init()" style="margin-top:8px;">↺ 重設重來</button>`;
+    if (!passed) { document.getElementById('questionArea').innerHTML = ''; document.getElementById('actionsArea').innerHTML = ''; }
+  }
+}
+
+// === STAGE 2: 填空關 ===
+function renderStage2() {
+  s2Submitted = false;
+  const q = S2[s2Idx];
+  let html = `<div class="card">
+    <span class="source-tag">📖 ${q.source}</span>
+    <h3>Stage 2 · 第 ${s2Idx+1}/6 題 · ${q.method}論證 — 完成公式</h3>
+    <div class="question-text">「${q.text}」</div>
+    <div class="fill-line">`;
+  let parts = q.template.split('&lb;');
+  html += parts[0];
+  for (let i = 1; i < parts.length; i++) {
+    const endIdx = parts[i].indexOf('&rb;');
+    const after = parts[i].substring(endIdx + 4);
+    html += `<input type="text" class="fill-input" id="s2f${i-1}"
+      placeholder="⋯" aria-label="填空${i}"
+      autocorrect="off" autocapitalize="off" spellcheck="false"
+      autocomplete="off" inputmode="text">${after}`;
+  }
+  html += `</div></div>`;
+  document.getElementById('questionArea').innerHTML = html;
+  document.getElementById('actionsArea').innerHTML = `
+    <button class="btn submit" onclick="s2Submit()">✓ 提交答案</button>
+    <button class="btn" onclick="s2Next()" id="s2next" style="display:none;">→ 下一題</button>`;
+  setTimeout(() => { const el = document.getElementById('s2f0'); if (el) el.focus(); }, 100);
+}
+
+function s2Submit() {
+  if (s2Submitted) return;
+  s2Submitted = true;
+  const q = S2[s2Idx];
+  let correctCount = 0, totalScore = 0;
+  q.blanks.forEach(b => {
+    const el = document.getElementById('s2f'+b.id);
+    if (!el) return;
+    const ua = el.value.trim().replace(/\s+/g, '');
+    const match = ua === b.ans || (b.score >= 1 && ua.length >= Math.ceil(b.ans.length * 0.75) && b.ans.includes(ua));
+    el.disabled = true;
+    if (match) { el.classList.add('correct'); correctCount++; totalScore += b.score; }
+    else { el.classList.add('wrong'); if (!ua) el.value = '（漏填）'; setTimeout(() => { el.value = b.ans; }, 1500); }
+  });
+  s2Score += totalScore;
+  const mKey = q.method+'論證';
+  methodStats[mKey].s2s += totalScore;
+  methodStats[mKey].s2m += q.blanks.reduce((s,b)=>s+b.score, 0);
+  document.getElementById('s2next').style.display = 'inline-block';
+  document.querySelector('.btn.submit').style.display = 'none';
+}
+
+function s2Next() {
+  s2Idx++;
+  if (s2Idx >= S2.length) {
+    stage = 3; s3Idx = 0; renderStageBar(); renderStage3();
+  } else {
+    renderStage2();
+  }
+}
+
+// === STAGE 3: 完整寫 ===
+function renderStage3() {
+  s3Submitted = false;
+  const q = S3[s3Idx];
+  let html = `<div class="card">
+    <span class="source-tag">📖 ${q.source}</span>
+    <h3>Stage 3 · 第 ${s3Idx+1}/4 題 · 完整分析論證方法</h3>
+    <div class="question-text">「${q.text}」</div>
+    <div class="textarea-wrap">
+      <textarea id="s3text" placeholder="請完整分析這段文字運用了什麼論證方法，以什麼證明了什麼，效果如何⋯" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+    </div>
+    <div class="model-answer" id="s3model"></div>
+  </div>`;
+  document.getElementById('questionArea').innerHTML = html;
+  document.getElementById('actionsArea').innerHTML = `
+    <button class="btn submit" onclick="s3Submit()">✓ 提交，看滿分答案</button>
+    <button class="btn" onclick="s3Next()" id="s3next" style="display:none;">→ 下一題</button>`;
+  setTimeout(() => { const el = document.getElementById('s3text'); if (el) el.focus(); }, 100);
+}
+
+function s3Submit() {
+  if (s3Submitted) return;
+  s3Submitted = true;
+  const q = S3[s3Idx];
+  document.getElementById('s3text').disabled = true;
+  const modelDiv = document.getElementById('s3model');
+  modelDiv.className = 'model-answer show';
+  let mhtml = '<strong>✅ 滿分答案（點擊底線看計分點）</strong><br>';
+  mhtml += q.model.map(p =>
+    `<span class="score-hit" onclick="toggleTip(event)" role="button">${p.t}<span class="tip-bubble">${p.tip}</span></span>`
+  ).join(' → ');
+  modelDiv.innerHTML = mhtml;
+  document.querySelector('.btn.submit').style.display = 'none';
+  document.getElementById('s3next').style.display = 'inline-block';
+}
+
+function s3Next() {
+  s3Idx++;
+  if (s3Idx >= S3.length) {
+    overallDone = true;
+    renderStageBar();
+    showChart();
+  } else {
+    renderStage3();
+  }
+}
+
+// === Chart ===
+function showChart() {
+  document.getElementById('questionArea').innerHTML = '';
+  document.getElementById('actionsArea').innerHTML = '<button class="btn" onclick="init()">↺ 重新挑戰</button>';
+  const sd = document.getElementById('stageSummary');
+  sd.className = 'stage-summary show pass';
+  sd.innerHTML = `🎉 三段全部完成！S1辨識 ${s1Correct}/8 · S2填空 +${s2Score.toFixed(1)}分`;
+
+  let html = `<div class="chart-section"><h3>📊 論證方法能力分佈</h3>`;
+  METHODS.forEach(m => {
+    const s1r = methodStats[m].s1t > 0 ? methodStats[m].s1c / methodStats[m].s1t : 0;
+    const s2r = methodStats[m].s2m > 0 ? methodStats[m].s2s / methodStats[m].s2m : 0;
+    const pct = Math.round(((s1r + s2r) / 2) * 100);
+    let cls = pct >= 70 ? 'high' : (pct >= 40 ? 'mid' : 'low');
+    html += `<div class="bar-row">
+      <span class="bar-label">${m}</span>
+      <div class="bar-track"><div class="bar-fill ${cls}" style="width:${Math.max(pct,8)}%">${pct}%</div></div>
+    </div>`;
+  });
+  html += `<p style="font-size:0.78em;color:var(--muted);margin-top:12px;">
+    🟢 ≥70% 穩固  🟡 40-69% 需加強  🔴 <40% 薄弱點<br>
+    <small>數據來源：S1辨識正確率 + S2填空得分率</small></p></div>`;
+  document.getElementById('chartArea').innerHTML = html;
+}
+
+// === Tip toggle (shared) ===
+function toggleTip(e) {
+  e.stopPropagation(); e.preventDefault();
+  const el = e.currentTarget;
+  el.classList.toggle('show-tip');
+  if (el.classList.contains('show-tip') && 'ontouchstart' in window) {
+    setTimeout(() => el.classList.remove('show-tip'), 3000);
+  }
+}
+document.addEventListener('click', function(e) {
+  if (!e.target.classList.contains('score-hit')) {
+    document.querySelectorAll('.show-tip').forEach(el => el.classList.remove('show-tip'));
+  }
+});
+
+init();
+</script>
+</body>
+</html>

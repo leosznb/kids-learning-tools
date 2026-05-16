@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>閱讀答題公式填空器 — 三步鷹架訓練</title>
+<style>
+:root {
+  --bg: #fafaf9; --text: #1c1c1c; --muted: #777;
+  --accent: #c0392b; --accent-soft: #fef0f0;
+  --border: #e0e0dc; --card-bg: #fff;
+  --correct: #1a7a2e; --correct-bg: #e8f5e9;
+  --miss: #c0392b; --miss-bg: #fef0f0;
+  --input-bg: #fffef5; --input-border: #d4c88c;
+  --radius: 6px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+  background: var(--bg); color: var(--text); line-height: 1.7;
+  padding: 20px 16px 60px; max-width: 760px; margin: 0 auto;
+  -webkit-font-smoothing: antialiased;
+}
+h1 { font-size: 1.4em; font-weight: 800; margin: 0 0 2px; }
+.subtitle { color: var(--muted); font-size: 0.88em; margin: 0 0 18px; }
+
+/* Type tabs */
+.type-tabs { display: flex; gap: 6px; margin: 0 0 16px; flex-wrap: wrap; }
+.type-tab {
+  padding: 10px 16px; border: 1px solid var(--border); border-radius: 20px;
+  background: #fff; font-size: 0.86em; cursor: pointer; user-select: none;
+  transition: all 0.15s; -webkit-tap-highlight-color: transparent;
+}
+.type-tab:active { background: #e8e8e4; }
+.type-tab.active { background: #1c1c1c; color: #fff; border-color: #1c1c1c; }
+.type-tab.done { border-color: var(--correct); background: var(--correct-bg); color: var(--correct); }
+
+/* Level indicator */
+.level-bar {
+  display: flex; align-items: center; gap: 8px; margin: 0 0 16px;
+  padding: 10px 16px; background: #fff; border: 1px solid var(--border); border-radius: var(--radius);
+  font-size: 0.88em;
+}
+.level-dots { display: flex; gap: 6px; flex: 1; }
+.level-dot {
+  width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.7em; font-weight: 700; background: #fff; transition: all 0.3s;
+}
+.level-dot.past { background: var(--correct); border-color: var(--correct); color: #fff; }
+.level-dot.current { border-color: var(--accent); background: #fff; color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.level-dot.future { opacity: 0.5; }
+.level-label { font-weight: 700; color: var(--accent); min-width: 120px; text-align: right; }
+
+/* Card */
+.card {
+  background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 20px; margin: 0 0 14px;
+}
+.card h3 { font-size: 0.95em; font-weight: 700; margin: 0 0 8px; }
+.hint-box {
+  font-size: 0.82em; color: var(--muted); background: #fefefb;
+  padding: 8px 12px; border-radius: var(--radius); margin: 0 0 12px;
+  border-left: 3px solid var(--input-border);
+}
+.hint-box strong { color: #b85c00; }
+
+/* Fill area */
+.fill-line {
+  font-size: 1em; line-height: 2.6; padding: 12px 16px;
+  background: #fefefb; border: 1px dashed var(--border); border-radius: var(--radius);
+  margin: 0 0 10px;
+}
+.fill-input {
+  display: inline-block; vertical-align: middle;
+  min-width: 70px; max-width: 220px; height: 42px;
+  border: none; border-bottom: 2px solid var(--input-border);
+  background: var(--input-bg); font-size: 0.92em;
+  padding: 4px 8px; margin: 0 2px; text-align: center;
+  font-family: inherit; outline: none; border-radius: 0;
+  transition: border-color 0.2s, background 0.2s;
+  -webkit-appearance: none;
+}
+.fill-input:focus {
+  border-bottom-color: var(--accent); background: #fffef0;
+  box-shadow: 0 1px 0 var(--accent);
+}
+.fill-input.correct {
+  border-bottom-color: var(--correct); background: var(--correct-bg); font-weight: 700;
+}
+.fill-input.wrong {
+  border-bottom-color: var(--miss); background: var(--miss-bg);
+}
+
+.textarea-wrap { margin: 10px 0; }
+.textarea-wrap textarea {
+  width: 100%; min-height: 120px; padding: 14px; font-size: 0.95em;
+  font-family: inherit; line-height: 1.8; border: 1px solid var(--border);
+  border-radius: var(--radius); background: var(--input-bg); outline: none;
+  resize: vertical; -webkit-appearance: none;
+}
+.textarea-wrap textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-soft); }
+
+.actions { display: flex; gap: 10px; margin: 12px 0; flex-wrap: wrap; }
+.btn {
+  padding: 14px 24px; border: 1px solid var(--border); border-radius: var(--radius);
+  background: #fff; font-size: 0.95em; cursor: pointer; user-select: none;
+  font-weight: 600; font-family: inherit; min-height: 44px;
+  -webkit-tap-highlight-color: transparent; transition: all 0.15s;
+}
+.btn:active { background: #e8e8e4; }
+.btn.submit { background: #1c1c1c; color: #fff; border-color: #1c1c1c; }
+.btn.submit:active { opacity: 0.8; }
+.btn.next { display: none; background: var(--correct); color: #fff; border-color: var(--correct); }
+
+/* Comparison */
+.comparison { display: none; margin: 14px 0; }
+.comparison.show { display: block; }
+.comp-row {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 8px 0;
+}
+@media (max-width: 600px) { .comp-row { grid-template-columns: 1fr; } }
+.comp-box {
+  padding: 12px 14px; border-radius: var(--radius); font-size: 0.9em; line-height: 1.7;
+}
+.comp-box.yours { background: #fffbe6; border: 1px solid #e6c940; }
+.comp-box.model { background: var(--correct-bg); border: 1px solid var(--correct); }
+
+.score-hit {
+  background: var(--correct-bg); border-bottom: 2px solid var(--correct);
+  padding: 1px 3px; border-radius: 2px; cursor: pointer; font-weight: 600;
+  display: inline-block; user-select: none; position: relative;
+  -webkit-tap-highlight-color: transparent;
+}
+.score-hit .tip-bubble {
+  display: none; position: absolute; bottom: calc(100% + 8px); left: 50%;
+  transform: translateX(-50%); z-index: 100;
+  background: #1c1c1c; color: #fff; font-size: 0.8em; font-weight: 400;
+  padding: 6px 14px; border-radius: 6px; white-space: nowrap; pointer-events: none;
+}
+.score-hit .tip-bubble::after {
+  content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+  border: 6px solid transparent; border-top-color: #1c1c1c;
+}
+.score-hit.show-tip .tip-bubble { display: block; }
+@media (hover: hover) {
+  .score-hit:hover .tip-bubble { display: block; }
+}
+.score-miss {
+  background: var(--miss-bg); border-bottom: 2px dashed var(--miss);
+  padding: 1px 3px; border-radius: 2px; display: inline-block; font-weight: 600;
+}
+
+.feedback { font-size: 0.92em; padding: 12px; border-radius: var(--radius); margin: 10px 0; display: none; }
+.feedback.show { display: block; }
+.feedback.good { background: var(--correct-bg); color: var(--correct); }
+.feedback.ok { background: #fffbe6; color: #b85c00; }
+
+.footnote {
+  font-size: 0.78em; color: var(--muted); margin: 28px 0 0;
+  padding: 14px; background: #fff; border: 1px solid var(--border); border-radius: var(--radius);
+}
+
+@media print {
+  body { padding: 0; font-size: 11pt; }
+  .type-tabs, .level-bar, .actions, .btn { display: none; }
+  .comparison { display: block !important; }
+  .card { break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+
+<h1>📝 閱讀答題公式填空器</h1>
+<p class="subtitle">L1關鍵詞 → L2句子 → L3自由寫 | 三步學會「把話說到計分點」</p>
+
+<div class="type-tabs" id="typeTabs"></div>
+<div class="level-bar" id="levelBar"></div>
+<div id="questionArea"></div>
+<div class="feedback" id="feedback"></div>
+<div class="comparison" id="comparison"></div>
+<div class="actions">
+  <button class="btn submit" id="submitBtn" onclick="submitAnswer()">✓ 提交答案</button>
+  <button class="btn" id="retryBtn" onclick="retryLevel()" style="display:none;">↺ 重做</button>
+  <button class="btn next" id="nextBtn" onclick="advanceLevel()">→ 下一級別</button>
+</div>
+
+<div class="footnote">
+  <strong>💡 使用方式</strong><br>
+  同一題型做三遍，每遍鷹架遞減、難度遞增。<br>
+  <strong>Lv1</strong>：只填關鍵詞，有提示 → 建立公式意識<br>
+  <strong>Lv2</strong>：填完整短句，提示減少 → 練習完整表達<br>
+  <strong>Lv3</strong>：空白答題框，只有題目 → 模擬真實考試
+</div>
+
+<script>
+// === DATA ===
+const TYPE_DATA = [
+  {
+    id: 'struct',
+    title: '結構作用',
+    desc: '「承上啟下」只寫四字＝0分，要寫出三個層次',
+    levels: [
+      {
+        label: 'Lv1 關鍵詞填空',
+        hint: '填結構術語 → 具體內容 → 作用效果',
+        question: '某段在文章結構上的作用是什麼？試完成以下答題公式：',
+        type: 'fill',
+        template: '本段在結構上起<span style="font-weight:700;color:#1c1c1c;">承上啟下</span>的過渡作用：「承上」&lb;總結&rb;了上文&lb;______&rb;的內容；「啟下」&lb;引出&rb;下文&lb;______&rb;的論述，使文章&lb;結構嚴密，層次分明&rb;。',
+        blanks: [
+          {id:0, ans:'總結', hint:'承上的動詞', score:1},
+          {id:1, ans:'論證未盡責任是苦', hint:'上文的具體內容', score:1},
+          {id:2, ans:'引出', hint:'啟下的動詞', score:1},
+          {id:3, ans:'責任完成即快樂', hint:'下文的具體內容', score:1},
+          {id:4, ans:'結構嚴密，層次分明', hint:'效果（四字+四字）', score:1}
+        ],
+        modelPieces: [
+          {t:'承上啟下', tip:'說出結構作用名稱'},
+          {t:'總結', tip:'承上的動詞（總結/歸納皆可）'},
+          {t:'論證未盡責任是苦', tip:'填上文的具體內容'},
+          {t:'引出', tip:'啟下的動詞'},
+          {t:'責任完成即快樂', tip:'填下文的具體內容'},
+          {t:'結構嚴密，層次分明', tip:'必須評價效果'}
+        ]
+      },
+      {
+        label: 'Lv2 句子填空',
+        hint: '鷹架減少：最關鍵的詞留空，其餘自己串',
+        question: '《以畫為喻》中，作者如何使讀者不會誤把主題視作談繪畫？（4分）',
+        type: 'fill',
+        template: '文章&lb;開首即點明「以畫為喻」&rb;，提醒讀者文章是&lb;借繪畫說明寫作道理&rb;；&lb;文末重申主題&rb;，&lb;前後呼應&rb;，使讀者清楚全文用意。',
+        blanks: [
+          {id:0, ans:'開首即點明「以畫為喻」', hint:'開頭做了什麼', score:1},
+          {id:1, ans:'借繪畫說明寫作道理', hint:'文章的真正主題', score:1},
+          {id:2, ans:'文末重申主題', hint:'結尾做了什麼', score:1},
+          {id:3, ans:'前後呼應', hint:'這種結構叫什麼', score:1}
+        ],
+        modelPieces: [
+          {t:'開首即點明「以畫為喻」', tip:'1分：點出開頭手法'},
+          {t:'借繪畫說明寫作道理', tip:'1分：說出具體主題'},
+          {t:'文末重申主題', tip:'1分：點出結尾手法'},
+          {t:'前後呼應', tip:'1分：說出結構效果'}
+        ]
+      },
+      {
+        label: 'Lv3 自由寫作',
+        hint: '鷹架全部撤除 — 只給題目，自己組織答案',
+        question: '某段落位於文章中間，上文討論「學習的困難」，下文討論「克服困難的方法」。請說明該段在結構上的作用。（4分）',
+        type: 'free',
+        modelPieces: [
+          {t:'起承上啟下的過渡作用', tip:'1分：先說出結構作用名稱'},
+          {t:'總結上文關於「學習困難」的論述', tip:'1分：承上的具體內容'},
+          {t:'引出下文「克服困難方法」的說明', tip:'1分：啟下的具體內容'},
+          {t:'使文章結構嚴密，過渡自然', tip:'1分：評價效果'}
+        ]
+      }
+    ]
+  },
+  {
+    id: 'argue',
+    title: '論證方法',
+    desc: '只寫名稱不寫作用＝扣一半',
+    levels: [
+      {
+        label: 'Lv1 關鍵詞填空',
+        hint: '先填方法→再填內容→最後填效果',
+        question: '《最苦與最樂》：文中如何論證「未盡責任是最大苦事」？完成以下公式：',
+        type: 'fill',
+        template: '作者&lb;運用&rb;&lb;比喻論證&rb;，以&lb;「千斤重擔壓在肩頭」&rb;比喻&lb;未盡責任帶來的心理壓力&rb;，&lb;生動形象地說明了&rb;責任之重，使讀者易於體會。',
+        blanks: [
+          {id:0, ans:'運用', hint:'動詞', score:0.5},
+          {id:1, ans:'比喻論證', hint:'論證方法名稱', score:0.5},
+          {id:2, ans:'「千斤重擔壓在肩頭」', hint:'原文的比喻句', score:0.5},
+          {id:3, ans:'未盡責任帶來的心理壓力', hint:'比喻說明了什麼', score:0.5},
+          {id:4, ans:'生動形象地說明了', hint:'效果詞（形容詞+說明了）', score:1}
+        ],
+        modelPieces: [
+          {t:'運用比喻論證', tip:'說出方法（名稱+論證兩字）'},
+          {t:'以「千斤重擔壓在肩頭」比喻', tip:'說出具體比喻（什麼比什麼）'},
+          {t:'未盡責任帶來的心理壓力', tip:'說明比喻的含義'},
+          {t:'生動形象地說明了責任之重', tip:'說出效果'}
+        ]
+      },
+      {
+        label: 'Lv2 句子填空',
+        hint: '填出論證方法的核心句子',
+        question: '《最苦與最樂》中，作者還用了對比論證。試完成分析：（3分）',
+        type: 'fill',
+        template: '作者採用&lb;對比論證&rb;，將&lb;未盡責任之苦&rb;與&lb;完成責任之樂&rb;進行對比，&lb;突出&rb;了責任未盡的痛苦，&lb;使論點更加鮮明&rb;。',
+        blanks: [
+          {id:0, ans:'對比論證', hint:'方法名稱', score:1},
+          {id:1, ans:'未盡責任之苦', hint:'對比的A面', score:0.5},
+          {id:2, ans:'完成責任之樂', hint:'對比的B面', score:0.5},
+          {id:3, ans:'突出', hint:'對比的動詞效果', score:0.5},
+          {id:4, ans:'使論點更加鮮明', hint:'對比的效果', score:0.5}
+        ],
+        modelPieces: [
+          {t:'對比論證', tip:'1分：說出方法名稱'},
+          {t:'未盡責任之苦 vs 完成責任之樂', tip:'1分：說出對比雙方的具體內容'},
+          {t:'使論點更加鮮明', tip:'1分：說出效果'}
+        ]
+      },
+      {
+        label: 'Lv3 自由寫作',
+        hint: '只給題目 — 自己寫完整的論證方法分析',
+        question: '《賣柑者言》中，作者如何以柑比喻官員？運用了什麼手法？試分析。（3分）',
+        type: 'free',
+        modelPieces: [
+          {t:'借物喻理（或比喻論證）', tip:'1分：說出方法名稱'},
+          {t:'以金玉其外敗絮其中的柑比喻徒有外表的官員', tip:'1分：說出具體比喻'},
+          {t:'生動形象地揭露了官場表裡不一的現實', tip:'1分：說出效果和目的'}
+        ]
+      }
+    ]
+  },
+  {
+    id: 'theme',
+    title: '主旨歸納',
+    desc: '只寫關鍵詞＝漏邏輯鏈，要寫出完整的因果',
+    levels: [
+      {
+        label: 'Lv1 關鍵詞填空',
+        hint: '主旨的邏輯鏈：苦是什麼→樂是什麼→轉化關鍵→結論',
+        question: '《最苦與最樂》的全文主旨是什麼？完成以下完整陳述：',
+        type: 'fill',
+        template: '本文論證了&lb;未盡責任&rb;是人生最大的&lb;痛苦&rb;，&lb;完成責任&rb;是人生最大的&lb;快樂&rb;，&lb;從苦到樂的關鍵在於「盡」&rb;，最後&lb;勸勉讀者勇於承擔責任&rb;。',
+        blanks: [
+          {id:0, ans:'未盡責任', hint:'苦的原因', score:1},
+          {id:1, ans:'痛苦', hint:'苦是___（單字）', score:0.5},
+          {id:2, ans:'完成責任', hint:'樂的原因', score:1},
+          {id:3, ans:'快樂', hint:'樂是___（單字）', score:0.5},
+          {id:4, ans:'從苦到樂的關鍵在於「盡」', hint:'苦→樂的轉化', score:1},
+          {id:5, ans:'勸勉讀者勇於承擔責任', hint:'結論/呼籲', score:1}
+        ],
+        modelPieces: [
+          {t:'未盡責任是最大痛苦', tip:'先定義苦'},
+          {t:'完成責任是最大快樂', tip:'再定義樂'},
+          {t:'從苦到樂關鍵在於「盡」', tip:'苦→樂轉化機制'},
+          {t:'勸勉讀者勇於承擔責任', tip:'結論'}
+        ]
+      },
+      {
+        label: 'Lv2 句子填空',
+        hint: '用自己的話組織主旨，填出核心句',
+        question: '《賣柑者言》的主旨是什麼？試用自己的話歸納：（4分）',
+        type: 'fill',
+        template: '本文&lb;借賣柑者之口&rb;，以&lb;「金玉其外，敗絮其中」的柑&rb;比喻&lb;徒有威儀、尸位素餐的朝廷官員&rb;，&lb;揭露了元末官場表裡不一的腐敗現實&rb;，&lb;諷刺手法辛辣&rb;。',
+        blanks: [
+          {id:0, ans:'借賣柑者之口', hint:'敘事角度（誰在說）', score:1},
+          {id:1, ans:'金玉其外，敗絮其中的柑', hint:'用什麼比喻', score:1},
+          {id:2, ans:'徒有威儀、尸位素餐的朝廷官員', hint:'比喻的對象', score:1},
+          {id:3, ans:'揭露了元末官場表裡不一的腐敗現實', hint:'諷刺目的/社會意義', score:0.5},
+          {id:4, ans:'諷刺手法辛辣', hint:'評價手法', score:0.5}
+        ],
+        modelPieces: [
+          {t:'借賣柑者之口', tip:'1分：敘事角度'},
+          {t:'以柑比喻官員', tip:'1分：具體比喻'},
+          {t:'揭露官場表裡不一', tip:'1分：諷刺目的'},
+          {t:'諷刺手法辛辣', tip:'1分：評價手法'}
+        ]
+      },
+      {
+        label: 'Lv3 自由寫作',
+        hint: '只給題目 — 自己歸納主旨',
+        question: '《鄒忌諷齊王納諫》的主旨是什麼？請用自己的話完整歸納。（5分）',
+        type: 'free',
+        modelPieces: [
+          {t:'鄒忌以自己被妻妾客蒙蔽的親身經歷為喻', tip:'1分：敘事角度'},
+          {t:'勸諫齊威王廣開言路、採納諫言', tip:'1分：進諫目的'},
+          {t:'說明君主容易因私、畏、有求而被蒙蔽', tip:'1分：核心道理'},
+          {t:'最終實現「戰勝於朝廷」的政治效果', tip:'1分：結果'},
+          {t:'以家事喻國事，類比說理巧妙', tip:'1分：評價手法'}
+        ]
+      }
+    ]
+  }
+];
+
+// === STATE ===
+let typeIdx = 0;
+let levelIdx = 0;
+let levelDone = [];
+let submitted = false;
+let scoreHistory = {};
+
+function init() {
+  levelDone = TYPE_DATA.map(() => [false, false, false]);
+  scoreHistory = {};
+  renderTypeTabs();
+  selectType(0);
+}
+
+function renderTypeTabs() {
+  document.getElementById('typeTabs').innerHTML = TYPE_DATA.map((t, i) => {
+    let cls = 'type-tab';
+    if (i === typeIdx) cls += ' active';
+    if (levelDone[i] && levelDone[i].every(d => d)) cls += ' done';
+    return `<span class="${cls}" onclick="selectType(${i})" role="button">${t.title}</span>`;
+  }).join('');
+}
+
+function renderLevelBar() {
+  const t = TYPE_DATA[typeIdx];
+  let html = '<div class="level-dots">';
+  for (let i = 0; i < 3; i++) {
+    let cls = 'level-dot';
+    if (levelDone[typeIdx][i]) cls += ' past';
+    else if (i === levelIdx) cls += ' current';
+    else cls += ' future';
+    html += `<span class="${cls}">${i+1}</span>`;
+  }
+  html += `</div><span class="level-label">${t.levels[levelIdx].label}</span>`;
+  document.getElementById('levelBar').innerHTML = html;
+}
+
+function renderQuestion() {
+  submitted = false;
+  const t = TYPE_DATA[typeIdx];
+  const lv = t.levels[levelIdx];
+  let html = `<div class="card">
+    <h3>${t.title} — ${lv.label}</h3>
+    <div class="hint-box">💬 <strong>提示：</strong>${lv.hint}</div>
+    <p style="margin:0 0 10px;"><strong>📝 ${lv.question}</strong></p>`;
+
+  if (lv.type === 'fill') {
+    html += `<div class="fill-line" id="fillLine">`;
+    let parts = lv.template.split('&lb;');
+    html += parts[0];
+    for (let i = 1; i < parts.length; i++) {
+      const endIdx = parts[i].indexOf('&rb;');
+      const after = parts[i].substring(endIdx + 4);
+      html += `<input type="text" class="fill-input" id="f${i-1}"
+        placeholder="⋯"
+        aria-label="填空 ${i}"
+        autocorrect="off" autocapitalize="off" spellcheck="false"
+        autocomplete="off" inputmode="text">${after}`;
+    }
+    html += `</div>`;
+  } else {
+    html += `<div class="textarea-wrap">
+      <textarea id="freeText" placeholder="在這裡寫下你的答案⋯" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+    </div>`;
+  }
+
+  html += `</div>`;
+  document.getElementById('questionArea').innerHTML = html;
+  document.getElementById('comparison').className = 'comparison';
+  document.getElementById('comparison').innerHTML = '';
+  document.getElementById('feedback').className = 'feedback';
+  document.getElementById('feedback').innerHTML = '';
+  document.getElementById('submitBtn').style.display = 'inline-block';
+  document.getElementById('retryBtn').style.display = 'inline-block';
+  document.getElementById('nextBtn').style.display = 'none';
+
+  renderLevelBar();
+  renderTypeTabs();
+
+  // Auto-focus
+  setTimeout(() => {
+    if (lv.type === 'fill') {
+      const el = document.getElementById('f0');
+      if (el) el.focus();
+    } else {
+      const el = document.getElementById('freeText');
+      if (el) el.focus();
+    }
+  }, 150);
+}
+
+function submitAnswer() {
+  if (submitted) return;
+  submitted = true;
+  const t = TYPE_DATA[typeIdx];
+  const lv = t.levels[levelIdx];
+  let correctCount = 0;
+  let totalScore = 0;
+  let userAnswerText = '';
+
+  if (lv.type === 'fill') {
+    lv.blanks.forEach(b => {
+      const el = document.getElementById('f'+b.id);
+      if (!el) return;
+      const ua = el.value.trim().replace(/\s+/g, '');
+      const match = ua === b.ans || (b.score >= 1 && ua.length >= b.ans.length - 1 && b.ans.includes(ua));
+      el.disabled = true;
+      if (match) {
+        el.classList.add('correct');
+        correctCount++;
+        totalScore += b.score;
+      } else {
+        el.classList.add('wrong');
+        if (!ua) el.value = '（漏填）';
+        setTimeout(() => { el.value = el.classList.contains('wrong') ? b.ans : el.value; }, 800);
+      }
+    });
+    // Build user answer from inputs
+    let uText = lv.template;
+    lv.blanks.forEach(b => {
+      const el = document.getElementById('f'+b.id);
+      uText = uText.replace('&lb;'+lv.blanks.find(x=>x.id===b.id).ans+'&rb;', el ? (el.classList.contains('correct') ? `<span class="score-hit">${el.value}</span>` : `<span class="score-miss">${el.value||'（漏填）'}</span>`) : '___');
+    });
+    userAnswerText = uText;
+  } else {
+    const el = document.getElementById('freeText');
+    userAnswerText = el ? el.value : '';
+    if (el) el.disabled = true;
+    // Lv3: no auto-scoring. Learning happens in comparison view.
+    correctCount = 0; totalScore = 0;
+  }
+
+  // Build model answer
+  let modelHtml = lv.modelPieces.map((m, i) => {
+    return `<span class="score-hit" onclick="toggleScoreTip(event)" role="button">${m.t}<span class="tip-bubble">${m.tip}</span></span>`;
+  }).join(' → ');
+
+  // Show comparison
+  document.getElementById('comparison').className = 'comparison show';
+  document.getElementById('comparison').innerHTML = `
+    <div class="comp-row">
+      <div>
+        <div style="font-size:0.8em;font-weight:700;color:var(--muted);margin:0 0 4px;">✏️ 你的答案</div>
+        <div class="comp-box yours">${lv.type==='fill' ? userAnswerText : (userAnswerText || '<em style="color:#999;">（未作答）</em>')}</div>
+      </div>
+      <div>
+        <div style="font-size:0.8em;font-weight:700;color:var(--correct);margin:0 0 4px;">✅ 滿分答案（點擊底線看計分點）</div>
+        <div class="comp-box model">${modelHtml}</div>
+      </div>
+    </div>`;
+
+  const maxScore = lv.type === 'fill' ? lv.blanks.reduce((s,b)=>s+b.score, 0) : 0;
+  const fb = document.getElementById('feedback');
+  fb.className = 'feedback show';
+  if (lv.type === 'free') {
+    fb.classList.add('ok');
+    fb.innerHTML = `📝 Lv3 是自由寫作，沒有自動計分。<br><small>請仔細對比右邊的滿分答案，檢查自己漏了哪些計分點，然後點「重做」再試一次。</small>`;
+  } else if (totalScore / maxScore >= 0.7) {
+    fb.classList.add('good');
+    fb.innerHTML = `✅ 得分：${totalScore.toFixed(1)}/${maxScore} — 很好！你的答案踩到了大部分計分點。`;
+  } else {
+    fb.classList.add('ok');
+    fb.innerHTML = `⚠️ 得分：${totalScore.toFixed(1)}/${maxScore} — 注意對比滿分答案，看看漏了哪些計分點。`;
+  }
+
+  document.getElementById('submitBtn').style.display = 'none';
+  document.getElementById('nextBtn').style.display = 'inline-block';
+
+  // Mark level done
+  levelDone[typeIdx][levelIdx] = true;
+  renderTypeTabs();
+}
+
+function advanceLevel() {
+  if (levelIdx < 2) {
+    levelIdx++;
+  } else {
+    // Done with this type, move to next type
+    levelIdx = 0;
+    typeIdx = (typeIdx + 1) % TYPE_DATA.length;
+  }
+  renderQuestion();
+}
+
+function retryLevel() {
+  levelDone[typeIdx][levelIdx] = false;
+  renderQuestion();
+  renderTypeTabs();
+}
+
+function selectType(i) {
+  typeIdx = i;
+  levelIdx = 0;
+  renderQuestion();
+}
+
+function toggleScoreTip(e) {
+  e.stopPropagation();
+  e.preventDefault();
+  const el = e.currentTarget;
+  el.classList.toggle('show-tip');
+  if (el.classList.contains('show-tip') && 'ontouchstart' in window) {
+    setTimeout(() => el.classList.remove('show-tip'), 3000);
+  }
+}
+document.addEventListener('click', function(e) {
+  if (!e.target.classList.contains('score-hit')) {
+    document.querySelectorAll('.show-tip').forEach(el => el.classList.remove('show-tip'));
+  }
+});
+
+init();
+</script>
+</body>
+</html>

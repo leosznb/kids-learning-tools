@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S3 History — MC Trainer</title>
+<style>
+  :root {
+    --bg: #fafafa; --card: #fff; --border: #e5e5e5; --text: #1a1a1a;
+    --text-dim: #666; --accent: #7c3aed; --accent-light: #f5f3ff;
+    --warn: #d97706; --danger: #dc2626; --success: #059669;
+    --radius: 8px; --gap: 16px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: -apple-system, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif;
+    line-height: 1.7; padding: 20px 16px 48px;
+  }
+  .container { max-width: 750px; margin: 0 auto; }
+
+  .header {
+    text-align: center; padding: 28px 16px 20px;
+    border-bottom: 2px solid var(--accent); margin-bottom: 24px;
+  }
+  .header h1 { font-size: 1.45rem; font-weight: 700; color: var(--accent); }
+  .header .sub { color: var(--text-dim); font-size: 0.85rem; margin-top: 4px; }
+
+  /* Scoreboard */
+  .scoreboard {
+    display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px;
+  }
+  .sb {
+    padding: 10px 22px; border-radius: 20px; font-size: 0.84rem; font-weight: 600;
+    background: var(--card); border: 1px solid var(--border);
+    transition: all 0.3s;
+  }
+  .sb .num { font-size: 1.1rem; font-weight: 700; }
+  .sb.correct .num { color: var(--success); }
+  .sb.wrong .num { color: var(--danger); }
+  .sb.remain .num { color: var(--text-dim); }
+
+  /* MC Card */
+  .mc {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 20px 24px; margin-bottom: var(--gap);
+    transition: border-color 0.2s;
+  }
+  .mc.answered-correct { border-color: #bbf7d0; background: #fafdfa; }
+  .mc.answered-wrong { border-color: #fecaca; background: #fefafa; }
+  .mc .q-num {
+    font-size: 0.72rem; font-weight: 700; color: var(--accent);
+    text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px;
+  }
+  .mc .q-text { font-size: 0.9rem; font-weight: 600; margin-bottom: 12px; line-height: 1.55; }
+
+  /* Options */
+  .options { display: flex; flex-direction: column; gap: 6px; }
+  .opt {
+    padding: 10px 14px; border: 2px solid var(--border); border-radius: 8px;
+    cursor: pointer; font-size: 0.85rem; line-height: 1.45; transition: all 0.15s;
+    user-select: none; -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    display: flex; gap: 10px; align-items: baseline;
+  }
+  .opt:hover:not(.locked) { border-color: var(--accent); background: var(--accent-light); }
+  .opt .letter { font-weight: 700; color: var(--accent); min-width: 20px; }
+  .opt.correct-choice { border-color: var(--success); background: #f0fdf4; }
+  .opt.correct-choice .letter { color: var(--success); }
+  .opt.wrong-choice { border-color: var(--danger); background: #fef2f2; }
+  .opt.wrong-choice .letter { color: var(--danger); }
+  .opt.locked { pointer-events: none; opacity: 0.7; }
+  .opt.locked.correct-choice { opacity: 1; }
+
+  /* Feedback */
+  .fb {
+    display: none; margin-top: 10px; padding: 10px 14px; border-radius: 6px;
+    font-size: 0.84rem; line-height: 1.55;
+  }
+  .fb.show { display: block; }
+  .fb.correct { background: #f0fdf4; border: 1px solid #bbf7d0; color: #065f46; }
+  .fb.wrong { background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; }
+  .fb .fb-label { font-weight: 700; display: block; margin-bottom: 4px; }
+
+  /* Buttons */
+  .btn-row { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 20px; }
+  .btn {
+    padding: 8px 22px; border: 1px solid var(--accent); border-radius: 6px;
+    font-size: 0.84rem; font-weight: 600; cursor: pointer;
+    background: #fff; color: var(--accent); transition: background 0.15s;
+  }
+  .btn:hover { background: var(--accent-light); }
+  .btn.primary { background: var(--accent); color: #fff; }
+  .btn.primary:hover { background: #6d28d9; }
+
+  /* Summary */
+  .summary {
+    display: none; background: var(--card); border: 2px solid var(--accent);
+    border-radius: var(--radius); padding: 24px; margin-top: 20px; text-align: center;
+  }
+  .summary.show { display: block; }
+  .summary h2 { font-size: 1.15rem; color: var(--accent); margin-bottom: 12px; }
+  .summary .big-num { font-size: 2.5rem; font-weight: 700; color: var(--accent); }
+  .summary .review-list { text-align: left; margin-top: 14px; }
+  .summary .review-list li { padding: 4px 0; font-size: 0.84rem; }
+  .summary .review-list .ri { color: var(--danger); }
+  .summary .review-list .rc { color: var(--success); }
+
+  /* Hints */
+  .global-hint {
+    background: var(--accent-light); border: 1px solid #ddd6fe; border-radius: 6px;
+    padding: 10px 14px; font-size: 0.82rem; color: #6d28d9; margin-bottom: 18px; text-align: center;
+  }
+
+  @media (max-width: 600px) {
+    .mc { padding: 16px; }
+    .header h1 { font-size: 1.3rem; }
+    .scoreboard { gap: 8px; }
+    .sb { padding: 8px 16px; font-size: 0.78rem; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <h1>🔘 S3 History · MC Trainer</h1>
+  <div class="sub">Section I — Multiple Choice (6 marks / 12% of exam) · 12 practice questions</div>
+</div>
+
+<div class="scoreboard">
+  <div class="sb correct"><span class="num" id="scoreCorrect">0</span> Correct ✅</div>
+  <div class="sb wrong"><span class="num" id="scoreWrong">0</span> Wrong ❌</div>
+  <div class="sb remain"><span class="num" id="scoreRemain">12</span> Remaining</div>
+</div>
+
+<div class="global-hint">
+  ⚡ Click an answer to see instant feedback. Each question locks after you answer. Complete all 12 to see your summary.
+</div>
+
+<!-- Q1 -->
+<div class="mc" id="q1-card">
+  <div class="q-num">Question 1 · Appeasement / 綏靖政策</div>
+  <div class="q-text">Which event is considered the height of the British and French policy of appeasement towards Nazi Germany?</div>
+  <div class="options" id="q1">
+    <div class="opt" onclick="answer('q1','A',this)"><span class="letter">A</span> The remilitarisation of the Rhineland, 1936</div>
+    <div class="opt" onclick="answer('q1','B',this)"><span class="letter">B</span> The Munich Agreement, 1938</div>
+    <div class="opt" onclick="answer('q1','C',this)"><span class="letter">C</span> The Nazi-Soviet Non-Aggression Pact, 1939</div>
+    <div class="opt" onclick="answer('q1','D',this)"><span class="letter">D</span> The Anschluss with Austria, 1938</div>
+  </div>
+  <div class="fb" id="q1-fb"></div>
+</div>
+
+<!-- Q2 -->
+<div class="mc" id="q2-card">
+  <div class="q-num">Question 2 · Outbreak of WWII / 二戰爆發</div>
+  <div class="q-text">What was the immediate consequence of the Nazi-Soviet Non-Aggression Pact (August 1939)?</div>
+  <div class="options" id="q2">
+    <div class="opt" onclick="answer('q2','A',this)"><span class="letter">A</span> Germany invaded France</div>
+    <div class="opt" onclick="answer('q2','B',this)"><span class="letter">B</span> The League of Nations was disbanded</div>
+    <div class="opt" onclick="answer('q2','C',this)"><span class="letter">C</span> Germany invaded Poland, triggering WWII</div>
+    <div class="opt" onclick="answer('q2','D',this)"><span class="letter">D</span> Italy joined the Axis powers</div>
+  </div>
+  <div class="fb" id="q2-fb"></div>
+</div>
+
+<!-- Q3 -->
+<div class="mc" id="q3-card">
+  <div class="q-num">Question 3 · US Entry into WWII / 美國參戰</div>
+  <div class="q-text">Which event directly led to the United States entering the Second World War?</div>
+  <div class="options" id="q3">
+    <div class="opt" onclick="answer('q3','A',this)"><span class="letter">A</span> The Battle of Britain, 1940</div>
+    <div class="opt" onclick="answer('q3','B',this)"><span class="letter">B</span> The Japanese attack on Pearl Harbor, December 1941</div>
+    <div class="opt" onclick="answer('q3','C',this)"><span class="letter">C</span> The German invasion of the Soviet Union, June 1941</div>
+    <div class="opt" onclick="answer('q3','D',this)"><span class="letter">D</span> The fall of Singapore, February 1942</div>
+  </div>
+  <div class="fb" id="q3-fb"></div>
+</div>
+
+<!-- Q4 -->
+<div class="mc" id="q4-card">
+  <div class="q-num">Question 4 · Turning Point in Europe / 歐洲戰場轉折點</div>
+  <div class="q-text">Which battle is widely considered the turning point of the Second World War in Europe?</div>
+  <div class="options" id="q4">
+    <div class="opt" onclick="answer('q4','A',this)"><span class="letter">A</span> The Battle of Britain, 1940</div>
+    <div class="opt" onclick="answer('q4','B',this)"><span class="letter">B</span> The Battle of Stalingrad, 1942–1943</div>
+    <div class="opt" onclick="answer('q4','C',this)"><span class="letter">C</span> The Battle of Midway, 1942</div>
+    <div class="opt" onclick="answer('q4','D',this)"><span class="letter">D</span> D-Day (Normandy Landings), June 1944</div>
+  </div>
+  <div class="fb" id="q4-fb"></div>
+</div>
+
+<!-- Q5 -->
+<div class="mc" id="q5-card">
+  <div class="q-num">Question 5 · Truman Doctrine / 杜魯門主義</div>
+  <div class="q-text">The Truman Doctrine (1947) stated that the United States would:</div>
+  <div class="options" id="q5">
+    <div class="opt" onclick="answer('q5','A',this)"><span class="letter">A</span> Provide economic aid to rebuild Western Europe</div>
+    <div class="opt" onclick="answer('q5','B',this)"><span class="letter">B</span> Support any country resisting communist takeover</div>
+    <div class="opt" onclick="answer('q5','C',this)"><span class="letter">C</span> Form a military alliance with Western European countries</div>
+    <div class="opt" onclick="answer('q5','D',this)"><span class="letter">D</span> Negotiate directly with Stalin to reduce Cold War tensions</div>
+  </div>
+  <div class="fb" id="q5-fb"></div>
+</div>
+
+<!-- Q6 -->
+<div class="mc" id="q6-card">
+  <div class="q-num">Question 6 · Berlin Crisis / 柏林危機</div>
+  <div class="q-text">What was the Western response to the Soviet blockade of West Berlin in 1948–1949?</div>
+  <div class="options" id="q6">
+    <div class="opt" onclick="answer('q6','A',this)"><span class="letter">A</span> Military invasion of East Germany</div>
+    <div class="opt" onclick="answer('q6','B',this)"><span class="letter">B</span> Complete withdrawal from Berlin</div>
+    <div class="opt" onclick="answer('q6','C',this)"><span class="letter">C</span> The Berlin Airlift — flying supplies into West Berlin</div>
+    <div class="opt" onclick="answer('q6','D',this)"><span class="letter">D</span> United Nations sanctions against the Soviet Union</div>
+  </div>
+  <div class="fb" id="q6-fb"></div>
+</div>
+
+<!-- Q7 -->
+<div class="mc" id="q7-card">
+  <div class="q-num">Question 7 · NATO / 北約</div>
+  <div class="q-text">In which year was NATO (North Atlantic Treaty Organization) formed?</div>
+  <div class="options" id="q7">
+    <div class="opt" onclick="answer('q7','A',this)"><span class="letter">A</span> 1945</div>
+    <div class="opt" onclick="answer('q7','B',this)"><span class="letter">B</span> 1947</div>
+    <div class="opt" onclick="answer('q7','C',this)"><span class="letter">C</span> 1949</div>
+    <div class="opt" onclick="answer('q7','D',this)"><span class="letter">D</span> 1955</div>
+  </div>
+  <div class="fb" id="q7-fb"></div>
+</div>
+
+<!-- Q8 -->
+<div class="mc" id="q8-card">
+  <div class="q-num">Question 8 · HK Under Japanese Occupation / 香港日佔時期</div>
+  <div class="q-text">Approximately how long did the Japanese occupation of Hong Kong last (December 1941 to August 1945)?</div>
+  <div class="options" id="q8">
+    <div class="opt" onclick="answer('q8','A',this)"><span class="letter">A</span> 1 year and 8 months</div>
+    <div class="opt" onclick="answer('q8','B',this)"><span class="letter">B</span> 2 years and 8 months</div>
+    <div class="opt" onclick="answer('q8','C',this)"><span class="letter">C</span> 3 years and 8 months</div>
+    <div class="opt" onclick="answer('q8','D',this)"><span class="letter">D</span> 5 years and 8 months</div>
+  </div>
+  <div class="fb" id="q8-fb"></div>
+</div>
+
+<!-- Q9 -->
+<div class="mc" id="q9-card">
+  <div class="q-num">Question 9 · HK Housing / 香港房屋</div>
+  <div class="q-text">What event in 1953 forced the Hong Kong colonial government to begin large-scale public housing?</div>
+  <div class="options" id="q9">
+    <div class="opt" onclick="answer('q9','A',this)"><span class="letter">A</span> The Typhoon Wanda disaster of 1962</div>
+    <div class="opt" onclick="answer('q9','B',this)"><span class="letter">B</span> The Shek Kip Mei Fire</div>
+    <div class="opt" onclick="answer('q9','C',this)"><span class="letter">C</span> The 1967 Leftist Riots</div>
+    <div class="opt" onclick="answer('q9','D',this)"><span class="letter">D</span> The arrival of Vietnamese boat people in the 1970s</div>
+  </div>
+  <div class="fb" id="q9-fb"></div>
+</div>
+
+<!-- Q10 -->
+<div class="mc" id="q10-card">
+  <div class="q-num">Question 10 · HK Education / 香港教育</div>
+  <div class="q-text">In which year did Hong Kong introduce nine-year free compulsory education?</div>
+  <div class="options" id="q10">
+    <div class="opt" onclick="answer('q10','A',this)"><span class="letter">A</span> 1965</div>
+    <div class="opt" onclick="answer('q10','B',this)"><span class="letter">B</span> 1971</div>
+    <div class="opt" onclick="answer('q10','C',this)"><span class="letter">C</span> 1978</div>
+    <div class="opt" onclick="answer('q10','D',this)"><span class="letter">D</span> 1984</div>
+  </div>
+  <div class="fb" id="q10-fb"></div>
+</div>
+
+<!-- Q11 -->
+<div class="mc" id="q11-card">
+  <div class="q-num">Question 11 · HK Economic Transformation / 香港經濟轉型</div>
+  <div class="q-text">In the 1950s and 1960s, Hong Kong's economy shifted from:</div>
+  <div class="options" id="q11">
+    <div class="opt" onclick="answer('q11','A',this)"><span class="letter">A</span> Manufacturing to financial services</div>
+    <div class="opt" onclick="answer('q11','B',this)"><span class="letter">B</span> Entrepôt trade to manufacturing</div>
+    <div class="opt" onclick="answer('q11','C',this)"><span class="letter">C</span> Agriculture to entrepôt trade</div>
+    <div class="opt" onclick="answer('q11','D',this)"><span class="letter">D</span> Financial services to tourism</div>
+  </div>
+  <div class="fb" id="q11-fb"></div>
+</div>
+
+<!-- Q12 -->
+<div class="mc" id="q12-card">
+  <div class="q-num">Question 12 · HK Political Development / 香港政治發展</div>
+  <div class="q-text">The Sino-British Joint Declaration, agreeing that Hong Kong would return to Chinese sovereignty, was signed in:</div>
+  <div class="options" id="q12">
+    <div class="opt" onclick="answer('q12','A',this)"><span class="letter">A</span> 1979</div>
+    <div class="opt" onclick="answer('q12','B',this)"><span class="letter">B</span> 1982</div>
+    <div class="opt" onclick="answer('q12','C',this)"><span class="letter">C</span> 1984</div>
+    <div class="opt" onclick="answer('q12','D',this)"><span class="letter">D</span> 1990</div>
+  </div>
+  <div class="fb" id="q12-fb"></div>
+</div>
+
+<div class="btn-row" id="btn-area">
+  <button class="btn" onclick="resetAll()">🔄 Reset All</button>
+  <button class="btn primary" onclick="showSummary()" id="btnSummary">📊 Show Summary</button>
+</div>
+
+<div class="summary" id="summary"></div>
+
+<div style="text-align:center;padding:20px 16px 8px;color:var(--text-dim);font-size:0.78rem;">
+  MC Trainer for <strong>海納 &amp; 有容</strong> · Tsuen Wan Government Secondary School S3 History 2nd Term Exam 2025-2026
+</div>
+
+</div>
+
+<script>
+// Answer key
+var KEY = {
+  q1:'B', q2:'C', q3:'B', q4:'B', q5:'B', q6:'C',
+  q7:'C', q8:'C', q9:'B', q10:'C', q11:'B', q12:'C'
+};
+
+var EXPLANATIONS = {
+  q1: {
+    correct: 'The Munich Agreement (September 1938) was the peak of appeasement — Britain and France allowed Hitler to annex the Sudetenland from Czechoslovakia without Czechoslovakia being present at the negotiations. The Rhineland remilitarisation (1936) and Anschluss (1938) were earlier acts of appeasement, while the Nazi-Soviet Pact (1939) was a strategic move by Hitler, not appeasement by Britain/France.',
+    wrong: {
+      A: 'The Rhineland remilitarisation (1936) was an earlier act of appeasement, not its peak. Britain and France did nothing to stop Hitler from sending troops into the demilitarised Rhineland, but the Munich Agreement (1938) went further — they actively handed over Czechoslovak territory to Germany.',
+      C: 'The Nazi-Soviet Pact (1939) was not an act of appeasement by Britain and France — it was a secret deal between Hitler and Stalin. Appeasement refers specifically to Britain and France giving in to Hitler\'s territorial demands.',
+      D: 'The Anschluss (union of Germany and Austria, March 1938) was another act of appeasement, but not the peak. The Munich Agreement (September 1938), where Britain and France forced Czechoslovakia to surrender the Sudetenland, was the height of appeasement.'
+    }
+  },
+  q2: {
+    correct: 'The Nazi-Soviet Non-Aggression Pact (23 August 1939) secretly divided Poland between Germany and the USSR. With the Soviet Union neutralised, Hitler invaded Poland on 1 September 1939, which triggered Britain and France to declare war — the start of WWII.',
+    wrong: {
+      A: 'Germany invaded France in May 1940, nearly a year after the Nazi-Soviet Pact. The immediate consequence of the August 1939 pact was the invasion of Poland just one week later, on 1 September 1939.',
+      B: 'The League of Nations was formally disbanded after WWII in 1946, not as a consequence of the Nazi-Soviet Pact. The pact\'s immediate effect was to clear the way for Germany to invade Poland.',
+      D: 'Italy formally joined the war in June 1940, not as a result of the Nazi-Soviet Pact. Italy had already signed the Pact of Steel with Germany in May 1939, before the Nazi-Soviet Pact was signed.'
+    }
+  },
+  q3: {
+    correct: 'Japan\'s surprise attack on Pearl Harbor (Hawaii) on 7 December 1941 destroyed much of the US Pacific Fleet. The US declared war on Japan the next day, and Germany then declared war on the US — bringing America fully into WWII.',
+    wrong: {
+      A: 'The Battle of Britain (1940) was fought entirely between Britain and Germany. The United States was still neutral at this point and did not enter the war until after Pearl Harbor in December 1941.',
+      C: 'Operation Barbarossa — the German invasion of the Soviet Union (June 1941) — brought the USSR into the war against Germany, but the United States remained officially neutral until the Japanese attack on Pearl Harbor.',
+      D: 'The fall of Singapore occurred in February 1942 — two months after the US had already entered the war following Pearl Harbor (December 1941). Singapore\'s fall was a consequence of Japan\'s wider offensive, not the trigger for US entry.'
+    }
+  },
+  q4: {
+    correct: 'The Battle of Stalingrad (1942–1943) was the turning point in Europe. The Soviet Red Army surrounded and defeated the German 6th Army — the first major German defeat. After Stalingrad, Germany was in retreat on the Eastern Front. (The Battle of Midway was the Pacific turning point, not European.)',
+    wrong: {
+      A: 'The Battle of Britain (1940) was a defensive victory — it prevented a German invasion of Britain but did not reverse German advances in Europe. The decisive turning point where Germany began losing was the Battle of Stalingrad (1942–1943).',
+      C: 'The Battle of Midway (June 1942) was the turning point in the Pacific War, not in Europe. The European turning point was the Battle of Stalingrad on the Eastern Front.',
+      D: 'D-Day (June 1944) opened the Western Allied front in France, but by then Germany had already been in retreat on the Eastern Front since Stalingrad in early 1943. Stalingrad, not D-Day, is regarded as the decisive European turning point.'
+    }
+  },
+  q5: {
+    correct: 'The Truman Doctrine (1947) pledged US support for any country resisting communist takeover — initially aimed at Greece and Turkey. (The Marshall Plan = economic aid, NATO = military alliance — these are separate policies.)',
+    wrong: {
+      A: 'You described the Marshall Plan (1948), which provided economic aid to rebuild Western Europe. The Truman Doctrine (1947) was different — it was a pledge to support any country resisting communist takeover, initially aimed at Greece and Turkey.',
+      C: 'You described NATO, the military alliance formed in 1949. The Truman Doctrine (1947) was not a military alliance — it was a declaration of political and military support for countries facing communist threats.',
+      D: 'The US did not negotiate directly with Stalin to reduce Cold War tensions during this period. The Truman Doctrine was a hardline policy that committed the US to actively opposing communism around the world.'
+    }
+  },
+  q6: {
+    correct: 'When the USSR blockaded all land routes into West Berlin (June 1948), the Western powers organised the Berlin Airlift — flying food, fuel and supplies into the city for nearly a year. The blockade was lifted in May 1949. This was a major Cold War confrontation but did not escalate into direct military conflict.',
+    wrong: {
+      A: 'The Western powers did not launch a military invasion of East Germany — that would have risked a direct war with the USSR. Instead, they chose the non-military Berlin Airlift to avoid escalating the conflict.',
+      B: 'The Western powers did not withdraw from Berlin. They stood firm and supplied West Berlin by air for 11 months until Stalin lifted the blockade in May 1949.',
+      D: 'The United Nations did not impose sanctions on the USSR over the Berlin blockade. The Western response was direct action by the US and Britain — the Berlin Airlift, which flew over 2 million tons of supplies into the city.'
+    }
+  },
+  q7: {
+    correct: 'NATO was formed in 1949 with 12 founding members, including the US, UK, Canada, and France. The Warsaw Pact was formed in 1955 as the Soviet response.',
+    wrong: {
+      A: '1945 was the year WWII ended. NATO was not formed until 1949, as Cold War tensions between the Western powers and the USSR intensified.',
+      B: '1947 was the year of the Truman Doctrine, not NATO. NATO was formed two years later, in 1949, as a formal military alliance against the Soviet threat.',
+      D: '1955 was the year the Warsaw Pact was formed — the Soviet-led military alliance created in response to NATO\'s formation six years earlier.'
+    }
+  },
+  q8: {
+    correct: 'Hong Kong fell to Japan on 25 December 1941 ("Black Christmas") and remained under Japanese occupation until Japan\'s surrender on 15 August 1945 — approximately 3 years and 8 months.',
+    wrong: {
+      A: '1 year and 8 months is too short. The occupation lasted from late December 1941 to mid-August 1945 — nearly 4 years, specifically about 3 years and 8 months.',
+      B: '2 years and 8 months underestimates the occupation period. From 25 December 1941 to 15 August 1945 is about 3 years and 8 months — a longer and more painful occupation.',
+      D: '5 years and 8 months is too long. Japan surrendered on 15 August 1945, ending the occupation after about 3 years and 8 months.'
+    }
+  },
+  q9: {
+    correct: 'The Shek Kip Mei Fire on 25 December 1953 left approximately 50,000 squatters homeless. This disaster forced the colonial government to begin the public housing programme, starting with resettlement estates at Shek Kip Mei. It was a turning point in Hong Kong\'s social policy.',
+    wrong: {
+      A: 'Typhoon Wanda struck Hong Kong in 1962 — nine years after the key housing trigger event. The disaster that forced the government to begin public housing was the Shek Kip Mei Fire of 1953.',
+      C: 'The 1967 Leftist Riots were about political unrest and labour disputes, not housing. The public housing programme had already started 14 years earlier, following the 1953 Shek Kip Mei Fire.',
+      D: 'Vietnamese boat people began arriving in Hong Kong in the mid-1970s, long after public housing had already been established. The original trigger for public housing was the 1953 Shek Kip Mei Fire.'
+    }
+  },
+  q10: {
+    correct: 'Hong Kong introduced free primary education in 1971 and extended it to nine years of free compulsory education (primary + junior secondary) in 1978.',
+    wrong: {
+      A: '1965 is incorrect — Hong Kong had not yet introduced free education at that time. Free primary education began in 1971, and the nine-year compulsory system followed in 1978.',
+      B: '1971 was the year Hong Kong introduced free primary education only, not the full nine-year compulsory system. The compulsory nine-year programme (primary + junior secondary) was introduced later, in 1978.',
+      D: '1984 was the year the Sino-British Joint Declaration was signed, not an education reform. Nine-year compulsory education had already been in place for six years by then (since 1978).'
+    }
+  },
+  q11: {
+    correct: 'After WWII, Hong Kong\'s economy shifted from entrepôt trade (acting as a middleman port between China and the world) to labour-intensive manufacturing (textiles, plastics, electronics) in the 1950s-60s. Later, in the 1970s-80s, it shifted again to financial services.',
+    wrong: {
+      A: 'The shift from manufacturing to financial services happened later, in the 1970s-80s. In the 1950s-60s, Hong Kong\'s first major post-war shift was from entrepôt trade to manufacturing.',
+      C: 'Hong Kong was already an entrepôt trading port long before the 1950s. Its key post-WWII economic shift was from entrepôt trade to manufacturing, not from agriculture.',
+      D: 'Hong Kong did not shift from financial services to tourism. The economy evolved from entrepôt trade → manufacturing (1950s-60s) → financial services (1970s onward). Tourism grew alongside these sectors, not as a replacement.'
+    }
+  },
+  q12: {
+    correct: 'The Sino-British Joint Declaration was signed on 19 December 1984 by Chinese Premier Zhao Ziyang and British Prime Minister Margaret Thatcher. It agreed that Hong Kong would return to Chinese sovereignty on 1 July 1997 under the "one country, two systems" principle.',
+    wrong: {
+      A: '1979 was the year Deng Xiaoping first raised the issue of Hong Kong\'s return during a meeting with Governor MacLehose. The actual signing of the Joint Declaration came five years later, in 1984.',
+      B: '1982 was the year formal negotiations between China and Britain began, following Prime Minister Thatcher\'s visit to Beijing. The agreement was signed two years later, in 1984.',
+      D: '1990 was the year the Basic Law — Hong Kong\'s mini-constitution — was promulgated, not the year the Sino-British Joint Declaration was signed. The declaration setting out the terms of Hong Kong\'s return was signed in 1984.'
+    }
+  }
+};
+
+var answered = {};
+var correctCount = 0;
+var wrongCount = 0;
+
+function answer(qId, chosen, el) {
+  if (answered[qId]) return; // already answered
+
+  var correct = KEY[qId];
+  var isRight = (chosen === correct);
+  answered[qId] = { chosen: chosen, correct: isRight };
+
+  // Highlight chosen option
+  el.classList.add(isRight ? 'correct-choice' : 'wrong-choice');
+
+  // Highlight correct option if wrong
+  if (!isRight) {
+    var container = document.getElementById(qId);
+    var opts = container.querySelectorAll('.opt');
+    var letters = ['A','B','C','D'];
+    opts[letters.indexOf(correct)].classList.add('correct-choice');
+  }
+
+  // Lock all options
+  var container = document.getElementById(qId);
+  var allOpts = container.querySelectorAll('.opt');
+  for (var k = 0; k < allOpts.length; k++) { allOpts[k].classList.add('locked'); }
+
+  // Show feedback
+  var fb = document.getElementById(qId + '-fb');
+  var expl = EXPLANATIONS[qId];
+  fb.innerHTML = (isRight
+    ? '<span class="fb-label">✅ Correct!</span>' + expl.correct
+    : '<span class="fb-label">❌ Incorrect — you chose ' + chosen + '</span>' + expl.wrong[chosen]);
+  fb.className = 'fb show ' + (isRight ? 'correct' : 'wrong');
+
+  // Style card
+  var card = document.getElementById(qId + '-card');
+  card.classList.add(isRight ? 'answered-correct' : 'answered-wrong');
+
+  // Update score
+  if (isRight) correctCount++; else wrongCount++;
+  updateScoreboard();
+
+  // Check if all answered
+  if (Object.keys(answered).length === 12) {
+    showSummary();
+  }
+}
+
+function updateScoreboard() {
+  document.getElementById('scoreCorrect').textContent = correctCount;
+  document.getElementById('scoreWrong').textContent = wrongCount;
+  document.getElementById('scoreRemain').textContent = 12 - (correctCount + wrongCount);
+}
+
+function showSummary() {
+  var total = Object.keys(answered).length;
+  if (total === 0) return;
+
+  var pct = Math.round(correctCount / total * 100);
+  var msg = '';
+  if (pct >= 90) msg = '🌟 Excellent! You are well-prepared for the MC section.';
+  else if (pct >= 70) msg = '👍 Good work! Review the ones you got wrong.';
+  else if (pct >= 50) msg = '📚 Keep studying. Focus on the questions you missed.';
+  else msg = '💪 You need more practice. Go through each topic again with the knowledge banks.';
+
+  var reviewItems = '';
+  for (var i = 1; i <= 12; i++) {
+    var qId = 'q' + i;
+    if (answered[qId]) {
+      var a = answered[qId];
+      var cls = a.correct ? 'rc' : 'ri';
+      reviewItems += '<li class="' + cls + '">Q' + i + ': ' + (a.correct ? '✅' : '❌') + '</li>';
+    } else {
+      reviewItems += '<li style="color:#999">Q' + i + ': — (not answered)</li>';
+    }
+  }
+
+  var sum = document.getElementById('summary');
+  sum.innerHTML =
+    '<h2>📊 Your Score</h2>' +
+    '<div class="big-num">' + correctCount + ' / ' + total + '</div>' +
+    '<div style="font-size:1.1rem;color:var(--text-dim);margin-top:4px;">' + pct + '%</div>' +
+    '<div style="margin-top:8px;font-size:0.88rem;">' + msg + '</div>' +
+    '<ul class="review-list">' + reviewItems + '</ul>';
+  sum.classList.add('show');
+
+  // Scored all 12 — auto-show already called, update the button
+  var btnSum = document.getElementById('btnSummary');
+  if (total === 12) {
+    btnSum.textContent = '📊 Summary (auto)';
+  }
+}
+
+function resetAll() {
+  answered = {};
+  correctCount = 0;
+  wrongCount = 0;
+  updateScoreboard();
+
+  for (var i = 1; i <= 12; i++) {
+    var qId = 'q' + i;
+    var container = document.getElementById(qId);
+    var opts = container.querySelectorAll('.opt');
+    for (var j = 0; j < opts.length; j++) {
+      opts[j].classList.remove('correct-choice','wrong-choice','locked');
+    }
+    var fb = document.getElementById(qId + '-fb');
+    fb.className = 'fb';
+    fb.innerHTML = '';
+    var card = document.getElementById(qId + '-card');
+    card.classList.remove('answered-correct','answered-wrong');
+  }
+
+  var sum = document.getElementById('summary');
+  sum.classList.remove('show');
+  sum.innerHTML = '';
+  document.getElementById('btnSummary').textContent = '📊 Show Summary';
+}
+</script>
+
+</body>
+</html>

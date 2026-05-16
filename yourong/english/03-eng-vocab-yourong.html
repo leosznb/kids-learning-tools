@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+<title>Vocab Trainer — 有容</title>
+<style>
+:root {
+  --font: 'Segoe UI',system-ui,-apple-system,sans-serif;
+  --bg:#0f172a; --surface:rgba(30,41,59,0.9); --card:rgba(51,65,85,0.5);
+  --text:#e2e8f0; --muted:#94a3b8; --accent: #4ade80; --accent2: #22c55e; --accent-bg: rgba(74,222,128,0.12);
+  --green:#4ade80; --red:#f87171; --gold:#fbbf24; --radius:14px; --blur:16px;
+}
+* { box-sizing:border-box; margin:0; padding:0; }
+body {
+  font-family:var(--font); background:var(--bg); min-height:100dvh;
+  display:flex; justify-content:center; align-items:flex-start; padding:12px; color:var(--text);
+  background:radial-gradient(ellipse at 20% 20%,#1e293b 0%,#0f172a 70%);
+}
+.container { width:100%; max-width:520px; display:flex; flex-direction:column; gap:10px; padding-top:10px; }
+
+/* Tabs */
+.tabs { display:flex; gap:4px; }
+.tab {
+  flex:1; padding:10px 0; border-radius:12px; text-align:center; font-weight:600;
+  font-size:0.85rem; cursor:pointer; font-family:var(--font); transition:all .2s;
+  background:rgba(255,255,255,0.04); border:1.5px solid rgba(255,255,255,0.06); color:var(--muted);
+  -webkit-tap-highlight-color:transparent;
+}
+.tab.active { background:var(--accent-bg); border-color:var(--accent); color:var(--accent); }
+
+/* Speed */
+.speed-row { display:flex; align-items:center; gap:6px; justify-content:center; }
+.speed-label { font-size:0.73rem; color:var(--muted); }
+.speed-btn {
+  padding:4px 14px; border-radius:16px; border:1.5px solid rgba(255,255,255,0.12);
+  background:transparent; color:var(--muted); font-size:0.76rem; cursor:pointer;
+  font-family:var(--font); -webkit-tap-highlight-color:transparent; transition:all .2s;
+}
+.speed-btn.active { background:var(--gold); color:#0f172a; border-color:var(--gold); }
+
+/* Progress */
+.progress-wrap { display:flex; align-items:center; gap:10px; }
+.progress-bar { flex:1; height:5px; background:rgba(255,255,255,0.06); border-radius:3px; overflow:hidden; }
+.progress-fill { height:100%; background:var(--accent); border-radius:3px; transition:width .4s; }
+.progress-text { font-size:0.76rem; color:var(--muted); white-space:nowrap; }
+
+/* Card */
+.main-card {
+  background:var(--surface); backdrop-filter:blur(var(--blur)); -webkit-backdrop-filter:blur(var(--blur));
+  border:1px solid rgba(255,255,255,0.06); border-radius:var(--radius);
+  padding:24px 20px; text-align:center; min-height:240px;
+  display:flex; flex-direction:column; justify-content:center; align-items:center; gap:12px;
+  transition:all .35s; position:relative;
+}
+.main-card.dict { border-color:rgba(251,191,36,0.25); }
+.main-card.correct { border-color:rgba(74,222,128,0.35); background:rgba(22,101,52,0.1); }
+.main-card.wrong { border-color:rgba(248,113,113,0.35); background:rgba(127,29,29,0.1); }
+
+.phase-badge {
+  position:absolute; top:10px; right:12px; font-size:0.68rem; padding:3px 10px;
+  border-radius:10px; background:rgba(255,255,255,0.05); color:var(--muted);
+}
+
+.word-display { font-size:2.6rem; font-weight:700; letter-spacing:0.02em; color:#fff; transition:opacity .3s; }
+.word-display.hidden { opacity:0.15; filter:blur(8px); }
+.word-meta { font-size:0.8rem; color:var(--muted); }
+.word-chinese { font-size:0.84rem; color:var(--accent); font-weight:500; }
+
+.speaker-row { display:flex; align-items:center; gap:8px; font-size:0.78rem; color:var(--muted); }
+.speaker-dot { width:10px; height:10px; border-radius:50%; background:var(--muted); transition:all .2s; }
+.speaker-dot.playing { background:var(--accent); box-shadow:0 0 14px var(--accent); animation:pulse .6s infinite; }
+@keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.6)} }
+
+/* Dict input */
+.dict-row { display:flex; gap:8px; align-items:center; justify-content:center; flex-wrap:wrap; }
+.dict-input {
+  font-size:1.2rem; padding:10px 16px; border-radius:10px;
+  border:2px solid rgba(255,255,255,0.12); background:rgba(0,0,0,0.2); color:#fff;
+  font-family:var(--font); width:220px; text-align:center; outline:none; transition:border-color .2s;
+}
+.dict-input:focus { border-color:var(--accent); }
+.dict-input.correct-input { border-color:var(--green); background:rgba(74,222,128,0.06); }
+.dict-input.wrong-input { border-color:var(--red); background:rgba(248,113,113,0.06); }
+.fl-hint { font-size:0.78rem; color:var(--muted); }
+
+.btn {
+  padding:9px 18px; border-radius:10px; border:none; font-weight:600; font-size:0.84rem;
+  cursor:pointer; font-family:var(--font); transition:all .2s; -webkit-tap-highlight-color:transparent;
+}
+.btn.primary { background:var(--accent); color:#0f172a; }
+.btn.green { background:var(--green); color:#0f172a; }
+.btn.ghost { background:transparent; border:1.5px solid rgba(255,255,255,0.12); color:var(--text); }
+.btn.small { padding:5px 12px; font-size:0.73rem; border-radius:8px; }
+
+.feedback { font-size:0.88rem; font-weight:600; min-height:22px; }
+.feedback.good { color:var(--green); }
+.feedback.bad { color:var(--red); }
+
+/* Stats */
+.stats { display:flex; gap:8px; flex-wrap:wrap; }
+.stat-card {
+  flex:1; min-width:70px; text-align:center; background:var(--surface);
+  backdrop-filter:blur(var(--blur)); border:1px solid rgba(255,255,255,0.06);
+  border-radius:var(--radius); padding:12px 8px;
+}
+.stat-num { font-size:1.4rem; font-weight:700; }
+.stat-label { font-size:0.7rem; color:var(--muted); margin-top:2px; }
+
+.wrong-btn {
+  width:100%; margin-top:2px; padding:10px; border-radius:var(--radius);
+  background:rgba(248,113,113,0.06); border:1px solid rgba(248,113,113,0.15);
+  color:var(--red); font-size:0.8rem; cursor:pointer; font-family:var(--font);
+  text-align:center; transition:all .2s; -webkit-tap-highlight-color:transparent;
+}
+
+@media (max-width:400px) {
+  .word-display { font-size:1.9rem; }
+  .dict-input { width:170px; font-size:1rem; }
+  .main-card { padding:20px 14px; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <div style="text-align:center;font-size:0.9rem;font-weight:700;color:var(--accent);">有容 · Textbook Order</div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <div class="tab active" id="tabRead" onclick="switchTab('read')">📖 Read-along</div>
+    <div class="tab" id="tabDict" onclick="switchTab('dict')">✏️ Dictation</div>
+  </div>
+
+  <!-- Speed -->
+  <div class="speed-row">
+    <span class="speed-label">Speed</span>
+    <button class="speed-btn" onclick="setSpeed(1.0)" id="btnSp1">1×</button>
+    <button class="speed-btn active" onclick="setSpeed(0.8)" id="btnSp08">0.8×</button>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-wrap">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <div class="progress-text"><strong id="doneCount">0</strong>/<span id="totalCount">55</span> · <span id="posLabel" style="color:var(--accent);">—</span></div>
+  </div>
+
+  <!-- Card -->
+  <div class="main-card" id="mainCard">
+    <div class="phase-badge" id="phaseBadge">📖 Read-along</div>
+    <div class="speaker-row" id="spkRow">
+      <span class="speaker-dot" id="spkDot"></span>
+      <span id="spkLabel">Tap Start</span>
+    </div>
+    <div class="word-display" id="wordDisplay">—</div>
+    <div class="word-meta" id="wordMeta"></div>
+    <div class="word-chinese" id="wordChinese"></div>
+    <div class="dict-row" id="dictRow" style="display:none;">
+      <span class="fl-hint" id="flHint"></span>
+      <input type="text" class="dict-input" id="dictInput" placeholder="Type the word" autocomplete="off" autocapitalize="off" spellcheck="false">
+      <button class="btn green" onclick="checkAnswer()" id="btnCheck">✓</button>
+    </div>
+    <div class="feedback" id="feedback"></div>
+    <button class="btn primary" onclick="startFlow()" id="btnStart" style="margin-top:6px;">▶ Start</button>
+    <button class="btn ghost small" onclick="nextWord()" id="btnNext" style="display:none;margin-top:6px;">Next →</button>
+  </div>
+
+  <!-- Controls -->
+  <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
+    <button class="btn ghost small" onclick="replayWord()" id="btnReplay">🔊 Replay</button>
+    <button class="btn ghost small" onclick="skipWord()">⏭ Skip</button>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats">
+    <div class="stat-card"><div class="stat-num" style="color:var(--green);" id="statOk">0</div><div class="stat-label">OK</div></div>
+    <div class="stat-card"><div class="stat-num" style="color:var(--red);" id="statNg">0</div><div class="stat-label">Wrong</div></div>
+    <div class="stat-card"><div class="stat-num" style="color:var(--gold);" id="statRem">55</div><div class="stat-label">Left</div></div>
+  </div>
+  <div class="wrong-btn" id="wrongBtn" onclick="reDrillWrong()" style="display:none;">🧺 Wrong Pool (<span id="wpCount">0</span>) — Tap to re-drill</div>
+</div>
+
+<script>
+// ═══════════ DATA ═══════════
+const WORDS = [
+  {w:'fascinate',p:'v.',c:'使著迷',fl:'f',key:'fascinate'},
+  {w:'problematic',p:'adj.',c:'有問題的',fl:'p',key:'problematic'},
+  {w:'inaccurate',p:'adj.',c:'不準確的',fl:'i',key:'inaccurate'},
+  {w:'insights',p:'n.',c:'見解、洞察',fl:'i',key:'insights'},
+  {w:'grave',p:'adj.',c:'嚴重的',fl:'g',key:'grave'},
+  {w:'threaten',p:'v.',c:'威脅',fl:'t',key:'threaten'},
+  {w:'severe',p:'adj.',c:'嚴重的',fl:'s',key:'severe'},
+  {w:'inhabitants',p:'n.',c:'居民',fl:'i',key:'inhabitants'},
+  {w:'remedy',p:'n.',c:'補救方法',fl:'r',key:'remedy'},
+  {w:'current',p:'adj.',c:'當前的',fl:'c',key:'current'},
+  {w:'occur',p:'v.',c:'發生',fl:'o',key:'occur'},
+  {w:'surge',p:'v.',c:'激增',fl:'s',key:'surge'},
+  {w:'skyrocketed',p:'v.',c:'飆升',fl:'s',key:'skyrocketed'},
+  {w:'disrupted',p:'v.',c:'擾亂',fl:'d',key:'disrupted'},
+  {w:'adequate',p:'adj.',c:'足夠的',fl:'a',key:'adequate'},
+  {w:'compound',p:'v.',c:'加劇',fl:'c',key:'compound'},
+  {w:'aggravating',p:'v.',c:'加劇、惡化',fl:'a',key:'aggravating'},
+  {w:'dependent',p:'adj.',c:'依賴的',fl:'d',key:'dependent'},
+  {w:'pragmatic',p:'adj.',c:'務實的',fl:'p',key:'pragmatic'},
+  {w:'ethical',p:'adj.',c:'道德的',fl:'e',key:'ethical'},
+  {w:'artificial intelligence',p:'n. ph.',c:'人工智能',fl:'a',key:'artificialintelligence'},
+  {w:'so-called',p:'adj.',c:'所謂的',fl:'s',key:'socalled'},
+  {w:'cognitive',p:'adj.',c:'認知的',fl:'c',key:'cognitive'},
+  {w:'sophisticated',p:'adj.',c:'精密的、複雜的',fl:'s',key:'sophisticated'},
+  {w:'indistinguishable',p:'adj.',c:'難以區分的',fl:'i',key:'indistinguishable'},
+  {w:'concerned',p:'adj.',c:'關注的、擔心的',fl:'c',key:'concerned'},
+  {w:'undoubtedly',p:'adv.',c:'毫無疑問地',fl:'u',key:'undoubtedly'},
+  {w:'astonishing',p:'adj.',c:'令人驚訝的',fl:'a',key:'astonishing'},
+  {w:'manipulate',p:'v.',c:'操控',fl:'m',key:'manipulate'},
+  {w:'immersed',p:'v.',c:'沉浸於',fl:'i',key:'immersed'},
+  {w:'captured',p:'v.',c:'捕獲、捕捉',fl:'c',key:'captured'},
+  {w:'envisions',p:'v.',c:'設想、展望',fl:'e',key:'envisions'},
+  {w:'digital',p:'adj.',c:'數碼的',fl:'d',key:'digital'},
+  {w:'embark on',p:'ph. v.',c:'著手、開始',fl:'e',key:'embarkon'},
+  {w:'deceased',p:'adj.',c:'已故的',fl:'d',key:'deceased'},
+  {w:'fathom',p:'v.',c:'理解、領悟',fl:'f',key:'fathom'},
+  {w:'contemplate',p:'v.',c:'沉思、考慮',fl:'c',key:'contemplate'},
+  {w:'primates',p:'n.',c:'靈長類動物',fl:'p',key:'primates'},
+  {w:'conservation',p:'n.',c:'保育',fl:'c',key:'conservation'},
+  {w:'haven',p:'n.',c:'避難所、安全地',fl:'h',key:'haven'},
+  {w:'deplorable',p:'adj.',c:'可悲的',fl:'d',key:'deplorable'},
+  {w:'trafficking',p:'n.',c:'非法交易',fl:'t',key:'trafficking'},
+  {w:'poaching',p:'n.',c:'偷獵',fl:'p',key:'poaching'},
+  {w:'exploitation',p:'n.',c:'剝削',fl:'e',key:'exploitation'},
+  {w:'industriously',p:'adv.',c:'勤奮地',fl:'i',key:'industriously'},
+  {w:'unarguably',p:'adv.',c:'無可爭辯地',fl:'u',key:'unarguably'},
+  {w:'stimulate',p:'v.',c:'刺激',fl:'s',key:'stimulate'},
+  {w:'trauma',p:'n.',c:'創傷',fl:'t',key:'trauma'},
+  {w:'outraged',p:'adj.',c:'憤怒的',fl:'o',key:'outraged'},
+  {w:'ignorantly',p:'adv.',c:'無知地',fl:'i',key:'ignorantly'},
+  {w:'vulnerable',p:'adj.',c:'脆弱的',fl:'v',key:'vulnerable'},
+  {w:'tolerate',p:'v.',c:'容忍',fl:'t',key:'tolerate'},
+  {w:'solitary',p:'adj.',c:'孤獨的',fl:'s',key:'solitary'},
+  {w:'Yours faithfully',p:'ph.',c:'此致（書信結尾）',fl:'y',key:'yoursfaithfully'},
+  {w:'brink',p:'n.',c:'邊緣',fl:'b',key:'brink'},
+];
+
+// ═══════════ STATE ═══════════
+let S = {
+  tab: 'read', speed: 0.8, idx: 0, wordList: [], flowId: 0, finished: false,
+  readDone: {},    // keys of words that completed read-along
+  dictOk: {},      // keys mastered in dictation
+  dictWrong: {},   // {key:{w,p,c,your}}
+};
+
+const LS = 'eng-vocab-有容';
+
+function load() {
+  try { const r=localStorage.getItem(LS); if(r){ const d=JSON.parse(r);
+    Object.assign(S.readDone, d.readDone||{}); Object.assign(S.dictOk, d.dictOk||{});
+    Object.assign(S.dictWrong, d.dictWrong||{}); if(d.speed) S.speed=d.speed;
+  }} catch(e){}
+}
+function save() {
+  try { localStorage.setItem(LS, JSON.stringify({
+    readDone:S.readDone, dictOk:S.dictOk, dictWrong:S.dictWrong, speed:S.speed
+  })); } catch(e){}
+}
+
+function buildList() {
+  const all = WORDS.map((_,i)=>i);
+  if (S.tab==='read') {
+    const undone = all.filter(i=>!S.readDone[WORDS[i].key]);
+    S.wordList = undone.length>0 ? undone : all;
+  } else {
+    const undone = all.filter(i=>!S.dictOk[WORDS[i].key]);
+    S.wordList = undone.length>0 ? undone : all;
+  }
+  S.idx=0; S.finished=false;
+}
+
+// ═══════════ SPEECH ═══════════
+let speechBusy=false;
+function getVoice() {
+  return new Promise(r=>{
+    const vs=speechSynthesis.getVoices();
+    if(vs.length>0){ r(vs.find(v=>v.lang.startsWith('en-US'))||vs.find(v=>v.lang.startsWith('en'))||vs[0]); }
+    else { speechSynthesis.onvoiceschanged=()=>{ const v2=speechSynthesis.getVoices(); r(v2.find(v=>v.lang.startsWith('en-US'))||v2.find(v=>v.lang.startsWith('en'))||v2[0]); }; }
+  });
+}
+async function speak(w) {
+  return new Promise(r=>{
+    getVoice().then(voice=>{
+      const u=new SpeechSynthesisUtterance(w); u.voice=voice; u.rate=S.speed; u.pitch=1; u.volume=1;
+      u.onend=()=>{ speechBusy=false; r(); };
+      u.onerror=()=>{ speechBusy=false; r(); };
+      speechBusy=true; dot(true); speechSynthesis.speak(u);
+    });
+  });
+}
+function cancel() { speechSynthesis.cancel(); speechBusy=false; dot(false); }
+function dot(on) { 
+  const d=document.getElementById('spkDot'); const l=document.getElementById('spkLabel');
+  if(on){ d.classList.add('playing'); l.textContent='Speaking...'; }
+  else { d.classList.remove('playing'); l.textContent=S.tab==='read'?'Listen & read along':'Listen & write'; }
+}
+
+// ═══════════ FLOW ═══════════
+async function startFlow() {
+  if(!('speechSynthesis' in window)){ alert('Speech not supported.'); return; }
+  cancel(); buildList();
+  if(S.wordList.length===0){ allDone(); return; }
+  document.getElementById('btnStart').style.display='none';
+  document.getElementById('btnNext').style.display=S.tab==='read'?'':'none';
+  document.getElementById('btnCheck').style.display=S.tab==='dict'?'':'none';
+  updateStats(); updateProgress();
+  await doWord();
+}
+
+async function doWord() {
+  if(S.finished) return;
+  if(S.idx>=S.wordList.length){ allDone(); return; }
+  const fid=++S.flowId;
+  const wi=S.wordList[S.idx];
+  const w=WORDS[wi];
+  const card=document.getElementById('mainCard');
+  card.className='main-card';
+  document.getElementById('feedback').textContent=''; document.getElementById('feedback').className='feedback';
+  document.getElementById('phaseBadge').textContent=S.tab==='read'?'📖 Read-along':'✏️ Dictation';
+  document.getElementById('wordMeta').textContent=w.p;
+  document.getElementById('wordChinese').textContent=S.tab==='read'?w.c:'';
+  document.getElementById('btnNext').style.display='none';
+  
+  if(S.tab==='read') {
+    // ── READ-ALONG ──
+    document.getElementById('wordDisplay').textContent=w.w;
+    document.getElementById('wordDisplay').classList.remove('hidden');
+    document.getElementById('dictRow').style.display='none';
+    card.classList.remove('dict','correct','wrong');
+    await speak(w.w); if(fid!==S.flowId) return;
+    await delay(1800); if(fid!==S.flowId) return;
+    await speak(w.w); if(fid!==S.flowId) return;
+    await delay(600);
+    S.readDone[w.key]=true; save(); updateStats(); updateProgress();
+    document.getElementById('btnNext').style.display='';
+    document.getElementById('btnNext').focus();
+    dot(false); document.getElementById('spkLabel').textContent='Read it aloud yourself, then tap Next';
+  } else {
+    // ── DICTATION ──
+    document.getElementById('wordDisplay').textContent=w.w;
+    document.getElementById('wordDisplay').classList.add('hidden');
+    document.getElementById('dictRow').style.display='flex';
+    const inp=document.getElementById('dictInput'); inp.value=''; inp.disabled=true; inp.className='dict-input';
+    document.getElementById('flHint').textContent='First: '+w.fl.toUpperCase();
+    card.classList.add('dict'); card.classList.remove('correct','wrong');
+    await speak(w.w); if(fid!==S.flowId) return;
+    await delay(2200); if(fid!==S.flowId) return;
+    await speak(w.w); if(fid!==S.flowId) return;
+    await delay(400);
+    inp.disabled=false; inp.focus();
+    dot(false); document.getElementById('spkLabel').textContent='Type & press Enter';
+    document.getElementById('btnCheck').style.display='';
+  }
+}
+
+function checkAnswer() {
+  if(S.tab!=='dict'||S.finished) return;
+  const wi=S.wordList[S.idx]; if(wi===undefined) return;
+  const w=WORDS[wi];
+  const inp=document.getElementById('dictInput'); const ans=inp.value.trim();
+  const card=document.getElementById('mainCard'); const fb=document.getElementById('feedback');
+  
+  const accept=[w.w];
+  if(w.w.includes('-')) accept.push(w.w.replace(/-/g,' '));
+  if(w.w.includes(' ')) accept.push(w.w.replace(/ /g,''));
+  
+  const ok=accept.some(a=>ans.toLowerCase().replace(/\s+/g,' ').trim()===a.toLowerCase().replace(/\s+/g,' ').trim());
+  
+  document.getElementById('wordDisplay').classList.remove('hidden');
+  document.getElementById('wordChinese').textContent=w.c;
+  
+  if(ok) {
+    card.className='main-card correct'; fb.textContent='✅ '+w.w; fb.className='feedback good';
+    inp.className='dict-input correct-input';
+    S.dictOk[w.key]=true; delete S.dictWrong[w.key];
+  } else {
+    card.className='main-card wrong'; fb.innerHTML='❌ Correct: <strong>'+w.w+'</strong>'; fb.className='feedback bad';
+    inp.className='dict-input wrong-input';
+    S.dictWrong[w.key]={w:w.w,p:w.p,c:w.c,your:ans}; delete S.dictOk[w.key];
+  }
+  inp.disabled=true; document.getElementById('btnCheck').style.display='none';
+  save(); updateStats(); updateProgress();
+  document.getElementById('btnNext').style.display=''; document.getElementById('btnNext').focus();
+}
+
+function nextWord() {
+  S.idx++;
+  if(S.idx>=S.wordList.length){ allDone(); return; }
+  document.getElementById('btnNext').style.display='none';
+  document.getElementById('btnCheck').style.display=S.tab==='dict'?'':'none';
+  updateStats(); updateProgress();
+  doWord();
+}
+
+function allDone() {
+  S.finished=true; cancel();
+  document.getElementById('phaseBadge').textContent='🏁';
+  document.getElementById('wordDisplay').textContent='All Done! 🎉'; document.getElementById('wordDisplay').classList.remove('hidden');
+  document.getElementById('wordMeta').textContent=''; document.getElementById('wordChinese').textContent='';
+  document.getElementById('dictRow').style.display='none'; document.getElementById('feedback').textContent='';
+  document.getElementById('spkLabel').textContent='Great work!'; dot(false);
+  document.getElementById('btnStart').style.display=''; document.getElementById('btnNext').style.display='none';
+  document.getElementById('btnCheck').style.display='none';
+  updateStats(); updateProgress();
+}
+
+function replayWord() { cancel(); if(!S.finished&&S.wordList[S.idx]!==undefined) speak(WORDS[S.wordList[S.idx]].w); }
+function skipWord() { cancel(); if(!S.finished){ const w=WORDS[S.wordList[S.idx]]; if(S.tab==='dict'){ S.dictWrong[w.key]={w:w.w,p:w.p,c:w.c,your:'(skipped)'}; save(); } nextWord(); } }
+
+// ═══════════ TAB / SPEED ═══════════
+function switchTab(t) {
+  if(S.tab===t) return; cancel(); S.tab=t;
+  document.getElementById('tabRead').classList.toggle('active',t==='read');
+  document.getElementById('tabDict').classList.toggle('active',t==='dict');
+  document.getElementById('phaseBadge').textContent=t==='read'?'📖 Read-along':'✏️ Dictation';
+  buildList();
+  document.getElementById('mainCard').className='main-card';
+  document.getElementById('wordDisplay').textContent='—'; document.getElementById('wordDisplay').classList.remove('hidden');
+  document.getElementById('wordMeta').textContent=''; document.getElementById('wordChinese').textContent='';
+  document.getElementById('dictRow').style.display='none'; document.getElementById('feedback').textContent='';
+  document.getElementById('btnStart').style.display=''; document.getElementById('btnNext').style.display='none';
+  document.getElementById('btnCheck').style.display='none';
+  document.getElementById('spkLabel').textContent='Tap Start'; dot(false);
+  S.idx=0; S.finished=false;
+  updateStats(); updateProgress();
+}
+
+function setSpeed(sp) { S.speed=sp; save(); document.getElementById('btnSp1').classList.toggle('active',sp===1.0); document.getElementById('btnSp08').classList.toggle('active',sp===0.8); }
+
+// ═══════════ STATS ═══════════
+function updateProgress() {
+  const t=WORDS.length; const d=S.tab==='read'?Object.keys(S.readDone).length:Object.keys(S.dictOk).length;
+  document.getElementById('doneCount').textContent=d; document.getElementById('totalCount').textContent=t;
+  document.getElementById('progressFill').style.width=(d/t*100)+'%';
+  const el=document.getElementById('posLabel');
+  if(S.finished) el.textContent='Done!';
+  else if(S.wordList.length>0&&S.idx<S.wordList.length) el.textContent='Word '+(S.idx+1)+'/'+S.wordList.length;
+  else el.textContent='—';
+}
+function updateStats() {
+  document.getElementById('statOk').textContent=S.tab==='read'?Object.keys(S.readDone).length:Object.keys(S.dictOk).length;
+  document.getElementById('statNg').textContent=S.tab==='read'?'—':Object.keys(S.dictWrong).length;
+  document.getElementById('statRem').textContent=Math.max(0,WORDS.length-(S.tab==='read'?Object.keys(S.readDone).length:Object.keys(S.dictOk).length));
+  const wc=Object.keys(S.dictWrong).length;
+  document.getElementById('wpCount').textContent=wc;
+  document.getElementById('wrongBtn').style.display=(S.tab==='dict'&&wc>0)?'':'none';
+}
+
+function reDrillWrong() {
+  if(S.tab!=='dict') return;
+  const keys=Object.keys(S.dictWrong); if(keys.length===0) return;
+  S.wordList=keys.map(k=>WORDS.findIndex(w=>w.key===k)).filter(i=>i>=0);
+  S.idx=0; S.finished=false; cancel();
+  document.getElementById('btnStart').style.display='none'; document.getElementById('btnCheck').style.display='';
+  updateStats(); updateProgress(); doWord();
+}
+
+// ═══════════ INIT ═══════════
+function delay(ms){ return new Promise(r=>setTimeout(r,ms)); }
+speechSynthesis.getVoices(); load(); buildList(); updateStats(); updateProgress();
+document.getElementById('btnSp1').classList.toggle('active',S.speed===1.0);
+document.getElementById('btnSp08').classList.toggle('active',S.speed===0.8);
+document.getElementById('btnNext').style.display='none'; document.getElementById('btnCheck').style.display='none';
+</script>
+</body>
+</html>

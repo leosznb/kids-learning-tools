@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>辨識擂臺 · 概念歸位戰</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#fafaf8;
+  --card:#fff;
+  --text:#1a1a1a;
+  --text2:#555;
+  --text3:#888;
+  --accent:#16a34a;
+  --accent-light:#dcfce7;
+  --accent-border:#bbf7d0;
+  --pill-cell:#16a34a;--pill-cell-bg:#f0fdf4;--pill-cell-b:#bbf7d0;
+  --pill-nut:#d97706;--pill-nut-bg:#fffbeb;--pill-nut-b:#fde68a;
+  --pill-trans:#dc2626;--pill-trans-bg:#fef2f2;--pill-trans-b:#fecaca;
+  --pill-resp:#0891b2;--pill-resp-bg:#ecfeff;--pill-resp-b:#a5f3fc;
+  --pill-eco:#7c3aed;--pill-eco-bg:#f5f3ff;--pill-eco-b:#ddd6fe;
+  --correct:#16a34a;--correct-bg:#f0fdf4;--correct-b:#bbf7d0;
+  --wrong:#dc2626;--wrong-bg:#fef2f2;--wrong-b:#fecaca;
+  --kw:#b85c00;--kw-ul:#e5a850;
+  --shadow:0 1px 4px rgba(0,0,0,0.06),0 1px 2px rgba(0,0,0,0.04);
+  --shadow-lg:0 4px 16px rgba(0,0,0,0.08),0 2px 6px rgba(0,0,0,0.04);
+  --radius:12px;
+}
+html{font-size:18px;-webkit-text-size-adjust:100%}
+body{
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.6;
+  min-height:100vh;-webkit-tap-highlight-color:transparent;
+}
+#app{max-width:960px;margin:0 auto;padding:0 16px 40px}
+
+.app-header{padding:24px 0 12px;text-align:center}
+.app-header h1{font-size:1.6rem;font-weight:800;letter-spacing:-0.02em;color:var(--text)}
+.app-header .subtitle{font-size:1rem;color:var(--text3);font-weight:400;margin-top:2px}
+.progress-wrap{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px}
+.progress-wrap .prog-label{font-size:0.9rem;color:var(--text2);font-weight:500}
+.progress-bar-outer{flex:0 1 240px;height:8px;background:#e5e5e0;border-radius:99px;overflow:hidden}
+.progress-bar-inner{height:100%;background:var(--accent);border-radius:99px;transition:width .4s ease}
+.progress-wrap .prog-num{font-size:0.9rem;color:var(--text2);font-weight:600;min-width:42px;text-align:right}
+
+.topic-nav{
+  position:sticky;top:0;z-index:100;
+  display:flex;gap:8px;overflow-x:auto;padding:10px 0 16px;
+  background:linear-gradient(to bottom,var(--bg) 0%,var(--bg) 80%,transparent 100%);
+  -webkit-overflow-scrolling:touch;
+}
+.topic-pill{
+  flex-shrink:0;padding:8px 16px;border-radius:99px;
+  font-size:0.95rem;font-weight:600;cursor:pointer;border:2px solid transparent;
+  transition:all .2s ease;font-family:inherit;
+  will-change:transform;transform:translateZ(0);
+}
+.topic-pill:active{transform:scale(0.95)}
+.topic-pill.cell{border-color:var(--pill-cell-b);background:var(--pill-cell-bg);color:var(--pill-cell)}
+.topic-pill.cell.active{background:var(--pill-cell);color:#fff;border-color:var(--pill-cell);box-shadow:0 2px 8px rgba(22,163,74,0.25)}
+.topic-pill.nut{border-color:var(--pill-nut-b);background:var(--pill-nut-bg);color:var(--pill-nut)}
+.topic-pill.nut.active{background:var(--pill-nut);color:#fff;border-color:var(--pill-nut);box-shadow:0 2px 8px rgba(217,119,6,0.25)}
+.topic-pill.trans{border-color:var(--pill-trans-b);background:var(--pill-trans-bg);color:var(--pill-trans)}
+.topic-pill.trans.active{background:var(--pill-trans);color:#fff;border-color:var(--pill-trans);box-shadow:0 2px 8px rgba(220,38,38,0.25)}
+.topic-pill.resp{border-color:var(--pill-resp-b);background:var(--pill-resp-bg);color:var(--pill-resp)}
+.topic-pill.resp.active{background:var(--pill-resp);color:#fff;border-color:var(--pill-resp);box-shadow:0 2px 8px rgba(37,99,235,0.25)}
+.topic-pill.eco{border-color:var(--pill-eco-b);background:var(--pill-eco-bg);color:var(--pill-eco)}
+.topic-pill.eco.active{background:var(--pill-eco);color:#fff;border-color:var(--pill-eco);box-shadow:0 2px 8px rgba(124,58,237,0.25)}
+
+.duel-grid{display:grid;grid-template-columns:1fr;gap:14px}
+@media(min-width:768px){.duel-grid{grid-template-columns:1fr 1fr}}
+.empty-state{text-align:center;padding:48px 16px;color:var(--text3);font-size:1rem;grid-column:1/-1}
+
+.duel-card{
+  background:var(--card);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:18px 20px;
+  border-left:4px solid var(--accent);
+  cursor:pointer;position:relative;
+  transition:box-shadow .2s ease,transform .2s ease;
+  will-change:transform;transform:translateZ(0);
+  display:flex;flex-direction:column;gap:10px;
+}
+.duel-card:hover{box-shadow:var(--shadow-lg)}
+.duel-card:active{transform:scale(0.985)}
+.duel-card.done{border-left-color:var(--correct)}
+.duel-card .duel-header{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.duel-card .duel-icon{font-size:1.3rem}
+.duel-card .duel-title{font-weight:700;font-size:1rem;color:var(--text);flex:1;text-align:center}
+.duel-card .duel-vs-row{display:flex;align-items:center;justify-content:center;gap:10px}
+.duel-card .duel-concept{
+  flex:1;text-align:center;padding:8px 6px;
+  background:#f8f9fb;border-radius:8px;
+  display:flex;flex-direction:column;gap:2px;
+}
+.duel-card .duel-concept .c-en{font-weight:700;font-size:0.95rem;color:var(--text)}
+.duel-card .duel-concept .c-zh{font-size:0.85rem;color:var(--text2)}
+.duel-card .duel-concept .c-tag{font-size:0.8rem;color:var(--accent);font-weight:600;margin-top:1px}
+.duel-card .duel-vs{
+  font-weight:900;font-size:0.9rem;color:var(--text3);
+  background:#f1f1ed;border-radius:50%;width:34px;height:34px;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.duel-card .duel-done-badge{
+  position:absolute;bottom:8px;left:12px;
+  font-size:0.9rem;color:var(--correct);
+  font-weight:700;display:none;
+}
+.duel-card.done .duel-done-badge{display:block}
+.duel-card .duel-score-badge{
+  position:absolute;bottom:8px;right:12px;
+  font-size:0.8rem;color:var(--text3);font-weight:500;
+}
+
+.quiz-view{max-width:640px;margin:0 auto}
+.quiz-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:20px}
+.quiz-progress{font-size:1rem;font-weight:700;color:var(--text2);white-space:nowrap;padding-top:4px}
+.quiz-statement{
+  font-size:20px;font-weight:700;line-height:1.5;
+  background:var(--card);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:22px 20px;
+  border-left:4px solid var(--accent);
+  margin-bottom:20px;
+}
+.quiz-buttons{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
+.quiz-btn{
+  padding:18px 12px;border-radius:var(--radius);
+  border:2px solid #e5e5e0;background:var(--card);
+  font-size:1rem;font-weight:700;cursor:pointer;
+  font-family:inherit;text-align:center;
+  transition:all .15s ease;
+  will-change:transform;transform:translateZ(0);
+  display:flex;flex-direction:column;align-items:center;gap:2px;
+}
+.quiz-btn:active{transform:scale(0.97)}
+.quiz-btn .qb-en{font-size:1rem}
+.quiz-btn .qb-zh{font-size:0.8rem;color:var(--text2);font-weight:500}
+.quiz-btn.correct{border-color:var(--correct);background:var(--correct-bg);color:var(--correct)}
+.quiz-btn.wrong{border-color:var(--wrong);background:var(--wrong-bg);color:var(--wrong)}
+.quiz-btn.chosen-correct{border-color:var(--correct);background:var(--correct-bg)}
+.quiz-btn.chosen-wrong{border-color:var(--wrong);background:var(--wrong-bg)}
+.quiz-btn:disabled{pointer-events:none}
+.quiz-feedback{
+  font-size:18px;line-height:1.55;padding:14px 16px;
+  border-radius:var(--radius);margin-bottom:12px;
+  display:none;
+}
+.quiz-feedback.show{display:block}
+.quiz-feedback.correct{background:var(--correct-bg);color:#166534;border:1px solid var(--correct-b)}
+.quiz-feedback.wrong{background:var(--wrong-bg);color:#991b1b;border:1px solid var(--wrong-b)}
+.quiz-feedback .kw{font-weight:700;color:var(--kw);border-bottom:2px solid var(--kw-ul)}
+.quiz-next{display:none;justify-content:center}
+.quiz-next.show{display:flex}
+
+.result-view{max-width:480px;margin:0 auto;text-align:center}
+.result-card{
+  background:var(--card);border-radius:var(--radius);
+  box-shadow:var(--shadow-lg);padding:28px 24px;
+}
+.result-icon{font-size:3rem;margin-bottom:8px}
+.result-title{font-size:1.3rem;font-weight:800;color:var(--text)}
+.result-score{font-size:2.8rem;font-weight:900;color:var(--accent);margin:8px 0 0}
+.result-score .of{font-size:1.2rem;color:var(--text3);font-weight:400}
+.result-msg{font-size:1rem;color:var(--text2);margin-top:6px;font-weight:500}
+.result-actions{display:flex;flex-direction:column;gap:10px;align-items:center}
+.btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:12px 24px;border-radius:99px;font-size:18px;
+  font-weight:600;cursor:pointer;border:none;
+  font-family:inherit;transition:all .2s ease;
+  will-change:transform;transform:translateZ(0);
+}
+.btn:active{transform:scale(0.96)}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-outline{background:transparent;color:var(--accent);border:2px solid var(--accent)}
+.btn-back{background:transparent;color:var(--text2);border:2px solid #e5e5e0;margin-top:4px}
+
+.compare-view{max-width:800px;margin:0 auto}
+.compare-header{text-align:center;margin-bottom:20px}
+.compare-header h2{font-size:1.3rem;font-weight:800}
+.compare-header .compare-tags{display:flex;justify-content:center;gap:12px;margin-top:6px}
+.compare-header .ctag{font-size:0.85rem;font-weight:600;padding:3px 10px;border-radius:99px}
+.ctag-a{background:var(--accent-light);color:var(--accent)}
+.ctag-b{background:#fef3c7;color:#b45309}
+.compare-grid{display:grid;grid-template-columns:1fr auto 1fr;gap:0;margin-bottom:18px}
+.compare-col{
+  background:var(--card);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:18px 16px;
+}
+.compare-col.col-a{border-left:4px solid var(--accent)}
+.compare-col.col-b{border-left:4px solid #f59e0b}
+.compare-col h4{font-size:1rem;font-weight:700;margin-bottom:10px;text-align:center}
+.compare-col h4 .en{display:block}
+.compare-col h4 .zh{display:block;font-size:0.85rem;color:var(--text2);font-weight:500}
+.compare-col ul{list-style:none;padding:0}
+.compare-col li{font-size:1rem;padding:6px 0;border-bottom:1px solid #f1f1ed;line-height:1.45}
+.compare-col li:last-child{border-bottom:none}
+.compare-col li::before{content:'• ';color:var(--accent);font-weight:700}
+.compare-col.col-b li::before{color:#f59e0b}
+.compare-vs-col{
+  display:flex;align-items:center;justify-content:center;padding:0 6px;
+}
+.compare-vs-badge{
+  font-weight:900;font-size:0.9rem;color:var(--text3);
+  background:#f1f1ed;border-radius:50%;width:34px;height:34px;
+  display:flex;align-items:center;justify-content:center;
+}
+.compare-diff{
+  background:#fffdf7;border:1px solid #fde68a;border-radius:var(--radius);
+  padding:16px 18px;margin-bottom:14px;font-size:1rem;line-height:1.55;
+}
+.compare-diff strong{color:var(--text);font-size:1rem}
+.compare-diff .kw{font-weight:700;color:var(--kw);border-bottom:2px solid var(--kw-ul)}
+.compare-trap{
+  background:#fef2f2;border:1px solid #fecaca;border-radius:var(--radius);
+  padding:14px 16px;font-size:1rem;line-height:1.55;
+}
+.compare-trap strong{color:#991b1b}
+
+@media(max-width:600px){
+  .compare-grid{grid-template-columns:1fr;gap:8px}
+  .compare-vs-col{display:none}
+}
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="app-header">
+    <h1>🏟️ 辨識擂臺 · 概念歸位戰</h1>
+    <div class="subtitle">F3 IS · 5 大課題 · 20 組混淆對決</div>
+    <div class="progress-wrap">
+      <span class="prog-label">進度</span>
+      <div class="progress-bar-outer"><div class="progress-bar-inner" id="progBar"></div></div>
+      <span class="prog-num" id="progNum">0/20</span>
+    </div>
+  </div>
+  <nav class="topic-nav" id="topicNav"></nav>
+  <div id="contentArea"></div>
+</div>
+
+<script>
+// ==================== DATA ====================
+const VERSION = 'v2-yourong';
+const DUELS = [
+  // ========== CELLS 🔬 (4) ==========
+  {id:"cel01",topic:"cell",icon:"🔬",title:"Animal Cell vs Plant Cell",
+   conceptA:{name_en:"Animal Cell",name_zh:"動物細胞",tag:"無細胞壁",traits:[
+     "No cell wall — only a cell membrane","No chloroplasts","Irregular / round shape",
+     "Small or no vacuole","Stores glycogen (not starch)"
+   ]},
+   conceptB:{name_en:"Plant Cell",name_zh:"植物細胞",tag:"有細胞壁",traits:[
+     "Has a cell wall made of cellulose","Has chloroplasts (for photosynthesis)",
+     "Regular rectangular shape","Large central vacuole","Stores starch"
+   ]},
+   keyDiff:"Animal cell = <span class='kw'>no cell wall</span> + <span class='kw'>no chloroplasts</span>; Plant cell = <span class='kw'>has cell wall</span> (cellulose) + <span class='kw'>has chloroplasts</span>.",
+   commonTrap:"Both have nucleus, cytoplasm, cell membrane, mitochondria. 不要因為都有這些就搞混！區分關鍵 = 細胞壁 + 葉綠體 + 大液泡（植物有，動物無）。",
+   statements:[
+     {text:"Has a cell wall made of cellulose.",answer:"B",explanation:"Only plant cells have a cell wall — it is made of cellulose and provides structural support."},
+     {text:"Has an irregular shape and no chloroplasts.",answer:"A",explanation:"Animal cells are typically round/irregular, and they lack chloroplasts because they do not photosynthesise."},
+     {text:"Stores starch as the main carbohydrate reserve.",answer:"B",explanation:"Plant cells store excess glucose as starch; animal cells store it as glycogen."},
+     {text:"Has a large central vacuole containing cell sap.",answer:"B",explanation:"Plant cells typically have one large permanent vacuole; animal cells have small temporary vacuoles (if any)."},
+     {text:"Both this type of cell and plant cells contain mitochondria.",answer:"A",explanation:"Animal cells DO contain mitochondria — they carry out respiration just like plant cells. The presence of mitochondria is shared by both."}
+   ]},
+  {id:"cel02",topic:"cell",icon:"🔬",title:"Cell Wall vs Cell Membrane",
+   conceptA:{name_en:"Cell Wall",name_zh:"細胞壁",tag:"結構支撐",traits:[
+     "Made of cellulose (in plants)","Fully permeable — lets everything through",
+     "Rigid — gives the cell its shape","Found ONLY in plant cells",
+     "Outside the cell membrane"
+   ]},
+   conceptB:{name_en:"Cell Membrane",name_zh:"細胞膜",tag:"選擇門禁",traits:[
+     "Selectively / differentially permeable","Controls what enters and leaves the cell",
+     "Found in ALL cells (animal + plant)","Flexible and thin",
+     "Made of phospholipids and proteins"
+   ]},
+   keyDiff:"Cell wall = <span class='kw'>structural support</span>, fully permeable (everything passes); Cell membrane = <span class='kw'>selectively permeable</span> (controls entry/exit of substances).",
+   commonTrap:"兩者都包圍細胞，但 cell wall 在外面，cell membrane 在內層。動物細胞只有 cell membrane，沒有 cell wall！",
+   statements:[
+     {text:"Fully permeable — allows all substances to pass through freely.",answer:"A",explanation:"The cell wall has large pores and allows all dissolved substances through — it provides structure but does not control what enters."},
+     {text:"Selectively permeable — controls the movement of substances in and out of the cell.",answer:"B",explanation:"The cell membrane is selectively permeable: it allows some substances to pass (e.g., water, oxygen) while blocking or regulating others."},
+     {text:"Found in both animal and plant cells.",answer:"B",explanation:"The cell membrane is a universal feature of all cells — both animal and plant cells have one."},
+     {text:"Made mainly of cellulose.",answer:"A",explanation:"Plant cell walls are composed primarily of cellulose fibres, which make them strong and rigid."},
+     {text:"This structure is absent in animal cells.",answer:"A",explanation:"Animal cells do not have a cell wall — they are surrounded only by the cell membrane."}
+   ]},
+  {id:"cel03",topic:"cell",icon:"🔬",title:"Chloroplast vs Chlorophyll",
+   conceptA:{name_en:"Chloroplast",name_zh:"葉綠體",tag:"工廠 (胞器)",traits:[
+     "An ORGANELLE — the 'factory'","Contains chlorophyll inside it",
+     "Double-membrane structure","Site of photosynthesis","Found in plant cells"
+   ]},
+   conceptB:{name_en:"Chlorophyll",name_zh:"葉綠素",tag:"工人 (色素)",traits:[
+     "A green PIGMENT — the 'worker'","Absorbs light energy for photosynthesis",
+     "Found INSIDE chloroplasts","Gives plants their green colour","NOT an organelle — just a molecule"
+   ]},
+   keyDiff:"Chloroplast (葉綠<span class='kw'>體</span>) = the <span class='kw'>organelle</span> (factory); Chlorophyll (葉綠<span class='kw'>素</span>) = the <span class='kw'>pigment</span> inside it (worker).",
+   commonTrap:"'Chloroplast contains chlorophyll' — 葉綠「體」裡面有葉綠「素」。「體」是細胞器 (organelle)，「素」是色素 (pigment)。兩者不是同一個東西！",
+   statements:[
+     {text:"An organelle found in plant cells — the site of photosynthesis.",answer:"A",explanation:"The chloroplast is a membrane-bound organelle where photosynthesis takes place."},
+     {text:"A green pigment that absorbs light energy.",answer:"B",explanation:"Chlorophyll is the light-absorbing pigment — it captures solar energy and passes it to the photosynthetic machinery."},
+     {text:"Found inside chloroplasts.",answer:"B",explanation:"Chlorophyll molecules are located on the thylakoid membranes inside chloroplasts."},
+     {text:"Has a double membrane surrounding it.",answer:"A",explanation:"Chloroplasts have an outer and inner membrane — this is a characteristic of the organelle, not the pigment."},
+     {text:"This is why most plants appear green.",answer:"B",explanation:"Chlorophyll reflects green light while absorbing red and blue wavelengths — this is why leaves look green."}
+   ]},
+  {id:"cel04",topic:"cell",icon:"🔬",title:"Nucleus vs Cytoplasm",
+   conceptA:{name_en:"Nucleus",name_zh:"細胞核",tag:"控制中心",traits:[
+     "Controls all cell activities","Contains DNA (genetic material)",
+     "Surrounded by a nuclear membrane","Usually the largest organelle",
+     "The 'brain' or 'control centre' of the cell"
+   ]},
+   conceptB:{name_en:"Cytoplasm",name_zh:"細胞質",tag:"活動現場",traits:[
+     "Jelly-like substance filling the cell","Site of most chemical reactions",
+     "Contains the organelles","Where respiration occurs (in mitochondria)",
+     "Lies between the nucleus and the cell membrane"
+   ]},
+   keyDiff:"Nucleus = <span class='kw'>control centre</span> (stores DNA, gives instructions); Cytoplasm = <span class='kw'>site of action</span> (where chemical reactions and respiration happen).",
+   commonTrap:"Nucleus 發指令，cytoplasm 執行。DNA 在 nucleus 裡，但 respiration (energy release) 發生在 cytoplasm 裡的 mitochondria。",
+   statements:[
+     {text:"Contains the cell's genetic material (DNA).",answer:"A",explanation:"The nucleus houses DNA in the form of chromosomes — it is the genetic control centre of the cell."},
+     {text:"Jelly-like substance where most chemical reactions take place.",answer:"B",explanation:"The cytoplasm is a gel-like medium that fills the cell and hosts metabolic reactions."},
+     {text:"Surrounded by a nuclear membrane with pores.",answer:"A",explanation:"The nucleus has a double membrane (nuclear envelope) with pores that allow molecules to pass in and out."},
+     {text:"Mitochondria — where respiration occurs — are found suspended here.",answer:"B",explanation:"Mitochondria float in the cytoplasm, where they carry out aerobic respiration to release energy."},
+     {text:"Controls activities such as growth, repair, and cell division.",answer:"A",explanation:"The nucleus directs all major cellular processes — growth, repair, protein synthesis, and cell division — via its DNA."}
+   ]},
+
+  // ========== NUTRITION 🍎 (4) ==========
+  {id:"nut01",topic:"nutrition",icon:"🍎",title:"Starch vs Glucose (Food Test)",
+   conceptA:{name_en:"Starch",name_zh:"澱粉",tag:"碘液測試",traits:[
+     "Tested with IODINE solution (brown)","Positive: turns BLUE-BLACK",
+     "No heating required","Complex carbohydrate (polysaccharide)",
+     "Insoluble in water; storage form in plants"
+   ]},
+   conceptB:{name_en:"Glucose",name_zh:"葡萄糖",tag:"本立德測試",traits:[
+     "Tested with BENEDICT'S solution (blue)","Positive: turns BRICK-RED (after heating)",
+     "MUST be heated in a water bath","Simple sugar (monosaccharide / reducing sugar)",
+     "Soluble in water; main energy source for cells"
+   ]},
+   keyDiff:"Starch + iodine → <span class='kw'>blue-black</span> (cold, no heat); Glucose + Benedict's → <span class='kw'>brick-red</span> (MUST heat in water bath).",
+   commonTrap:"Iodine test 不用加熱、室溫即變藍黑（測 starch）。Benedict's test 一定要加熱才變磚紅色（測 reducing sugar）。兩個 test 完全不同！",
+   statements:[
+     {text:"Tested with iodine solution — turns blue-black if present.",answer:"A",explanation:"Iodine solution (brown) turns blue-black in the presence of starch. No heating is needed."},
+     {text:"Tested with Benedict's solution — must be heated to give a brick-red precipitate.",answer:"B",explanation:"Benedict's test requires heating in a water bath — a brick-red colour indicates the presence of reducing sugars like glucose."},
+     {text:"A polysaccharide that is insoluble in water.",answer:"A",explanation:"Starch is a large polymer of glucose molecules — it is insoluble in water, which makes it ideal for storage in plants."},
+     {text:"A simple sugar (monosaccharide) that dissolves easily in water.",answer:"B",explanation:"Glucose is a small, soluble molecule — it dissolves in water and is readily transported in the blood."},
+     {text:"The main form in which plants store carbohydrates.",answer:"A",explanation:"Plants convert excess glucose into starch for storage — found in potatoes, rice, and grains."}
+   ]},
+  {id:"nut02",topic:"nutrition",icon:"🍎",title:"Carbohydrates vs Proteins",
+   conceptA:{name_en:"Carbohydrates",name_zh:"碳水化合物",tag:"主要供能",traits:[
+     "Main function: provide ENERGY","Stored as glycogen in liver and muscles",
+     "Include starch, sugar, and cellulose","Food sources: rice, bread, potatoes, pasta",
+     "Used FIRST by the body for energy"
+   ]},
+   conceptB:{name_en:"Proteins",name_zh:"蛋白質",tag:"生長修復",traits:[
+     "Main function: GROWTH and REPAIR of tissues","Made of amino acids",
+     "Make enzymes, hormones, and antibodies","Can be used for energy as a LAST resort",
+     "Food sources: meat, eggs, fish, beans, milk"
+   ]},
+   keyDiff:"Carbs = <span class='kw'>energy</span> (fuel for the body); Proteins = <span class='kw'>growth + repair</span> (building blocks of the body).",
+   commonTrap:"Both can provide energy, but protein's PRIMARY job is growth and repair. The body only breaks down protein for energy when carbs and fats are exhausted.",
+   statements:[
+     {text:"The body's primary and preferred energy source.",answer:"A",explanation:"Carbohydrates are broken down into glucose and used first for energy — they are the body's preferred fuel."},
+     {text:"Used mainly for growth and repair of body tissues.",answer:"B",explanation:"Proteins supply amino acids for building new cells and repairing damaged tissues."},
+     {text:"Stored in the liver and muscles as glycogen.",answer:"A",explanation:"Excess glucose from carbohydrates is converted to glycogen and stored in the liver and muscles."},
+     {text:"Made of amino acids linked together in long chains.",answer:"B",explanation:"Proteins are polymers of amino acids — there are 20 different amino acids used to build human proteins."},
+     {text:"Enzymes like amylase and protease belong to this group.",answer:"B",explanation:"All enzymes are proteins — they are biological catalysts made of amino acid chains."}
+   ]},
+  {id:"nut03",topic:"nutrition",icon:"🍎",title:"Vitamin C vs Vitamin D Deficiency",
+   conceptA:{name_en:"Vitamin C Deficiency",name_zh:"維生素C缺乏",tag:"壞血病",traits:[
+     "Causes SCURVY","Symptoms: bleeding gums, slow wound healing",
+     "Vitamin C is water-soluble","Found in citrus fruits, fresh vegetables",
+     "Easily destroyed by heat (cooking)"
+   ]},
+   conceptB:{name_en:"Vitamin D Deficiency",name_zh:"維生素D缺乏",tag:"佝僂病",traits:[
+     "Causes RICKETS (in children)","Symptoms: weak and deformed bones",
+     "Vitamin D is fat-soluble","Helps absorb CALCIUM from food",
+     "Made by skin when exposed to sunlight"
+   ]},
+   keyDiff:"Vitamin C deficiency → <span class='kw'>scurvy</span> (bleeding gums); Vitamin D deficiency → <span class='kw'>rickets</span> (weak, deformed bones, poor calcium absorption).",
+   commonTrap:"Scurvy (Vit C) 和 Rickets (Vit D) 完全不同！曬太陽可以補 Vit D，但不能補 Vit C。Vit C 存在新鮮蔬果，但容易被高溫破壞。",
+   statements:[
+     {text:"Deficiency causes bleeding gums and poor wound healing (scurvy).",answer:"A",explanation:"Vitamin C is essential for collagen production — without it, connective tissues break down, causing scurvy."},
+     {text:"Deficiency causes rickets — weak and deformed bones in children.",answer:"B",explanation:"Vitamin D is needed for calcium absorption; deficiency leads to poor bone mineralisation → rickets."},
+     {text:"Found in citrus fruits such as oranges and lemons.",answer:"A",explanation:"Citrus fruits are rich in vitamin C — hence why sailors historically carried limes to prevent scurvy."},
+     {text:"Produced by the skin when exposed to sunlight.",answer:"B",explanation:"The body synthesises vitamin D when UV light hits the skin — sunlight is the primary natural source."},
+     {text:"Helps the body absorb calcium from the small intestine into the blood.",answer:"B",explanation:"Vitamin D promotes calcium absorption — without it, dietary calcium cannot be properly absorbed, leading to weak bones."}
+   ]},
+  {id:"nut04",topic:"nutrition",icon:"🍎",title:"Mechanical vs Chemical Digestion",
+   conceptA:{name_en:"Mechanical Digestion",name_zh:"物理消化",tag:"物理粉碎",traits:[
+     "Physical breakdown into smaller pieces","NO chemical change to food molecules",
+     "Increases surface area for enzymes","Examples: chewing (teeth), stomach churning",
+     "Does NOT change the chemical structure"
+   ]},
+   conceptB:{name_en:"Chemical Digestion",name_zh:"化學消化",tag:"酵素分解",traits:[
+     "Enzymes break LARGE molecules → SMALL soluble ones","Chemical change occurs",
+     "Requires specific enzymes","Examples: amylase (starch → maltose), protease (protein → amino acids)",
+     "Changes the chemical structure of food"
+   ]},
+   keyDiff:"Mechanical = <span class='kw'>physical crushing</span> (teeth, churning), no chemical change; Chemical = <span class='kw'>enzymes break bonds</span> (molecules change into new substances).",
+   commonTrap:"Chewing = mechanical digestion; BUT amylase in saliva acting on starch = chemical digestion. 兩者同時在口腔發生！",
+   statements:[
+     {text:"Chewing food with teeth is an example of this type of digestion.",answer:"A",explanation:"Teeth physically crush and grind food into smaller pieces — this is mechanical digestion with no chemical change."},
+     {text:"Amylase breaking starch into maltose is an example.",answer:"B",explanation:"Amylase is an enzyme — it chemically breaks the bonds in starch to produce maltose. This IS a chemical change."},
+     {text:"Increases the surface area of food for enzymes to work on.",answer:"A",explanation:"Mechanical digestion breaks food into smaller pieces, increasing the total surface area available for enzyme action."},
+     {text:"Protease breaking down proteins into amino acids.",answer:"B",explanation:"Protease catalyses the chemical breakdown of proteins into amino acids — this is chemical digestion."},
+     {text:"The stomach churning and mixing food with gastric juice.",answer:"A",explanation:"The stomach's muscular contractions physically churn food — this is mechanical digestion, though gastric juice also carries out chemical digestion."}
+   ]},
+
+  // ========== TRANSPORT 🫀 (4) ==========
+  {id:"trn01",topic:"transport",icon:"🫀",title:"Artery vs Vein",
+   conceptA:{name_en:"Artery",name_zh:"動脈",tag:"離心",traits:[
+     "Carries blood AWAY from the heart","Thick, muscular, elastic wall",
+     "Small lumen (narrow channel)","Usually NO valves","Blood under HIGH pressure"
+   ]},
+   conceptB:{name_en:"Vein",name_zh:"靜脈",tag:"回心",traits:[
+     "Carries blood TOWARDS the heart","Thin, less muscular wall",
+     "Large lumen (wide channel)","HAS valves to prevent backflow","Blood under LOW pressure"
+   ]},
+   keyDiff:"Artery = <span class='kw'>away</span> from heart (thick wall, small lumen, high pressure); Vein = <span class='kw'>towards</span> heart (thin wall, large lumen, has valves).",
+   commonTrap:"不要記 oxygenated / deoxygenated！Pulmonary artery 帶 deoxygenated blood，pulmonary vein 帶 oxygenated blood。記方向：Artery = Away，Vein = toWards。",
+   statements:[
+     {text:"Carries blood away from the heart.",answer:"A",explanation:"All arteries carry blood away from the ventricles — this is their defining characteristic, regardless of blood oxygen content."},
+     {text:"Has valves to prevent the backflow of blood.",answer:"B",explanation:"Veins have semilunar valves along their length to prevent blood from flowing backwards under low pressure."},
+     {text:"Has a thick, muscular wall to withstand high blood pressure.",answer:"A",explanation:"Arteries must withstand the high pressure generated by ventricular contraction — their thick elastic walls expand and recoil with each heartbeat."},
+     {text:"Has a large lumen and thin wall.",answer:"B",explanation:"Veins operate under low pressure and have wider lumens to reduce resistance as blood returns to the heart."},
+     {text:"The pulmonary type of this vessel carries deoxygenated blood.",answer:"A",explanation:"The pulmonary artery is the only artery that carries deoxygenated blood — it takes blood from the heart to the lungs for gas exchange."}
+   ]},
+  {id:"trn02",topic:"transport",icon:"🫀",title:"Red Blood Cell vs White Blood Cell",
+   conceptA:{name_en:"Red Blood Cell",name_zh:"紅血球",tag:"運氧",traits:[
+     "Carries OXYGEN around the body","Contains HAEMOGLOBIN (red pigment)",
+     "NO nucleus (biconcave disc shape)","Most numerous type of blood cell",
+     "Made in bone marrow; ~120-day lifespan"
+   ]},
+   conceptB:{name_en:"White Blood Cell",name_zh:"白血球",tag:"防禦",traits:[
+     "Defends against infection and disease","Irregular shape; HAS a nucleus",
+     "Fewer in number than RBCs","Engulfs pathogens (phagocytosis) or produces antibodies",
+     "Made in bone marrow"
+   ]},
+   keyDiff:"RBC = <span class='kw'>oxygen carrier</span> (haemoglobin, no nucleus); WBC = <span class='kw'>defender</span> (fights infection, has nucleus).",
+   commonTrap:"Both are made in bone marrow. RBC has NO nucleus — this gives more space for haemoglobin to carry oxygen. WBC HAS a nucleus — it needs it to produce antibodies and control immune responses.",
+   statements:[
+     {text:"Contains haemoglobin and carries oxygen.",answer:"A",explanation:"Red blood cells are packed with haemoglobin, which binds to oxygen in the lungs and releases it at body tissues."},
+     {text:"Has a nucleus and can change shape to engulf pathogens.",answer:"B",explanation:"White blood cells are nucleated and can perform phagocytosis — surrounding and digesting foreign particles."},
+     {text:"Biconcave disc shape with no nucleus.",answer:"A",explanation:"The biconcave shape increases surface area for gas exchange; removing the nucleus maximises space for haemoglobin."},
+     {text:"Fewest in number among the major blood cells but crucial for immunity.",answer:"B",explanation:"WBCs are far fewer than RBCs (about 1:700 ratio) but are essential for the body's defence system."},
+     {text:"Both this and white blood cells are produced in the bone marrow.",answer:"A",explanation:"All blood cells — red, white, and platelets — originate from stem cells in the red bone marrow."}
+   ]},
+  {id:"trn03",topic:"transport",icon:"🫀",title:"Plasma vs Platelets",
+   conceptA:{name_en:"Plasma",name_zh:"血漿",tag:"運輸液",traits:[
+     "The liquid part of blood (~55% of blood volume)","Pale yellow colour",
+     "TRANSPORTS: nutrients, hormones, carbon dioxide, urea, heat",
+     "About 90% water","Carries dissolved substances throughout the body"
+   ]},
+   conceptB:{name_en:"Platelets",name_zh:"血小板",tag:"凝血",traits:[
+     "Small cell fragments (NOT complete cells)","No nucleus",
+     "Responsible for BLOOD CLOTTING","Prevents excessive bleeding after injury",
+     "Formed from broken pieces of large cells in bone marrow"
+   ]},
+   keyDiff:"Plasma = <span class='kw'>liquid</span> that transports substances; Platelets = <span class='kw'>cell fragments</span> that initiate blood clotting.",
+   commonTrap:"Plasma 負責運輸 (nutrients, CO₂, urea, heat)；Platelets 負責凝血 (stop bleeding)。兩個完全不同的東西，但中文名稱都帶「血」字！",
+   statements:[
+     {text:"The pale yellow liquid that makes up about 55% of blood.",answer:"A",explanation:"Plasma is the straw-coloured liquid component of blood — it is about 90% water and serves as the transport medium."},
+     {text:"Small cell fragments involved in blood clotting.",answer:"B",explanation:"Platelets are tiny fragments of cells that clump together at wound sites to form a plug and initiate the clotting cascade."},
+     {text:"Transports dissolved nutrients, carbon dioxide, and urea.",answer:"A",explanation:"Plasma carries nutrients (glucose, amino acids), waste products (urea, CO₂), hormones, and heat around the body."},
+     {text:"Prevents excessive blood loss when a blood vessel is damaged.",answer:"B",explanation:"Platelets aggregate at injury sites, forming a temporary plug and triggering the formation of fibrin to seal the wound."},
+     {text:"Does not contain cells but carries them in suspension.",answer:"A",explanation:"Plasma is the fluid matrix of blood — RBCs, WBCs, and platelets are suspended in it but are not part of the plasma itself."}
+   ]},
+  {id:"trn04",topic:"transport",icon:"🫀",title:"Ventricle vs Atrium",
+   conceptA:{name_en:"Ventricle",name_zh:"心室",tag:"泵血出",traits:[
+     "LOWER chambers of the heart (left + right)","THICK muscular wall",
+     "PUMPS blood OUT of the heart","Left ventricle: thickest wall (pumps to whole body)",
+     "Right ventricle: pumps blood to lungs"
+   ]},
+   conceptB:{name_en:"Atrium",name_zh:"心房",tag:"接收血",traits:[
+     "UPPER chambers of the heart (left + right)","THIN muscular wall",
+     "RECEIVES blood returning to the heart","Right atrium: receives deoxygenated blood from body",
+     "Left atrium: receives oxygenated blood from lungs"
+   ]},
+   keyDiff:"Ventricle = <span class='kw'>pumps blood OUT</span> (thick muscle, lower chamber); Atrium = <span class='kw'>receives blood IN</span> (thin wall, upper chamber).",
+   commonTrap:"Left ventricle 的肌肉最厚，因為它要將血液泵到全身（壓力最大）。Right ventricle 只泵到肺，壓力較小。",
+   statements:[
+     {text:"Lower chamber of the heart that pumps blood out to the body or lungs.",answer:"A",explanation:"Ventricles are the main pumping chambers — the right ventricle pumps to the lungs, the left ventricle pumps to the whole body."},
+     {text:"Upper chamber that receives blood returning to the heart.",answer:"B",explanation:"Atria collect blood from veins — the right atrium receives deoxygenated blood, the left atrium receives oxygenated blood."},
+     {text:"Has the thickest muscular wall in the heart.",answer:"A",explanation:"The left ventricle has the thickest wall — it must generate the highest pressure to pump blood through the entire systemic circulation."},
+     {text:"The right side of this chamber receives deoxygenated blood from the vena cava.",answer:"B",explanation:"The right atrium receives deoxygenated blood from the body via the superior and inferior vena cava."},
+     {text:"Has thinner walls because it only needs to push blood into the ventricle below.",answer:"B",explanation:"Atria contract to push blood into the ventricles — they do not need thick walls because the distance and pressure required are small."}
+   ]},
+
+  // ========== RESPIRATION 🫁 (4) ==========
+  {id:"res01",topic:"respiration",icon:"🫁",title:"Breathing vs Respiration",
+   conceptA:{name_en:"Breathing",name_zh:"呼吸運動",tag:"肺換氣",traits:[
+     "Physical process of moving air in/out of lungs","Involves diaphragm + intercostal muscles",
+     "NO chemical reaction — just gas exchange","Brings O₂ in, removes CO₂ out",
+     "Measured by breathing rate (breaths per minute)"
+   ]},
+   conceptB:{name_en:"Respiration",name_zh:"呼吸作用",tag:"細胞釋能",traits:[
+     "CHEMICAL process inside body cells","Breaks down glucose to RELEASE ENERGY",
+     "Occurs in mitochondria (aerobic)","Glucose + O₂ → CO₂ + H₂O + energy (ATP)",
+     "Happens in ALL living cells, ALL the time"
+   ]},
+   keyDiff:"Breathing = <span class='kw'>gas exchange in lungs</span> (physical, no energy released); Respiration = <span class='kw'>energy release in cells</span> (chemical, glucose broken down).",
+   commonTrap:"這是中三最經典的混淆！中文「呼吸」二字同時用來描述兩個完全不同的事。Breathing 是肺部換氣；Respiration 是細胞內釋放能量。Respiration happens inside cells, NOT in the lungs!",
+   statements:[
+     {text:"Physical process of moving air into and out of the lungs.",answer:"A",explanation:"Breathing (ventilation) is the mechanical movement of air — inhalation and exhalation — driven by the diaphragm and intercostal muscles."},
+     {text:"Chemical process that releases energy from glucose inside cells.",answer:"B",explanation:"Respiration is a series of chemical reactions (in mitochondria) that break down glucose to release energy for cell activities."},
+     {text:"Involves the diaphragm and intercostal muscles.",answer:"A",explanation:"Breathing requires the contraction and relaxation of the diaphragm and intercostal muscles to change chest volume."},
+     {text:"Occurs in mitochondria inside all living cells.",answer:"B",explanation:"Aerobic respiration takes place in the mitochondria of cells — it is a cellular process, not a lung process."},
+     {text:"Measured as 'breaths per minute'.",answer:"A",explanation:"Breathing rate counts how many times air is taken in and expelled per minute — it measures ventilation, not cellular respiration."}
+   ]},
+  {id:"res02",topic:"respiration",icon:"🫁",title:"Aerobic vs Anaerobic Respiration",
+   conceptA:{name_en:"Aerobic Respiration",name_zh:"需氧呼吸",tag:"用氧",traits:[
+     "Requires OXYGEN","Produces a LARGE amount of energy",
+     "Complete breakdown of glucose","Products: carbon dioxide + WATER",
+     "Occurs in mitochondria","Glucose + O₂ → CO₂ + H₂O + energy"
+   ]},
+   conceptB:{name_en:"Anaerobic Respiration",name_zh:"缺氧呼吸",tag:"無氧",traits:[
+     "NO oxygen required","Produces a SMALL amount of energy",
+     "Incomplete breakdown of glucose","In humans: produces LACTIC ACID",
+     "In yeast: produces ETHANOL + CO₂","Occurs in cytoplasm (not mitochondria)"
+   ]},
+   keyDiff:"Aerobic = <span class='kw'>with O₂</span> → lots of energy, CO₂ + H₂O (in mitochondria); Anaerobic = <span class='kw'>no O₂</span> → little energy, lactic acid (humans) or ethanol + CO₂ (yeast).",
+   commonTrap:"Anaerobic 在人類 = 乳酸 (lactic acid)，肌肉酸痛的原因（劇烈運動時短暫缺氧）。Anaerobic 在酵母 = 乙醇 + CO₂ (造麵包和啤酒的原理)。產物不同！",
+   statements:[
+     {text:"Requires oxygen and produces carbon dioxide and water.",answer:"A",explanation:"Aerobic respiration uses oxygen to completely oxidise glucose, producing CO₂ and H₂O as waste products."},
+     {text:"In humans, produces lactic acid during intense exercise.",answer:"B",explanation:"When muscles work hard and oxygen supply is insufficient, anaerobic respiration produces lactic acid, causing cramps."},
+     {text:"Occurs in the mitochondria.",answer:"A",explanation:"The Krebs cycle and electron transport chain of aerobic respiration take place inside mitochondria."},
+     {text:"In yeast, produces ethanol and carbon dioxide.",answer:"B",explanation:"Yeast carries out anaerobic respiration (fermentation) — producing ethanol and CO₂, which is used in baking and brewing."},
+     {text:"Produces much more energy per glucose molecule than the alternative process.",answer:"A",explanation:"Aerobic respiration yields approximately 38 ATP per glucose molecule, compared to only 2 ATP from anaerobic respiration."}
+   ]},
+  {id:"res03",topic:"respiration",icon:"🫁",title:"Inhalation vs Exhalation",
+   conceptA:{name_en:"Inhalation",name_zh:"吸氣",tag:"空氣進入",traits:[
+     "Diaphragm CONTRACTS (moves DOWN / flattens)","Intercostal muscles CONTRACT",
+     "Rib cage moves UP and OUT","Chest volume INCREASES",
+     "Pressure in lungs DECREASES → air rushes IN"
+   ]},
+   conceptB:{name_en:"Exhalation",name_zh:"呼氣",tag:"空氣排出",traits:[
+     "Diaphragm RELAXES (moves UP / domes)","Intercostal muscles RELAX",
+     "Rib cage moves DOWN and IN","Chest volume DECREASES",
+     "Pressure in lungs INCREASES → air is pushed OUT"
+   ]},
+   keyDiff:"Inhale = diaphragm contracts <span class='kw'>DOWN</span>, chest expands, air IN; Exhale = diaphragm relaxes <span class='kw'>UP</span>, chest shrinks, air OUT.",
+   commonTrap:"最容易記錯的一點：吸氣時 diaphragm CONTRACTS（收縮變平、往下移）！很多人以為放鬆才是吸氣，剛好相反。",
+   statements:[
+     {text:"Diaphragm contracts and moves downwards.",answer:"A",explanation:"During inhalation, the diaphragm muscle contracts and flattens, moving downward to increase the vertical space in the chest cavity."},
+     {text:"Diaphragm relaxes and returns to its dome shape.",answer:"B",explanation:"During exhalation, the diaphragm relaxes and moves back upward into its resting dome-shaped position."},
+     {text:"Rib cage moves up and out; chest volume increases.",answer:"A",explanation:"The intercostal muscles contract, lifting the rib cage up and outward — the chest cavity expands, reducing internal pressure."},
+     {text:"Pressure inside the lungs increases, forcing air out.",answer:"B",explanation:"When chest volume decreases, pressure inside the lungs rises above atmospheric pressure, causing air to flow out."},
+     {text:"This is an active process requiring muscle contraction.",answer:"A",explanation:"Inhalation at rest is an active process — the diaphragm and intercostal muscles must contract. Normal exhalation at rest is passive."}
+   ]},
+  {id:"res04",topic:"respiration",icon:"🫁",title:"Inspired Air vs Expired Air",
+   conceptA:{name_en:"Inspired Air",name_zh:"吸入空氣",tag:"多氧",traits:[
+     "MORE oxygen: ~21%","LESS carbon dioxide: ~0.04%",
+     "Variable water vapour content","Cooler and drier","Going INTO the lungs"
+   ]},
+   conceptB:{name_en:"Expired Air",name_zh:"呼出空氣",tag:"多CO₂",traits:[
+     "LESS oxygen: ~16%","MORE carbon dioxide: ~4%",
+     "MORE water vapour (saturated)","Warmer (body temperature)","Leaving the lungs",
+     "Turns limewater milky FASTER"
+   ]},
+   keyDiff:"Inspired = more <span class='kw'>O₂</span> (~21%), less CO₂ (~0.04%); Expired = less <span class='kw'>O₂</span> (~16%), more <span class='kw'>CO₂</span> (~4%), more water vapour.",
+   commonTrap:"呼出的空氣仍然有 ~16% oxygen！這就是為什麼人工呼吸 (mouth-to-mouth resuscitation) 有用——呼出的空氣仍有足夠的氧氣供給被救者。",
+   statements:[
+     {text:"Contains about 21% oxygen.",answer:"A",explanation:"Inspired (atmospheric) air contains approximately 21% oxygen — this is the concentration entering the lungs."},
+     {text:"Contains about 4% carbon dioxide.",answer:"B",explanation:"Expired air contains roughly 4% CO₂ — about 100 times more than inspired air (~0.04%), due to respiration in body cells."},
+     {text:"Turns limewater milky much faster.",answer:"B",explanation:"Expired air has a much higher CO₂ concentration, so it turns limewater (calcium hydroxide) milky more rapidly than inspired air."},
+     {text:"Has a higher water vapour content and is warmer.",answer:"B",explanation:"As air passes through the respiratory tract, it is warmed to body temperature and saturated with water vapour from moist lung surfaces."},
+     {text:"Still contains enough oxygen to support mouth-to-mouth resuscitation.",answer:"B",explanation:"Expired air still contains ~16% oxygen — enough for rescue breathing, which is why this technique can save lives."}
+   ]},
+
+  // ========== ECOLOGY 🌿 (4) ==========
+  {id:"eco01",topic:"ecology",icon:"🌿",title:"Producer vs Consumer",
+   conceptA:{name_en:"Producer",name_zh:"生產者",tag:"自製食物",traits:[
+     "Makes its OWN food by photosynthesis","Uses light energy from the sun",
+     "Contains chlorophyll","Examples: green plants, algae",
+     "Always at the START of every food chain"
+   ]},
+   conceptB:{name_en:"Consumer",name_zh:"消費者",tag:"靠吃",traits:[
+     "Obtains food by EATING other organisms","Cannot make its own food",
+     "Depends on producers (directly or indirectly)","Primary consumer = herbivore",
+     "Secondary consumer = carnivore that eats herbivores","Humans are consumers"
+   ]},
+   keyDiff:"Producer = <span class='kw'>makes food</span> (photosynthesis); Consumer = <span class='kw'>eats others</span> (cannot make its own food).",
+   commonTrap:"All food chains MUST start with a PRODUCER (green plant). Without producers, no ecosystem can exist — consumers depend entirely on the food producers make.",
+   statements:[
+     {text:"Makes its own food using light energy through photosynthesis.",answer:"A",explanation:"Producers (green plants, algae) convert light energy into chemical energy stored in glucose — this is the foundation of all food chains."},
+     {text:"Must eat other organisms to obtain energy and nutrients.",answer:"B",explanation:"Consumers are heterotrophs — they cannot photosynthesise and must consume producers or other consumers for food."},
+     {text:"Green plants and algae are examples.",answer:"A",explanation:"Green plants and algae are the primary producers in most ecosystems — they are the only organisms that can convert solar energy into food."},
+     {text:"A herbivore like a cow or rabbit is this type of organism.",answer:"B",explanation:"Herbivores are primary consumers — they eat producers (plants) but cannot make their own food."},
+     {text:"Always occupies the first trophic level in a food chain.",answer:"A",explanation:"Producers form the first trophic level in every food chain — they are the only source of new energy in an ecosystem."}
+   ]},
+  {id:"eco02",topic:"ecology",icon:"🌿",title:"Food Chain vs Food Web",
+   conceptA:{name_en:"Food Chain",name_zh:"食物鏈",tag:"單線",traits:[
+     "Shows ONE linear feeding relationship","Single path of energy flow",
+     "Simple diagram","Example: grass → grasshopper → frog → snake",
+     "Energy transfers along ONE line only"
+   ]},
+   conceptB:{name_en:"Food Web",name_zh:"食物網",tag:"交織網絡",traits:[
+     "Shows MANY interconnected food chains","Multiple feeding relationships",
+     "More realistic — reflects actual ecosystems","Shows organisms eat/depend on MANY things",
+     "A network of energy flow in an ecosystem"
+   ]},
+   keyDiff:"Food chain = <span class='kw'>single line</span> (simple); Food web = <span class='kw'>many chains interconnected</span> (complex and realistic).",
+   commonTrap:"自然界中沒有單一食物鏈——食物網才是真實情況。一個 organism 可能吃很多種東西，也會被很多種東西吃。Food web = many food chains connected.",
+   statements:[
+     {text:"Shows one straight-line feeding relationship (e.g., A → B → C).",answer:"A",explanation:"A food chain is a simplified linear diagram showing who eats whom in a single path."},
+     {text:"Shows all the interconnected feeding relationships in an ecosystem.",answer:"B",explanation:"A food web combines multiple food chains, showing the complex and realistic feeding network in nature."},
+     {text:"A more realistic representation of what actually happens in nature.",answer:"B",explanation:"In a real ecosystem, most organisms eat more than one type of food — a food web captures this complexity."},
+     {text:"If one organism is removed, the entire path may collapse.",answer:"A",explanation:"In a simple food chain, removing one link breaks the chain. In a food web, alternative feeding paths provide resilience."},
+     {text:"Consists of multiple food chains linked together.",answer:"B",explanation:"A food web is essentially a collection of interconnected food chains within the same ecosystem."}
+   ]},
+  {id:"eco03",topic:"ecology",icon:"🌿",title:"Sperm vs Egg (Ovum)",
+   conceptA:{name_en:"Sperm",name_zh:"精子",tag:"雄性配子",traits:[
+     "Male gamete (sex cell)","Produced in the TESTES",
+     "Very small with a TAIL for swimming","Millions produced continuously",
+     "Carries father's genetic material","Haploid (half the normal chromosome number)"
+   ]},
+   conceptB:{name_en:"Egg (Ovum)",name_zh:"卵子",tag:"雌性配子",traits:[
+     "Female gamete (sex cell)","Produced in the OVARIES",
+     "Much LARGER than sperm","No tail — cannot move by itself",
+     "One released per month (ovulation)","Haploid; carries mother's genetic material + food store"
+   ]},
+   keyDiff:"Sperm = <span class='kw'>small</span>, has tail, millions made in testes; Egg = <span class='kw'>large</span>, no tail, one per month from ovaries.",
+   commonTrap:"Both are GAMETES (sex cells) — they each have HALF the normal chromosome number (haploid, n). When they fuse during fertilisation, they form a zygote with the full chromosome number (diploid, 2n).",
+   statements:[
+     {text:"Has a tail (flagellum) for swimming towards the egg.",answer:"A",explanation:"The sperm's tail propels it through the female reproductive tract towards the egg for fertilisation."},
+     {text:"Much larger cell, containing a food store for the developing embryo.",answer:"B",explanation:"The egg cell is large and contains yolk-like food reserves to nourish the early embryo before implantation."},
+     {text:"Millions are produced every day in the testes.",answer:"A",explanation:"Sperm production (spermatogenesis) occurs continuously in the seminiferous tubules of the testes, producing millions daily."},
+     {text:"Released once per month from the ovary (ovulation).",answer:"B",explanation:"Typically one mature egg is released each menstrual cycle — this is ovulation, occurring around day 14 of a 28-day cycle."},
+     {text:"Both are haploid cells containing half the normal number of chromosomes.",answer:"A",explanation:"Both sperm and egg are haploid (n=23 in humans) — this ensures the zygote formed at fertilisation has the normal diploid number (2n=46)."}
+   ]},
+  {id:"eco04",topic:"ecology",icon:"🌿",title:"Sexual vs Asexual Reproduction",
+   conceptA:{name_en:"Sexual Reproduction",name_zh:"有性生殖",tag:"需兩親",traits:[
+     "Requires TWO parents (male + female)","Involves GAMETES (sperm + egg)",
+     "Offspring are GENETICALLY DIFFERENT from parents","Produces VARIATION",
+     "Slower process","Examples: humans, flowering plants"
+   ]},
+   conceptB:{name_en:"Asexual Reproduction",name_zh:"無性生殖",tag:"只需一親",traits:[
+     "Requires only ONE parent","NO gametes involved",
+     "Offspring are GENETICALLY IDENTICAL (clones)","NO variation (unless mutation)",
+     "Faster process","Examples: bacteria (binary fission), potato tubers, runners"
+   ]},
+   keyDiff:"Sexual = <span class='kw'>2 parents</span> + gametes → variation (offspring different); Asexual = <span class='kw'>1 parent</span> + no gametes → clones (offspring identical).",
+   commonTrap:"Variation (變異) 是有性生殖的最大優勢——物種可以適應環境變化。無性生殖快但後代全部一樣，一旦環境改變就可能全部死亡。",
+   statements:[
+     {text:"Requires the fusion of gametes from two parents.",answer:"A",explanation:"Sexual reproduction involves fertilisation — the fusion of a male gamete (sperm) and female gamete (egg) to form a zygote."},
+     {text:"Offspring are genetically identical to the parent.",answer:"B",explanation:"Asexual reproduction produces clones — the offspring have exactly the same DNA as the single parent."},
+     {text:"Produces variation among offspring in the population.",answer:"A",explanation:"The mixing of genes from two parents during sexual reproduction creates genetic diversity — this is key to evolution and adaptation."},
+     {text:"Bacteria reproducing by binary fission is an example.",answer:"B",explanation:"Binary fission is asexual — a single bacterial cell divides into two genetically identical daughter cells."},
+     {text:"Potato tubers and strawberry runners are examples in plants.",answer:"B",explanation:"Tubers and runners are methods of vegetative propagation — asexual reproduction producing genetically identical new plants."}
+   ]}
+];
+
+const TOPICS = [
+  {key:'cell',label:'Cells 細胞',emoji:'🔬',css:'cell'},
+  {key:'nutrition',label:'Nutrition 營養',emoji:'🍎',css:'nut'},
+  {key:'transport',label:'Transport 循環',emoji:'🫀',css:'trans'},
+  {key:'respiration',label:'Respiration 呼吸',emoji:'🫁',css:'resp'},
+  {key:'ecology',label:'Ecology 生態',emoji:'🌿',css:'eco'}
+];
+
+// ==================== STATE ====================
+const LS_DONE = 'arena-done-' + VERSION;
+const LS_SCORES = 'arena-scores-' + VERSION;
+
+let doneSet, scoresMap;
+function loadStorage(){
+  try{
+    doneSet = new Set(JSON.parse(localStorage.getItem(LS_DONE)||'[]'));
+    scoresMap = new Map(Object.entries(JSON.parse(localStorage.getItem(LS_SCORES)||'{}')));
+  }catch(e){doneSet=new Set();scoresMap=new Map();}
+}
+function saveDone(){try{localStorage.setItem(LS_DONE,JSON.stringify([...doneSet]))}catch(e){}}
+function saveScores(){try{localStorage.setItem(LS_SCORES,JSON.stringify(Object.fromEntries(scoresMap)))}catch(e){}}
+
+let currentTopic = 'cell';
+let view = 'browse'; // browse | quiz | result | compare
+let currentDuelId = null;
+let currentQIndex = 0;
+let currentScore = 0;
+
+// ==================== DOM REFS ====================
+const topicNav = document.getElementById('topicNav');
+const contentArea = document.getElementById('contentArea');
+const progBar = document.getElementById('progBar');
+const progNum = document.getElementById('progNum');
+
+// ==================== HELPERS ====================
+function getDuel(id){return DUELS.find(d=>d.id===id);}
+function getDuelsByTopic(topic){return DUELS.filter(d=>d.topic===topic);}
+function countDone(topic){
+  const total = getDuelsByTopic(topic).length;
+  const done = getDuelsByTopic(topic).filter(d=>doneSet.has(d.id)).length;
+  return {done,total};
+}
+function updateProgress(){
+  const total = DUELS.length;
+  const done = DUELS.filter(d=>doneSet.has(d.id)).length;
+  progBar.style.width = total? (done/total*100)+'%' : '0%';
+  progNum.textContent = done+'/'+total;
+}
+
+// ==================== RENDER BROWSE ====================
+function renderBrowse(){
+  const duels = getDuelsByTopic(currentTopic);
+  let html = '';
+  if(!duels.length){html='<div class="empty-state">這個主題暫無對決</div>';}
+  else {
+    html = '<div class="duel-grid">';
+    duels.forEach(d=>{
+      const done = doneSet.has(d.id);
+      const score = scoresMap.get(d.id);
+      html += '<div class="duel-card'+(done?' done':'')+'" onclick="startQuiz(\''+d.id+'\')">';
+      html += '<div class="duel-header"><span class="duel-icon">'+d.icon+'</span><span class="duel-title">'+d.title+'</span></div>';
+      html += '<div class="duel-vs-row">';
+      html += '<div class="duel-concept"><span class="c-en">'+d.conceptA.name_en+'</span><span class="c-zh">'+d.conceptA.name_zh+'</span><span class="c-tag">'+d.conceptA.tag+'</span></div>';
+      html += '<div class="duel-vs">VS</div>';
+      html += '<div class="duel-concept"><span class="c-en">'+d.conceptB.name_en+'</span><span class="c-zh">'+d.conceptB.name_zh+'</span><span class="c-tag">'+d.conceptB.tag+'</span></div>';
+      html += '</div>';
+      if(done){html+='<div class="duel-done-badge">✅ 已通關</div>';}
+      if(score){html+='<div class="duel-score-badge">最佳 '+score+'/5</div>';}
+      html += '</div>';
+    });
+    html += '</div>';
+  }
+  contentArea.innerHTML = html;
+}
+
+// ==================== RENDER TOPIC NAV ====================
+function renderTopicNav(){
+  let html = '';
+  TOPICS.forEach(t=>{
+    const active = t.key===currentTopic?' active':'';
+    const cnt = countDone(t.key);
+    html += '<button class="topic-pill '+t.css+active+'" onclick="switchTopic(\''+t.key+'\')">'+t.emoji+' '+t.label+' <span style="font-size:0.8rem;opacity:0.7">'+cnt.done+'/'+cnt.total+'</span></button>';
+  });
+  topicNav.innerHTML = html;
+}
+
+function switchTopic(topic){
+  currentTopic = topic;
+  if(view==='quiz'||view==='result'||view==='compare'){view='browse';}
+  renderTopicNav();
+  renderBrowse();
+  updateProgress();
+}
+
+// ==================== QUIZ ====================
+function startQuiz(duelId){
+  currentDuelId = duelId;
+  currentQIndex = 0;
+  currentScore = 0;
+  view = 'quiz';
+  renderQuiz();
+}
+
+function renderQuiz(){
+  const duel = getDuel(currentDuelId);
+  if(!duel)return;
+  if(currentQIndex >= duel.statements.length){
+    showResult();
+    return;
+  }
+  const q = duel.statements[currentQIndex];
+  const total = duel.statements.length;
+  let html = '<div class="quiz-view">';
+  html += '<button class="btn btn-back" onclick="backToBrowse()">← 返回對決列表</button>';
+  html += '<div class="quiz-top">';
+  html += '<div class="quiz-progress">第 '+(currentQIndex+1)+' / '+total+' 題</div>';
+  html += '</div>';
+  html += '<div class="quiz-statement">'+q.text+'</div>';
+  html += '<div class="quiz-buttons">';
+  html += '<button class="quiz-btn" onclick="answer(\'A\',this)" id="btnA"><span class="qb-en">'+duel.conceptA.name_en+'</span><span class="qb-zh">'+duel.conceptA.name_zh+'</span></button>';
+  html += '<button class="quiz-btn" onclick="answer(\'B\',this)" id="btnB"><span class="qb-en">'+duel.conceptB.name_en+'</span><span class="qb-zh">'+duel.conceptB.name_zh+'</span></button>';
+  html += '</div>';
+  html += '<div class="quiz-feedback" id="fb"></div>';
+  html += '<div class="quiz-next" id="nextWrap"><button class="btn btn-primary" onclick="nextQuestion()">下一題 →</button></div>';
+  html += '</div>';
+  contentArea.innerHTML = html;
+}
+
+function answer(choice, btnEl){
+  const duel = getDuel(currentDuelId);
+  const q = duel.statements[currentQIndex];
+  const fb = document.getElementById('fb');
+  const btnA = document.getElementById('btnA');
+  const btnB = document.getElementById('btnB');
+
+  btnA.disabled = true;
+  btnB.disabled = true;
+
+  if(choice === q.answer){
+    currentScore++;
+    btnEl.classList.add('correct');
+    fb.className = 'quiz-feedback correct show';
+    fb.innerHTML = '✅ <strong>正確！</strong> '+q.explanation;
+  } else {
+    btnEl.classList.add('wrong');
+    fb.className = 'quiz-feedback wrong show';
+    fb.innerHTML = '❌ <strong>答錯了。</strong> '+q.explanation;
+    const correctBtn = q.answer==='A'?btnA:btnB;
+    correctBtn.classList.add('chosen-correct');
+  }
+
+  document.getElementById('nextWrap').classList.add('show');
+}
+
+function nextQuestion(){
+  currentQIndex++;
+  if(currentQIndex >= getDuel(currentDuelId).statements.length){
+    showResult();
+  } else {
+    renderQuiz();
+  }
+}
+
+// ==================== RESULT ====================
+function showResult(){
+  view = 'result';
+  const duel = getDuel(currentDuelId);
+  const total = duel.statements.length;
+  const pct = Math.round(currentScore/total*100);
+
+  let emoji, msg;
+  if(pct===100){emoji='🏆';msg='完美！全對通關！';}
+  else if(pct>=80){emoji='👏';msg='做得很好，錯的題目記得複習！';}
+  else if(pct>=60){emoji='💪';msg='不錯，再加把勁！看看對比卡加強記憶。';}
+  else {emoji='📚';msg='別灰心！混淆點就是這樣——錯過才更記得牢。';}
+
+  const prevBest = scoresMap.get(currentDuelId);
+  if(!prevBest || currentScore > parseInt(prevBest)){
+    scoresMap.set(currentDuelId, String(currentScore));
+    saveScores();
+  }
+  if(currentScore===total){
+    doneSet.add(currentDuelId);
+    saveDone();
+  }
+
+  let html = '<div class="result-view"><div class="result-card">';
+  html += '<div class="result-icon">'+emoji+'</div>';
+  html += '<div class="result-title">'+duel.title+'</div>';
+  html += '<div class="result-score">'+currentScore+'<span class="of"> / '+total+'</span></div>';
+  html += '<div class="result-msg">'+msg+'</div></div>';
+  html += '<div class="result-actions" style="margin-top:18px">';
+  html += '<button class="btn btn-primary" onclick="retryQuiz()">🔄 重新挑戰</button>';
+  html += '<button class="btn btn-outline" onclick="showCompare()">📋 查看對比卡</button>';
+  html += '<button class="btn btn-back" onclick="backToBrowse()">← 返回對決列表</button>';
+  html += '</div></div>';
+  contentArea.innerHTML = html;
+
+  updateProgress();
+  renderTopicNav();
+}
+
+function retryQuiz(){
+  currentQIndex = 0;
+  currentScore = 0;
+  view = 'quiz';
+  renderQuiz();
+}
+
+// ==================== COMPARE ====================
+function showCompare(){
+  view = 'compare';
+  const duel = getDuel(currentDuelId);
+  let html = '<div class="compare-view">';
+  html += '<button class="btn btn-back" onclick="backToBrowse()">← 返回對決列表</button>';
+  html += '<div class="compare-header" style="margin-top:12px"><h2>'+duel.icon+' '+duel.title+'</h2>';
+  html += '<div class="compare-tags"><span class="ctag ctag-a">'+duel.conceptA.name_en+'</span><span class="ctag ctag-b">'+duel.conceptB.name_en+'</span></div></div>';
+  html += '<div class="compare-grid">';
+  html += '<div class="compare-col col-a"><h4><span class="en">'+duel.conceptA.name_en+'</span><span class="zh">'+duel.conceptA.name_zh+'</span></h4><ul>';
+  duel.conceptA.traits.forEach(t=>{html+='<li>'+t+'</li>';});
+  html += '</ul></div>';
+  html += '<div class="compare-vs-col"><div class="compare-vs-badge">VS</div></div>';
+  html += '<div class="compare-col col-b"><h4><span class="en">'+duel.conceptB.name_en+'</span><span class="zh">'+duel.conceptB.name_zh+'</span></h4><ul>';
+  duel.conceptB.traits.forEach(t=>{html+='<li>'+t+'</li>';});
+  html += '</ul></div></div>';
+  html += '<div class="compare-diff"><strong>🔑 關鍵區分：</strong>'+duel.keyDiff+'</div>';
+  html += '<div class="compare-trap"><strong>⚠️ 常見陷阱：</strong>'+duel.commonTrap+'</div>';
+  html += '<div class="result-actions" style="margin-top:16px"><button class="btn btn-primary" onclick="retryQuiz()">🔄 重新挑戰</button></div>';
+  html += '</div>';
+  contentArea.innerHTML = html;
+}
+
+function backToBrowse(){
+  view = 'browse';
+  renderTopicNav();
+  renderBrowse();
+  updateProgress();
+}
+
+// ==================== INIT ====================
+function init(){
+  loadStorage();
+  renderTopicNav();
+  renderBrowse();
+  updateProgress();
+}
+init();
+</script>
+</body>
+</html>

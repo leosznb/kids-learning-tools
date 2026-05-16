@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Map Skills Drill · Geography S3</title>
+<style>
+:root {
+  --bg: #fafaf8; --card: #fff; --text: #1a1a1a; --text2: #5c5c5c;
+  --accent: #2563eb; --accent-muted: #dbeafe; --border: #e5e5e0;
+  --correct: #16a34a; --wrong: #dc2626; --warn: #ea580c;
+  --radius: 6px; --shadow: 0 1px 3px rgba(0,0,0,.06);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:-apple-system,'Helvetica Neue','PingFang HK','Noto Sans TC',sans-serif;
+  font-size:15px;line-height:1.7;color:var(--text);background:var(--bg);
+  padding-bottom:3rem;
+}
+header{
+  background:#fff;border-bottom:1px solid var(--border);
+  padding:1rem 1.5rem;position:sticky;top:0;z-index:100;
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem;
+}
+header h1{font-size:1.1rem;font-weight:600}
+header .score{font-size:.85rem;color:var(--text2)}
+header .score span{font-weight:700;color:var(--accent)}
+
+.container{max-width:860px;margin:0 auto;padding:1rem}
+
+/* Tabs */
+.tabs{
+  display:flex;gap:0;border-bottom:1px solid var(--border);
+  background:#fff;position:sticky;top:57px;z-index:50;overflow-x:auto;
+}
+.tab{
+  padding:.55rem .9rem;font-size:.8rem;font-weight:500;cursor:pointer;
+  border:none;background:none;color:var(--text2);white-space:nowrap;
+  border-bottom:2px solid transparent;transition:.15s;
+}
+.tab:hover{color:var(--text)}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+
+/* Cards */
+.card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius);padding:1.5rem;margin:1rem 0;
+  box-shadow:var(--shadow);
+}
+.card h2{font-size:1rem;font-weight:600;margin-bottom:.5rem}
+.card h3{font-size:.85rem;font-weight:600;margin:1rem 0 .5rem;color:var(--text2)}
+.hint{font-size:.78rem;color:var(--text2);margin-bottom:.75rem}
+
+/* Sections */
+.section{display:none}
+.section.active{display:block}
+
+/* SVG Grid */
+.svg-wrap{position:relative;margin:1rem 0;overflow-x:auto}
+.svg-wrap svg{display:block;max-width:100%;height:auto}
+.point-marker{fill:var(--wrong);stroke:#fff;stroke-width:2}
+.grid-label{font-size:8px;fill:var(--text2);font-family:monospace}
+
+/* Input group */
+.input-row{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;margin:.75rem 0}
+.input-row label{font-size:.82rem;font-weight:500;white-space:nowrap}
+.input-row input{
+  padding:.45rem .6rem;border:1px solid var(--border);border-radius:var(--radius);
+  font-size:.9rem;width:120px;font-family:monospace;
+}
+.input-row input:focus{outline:2px solid var(--accent-muted);border-color:var(--accent)}
+.input-row input.correct{border-color:var(--correct);background:#f0fdf4}
+.input-row input.wrong{border-color:var(--wrong);background:#fef2f2}
+
+button{
+  padding:.45rem 1rem;background:var(--accent);color:#fff;border:none;
+  border-radius:var(--radius);font-size:.82rem;font-weight:500;cursor:pointer;
+  transition:.15s;
+}
+button:hover{opacity:.9}
+button:active{transform:scale(.97)}
+button.secondary{background:var(--border);color:var(--text)}
+button.skip{background:none;color:var(--text2);padding:.45rem .6rem;font-size:.78rem}
+
+/* Feedback */
+.feedback{padding:.6rem .8rem;border-radius:var(--radius);font-size:.82rem;margin:.5rem 0;display:none}
+.feedback.show{display:block}
+.feedback.correct{background:#f0fdf4;color:var(--correct);border:1px solid #bbf7d0}
+.feedback.wrong{background:#fef2f2;color:var(--wrong);border:1px solid #fecaca}
+.feedback.info{background:var(--accent-muted);color:var(--accent);border:1px solid #bfdbfe}
+
+/* Stats bar */
+.stats{display:flex;gap:1.5rem;flex-wrap:wrap;font-size:.8rem;color:var(--text2);margin-top:.5rem}
+.stats strong{color:var(--text)}
+
+/* Select */
+select{
+  padding:.45rem .6rem;border:1px solid var(--border);border-radius:var(--radius);
+  font-size:.82rem;background:#fff;cursor:pointer;
+}
+
+/* Protractor helper */
+.protractor-note{font-size:.78rem;color:var(--text2);font-style:italic;margin:.25rem 0}
+
+/* Tooltip mark */
+.tool-mark{position:absolute;color:var(--wrong);font-weight:700;font-size:.7rem;pointer-events:none}
+
+/* History */
+.history{font-size:.75rem;color:var(--text2);max-height:150px;overflow-y:auto;margin-top:.75rem}
+.history div{padding:.15rem 0;border-bottom:1px solid var(--border)}
+.history .h-c{color:var(--correct)}
+.history .h-w{color:var(--wrong)}
+
+/* Responsive */
+@media(max-width:600px){
+  .container{padding:.75rem}
+  .card{padding:1rem}
+  .input-row input{width:100px}
+}
+
+/* Answer display */
+.answer-reveal{font-weight:700;color:var(--accent);font-size:.9rem}
+.answer-reveal span{color:var(--correct)}
+
+/* Contour sketch */
+.contour-sketch{margin:1rem 0}
+.contour-sketch svg{display:block;max-width:100%}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🗺️ Map Skills Drill · S3 Geography</h1>
+  <div class="score">Score: <span id="totalScore">0</span> / <span id="totalQ">0</span></div>
+</header>
+
+<nav class="tabs" id="tabs">
+  <button class="tab active" data-tab="gridref">1. Grid Reference</button>
+  <button class="tab" data-tab="bearing">2. Bearing</button>
+  <button class="tab" data-tab="distance">3. Distance</button>
+  <button class="tab" data-tab="gradient">4. Gradient</button>
+  <button class="tab" data-tab="convert">5. Direction Convert</button>
+</nav>
+
+<div class="container">
+
+<!-- ═══════════════════════════════════════ -->
+<!-- TAB 1: Grid Reference -->
+<!-- ═══════════════════════════════════════ -->
+<section class="section active" id="sec-gridref">
+<div class="card">
+  <h2>Grid Reference</h2>
+  <p class="hint">Remember: <em>"Along the corridor, then up the stairs"</em> — Easting first, then Northing.</p>
+
+  <div style="margin:.5rem 0">
+    <label style="font-size:.82rem;font-weight:500">Mode:</label>
+    <select id="grMode" style="margin-left:.5rem">
+      <option value="4">4-figure grid reference</option>
+      <option value="6">6-figure grid reference</option>
+      <option value="mixed">Mixed (both)</option>
+    </select>
+  </div>
+
+  <div id="grGrid" class="svg-wrap"></div>
+
+  <div class="input-row">
+    <label for="grAnswer">Your GR:</label>
+    <input type="text" id="grAnswer" placeholder="e.g. 4233 or 425335" autocomplete="off" inputmode="numeric">
+    <button id="grCheck">Check</button>
+    <button id="grHint" class="secondary">Hint</button>
+    <button id="grNew" class="skip">New Point →</button>
+  </div>
+
+  <div class="feedback" id="grFeedback"></div>
+  <div class="history" id="grHistory"></div>
+</div>
+</section>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- TAB 2: Bearing -->
+<!-- ═══════════════════════════════════════ -->
+<section class="section" id="sec-bearing">
+<div class="card">
+  <h2>Bearing</h2>
+  <p class="hint">Measure bearing from Point A (FROM) to Point B (TO). Use protractor — measure clockwise from North.</p>
+
+  <div style="margin:.5rem 0">
+    <label style="font-size:.82rem;font-weight:500">Type:</label>
+    <select id="brType">
+      <option value="wcb">Whole-circle bearing (0°–360°)</option>
+      <option value="rb">Reduced bearing (e.g. N45°E)</option>
+      <option value="mixed">Mixed</option>
+    </select>
+  </div>
+
+  <div id="brPlot" class="svg-wrap"></div>
+
+  <div class="input-row" id="brWCBRow">
+    <label for="brWCB">Whole-circle bearing:</label>
+    <input type="text" id="brWCB" placeholder="e.g. 135°" autocomplete="off" inputmode="decimal">
+    <span style="font-size:.82rem">°</span>
+  </div>
+
+  <div class="input-row" id="brRBRow" style="display:none">
+    <label for="brRB">Reduced bearing:</label>
+    <select id="brRBDir" style="width:auto">
+      <option value="N">N</option><option value="S">S</option>
+    </select>
+    <input type="text" id="brRBAngle" placeholder="e.g. 45" autocomplete="off" inputmode="decimal" style="width:80px">
+    <span style="font-size:.82rem">°</span>
+    <select id="brRBEW" style="width:auto">
+      <option value="E">E</option><option value="W">W</option>
+    </select>
+  </div>
+
+  <div class="input-row">
+    <button id="brCheck">Check</button>
+    <button id="brNew" class="skip">New Points →</button>
+  </div>
+
+  <div class="feedback" id="brFeedback"></div>
+  <div class="history" id="brHistory"></div>
+</div>
+</section>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- TAB 3: Distance -->
+<!-- ═══════════════════════════════════════ -->
+<section class="section" id="sec-distance">
+<div class="card">
+  <h2>Distance</h2>
+  <p class="hint">Each grid square = 2cm on the map. Measure the path. Apply the scale to get actual ground distance.</p>
+
+  <div id="distGrid" class="svg-wrap"></div>
+
+  <div style="font-size:.85rem;margin:.5rem 0">
+    Scale: <strong id="distScaleDisplay">1:20,000</strong> — each grid square (2cm on map) = <strong id="distPerSquare">400</strong> m on ground
+  </div>
+
+  <div style="font-size:.82rem;color:var(--text2);margin:.25rem 0">
+    Path type: <strong id="distPathType">—</strong>
+    <span style="margin-left:.5rem">Map length: <strong id="distMapLength">—</strong> cm</span>
+  </div>
+
+  <div class="input-row">
+    <label for="distAnswer">Actual ground distance:</label>
+    <input type="text" id="distAnswer" placeholder="e.g. 1200" autocomplete="off" inputmode="decimal">
+    <select id="distUnit" style="width:auto">
+      <option value="m">m</option>
+      <option value="km">km</option>
+    </select>
+    <button id="distCheck">Check</button>
+    <button id="distNew" class="skip">New Path →</button>
+  </div>
+
+  <div class="feedback" id="distFeedback"></div>
+  <div class="history" id="distHistory"></div>
+</div>
+</section>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- TAB 4: Gradient -->
+<!-- ═══════════════════════════════════════ -->
+<section class="section" id="sec-gradient">
+<div class="card">
+  <h2>Gradient</h2>
+  <p class="hint">Gradient = Vertical Interval (VI) ÷ Horizontal Equivalent (HE). Express as ratio 1:X.</p>
+
+  <div class="contour-sketch" id="gradSketch"></div>
+
+  <div style="font-size:.85rem;margin:.5rem 0;background:#f8f8f5;padding:.75rem;border-radius:var(--radius)">
+    <div>Vertical Interval (VI) = <strong id="gradVI">—</strong> m</div>
+    <div>Horizontal Equivalent (HE) = <strong id="gradHE">—</strong> m</div>
+    <div style="margin-top:.25rem;color:var(--text2)">Map distance = <strong id="gradMapDist">—</strong> cm · Scale = <strong id="gradScale">1:20,000</strong></div>
+  </div>
+
+  <div class="input-row">
+    <label for="gradAnswer">Gradient = 1 :</label>
+    <input type="text" id="gradAnswer" placeholder="e.g. 25" autocomplete="off" inputmode="decimal">
+    <button id="gradCheck">Check</button>
+    <button id="gradNew" class="skip">New Problem →</button>
+  </div>
+
+  <div class="feedback" id="gradFeedback"></div>
+  <div class="history" id="gradHistory"></div>
+</div>
+</section>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- TAB 5: Direction Conversion -->
+<!-- ═══════════════════════════════════════ -->
+<section class="section" id="sec-convert">
+<div class="card">
+  <h2>Direction Conversion</h2>
+  <p class="hint">Convert between Compass Points, Whole-circle Bearings, and Reduced Bearings.</p>
+
+  <div style="font-size:1rem;font-weight:600;margin:1rem 0;text-align:center;padding:1rem;background:#f8f8f5;border-radius:var(--radius)" id="convQuestion">
+    —
+  </div>
+
+  <div class="input-row" id="convRow">
+    <label for="convAnswer">Your answer:</label>
+    <input type="text" id="convAnswer" placeholder="—" autocomplete="off">
+    <button id="convCheck">Check</button>
+  </div>
+
+  <div class="input-row">
+    <button id="convNew" class="skip">New Question →</button>
+  </div>
+
+  <div class="feedback" id="convFeedback"></div>
+  <div class="history" id="convHistory"></div>
+</div>
+</section>
+
+</div><!-- /container -->
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════
+   MAP SKILLS DRILL · S3 Geography
+   Covers: Grid Reference, Bearing, Distance, Gradient, Direction Conv.
+   ═══════════════════════════════════════════════════════════════════ */
+
+const TOLERANCE = { bearing: 3, distance: 3, gradient: 1 };
+
+let totalScore = 0, totalQ = 0;
+
+function updateScore(correct) {
+  totalQ++;
+  if (correct) totalScore++;
+  document.getElementById('totalScore').textContent = totalScore;
+  document.getElementById('totalQ').textContent = totalQ;
+}
+
+/* ── Tab Navigation ── */
+document.querySelectorAll('.tab').forEach(t => {
+  t.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+    document.querySelectorAll('.section').forEach(x => x.classList.remove('active'));
+    t.classList.add('active');
+    document.getElementById('sec-' + t.dataset.tab).classList.add('active');
+    // Re-trigger SVG sizing on tab switch
+    if (t.dataset.tab === 'gridref') generateGR();
+    if (t.dataset.tab === 'bearing') generateBearing();
+    if (t.dataset.tab === 'distance') generateDistance();
+    if (t.dataset.tab === 'gradient') generateGradient();
+    if (t.dataset.tab === 'convert') generateConversion();
+  });
+});
+
+/* ═══════════════════════════════════════════════
+   TAB 1: GRID REFERENCE
+   ═══════════════════════════════════════════════ */
+let grCurrent = null;
+
+function generateGR() {
+  const mode = document.getElementById('grMode').value;
+  const is4 = mode === '4' ? true : (mode === '6' ? false : Math.random() > 0.5);
+  const eastBase = 40 + Math.floor(Math.random() * 7); // 40-46
+  const northBase = 30 + Math.floor(Math.random() * 5); // 30-34
+
+  let eastTenth = 0, northTenth = 0;
+  let correctAnswer = '';
+  if (is4) {
+    correctAnswer = String(eastBase) + String(northBase);
+  } else {
+    eastTenth = Math.floor(Math.random() * 9) + 1; // 1-9
+    northTenth = Math.floor(Math.random() * 9) + 1;
+    correctAnswer = String(eastBase) + eastTenth + String(northBase) + northTenth;
+  }
+
+  grCurrent = { is4, eastBase, northBase, eastTenth, northTenth, correctAnswer };
+
+  const gridCols = 7, gridRows = 5;
+  const highestNorthing = 34; // Northing increases upward: 30(bottom) → 34(top)
+  const sq = 70;
+  const margin = { left: 55, top: 30, right: 20, bottom: 40 };
+  const w = margin.left + gridCols * sq + margin.right;
+  const h = margin.top + gridRows * sq + margin.bottom;
+
+  let svg = `<svg viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg">`;
+  svg += `<rect width="${w}" height="${h}" fill="#fdfdfc"/>`;
+
+  // Grid lines and labels
+  for (let c = 0; c <= gridCols; c++) {
+    const x = margin.left + c * sq;
+    svg += `<line x1="${x}" y1="${margin.top}" x2="${x}" y2="${margin.top + gridRows * sq}" stroke="#ddd" stroke-width="${c === 0 || c === gridCols ? 1.2 : 0.5}"/>`;
+    if (c < gridCols) {
+      svg += `<text x="${x + sq/2}" y="${margin.top + gridRows * sq + 16}" text-anchor="middle" class="grid-label">${40 + c}</text>`;
+    }
+  }
+  for (let r = 0; r <= gridRows; r++) {
+    const y = margin.top + r * sq;
+    svg += `<line x1="${margin.left}" y1="${y}" x2="${margin.left + gridCols * sq}" y2="${y}" stroke="#ddd" stroke-width="${r === 0 || r === gridRows ? 1.2 : 0.5}"/>`;
+    if (r < gridRows) {
+      svg += `<text x="${margin.left - 8}" y="${y + sq/2 + 3}" text-anchor="end" class="grid-label">${highestNorthing - r}</text>`;
+    }
+  }
+
+  // Sub-grid lines (for 6-fig, faint)
+  if (!is4) {
+    for (let c = 0; c < gridCols * 10; c++) {
+      if (c % 10 !== 0) {
+        const x = margin.left + (c / 10) * sq;
+        svg += `<line x1="${x}" y1="${margin.top}" x2="${x}" y2="${margin.top + gridRows * sq}" stroke="#eee" stroke-width="0.3"/>`;
+      }
+    }
+    for (let r = 0; r < gridRows * 10; r++) {
+      if (r % 10 !== 0) {
+        const y = margin.top + (r / 10) * sq;
+        svg += `<line x1="${margin.left}" y1="${y}" x2="${margin.left + gridCols * sq}" y2="${y}" stroke="#eee" stroke-width="0.3"/>`;
+      }
+    }
+  }
+
+  // Point marker
+  const colIdx = eastBase - 40; // 0 = leftmost column
+  const rowIdxFromTop = highestNorthing - northBase; // 0 = top row (northing 34), 4 = bottom row (northing 30)
+  let px = margin.left + colIdx * sq + sq / 2;
+  let py = margin.top + rowIdxFromTop * sq + sq / 2;
+  if (!is4) {
+    px = margin.left + colIdx * sq + (eastTenth / 10) * sq;
+    // Northing increases upward: 0/10 = bottom edge, 10/10 = top edge
+    // Bottom edge at margin.top + (rowIdxFromTop + 1) * sq; top edge at margin.top + rowIdxFromTop * sq
+    py = margin.top + rowIdxFromTop * sq + sq - (northTenth / 10) * sq;
+  }
+  svg += `<circle cx="${px}" cy="${py}" r="6" class="point-marker"/>`;
+  svg += `<text x="${px + 10}" y="${py - 10}" fill="var(--wrong)" font-size="10" font-weight="700">📍</text>`;
+
+  // Labels
+  svg += `<text x="${margin.left + gridCols * sq / 2}" y="${margin.top + gridRows * sq + 32}" text-anchor="middle" font-size="9" fill="var(--text2)">Easting →</text>`;
+  svg += `<text x="12" y="${margin.top + gridRows * sq / 2}" text-anchor="middle" font-size="9" fill="var(--text2)" transform="rotate(-90,12,${margin.top + gridRows * sq / 2})">Northing →</text>`;
+  svg += `<text x="${margin.left + gridCols * sq + 12}" y="${margin.top + 14}" font-size="9" fill="var(--text2)">N</text>`;
+
+  svg += `</svg>`;
+  document.getElementById('grGrid').innerHTML = svg;
+  document.getElementById('grAnswer').value = '';
+  document.getElementById('grAnswer').className = '';
+  document.getElementById('grFeedback').className = 'feedback';
+  document.getElementById('grAnswer').focus();
+}
+
+function checkGR() {
+  if (!grCurrent) return;
+  const ans = document.getElementById('grAnswer').value.trim().replace(/\s/g, '');
+  const inp = document.getElementById('grAnswer');
+  const fb = document.getElementById('grFeedback');
+  const correct = ans === grCurrent.correctAnswer;
+
+  inp.className = correct ? 'correct' : 'wrong';
+  fb.className = 'feedback show ' + (correct ? 'correct' : 'wrong');
+
+  if (correct) {
+    fb.textContent = '✓ Correct! ' + grCurrent.correctAnswer;
+  } else {
+    fb.innerHTML = '✗ Wrong. Correct answer: <strong>' + grCurrent.correctAnswer + '</strong>';
+    if (grCurrent.is4) {
+      fb.innerHTML += '<br>Hint: Easting first (40–46), then Northing (30–34).';
+    } else {
+      fb.innerHTML += '<br>Hint: Easting first (3 digits 40-46 + tenth), then Northing (3 digits 30-34 + tenth).';
+    }
+  }
+
+  updateScore(correct);
+  addHistory('grHistory', correct, grCurrent.correctAnswer, ans);
+}
+
+function hintGR() {
+  if (!grCurrent) return;
+  const fb = document.getElementById('grFeedback');
+  fb.className = 'feedback show info';
+  if (grCurrent.is4) {
+    fb.textContent = `Hint: The point is in grid square Easting ${grCurrent.eastBase}, Northing ${grCurrent.northBase}. 4-figure format: EENN (4 digits, Easting first).`;
+  } else {
+    fb.textContent = `Hint: The point is at Easting ${grCurrent.eastBase}.${grCurrent.eastTenth}, Northing ${grCurrent.northBase}.${grCurrent.northTenth}. 6-figure format: EEENNN (6 digits, Easting first).`;
+  }
+}
+
+document.getElementById('grCheck').addEventListener('click', checkGR);
+document.getElementById('grNew').addEventListener('click', generateGR);
+document.getElementById('grHint').addEventListener('click', hintGR);
+document.getElementById('grMode').addEventListener('change', generateGR);
+document.getElementById('grAnswer').addEventListener('keydown', e => { if (e.key === 'Enter') checkGR(); });
+
+/* ═══════════════════════════════════════════════
+   TAB 2: BEARING
+   ═══════════════════════════════════════════════ */
+let brCurrent = null;
+
+function generateBearing() {
+  const type = document.getElementById('brType').value;
+  const isWCB = type === 'wcb' ? true : (type === 'rb' ? false : Math.random() > 0.5);
+
+  const w = 380, h = 340;
+  const cx = 160, cy = 160;
+
+  // Generate random point B (point A is at center reference)
+  let bx, by, trueWCB;
+  do {
+    bx = 60 + Math.random() * 280;
+    by = 40 + Math.random() * 280;
+    const dx = bx - cx;
+    const dy = -(by - cy); // SVG Y is inverted
+    let angle = Math.atan2(dx, dy) * (180 / Math.PI); // Angle from North
+    if (angle < 0) angle += 360;
+    trueWCB = Math.round(angle);
+  } while (Math.abs(bx - cx) < 40 && Math.abs(by - cy) < 40); // Not too close
+
+  // Reduced bearing
+  let rbNS, rbAngle, rbEW;
+  if (trueWCB <= 90) { rbNS = 'N'; rbAngle = trueWCB; rbEW = 'E'; }
+  else if (trueWCB <= 180) { rbNS = 'S'; rbAngle = 180 - trueWCB; rbEW = 'E'; }
+  else if (trueWCB <= 270) { rbNS = 'S'; rbAngle = trueWCB - 180; rbEW = 'W'; }
+  else { rbNS = 'N'; rbAngle = 360 - trueWCB; rbEW = 'W'; }
+
+  brCurrent = { isWCB, trueWCB, rbNS, rbAngle, rbEW, ax: cx, ay: cy, bx, by };
+
+  let svg = `<svg viewBox="0 0 ${w} ${h}" width="${w}" height="${Math.min(h, 300)}" xmlns="http://www.w3.org/2000/svg">`;
+  svg += `<rect width="${w}" height="${h}" fill="#fdfdfc"/>`;
+
+  // Crosshair at A with N arrow
+  svg += `<line x1="${cx}" y1="20" x2="${cx}" y2="${h - 20}" stroke="#eee" stroke-width="0.5"/>`;
+  svg += `<line x1="20" y1="${cy}" x2="${w - 20}" y2="${cy}" stroke="#eee" stroke-width="0.5"/>`;
+  // North arrow
+  svg += `<line x1="${cx}" y1="${cy}" x2="${cx}" y2="${cy - 40}" stroke="var(--wrong)" stroke-width="2"/>`;
+  svg += `<polygon points="${cx - 5},${cy - 35} ${cx},${cy - 48} ${cx + 5},${cy - 35}" fill="var(--wrong)"/>`;
+  svg += `<text x="${cx}" y="${cy - 50}" text-anchor="middle" font-size="11" font-weight="700" fill="var(--wrong)">N</text>`;
+
+  // Point A
+  svg += `<circle cx="${cx}" cy="${cy}" r="6" fill="var(--accent)" stroke="#fff" stroke-width="2"/>`;
+  svg += `<text x="${cx + 10}" y="${cy - 10}" font-size="10" font-weight="700" fill="var(--accent)">A</text>`;
+
+  // Point B
+  svg += `<circle cx="${bx}" cy="${by}" r="6" fill="var(--warn)" stroke="#fff" stroke-width="2"/>`;
+  svg += `<text x="${bx + 10}" y="${by - 10}" font-size="10" font-weight="700" fill="var(--warn)">B</text>`;
+
+  // Line from A to B
+  svg += `<line x1="${cx}" y1="${cy}" x2="${bx}" y2="${by}" stroke="#999" stroke-width="1" stroke-dasharray="4,3"/>`;
+
+  svg += `<text x="${w / 2}" y="${h - 8}" text-anchor="middle" font-size="8" fill="var(--text2)">Measure bearing from A → B. North = 0°. Clockwise.</text>`;
+  svg += `</svg>`;
+
+  document.getElementById('brPlot').innerHTML = svg;
+
+  // Show correct input row
+  const wcbRow = document.getElementById('brWCBRow');
+  const rbRow = document.getElementById('brRBRow');
+  if (isWCB) {
+    wcbRow.style.display = 'flex';
+    rbRow.style.display = 'none';
+    document.getElementById('brWCB').value = '';
+    document.getElementById('brWCB').className = '';
+  } else {
+    wcbRow.style.display = 'none';
+    rbRow.style.display = 'flex';
+    document.getElementById('brRBAngle').value = '';
+    document.getElementById('brRBAngle').className = '';
+  }
+  document.getElementById('brFeedback').className = 'feedback';
+  if (isWCB) document.getElementById('brWCB').focus();
+  else document.getElementById('brRBAngle').focus();
+}
+
+function checkBearing() {
+  if (!brCurrent) return;
+  const fb = document.getElementById('brFeedback');
+  let userAnswer, correctAnswer, isCorrect;
+
+  if (brCurrent.isWCB) {
+    userAnswer = parseFloat(document.getElementById('brWCB').value);
+    correctAnswer = brCurrent.trueWCB;
+    isCorrect = !isNaN(userAnswer) && Math.abs(userAnswer - correctAnswer) <= TOLERANCE.bearing;
+    document.getElementById('brWCB').className = isCorrect ? 'correct' : 'wrong';
+  } else {
+    const ns = document.getElementById('brRBDir').value;
+    const ang = parseFloat(document.getElementById('brRBAngle').value);
+    const ew = document.getElementById('brRBEW').value;
+    userAnswer = ns + ang + '°' + ew;
+    correctAnswer = brCurrent.rbNS + brCurrent.rbAngle + '°' + brCurrent.rbEW;
+    isCorrect = ns === brCurrent.rbNS && !isNaN(ang) && Math.abs(ang - brCurrent.rbAngle) <= TOLERANCE.bearing && ew === brCurrent.rbEW;
+    document.getElementById('brRBAngle').className = isCorrect ? 'correct' : 'wrong';
+  }
+
+  fb.className = 'feedback show ' + (isCorrect ? 'correct' : 'wrong');
+  if (isCorrect) {
+    fb.textContent = '✓ Correct! ' + correctAnswer + (brCurrent.isWCB ? '°' : '');
+    if (!brCurrent.isWCB) fb.textContent += ' = ' + brCurrent.trueWCB + '° WCB';
+  } else {
+    fb.innerHTML = '✗ Wrong. Correct: <strong>' + correctAnswer + (brCurrent.isWCB ? '°' : '') + '</strong>';
+    if (!brCurrent.isWCB) fb.innerHTML += ' = <strong>' + brCurrent.trueWCB + '°</strong> WCB';
+  }
+
+  updateScore(isCorrect);
+  addHistory('brHistory', isCorrect, correctAnswer, String(userAnswer));
+}
+
+document.getElementById('brCheck').addEventListener('click', checkBearing);
+document.getElementById('brNew').addEventListener('click', generateBearing);
+document.getElementById('brType').addEventListener('change', generateBearing);
+document.getElementById('brWCB').addEventListener('keydown', e => { if (e.key === 'Enter') checkBearing(); });
+document.getElementById('brRBAngle').addEventListener('keydown', e => { if (e.key === 'Enter') checkBearing(); });
+
+/* ═══════════════════════════════════════════════
+   TAB 3: DISTANCE
+   ═══════════════════════════════════════════════ */
+let distCurrent = null;
+const SCALES = [
+  { name: '1:20,000', factor: 20000, perSquare: 400 },  // 2cm × 20000 = 40000cm = 400m
+  { name: '1:10,000', factor: 10000, perSquare: 200 },
+  { name: '1:5,000', factor: 5000, perSquare: 100 },
+];
+
+function generateDistance() {
+  const scale = SCALES[Math.floor(Math.random() * SCALES.length)];
+  const isStraight = Math.random() > 0.4;
+
+  const gridCols = 8, gridRows = 5;
+  const sq = 50;
+  const margin = { left: 15, top: 15, right: 15, bottom: 25 };
+  const w = margin.left + gridCols * sq + margin.right;
+  const h = margin.top + gridRows * sq + margin.bottom;
+
+  let mapLengthCm = 0; // Map length in cm
+  let pathPoints = [];
+  let pathType = isStraight ? 'Straight line' : 'Curved path';
+
+  if (isStraight) {
+    const sx = 1 + Math.floor(Math.random() * (gridCols - 3));
+    const sy = 1 + Math.floor(Math.random() * (gridRows - 2));
+    const ex = sx + 2 + Math.floor(Math.random() * (gridCols - sx - 3));
+    const ey = sy + Math.floor(Math.random() * (gridRows - sy - 1));
+    const dx = ex - sx, dy = ey - sy;
+    const gridDist = Math.sqrt(dx * dx + dy * dy);
+    mapLengthCm = Math.round(gridDist * 2 * 10) / 10; // 2cm per grid square
+    pathPoints = [{ x: sx * sq + sq / 2, y: sy * sq + sq / 2 }, { x: ex * sq + sq / 2, y: ey * sq + sq / 2 }];
+  } else {
+    // Curved: generate a winding path with multiple segments
+    let cx = 1 + Math.random() * 2;
+    let cy = 2 + Math.random() * 2;
+    pathPoints.push({ x: cx * sq + sq / 2, y: cy * sq + sq / 2 });
+    const segments = 3 + Math.floor(Math.random() * 3);
+    for (let i = 0; i < segments; i++) {
+      cx += 1 + Math.random() * 1.5;
+      cy += (Math.random() - 0.3) * 1.5;
+      cx = Math.min(cx, gridCols - 1.5);
+      cy = Math.max(1, Math.min(cy, gridRows - 1.5));
+      pathPoints.push({ x: cx * sq + sq / 2, y: cy * sq + sq / 2 });
+    }
+    // Calculate map length
+    for (let i = 1; i < pathPoints.length; i++) {
+      const dx = pathPoints[i].x - pathPoints[i - 1].x;
+      const dy = pathPoints[i].y - pathPoints[i - 1].y;
+      const segLenPx = Math.sqrt(dx * dx + dy * dy);
+      mapLengthCm += (segLenPx / sq) * 2; // 2cm per sq
+    }
+    mapLengthCm = Math.round(mapLengthCm * 10) / 10;
+  }
+
+  const groundDistM = Math.round(mapLengthCm * scale.factor / 100); // cm → m
+  distCurrent = { scale, mapLengthCm, groundDistM, pathType, pathPoints, w, h, sq, margin, gridCols, gridRows };
+
+  // Draw
+  let svg = `<svg viewBox="0 0 ${w} ${h}" width="${w}" height="${Math.min(h, 220)}" xmlns="http://www.w3.org/2000/svg">`;
+  svg += `<rect width="${w}" height="${h}" fill="#fdfdfc"/>`;
+
+  // Grid
+  for (let c = 0; c <= gridCols; c++) {
+    svg += `<line x1="${c * sq}" y1="0" x2="${c * sq}" y2="${gridRows * sq}" stroke="#eee" stroke-width="0.5"/>`;
+  }
+  for (let r = 0; r <= gridRows; r++) {
+    svg += `<line x1="0" y1="${r * sq}" x2="${gridCols * sq}" y2="${r * sq}" stroke="#eee" stroke-width="0.5"/>`;
+  }
+
+  // Path
+  let pathD = '';
+  for (let i = 0; i < pathPoints.length; i++) {
+    pathD += (i === 0 ? 'M' : 'L') + pathPoints[i].x + ',' + pathPoints[i].y + ' ';
+  }
+  svg += `<path d="${pathD}" fill="none" stroke="var(--wrong)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>`;
+
+  // Endpoints
+  const first = pathPoints[0], last = pathPoints[pathPoints.length - 1];
+  svg += `<circle cx="${first.x}" cy="${first.y}" r="5" fill="var(--accent)"/>`;
+  svg += `<circle cx="${last.x}" cy="${last.y}" r="5" fill="var(--warn)"/>`;
+  svg += `<text x="${first.x + 8}" y="${first.y - 6}" font-size="9" fill="var(--accent)" font-weight="700">Start</text>`;
+  svg += `<text x="${last.x + 8}" y="${last.y - 6}" font-size="9" fill="var(--warn)" font-weight="700">End</text>`;
+
+  // Scale bar
+  const barX = 5, barY = gridRows * sq + 5, barW = sq * 2;
+  svg += `<line x1="${barX}" y1="${barY}" x2="${barX + barW}" y2="${barY}" stroke="#333" stroke-width="3"/>`;
+  svg += `<text x="${barX + barW / 2}" y="${barY + 12}" text-anchor="middle" font-size="8" fill="var(--text2)">${scale.perSquare * 2} m</text>`;
+
+  svg += `</svg>`;
+  document.getElementById('distGrid').innerHTML = svg;
+  document.getElementById('distScaleDisplay').textContent = scale.name;
+  document.getElementById('distPerSquare').textContent = scale.perSquare;
+  document.getElementById('distPathType').textContent = pathType;
+  document.getElementById('distMapLength').textContent = mapLengthCm;
+  document.getElementById('distAnswer').value = '';
+  document.getElementById('distAnswer').className = '';
+  document.getElementById('distFeedback').className = 'feedback';
+  document.getElementById('distAnswer').focus();
+}
+
+function checkDistance() {
+  if (!distCurrent) return;
+  const ans = document.getElementById('distAnswer').value.trim();
+  const unit = document.getElementById('distUnit').value;
+  const inp = document.getElementById('distAnswer');
+  const fb = document.getElementById('distFeedback');
+
+  let userM = parseFloat(ans);
+  if (isNaN(userM)) { fb.className = 'feedback show wrong'; fb.textContent = 'Please enter a number.'; return; }
+  if (unit === 'km') userM *= 1000;
+
+  const correctM = distCurrent.groundDistM;
+  const diff = Math.abs(userM - correctM);
+  const pctDiff = diff / correctM;
+  const isCorrect = pctDiff < 0.05; // 5% tolerance
+
+  inp.className = isCorrect ? 'correct' : 'wrong';
+  fb.className = 'feedback show ' + (isCorrect ? 'correct' : 'wrong');
+
+  if (isCorrect) {
+    fb.textContent = `✓ Correct! ${correctM} m (map: ${distCurrent.mapLengthCm} cm × ${distCurrent.scale.factor / 100} = ${correctM} m)`;
+  } else {
+    fb.innerHTML = `✗ Wrong. Correct: <strong>${correctM} m</strong> (map: ${distCurrent.mapLengthCm} cm × ${distCurrent.scale.factor / 100}).`;
+    fb.innerHTML += `<br>Your answer: ${userM} m. Difference: ${Math.round(diff)} m.`;
+  }
+
+  updateScore(isCorrect);
+  addHistory('distHistory', isCorrect, correctM + ' m', userM + ' m');
+}
+
+document.getElementById('distCheck').addEventListener('click', checkDistance);
+document.getElementById('distNew').addEventListener('click', generateDistance);
+document.getElementById('distAnswer').addEventListener('keydown', e => { if (e.key === 'Enter') checkDistance(); });
+
+/* ═══════════════════════════════════════════════
+   TAB 4: GRADIENT
+   ═══════════════════════════════════════════════ */
+let gradCurrent = null;
+
+function generateGradient() {
+  const scale = SCALES[Math.floor(Math.random() * SCALES.length)];
+  const mapDistCm = 2 + Math.floor(Math.random() * 5) + Math.random();
+  const mapDistRounded = Math.round(mapDistCm * 10) / 10;
+  const heM = Math.round(mapDistRounded * scale.factor / 100); // ground distance in m
+  const viM = 20 + Math.floor(Math.random() * 16) * 5; // 20-95 in steps of 5
+  const gradientRaw = heM / viM;
+  const gradientRounded = Math.round(gradientRaw);
+
+  gradCurrent = { scale, mapDistCm: mapDistRounded, viM, heM, gradientRounded };
+
+  // Draw simple contour sketch
+  const w = 320, h = 120;
+  const padX = 30, padY = 20;
+  let svg = `<svg viewBox="0 0 ${w} ${h}" width="${w}" height="${Math.min(h, 100)}" xmlns="http://www.w3.org/2000/svg">`;
+  svg += `<rect width="${w}" height="${h}" fill="#fdfdfc"/>`;
+
+  // Ground line
+  svg += `<line x1="${padX}" y1="${h - padY}" x2="${w - padX}" y2="${h - padY}" stroke="#333" stroke-width="2"/>`;
+  // Slope line
+  const slopeEnd = h - padY - 40;
+  svg += `<line x1="${padX}" y1="${h - padY}" x2="${w - padX}" y2="${slopeEnd}" stroke="var(--wrong)" stroke-width="2.5"/>`;
+
+  // Height labels
+  svg += `<text x="${padX - 5}" y="${h - padY + 4}" text-anchor="end" font-size="9" fill="var(--text2)">0 m</text>`;
+  svg += `<text x="${w - padX + 5}" y="${slopeEnd + 4}" font-size="9" fill="var(--wrong)">${viM} m</text>`;
+
+  // Horizontal line
+  svg += `<line x1="${padX}" y1="${h - padY - 2}" x2="${w - padX}" y2="${h - padY - 2}" stroke="#999" stroke-dasharray="3,3" stroke-width="0.8"/>`;
+
+  // Distance label
+  svg += `<text x="${w / 2}" y="${h - 5}" text-anchor="middle" font-size="9" fill="var(--text2)">HE = ${heM} m (${mapDistRounded} cm on map)</text>`;
+
+  svg += `</svg>`;
+  document.getElementById('gradSketch').innerHTML = svg;
+  document.getElementById('gradVI').textContent = viM;
+  document.getElementById('gradHE').textContent = heM;
+  document.getElementById('gradMapDist').textContent = mapDistRounded;
+  document.getElementById('gradScale').textContent = scale.name;
+  document.getElementById('gradAnswer').value = '';
+  document.getElementById('gradAnswer').className = '';
+  document.getElementById('gradFeedback').className = 'feedback';
+  document.getElementById('gradAnswer').focus();
+}
+
+function checkGradient() {
+  if (!gradCurrent) return;
+  const ans = parseFloat(document.getElementById('gradAnswer').value);
+  const inp = document.getElementById('gradAnswer');
+  const fb = document.getElementById('gradFeedback');
+  const correct = gradCurrent.gradientRounded;
+
+  const isCorrect = !isNaN(ans) && Math.abs(ans - correct) <= TOLERANCE.gradient;
+
+  inp.className = isCorrect ? 'correct' : 'wrong';
+  fb.className = 'feedback show ' + (isCorrect ? 'correct' : 'wrong');
+
+  if (isCorrect) {
+    fb.textContent = `✓ Correct! 1:${correct} (VI=${gradCurrent.viM}m, HE=${gradCurrent.heM}m, ${gradCurrent.heM}÷${gradCurrent.viM}=${correct})`;
+  } else {
+    fb.innerHTML = `✗ Wrong. Correct: <strong>1:${correct}</strong>.`;
+    fb.innerHTML += `<br>Formula: HE ÷ VI = ${gradCurrent.heM} ÷ ${gradCurrent.viM} = ${gradCurrent.gradientRounded}`;
+    fb.innerHTML += `<br>Gradient = 1 : ${correct}`;
+  }
+
+  updateScore(isCorrect);
+  addHistory('gradHistory', isCorrect, '1:' + correct, isNaN(ans) ? '—' : '1:' + ans);
+}
+
+document.getElementById('gradCheck').addEventListener('click', checkGradient);
+document.getElementById('gradNew').addEventListener('click', generateGradient);
+document.getElementById('gradAnswer').addEventListener('keydown', e => { if (e.key === 'Enter') checkGradient(); });
+
+/* ═══════════════════════════════════════════════
+   TAB 5: DIRECTION CONVERSION
+   ═══════════════════════════════════════════════ */
+let convCurrent = null;
+
+const COMPASS_POINTS = ['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'];
+const COMPASS_TO_WCB = { N:0,NNE:22.5,NE:45,ENE:67.5,E:90,ESE:112.5,SE:135,SSE:157.5,S:180,SSW:202.5,SW:225,WSW:247.5,W:270,WNW:292.5,NW:315,NNW:337.5 };
+const WCB_TO_COMPASS = {};
+Object.entries(COMPASS_TO_WCB).forEach(([k,v]) => { WCB_TO_COMPASS[v] = k; });
+
+function generateConversion() {
+  const types = ['compass2wcb', 'wcb2compass', 'wcb2rb', 'rb2wcb'];
+  const type = types[Math.floor(Math.random() * types.length)];
+  let question, correctAnswer;
+
+  switch (type) {
+    case 'compass2wcb': {
+      const cp = COMPASS_POINTS[Math.floor(Math.random() * COMPASS_POINTS.length)];
+      question = `Convert <strong>${cp}</strong> to Whole-circle bearing:`;
+      correctAnswer = COMPASS_TO_WCB[cp] + '°';
+      break;
+    }
+    case 'wcb2compass': {
+      const wcb = Object.keys(WCB_TO_COMPASS).map(Number);
+      const val = wcb[Math.floor(Math.random() * wcb.length)];
+      question = `Convert <strong>${val}°</strong> to Compass Point:`;
+      correctAnswer = WCB_TO_COMPASS[val];
+      break;
+    }
+    case 'wcb2rb': {
+      const wcb = Math.floor(Math.random() * 36) * 10; // 0, 10, 20, ... 350
+      const trueWCB = wcb === 360 ? 0 : wcb;
+      let rb;
+      if (trueWCB === 0) rb = 'N';
+      else if (trueWCB < 90) rb = 'N' + trueWCB + '°E';
+      else if (trueWCB === 90) rb = 'E';
+      else if (trueWCB < 180) rb = 'S' + (180 - trueWCB) + '°E';
+      else if (trueWCB === 180) rb = 'S';
+      else if (trueWCB < 270) rb = 'S' + (trueWCB - 180) + '°W';
+      else if (trueWCB === 270) rb = 'W';
+      else rb = 'N' + (360 - trueWCB) + '°W';
+      question = `Convert <strong>${wcb}°</strong> (WCB) to Reduced bearing:`;
+      correctAnswer = rb;
+      break;
+    }
+    case 'rb2wcb': {
+      // Generate random reduced bearing (including pure cardinal cases)
+      let rbStr, wcb;
+      const r = Math.random();
+      if (r < 0.1) { rbStr = 'N'; wcb = 0; }
+      else if (r < 0.2) { rbStr = 'E'; wcb = 90; }
+      else if (r < 0.3) { rbStr = 'S'; wcb = 180; }
+      else if (r < 0.4) { rbStr = 'W'; wcb = 270; }
+      else {
+        const ns = Math.random() > 0.5 ? 'N' : 'S';
+        const ang = Math.floor(Math.random() * 9) * 10; // 0, 10, ..., 80
+        const ew = Math.random() > 0.5 ? 'E' : 'W';
+        rbStr = ns + ang + '°' + ew;
+        if (ns === 'N' && ew === 'E') wcb = ang;
+        else if (ns === 'S' && ew === 'E') wcb = 180 - ang;
+        else if (ns === 'S' && ew === 'W') wcb = 180 + ang;
+        else wcb = 360 - ang;
+        if (wcb === 360) wcb = 0;
+      }
+      question = `Convert <strong>${rbStr}</strong> to Whole-circle bearing:`;
+      correctAnswer = wcb + '°';
+      break;
+    }
+  }
+
+  convCurrent = { correctAnswer, type };
+  document.getElementById('convQuestion').innerHTML = question;
+  document.getElementById('convAnswer').value = '';
+  document.getElementById('convAnswer').className = '';
+  document.getElementById('convFeedback').className = 'feedback';
+  document.getElementById('convAnswer').focus();
+}
+
+function checkConversion() {
+  if (!convCurrent) return;
+  const rawAns = document.getElementById('convAnswer').value.trim();
+  const ans = rawAns.toUpperCase().replace(/\s/g, '');
+  const correct = convCurrent.correctAnswer.toUpperCase().replace(/\s/g, '');
+  const inp = document.getElementById('convAnswer');
+  const fb = document.getElementById('convFeedback');
+
+  // Flexible matching
+  let isCorrect = ans === correct;
+
+  // Handle 0° / 360° equivalence
+  if (!isCorrect) {
+    const userNum = parseFloat(ans);
+    const correctNum = parseFloat(correct);
+    if (!isNaN(userNum) && !isNaN(correctNum)) {
+      // 0° and 360° are equivalent
+      if ((Math.abs(userNum) < 1 && Math.abs(correctNum - 360) < 1) ||
+          (Math.abs(userNum - 360) < 1 && Math.abs(correctNum) < 1)) {
+        isCorrect = true;
+      } else if (Math.abs(userNum - correctNum) <= 2) {
+        isCorrect = true;
+      }
+    }
+    // Handle N/S/E/W variants
+    if (!isCorrect) {
+      const nVariants = ['N', 'N0°', 'N0', 'N0°E', 'N0°W'];
+      const sVariants = ['S', 'S0°', 'S0'];
+      const eVariants = ['E', 'N90°E', 'S90°E'];
+      const wVariants = ['W', 'N90°W', 'S90°W'];
+      if (nVariants.includes(ans) && nVariants.includes(correct)) isCorrect = true;
+      if (sVariants.includes(ans) && sVariants.includes(correct)) isCorrect = true;
+      if (eVariants.includes(ans) && eVariants.includes(correct)) isCorrect = true;
+      if (wVariants.includes(ans) && wVariants.includes(correct)) isCorrect = true;
+    }
+  }
+
+  inp.className = isCorrect ? 'correct' : 'wrong';
+  fb.className = 'feedback show ' + (isCorrect ? 'correct' : 'wrong');
+
+  if (isCorrect) {
+    fb.textContent = '✓ Correct! ' + convCurrent.correctAnswer;
+  } else {
+    fb.innerHTML = '✗ Wrong. Correct answer: <strong>' + convCurrent.correctAnswer + '</strong>';
+  }
+
+  updateScore(isCorrect);
+  addHistory('convHistory', isCorrect, convCurrent.correctAnswer, ans);
+}
+
+document.getElementById('convCheck').addEventListener('click', checkConversion);
+document.getElementById('convNew').addEventListener('click', generateConversion);
+document.getElementById('convAnswer').addEventListener('keydown', e => { if (e.key === 'Enter') checkConversion(); });
+
+/* ═══════════════════════════════════════════════
+   HELPERS
+   ═══════════════════════════════════════════════ */
+function addHistory(containerId, correct, expected, got) {
+  const el = document.getElementById(containerId);
+  const div = document.createElement('div');
+  div.className = correct ? 'h-c' : 'h-w';
+  div.innerHTML = (correct ? '✓' : '✗') + ' Expected: <strong>' + expected + '</strong>' + (got ? ' · Got: ' + got : '');
+  el.prepend(div);
+  // Keep only last 10
+  while (el.children.length > 10) el.removeChild(el.lastChild);
+}
+
+/* ═══════════════════════════════════════════════
+   INIT
+   ═══════════════════════════════════════════════ */
+generateGR();
+generateBearing();
+generateDistance();
+generateGradient();
+generateConversion();
+</script>
+
+</body>
+</html>

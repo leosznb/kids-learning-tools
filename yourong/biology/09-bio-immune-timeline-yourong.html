@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+<title>Immune Timeline · S3 IS Biology</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:18px;-webkit-text-size-adjust:100%}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:#fafafa;color:#1a1a1a;line-height:1.6;min-height:100dvh}
+.app{max-width:720px;margin:0 auto;padding:20px 20px 48px}
+.app-header{text-align:center;margin-bottom:28px}
+.app-header .icon{font-size:2.4rem;margin-bottom:4px}
+.app-header h1{font-size:1.35rem;font-weight:700;color:#111}
+.app-header .sub{font-size:.9rem;color:#666;margin-top:2px}
+
+/* ---- timeline ---- */
+.timeline{position:relative;padding-left:44px}
+.timeline::before{content:'';position:absolute;left:18px;top:8px;bottom:8px;width:3px;background:#e2e8f0;border-radius:3px}
+.tl-node{position:relative;margin-bottom:16px}
+.tl-dot{position:absolute;left:-26px;top:22px;width:20px;height:20px;border-radius:50%;background:#fff;border:3px solid #16a34a;z-index:1;transition:background .2s}
+.tl-node.open .tl-dot{background:#16a34a}
+.tl-card{background:#fff;border:2px solid #e5e5e5;border-radius:14px;padding:16px 18px;cursor:pointer;transition:border-color .2s,box-shadow .2s}
+.tl-node.open .tl-card{border-color:#16a34a;box-shadow:0 2px 16px rgba(37,99,235,.1)}
+.tl-time{font-size:.78rem;font-weight:700;color:#16a34a;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.tl-title{font-size:1.05rem;font-weight:700;color:#111;margin-bottom:4px}
+.tl-title .zh{display:block;font-size:.82rem;font-weight:400;color:#888;margin-top:2px}
+.tl-preview{font-size:1rem;color:#666;line-height:1.5}
+.tl-detail{display:none;margin-top:14px;padding-top:14px;border-top:1px solid #e5e5e5}
+.tl-node.open .tl-detail{display:block}
+.tl-detail p{font-size:1rem;line-height:1.65;margin-bottom:10px;color:#1a1a1a}
+.tl-detail .zh{display:block;font-size:.9rem;color:#666;margin-top:3px}
+.tl-tag{display:inline-block;font-size:.72rem;font-weight:700;padding:2px 10px;border-radius:12px;margin-right:6px;margin-bottom:6px}
+.tag-line1{background:#fef2f2;color:#b91c1c}
+.tag-line2{background:#fff7ed;color:#c2410c}
+.tag-line3{background:#d1fae5;color:#15803d}
+
+/* ---- compare cards (primary vs secondary) ---- */
+.compare-wrap{display:flex;gap:14px;margin:16px 0;flex-wrap:wrap}
+.compare-card{flex:1;min-width:160px;border-radius:12px;padding:16px;text-align:center;border:2px solid #e5e5e5}
+.compare-card.primary{background:#fef2f2;border-color:#fecaca}
+.compare-card.secondary{background:#f0fdf4;border-color:#bbf7d0}
+.compare-card h4{font-size:.92rem;font-weight:700;margin-bottom:8px}
+.compare-card p{font-size:.85rem;line-height:1.55;color:#333;margin-bottom:4px}
+.compare-card .zh{font-size:.8rem;color:#888;display:block}
+
+/* ---- chart ---- */
+.chart-wrap{position:relative;background:#f8fafc;border-radius:12px;padding:20px 16px 8px;margin:16px 0;overflow:hidden}
+.chart-wrap h4{font-size:.92rem;font-weight:700;color:#111;margin-bottom:12px;text-align:center}
+.chart-area{position:relative;height:240px;margin:0 10px 10px 40px;border-left:2px solid #cbd5e1;border-bottom:2px solid #cbd5e1}
+.chart-yl{position:absolute;left:-38px;top:0;bottom:0;display:flex;flex-direction:column;justify-content:space-between;font-size:.7rem;color:#888;text-align:right;padding:0 4px}
+.chart-yl span{line-height:1}
+.chart-xl{position:absolute;left:0;right:0;bottom:-22px;display:flex;justify-content:space-between;font-size:.68rem;color:#888}
+.chart-legend{display:flex;gap:16px;justify-content:center;margin:6px 0 10px;font-size:.8rem}
+.chart-legend span{display:inline-flex;align-items:center;gap:5px}
+.cl-sq{display:inline-block;width:12px;height:12px;border-radius:3px}
+.btn-chart{font-size:.85rem;font-weight:600;padding:8px 22px;border:2px solid #16a34a;border-radius:10px;background:#fff;color:#16a34a;cursor:pointer;font-family:inherit;transition:all .15s;margin:6px 6px 0 0}
+.btn-chart:active,.btn-chart.active{background:#ecfdf5}
+
+/* ---- vaccine info ---- */
+.vax-box{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;padding:16px 18px;margin:14px 0;font-size:1rem;line-height:1.6}
+.vax-box .en{font-weight:600;color:#14532d}
+.vax-box .zh{display:block;font-size:.9rem;color:#555;margin-top:4px}
+
+@media(max-width:480px){
+  .app{padding:14px 12px 40px}
+  .timeline{padding-left:36px}
+  .tl-card{padding:14px 14px}
+  .compare-card{min-width:130px;padding:12px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+<header class="app-header">
+  <div class="icon">🛡️</div>
+  <h1>Immune Timeline · Body Defence</h1>
+  <div class="sub">F3 IS · Three Lines of Defence · Antibody Response · Vaccination</div>
+</header>
+
+<div class="timeline" id="timeline">
+
+  <!-- Node 0: Pathogen Invasion -->
+  <div class="tl-node" data-node="0">
+    <div class="tl-dot"></div>
+    <div class="tl-card" data-act="toggleNode" data-node="0">
+      <div class="tl-time">0 hr — Infection Begins 感染開始</div>
+      <div class="tl-title">🦠 Pathogen Invades the Body<span class="zh">病原體入侵人體</span></div>
+      <div class="tl-preview">Bacteria or virus enters through a cut, air, or food. The immune system is alerted. <span style="font-size:.82rem;color:#999">點擊展開詳情</span></div>
+      <div class="tl-detail">
+        <p><b>Pathogens</b> (disease-causing microorganisms such as bacteria, viruses, fungi) enter the body through various routes — skin cuts, respiratory tract, digestive system, or body fluids.</p>
+        <p class="zh"><b>病原體</b>（致病微生物，如細菌、病毒、真菌）通過各種途徑進入人體——皮膚傷口、呼吸道、消化系統或體液。</p>
+        <p>Once inside, they begin to multiply → this triggers the body&rsquo;s <b>immune response</b>.</p>
+        <p class="zh">一旦進入，它們開始繁殖 → 觸發身體的<b>免疫反應</b>。</p>
+        <span class="tl-tag tag-line1">1st Line of Defence 第一道防線</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Node 1: 1st Line — Physical Barriers -->
+  <div class="tl-node" data-node="1">
+    <div class="tl-dot"></div>
+    <div class="tl-card" data-act="toggleNode" data-node="1">
+      <div class="tl-time">0 hr — First Line of Defence 第一道防線</div>
+      <div class="tl-title">🏰 Physical &amp; Chemical Barriers<span class="zh">物理及化學屏障</span></div>
+      <div class="tl-preview">Skin, mucous membranes, tears, stomach acid — the body&rsquo;s outermost shield. <span style="font-size:.82rem;color:#999">點擊展開詳情</span></div>
+      <div class="tl-detail">
+        <p>The <b>first line of defence</b> is non-specific — it blocks <b>all</b> pathogens equally:</p>
+        <p class="zh"><b>第一道防線</b>是非特異性的——它對<b>所有</b>病原體一視同仁地阻擋：</p>
+        <p>🦴 <b>Skin</b> — physical barrier; waterproof, slightly acidic → kills some bacteria<br>
+        👃 <b>Mucous membrane</b> — traps pathogens in sticky mucus<br>
+        👁️ <b>Tears</b> — contain lysozyme (enzyme) that destroys bacterial cell walls<br>
+        🍽️ <b>Stomach acid</b> (HCl) — kills most pathogens in food<br>
+        💨 <b>Cilia</b> in airways — sweep mucus + trapped pathogens upward</p>
+        <p class="zh">🦴 <b>皮膚</b>——物理屏障；防水、微酸性 → 殺死部分細菌 | 👃 <b>黏膜</b>——用黏稠的黏液捕捉病原體 | 👁️ <b>眼淚</b>——含溶菌酶，破壞細菌細胞壁 | 🍽️ <b>胃酸</b>（HCl）——殺死食物中大多數病原體 | 💨 <b>氣管纖毛</b>——將黏液和被捕捉的病原體向上掃出</p>
+        <span class="tl-tag tag-line1">1st Line of Defence</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Node 2: 2nd Line — Phagocytes -->
+  <div class="tl-node" data-node="2">
+    <div class="tl-dot"></div>
+    <div class="tl-card" data-act="toggleNode" data-node="2">
+      <div class="tl-time">0–6 hr — Second Line of Defence 第二道防線</div>
+      <div class="tl-title">⚔️ Phagocytes Engulf Pathogens<span class="zh">吞噬細胞吞噬病原體</span></div>
+      <div class="tl-preview">White blood cells that "eat" any foreign invader — non-specific, fast response. <span style="font-size:.82rem;color:#999">點擊展開詳情</span></div>
+      <div class="tl-detail">
+        <p>When pathogens breach the first line, <b>phagocytes</b> (a type of white blood cell) arrive at the infection site:</p>
+        <p class="zh">當病原體突破第一道防線，<b>吞噬細胞</b>（一種白血球）到達感染部位：</p>
+        <p>1. Phagocyte <b>engulfs</b> the pathogen (phagocytosis)<br>
+        2. <b>Digests</b> it using enzymes inside the phagocyte<br>
+        3. This is still <b>non-specific</b> — any pathogen gets eaten<br>
+        4. <b>Inflammation</b> (redness, swelling, heat, pain) occurs — increased blood flow brings more phagocytes</p>
+        <p class="zh">1. 吞噬細胞<b>吞入</b>病原體（吞噬作用）| 2. 用吞噬細胞內的酶<b>消化</b>它 | 3. 仍然是<b>非特異性</b>的——任何病原體都會被吃掉 | 4. 發生<b>發炎反應</b>（紅、腫、熱、痛）——增加血流帶來更多吞噬細胞</p>
+        <p><b>Blood clotting</b> also occurs at wounds — platelets + fibrin form a clot to seal the wound and prevent more pathogens from entering.</p>
+        <p class="zh">傷口處也發生<b>凝血</b>——血小板 + 纖維蛋白形成血塊封住傷口，阻止更多病原體進入。</p>
+        <span class="tl-tag tag-line2">2nd Line of Defence</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Node 3: 3rd Line — Lymphocytes & Antibodies -->
+  <div class="tl-node" data-node="3">
+    <div class="tl-dot"></div>
+    <div class="tl-card" data-act="toggleNode" data-node="3">
+      <div class="tl-time">3–7 days — Third Line of Defence 第三道防線</div>
+      <div class="tl-title">🎯 Lymphocytes Produce Specific Antibodies<span class="zh">淋巴細胞產生特異性抗體</span></div>
+      <div class="tl-preview">The smart weapon: each antibody matches ONE specific antigen. <span style="font-size:.82rem;color:#999">點擊展開詳情</span></div>
+      <div class="tl-detail">
+        <p>The <b>third line of defence</b> is <b>specific</b> — it targets ONE particular pathogen:</p>
+        <p class="zh"><b>第三道防線</b>是<b>特異性</b>的——它針對<b>一種</b>特定病原體：</p>
+        <p>🔑 <b>Lymphocytes</b> (a type of WBC) recognise the <b>antigen</b> (a specific molecule on the pathogen&rsquo;s surface).</p>
+        <p class="zh">🔑 <b>淋巴細胞</b>（一種白血球）識別<b>抗原</b>（病原體表面的特定分子）。</p>
+        <p>🔒 Lymphocytes produce <b>antibodies</b> that fit the antigen like a <b>lock and key</b>. Each antibody is specific to ONE antigen.</p>
+        <p class="zh">🔒 淋巴細胞產生<b>抗體</b>，與抗原<b>像鎖和鑰匙一樣</b>匹配。每種抗體只針對一種抗原。</p>
+        <p>⚡ Antibodies bind to antigens → <b>neutralise</b> the pathogen or <b>mark</b> it for destruction by phagocytes.</p>
+        <p class="zh">⚡ 抗體與抗原結合 → <b>中和</b>病原體，或<b>標記</b>它讓吞噬細胞消滅。</p>
+        <span class="tl-tag tag-line3">3rd Line of Defence · Specific 特異性</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Node 4: Primary Response Peak -->
+  <div class="tl-node" data-node="4">
+    <div class="tl-dot"></div>
+    <div class="tl-card" data-act="toggleNode" data-node="4">
+      <div class="tl-time">7–14 days — Primary Response 初次反應</div>
+      <div class="tl-title">📈 Antibody Level Peaks &amp; Pathogen Cleared<span class="zh">抗體水平達峰，病原體被清除</span></div>
+      <div class="tl-preview">Slow start, gradual rise — this is the primary immune response. <span style="font-size:.82rem;color:#999">點擊展開詳情 + 圖表</span></div>
+      <div class="tl-detail">
+        <p>The <b>primary response</b> (first exposure to a pathogen):</p>
+        <p class="zh"><b>初次反應</b>（第一次接觸某病原體）：</p>
+        <p>🐢 <b>Slow</b> — takes several days for lymphocytes to recognise the antigen and produce antibodies<br>
+        📉 <b>Low peak</b> — antibody concentration rises gradually<br>
+        🤒 You may feel <b>sick</b> during this time because the pathogen is multiplying while the immune system catches up</p>
+        <p class="zh">🐢 <b>慢</b>——淋巴細胞需要數天才能識別抗原並產生抗體 | 📉 <b>峰值低</b>——抗體濃度逐漸上升 | 🤒 在此期間你可能會<b>生病</b>，因為病原體在繁殖，而免疫系統還在追趕</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Node 5: Memory Cells -->
+  <div class="tl-node" data-node="5">
+    <div class="tl-dot"></div>
+    <div class="tl-card" data-act="toggleNode" data-node="5">
+      <div class="tl-time">14 days → Years — Memory Cells Remain 記憶細胞留存</div>
+      <div class="tl-title">🧠 Memory Cells — The Immune System&rsquo;s Secret Weapon<span class="zh">記憶細胞——免疫系統的秘密武器</span></div>
+      <div class="tl-preview">After recovery, some lymphocytes become memory cells — they "remember" the pathogen for years. <span style="font-size:.82rem;color:#999">點擊展開詳情</span></div>
+      <div class="tl-detail">
+        <p>After the pathogen is cleared, <b>most</b> lymphocytes die off — but some become <b>memory cells</b>:</p>
+        <p class="zh">病原體被清除後，<b>大多數</b>淋巴細胞會死亡——但有些變成<b>記憶細胞</b>：</p>
+        <p>🧠 Memory cells stay in the body for <b>years or a lifetime</b><br>
+        🔍 They "remember" the specific antigen<br>
+        ⚡ If the <b>same pathogen</b> invades again → memory cells <b>rapidly</b> produce large amounts of specific antibodies<br>
+        🛡️ This is why you usually only get some diseases <b>once</b> (e.g. chickenpox)</p>
+        <p class="zh">🧠 記憶細胞在體內留存<b>數年甚至終身</b> | 🔍 它們「記得」特定抗原 | ⚡ 如果<b>同一病原體</b>再次入侵 → 記憶細胞<b>快速</b>產生大量特異性抗體 | 🛡️ 這就是為什麼某些疾病通常只會感染<b>一次</b>（如：水痘）</p>
+        <p><b>This is the basis of vaccination 💉</b> — we create memory cells WITHOUT getting the actual disease.</p>
+        <p class="zh"><b>這就是疫苗接種的基礎 💉</b>——我們在不真正感染疾病的情況下建立記憶細胞。</p>
+        <span class="tl-tag tag-line3">3rd Line of Defence · Memory</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Node 6: Secondary Response -->
+  <div class="tl-node" data-node="6">
+    <div class="tl-dot"></div>
+    <div class="tl-card" data-act="toggleNode" data-node="6">
+      <div class="tl-time">Months later — Secondary Response 二次反應</div>
+      <div class="tl-title">⚡ Faster &amp; Stronger — The Memory Cells at Work<span class="zh">更快更強——記憶細胞的作用</span></div>
+      <div class="tl-preview">Same pathogen again → antibodies surge within hours, not days. <span style="font-size:.82rem;color:#999">點擊展開圖表對比</span></div>
+      <div class="tl-detail">
+        <p>The <b>secondary response</b> (second exposure to the same pathogen) is dramatically different:</p>
+        <p class="zh"><b>二次反應</b>（再次接觸同一病原體）與初次截然不同：</p>
+
+        <div class="compare-wrap">
+          <div class="compare-card primary">
+            <h4>🐢 Primary Response 初次反應</h4>
+            <p>Slow onset (several days)</p>
+            <p class="zh">起效慢（數天）</p>
+            <p>Low antibody peak</p>
+            <p class="zh">抗體峰值低</p>
+            <p>You feel sick 🤒</p>
+            <p class="zh">你會生病</p>
+          </div>
+          <div class="compare-card secondary">
+            <h4>⚡ Secondary Response 二次反應</h4>
+            <p>Fast onset (hours)</p>
+            <p class="zh">起效快（數小時）</p>
+            <p>High antibody peak</p>
+            <p class="zh">抗體峰值高</p>
+            <p>You may NOT feel sick 🛡️</p>
+            <p class="zh">你可能不生病</p>
+          </div>
+        </div>
+
+        <p><b>Why?</b> Memory cells from the first infection are ready → they rapidly divide and produce antibodies → the pathogen is destroyed before it can multiply enough to cause symptoms.</p>
+        <p class="zh"><b>為什麼？</b>第一次感染留下的記憶細胞已經準備就緒 → 它們快速分裂並產生抗體 → 病原體在繁殖到足以引起症狀之前就被消滅。</p>
+
+        <!-- Antibody Level Chart -->
+        <div class="chart-wrap">
+          <h4>📊 Antibody Concentration Over Time 抗體濃度變化</h4>
+          <div class="chart-legend">
+            <span><span class="cl-sq" style="background:#dc2626"></span> Primary 初次</span>
+            <span><span class="cl-sq" style="background:#16a34a"></span> Secondary 二次</span>
+          </div>
+          <div class="chart-area" id="chartArea">
+            <div class="chart-yl"><span>High</span><span></span><span></span><span></span><span>Low</span></div>
+            <svg id="abChart" viewBox="0 0 320 200" width="100%" height="200" style="position:absolute;left:0;top:0">
+              <!-- Primary curve (red) -->
+              <path id="primaryCurve" d="M10,190 Q40,188 60,175 T120,80 Q160,50 180,55 Q220,70 280,85 Q310,92 310,92" fill="none" stroke="#dc2626" stroke-width="3" stroke-linecap="round" opacity="0"/>
+              <!-- Secondary curve (green) -->
+              <path id="secondaryCurve" d="M160,90 Q170,85 180,40 Q200,15 220,12 Q260,18 300,30 Q315,35 315,37" fill="none" stroke="#16a34a" stroke-width="3.5" stroke-linecap="round" opacity="0"/>
+              <!-- time labels -->
+              <text x="50" y="198" font-size="9" fill="#888">1st exposure 初次感染</text>
+              <text x="175" y="198" font-size="9" fill="#888">2nd exposure 二次感染</text>
+              <line x1="150" y1="10" x2="150" y2="185" stroke="#cbd5e1" stroke-dasharray="4,3"/>
+            </svg>
+          </div>
+          <div style="text-align:center;margin-top:8px">
+            <button class="btn-chart active" id="btnShowPri" data-act="showPri">Show Primary 初次</button>
+            <button class="btn-chart" id="btnShowSec" data-act="showSec">Show Secondary 二次</button>
+            <button class="btn-chart" id="btnShowBoth" data-act="showBoth">Compare 對比</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Node 7: Vaccination -->
+  <div class="tl-node" data-node="7">
+    <div class="tl-dot"></div>
+    <div class="tl-card" data-act="toggleNode" data-node="7">
+      <div class="tl-time">💉 Vaccination — Artificial Active Immunity</div>
+      <div class="tl-title">💉 How Vaccines Work 疫苗原理<span class="zh">人工主動免疫</span></div>
+      <div class="tl-preview">Training the immune system without getting sick. <span style="font-size:.82rem;color:#999">點擊展開詳情</span></div>
+      <div class="tl-detail">
+        <p><b>Vaccination</b> creates immunity <b>without</b> suffering from the actual disease:</p>
+        <p class="zh"><b>疫苗接種</b>在不真正患病的情況下建立免疫力：</p>
+
+        <div class="vax-box">
+          <span class="en">💉 1. A vaccine contains <b>dead or weakened</b> pathogens (or just the antigen).</span>
+          <span class="zh">💉 1. 疫苗含有<b>已死或弱化</b>的病原體（或僅抗原）。</span>
+        </div>
+        <div class="vax-box">
+          <span class="en">🔍 2. Lymphocytes recognise the antigen → produce <b>specific antibodies</b>.</span>
+          <span class="zh">🔍 2. 淋巴細胞識別抗原 → 產生<b>特異性抗體</b>。</span>
+        </div>
+        <div class="vax-box">
+          <span class="en">🧠 3. <b>Memory cells</b> are formed — they stay in the body for years.</span>
+          <span class="zh">🧠 3. 形成<b>記憶細胞</b>——在體內留存多年。</span>
+        </div>
+        <div class="vax-box">
+          <span class="en">⚡ 4. If the <b>real pathogen</b> invades later → memory cells trigger a <b>fast, strong secondary response</b> → you don&rsquo;t get sick.</span>
+          <span class="zh">⚡ 4. 如果<b>真正的病原體</b>日後入侵 → 記憶細胞觸發<b>快速、強烈的二次反應</b> → 你不會生病。</span>
+        </div>
+
+        <p style="margin-top:12px"><b>Active immunity 主動免疫：</b> The body <b>makes its own antibodies</b> after exposure to an antigen (natural infection OR vaccination). Long-lasting.<br>
+        <b>Passive immunity 被動免疫：</b> The body <b>receives ready-made antibodies</b> from another source (e.g. mother&rsquo;s breast milk, antibody injection). Short-term, no memory cells formed.</p>
+        <p class="zh"><b>主動免疫：</b>身體在接觸抗原後<b>自己製造抗體</b>（自然感染或疫苗接種）。持久有效。 | <b>被動免疫：</b>身體<b>接收現成抗體</b>（如：母乳、抗體注射）。短期有效，無記憶細胞形成。</p>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /timeline -->
+
+</div><!-- /app -->
+
+<script>
+(function(){
+
+var tl = document.getElementById('timeline');
+if(!tl){console.log('ERROR: timeline not found');return;}
+
+// ============ UNIFIED EVENT HANDLER ============
+tl.addEventListener('click',function(e){
+
+  // --- TOGGLE NODE ---
+  var card = e.target.closest('[data-act="toggleNode"]');
+  if(card){
+    var nodeId = card.getAttribute('data-node');
+    var node = tl.querySelector('.tl-node[data-node="'+nodeId+'"]');
+    if(node) node.classList.toggle('open');
+    return;
+  }
+
+  // --- CHART BUTTONS ---
+  var chartBtn = e.target.closest('.btn-chart');
+  if(!chartBtn) return;
+  var act = chartBtn.getAttribute('data-act');
+  if(!act) return;
+
+  var pri = document.getElementById('primaryCurve');
+  var sec = document.getElementById('secondaryCurve');
+  var bPri = document.getElementById('btnShowPri');
+  var bSec = document.getElementById('btnShowSec');
+  var bBoth = document.getElementById('btnShowBoth');
+  if(!pri||!sec||!bPri||!bSec||!bBoth) return;
+
+  bPri.classList.remove('active');
+  bSec.classList.remove('active');
+  bBoth.classList.remove('active');
+
+  if(act === 'showPri'){
+    pri.setAttribute('opacity','1');
+    sec.setAttribute('opacity','0');
+    bPri.classList.add('active');
+  } else if(act === 'showSec'){
+    pri.setAttribute('opacity','0');
+    sec.setAttribute('opacity','1');
+    bSec.classList.add('active');
+  } else if(act === 'showBoth'){
+    pri.setAttribute('opacity','1');
+    sec.setAttribute('opacity','1');
+    bBoth.classList.add('active');
+  }
+});
+
+// ============ INIT: show both curves ============
+var priCurve = document.getElementById('primaryCurve');
+var secCurve = document.getElementById('secondaryCurve');
+if(priCurve) priCurve.setAttribute('opacity','1');
+if(secCurve) secCurve.setAttribute('opacity','1');
+
+})();
+</script>
+</body>
+</html>

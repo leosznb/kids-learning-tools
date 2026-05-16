@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Geography Glossary · S3 TWGSS</title>
+<style>
+:root {
+  --bg: #f0f4f8;
+  --glass: rgba(255,255,255,.72);
+  --glass-border: rgba(255,255,255,.45);
+  --glass-shadow: 0 8px 32px rgba(0,0,0,.06);
+  --text: #1a1a2e; --text2: #5c6370;
+  --accent: #2563eb; --accent-glass: rgba(37,99,235,.12);
+  --correct: #16a34a; --wrong: #dc2626; --warn: #ea580c;
+  --radius: 14px; --radius-sm: 8px;
+  --font: -apple-system,'Helvetica Neue','PingFang HK','Noto Sans TC',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:var(--font);font-size:15px;line-height:1.7;color:var(--text);
+  background:linear-gradient(135deg,#e8eef5 0%,#dce3ed 30%,#eaf0f6 60%,#f0f4f8 100%);
+  background-attachment:fixed;min-height:100vh;padding-bottom:3rem;
+}
+
+/* Glass card */
+.glass{
+  background:var(--glass);border:1px solid var(--glass-border);
+  border-radius:var(--radius);box-shadow:var(--glass-shadow);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+}
+.container{max-width:600px;margin:0 auto;padding:1rem}
+
+/* Header */
+header{
+  text-align:center;padding:1.5rem 1rem .75rem;
+}
+header h1{font-size:1.2rem;font-weight:700;letter-spacing:-.01em}
+header .sub{font-size:.78rem;color:var(--text2);margin-top:.15rem}
+
+/* Category tabs */
+.cat-tabs{
+  display:flex;gap:.4rem;justify-content:center;margin:.75rem 0;flex-wrap:wrap;
+}
+.cat-tab{
+  padding:.45rem 1rem;border-radius:20px;font-size:.78rem;font-weight:500;
+  cursor:pointer;border:1px solid var(--glass-border);background:var(--glass);
+  color:var(--text2);transition:.2s;backdrop-filter:blur(8px);
+}
+.cat-tab:hover{background:rgba(255,255,255,.9)}
+.cat-tab.active{background:var(--accent);color:#fff;border-color:var(--accent);font-weight:600}
+
+/* Mode toggle */
+.mode-row{
+  display:flex;gap:.5rem;justify-content:center;margin:.5rem 0 1rem;
+}
+.mode-btn{
+  padding:.4rem 1.2rem;border-radius:20px;font-size:.78rem;font-weight:500;
+  cursor:pointer;border:1px solid var(--glass-border);background:var(--glass);
+  color:var(--text2);transition:.2s;
+}
+.mode-btn.active{background:var(--text);color:#fff;border-color:var(--text)}
+
+/* Progress bar */
+.progress-wrap{margin:.5rem 1rem;display:flex;align-items:center;gap:.75rem}
+.progress-bar{
+  flex:1;height:5px;background:rgba(0,0,0,.06);border-radius:3px;overflow:hidden;
+}
+.progress-fill{height:100%;background:var(--accent);border-radius:3px;transition:.4s}
+.progress-text{font-size:.72rem;color:var(--text2);white-space:nowrap;min-width:50px}
+
+/* Card area */
+.card-area{
+  padding:1.5rem;margin:1rem 0;text-align:center;min-height:220px;
+  display:flex;flex-direction:column;justify-content:center;align-items:center;
+  cursor:pointer;user-select:none;transition:transform .2s,box-shadow .2s;
+  position:relative;overflow:hidden;
+}
+.card-area:active{transform:scale(.98)}
+.card-area.flipped{background:rgba(37,99,235,.04)}
+.card-term{
+  font-size:1.6rem;font-weight:700;letter-spacing:-.01em;
+  margin-bottom:.3rem;transition:.2s;
+}
+.card-zh{font-size:1.3rem;color:var(--accent);font-weight:600;margin:.3rem 0}
+.card-explanation{
+  font-size:.82rem;color:var(--text2);line-height:1.55;max-width:400px;
+  margin:.5rem auto 0;
+}
+.card-hint{font-size:.72rem;color:var(--text2);margin-top:.75rem;opacity:.7}
+.card-category{
+  position:absolute;top:12px;right:16px;font-size:.65rem;color:var(--text2);
+  text-transform:uppercase;letter-spacing:.05em;opacity:.5;
+}
+
+/* Type mode input */
+.type-area{margin:1rem 0;text-align:center}
+.type-prompt{font-size:1.1rem;font-weight:600;color:var(--accent);margin-bottom:.75rem}
+.type-input{
+  width:100%;max-width:300px;padding:.65rem 1rem;border:2px solid var(--glass-border);
+  border-radius:var(--radius-sm);font-size:1rem;font-family:var(--font);
+  text-align:center;background:rgba(255,255,255,.85);outline:none;transition:.2s;
+}
+.type-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glass)}
+.type-input.correct{border-color:var(--correct);background:rgba(22,163,74,.06)}
+.type-input.wrong{border-color:var(--wrong);background:rgba(220,38,38,.06)}
+
+/* Feedback in type mode */
+.type-feedback{
+  margin-top:.75rem;font-size:.85rem;font-weight:500;min-height:1.5em;
+  transition:.2s;
+}
+.type-feedback.correct{color:var(--correct)}
+.type-feedback.wrong{color:var(--wrong)}
+.type-diff{font-size:.78rem;color:var(--text2);margin-top:.25rem}
+
+/* Action buttons */
+.actions{display:flex;gap:.6rem;justify-content:center;margin:.75rem 0;flex-wrap:wrap}
+.btn{
+  padding:.5rem 1.2rem;border-radius:20px;font-size:.78rem;font-weight:500;
+  cursor:pointer;border:none;transition:.2s;font-family:var(--font);
+}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{opacity:.9}
+.btn-review{background:rgba(234,88,12,.12);color:var(--warn)}
+.btn-known{background:rgba(22,163,74,.12);color:var(--correct)}
+.btn-ghost{background:rgba(0,0,0,.04);color:var(--text2)}
+
+/* Weak pool indicator */
+.weak-badge{
+  display:inline-block;padding:.15em .55em;border-radius:10px;
+  font-size:.68rem;font-weight:600;margin-left:.4rem;
+}
+.weak-badge.in-pool{background:rgba(234,88,12,.15);color:var(--warn)}
+.weak-badge.out-pool{background:rgba(22,163,74,.1);color:var(--correct)}
+
+/* Stats */
+.stats-row{
+  display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;
+  font-size:.72rem;color:var(--text2);margin-top:.5rem;
+}
+.stats-row strong{color:var(--text)}
+
+/* Scrollable weak list */
+.weak-list{
+  margin:1rem 0;max-height:200px;overflow-y:auto;font-size:.78rem;
+}
+.weak-item{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:.45rem .75rem;border-bottom:1px solid rgba(0,0,0,.04);
+}
+.weak-item .en{font-weight:600}
+.weak-item .zh{color:var(--text2);margin-left:.5rem}
+.weak-item .count{font-size:.7rem;color:var(--warn)}
+
+/* Responsive */
+@media(max-width:420px){
+  .card-area{min-height:180px;padding:1.2rem}
+  .card-term{font-size:1.35rem}
+  .card-zh{font-size:1.1rem}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🌍 Geography Glossary</h1>
+  <div class="sub">S3 · TWGSS · 53 Key Terms · EMI (English → 中文)</div>
+</header>
+
+<div class="container">
+
+  <!-- Category tabs -->
+  <div class="cat-tabs" id="catTabs">
+    <button class="cat-tab active" data-cat="all">All (53)</button>
+    <button class="cat-tab" data-cat="tourism">Tourism</button>
+    <button class="cat-tab" data-cat="rainforest">Rainforests</button>
+    <button class="cat-tab" data-cat="geology">HK Geology</button>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-wrap">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <div class="progress-text" id="progressText">0/53</div>
+  </div>
+
+  <!-- Mode toggle -->
+  <div class="mode-row">
+    <button class="mode-btn active" data-mode="flip">🔄 Flip Cards</button>
+    <button class="mode-btn" data-mode="type">⌨️ Type Recall</button>
+  </div>
+
+  <!-- FLIP MODE -->
+  <div id="flipMode">
+    <div class="glass card-area" id="flipCard">
+      <div class="card-category" id="flipCat"></div>
+      <div class="card-term" id="flipEN"></div>
+      <div class="card-zh" id="flipZH" style="display:none"></div>
+      <div class="card-explanation" id="flipExpl" style="display:none"></div>
+      <div class="card-hint" id="flipHint">Tap to flip</div>
+    </div>
+
+    <div class="actions" id="flipActions" style="display:none">
+      <button class="btn btn-review" id="btnReview">✗ Review Again</button>
+      <button class="btn btn-known" id="btnKnown">✓ I Know This</button>
+    </div>
+  </div>
+
+  <!-- TYPE MODE -->
+  <div id="typeMode" style="display:none">
+    <div class="glass card-area" style="cursor:default;user-select:text">
+      <div class="card-category" id="typeCat"></div>
+      <div class="type-prompt" id="typePrompt"></div>
+      <input type="text" class="type-input" id="typeInput" placeholder="Type the English term..." autocomplete="off" autocapitalize="off" spellcheck="false">
+      <div class="type-feedback" id="typeFeedback"></div>
+      <div class="type-diff" id="typeDiff"></div>
+      <div style="margin-top:.75rem">
+        <button class="btn btn-primary" id="btnCheck">Check</button>
+        <button class="btn btn-ghost" id="btnSkip" style="margin-left:.4rem">Skip →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <div class="actions" style="margin-top:.5rem">
+    <button class="btn btn-ghost" id="btnPrev">← Prev</button>
+    <span style="font-size:.78rem;color:var(--text2);padding:.5rem" id="cardIndex">1 / 53</span>
+    <button class="btn btn-ghost" id="btnNext">Next →</button>
+  </div>
+
+  <!-- Weak pool -->
+  <div class="glass" style="padding:1rem;margin:1rem 0">
+    <div style="display:flex;justify-content:space-between;align-items:center;cursor:pointer" id="weakToggle">
+      <h3 style="font-size:.85rem;font-weight:600">📝 Weak Pool <span style="font-weight:400;color:var(--text2);font-size:.75rem" id="weakCount"></span></h3>
+      <span style="font-size:.75rem;color:var(--text2)" id="weakArrow">▼</span>
+    </div>
+    <div class="weak-list" id="weakList" style="display:none"></div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-row">
+    <div>Flip: <strong id="statFlip">0</strong></div>
+    <div>Correct: <strong id="statCorrect">0</strong></div>
+    <div>Review: <strong id="statReview">0</strong></div>
+    <div>In Pool: <strong id="statPool">0</strong></div>
+  </div>
+
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   GEOGRAPHY GLOSSARY · Flash Cards + Active Recall
+   53 terms across 3 categories: Tourism / Rainforests / Geology
+   Mode A: Flip Cards (passive browsing)
+   Mode B: Type Recall (active retrieval)
+   Smart weak pool: 3 consecutive correct → exit
+   ═══════════════════════════════════════════════════════════════ */
+
+const VOCAB = [
+  // ── Tourism (15) ──
+  {en:'recreation',zh:'康乐',expl:'Activities done for enjoyment during free time',cat:'tourism'},
+  {en:'leisure',zh:'闲暇',expl:'Free time not occupied by work or obligations',cat:'tourism'},
+  {en:'peak season',zh:'旺季',expl:'Period of highest travel demand, often during holidays',cat:'tourism'},
+  {en:'mass tourism',zh:'大众化旅游',expl:'Large-scale tourism bringing significant economic and environmental impacts',cat:'tourism'},
+  {en:'cultural exchange',zh:'文化交流',expl:'Mutual sharing of ideas, customs and traditions between tourists and locals',cat:'tourism'},
+  {en:'cultural conflict',zh:'文化冲突',expl:'Tension between tourists and locals due to different values or behaviours',cat:'tourism'},
+  {en:'overcrowding',zh:'过度拥挤',expl:'Too many tourists in one place, reducing experience quality and damaging sites',cat:'tourism'},
+  {en:'sustainable tourism',zh:'可持续旅游',expl:'Tourism that balances economic, environmental and social needs for the future',cat:'tourism'},
+  {en:'ecotourism',zh:'生态旅游',expl:'Responsible travel to natural areas that conserves the environment',cat:'tourism'},
+  {en:'carrying capacity',zh:'承载力',expl:'Maximum number of visitors an area can support without damage',cat:'tourism'},
+  {en:'heritage trail',zh:'文物径',expl:'A designated walking route connecting historical and cultural sites',cat:'tourism'},
+  {en:'declared monument',zh:'法定古迹',expl:'A historic building or site officially protected by law',cat:'tourism'},
+  {en:'GDP per capita',zh:'人均国内生产总值',expl:'Total economic output of a country divided by its population',cat:'tourism'},
+  {en:'Greenwich Mean Time',zh:'格林尼治标准时间',expl:'The time at the Prime Meridian (0° longitude), used as a global reference',cat:'tourism'},
+  {en:'International Date Line',zh:'国际日期变更线',expl:'An imaginary line at ~180° longitude where the date changes by one day',cat:'tourism'},
+  // ── Rainforests (20) ──
+  {en:'Equator',zh:'赤道',expl:'An imaginary line at 0° latitude dividing the Earth into Northern and Southern Hemispheres',cat:'rainforest'},
+  {en:'emergent layer',zh:'露生层',expl:'The topmost layer of the rainforest with trees over 50m tall, straight trunks and buttress roots',cat:'rainforest'},
+  {en:'canopy layer',zh:'树冠层',expl:'A dense continuous layer of tree crowns, home to most rainforest wildlife',cat:'rainforest'},
+  {en:'understorey',zh:'幼树层',expl:'Layer of young trees waiting for gaps in the canopy to grow taller',cat:'rainforest'},
+  {en:'shrub layer',zh:'灌木层',expl:'Layer of shrubs and small woody plants below the understorey',cat:'rainforest'},
+  {en:'buttress root',zh:'板根',expl:'Large, wide roots at the base of tall rainforest trees providing stability',cat:'rainforest'},
+  {en:'drip-tip',zh:'滴水叶尖',expl:'A pointed leaf tip that channels water off the leaf surface quickly',cat:'rainforest'},
+  {en:'epiphyte',zh:'附生植物',expl:'A plant that grows on another plant for support, not as a parasite',cat:'rainforest'},
+  {en:'parasite',zh:'寄生植物',expl:'An organism that lives on or in a host, taking nutrients from it',cat:'rainforest'},
+  {en:'saprophyte',zh:'腐生植物',expl:'An organism that feeds on dead and decaying organic matter',cat:'rainforest'},
+  {en:'climber',zh:'攀缘植物',expl:'A plant that grows upward by attaching to trees or other supports',cat:'rainforest'},
+  {en:'carbon sink',zh:'碳汇',expl:'A natural system (like a rainforest) that absorbs more carbon dioxide than it releases',cat:'rainforest'},
+  {en:'deforestation',zh:'毁林',expl:'The large-scale clearing of forests by human activity',cat:'rainforest'},
+  {en:'slash-and-burn',zh:'刀耕火种',expl:'A farming method where vegetation is cut and burned to clear land for crops',cat:'rainforest'},
+  {en:'shifting cultivation',zh:'迁移农业',expl:'A farming system where land is cultivated temporarily then abandoned to restore fertility',cat:'rainforest'},
+  {en:'monoculture',zh:'单一作物种植',expl:'Growing only one type of crop over a large area, reducing biodiversity',cat:'rainforest'},
+  {en:'soil erosion',zh:'土壤侵蚀',expl:'The removal of topsoil by wind or water, often worsened by deforestation',cat:'rainforest'},
+  {en:'carbon trading',zh:'碳贸易',expl:'A market system where countries buy and sell permits to emit carbon dioxide',cat:'rainforest'},
+  {en:'afforestation',zh:'造林',expl:'Planting trees in an area that was not previously forested',cat:'rainforest'},
+  {en:'biodiversity',zh:'生物多样性',expl:'The variety of living organisms in an area, from genes to ecosystems',cat:'rainforest'},
+  // ── HK Geology (18) ──
+  {en:'igneous rock',zh:'火成岩',expl:'Rock formed from cooled and solidified magma or lava',cat:'geology'},
+  {en:'sedimentary rock',zh:'沉积岩',expl:'Rock formed from compressed and cemented layers of sediment, may contain fossils',cat:'geology'},
+  {en:'metamorphic rock',zh:'变质岩',expl:'Rock changed by extreme heat and pressure from its original form',cat:'geology'},
+  {en:'granite',zh:'花岗岩',expl:'An intrusive igneous rock with large crystals, formed by slow cooling below ground',cat:'geology'},
+  {en:'tuff',zh:'凝灰岩',expl:'A volcanic rock formed from compacted volcanic ash, found at High Island, HK',cat:'geology'},
+  {en:'sandstone',zh:'砂岩',expl:'A sedimentary rock made of compressed sand grains',cat:'geology'},
+  {en:'shale',zh:'页岩',expl:'A fine-grained sedimentary rock formed from compacted mud or clay',cat:'geology'},
+  {en:'conglomerate',zh:'砾岩',expl:'A sedimentary rock containing rounded pebbles cemented together',cat:'geology'},
+  {en:'hexagonal column',zh:'六角形岩柱',expl:'Six-sided rock columns formed by cooling and contraction of volcanic rock',cat:'geology'},
+  {en:'sea arch',zh:'海蚀拱',expl:'A natural arch formed by wave erosion cutting through a headland',cat:'geology'},
+  {en:'sea stack',zh:'海蚀柱',expl:'An isolated rock pillar left standing after a sea arch collapses',cat:'geology'},
+  {en:'tombolo',zh:'连岛沙洲',expl:'A sand or gravel bar connecting an island to the mainland, visible at low tide',cat:'geology'},
+  {en:'volcanic ash',zh:'火山灰',expl:'Fine particles of rock and mineral ejected during a volcanic eruption',cat:'geology'},
+  {en:'fossil',zh:'化石',expl:'Preserved remains or traces of ancient organisms found in sedimentary rock',cat:'geology'},
+  {en:'weathering',zh:'风化',expl:'The breakdown of rocks in place by physical, chemical or biological processes',cat:'geology'},
+  {en:'erosion',zh:'侵蚀',expl:'The removal and transport of weathered rock material by wind, water or ice',cat:'geology'},
+  {en:'fold',zh:'褶皱',expl:'A bend in rock layers caused by compressional forces in the Earth\'s crust',cat:'geology'},
+  {en:'fault',zh:'断层',expl:'A fracture in rock where movement has occurred, common at Ma Shi Chau, HK',cat:'geology'},
+];
+
+/* ── State ── */
+let currentMode = 'flip';
+let currentCat = 'all';
+let cardIndex = 0;
+let isFlipped = false;
+let filtered = [];
+
+// Per-item tracking: typeCorrect/typeWrong/typeStreak/inWeakPool for Type mode SRS
+// flipKnown/flipReview/flipCount for Flip mode browsing
+let tracking = {};
+VOCAB.forEach((v,i) => { tracking[i] = { typeCorrect:0, typeWrong:0, typeStreak:0, inWeakPool:false, flipKnown:0, flipReview:0, flipCount:0 }; });
+
+/* ── Filter by category ── */
+function applyFilter() {
+  if (currentCat === 'all') filtered = VOCAB.map((_,i) => i);
+  else filtered = VOCAB.reduce((acc, v, i) => { if (v.cat === currentCat) acc.push(i); return acc; }, []);
+  cardIndex = 0;
+  isFlipped = false;
+  render();
+}
+
+/* ── Render ── */
+function render() {
+  updateProgress();
+  updateStats();
+  updateWeakPool();
+
+  if (filtered.length === 0) {
+    document.getElementById('flipEN').textContent = 'No cards';
+    document.getElementById('cardIndex').textContent = '0 / 0';
+    return;
+  }
+
+  const idx = filtered[cardIndex];
+  const v = VOCAB[idx];
+  const t = tracking[idx];
+
+  document.getElementById('cardIndex').textContent = `${cardIndex + 1} / ${filtered.length}`;
+
+  if (currentMode === 'flip') {
+    document.getElementById('flipMode').style.display = 'block';
+    document.getElementById('typeMode').style.display = 'none';
+    document.getElementById('flipCat').textContent = v.cat.toUpperCase();
+    document.getElementById('flipEN').textContent = v.en;
+    document.getElementById('flipZH').textContent = v.zh;
+    document.getElementById('flipExpl').textContent = v.expl;
+
+    if (isFlipped) {
+      document.getElementById('flipZH').style.display = 'block';
+      document.getElementById('flipExpl').style.display = 'block';
+      document.getElementById('flipHint').style.display = 'none';
+      document.getElementById('flipActions').style.display = 'flex';
+      document.getElementById('flipCard').classList.add('flipped');
+      // Weak badge on term
+      let badge = '';
+      if (t.inWeakPool) badge = ' <span class="weak-badge in-pool">In Pool</span>';
+      else if (t.typeCorrect > 0 || t.flipKnown > 0) badge = ' <span class="weak-badge out-pool">Mastered</span>';
+      document.getElementById('flipEN').innerHTML = v.en + badge;
+    } else {
+      document.getElementById('flipZH').style.display = 'none';
+      document.getElementById('flipExpl').style.display = 'none';
+      document.getElementById('flipHint').style.display = 'block';
+      document.getElementById('flipActions').style.display = 'none';
+      document.getElementById('flipCard').classList.remove('flipped');
+      document.getElementById('flipEN').innerHTML = v.en;
+    }
+  } else {
+    document.getElementById('flipMode').style.display = 'none';
+    document.getElementById('typeMode').style.display = 'block';
+    document.getElementById('typeCat').textContent = v.cat.toUpperCase();
+    document.getElementById('typePrompt').textContent = v.zh;
+    document.getElementById('typeInput').value = '';
+    document.getElementById('typeInput').className = 'type-input';
+    document.getElementById('typeFeedback').textContent = '';
+    document.getElementById('typeFeedback').className = 'type-feedback';
+    document.getElementById('typeDiff').textContent = '';
+    // Show weak pool status
+    if (t.inWeakPool) {
+      document.getElementById('typeFeedback').textContent = '⚠ In weak pool — needs more practice';
+      document.getElementById('typeFeedback').className = 'type-feedback';
+    }
+    setTimeout(() => document.getElementById('typeInput').focus(), 100);
+  }
+}
+
+/* ── Flip card ── */
+document.getElementById('flipCard').addEventListener('click', () => {
+  if (currentMode !== 'flip' || filtered.length === 0) return;
+  if (!isFlipped) {
+    isFlipped = true;
+    const idx = filtered[cardIndex];
+    tracking[idx].flipCount++;
+  }
+  render();
+});
+
+/* ── Flip actions ── */
+document.getElementById('btnReview').addEventListener('click', () => {
+  const idx = filtered[cardIndex];
+  tracking[idx].flipReview++;
+  // Flip mode does NOT affect typeStreak or inWeakPool
+  isFlipped = false;
+  nextCard();
+});
+document.getElementById('btnKnown').addEventListener('click', () => {
+  const idx = filtered[cardIndex];
+  tracking[idx].flipKnown++;
+  // Flip mode does NOT affect typeStreak or inWeakPool
+  isFlipped = false;
+  nextCard();
+});
+
+/* ── Type check ── */
+document.getElementById('btnCheck').addEventListener('click', checkType);
+document.getElementById('typeInput').addEventListener('keydown', e => { if (e.key === 'Enter') checkType(); });
+
+function checkType() {
+  if (currentMode !== 'type' || filtered.length === 0) return;
+  const idx = filtered[cardIndex];
+  const v = VOCAB[idx];
+  const t = tracking[idx];
+  const userAns = document.getElementById('typeInput').value.trim();
+  const correctAns = v.en;
+
+  const inp = document.getElementById('typeInput');
+  const fb = document.getElementById('typeFeedback');
+  const df = document.getElementById('typeDiff');
+  const checkBtn = document.getElementById('btnCheck');
+  const skipBtn = document.getElementById('btnSkip');
+
+  // Normalize: lowercase, trim, collapse spaces
+  const normUser = userAns.toLowerCase().replace(/\s+/g, ' ');
+  const normCorrect = correctAns.toLowerCase().replace(/\s+/g, ' ');
+
+  // --- Step 1: empty input interception ---
+  if (normUser.length === 0) {
+    fb.textContent = 'Please type an answer.';
+    fb.className = 'type-feedback';
+    df.textContent = '';
+    updateProgress(); updateStats(); updateWeakPool();
+    return;
+  }
+
+  // --- Step 2: exact match ---
+  let fuzzyMatch = normUser === normCorrect;
+
+  // --- Step 3: stripPlural fuzzy match (handles hyphen/space + trailing s/es) ---
+  if (!fuzzyMatch) {
+    const stripPluralVariants = (s) => s.replace(/-/g, ' ').replace(/es$/, '').replace(/s$/, '').replace(/\s+/g, ' ').trim();
+    fuzzyMatch = stripPluralVariants(normUser) === stripPluralVariants(normCorrect);
+  }
+
+  if (fuzzyMatch) {
+    t.typeCorrect++;
+    t.typeStreak++;
+    if (t.typeStreak >= 3) t.inWeakPool = false;
+    inp.className = 'type-input correct';
+    fb.textContent = '✓ Correct!';
+    fb.className = 'type-feedback correct';
+    df.textContent = correctAns;
+    updateProgress(); updateStats(); updateWeakPool();
+    // Disable inputs during auto-advance
+    checkBtn.disabled = true; skipBtn.disabled = true; inp.disabled = true;
+    setTimeout(() => {
+      checkBtn.disabled = false; skipBtn.disabled = false; inp.disabled = false;
+      isFlipped = false; nextCard();
+    }, 1200);
+  } else {
+    t.typeWrong++;
+    t.typeStreak = 0;
+    t.inWeakPool = true;
+    inp.className = 'type-input wrong';
+    fb.textContent = '✗ Wrong — see the difference below';
+    fb.className = 'type-feedback wrong';
+
+    // Build diff message with Levenshtein-driven hint
+    const levDist = levenshtein(normUser, normCorrect);
+    let diffHTML = `You typed: <strong style="color:var(--wrong)">${escapeHTML(userAns)}</strong><br>Correct: <strong style="color:var(--correct)">${correctAns}</strong>`;
+
+    // Only give hint when Levenshtein distance is small enough to be useful
+    const maxHintDist = Math.max(2, Math.floor(normCorrect.length / 4));
+    if (levDist <= maxHintDist && normUser.length > 0) {
+      const mismatchIdx = findFirstMismatch(normUser, normCorrect);
+      if (mismatchIdx >= normUser.length) {
+        diffHTML += `<br><span style="font-size:.72rem;color:var(--warn)">↳ Missing "<strong>${escapeHTML(normCorrect.slice(normUser.length))}</strong>" at the end</span>`;
+      } else if (mismatchIdx >= normCorrect.length) {
+        diffHTML += `<br><span style="font-size:.72rem;color:var(--warn)">↳ Extra characters at the end</span>`;
+      } else {
+        diffHTML += `<br><span style="font-size:.72rem;color:var(--warn)">↳ Mismatch at position ${mismatchIdx + 1}: "<strong>${escapeHTML(normCorrect[mismatchIdx])}</strong>" expected, got "<strong>${escapeHTML(normUser[mismatchIdx])}</strong>"</span>`;
+      }
+    }
+    df.innerHTML = diffHTML;
+  }
+  updateProgress();
+  updateStats();
+  updateWeakPool();
+}
+
+document.getElementById('btnSkip').addEventListener('click', () => {
+  const idx = filtered[cardIndex];
+  const v = VOCAB[idx];
+  document.getElementById('typeFeedback').textContent = 'Skipped. Correct: ' + v.en;
+  document.getElementById('typeFeedback').className = 'type-feedback';
+  document.getElementById('typeDiff').textContent = '';
+  document.getElementById('typeInput').className = 'type-input';
+  setTimeout(() => nextCard(), 800);
+});
+
+/* ── Navigation ── */
+function nextCard() {
+  if (filtered.length === 0) return;
+  cardIndex = (cardIndex + 1) % filtered.length;
+  isFlipped = false;
+  render();
+}
+function prevCard() {
+  if (filtered.length === 0) return;
+  cardIndex = (cardIndex - 1 + filtered.length) % filtered.length;
+  isFlipped = false;
+  render();
+}
+document.getElementById('btnNext').addEventListener('click', nextCard);
+document.getElementById('btnPrev').addEventListener('click', prevCard);
+
+/* ── Progress ── */
+function updateProgress() {
+  if (filtered.length === 0) { document.getElementById('progressFill').style.width = '0%'; document.getElementById('progressText').textContent = '0/0'; return; }
+  let known = 0;
+  filtered.forEach(idx => { if (!tracking[idx].inWeakPool && (tracking[idx].typeCorrect >= 1 || tracking[idx].flipKnown >= 1)) known++; });
+  const pct = Math.round((known / filtered.length) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressText').textContent = `${known}/${filtered.length}`;
+}
+
+function updateStats() {
+  let flips = 0, corr = 0, rev = 0, pool = 0;
+  filtered.forEach(idx => {
+    flips += tracking[idx].flipCount + tracking[idx].flipKnown + tracking[idx].flipReview;
+    corr += tracking[idx].typeCorrect;
+    rev += tracking[idx].typeWrong;
+    if (tracking[idx].inWeakPool) pool++;
+  });
+  document.getElementById('statFlip').textContent = flips;
+  document.getElementById('statCorrect').textContent = corr;
+  document.getElementById('statReview').textContent = rev;
+  document.getElementById('statPool').textContent = pool;
+}
+
+/* ── Weak pool ── */
+function updateWeakPool() {
+  const pool = filtered.filter(idx => tracking[idx].inWeakPool);
+  document.getElementById('weakCount').textContent = pool.length > 0 ? `(${pool.length} words)` : '(empty)';
+  let html = '';
+  pool.forEach(idx => {
+    const v = VOCAB[idx];
+    html += `<div class="weak-item">
+      <div><span class="en">${v.en}</span><span class="zh">${v.zh}</span></div>
+      <div class="count">streak: ${tracking[idx].typeStreak}/3</div>
+    </div>`;
+  });
+  if (pool.length === 0) html = '<div style="text-align:center;color:var(--text2);padding:.5rem">No weak words — well done! 🎉</div>';
+  document.getElementById('weakList').innerHTML = html;
+}
+
+/* ── Weak pool toggle ── */
+document.getElementById('weakToggle').addEventListener('click', () => {
+  const list = document.getElementById('weakList');
+  const arrow = document.getElementById('weakArrow');
+  if (list.style.display === 'none') {
+    list.style.display = 'block';
+    arrow.textContent = '▲';
+  } else {
+    list.style.display = 'none';
+    arrow.textContent = '▼';
+  }
+});
+
+/* ── Category tabs ── */
+document.querySelectorAll('.cat-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    currentCat = tab.dataset.cat;
+    applyFilter();
+  });
+});
+
+/* ── Mode toggle ── */
+document.querySelectorAll('.mode-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentMode = btn.dataset.mode;
+    isFlipped = false;
+    render();
+  });
+});
+
+/* ── Keyboard navigation ── */
+document.addEventListener('keydown', e => {
+  if (currentMode === 'flip' && e.key === ' ' && !isFlipped) {
+    e.preventDefault();
+    document.getElementById('flipCard').click();
+  } else if (e.key === 'ArrowRight') nextCard();
+  else if (e.key === 'ArrowLeft') prevCard();
+});
+
+/* ── Helpers ── */
+
+/* Levenshtein distance (edit distance) for spelling hints */
+function levenshtein(a, b) {
+  if (a.length === 0) return b.length;
+  if (b.length === 0) return a.length;
+  let prevRow = new Array(b.length + 1);
+  let currRow = new Array(b.length + 1);
+  for (let j = 0; j <= b.length; j++) prevRow[j] = j;
+  for (let i = 1; i <= a.length; i++) {
+    currRow[0] = i;
+    for (let j = 1; j <= b.length; j++) {
+      currRow[j] = Math.min(
+        prevRow[j] + 1,
+        currRow[j - 1] + 1,
+        prevRow[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)
+      );
+    }
+    [prevRow, currRow] = [currRow, prevRow];
+  }
+  return prevRow[b.length];
+}
+
+/* Find first character position where two strings differ */
+function findFirstMismatch(a, b) {
+  const minLen = Math.min(a.length, b.length);
+  for (let i = 0; i < minLen; i++) { if (a[i] !== b[i]) return i; }
+  return minLen;
+}
+
+function escapeHTML(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+
+/* ── Init ── */
+applyFilter();
+</script>
+
+</body>
+</html>

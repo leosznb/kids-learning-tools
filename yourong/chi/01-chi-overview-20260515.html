@@ -1,0 +1,2278 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-HK" xml:lang="zh-HK">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>荃官中三中文科卷一備戰全景分析</title>
+  <style>
+    /* === Swiss Minimalist Reset === */
+    :root {
+      --bg: #fafaf9;
+      --text: #1c1c1c;
+      --text-secondary: #555;
+      --accent: #c0392b;
+      --accent-soft: #fef0f0;
+      --border: #e0e0dc;
+      --table-stripe: #f5f5f2;
+      --code-bg: #f0f0ec;
+      --warn-bg: #fff8e6;
+      --warn-border: #e6c940;
+      --radius: 4px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html {
+      color: var(--text);
+      background: var(--bg);
+      font-size: 16px;
+      scroll-behavior: smooth;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 820px;
+      padding: 48px 32px 80px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+      line-height: 1.75;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* === Typography === */
+    h1 { font-size: 2em; font-weight: 800; letter-spacing: -0.02em; margin: 0 0 8px; color: #111; }
+    h2 { font-size: 1.4em; font-weight: 700; margin: 48px 0 12px; padding-bottom: 6px; border-bottom: 2px solid var(--border); color: #222; }
+    h3 { font-size: 1.15em; font-weight: 600; margin: 32px 0 8px; color: #333; }
+    h4 { font-size: 1em; font-weight: 600; margin: 24px 0 6px; color: #444; }
+    h5, h6 { font-size: 0.95em; font-weight: 500; margin: 16px 0 4px; color: #555; }
+    p { margin: 0 0 14px; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* === Separator === */
+    hr { border: none; height: 1px; background: var(--border); margin: 40px 0; }
+
+    /* === Blockquote === */
+    blockquote {
+      margin: 18px 0;
+      padding: 12px 18px;
+      border-left: 4px solid var(--accent);
+      background: var(--accent-soft);
+      color: var(--text-secondary);
+      border-radius: 0 var(--radius) var(--radius) 0;
+    }
+    blockquote p { margin: 6px 0; }
+
+    /* === Lists === */
+    ul, ol { padding-left: 1.6em; margin: 10px 0 16px; }
+    li { margin: 4px 0; }
+    li > ul, li > ol { margin-top: 4px; }
+
+    /* === Code === */
+    code {
+      font-family: "SF Mono", "Cascadia Code", "JetBrains Mono", Menlo, monospace;
+      font-size: 0.85em;
+      background: var(--code-bg);
+      padding: 1px 5px;
+      border-radius: 3px;
+    }
+    pre {
+      margin: 14px 0;
+      padding: 16px 20px;
+      background: #f5f5f0;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow-x: auto;
+      font-size: 0.88em;
+      line-height: 1.6;
+    }
+    pre code { background: none; padding: 0; }
+
+    /* === Tables === */
+    table {
+      width: 100%;
+      margin: 16px 0 24px;
+      border-collapse: collapse;
+      font-size: 0.93em;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    thead { background: #f0f0ec; }
+    th {
+      font-weight: 600;
+      text-align: left;
+      padding: 10px 14px;
+      border-bottom: 2px solid #ccc;
+      font-size: 0.9em;
+    }
+    td {
+      padding: 9px 14px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    tbody tr:nth-child(even) { background: var(--table-stripe); }
+    tbody tr:hover { background: #fffef5; }
+
+    /* === TOC === */
+    nav#TOC {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 24px;
+      margin: 24px 0 36px;
+    }
+    nav#TOC h2 { font-size: 1em; margin: 0 0 10px; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+    nav#TOC ul { list-style: none; padding-left: 0; }
+    nav#TOC li { margin: 3px 0; font-size: 0.93em; }
+    nav#TOC ul ul { padding-left: 1.2em; }
+    nav#TOC ul ul li { font-size: 0.88em; }
+    nav#TOC a { color: var(--text-secondary); }
+    nav#TOC a:hover { color: var(--accent); }
+
+    /* === Print === */
+    @media print {
+      html { background: #fff; }
+      body { max-width: 100%; padding: 0; font-size: 11pt; color: #000; }
+      nav#TOC { break-after: page; }
+      pre, blockquote { break-inside: avoid; }
+      table { break-inside: avoid; font-size: 9pt; }
+      h2 { break-after: avoid; }
+      a { color: #000; text-decoration: underline; }
+    }
+
+    /* === Mobile === */
+    @media (max-width: 768px) {
+      body { padding: 20px 16px 48px; font-size: 15px; }
+      h1 { font-size: 1.5em; }
+      h2 { font-size: 1.2em; margin-top: 32px; }
+      table { font-size: 0.82em; }
+      th, td { padding: 6px 8px; }
+      pre { padding: 12px; font-size: 0.8em; }
+      nav#TOC { padding: 12px 14px; }
+    }
+  </style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">荃官中三中文科卷一備戰全景分析</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<h2>📑 目錄</h2>
+<ul>
+<li><a href="#荃灣官立中學-中三中文科-下學期考試"
+id="toc-荃灣官立中學-中三中文科-下學期考試">荃灣官立中學 中三中文科
+下學期考試</a>
+<ul>
+<li><a href="#卷一-閱讀能力-備戰全景分析"
+id="toc-卷一-閱讀能力-備戰全景分析">卷一 閱讀能力 —
+備戰全景分析</a></li>
+</ul></li>
+<li><a href="#壹考試基本盤"
+id="toc-壹考試基本盤">壹、考試基本盤</a></li>
+<li><a href="#貳甲部課文問答-三年縱向對比"
+id="toc-貳甲部課文問答-三年縱向對比">貳、甲部課文問答 — 三年縱向對比</a>
+<ul>
+<li><a href="#總體出題格局" id="toc-總體出題格局">2.1
+總體出題格局</a></li>
+<li><a href="#逐題橫向對照三年每一題"
+id="toc-逐題橫向對照三年每一題">2.2 逐題橫向對照（三年每一題）</a></li>
+</ul></li>
+<li><a href="#參五篇課文逐篇拆解"
+id="toc-參五篇課文逐篇拆解">參、五篇課文逐篇拆解</a>
+<ul>
+<li><a href="#課文一賣柑者言劉基-文言僅考過1次"
+id="toc-課文一賣柑者言劉基-文言僅考過1次">課文一：《賣柑者言》（劉基）🔴
+文言｜僅考過1次</a></li>
+<li><a href="#課文二以畫為喻葉紹鈞-白話考過2次"
+id="toc-課文二以畫為喻葉紹鈞-白話考過2次">課文二：《以畫為喻》（葉紹鈞）🟡
+白話｜考過2次</a></li>
+<li><a href="#課文三運動家的風度羅家倫-白話三年都考"
+id="toc-課文三運動家的風度羅家倫-白話三年都考">課文三：《運動家的風度》（羅家倫）🟢
+白話｜三年都考</a></li>
+<li><a href="#課文四最苦與最樂梁啟超-白話三年都考"
+id="toc-課文四最苦與最樂梁啟超-白話三年都考">課文四：《最苦與最樂》（梁啟超）🟢
+白話｜三年都考</a></li>
+<li><a href="#課文五鄒忌諷齊王納諫戰國策-文言三年都考"
+id="toc-課文五鄒忌諷齊王納諫戰國策-文言三年都考">課文五：《鄒忌諷齊王納諫》（戰國策）🔴
+文言｜三年都考</a></li>
+</ul></li>
+<li><a href="#肆2026年出題預測-甲部30分配推演"
+id="toc-肆2026年出題預測-甲部30分配推演">肆、2026年出題預測 —
+甲部30分配推演</a></li>
+<li><a href="#伍乙部閱讀理解-題型全景與對策"
+id="toc-伍乙部閱讀理解-題型全景與對策">伍、乙部閱讀理解 —
+題型全景與對策</a>
+<ul>
+<li><a href="#題型頻率熱力圖" id="toc-題型頻率熱力圖">5.1
+題型頻率熱力圖</a></li>
+<li><a href="#三類必殺題型-答題公式" id="toc-三類必殺題型-答題公式">5.2
+三類必殺題型 → 答題公式</a></li>
+</ul></li>
+<li><a href="#陸重點難點矩陣"
+id="toc-陸重點難點矩陣">陸、重點難點矩陣</a></li>
+<li><a href="#柒21天複習路線圖"
+id="toc-柒21天複習路線圖">柒、21天複習路線圖</a>
+<ul>
+<li><a href="#第一階段課文精讀516-5227天"
+id="toc-第一階段課文精讀516-5227天">第一階段：課文精讀（5/16 →
+5/22，7天）</a></li>
+<li><a href="#第二階段真卷實戰523-5297天"
+id="toc-第二階段真卷實戰523-5297天">第二階段：真卷實戰（5/23 →
+5/29，7天）</a></li>
+<li><a href="#第三階段衝刺530-646天"
+id="toc-第三階段衝刺530-646天">第三階段：衝刺（5/30 →
+6/4，6天）</a></li>
+</ul></li>
+<li><a href="#捌給海納和有容的個人化提醒"
+id="toc-捌給海納和有容的個人化提醒">捌、給海納和有容的個人化提醒</a></li>
+<li><a href="#玖卷二寫作能力-全景分析"
+id="toc-玖卷二寫作能力-全景分析">玖、卷二寫作能力 — 全景分析</a>
+<ul>
+<li><a href="#考試基本盤" id="toc-考試基本盤">9.1 考試基本盤</a></li>
+<li><a href="#甲部實用文寫作-三年出題對比"
+id="toc-甲部實用文寫作-三年出題對比">9.2 甲部實用文寫作 —
+三年出題對比</a></li>
+<li><a href="#五種實用文格式速查" id="toc-五種實用文格式速查">9.3
+五種實用文格式速查</a></li>
+<li><a href="#甲部實用文-時間與策略" id="toc-甲部實用文-時間與策略">9.4
+甲部實用文 — 時間與策略</a></li>
+<li><a href="#乙部命題寫作-三年題型縱向對比"
+id="toc-乙部命題寫作-三年題型縱向對比">9.5 乙部命題寫作 —
+三年題型縱向對比</a></li>
+<li><a href="#三類命題寫作-答題框架" id="toc-三類命題寫作-答題框架">9.6
+三類命題寫作 — 答題框架</a></li>
+<li><a href="#卷二時間分配鐵律" id="toc-卷二時間分配鐵律">9.7
+卷二時間分配鐵律</a></li>
+<li><a href="#實用文命題寫作-十大注意事項總匯"
+id="toc-實用文命題寫作-十大注意事項總匯">9.8 實用文＋命題寫作 —
+十大注意事項總匯</a></li>
+</ul></li>
+</ul>
+</nav>
+<header style="margin: 0 0 40px; padding: 32px 0 24px; border-bottom: 3px solid #1c1c1c;">
+<h1 id="荃灣官立中學-中三中文科-下學期考試" style="margin:0;">荃灣官立中學 中三中文科
+下學期考試</h1>
+<h2 id="卷一-閱讀能力-備戰全景分析" style="margin:6px 0 20px; font-weight:400; color:#555; border:none;">卷一 閱讀能力 — 備戰全景分析</h2>
+<blockquote style="margin:0; padding:0; border:none; background:none;">
+<p style="font-size:0.9em; color:#777;">編製日期：2026年5月15日 | 考試日期：2026年6月5日（尚有<span style="color:#c0392b; font-weight:700;">21天</span>）
+數據來源：2223/2324/2425 三年真卷 + 校本課程 + 考試範圍文件</p>
+</blockquote>
+</header>
+<hr />
+<h1 id="壹考試基本盤">壹、考試基本盤</h1>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>項目</th>
+<th>數據</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>日期</strong></td>
+<td>2026年6月5日（星期五）</td>
+</tr>
+<tr class="even">
+<td><strong>時間</strong></td>
+<td>1小時15分鐘</td>
+</tr>
+<tr class="odd">
+<td><strong>總分</strong></td>
+<td>90分（佔全科 <strong>45%</strong>）</td>
+</tr>
+<tr class="even">
+<td><strong>結構</strong></td>
+<td>甲部課文問答 30分 ＋ 乙部閱讀理解 60分</td>
+</tr>
+<tr class="odd">
+<td><strong>評分鐵則</strong></td>
+<td>錯別字扣0.5分（甲部最多扣2分）；選擇題多選0分；翻譯逐字計分</td>
+</tr>
+<tr class="even">
+<td><strong>課文範圍</strong></td>
+<td>《賣柑者言》《以畫為喻》《運動家的風度》《最苦與最樂》《鄒忌諷齊王納諫》</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1 id="貳甲部課文問答-三年縱向對比">貳、甲部課文問答 —
+三年縱向對比</h1>
+<h2 id="總體出題格局">2.1 總體出題格局</h2>
+<table>
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 41%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>維度</th>
+<th>2223</th>
+<th>2324</th>
+<th>2425</th>
+<th>→ <strong>2526 預測</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>課文數</td>
+<td>5篇</td>
+<td>5篇</td>
+<td>5篇</td>
+<td>5篇</td>
+</tr>
+<tr class="even">
+<td>詞解</td>
+<td>5題×1分＝5分</td>
+<td>5題×1分＝5分</td>
+<td>5題×1分＝5分</td>
+<td><strong>5題×1分（不變）</strong></td>
+</tr>
+<tr class="odd">
+<td>翻譯</td>
+<td>2句＝6分</td>
+<td>1句＝4分</td>
+<td>1句＝4分</td>
+<td><strong>1句＝4分</strong></td>
+</tr>
+<tr class="even">
+<td>內容問答/表格</td>
+<td>4題＝19分</td>
+<td>5題＝21分</td>
+<td>5題＝21分</td>
+<td><strong>5題≈21分</strong></td>
+</tr>
+<tr class="odd">
+<td><strong>甲部總分</strong></td>
+<td><strong>30分</strong></td>
+<td><strong>30分</strong></td>
+<td><strong>30分</strong></td>
+<td><strong>30分</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>🔑
+關鍵信號：甲部結構三年極其穩定，2526年不會有意外。詞解5分+翻譯4分是鐵律，剩下21分由各課文瓜分。</p>
+<p>⚠️
+<strong>題型演變警報</strong>：2425年甲部出現了<strong>全新的混合題型結構</strong>——Q1拆分為填空（4分）、詞解（4分）、翻譯（3分）、選擇（4分）四個子題，不再是傳統的「Q1＝詞解5分」單一模式。這可能是2526年的出題方向，孩子需提前適應「一題多型」的考法。</p>
+</blockquote>
+<h2 id="逐題橫向對照三年每一題">2.2 逐題橫向對照（三年每一題）</h2>
+<table>
+<colgroup>
+<col style="width: 18%" />
+<col style="width: 27%" />
+<col style="width: 27%" />
+<col style="width: 27%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>序</th>
+<th>2223</th>
+<th>2324</th>
+<th>2425</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Q1</td>
+<td>詞解：論語八則+四端+鄒忌（5分）</td>
+<td>詞解：論語八則+鄒忌（5分）</td>
+<td>詞解：鄒忌+賣柑者言（5分）</td>
+</tr>
+<tr class="even">
+<td>Q2</td>
+<td>翻譯：論語八則×2句（6分）</td>
+<td>翻譯：論語八則×1句（4分）</td>
+<td>翻譯：鄒忌×1句（4分）</td>
+</tr>
+<tr class="odd">
+<td>Q3</td>
+<td>內容：論語八則（學習見解，3分）</td>
+<td>內容：運動家的風度（超越勝敗，4分）</td>
+<td>內容：賣柑者言（反諷手法，4分）</td>
+</tr>
+<tr class="even">
+<td>Q4</td>
+<td>內容：鄒忌（納諫效果，5分）</td>
+<td>內容：以畫為喻（結構作用，4分）</td>
+<td>內容：以畫為喻（實用vs藝術畫，3分）</td>
+</tr>
+<tr class="odd">
+<td>Q5</td>
+<td>主旨：最苦與最樂（5分）</td>
+<td>人物：鄒忌（6分）</td>
+<td>表格：運動家的風度（6分）</td>
+</tr>
+<tr class="even">
+<td>Q6</td>
+<td>表格：運動家的風度（6分）</td>
+<td>內容：論語八則（孝道，2分）</td>
+<td>主旨：最苦與最樂（3分）</td>
+</tr>
+<tr class="odd">
+<td>Q7</td>
+<td>—</td>
+<td>表格：最苦與最樂（論點/論據/論證，5分）</td>
+<td>內容：鄒忌（戰勝於朝廷，5分）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⚠️ <strong>重要提示</strong>：「論語八則」和「論四端」僅在 2223/2324
+年出現，<strong>不在 2526
+年考試範圍內</strong>。此處列出的歷年題目僅供出題規律參考，無需複習這兩篇課文。2526
+年範圍只有五篇：《賣柑者言》《以畫為喻》《運動家的風度》《最苦與最樂》《鄒忌諷齊王納諫》。</p>
+</blockquote>
+<hr />
+<h1 id="參五篇課文逐篇拆解">參、五篇課文逐篇拆解</h1>
+<hr />
+<h2 id="課文一賣柑者言劉基-文言僅考過1次">課文一：《賣柑者言》（劉基）🔴
+文言｜僅考過1次</h2>
+<h3 id="檔案">檔案</h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>項目</th>
+<th>內容</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>文體</td>
+<td>寓言式諷刺文言</td>
+</tr>
+<tr class="even">
+<td>核心手法</td>
+<td><strong>借物喻理</strong>：以「金玉其外，敗絮其中」的柑，諷刺徒有其表的朝廷官員</td>
+</tr>
+<tr class="odd">
+<td>校本筆記來源</td>
+<td><code>校本課程 論四端-論語八則-買柑者言.pdf</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="歷年考情">歷年考情</h3>
+<table>
+<colgroup>
+<col style="width: 37%" />
+<col style="width: 62%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>年份</th>
+<th>考了什麼</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>2425</td>
+<td>Q1詞解（潰、瞽）+
+Q3反諷手法（4分）：「賣柑者愈是讚美官員，愈顯得他們表裡不一，鞭撻愈辛辣」</td>
+</tr>
+</tbody>
+</table>
+<h3 id="從未考過的處女角度">⚠️ 從未考過的「處女角度」</h3>
+<table>
+<colgroup>
+<col style="width: 27%" />
+<col style="width: 45%" />
+<col style="width: 27%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>角度</th>
+<th>預測概率</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>文言翻譯</strong></td>
+<td>🔴🔴🔴 極高</td>
+<td>2425只考了詞解，翻譯完全空白，2526幾乎必出</td>
+</tr>
+<tr class="even">
+<td><strong>「金玉其外敗絮其中」寓意闡釋</strong></td>
+<td>🔴🔴🔴 極高</td>
+<td>全篇最核心的比喻，從未被獨立出題</td>
+</tr>
+<tr class="odd">
+<td><strong>賣柑者的形象分析</strong></td>
+<td>🔴🔴 中高</td>
+<td>他是一個敢於直言的市井小人物，角色功能類似鄒忌</td>
+</tr>
+<tr class="even">
+<td><strong>與其他諷諫文章的比較</strong></td>
+<td>🔴 中</td>
+<td>可與鄒忌的進諫方式做對比</td>
+</tr>
+</tbody>
+</table>
+<h3 id="必背知識點">必背知識點</h3>
+<pre><code>【詞解高頻】
+  善藏柑，涉寒暑不潰    潰＝腐爛
+  將衒外以惑愚瞽乎      衒＝炫耀；瞽＝瞎子
+  出之燁然，玉質而金色  燁然＝光彩鮮明的樣子
+  予貿得其一，剖之      貿＝買
+
+【關鍵文句翻譯】（預測必考）
+  「金玉其外，敗絮其中」
+  → 外表像金玉一樣華美，內裡卻是破爛的棉絮。
+
+【文章主旨】
+  借賣柑者之口，諷刺元末朝廷官員徒有威儀外表，實則尸位素餐、毫無才幹，
+  揭露「世之為欺者不寡矣」的社會現實。
+
+【論證/寫作手法】
+  ✅ 借物喻理（以柑喻人）
+  ✅ 反諷（表面讚美實則鞭撻）
+  ✅ 設問（「子何為者也？」→引出賣柑者的反駁）</code></pre>
+<h3 id="常見失分陷阱">常見失分陷阱</h3>
+<ul>
+<li>「潰」字易誤解為「崩潰」（正確：腐爛）</li>
+<li>「瞽」字易誤認（正確：瞎子，讀音gǔ）</li>
+<li>翻譯時漏掉「出之燁然」的「之」→應譯為「拿出來」</li>
+<li>主旨題只寫「諷刺官員」→要寫出「表裡不一/尸位素餐/金玉其外敗絮其中」</li>
+</ul>
+<hr />
+<h2
+id="課文二以畫為喻葉紹鈞-白話考過2次">課文二：《以畫為喻》（葉紹鈞）🟡
+白話｜考過2次</h2>
+<h3 id="檔案-1">檔案</h3>
+<table>
+<thead>
+<tr class="header">
+<th>項目</th>
+<th>內容</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>文體</td>
+<td>說理散文</td>
+</tr>
+<tr class="even">
+<td>核心手法</td>
+<td><strong>比喻說理</strong>：以繪畫之道比喻寫作之道</td>
+</tr>
+<tr class="odd">
+<td>校本筆記來源</td>
+<td><code>校本課程_單元七 說理散文.pdf</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="歷年考情-1">歷年考情</h3>
+<table>
+<thead>
+<tr class="header">
+<th>年份</th>
+<th>考了什麼</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>2324</td>
+<td>Q4結構作用（4分）：「作者如何使讀者不會誤把主題視作談繪畫？」</td>
+</tr>
+<tr class="even">
+<td>2425</td>
+<td>Q4實用畫vs藝術畫對比（3分）：創作動機、程度之別</td>
+</tr>
+</tbody>
+</table>
+<h3 id="從未考過的處女角度-1">⚠️ 從未考過的「處女角度」</h3>
+<table>
+<colgroup>
+<col style="width: 27%" />
+<col style="width: 45%" />
+<col style="width: 27%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>角度</th>
+<th>預測概率</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>「實用畫 vs 藝術畫」完整對比表</strong></td>
+<td>🔴🔴🔴 極高</td>
+<td>2425只考了3分簡答，未考表格填空。這是表格題的黃金素材</td>
+</tr>
+<tr class="even">
+<td><strong>「法度」在創作中的角色</strong></td>
+<td>🔴🔴 中高</td>
+<td>作者認為實用畫需要熟習法度，藝術畫則需超越法度</td>
+</tr>
+<tr class="odd">
+<td><strong>「感興」的含義</strong></td>
+<td>🔴🔴 中</td>
+<td>藝術畫的核心驅動力</td>
+</tr>
+</tbody>
+</table>
+<h3 id="必背知識點-1">必背知識點</h3>
+<pre><code>【核心概念對比】（預測表格題素材）
+
+| 維度 | 實用畫（圖畫） | 藝術畫（畫） |
+|------|---------------|-------------|
+| 動機 | 為實用目的 | 表現作者的感興 |
+| 要求 | 像真、清楚、能傳達意思 | 超越形似，表現精神 |
+| 與法度的關係 | 必須熟習法度 | 從法度入，從法度出 |
+| 程度 | 較淺 | 較深 |
+
+【關鍵句子】
+  「題目標明『以畫為喻』，就是借圖畫的情形，來比喻文字。」
+  → 反覆出現的結構提示句，證明全文是比喻說理
+
+【文章主旨】
+  以繪畫的實用畫與藝術畫之分，比喻寫作的實用文與文學創作之別，
+  說明不同目的需要不同程度的技巧，但都需要從熟習法度開始。
+
+【寫作手法】
+  ✅ 比喻說理（畫 → 文）
+  ✅ 對比（實用畫 vs 藝術畫）
+  ✅ 首尾呼應（開頭談畫，結尾點破）</code></pre>
+<h3 id="常見失分陷阱-1">常見失分陷阱</h3>
+<ul>
+<li>誤把文章主題當作「談繪畫」（作者已反覆提示是比喻）</li>
+<li>實用畫/藝術畫區別只答一兩點，遺漏完整維度</li>
+<li>忽略「法度」在兩類繪畫中的不同角色</li>
+</ul>
+<hr />
+<h2
+id="課文三運動家的風度羅家倫-白話三年都考">課文三：《運動家的風度》（羅家倫）🟢
+白話｜三年都考</h2>
+<h3 id="檔案-2">檔案</h3>
+<table>
+<thead>
+<tr class="header">
+<th>項目</th>
+<th>內容</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>文體</td>
+<td>說理散文（議論文）</td>
+</tr>
+<tr class="even">
+<td>核心手法</td>
+<td><strong>正反對照</strong> + <strong>舉例論證</strong></td>
+</tr>
+<tr class="odd">
+<td>校本筆記來源</td>
+<td><code>校本課程_單元七 說理散文.pdf</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="歷年考情-2">歷年考情</h3>
+<table>
+<colgroup>
+<col style="width: 37%" />
+<col style="width: 62%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>年份</th>
+<th>考了什麼</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>2223</td>
+<td>Q6 表格填空（6分）：光明正大的態度 + 服輸的精神（正反對照表格）</td>
+</tr>
+<tr class="even">
+<td>2324</td>
+<td>Q3 內容問答（4分）：超越勝敗的心胸＋歐文斯例子</td>
+</tr>
+<tr class="odd">
+<td>2425</td>
+<td>Q5 表格填空（6分）：貫徹始終 + 君子之爭（含普林斯頓禱告詞）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="從未考過的處女角度-2">⚠️ 從未考過的「處女角度」</h3>
+<table>
+<colgroup>
+<col style="width: 27%" />
+<col style="width: 45%" />
+<col style="width: 27%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>角度</th>
+<th>預測概率</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>「運動家的風度」在人生中的應用</strong></td>
+<td>🔴🔴🔴 極高</td>
+<td>三年都考課內，未考延伸。文章多次提「運動場是人生的縮影」</td>
+</tr>
+<tr class="even">
+<td><strong>「服輸精神」獨立分析</strong></td>
+<td>🔴🔴 中高</td>
+<td>2223考過但混在表格中，未獨立成題</td>
+</tr>
+<tr class="odd">
+<td><strong>作者寫作目的/現實意義</strong></td>
+<td>🔴🔴 中</td>
+<td>為什麼要向中學生談運動家風度？</td>
+</tr>
+</tbody>
+</table>
+<h3 id="必背知識點-2">必背知識點</h3>
+<pre><code>【運動家風度四大內涵】
+
+| 特質 | 說明 | 文中例子 |
+|------|------|----------|
+| ①光明正大的態度 | 遵守規則、公平競爭、排斥暗箭傷人 | 普林斯頓球隊禱告詞 |
+| ②服輸的精神 | 輸了承認技不如人，佩服對方，力求改進 | vs 怨天尤人 |
+| ③超越勝敗的心胸 | 勝不驕敗不餒，重在參與和盡力 | 歐文斯奔跑不及火車 |
+| ④貫徹始終 | 全力以赴，不臨陣退縮、不半途而廢 | 賽跑落後仍跑到終點 |
+
+【論證方法】
+  ✅ 正反對照（全篇核心結構）
+  ✅ 舉例論證（歐文斯、普林斯頓）
+  ✅ 比喻論證（運動場＝人生縮影）
+
+【關鍵句子】
+  「運動場是人生的縮影」
+  「君子之爭」（引用《論語》「君子無所爭，必也射乎」）</code></pre>
+<h3 id="常見失分陷阱-2">常見失分陷阱</h3>
+<ul>
+<li>表格填空時「說明」和「例子」互相錯位</li>
+<li>把「貫徹始終」和「超越勝敗」混淆</li>
+<li>「服輸」不是「認輸放棄」，而是「承認技不如人＋力求改進」</li>
+</ul>
+<hr />
+<h2
+id="課文四最苦與最樂梁啟超-白話三年都考">課文四：《最苦與最樂》（梁啟超）🟢
+白話｜三年都考</h2>
+<h3 id="檔案-3">檔案</h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>項目</th>
+<th>內容</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>文體</td>
+<td>議論文</td>
+</tr>
+<tr class="even">
+<td>核心手法</td>
+<td><strong>對比論證</strong> + <strong>比喻論證</strong> +
+<strong>舉例論證</strong></td>
+</tr>
+<tr class="odd">
+<td>校本筆記來源</td>
+<td><code>校本課程-最苦與最樂_20260515.pdf</code>（本文件同時涵蓋《最苦與最樂》《鄒忌諷齊王納諫》《大同與小康》三課）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="歷年考情-3">歷年考情</h3>
+<table>
+<colgroup>
+<col style="width: 37%" />
+<col style="width: 62%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>年份</th>
+<th>考了什麼</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>2223</td>
+<td>Q5 主旨歸納（5分）：全文主旨</td>
+</tr>
+<tr class="even">
+<td>2324</td>
+<td>Q7
+表格填空（5分）：論點/論據/論證方法（比喻論證、舉例論證、對比論證）</td>
+</tr>
+<tr class="odd">
+<td>2425</td>
+<td>Q6 主旨/寫作目的（3分）：作者為何寫此文</td>
+</tr>
+</tbody>
+</table>
+<h3 id="從未考過的處女角度-3">⚠️ 從未考過的「處女角度」</h3>
+<table>
+<colgroup>
+<col style="width: 27%" />
+<col style="width: 45%" />
+<col style="width: 27%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>角度</th>
+<th>預測概率</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>「未盡責任之苦」的心理描寫分析</strong></td>
+<td>🔴🔴🔴 極高</td>
+<td>三年集中在主旨和論證方法，未考文本細節分析</td>
+</tr>
+<tr class="even">
+<td><strong>責任的種類與輕重</strong></td>
+<td>🔴🔴 中高</td>
+<td>文中區分了多種責任（對自己/對他人/對社會）</td>
+</tr>
+<tr class="odd">
+<td><strong>「盡得大責任即大快樂」的邏輯鏈</strong></td>
+<td>🔴🔴 中</td>
+<td>從苦到樂的轉化機制</td>
+</tr>
+</tbody>
+</table>
+<h3 id="必背知識點-3">必背知識點</h3>
+<pre><code>【核心論點】
+  未盡責任 → 人生最大的苦
+  完成責任 → 人生最大的樂
+  結論：勇於承擔責任，不要逃避
+
+【論證方法三件套】
+
+| 論點 | 論據 | 論證方法 |
+|------|------|----------|
+| 未盡責任是最大苦事 | 未盡的責任像千斤重擔壓在肩頭 | 比喻論證 |
+| 未盡責任是最大苦事 | 欠債未還、受恩未報、得罪人未賠禮 | 舉例論證 |
+| 未盡責任是最大苦事 | 生老病死可達觀排解，責任未盡到死也痛苦 | 對比論證 |
+
+【關鍵句子】
+  「未盡責任是人生最大的痛苦，盡責任是人生最大的快樂。」
+  「處處盡責任，便處處快樂；時時盡責任，便時時快樂。」</code></pre>
+<h3 id="常見失分陷阱-3">常見失分陷阱</h3>
+<ul>
+<li>主旨歸納只寫「責任重要」→ 要寫出「苦→樂→承擔」的完整邏輯鏈</li>
+<li>論證方法表格：比喻論證和舉例論證混淆（比喻用「像/如」、舉例是具體事件）</li>
+<li>寫作目的＝勸勉，不可只寫「分析責任」</li>
+</ul>
+<hr />
+<h2
+id="課文五鄒忌諷齊王納諫戰國策-文言三年都考">課文五：《鄒忌諷齊王納諫》（戰國策）🔴
+文言｜三年都考</h2>
+<h3 id="檔案-4">檔案</h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>項目</th>
+<th>內容</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>文體</td>
+<td>歷史散文/進諫故事</td>
+</tr>
+<tr class="even">
+<td>核心手法</td>
+<td><strong>類比說理</strong>（以家事喻國事）+
+<strong>排比</strong>（三問三答三思）</td>
+</tr>
+<tr class="odd">
+<td>校本筆記來源</td>
+<td><code>校本課程-最苦與最樂_20260515.pdf</code>（本文件同時涵蓋《最苦與最樂》《鄒忌諷齊王納諫》《大同與小康》三課）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="歷年考情-4">歷年考情</h3>
+<table>
+<thead>
+<tr class="header">
+<th>年份</th>
+<th>考了什麼</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>2223</td>
+<td>Q1詞解 + Q4納諫效果（5分）：命令下達後群臣進諫的三階段</td>
+</tr>
+<tr class="even">
+<td>2324</td>
+<td>Q1詞解 + Q2翻譯 + Q5人物分析（6分）：鄒忌是怎樣的人</td>
+</tr>
+<tr class="odd">
+<td>2425</td>
+<td>Q1詞解 + Q2翻譯 + Q7戰勝於朝廷（5分）：為何納諫可以不戰而勝</td>
+</tr>
+</tbody>
+</table>
+<h3 id="從未考過的處女角度-4">⚠️ 從未考過的「處女角度」</h3>
+<table>
+<colgroup>
+<col style="width: 27%" />
+<col style="width: 45%" />
+<col style="width: 27%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>角度</th>
+<th>預測概率</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>「三問三答」的對比分析</strong></td>
+<td>🔴🔴🔴 極高</td>
+<td>妻、妾、客回答相同但動機不同（私/畏/有求），從未獨立出題</td>
+</tr>
+<tr class="even">
+<td><strong>鄒忌的「諷」與直諫的區別</strong></td>
+<td>🔴🔴 中高</td>
+<td>文章標題就是「諷」，但從未考「諷」的技巧特點</td>
+</tr>
+<tr class="odd">
+<td><strong>「王之蔽甚矣」的「蔽」具體指什麼</strong></td>
+<td>🔴🔴 中</td>
+<td>宮婦左右私王、朝廷之臣畏王、四境之內有求於王</td>
+</tr>
+</tbody>
+</table>
+<h3 id="必背知識點-4">必背知識點</h3>
+<pre><code>【詞解高頻】（2425考過、2324考過、2223考過，以下彙總）
+
+  朝服衣冠        服＝穿戴
+  旦日            旦日＝第二天
+  吾與徐公孰美    孰＝誰
+  王之蔽甚矣      蔽＝蒙蔽
+  四境之內莫不有求於王  莫＝沒有（人）
+  時時而間進      間＝偶爾/間中
+
+【關鍵文句翻譯】（連續兩年考翻譯，2526仍可能出）
+
+  「令初下，群臣進諫，門庭若市。」
+  → 命令剛下達時，許多大臣都來進諫，宮門和庭院像集市一樣熱鬧。
+
+  「此所謂戰勝於朝廷。」
+  → 這就是所說的在朝廷上戰勝（別國）。
+
+【三問三答對照表】（預測必背）
+
+| 問的對象 | 回答 | 動機 | 鄒忌的反思 |
+|----------|------|------|-----------|
+| 妻 | 「君美甚，徐公何能及君也」 | 私我（偏愛） |  |
+| 妾 | 「徐公何能及君也」 | 畏我（害怕） |  |
+| 客 | 「徐公不若君之美也」 | 有求於我 |  |
+
+【文章主旨】
+  鄒忌以自己與徐公比美被蒙蔽的親身經歷為喻，勸諫齊威王廣開言路、
+  採納諫言，最終實現「戰勝於朝廷」的政治效果。
+
+【寫作手法】
+  ✅ 類比說理（家事→國事，妻妾客→宮婦朝廷四境）
+  ✅ 排比（三問、三答、三賞）
+  ✅ 鋪墊（層層推進，由己及人、由近及遠）</code></pre>
+<h3 id="常見失分陷阱-4">常見失分陷阱</h3>
+<ul>
+<li>「服」字誤以為「衣服」（此處是動詞「穿戴」）</li>
+<li>翻譯「門庭若市」只寫「熱鬧」→需保留「像市場一樣」的比喻</li>
+<li>人物分析只說「勇敢進諫」→要寫「有自知之明（照鏡認清自己不如徐公）＋善於類比說理」</li>
+<li>「戰勝於朝廷」解釋不能只說「打勝仗」→是「不戰而使他國臣服」</li>
+</ul>
+<hr />
+<h1 id="肆2026年出題預測-甲部30分配推演">肆、2026年出題預測 —
+甲部30分配推演</h1>
+<p>基於三年輪換規律+各課文「處女角度」分析，2526甲部最可能的出題配置：</p>
+<table>
+<colgroup>
+<col style="width: 15%" />
+<col style="width: 26%" />
+<col style="width: 26%" />
+<col style="width: 15%" />
+<col style="width: 15%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>題號</th>
+<th>預測題型</th>
+<th>預測課文</th>
+<th>分值</th>
+<th>理由</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Q1</td>
+<td><strong>詞解</strong></td>
+<td>賣柑者言＋鄒忌</td>
+<td>5分</td>
+<td>兩篇文言各抽2-3個詞</td>
+</tr>
+<tr class="even">
+<td>Q2</td>
+<td><strong>翻譯</strong></td>
+<td>賣柑者言</td>
+<td>4分</td>
+<td>2425未考翻譯，輪到它了</td>
+</tr>
+<tr class="odd">
+<td>Q3</td>
+<td><strong>內容問答</strong></td>
+<td>以畫為喻（實用vs藝術畫對比表）</td>
+<td>5分</td>
+<td>2425只考了3分簡答，深度不足</td>
+</tr>
+<tr class="even">
+<td>Q4</td>
+<td><strong>表格填空</strong></td>
+<td>最苦與最樂（論點/論據/論證）</td>
+<td>5分</td>
+<td>2425未出表格，2324模式重現</td>
+</tr>
+<tr class="odd">
+<td>Q5</td>
+<td><strong>內容問答</strong></td>
+<td>鄒忌（三問三答動機分析）</td>
+<td>4分</td>
+<td>三年從未考的角度</td>
+</tr>
+<tr class="even">
+<td>Q6</td>
+<td><strong>內容問答</strong></td>
+<td>運動家的風度（延伸到人生）</td>
+<td>4分</td>
+<td>三年都考課內，今年該考延伸了</td>
+</tr>
+<tr class="odd">
+<td>Q7</td>
+<td><strong>簡答</strong></td>
+<td>賣柑者言（主旨或寓意）</td>
+<td>3分</td>
+<td>配合Q2翻譯形成文言組合</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⚠️ 以上為預測，非洩題。真實考卷可能會有 ±1題的變動和分值微調。</p>
+</blockquote>
+<hr />
+<h1 id="伍乙部閱讀理解-題型全景與對策">伍、乙部閱讀理解 —
+題型全景與對策</h1>
+<h2 id="題型頻率熱力圖">5.1 題型頻率熱力圖</h2>
+<table>
+<thead>
+<tr class="header">
+<th>題型</th>
+<th style="text-align: center;">2223</th>
+<th style="text-align: center;">2324</th>
+<th style="text-align: center;">2425</th>
+<th style="text-align: center;">頻率</th>
+<th>分值區間</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>段落劃分＋內容大意</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">⭐⭐⭐ 必出</td>
+<td>6-12分</td>
+</tr>
+<tr class="even">
+<td>文言詞解（第二篇）</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">⭐⭐⭐ 必出</td>
+<td>6-8分</td>
+</tr>
+<tr class="odd">
+<td>文言翻譯（第二篇）</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">⭐⭐⭐ 必出</td>
+<td>3-4分</td>
+</tr>
+<tr class="even">
+<td>論證方法辨識</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">⭐⭐⭐ 必出</td>
+<td>2分</td>
+</tr>
+<tr class="odd">
+<td>修辭手法＋作用</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">⭐⭐⭐ 必出</td>
+<td>3-4分</td>
+</tr>
+<tr class="even">
+<td>判斷題</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">⭐⭐ 高頻</td>
+<td>4分</td>
+</tr>
+<tr class="odd">
+<td>選擇題</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">⭐ 新題型</td>
+<td>4分</td>
+</tr>
+<tr class="even">
+<td>成語理解/解釋</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">⭐⭐⭐ 必出</td>
+<td>2-4分</td>
+</tr>
+<tr class="odd">
+<td>結構作用（承上啟下）</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">⭐⭐⭐ 必出</td>
+<td>4-5分</td>
+</tr>
+<tr class="even">
+<td>人物描寫手法</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">⭐ 低頻</td>
+<td>3-5分</td>
+</tr>
+<tr class="odd">
+<td>開放題（結合經驗/現實）</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">⭐⭐⭐ 必出</td>
+<td>3-4分</td>
+</tr>
+<tr class="even">
+<td>填充/表格（乙部）</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">⭐⭐ 高頻</td>
+<td>4-6分</td>
+</tr>
+</tbody>
+</table>
+<h2 id="三類必殺題型-答題公式">5.2 三類必殺題型 → 答題公式</h2>
+<h3
+id="題型a段落劃分內容大意必出6-12分">題型A：段落劃分＋內容大意（必出，6-12分）</h3>
+<pre><code>【答題公式】
+  第一部分（第X-Y段）：【主題詞】＋【作者做了/說了什麼】
+  第二部分（第X-Y段）：【主題詞】＋【論證/展開】
+  第三部分（第X-Y段）：【主題詞】＋【結論/深化】
+
+  答題技巧：先找文章的中心句/過渡句，它們通常就是段落分界線。</code></pre>
+<h3
+id="題型b論證方法作用必出2-4分">題型B：論證方法＋作用（必出，2-4分）</h3>
+<pre><code>【五種論證方法速查】
+
+| 方法 | 判斷標誌 | 作用句 |
+|------|----------|--------|
+| 舉例論證 | 人名/事件/故事 | 「以具體事例證明…增強說服力」 |
+| 比喻論證 | 「像/如/猶如」 | 「以生動比喻說明…使抽象道理具體化」 |
+| 對比論證 | 正反/前後/有無 | 「通過對比突出…使觀點更加鮮明」 |
+| 引用論證 | 引號/名言/經典 | 「引用權威言論證明…增加可信度」 |
+| 類比論證 | A和B並列比較 | 「以熟悉事物類比陌生事物…使讀者易於理解」 |</code></pre>
+<h3 id="題型c結構作用高頻4-5分">題型C：結構作用（高頻，4-5分）</h3>
+<pre><code>【萬能結構句】
+
+  承上啟下：
+  「本段/句在結構上起承上啟下的過渡作用。『承上』總結了上文______的內容；
+   『啟下』引出下文______的論述，使文章結構嚴密，層次分明。」
+
+  首段作用（如適用）：
+  「開門見山提出中心論點，統攝全文／設置懸念引起讀者興趣。」
+
+  末段作用（如適用）：
+  「總結全文，呼應開頭，深化主題。」</code></pre>
+<h3 id="題型d開放題必出3-4分">題型D：開放題（必出，3-4分）</h3>
+<pre><code>【三分鐘高分框架】
+
+  立場句（1句）：我同意/不同意作者的觀點。
+  理由A（1-2句）：因為…（結合文章觀點）
+  理由B（1-2句）：此外…（補充另一個角度）
+  例子（1-2句）：例如…（具體事例，可以是學習/生活/社會）
+  回扣（1句）：因此，我認為作者的說法是有道理的/值得商榷的。</code></pre>
+<h3
+id="題型e選擇題新題型2425年出現">題型E：選擇題（新題型，2425年出現）</h3>
+<pre><code>【應對策略】
+  - 文言虛詞選擇：先確認每個選項的詞性（連詞/代詞/語氣詞），
+    再代入原文驗證。常見混淆點：「之」作代詞 vs 作助詞。
+  - 內容理解選擇：用「排除法」先刪去明顯錯誤選項，
+    再比較剩餘選項，回原文找關鍵句對照。
+  - 絕不可「憑感覺」選，必須在原文找到確切依據。</code></pre>
+<h3
+id="題型f成語詞語解釋必出2-4分">題型F：成語/詞語解釋（必出，2-4分）</h3>
+<pre><code>【答題公式】
+  ① 先解釋成語的字面意思
+  ② 再指出在文中的具體含義
+  ③ 說明該詞的表達效果（如適用）
+
+  示例（2324「令初下」）：
+  → 「令初下」指命令剛剛下達的時候。
+    在文中形容齊威王納諫後，群臣爭相進諫的熱烈場面。</code></pre>
+<hr />
+<h1 id="陸重點難點矩陣">陸、重點難點矩陣</h1>
+<table>
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 38%" />
+<col style="width: 15%" />
+<col style="width: 23%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>難點</th>
+<th>涉及範圍</th>
+<th style="text-align: center;">難度</th>
+<th>對策</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>文言實詞多義辨析</strong></td>
+<td>賣柑者言、鄒忌</td>
+<td style="text-align: center;">⭐⭐⭐</td>
+<td>製作多義詞對比卡（如「服」：穿戴vs衣服vs佩服）</td>
+</tr>
+<tr class="even">
+<td><strong>論證方法混淆</strong>（比喻 vs 類比）</td>
+<td>最苦與最樂、以畫為喻</td>
+<td style="text-align: center;">⭐⭐</td>
+<td>口訣：比喻是「像」，類比是「並列對照」</td>
+</tr>
+<tr class="odd">
+<td><strong>翻譯逐字對譯不準</strong></td>
+<td>賣柑者言、鄒忌</td>
+<td style="text-align: center;">⭐⭐⭐</td>
+<td>訓練「先圈關鍵字→逐一對譯→調整語序」三步法</td>
+</tr>
+<tr class="even">
+<td><strong>表格審題偏差</strong></td>
+<td>運動家的風度、最苦與最樂</td>
+<td style="text-align: center;">⭐⭐</td>
+<td>先讀表格欄目名稱，再回原文定位</td>
+</tr>
+<tr class="odd">
+<td><strong>內容大意過於籠統</strong></td>
+<td>乙部第一篇</td>
+<td style="text-align: center;">⭐⭐</td>
+<td>方法：每段抓一個核心動詞+一個核心名詞</td>
+</tr>
+<tr class="even">
+<td><strong>開放題無話可說</strong></td>
+<td>乙部常見</td>
+<td style="text-align: center;">⭐⭐⭐</td>
+<td>預製「萬能例子庫」（港鐵讓座、AI學習、環保回收）</td>
+</tr>
+<tr class="odd">
+<td><strong>時間分配不當</strong></td>
+<td>全卷</td>
+<td style="text-align: center;">⭐⭐⭐</td>
+<td>甲部最多25分鐘，乙部50分鐘（第一篇25+第二篇25）</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1 id="柒21天複習路線圖">柒、21天複習路線圖</h1>
+<h2 id="第一階段課文精讀516-5227天">第一階段：課文精讀（5/16 →
+5/22，7天）</h2>
+<table>
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 30%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>日期</th>
+<th>任務</th>
+<th>檢查點</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>5/16（五）</td>
+<td>《賣柑者言》全篇精讀：詞解全清＋逐句翻譯＋主旨背誦</td>
+<td>文言詞解抽測 ≥ 90%正確</td>
+</tr>
+<tr class="even">
+<td>5/17（六）</td>
+<td>《鄒忌諷齊王納諫》精讀：詞解＋三問三答表＋人物分析</td>
+<td>翻譯「門庭若市/戰勝於朝廷」過關</td>
+</tr>
+<tr class="odd">
+<td>5/18（日）</td>
+<td>《最苦與最樂》精讀：三種論證方法對位＋主旨邏輯鏈</td>
+<td>論證方法表格默寫</td>
+</tr>
+<tr class="even">
+<td>5/19（一）</td>
+<td>《運動家的風度》精讀：四大內涵對照表＋正反對照結構</td>
+<td>四項特質+對應例子默寫</td>
+</tr>
+<tr class="odd">
+<td>5/20（二）</td>
+<td>《以畫為喻》精讀：實用畫vs藝術畫對比表＋法度關係</td>
+<td>對比表默寫</td>
+</tr>
+<tr class="even">
+<td>5/21（三）</td>
+<td>機動日：補弱項</td>
+<td>—</td>
+</tr>
+<tr class="odd">
+<td>5/22（四）</td>
+<td>第一階段總測：五篇課文混合抽問</td>
+<td>全面掃描</td>
+</tr>
+</tbody>
+</table>
+<h2 id="第二階段真卷實戰523-5297天">第二階段：真卷實戰（5/23 →
+5/29，7天）</h2>
+<table>
+<thead>
+<tr class="header">
+<th>日期</th>
+<th>試卷</th>
+<th>重點</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>5/23（五）</td>
+<td>2223 P1（限時75分鐘）</td>
+<td>熟悉最早期題型</td>
+</tr>
+<tr class="even">
+<td>5/24（六）</td>
+<td>批改＋錯題分析</td>
+<td>建立錯題清單</td>
+</tr>
+<tr class="odd">
+<td>5/25（日）</td>
+<td>2324 P1（限時75分鐘）</td>
+<td>練習表格填空</td>
+</tr>
+<tr class="even">
+<td>5/26（一）</td>
+<td>批改＋錯題分析</td>
+<td>錯題歸類</td>
+</tr>
+<tr class="odd">
+<td>5/27（二）</td>
+<td>2425 P1（限時75分鐘）</td>
+<td>最新題型模擬</td>
+</tr>
+<tr class="even">
+<td>5/28（三）</td>
+<td>批改＋錯題總整理</td>
+<td>製作「個人易錯清單」</td>
+</tr>
+<tr class="odd">
+<td>5/29（四）</td>
+<td>弱項針對：重做三年錯題</td>
+<td>只做曾錯的題</td>
+</tr>
+</tbody>
+</table>
+<h2 id="第三階段衝刺530-646天">第三階段：衝刺（5/30 → 6/4，6天）</h2>
+<table>
+<thead>
+<tr class="header">
+<th>日期</th>
+<th>任務</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>5/30-31</td>
+<td>五篇課文關鍵句默寫＋開放題框架複練</td>
+</tr>
+<tr class="even">
+<td>6/1-2</td>
+<td>限時全卷模擬（自擬或綜合三年真題）</td>
+</tr>
+<tr class="odd">
+<td>6/3</td>
+<td>放鬆複習：只看錯題本＋關鍵詞卡</td>
+</tr>
+<tr class="even">
+<td>6/4</td>
+<td>休息為主+輕度翻閱筆記</td>
+</tr>
+<tr class="odd">
+<td><strong>6/5</strong></td>
+<td><strong>考試日</strong> 🎯</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1 id="捌給海納和有容的個人化提醒">捌、給海納和有容的個人化提醒</h1>
+<blockquote>
+<p>以下待 Ethan
+提供兩兄弟在中文科的個別弱項後，可針對性補充。列出常見弱項及對策框架：</p>
+</blockquote>
+<table>
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 38%" />
+<col style="width: 38%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>維度</th>
+<th>常見弱項</th>
+<th>針對策略</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>文言</strong></td>
+<td>翻譯失分多</td>
+<td>每天練1句逐字對譯，賣柑者言+鄒忌輪換</td>
+</tr>
+<tr class="even">
+<td><strong>文言</strong></td>
+<td>詞解望文生義</td>
+<td>製作「文言實詞多義卡」：一面寫例句，一面寫釋義+現代對應</td>
+</tr>
+<tr class="odd">
+<td><strong>議論文</strong></td>
+<td>論證方法混淆</td>
+<td>做「論證方法配對卡」：正面寫文句，反面寫方法+作用</td>
+</tr>
+<tr class="even">
+<td><strong>答題</strong></td>
+<td>開放題空泛</td>
+<td>每週寫2篇開放題短文（100字），用三分鐘框架</td>
+</tr>
+<tr class="odd">
+<td><strong>答題</strong></td>
+<td>時間不夠</td>
+<td>考前做2次限時75分鐘全卷模擬</td>
+</tr>
+<tr class="even">
+<td><strong>新題型</strong></td>
+<td>選擇題不會排除</td>
+<td>練習「先排錯、再比較、回原文對照」三步法</td>
+</tr>
+<tr class="odd">
+<td><strong>新題型</strong></td>
+<td>填空題漏關鍵字</td>
+<td>先理解全句意思→再鎖定缺空的詞性→最後從原文找對應詞</td>
+</tr>
+</tbody>
+</table>
+<h3 id="分別追蹤">👥 分別追蹤</h3>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>海納（3B 28號）</th>
+<th>有容（3B）</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>已知弱項</strong></td>
+<td>待補充</td>
+<td>待補充</td>
+</tr>
+<tr class="even">
+<td><strong>上次中文排名</strong></td>
+<td>待補充</td>
+<td>待補充</td>
+</tr>
+<tr class="odd">
+<td><strong>重點盯防課文</strong></td>
+<td>待補充</td>
+<td>待補充</td>
+</tr>
+<tr class="even">
+<td><strong>時間分配建議</strong></td>
+<td>待補充</td>
+<td>待補充</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1 id="玖卷二寫作能力-全景分析">玖、卷二寫作能力 — 全景分析</h1>
+<blockquote>
+<p>實用文寫作（20分）＋命題寫作（70分）＝90分｜佔全科45%｜1小時15分鐘</p>
+</blockquote>
+<h2 id="考試基本盤">9.1 考試基本盤</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>項目</th>
+<th>數據</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>總分</strong></td>
+<td>90分（佔全科 <strong>45%</strong>，與卷一平權）</td>
+</tr>
+<tr class="even">
+<td><strong>時間</strong></td>
+<td>1小時15分鐘</td>
+</tr>
+<tr class="odd">
+<td><strong>結構</strong></td>
+<td>甲部實用文 20分 ＋ 乙部命題寫作 70分</td>
+</tr>
+<tr class="even">
+<td><strong>實用文範圍</strong></td>
+<td>通告、啟事、書信、會議紀錄、報告（五種）</td>
+</tr>
+<tr class="odd">
+<td><strong>命題寫作</strong></td>
+<td>三題選一，不少於600字</td>
+</tr>
+<tr class="even">
+<td><strong>字數鐵則</strong></td>
+<td>600字以下內容不高於28分；500字以下不高於24分；400字以下不高於20分；350字以下不高於16分</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="甲部實用文寫作-三年出題對比">9.2 甲部實用文寫作 —
+三年出題對比</h2>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 13%" />
+<col style="width: 21%" />
+<col style="width: 17%" />
+<col style="width: 17%" />
+<col style="width: 17%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>年份</th>
+<th>體裁</th>
+<th>身份/情境</th>
+<th style="text-align: center;">格式分</th>
+<th style="text-align: center;">內容分</th>
+<th style="text-align: center;">行文分</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>2223</strong></td>
+<td>會議紀錄</td>
+<td>環保學會文書楊可悠</td>
+<td style="text-align: center;">8</td>
+<td style="text-align: center;">9</td>
+<td style="text-align: center;">3</td>
+</tr>
+<tr class="even">
+<td><strong>2324</strong></td>
+<td><strong>活動報告</strong></td>
+<td>烹飪學會會長郭芊穎（報告給顧問老師）</td>
+<td style="text-align: center;">6</td>
+<td style="text-align: center;">11</td>
+<td style="text-align: center;">3</td>
+</tr>
+<tr class="odd">
+<td><strong>2425</strong></td>
+<td>會議紀錄</td>
+<td>中文學會文書蔡芷悠</td>
+<td style="text-align: center;">8</td>
+<td style="text-align: center;">9</td>
+<td style="text-align: center;">3</td>
+</tr>
+</tbody>
+</table>
+<h3 id="關鍵信號">🔑 關鍵信號</h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>信號</th>
+<th>分析</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>會議紀錄出現2次</strong>（2223、2425）</td>
+<td>隔年輪迴模式，2324插了活動報告，<strong>2526大概率輪到報告或新體裁</strong></td>
+</tr>
+<tr class="even">
+<td><strong>通告、啟事、書信三年從未考過</strong></td>
+<td>範圍明列五種，但只考過兩種，<strong>三種「處女體裁」風險極高</strong></td>
+</tr>
+<tr class="odd">
+<td><strong>TSA 2025提供了通告+啟事+調查報告評卷參考</strong></td>
+<td>學校特意放入知識庫作為溫習材料，信號明確</td>
+</tr>
+</tbody>
+</table>
+<h3 id="年實用文出題預測">⚠️ 2026年實用文出題預測</h3>
+<table>
+<colgroup>
+<col style="width: 37%" />
+<col style="width: 25%" />
+<col style="width: 37%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>體裁</th>
+<th style="text-align: center;">概率</th>
+<th>理由</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>活動報告</strong></td>
+<td style="text-align: center;">🔴🔴🔴</td>
+<td>2324出過一次，2526輪到它；TSA評卷參考中有報告格式</td>
+</tr>
+<tr class="even">
+<td><strong>通告</strong></td>
+<td style="text-align: center;">🔴🔴</td>
+<td>TSA 9CW2專門考通告（校慶標語創作比賽），學校指定TSA為溫習材料</td>
+</tr>
+<tr class="odd">
+<td><strong>啟事</strong></td>
+<td style="text-align: center;">🔴🔴</td>
+<td>TSA 9CW1專門考啟事（結業啟事），從未在校內考試出現</td>
+</tr>
+<tr class="even">
+<td><strong>書信</strong></td>
+<td style="text-align: center;">🔴</td>
+<td>範圍內但無TSA對應，概率較低</td>
+</tr>
+<tr class="odd">
+<td><strong>會議紀錄</strong></td>
+<td style="text-align: center;">🟡</td>
+<td>已考2次，可能讓位</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="五種實用文格式速查">9.3 五種實用文格式速查</h2>
+<h3 id="會議紀錄已考2次">① 會議紀錄（已考2次）</h3>
+<pre><code>【必備格式 — 8分】
+
+  標題（置中）：XXXX-XXXX年度  XX中學  XX學會  第X次會議紀錄
+  ← 欠「會議紀錄」四字直接扣1分！未置中扣1分！
+
+  會議組織：
+    日期：XXXX年XX月XX日（星期X）
+    時間：下午X時
+    地點：XXX
+    主席：XXX
+    文書／記錄者：XXX
+    出席者：XXX、XXX、XXX
+
+  正文（點列式！不可段落書寫！）：
+    1. 通過上次會議紀錄
+       紀錄經與會者確認，一致通過。
+    2. 報告事項
+       （活動的日期、時間、地點等資訊）
+    3. 討論事項
+       3.1 「XXX」環節安排
+           XXX建議……全體一致通過。XXX負責XXX。
+       3.2 「XXX」環節安排
+           ……
+    4. 其他事項
+       下次開會日期：XXXX年XX月XX日
+    5. 散會時間：下午X時
+
+  文末：
+    主席簽署：___________
+    文書簽署：___________
+    通過日期：___________</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th>致命扣分點</th>
+<th style="text-align: center;">扣分</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>正文不以點列方式（用段落寫）</td>
+<td style="text-align: center;">行文最多1分</td>
+</tr>
+<tr class="even">
+<td>只列點但缺「報告事項」「討論事項」標題</td>
+<td style="text-align: center;">-1</td>
+</tr>
+<tr class="odd">
+<td>誤加書信格式（如「敬啟者」）</td>
+<td style="text-align: center;">-1</td>
+</tr>
+<tr class="even">
+<td>日期缺年/月/日任何一項</td>
+<td style="text-align: center;">-0.5/項</td>
+</tr>
+</tbody>
+</table>
+<h3 id="活動報告2324考過1次">② 活動報告（2324考過1次）</h3>
+<pre><code>【必備格式】
+
+  上款：XXX學會XXX老師（全名扣0.5分）
+
+  標題：XXX活動報告
+
+  正文（分段）：
+    甲、背景資料
+        （活動日期、時間、地點、參與人數）
+
+    乙、活動概況
+        （活動內容、氣氛、參與者反饋、問卷調查結果）
+        → 要有具體數字，如「超過八成五參與同學滿意」
+
+    丙、改善建議
+        （至少兩項，格式：第一……第二……）
+        → 每項建議要具體，不能空泛
+
+  下款：XXX學會會長  XXX謹啟
+  日期：XXXX年XX月XX日（必須在呈交日期或之前）</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">格式分</th>
+<th style="text-align: center;">內容分</th>
+<th style="text-align: center;">行文分</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">6</td>
+<td style="text-align: center;">11</td>
+<td style="text-align: center;">3</td>
+</tr>
+</tbody>
+</table>
+<h3 id="通告從未考過">③ 通告（從未考過 🔴）</h3>
+<pre><code>【必備格式】
+
+  標題（置中）：XXX學會通告 或 關於XXX的通告
+
+  正文：
+    逕啟者：（開頭）
+    （目的、對象、時間、地點、內容、要求）
+    → 重點資訊必須齊全
+    → 如有比賽，須列明：主題、字數限制、截止日期、提交方式
+
+  下款：XXX中學學生會主席  XXX
+  日期：XXXX年XX月XX日</code></pre>
+<blockquote>
+<p>TSA
+9CW2範例：校慶標語創作比賽通告（須寫明主題50周年校慶、不多於30字、截止日期）</p>
+</blockquote>
+<h3 id="啟事從未考過">④ 啟事（從未考過 🔴）</h3>
+<pre><code>【必備格式】
+
+  標題（置中）：XXX啟事 或 關於XXX的啟事
+
+  正文：
+    （說明緣由→具體內容→聯絡方式）
+    → 結業啟事：須交代原因、優惠、分店去向、感謝語
+
+  下款：XXX 啟
+  日期：XXXX年XX月XX日</code></pre>
+<blockquote>
+<p>TSA
+9CW1範例：美城文具店結業啟事（政府重建、六折優惠、分店繼續營業）</p>
+</blockquote>
+<h3 id="書信從未考過">⑤ 書信（從未考過）</h3>
+<pre><code>【必備格式】
+
+  上款：XXX（收信人）：
+
+  正文：
+    （開頭問候→主體內容→結尾祝頌語）
+
+  下款：XXX 敬上
+  日期：XXXX年XX月XX日</code></pre>
+<hr />
+<h2 id="甲部實用文-時間與策略">9.4 甲部實用文 — 時間與策略</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>策略</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>建議時間</strong></td>
+<td>20-25分鐘（不超過30分鐘，否則命題寫作不夠時間）</td>
+</tr>
+<tr class="even">
+<td><strong>先讀題目情境2遍</strong></td>
+<td>圈出：身份、呈交對象、日期、活動名稱、與會者姓名</td>
+</tr>
+<tr class="odd">
+<td><strong>格式先行</strong></td>
+<td>格式分佔6-8分，是「送分題」。開筆前先把標題/上款/下款框架寫好</td>
+</tr>
+<tr class="even">
+<td><strong>內容不創作</strong></td>
+<td>所有內容必須來自題目提供的資料，不可憑空添加</td>
+</tr>
+<tr class="odd">
+<td><strong>數字要準確</strong></td>
+<td>日期、時間、人數必須照抄，一個數字錯就失分</td>
+</tr>
+<tr class="even">
+<td><strong>點列≠隨意</strong></td>
+<td>會議紀錄正文用點列，但每個點必須是完整句子</td>
+</tr>
+<tr class="odd">
+<td><strong>字數控制</strong></td>
+<td>實用文不應超過450字（2324報告明文限制），列出重點即可</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="乙部命題寫作-三年題型縱向對比">9.5 乙部命題寫作 —
+三年題型縱向對比</h2>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>年份</th>
+<th>題一</th>
+<th>題二</th>
+<th>題三</th>
+<th>題四</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>2223</strong></td>
+<td>記敍＋抒情：首句續寫「沒想到我竟會喜歡…」</td>
+<td>描寫文：「觀看話劇表演有感」</td>
+<td>議論文：科技vs勤奮</td>
+<td>—</td>
+</tr>
+<tr class="even">
+<td><strong>2324</strong></td>
+<td>記敍＋倒敍法：「看到親人驚喜反應…」</td>
+<td>借景抒情：「難忘的郊外風光」</td>
+<td>議論文：「能者是否應該多勞」</td>
+<td>—</td>
+</tr>
+<tr class="odd">
+<td><strong>2425</strong></td>
+<td>—</td>
+<td>記敍＋倒敍法：「想不到事情竟有喜出望外的結果」</td>
+<td>借景抒情：「不一樣的清晨景象」</td>
+<td>議論文：「多一事不如少一事」</td>
+</tr>
+</tbody>
+</table>
+<h3 id="題型規律總結">🔑 題型規律總結</h3>
+<table>
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 20%" />
+<col style="width: 30%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>題型</th>
+<th style="text-align: center;">三年頻率</th>
+<th>特徵</th>
+<th style="text-align: center;">2526預測</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>記敍＋倒敍法</strong></td>
+<td style="text-align: center;">100%（必出）</td>
+<td>首句續寫／倒敍法，借事抒情</td>
+<td style="text-align: center;">🔴🔴🔴 必出</td>
+</tr>
+<tr class="even">
+<td><strong>借景抒情／描寫</strong></td>
+<td style="text-align: center;">100%（必出）</td>
+<td>自然風景、場景描寫</td>
+<td style="text-align: center;">🔴🔴🔴 必出</td>
+</tr>
+<tr class="odd">
+<td><strong>議論文</strong></td>
+<td style="text-align: center;">100%（必出）</td>
+<td>立場議論，需論據＋駁論</td>
+<td style="text-align: center;">🔴🔴🔴 必出</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>三年題型結構極其穩定：一記敍、一描寫/抒情、一議論，三選一。2526年不會變。</p>
+</blockquote>
+<h3 id="從每周一文目錄看2526年信號">🆕
+從「每周一文」目錄看2526年信號</h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>信號</th>
+<th>解讀</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>下學期大量訓練<strong>議論/說理</strong>（談不進則退、同情心之必要、見義勇為、預知未來、懲罰與獎勵…）</td>
+<td>學校在為議論題加壓，議論題可能難度提升</td>
+</tr>
+<tr class="even">
+<td>借景抒情練習量偏低（只有聲音描寫一場）</td>
+<td>抒情題可能回歸基礎，不需要太複雜的借景手法</td>
+</tr>
+<tr class="odd">
+<td>5月連續三週議論</td>
+<td>考前衝刺方向 = 議論，暗示議論題分值或難度上升</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="三類命題寫作-答題框架">9.6 三類命題寫作 — 答題框架</h2>
+<h3
+id="題型a記敍倒敍法必出選做率最高">題型A：記敍＋倒敍法（必出，選做率最高）</h3>
+<pre><code>【萬能結構 — 倒敍法五段式】
+
+  第一段（倒敍開場）：
+    先寫結局／高潮場景，用題目提供的首句開頭。
+    → 「看到媽媽的驚喜反應，我感到自己所做的一切都是值得的。」
+
+  第二段（起因）：
+    倒回事件起點，交代為何要做這件事。
+    → 媽媽生日將至／媽媽一直想要某物但捨不得買…
+
+  第三段（經過）：
+    詳細記述努力的過程。可寫困難和如何克服。
+    → 省零用錢／偷偷準備／遇到挫折…
+
+  第四段（高潮 — 與第一段呼應）：
+    寫送出驚喜的瞬間，聚焦親人的反應。
+    → 運用肖像描寫（表情）、行動描寫（動作）、語言描寫（說了什麼）
+
+  第五段（體會）：
+    抒發感受＋帶出深刻的體會。
+    → 不只是「我很開心」，要寫「我明白了親情的價值/付出的意義…」</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th>評分關鍵</th>
+<th>高分的秘密</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>必須用倒敍法</td>
+<td>不用的扣結構分（1等）</td>
+</tr>
+<tr class="even">
+<td>第一人稱</td>
+<td>必須用「我」</td>
+</tr>
+<tr class="odd">
+<td>親人反應要具體</td>
+<td>面部表情＋動作＋語言，至少兩種描寫手法</td>
+</tr>
+<tr class="even">
+<td>體會要深刻</td>
+<td>不能只寫「我很開心」，要寫明白了什麼道理</td>
+</tr>
+</tbody>
+</table>
+<h3 id="題型b借景抒情必出">題型B：借景抒情（必出）</h3>
+<pre><code>【萬能結構 — 情景交融四段式】
+
+  第一段（入景）：
+    交代時間、地點、天氣。「清晨五點，我獨自走上太平山…」
+
+  第二段（繪景）：
+    從遠到近、從靜到動、從整體到細節描寫景色。
+    運用：視覺（顏色、光線）、聽覺（鳥鳴、風聲）、嗅覺（草香）
+
+  第三段（融情入景）：
+    將個人情感投射到景物上。同樣的景，因為心情不同而看起來不同。
+    → 心情愉悅時：「晨光溫柔地撫摸大地」
+    → 心情沉重時：「晨光冷冷地刺穿霧氣」
+
+  第四段（點題＋感悟）：
+    回扣題目的關鍵詞（如「不一樣」），寫出景色如何觸動你、讓你明白了什麼。</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th>致命錯誤</th>
+<th>後果</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>通篇寫景、沒有抒情</td>
+<td>低分（內容不高於16分）</td>
+</tr>
+<tr class="even">
+<td>通篇記事、沒有寫景</td>
+<td>喧賓奪主，降檔</td>
+</tr>
+<tr class="odd">
+<td>沒有點出景色如何「難忘」／「不一樣」</td>
+<td>扣題不緊</td>
+</tr>
+</tbody>
+</table>
+<h3 id="題型c議論文必出">題型C：議論文（必出）</h3>
+<pre><code>【萬能結構 — 立場議論五段式】
+
+  第一段（引論 — 約80字）：
+    引用題目說法 → 闡釋關鍵詞 → 明確表態。
+    → 「我認為能者應該多勞，原因有三。」
+
+  第二至四段（本論 — 每段約120字）：
+    論點1：能者多勞可以提升整體效率（+例子）
+    論點2：能者多勞是一種社會責任（+例子）
+    論點3（駁論）：有人說多勞會令能者過勞，但…
+    → 每段必須有：論點句＋論據＋論證方法
+
+  第五段（結論 — 約80字）：
+    總結立場＋展望／呼籲。</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th>評分檔次</th>
+<th>要求</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>7-8檔（28分）</strong></td>
+<td>立場鮮明＋3項論據＋不同論證方法＋駁論</td>
+</tr>
+<tr class="even">
+<td><strong>5-6檔（20-24分）</strong></td>
+<td>立場明確＋2項論據＋基本論證方法</td>
+</tr>
+<tr class="odd">
+<td><strong>4檔（16分）</strong></td>
+<td>立場尚清晰＋1項論據</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="卷二時間分配鐵律">9.7 卷二時間分配鐵律</h2>
+<pre><code>  1小時15分鐘 = 75分鐘
+
+  ┌─────────────┬─────────────┬──────────┐
+  │  審題+選題   │  實用文寫作  │ 命題寫作  │
+  │  5分鐘       │  20分鐘      │ 50分鐘    │
+  └─────────────┴─────────────┴──────────┘
+
+  實用文20分鐘分配：
+    2分鐘 → 圈畫題目關鍵資訊（日期、人名、活動名）
+    3分鐘 → 搭格式骨架（標題、組織、署名）
+    12分鐘 → 填充內容
+    3分鐘 → 檢查格式（日期、人名、置中）
+
+  命題寫作50分鐘分配：
+    3分鐘 → 快速閱讀三題，勾出最有把握的一題
+    5分鐘 → 簡短大綱（5個關鍵詞即可）
+    38分鐘 → 寫作（目標700-800字）
+    4分鐘 → 檢查（錯別字、字數、是否扣題）</code></pre>
+<hr />
+<h2 id="實用文命題寫作-十大注意事項總匯">9.8 實用文＋命題寫作 —
+十大注意事項總匯</h2>
+<h3 id="實用文五誡">🛑 實用文五誡</h3>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 40%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>誡律</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td><strong>不可混淆格式</strong></td>
+<td>會議紀錄不可寫成書信（加「敬啟者」即扣1分）；報告不可漏「改善建議」</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td><strong>日期必須完整</strong></td>
+<td>XXXX年XX月XX日，缺任何一項扣0.5分</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td><strong>人名照抄不誤</strong></td>
+<td>題目給的名字必須原文照抄，不可簡稱或改名</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td><strong>正文點列≠縮寫</strong></td>
+<td>每個點必須是完整句子，不可只寫關鍵詞</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td><strong>不要自由創作</strong></td>
+<td>所有內容必須來自題目提供的資料，添加虛構資訊視為錯誤</td>
+</tr>
+</tbody>
+</table>
+<h3 id="命題寫作五誡">🛑 命題寫作五誡</h3>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 40%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>誡律</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>6</td>
+<td><strong>字數就是分數</strong></td>
+<td>&lt;600字內容自動封頂28分；建議寫700-800字為安全區</td>
+</tr>
+<tr class="even">
+<td>7</td>
+<td><strong>必須扣題</strong></td>
+<td>題目關鍵詞（如「倒敍」「借景抒情」「不一樣」）必須在文中明確體現</td>
+</tr>
+<tr class="odd">
+<td>8</td>
+<td><strong>首句不可改</strong></td>
+<td>如果題目給定首句，必須原句抄入，不可改動</td>
+</tr>
+<tr class="even">
+<td>9</td>
+<td><strong>立場貫徹始終</strong></td>
+<td>議論文中途不可搖擺；記敍文人稱不可中途切換</td>
+</tr>
+<tr class="odd">
+<td>10</td>
+<td><strong>五段為宜</strong></td>
+<td>不要只寫三段（太單薄），也不要寫七八段（太零碎），五段最穩</td>
+</tr>
+</tbody>
+</table>
+<h3 id="加分技巧">📝 加分技巧</h3>
+<table>
+<colgroup>
+<col style="width: 27%" />
+<col style="width: 45%" />
+<col style="width: 27%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>技巧</th>
+<th>適用題型</th>
+<th>操作</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>修辭點綴</strong></td>
+<td>全部</td>
+<td>每200字至少用一個修辭（比喻/排比/反問），但不要堆砌</td>
+</tr>
+<tr class="even">
+<td><strong>首尾呼應</strong></td>
+<td>全部</td>
+<td>結尾回扣開頭的一句話或一個意象，結構分+1</td>
+</tr>
+<tr class="odd">
+<td><strong>具體數字</strong></td>
+<td>記敍/報告</td>
+<td>「很多人」→「超過八成五」；「等了很久」→「足足等了兩個小時」</td>
+</tr>
+<tr class="even">
+<td><strong>駁論加分</strong></td>
+<td>議論文</td>
+<td>必寫一段駁論，這是7-8檔的關鍵區分點</td>
+</tr>
+<tr class="odd">
+<td><strong>五感描寫</strong></td>
+<td>借景抒情</td>
+<td>視覺、聽覺、嗅覺至少用兩種</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<blockquote>
+<p>📎 <strong>附錄文件</strong>（可單獨提取使用）： - 五篇課文詞解總表 -
+論證方法速查卡 - 開放題三分鐘框架模板 - 三年真卷Q&amp;A索引 -
+五種實用文格式模板卡</p>
+</blockquote>
+</body>
+</html>

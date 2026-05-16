@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🟢 三步通關 — 有容</title>
+<style>
+/* ===== RESET & BASE ===== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:system-ui,-apple-system,sans-serif;
+  font-size:18px;
+  color:#1a1a1a;
+  background:#fafaf8;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ===== KEYWORD HIGHLIGHT ===== */
+.kw{
+  color:#b85c00;
+  font-weight:700;
+  text-decoration:underline;
+  text-decoration-color:#e5a850;
+  text-underline-offset:3px;
+}
+
+/* ===== STICKY NAV CONTAINER ===== */
+.nav-container{
+  position:sticky;
+  top:0;
+  z-index:100;
+  background:#fafaf8;
+  padding:12px 0 0 0;
+}
+
+/* ===== HEADER ===== */
+.header{
+  text-align:center;
+  padding:32px 24px 16px;
+}
+.header h1{
+  font-size:28px;
+  font-weight:800;
+  letter-spacing:-0.5px;
+  color:#1a1a1a;
+  margin-bottom:4px;
+}
+.header .subtitle{
+  font-size:15px;
+  color:#888;
+  font-weight:400;
+}
+
+/* ===== PROGRESS BAR ===== */
+.progress-wrap{
+  padding:0 20px 12px;
+}
+.progress-bar-outer{
+  height:6px;
+  background:#e8e8e0;
+  border-radius:3px;
+  overflow:hidden;
+}
+.progress-bar-inner{
+  height:100%;
+  background:#16a34a;
+  border-radius:3px;
+  transition:width 0.4s ease;
+  width:0%;
+}
+.progress-text{
+  text-align:center;
+  font-size:13px;
+  color:#888;
+  margin-top:6px;
+  font-weight:500;
+}
+
+/* ===== TOPIC NAV PILLS ===== */
+.topic-nav{
+  display:flex;
+  gap:10px;
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+  padding:0 20px 16px;
+  scrollbar-width:none;
+  -ms-overflow-style:none;
+  white-space:nowrap;
+}
+.topic-nav::-webkit-scrollbar{display:none}
+.topic-pill{
+  flex:0 0 auto;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:9px 18px;
+  border-radius:24px;
+  background:#fff;
+  border:1.5px solid #e0e0d8;
+  font-size:15px;
+  font-weight:600;
+  color:#555;
+  cursor:pointer;
+  transition:all 0.2s;
+  text-decoration:none;
+  white-space:nowrap;
+  user-select:none;
+}
+.topic-pill:hover{
+  border-color:#16a34a;
+  color:#16a34a;
+  background:#ecfdf5;
+}
+.topic-pill.active{
+  background:#16a34a;
+  color:#fff;
+  border-color:#16a34a;
+}
+
+/* ===== TOPIC SECTION HEADER ===== */
+.topic-section-header{
+  padding:24px 20px 12px;
+  display:flex;
+  align-items:baseline;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.topic-section-header h2{
+  font-size:22px;
+  font-weight:700;
+  color:#1a1a1a;
+}
+.topic-section-header .ts-sub{
+  font-size:14px;
+  color:#999;
+  margin-left:4px;
+}
+
+/* ===== CARD GRID ===== */
+.card-grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:18px;
+  padding:0 16px;
+}
+@media(min-width:768px){
+  .card-grid{grid-template-columns:1fr 1fr}
+}
+
+/* ===== CARD ===== */
+.card{
+  --accent:#16a34a;
+  position:relative;
+  border-radius:12px;
+  background:#fff;
+  box-shadow:0 1px 3px rgba(0,0,0,0.08);
+  border-left:4px solid var(--accent);
+  transition:all 0.3s;
+  overflow:hidden;
+}
+.card.done{
+  --accent:#22c55e;
+}
+.card.done::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:rgba(34,197,94,0.06);
+  pointer-events:none;
+  z-index:0;
+  border-radius:0 12px 12px 0;
+}
+
+/* ===== STEP TABS ===== */
+.step-tabs{
+  display:flex;
+  gap:6px;
+  padding:14px 18px 0;
+  position:relative;
+  z-index:1;
+}
+.step-tab{
+  padding:7px 16px;
+  border-radius:20px;
+  font-size:14px;
+  font-weight:600;
+  cursor:pointer;
+  border:1.5px solid #e0e0d8;
+  background:#f9f9f6;
+  color:#777;
+  transition:all 0.2s;
+  user-select:none;
+  white-space:nowrap;
+}
+.step-tab:hover{
+  border-color:#16a34a;
+  color:#16a34a;
+  background:#ecfdf5;
+}
+.step-tab.active{
+  background:#16a34a;
+  color:#fff;
+  border-color:#16a34a;
+}
+
+/* ===== STEP CONTENT ===== */
+.step-content{
+  padding:18px 20px 20px;
+  position:relative;
+  z-index:1;
+}
+
+/* ---- Step 1 ---- */
+.step1-term{
+  font-size:22px;
+  font-weight:700;
+  color:#1a1a1a;
+  margin-bottom:2px;
+}
+.step1-zh{
+  font-size:14px;
+  color:#999;
+  font-weight:400;
+  margin-bottom:12px;
+}
+.step1-def{
+  font-size:18px;
+  color:#555;
+  line-height:1.5;
+  margin-bottom:16px;
+}
+.step1-next{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:10px 22px;
+  font-size:16px;
+  font-weight:600;
+  color:#16a34a;
+  background:#ecfdf5;
+  border:1.5px solid #16a34a;
+  border-radius:24px;
+  cursor:pointer;
+  transition:all 0.2s;
+  user-select:none;
+  float:right;
+}
+.step1-next:hover{
+  background:#16a34a;
+  color:#fff;
+}
+
+/* ---- Step 2 ---- */
+.step2-counter{
+  font-size:15px;
+  font-weight:600;
+  color:#666;
+  margin-bottom:10px;
+}
+.step2-counter span{color:#16a34a;font-weight:700}
+.step2-text{
+  font-size:18px;
+  color:#555;
+  line-height:1.7;
+}
+.blanks{
+  display:inline-block;
+  background:#f0f0e8;
+  padding:2px 10px;
+  border-radius:4px;
+  min-width:60px;
+  cursor:pointer;
+  color:#b85c00;
+  font-weight:700;
+  transition:all 0.2s;
+  text-align:center;
+}
+.blanks:hover{
+  background:#e0d8c0;
+}
+.blanks.revealed{
+  background:transparent;
+  color:#b85c00;
+  font-weight:700;
+  text-decoration:underline;
+  text-decoration-color:#e5a850;
+  text-underline-offset:3px;
+  cursor:default;
+}
+.step2-actions{
+  display:flex;
+  gap:10px;
+  margin-top:16px;
+  flex-wrap:wrap;
+  align-items:center;
+}
+.btn-reveal-all{
+  padding:8px 18px;
+  font-size:15px;
+  font-weight:600;
+  color:#b85c00;
+  background:#fff;
+  border:1.5px solid #e5a850;
+  border-radius:24px;
+  cursor:pointer;
+  transition:all 0.2s;
+}
+.btn-reveal-all:hover{
+  background:#b85c00;
+  color:#fff;
+  border-color:#b85c00;
+}
+.btn-reveal-all:disabled{
+  opacity:0.4;
+  cursor:default;
+}
+.btn-reveal-all:disabled:hover{
+  background:#fff;
+  color:#b85c00;
+  border-color:#e5a850;
+}
+.step2-done-msg{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  font-size:16px;
+  font-weight:600;
+  color:#22c55e;
+  margin-left:8px;
+}
+
+/* ---- Step 3 ---- */
+.step3-textarea{
+  width:100%;
+  min-height:120px;
+  font-family:system-ui,-apple-system,sans-serif;
+  font-size:18px;
+  line-height:1.6;
+  padding:14px;
+  border:1.5px solid #e0ded5;
+  border-radius:10px;
+  background:#fdfcf9;
+  color:#1a1a1a;
+  resize:vertical;
+  outline:none;
+  transition:border-color 0.2s;
+}
+.step3-textarea:focus{
+  border-color:#16a34a;
+  background:#fff;
+}
+.step3-textarea::placeholder{
+  color:#bbb;
+}
+.step3-compare-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:10px 22px;
+  font-size:16px;
+  font-weight:600;
+  color:#16a34a;
+  background:#ecfdf5;
+  border:1.5px solid #16a34a;
+  border-radius:24px;
+  cursor:pointer;
+  transition:all 0.2s;
+  user-select:none;
+  margin-top:12px;
+}
+.step3-compare-btn:hover{
+  background:#16a34a;
+  color:#fff;
+}
+.step3-answer-card{
+  margin-top:14px;
+  padding:16px 18px;
+  border-radius:10px;
+  background:#f0faf2;
+  border-left:4px solid #22c55e;
+  font-size:17px;
+  color:#2d6a4f;
+  line-height:1.6;
+  display:none;
+}
+.step3-answer-card.show{
+  display:block;
+  animation:fadeSlideIn 0.35s ease;
+}
+@keyframes fadeSlideIn{
+  from{opacity:0;transform:translateY(-8px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.step3-answer-label{
+  font-size:12px;
+  font-weight:700;
+  color:#22c55e;
+  text-transform:uppercase;
+  letter-spacing:0.5px;
+  margin-bottom:6px;
+}
+.step3-done-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:10px 22px;
+  font-size:16px;
+  font-weight:700;
+  color:#fff;
+  background:#22c55e;
+  border:none;
+  border-radius:24px;
+  cursor:pointer;
+  transition:all 0.2s;
+  user-select:none;
+  margin-top:12px;
+}
+.step3-done-btn:hover{
+  background:#16a34a;
+}
+.step3-done-btn.undo{
+  background:#888;
+}
+.step3-done-btn.undo:hover{
+  background:#666;
+}
+
+/* ===== TOPIC SECTION PADDING ===== */
+.topic-section{
+  padding-bottom:32px;
+}
+
+/* ===== CLEARFIX FOR FLOAT ===== */
+.clearfix::after{
+  content:'';
+  display:table;
+  clear:both;
+}
+</style>
+</head>
+<body>
+
+<div class="nav-container">
+  <div class="header">
+    <h1>🟢 三步通關 · 有容</h1>
+    <div class="subtitle">📖 閱讀 → ✏️ 填空 → 💬 總結 · 50 张概念卡 · 大字舒適版</div>
+  </div>
+  <div class="progress-wrap">
+    <div class="progress-bar-outer">
+      <div class="progress-bar-inner" id="progressBar"></div>
+    </div>
+    <div class="progress-text">已完成 <strong id="progressCount">0</strong> / 50</div>
+  </div>
+  <div class="topic-nav" id="topicNav"></div>
+</div>
+
+<div id="mainContent"></div>
+
+<script>
+// ===== DATA =====
+const TOPICS = [
+  {id:"cells", name:"Cells & Molecules of Life", icon:"🧬", zh:"細胞與生命分子"},
+  {id:"membrane", name:"Movement across Membrane", icon:"🔄", zh:"物質跨膜運輸"},
+  {id:"enzymes", name:"Enzymes & Metabolism", icon:"⚗️", zh:"酶與代謝"},
+  {id:"nutrition", name:"Nutrition in Humans", icon:"🍎", zh:"人體營養"},
+  {id:"respiration", name:"Respiration & Gas Exchange", icon:"🫁", zh:"呼吸作用與氣體交換"},
+  {id:"transport", name:"Transport in Living Things", icon:"❤️", zh:"生物體內的運輸"},
+  {id:"photosynthesis", name:"Photosynthesis", icon:"🌿", zh:"光合作用"},
+  {id:"ecology", name:"Ecology", icon:"🌍", zh:"生態學"}
+];
+
+const CARDS = [
+  // ===== CELLS (8 cards) =====
+  {id:"c01",topic:"cells",term_en:"Cell",term_zh:"細胞",def_short:"The basic structural and functional unit of all living organisms.",def_long:"All living organisms are made up of cells. Cells carry out all life processes including metabolism, growth, reproduction, and response to stimuli. Some organisms are unicellular (e.g. bacteria, Amoeba), while others are multicellular (e.g. humans, plants).",keywords:["basic unit","unicellular","multicellular","metabolism"],exam_q:"What is the basic unit of life? → Cell (細胞)",exam_a:"Cell is the basic structural and functional unit of all living organisms."},
+  {id:"c02",topic:"cells",term_en:"Nucleus",term_zh:"細胞核",def_short:"The organelle that controls all cell activities and contains genetic material (DNA).",def_long:"The nucleus is surrounded by a nuclear membrane and contains chromosomes made of DNA. It controls protein synthesis, cell division, and all metabolic activities. Under a light microscope, it appears as the largest, most visible organelle — stained darkly.",keywords:["controls cell activities","DNA","chromosomes","largest organelle"],exam_q:"Which organelle controls all cell activities? → Nucleus",exam_a:"The nucleus — it contains DNA/chromosomes and controls protein synthesis and cell division."},
+  {id:"c03",topic:"cells",term_en:"Mitochondria",term_zh:"線粒體",def_short:"The organelle where aerobic respiration occurs, producing ATP for cellular energy.",def_long:"Mitochondria (singular: mitochondrion) are the 'powerhouses' of the cell. They carry out aerobic respiration: Glucose + Oxygen → Carbon dioxide + Water + ATP (energy). Cells with high energy demands (e.g. muscle cells, sperm cells, root hair cells) contain many mitochondria.",keywords:["aerobic respiration","ATP","powerhouses","energy"],exam_q:"Which organelle is the powerhouse of the cell? → Mitochondria",exam_a:"Mitochondria carry out aerobic respiration, releasing energy as ATP — cells with high energy needs have many mitochondria."},
+  {id:"c04",topic:"cells",term_en:"Chloroplast",term_zh:"葉綠體",def_short:"The organelle in plant cells that carries out photosynthesis, converting light energy to chemical energy.",def_long:"Chloroplasts contain chlorophyll (green pigment) that absorbs light energy for photosynthesis: CO₂ + H₂O → Glucose + O₂. Found only in plant cells and algae. Under a microscope, chloroplasts appear as green oval discs. They are NOT found in animal cells.",keywords:["chlorophyll","photosynthesis","plant cells only","not in animal cells"],exam_q:"Which organelle is responsible for photosynthesis? → Chloroplast",exam_a:"Chloroplast — contains chlorophyll, absorbs light energy, converts CO₂ + H₂O into glucose and O₂. Found only in plant cells."},
+  {id:"c05",topic:"cells",term_en:"Ribosome",term_zh:"核糖體",def_short:"The organelle responsible for protein synthesis in all cells.",def_long:"Ribosomes are the smallest organelles and are NOT membrane-bound. They can be free-floating in the cytoplasm or attached to the rough endoplasmic reticulum (RER). They read mRNA to assemble amino acids into proteins. Both plant and animal cells, as well as bacteria, have ribosomes.",keywords:["protein synthesis","not membrane-bound","mRNA","RER"],exam_q:"Which organelle synthesizes proteins? → Ribosome",exam_a:"Ribosome — it reads mRNA and assembles amino acids into polypeptide chains (proteins)."},
+  {id:"c06",topic:"cells",term_en:"Cell Membrane",term_zh:"細胞膜",def_short:"A selectively permeable barrier that controls the movement of substances into and out of the cell.",def_long:"The cell membrane is made of a phospholipid bilayer with embedded proteins. It is described by the Fluid Mosaic Model — the phospholipids and proteins can move laterally within the membrane. It is differentially permeable: small molecules (water, oxygen, CO₂) pass freely; larger molecules and ions require transport proteins or active transport.",keywords:["selectively permeable","phospholipid bilayer","Fluid Mosaic Model","differentially permeable"],exam_q:"What is the function of the cell membrane? → Controls movement of substances; selectively permeable.",exam_a:"It controls what enters and leaves the cell; composed of a phospholipid bilayer with embedded proteins (Fluid Mosaic Model)."},
+  {id:"c07",topic:"cells",term_en:"Plant vs Animal Cells",term_zh:"植物細胞 vs 動物細胞",def_short:"Plant cells have cell wall, chloroplasts, and large central vacuole — features absent in animal cells.",def_long:"Key differences: (1) Cell wall — plant cells have a rigid cell wall made of cellulose for support; animal cells do not. (2) Chloroplasts — present in plant cells for photosynthesis; absent in animal cells. (3) Large central vacuole — stores water and dissolved substances in plant cells; animal cells have small or no vacuoles. Both share: nucleus, cytoplasm, cell membrane, mitochondria, ribosomes.",keywords:["cell wall","cellulose","chloroplast","large central vacuole"],exam_q:"State TWO features plant cells have but animal cells do not. → Cell wall & Chloroplast (or Large central vacuole)",exam_a:"Cell wall (made of cellulose), chloroplast (for photosynthesis), and large central vacuole (stores water)."},
+  {id:"c08",topic:"cells",term_en:"Endoplasmic Reticulum (ER)",term_zh:"內質網",def_short:"A network of membrane-bound channels that transports proteins and lipids within the cell.",def_long:"Rough ER: studded with ribosomes, modifies and transports proteins. Smooth ER: no ribosomes, synthesizes lipids and detoxifies substances. The ER connects the nuclear membrane to the cell membrane, forming an intracellular transport network.",keywords:["rough ER","smooth ER","protein transport","lipid synthesis"],exam_q:"Name the organelle that transports proteins within the cell. → Endoplasmic Reticulum (ER)",exam_a:"Rough ER (with ribosomes) transports and modifies proteins; Smooth ER synthesizes lipids."},
+
+  // ===== MEMBRANE (5 cards) =====
+  {id:"m01",topic:"membrane",term_en:"Diffusion",term_zh:"擴散",def_short:"The net movement of particles from a region of higher concentration to a region of lower concentration, down a concentration gradient.",def_long:"Diffusion is a passive process — it does NOT require energy. Particles move using their own kinetic energy. Factors affecting diffusion rate: concentration gradient (steeper = faster), temperature (higher = faster), particle size (smaller = faster), and diffusion distance (shorter = faster). Examples: Oxygen diffusing from alveoli into blood capillaries; CO₂ diffusing out of cells.",keywords:["passive","no energy","concentration gradient","kinetic energy"],exam_q:"Why does diffusion not require energy? → Particles move down the concentration gradient using their own kinetic energy.",exam_a:"It is a passive process; particles move from high to low concentration using their own kinetic energy — no ATP needed."},
+  {id:"m02",topic:"membrane",term_en:"Osmosis",term_zh:"滲透",def_short:"The net movement of water molecules from a region of higher water potential to a region of lower water potential through a selectively permeable membrane.",def_long:"Osmosis is a special type of diffusion — only water molecules move, and ONLY through a selectively permeable membrane. Water potential: pure water = highest (0 kPa); adding solutes lowers water potential (more negative). Water always moves from high water potential to low water potential. In plant cells: placed in pure water → becomes turgid (firm); placed in concentrated solution → becomes plasmolysed (cell membrane pulls away from cell wall).",keywords:["water potential","selectively permeable membrane","turgid","plasmolysed"],exam_q:"Which statement best describes osmosis? → Water molecules move from high water potential to low water potential through a selectively permeable membrane.",exam_a:"Osmosis is the net movement of water molecules from high water potential to low water potential through a selectively permeable membrane; no energy required."},
+  {id:"m03",topic:"membrane",term_en:"Active Transport",term_zh:"主動運輸",def_short:"The movement of substances from a region of lower concentration to a region of higher concentration, against the concentration gradient, using energy (ATP).",def_long:"Active transport moves substances AGAINST the concentration gradient (low → high). It requires: (1) Carrier proteins in the cell membrane. (2) Energy from ATP (produced by respiration). Examples: absorption of minerals by root hair cells from soil (soil has lower ion concentration than roots); absorption of glucose by villi in the small intestine. Cells that carry out lots of active transport have many mitochondria.",keywords:["against concentration gradient","carrier proteins","ATP","root hair cells"],exam_q:"Compare diffusion and active transport. → Diffusion: passive, down gradient, no energy; Active transport: against gradient, needs ATP.",exam_a:"Diffusion: passive, down concentration gradient, no energy needed. Active transport: against concentration gradient, requires carrier proteins and ATP energy from respiration."},
+  {id:"m04",topic:"membrane",term_en:"Water Potential",term_zh:"水勢",def_short:"A measure of the tendency of water to move from one place to another.",def_long:"Pure water has the highest water potential (0 kPa). Adding solutes lowers (makes more negative) the water potential. Water always moves from HIGH water potential to LOW water potential. Key applications: Plant cells in pure water → water enters → turgid (cell pushes against cell wall — provides support). Plant cells in concentrated sugar/salt solution → water leaves → plasmolysed (wilts).",keywords:["pure water = 0 kPa","solutes lower potential","turgidity","plasmolysis"],exam_q:"What happens to a plant cell placed in concentrated salt solution? → Water leaves the cell by osmosis; the cell becomes plasmolysed.",exam_a:"Water moves out of the cell (from high to low water potential), the vacuole shrinks, and the cell membrane pulls away from the cell wall — plasmolysis."},
+  {id:"m05",topic:"membrane",term_en:"Dialysis Tubing Experiment",term_zh:"透析管實驗",def_short:"A model of the cell membrane using selectively permeable tubing to demonstrate diffusion and osmosis.",def_long:"Dialysis tubing acts like a selectively permeable membrane — small molecules (water, glucose, ions) pass through; large molecules (starch, proteins) cannot. Experimental precautions: (1) Rinse outer surface with distilled water before testing. (2) Ensure both ends are tightly tied. (3) Use same volume/ concentration for fair comparison. Common exam setup: starch + glucose inside tubing, iodine + water outside → only glucose passes out (positive glucose test outside), starch stays inside (iodine turns blue-black inside).",keywords:["selectively permeable","small molecules pass","starch cannot pass","fair test"],exam_q:"Why rinse the dialysis tubing with distilled water before testing? → To remove any substances on the outer surface that may contaminate results.",exam_a:"To ensure that any substances detected outside the tubing actually diffused out from inside — prevents false positive results."},
+
+  // ===== ENZYMES (5 cards) =====
+  {id:"e01",topic:"enzymes",term_en:"Enzyme",term_zh:"酶",def_short:"A biological catalyst (protein) that speeds up chemical reactions without being used up.",def_long:"Enzymes are globular proteins that act as catalysts — they lower the activation energy of reactions, providing an alternative pathway. They are NOT consumed or changed by the reaction. Each enzyme is specific to one substrate. Enzymes are involved in digestion (amylase, protease, lipase), respiration, photosynthesis, and DNA replication. Without enzymes, metabolic reactions would be too slow to sustain life.",keywords:["biological catalyst","protein","lowers activation energy","not consumed"],exam_q:"What is an enzyme? → A biological catalyst that speeds up reactions; protein in nature.",exam_a:"A protein that acts as a biological catalyst — speeds up chemical reactions by lowering activation energy without being used up."},
+  {id:"e02",topic:"enzymes",term_en:"Active Site & Lock-and-Key Hypothesis",term_zh:"活性位點與鎖鑰假說",def_short:"The active site is the specific region where the substrate binds; the lock-and-key hypothesis describes their precise fit.",def_long:"Lock-and-Key Hypothesis: The substrate fits exactly into the active site of the enzyme, like a key fits into a specific lock. The shape of the active site is complementary to the shape of the substrate. After the reaction, products are released and the enzyme can be reused. Modern refinement: Induced Fit Model — the active site slightly changes shape to better fit the substrate.",keywords:["active site","substrate","complementary shape","specific fit"],exam_q:"What is the lock-and-key hypothesis? → The substrate fits exactly into the active site like a key fits a lock.",exam_a:"The active site has a shape complementary to the substrate; the substrate binds specifically, reaction occurs, products are released."},
+  {id:"e03",topic:"enzymes",term_en:"Denaturation",term_zh:"變性",def_short:"The irreversible change in the shape of the active site, causing the enzyme to lose its catalytic function.",def_long:"Denaturation occurs when the bonds maintaining the enzyme's 3D structure (hydrogen bonds, ionic bonds) are broken. Causes: (1) High temperature (above optimum, usually >60°C for most enzymes) — breaks bonds, changes active site shape. (2) Extreme pH (far from optimum) — alters charges on amino acids, disrupting bonds. Denaturation is IRREVERSIBLE: the enzyme cannot regain function even when conditions return to normal. Important: Low temperature does NOT denature enzymes — it only inactivates them temporarily.",keywords:["irreversible","high temperature","extreme pH","hydrogen bonds"],exam_q:"What is denaturation? → Permanent change in the active site shape, causing loss of enzyme function.",exam_a:"Denaturation is the irreversible loss of enzyme activity due to high temperature or extreme pH breaking the bonds (hydrogen, ionic) that maintain the active site's specific 3D shape."},
+  {id:"e04",topic:"enzymes",term_en:"Factors Affecting Enzyme Activity",term_zh:"影響酶活性的因素",def_short:"Temperature and pH affect enzyme activity; each enzyme has an optimum temperature and optimum pH.",def_long:"Temperature: As temperature increases, kinetic energy increases → more enzyme-substrate collisions → activity increases up to the optimum (~37°C for human enzymes). Beyond optimum, enzyme denatures — activity drops sharply. pH: Each enzyme has an optimum pH (e.g. pepsin in stomach: pH 2; trypsin in small intestine: pH 8; most intracellular enzymes: pH 7). Extreme pH values denature enzymes.",keywords:["optimum 37°C","optimum pH","kinetic energy","extreme pH denatures"],exam_q:"Why does high temperature denature enzymes? → High temperature breaks bonds maintaining the 3D shape, changing the active site permanently.",exam_a:"Heat breaks hydrogen and ionic bonds that maintain the enzyme's tertiary structure → active site shape changes irreversibly → no more catalytic activity."},
+  {id:"e05",topic:"enzymes",term_en:"Enzyme Specificity & Metabolism",term_zh:"酶專一性與代謝",def_short:"Each enzyme catalyzes only one specific reaction; metabolism is the sum of all chemical reactions in an organism.",def_long:"Enzyme specificity: Each enzyme has an active site that is complementary to only ONE specific substrate. Example: Amylase only breaks down starch → maltose; Protease only breaks down protein → amino acids; Lipase only breaks down lipids → fatty acids + glycerol. Metabolism = catabolism (breaking down, releases energy) + anabolism (building up, uses energy). Digestive enzymes are examples of catabolic enzymes.",keywords:["one enzyme one substrate","catabolism","anabolism","amylase protease lipase"],exam_q:"Name a digestive enzyme and its function. → Amylase — breaks down starch into maltose.",exam_a:"Amylase (produced by salivary glands and pancreas): starch → maltose. Protease (stomach/pancreas): protein → amino acids. Lipase (pancreas): lipids → fatty acids + glycerol."},
+
+  // ===== NUTRITION (7 cards) =====
+  {id:"n01",topic:"nutrition",term_en:"7 Food Substances",term_zh:"七大營養素",def_short:"A balanced diet must include: Carbohydrates, Proteins, Lipids, Vitamins, Minerals, Water, and Dietary fibre.",def_long:"(1) Carbohydrates — main energy source (rice, bread, pasta). (2) Proteins — growth & repair of tissues (meat, eggs, beans). (3) Lipids/Fats — long-term energy storage, insulation (oil, butter). (4) Vitamins — regulate body processes (e.g. Vitamin A for vision, C for connective tissue, D for calcium absorption). (5) Minerals — various functions (e.g. Iron for haemoglobin, Calcium for bones). (6) Water — solvent for metabolic reactions, transport medium. (7) Dietary fibre — prevents constipation, adds bulk to faeces.",keywords:["carbohydrates","proteins","lipids","vitamins","minerals","water","dietary fibre"],exam_q:"Name the 7 food substances in a balanced diet. → Carbs, proteins, lipids, vitamins, minerals, water, dietary fibre.",exam_a:"Carbohydrates, Proteins, Lipids (fats), Vitamins, Minerals, Water, Dietary fibre — each serves distinct functions in the body."},
+  {id:"n02",topic:"nutrition",term_en:"Carbohydrates",term_zh:"碳水化合物",def_short:"The body's primary energy source; includes starch (complex) and sugars (simple).",def_long:"Carbohydrates are made of carbon, hydrogen, and oxygen (C,H,O). Types: Monosaccharides (e.g. glucose, fructose — simple sugars), Disaccharides (e.g. maltose, sucrose), Polysaccharides (e.g. starch, glycogen, cellulose — complex). Digestion: Starch → (amylase) → Maltose → (maltase) → Glucose. Excess glucose is stored as glycogen in liver and muscles, or converted to fat.",keywords:["energy source","starch","glucose","glycogen"],exam_q:"What is the main function of carbohydrates? → To provide energy for body activities.",exam_a:"Carbohydrates are broken down to glucose, which is used in respiration to release energy (ATP) for cellular activities."},
+  {id:"n03",topic:"nutrition",term_en:"Proteins",term_zh:"蛋白質",def_short:"Made of amino acids; essential for growth and repair of body tissues.",def_long:"Proteins are polymers of amino acids joined by peptide bonds. Functions: (1) Growth and repair of tissues (muscle, skin, hair). (2) Making enzymes (all enzymes are proteins). (3) Making hormones (e.g. insulin). (4) Making antibodies (immune defence). Deficiency: Kwashiorkor — swollen belly, muscle wasting, especially in children. Digestion: Protein → (protease) → amino acids → absorbed into blood.",keywords:["amino acids","growth and repair","enzymes","kwashiorkor"],exam_q:"What are proteins used for in the body? → Growth and repair of tissues; making enzymes, hormones, and antibodies.",exam_a:"Proteins provide amino acids for growth and repair; also form enzymes, hormones (insulin), and antibodies. Deficiency leads to kwashiorkor."},
+  {id:"n04",topic:"nutrition",term_en:"Lipids (Fats)",term_zh:"脂質",def_short:"Lipids are energy-dense molecules providing long-term energy storage, insulation, and protection of organs.",def_long:"Lipids (fats and oils) are made of fatty acids and glycerol. Functions: (1) Long-term energy storage — yield about 2× more energy per gram than carbohydrates. (2) Thermal insulation — fat layer under skin (adipose tissue) reduces heat loss. (3) Protection — cushions internal organs (e.g. kidneys). (4) Cell membrane component — phospholipids form the bilayer. Lipase breaks down lipids into fatty acids + glycerol.",keywords:["fatty acids","glycerol","energy storage","insulation","phospholipids"],exam_q:"Give TWO functions of lipids. → Long-term energy storage / Thermal insulation / Protection of internal organs.",exam_a:"Lipids store energy long-term, provide thermal insulation under the skin, and protect internal organs as cushioning."},
+  {id:"n05",topic:"nutrition",term_en:"Vitamins & Minerals",term_zh:"維生素與礦物質",def_short:"Essential micronutrients: vitamins (organic) and minerals (inorganic) required in small amounts.",def_long:"Key deficiencies: Vitamin A → night blindness (needed for visual pigment); Vitamin C → scurvy (needed for collagen — bleeding gums, poor wound healing); Vitamin D → rickets (needed for calcium absorption — weak bones). Minerals: Iron → anaemia (needed for haemoglobin — tiredness, pale skin); Calcium → weak bones/teeth (needed for bone structure); Iodine → goitre (needed for thyroxine hormone).",keywords:["deficiency diseases","Vitamin A C D","Iron","Calcium","anaemia","scurvy"],exam_q:"Which vitamin deficiency causes scurvy? → Vitamin C deficiency.",exam_a:"Vitamin C deficiency causes scurvy (bleeding gums, poor wound healing) — Vitamin C is needed to produce collagen."},
+  {id:"n06",topic:"nutrition",term_en:"Peristalsis",term_zh:"蠕動",def_short:"The rhythmic contraction and relaxation of gut wall muscles that pushes food along the alimentary canal.",def_long:"Peristalsis is an involuntary wave-like muscle contraction that moves food through the digestive system — from oesophagus → stomach → small intestine → large intestine. It occurs even when you are upside down (not gravity-dependent). Two layers of smooth muscle work together: circular muscles contract behind the food bolus while relaxing ahead of it; longitudinal muscles coordinate the wave. Fibre stimulates peristalsis.",keywords:["rhythmic contraction","involuntary","alimentary canal","circular & longitudinal muscles"],exam_q:"What is peristalsis? → Rhythmic contraction and relaxation of gut muscles pushing food along the alimentary canal.",exam_a:"Peristalsis is the wave-like, involuntary contraction of circular and longitudinal muscles in the gut wall that propels food through the digestive tract."},
+  {id:"n07",topic:"nutrition",term_en:"Villi & Absorption",term_zh:"絨毛與吸收",def_short:"Finger-like projections in the small intestine that increase surface area for absorption of digested food.",def_long:"Villi (singular: villus) are found in the ileum (small intestine). Adaptations for absorption: (1) Numerous folds → huge surface area. (2) Thin wall — one-cell thick epithelium → short diffusion distance. (3) Rich blood capillary network → absorbed nutrients (glucose, amino acids, minerals, water-soluble vitamins) enter blood quickly; maintains concentration gradient. (4) Lacteal (lymph vessel) → absorbs fatty acids and glycerol. (5) Microvilli on epithelial cells further increase surface area.",keywords:["finger-like","surface area","one-cell thick","blood capillaries","lacteal"],exam_q:"What is the function of villi? → Increase surface area for absorption of digested food.",exam_a:"Villi increase surface area, have thin one-cell thick walls, rich capillary network, and lacteals — all adaptations to maximize absorption efficiency."},
+
+  // ===== RESPIRATION (6 cards) =====
+  {id:"r01",topic:"respiration",term_en:"Aerobic Respiration",term_zh:"有氧呼吸",def_short:"The breakdown of glucose in the presence of oxygen to release a large amount of energy (ATP).",def_long:"Word equation: Glucose + Oxygen → Carbon dioxide + Water + Large amount of energy (~38 ATP). Occurs in the mitochondria. All organisms carry out aerobic respiration when oxygen is available. It is the most efficient form of respiration. Products CO₂ and H₂O are waste products — CO₂ is exhaled, water is used or excreted.",keywords:["glucose + oxygen","CO₂ + water","~38 ATP","mitochondria"],exam_q:"Write the word equation for aerobic respiration. → Glucose + Oxygen → Carbon dioxide + Water + Energy (ATP)",exam_a:"Glucose + Oxygen → Carbon dioxide + Water + Large amount of energy (~38 ATP per glucose molecule) — occurs in mitochondria."},
+  {id:"r02",topic:"respiration",term_en:"Anaerobic Respiration",term_zh:"無氧呼吸",def_short:"The breakdown of glucose in the absence of oxygen, releasing only a small amount of energy.",def_long:"In humans (muscle cells during vigorous exercise): Glucose → Lactic acid + Small amount of energy (~2 ATP). Lactic acid accumulation causes muscle fatigue and cramps. In yeast (fermentation): Glucose → Ethanol + Carbon dioxide + Small amount of energy. This is used in baking (CO₂ makes bread rise) and brewing (ethanol = alcohol). Anaerobic respiration is much less efficient than aerobic.",keywords:["no oxygen","lactic acid","ethanol","yeast","~2 ATP"],exam_q:"Compare aerobic and anaerobic respiration (humans). → Aerobic: with O₂, produces ~38 ATP. Anaerobic: no O₂, produces lactic acid + ~2 ATP.",exam_a:"Aerobic: Glucose + O₂ → CO₂ + H₂O + ~38 ATP. Anaerobic (humans): Glucose → Lactic acid + ~2 ATP. Anaerobic (yeast): Glucose → Ethanol + CO₂ + ~2 ATP."},
+  {id:"r03",topic:"respiration",term_en:"Alveoli",term_zh:"肺泡",def_short:"Tiny air sacs in the lungs where gas exchange (O₂ in, CO₂ out) occurs by diffusion.",def_long:"Alveoli (singular: alveolus) are found at the ends of bronchioles. Adaptations for gas exchange: (1) Numerous alveoli → huge total surface area (~70 m² in humans). (2) Wall one-cell thick → short diffusion distance. (3) Moist inner surface → O₂ dissolves before diffusing. (4) Surrounded by dense capillary network → concentration gradients maintained. (5) Ventilation (breathing) keeps O₂ high and CO₂ low in alveoli.",keywords:["large surface area","one-cell thick","moist","capillary network","ventilation"],exam_q:"State TWO adaptations of alveoli for gas exchange. → Thin wall (one-cell thick) / Large surface area / Rich blood capillary network.",exam_a:"Thin wall (short diffusion distance), large surface area, moist surface, rich capillary network, and constant ventilation — all maximize diffusion efficiency."},
+  {id:"r04",topic:"respiration",term_en:"Breathing Mechanism",term_zh:"呼吸機制",def_short:"Inhalation: diaphragm contracts (flattens), intercostal muscles contract (ribs move up and out); Exhalation: reverse.",def_long:"Inhalation (active): External intercostal muscles contract → rib cage moves UP and OUT. Diaphragm contracts and FLATTENS. Thoracic volume increases → pressure decreases → air drawn IN. Exhalation (passive at rest): External intercostal muscles relax → rib cage moves DOWN and IN. Diaphragm relaxes and becomes DOME-SHAPED. Thoracic volume decreases → pressure increases → air pushed OUT. During forced exhalation, internal intercostal muscles contract.",keywords:["diaphragm","intercostal muscles","thoracic volume","pressure change"],exam_q:"What happens to the diaphragm during inhalation? → It contracts and flattens.",exam_a:"The diaphragm contracts and moves downward (flattens), increasing thoracic volume and decreasing pressure, drawing air into the lungs."},
+  {id:"r05",topic:"respiration",term_en:"Oxygen Debt",term_zh:"氧債",def_short:"The extra oxygen needed after vigorous exercise to break down accumulated lactic acid.",def_long:"During strenuous exercise, muscles may not get enough O₂ → switch to anaerobic respiration → lactic acid builds up. After exercise stops, heavy breathing continues to repay the oxygen debt: Oxygen is used to oxidize (break down) lactic acid into CO₂ and H₂O in the liver. This is why you keep breathing heavily even after stopping exercise — to clear the lactic acid.",keywords:["lactic acid buildup","heavy breathing after exercise","liver oxidizes lactic acid","repay O₂ debt"],exam_q:"Why do we breathe heavily after vigorous exercise? → To repay oxygen debt — extra oxygen breaks down accumulated lactic acid.",exam_a:"Heavy breathing after exercise provides extra oxygen to oxidize lactic acid (produced during anaerobic respiration) back to CO₂ and H₂O in the liver — repaying the oxygen debt."},
+  {id:"r06",topic:"respiration",term_en:"CO₂ Transport in Blood",term_zh:"二氧化碳的血液運輸",def_short:"Carbon dioxide is transported in blood mostly as hydrogencarbonate ions (HCO₃⁻) dissolved in plasma.",def_long:"Three methods of CO₂ transport: (1) As hydrogencarbonate ions (HCO₃⁻) in plasma — ~70% (CO₂ + H₂O → H₂CO₃ → H⁺ + HCO₃⁻, catalyzed by carbonic anhydrase in RBCs). (2) Bound to haemoglobin as carbaminohaemoglobin — ~23%. (3) Dissolved directly in plasma — ~7%. The HCO₃⁻ diffuses out of RBCs into plasma; chloride ions (Cl⁻) move into RBCs to maintain electrical balance (chloride shift).",keywords:["hydrogencarbonate HCO₃⁻","carbonic anhydrase","carbaminohaemoglobin","chloride shift"],exam_q:"How is CO₂ transported in blood? → Mostly as hydrogencarbonate ions (HCO₃⁻) in plasma.",exam_a:"~70% as hydrogencarbonate ions in plasma (formed by carbonic anhydrase in RBCs), ~23% bound to haemoglobin, ~7% dissolved directly."},
+
+  // ===== TRANSPORT (6 cards) =====
+  {id:"t01",topic:"transport",term_en:"Heart Chambers",term_zh:"心臟腔室",def_short:"The human heart has 4 chambers: Left atrium, Left ventricle, Right atrium, Right ventricle.",def_long:"Right side: receives deoxygenated blood from body → Right atrium → Right ventricle → pumps to lungs (pulmonary artery). Left side: receives oxygenated blood from lungs → Left atrium → Left ventricle → pumps to body (aorta). Left ventricle has the thickest wall because it must pump blood to the entire body (highest pressure). Valves (tricuspid, bicuspid, semilunar) prevent backflow.",keywords:["4 chambers","left ventricle thickest","deoxygenated right","oxygenated left","valves"],exam_q:"Which chamber pumps blood to the whole body? → Left ventricle.",exam_a:"Left ventricle — it has the thickest muscular wall because it must generate the highest pressure to pump blood through the systemic circulation to the entire body."},
+  {id:"t02",topic:"transport",term_en:"Double Circulation",term_zh:"雙循環",def_short:"Blood passes through the heart twice in one complete circuit: pulmonary and systemic circulation.",def_long:"Pulmonary circulation: Heart (right ventricle) → Pulmonary artery → Lungs (gas exchange: CO₂ out, O₂ in) → Pulmonary vein → Heart (left atrium). Systemic circulation: Heart (left ventricle) → Aorta → Body tissues (O₂ and nutrients delivered, CO₂ and waste collected) → Vena cava → Heart (right atrium). Advantage: Oxygenated and deoxygenated blood are kept separate → more efficient oxygen delivery.",keywords:["pulmonary","systemic","heart twice","oxygenated vs deoxygenated"],exam_q:"What is double circulation? → Blood passes through the heart twice — pulmonary (lungs) and systemic (body).",exam_a:"Blood passes through the heart twice per complete circuit: right side pumps to lungs (pulmonary), left side pumps to body (systemic). Keeps oxygenated and deoxygenated blood separate."},
+  {id:"t03",topic:"transport",term_en:"Arteries, Veins, Capillaries",term_zh:"動脈、靜脈、微血管",def_short:"Arteries: thick elastic walls, carry blood away from heart. Veins: thin walls with valves, carry blood to heart. Capillaries: one-cell thick for exchange.",def_long:"Artery: thick elastic/muscular wall, narrow lumen, no valves, high pressure (away from heart). Vein: thin wall with little muscle, wide lumen, has valves to prevent backflow, low pressure (toward heart). Capillary: one-cell thick wall only (endothelium), no valves, very narrow — red blood cells pass in single file. Pathway: Artery → Arteriole → Capillary → Venule → Vein.",keywords:["artery thick elastic","vein valves","capillary one-cell","narrow vs wide lumen"],exam_q:"Compare arteries and veins. → Arteries: thick muscular wall, no valves, narrow lumen. Veins: thin wall, valves, wide lumen.",exam_a:"Arteries: thick elastic/muscular wall, narrow lumen, no valves, high pressure (away from heart). Veins: thin wall, wide lumen, valves present, low pressure (toward heart)."},
+  {id:"t04",topic:"transport",term_en:"Red Blood Cells (RBCs)",term_zh:"紅血球",def_short:"Transport oxygen by containing haemoglobin; biconcave disc shape, no nucleus (mammals).",def_long:"Adaptations: (1) Biconcave disc shape → large surface area for O₂ diffusion. (2) No nucleus (in mammals) → more space for haemoglobin. (3) Contains haemoglobin → binds oxygen to form oxyhaemoglobin (reversible: Hb + 4O₂ ⇌ Hb(O₂)₄). (4) Flexible → can squeeze through narrow capillaries. RBCs are produced in bone marrow; old RBCs are broken down in the liver and spleen.",keywords:["haemoglobin","oxyhaemoglobin","biconcave","no nucleus","bone marrow"],exam_q:"What is the function of red blood cells? → Transport oxygen — contain haemoglobin.",exam_a:"RBCs contain haemoglobin which binds to oxygen (forming oxyhaemoglobin) in the lungs and releases it to body tissues. Biconcave shape and lack of nucleus maximize O₂-carrying capacity."},
+  {id:"t05",topic:"transport",term_en:"White Blood Cells & Platelets",term_zh:"白血球與血小板",def_short:"WBCs: immune defence (phagocytosis + antibodies). Platelets: blood clotting.",def_long:"White Blood Cells (Leucocytes): Defend against pathogens. Two main types: (1) Phagocytes — engulf and digest pathogens (phagocytosis). (2) Lymphocytes — produce antibodies that bind to specific antigens on pathogens, marking them for destruction. Platelets (Thrombocytes): Small cell fragments that help in blood clotting — they release chemicals that convert fibrinogen → fibrin, forming a mesh that traps blood cells to form a clot (scab).",keywords:["phagocytosis","antibodies","lymphocytes","fibrin","blood clot"],exam_q:"What do white blood cells do? → Defend against pathogens via phagocytosis and antibody production.",exam_a:"Phagocytes engulf pathogens (phagocytosis); Lymphocytes produce antibodies that specifically target antigens on pathogens."},
+  {id:"t06",topic:"transport",term_en:"Sinoatrial Node (SAN)",term_zh:"竇房結",def_short:"The natural pacemaker of the heart, located in the right atrium, that initiates heartbeats.",def_long:"The SAN (sinoatrial node) is a group of specialized cells in the wall of the right atrium. It generates electrical impulses that spread across the atria → atria contract (atrial systole). The impulse then reaches the AVN (atrioventricular node) → travels down the Bundle of His and Purkinje fibres → ventricles contract (ventricular systole). This coordinated sequence ensures efficient pumping. The SAN sets the basic rhythm; it can be influenced by nerves (sympathetic speeds up, parasympathetic slows down) and hormones (adrenaline).",keywords:["pacemaker","right atrium","electrical impulse","AVN","Bundle of His"],exam_q:"What is the natural pacemaker of the heart? → The sinoatrial node (SAN), located in the right atrium.",exam_a:"SAN generates rhythmic electrical impulses that spread across the atria and (via AVN) to the ventricles, coordinating heart contraction."},
+
+  // ===== PHOTOSYNTHESIS (6 cards) =====
+  {id:"p01",topic:"photosynthesis",term_en:"Photosynthesis Equation",term_zh:"光合作用方程式",def_short:"Carbon dioxide + Water → Glucose + Oxygen (requires light energy and chlorophyll).",def_long:"Word equation: Carbon dioxide + Water —(light, chlorophyll)→ Glucose + Oxygen. This is an endothermic reaction — it absorbs light energy and converts it to chemical energy stored in glucose. CO₂ enters through stomata; water is absorbed by roots and transported via xylem; light is absorbed by chlorophyll in chloroplasts. Oxygen is released as a by-product through stomata.",keywords:["CO₂ + H₂O","glucose + O₂","light energy","chlorophyll","endothermic"],exam_q:"Write the word equation for photosynthesis. → Carbon dioxide + Water → Glucose + Oxygen (light & chlorophyll).",exam_a:"Carbon dioxide + Water —(light energy, chlorophyll)→ Glucose + Oxygen. An endothermic reaction converting light energy to chemical energy."},
+  {id:"p02",topic:"photosynthesis",term_en:"Chloroplast & Palisade Mesophyll",term_zh:"葉綠體與柵狀葉肉",def_short:"Chloroplasts contain chlorophyll; palisade mesophyll cells are packed with chloroplasts for maximum light absorption.",def_long:"Chloroplasts: Double-membrane organelles containing stacks of thylakoids (grana) where light reactions occur, surrounded by stroma where the Calvin cycle occurs. Chlorophyll (green pigment) absorbs red and blue light most strongly; green light is reflected (hence leaves appear green). Palisade mesophyll cells: Located just below the upper epidermis, tightly packed, column-shaped, packed with chloroplasts — the main site of photosynthesis. Adapted to receive maximum sunlight.",keywords:["thylakoids","grana","stroma","absorbs red and blue","column-shaped"],exam_q:"Why are leaves green? → Chlorophyll reflects green light while absorbing red and blue light.",exam_a:"Chlorophyll (in chloroplasts) absorbs red and blue wavelengths for photosynthesis; green light is reflected, making leaves appear green."},
+  {id:"p03",topic:"photosynthesis",term_en:"Limiting Factors",term_zh:"限制因素",def_short:"Light intensity, CO₂ concentration, and temperature — whichever is lowest limits the rate of photosynthesis.",def_long:"At any moment, only ONE factor is the limiting factor. (1) Light intensity: At low light, increasing light increases photosynthesis rate; eventually plateaus when other factors (CO₂ or temperature) become limiting. (2) CO₂ concentration: At low CO₂, rate increases with CO₂; plateaus when light or temperature limits. (3) Temperature: Affects enzyme activity (Calvin cycle enzymes); very high temperature denatures enzymes → rate drops sharply. At any point, only ONE factor is the limiting factor.",keywords:["light intensity","CO₂ concentration","temperature","plateau","one limiting factor"],exam_q:"Why does photosynthesis rate plateau at high light intensity? → Another factor (CO₂ or temperature) becomes the limiting factor.",exam_a:"At high light intensity, light is no longer limiting — either CO₂ concentration or temperature becomes the new limiting factor."},
+  {id:"p04",topic:"photosynthesis",term_en:"Stomata",term_zh:"氣孔",def_short:"Pores on leaf surfaces that allow gas exchange (CO₂ in, O₂ out) and control water loss by transpiration.",def_long:"Stomata (singular: stoma) are mostly found on the lower epidermis of leaves. Each stoma is surrounded by two guard cells that control its opening and closing. Guard cells become turgid (water enters by osmosis) → stoma opens (allows gas exchange). Guard cells become flaccid (water leaves) → stoma closes (reduces water loss). Stomata open during the day (for photosynthesis) and generally close at night (reduce water loss).",keywords:["guard cells","gas exchange","transpiration","turgid opens","flaccid closes"],exam_q:"What is the role of stomata? → Allow gas exchange (CO₂ in, O₂ out); control water loss via transpiration.",exam_a:"Stomata allow CO₂ to enter for photosynthesis and O₂ to exit as a by-product. Guard cells regulate opening/closing to balance gas exchange and water loss."},
+  {id:"p05",topic:"photosynthesis",term_en:"Starch Test",term_zh:"澱粉測試",def_short:"Test for the presence of starch using iodine solution (turns blue-black if starch is present).",def_long:"Steps (to test a leaf for starch): (1) Boil leaf in water for ~2 minutes — kills cells and stops metabolic reactions. (2) Boil leaf in alcohol (ethanol) in a water bath — removes chlorophyll (decolorizes the leaf). (3) Rinse leaf in warm water — softens the leaf. (4) Add iodine solution — blue-black colour indicates presence of starch (brown = no starch). Safety: ethanol is flammable — must use water bath, not direct flame.",keywords:["iodine","blue-black","boil in water","boil in alcohol","decolorize"],exam_q:"How do you test a leaf for starch? → Boil in water → boil in alcohol → rinse → add iodine → blue-black = starch present.",exam_a:"1. Boil in water (kill cells). 2. Boil in alcohol/ethanol in water bath (remove chlorophyll). 3. Rinse. 4. Add iodine solution — blue-black indicates starch."},
+  {id:"p06",topic:"photosynthesis",term_en:"Importance of Photosynthesis",term_zh:"光合作用的重要性",def_short:"Photosynthesis produces oxygen for respiration and converts light energy to chemical energy in food — the basis of most food chains.",def_long:"Photosynthesis is arguably the most important biochemical process on Earth: (1) Produces O₂ — essential for aerobic respiration in nearly all organisms. (2) Converts light energy to chemical energy (glucose) — this energy flows through food chains. (3) Removes CO₂ from the atmosphere — helps regulate the greenhouse effect. (4) Basis of almost all food chains — producers (plants, algae) are the first trophic level. Without photosynthesis, most life on Earth would not exist.",keywords:["produces oxygen","chemical energy","food chain basis","removes CO₂","producers"],exam_q:"Why is photosynthesis important to all life on Earth? → Produces oxygen for respiration and converts light energy to chemical energy in food.",exam_a:"It produces oxygen (essential for aerobic respiration), converts solar energy to chemical energy (glucose) that fuels food chains, and removes CO₂ from the atmosphere."},
+
+  // ===== ECOLOGY (7 cards) =====
+  {id:"ec01",topic:"ecology",term_en:"Ecosystem & Habitat",term_zh:"生態系統與棲息地",def_short:"Ecosystem = community + physical environment; Habitat = where an organism lives.",def_long:"Ecosystem: A self-contained system where organisms interact with each other (biotic factors) and with their physical environment (abiotic factors — temperature, light, water, pH, soil). Examples: pond, forest, grassland, rocky shore. Habitat: The specific place where an organism lives (e.g. a rotting log for fungi, canopy for monkeys). Niche: The role of an organism in the ecosystem (what it does, what it eats, how it interacts).",keywords:["biotic","abiotic","community","physical environment","niche"],exam_q:"What is an ecosystem? → A system where organisms interact with each other and their physical environment.",exam_a:"An ecosystem includes all organisms (biotic factors) and their physical environment (abiotic factors) interacting as a system — e.g. a pond, forest, or rocky shore."},
+  {id:"ec02",topic:"ecology",term_en:"Population & Community",term_zh:"種群與群落",def_short:"Population: same species in same area; Community: all species in same area.",def_long:"Population: A group of organisms of the SAME species living in the same area at the same time. Example: all frogs in a pond. Community: An assembly of populations of DIFFERENT species living and interacting in the same area. Example: all fish, plants, snails, bacteria in a pond. Key distinction: Population = one species; Community = all species.",keywords:["same species","different species","same area","same time","interacting"],exam_q:"Distinguish population from community. → Population: same species; Community: all species in an area.",exam_a:"Population: group of organisms of ONE species in the same area at the same time. Community: ALL populations of different species living and interacting in the same area."},
+  {id:"ec03",topic:"ecology",term_en:"Food Chain & Food Web",term_zh:"食物鏈與食物網",def_short:"Food chain: linear sequence of feeding relationships. Food web: interconnected food chains.",def_long:"Food chain: Shows energy transfer from one organism to another. Arrow direction: points to the eater (shows energy flow direction). Example: Grass → Grasshopper → Frog → Snake → Hawk. Food web: A network of multiple interconnected food chains, showing all feeding relationships in an ecosystem. More realistic than food chain because most organisms eat more than one type of food. Trophic levels: Producer (1st) → Primary consumer (2nd) → Secondary consumer (3rd) → Tertiary consumer (4th).",keywords:["energy transfer","arrow = energy flow","trophic level","interconnected","producer to consumer"],exam_q:"What is a food web? → A network of interconnected food chains showing all feeding relationships.",exam_a:"A food web is a network of multiple food chains linked together, showing all feeding relationships in an ecosystem — more realistic than a single food chain."},
+  {id:"ec04",topic:"ecology",term_en:"Producer, Consumer, Decomposer",term_zh:"生產者、消費者、分解者",def_short:"Producers make food (photosynthesis); Consumers eat others; Decomposers break down dead matter.",def_long:"Producer: Makes its own food by photosynthesis (green plants, algae, cyanobacteria) — the first trophic level. Consumer: Eats other organisms. Primary consumer (herbivore) eats producer. Secondary consumer eats primary consumer. Tertiary consumer eats secondary consumer. Decomposer: Breaks down dead organisms and waste (e.g. bacteria, fungi, earthworms) — returns nutrients to soil for producers to reuse. Decomposers are essential for nutrient cycling.",keywords:["photosynthesis","herbivore","carnivore","break down","nutrient cycling"],exam_q:"Distinguish producer, consumer, and decomposer. → Producer makes food (photosynthesis); Consumer eats others; Decomposer breaks down dead matter.",exam_a:"Producer: makes own food by photosynthesis (e.g. green plants). Consumer: eats other organisms. Decomposer: breaks down dead organisms/waste, returning nutrients to soil (e.g. bacteria, fungi)."},
+  {id:"ec05",topic:"ecology",term_en:"Energy Flow in Ecosystem",term_zh:"生態系統能量流",def_short:"Energy enters as sunlight → producers → consumers → decomposers; ~90% lost as heat at each trophic level.",def_long:"Energy flow is LINEAR (not cycled like nutrients). Sunlight → captured by producers (photosynthesis) → energy stored as chemical energy in biomass. At each trophic level: ~10% of energy is transferred to the next level; ~90% is lost as heat (respiration), movement, or undigested material (faeces). This is why food chains rarely have more than 4-5 trophic levels — insufficient energy at the top. Energy pyramids are always upright (wider at bottom).",keywords:["linear","10% transferred","90% lost as heat","trophic level","energy pyramid"],exam_q:"Why is energy lost at each trophic level? → ~90% lost as heat through respiration, movement, and undigested material.",exam_a:"At each trophic level, energy is lost as heat (respiration), used for movement, or lost in faeces — only ~10% of energy is passed to the next trophic level."},
+  {id:"ec06",topic:"ecology",term_en:"Carbon Cycle",term_zh:"碳循環",def_short:"The circulation of carbon between atmosphere (CO₂), organisms, soil, and oceans via key processes.",def_long:"Key processes: (1) Photosynthesis: removes CO₂ from air → converts to organic carbon (glucose). (2) Respiration: returns CO₂ to air (plants, animals, decomposers all respire). (3) Decomposition: decomposers break down dead matter → release CO₂. (4) Combustion: burning fossil fuels (coal, oil, natural gas) and wood → releases CO₂. (5) Feeding: carbon moves through the food chain. Carbon is cycled; it is not created or destroyed.",keywords:["photosynthesis removes CO₂","respiration returns CO₂","decomposition","combustion","fossil fuels"],exam_q:"Name TWO processes that return CO₂ to the atmosphere. → Respiration and Combustion (or Decomposition).",exam_a:"Respiration (by all organisms), combustion (burning fossil fuels and wood), and decomposition (by bacteria and fungi) all return CO₂ to the atmosphere."},
+  {id:"ec07",topic:"ecology",term_en:"Biodiversity, Pollution & Conservation",term_zh:"生物多樣性、污染與保育",def_short:"Biodiversity: variety of life at species, genetic, and ecosystem levels. Conservation protects it from threats like pollution.",def_long:"Biodiversity types: Species diversity (variety of species), genetic diversity (variation within species), ecosystem diversity (variety of habitats). Importance: ecosystem stability, medicines, food, clean water. Threats: habitat destruction, pollution, climate change, over-exploitation. Pollution sources: burning fossil fuels (air), industrial waste (water/land), agricultural runoff (fertilizers → eutrophication; pesticides), sewage, plastic waste. Conservation measures: protected areas, laws, reduce/reuse/recycle, sustainable practices.",keywords:["species/genetic/ecosystem diversity","eutrophication","habitat destruction","conservation","sustainability"],exam_q:"Name TWO causes of pollution and their effects. → Burning fossil fuels (air pollution, acid rain); Agricultural runoff (eutrophication of water bodies).",exam_a:"Burning fossil fuels: releases SO₂ and NOₓ → acid rain; CO₂ → global warming. Agricultural runoff: fertilizers → algal bloom → eutrophication → oxygen depletion kills aquatic life."}
+];
+
+// ===== STATE =====
+const DONE_KEY = 'stepmaster-yourong-done';
+const SUMMARY_PREFIX = 'stepmaster-yourong-summary-';
+let doneSet = new Set();
+
+function loadDone(){
+  try{
+    const raw = localStorage.getItem(DONE_KEY);
+    if(raw){ doneSet = new Set(JSON.parse(raw)); }
+  }catch(e){ doneSet = new Set(); }
+}
+
+function saveDone(){
+  try{ localStorage.setItem(DONE_KEY, JSON.stringify([...doneSet])); }catch(e){}
+}
+
+function isDone(cardId){ return doneSet.has(cardId); }
+
+function toggleDone(cardId){
+  if(doneSet.has(cardId)){ doneSet.delete(cardId); }
+  else { doneSet.add(cardId); }
+  saveDone();
+  updateProgress();
+  updateCardDoneUI(cardId);
+}
+
+function getSummary(cardId){
+  try{ return localStorage.getItem(SUMMARY_PREFIX + cardId) || ''; }catch(e){ return ''; }
+}
+
+function setSummary(cardId, text){
+  try{ localStorage.setItem(SUMMARY_PREFIX + cardId, text); }catch(e){}
+}
+
+// ===== ESCAPE HTML =====
+function esc(str){
+  const d = document.createElement('div');
+  d.textContent = str;
+  return d.innerHTML;
+}
+
+// ===== STEP 2: BUILD BLANKS HTML =====
+function buildBlanksHTML(defLong, keywords, cardId){
+  if(!keywords || keywords.length===0) return esc(defLong);
+
+  // Sort by length descending to avoid partial matches
+  const sorted = [...keywords].sort(function(a,b){ return b.length - a.length; });
+  var matches = [];
+
+  sorted.forEach(function(kw){
+    var escaped = kw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    var regex = new RegExp(escaped, 'gi');
+    var m = regex.exec(defLong);
+    if(m !== null){
+      matches.push({start: m.index, end: m.index + m[0].length, kw: kw});
+    }
+  });
+
+  // Sort by position
+  matches.sort(function(a,b){ return a.start - b.start; });
+
+  // Remove overlaps (keep first-occurring)
+  var filtered = [];
+  matches.forEach(function(m){
+    if(filtered.length === 0 || m.start >= filtered[filtered.length-1].end){
+      filtered.push(m);
+    }
+  });
+
+  // Build HTML
+  var result = '';
+  var cursor = 0;
+  filtered.forEach(function(m, idx){
+    result += esc(defLong.slice(cursor, m.start));
+    var kwText = esc(defLong.slice(m.start, m.end));
+    result += '<span class="blanks blanks-hidden" data-card="' + cardId + '" data-idx="' + idx + '" data-word="' + kwText.replace(/"/g,'&quot;') + '">████</span>';
+    cursor = m.end;
+  });
+  result += esc(defLong.slice(cursor));
+  return result;
+}
+
+// ===== RENDER A SINGLE CARD =====
+function buildCardHTML(card){
+  var doneClass = isDone(card.id) ? ' done' : '';
+  var blanksHTML = buildBlanksHTML(card.def_long, card.keywords, card.id);
+  var savedSummary = esc(getSummary(card.id));
+  var totalKeywords = card.keywords ? card.keywords.length : 0;
+
+  return '' +
+  '<div class="card' + doneClass + '" id="card-' + card.id + '" data-card-id="' + card.id + '">' +
+    /* Step Tabs */
+    '<div class="step-tabs">' +
+      '<span class="step-tab active" data-card="' + card.id + '" data-step="1">📖 概念閱讀</span>' +
+      '<span class="step-tab" data-card="' + card.id + '" data-step="2">✏️ 關鍵詞填空</span>' +
+      '<span class="step-tab" data-card="' + card.id + '" data-step="3">💬 一句話總結</span>' +
+    '</div>' +
+
+    /* Step 1 Content */
+    '<div class="step-content step-panel" id="step1-' + card.id + '">' +
+      '<div class="step1-term">' + esc(card.term_en) + '</div>' +
+      '<div class="step1-zh">' + esc(card.term_zh) + '</div>' +
+      '<div class="step1-def">' + esc(card.def_short) + '</div>' +
+      '<div class="clearfix">' +
+        '<button class="step1-next" data-card="' + card.id + '">下一步 →</button>' +
+      '</div>' +
+    '</div>' +
+
+    /* Step 2 Content */
+    '<div class="step-content step-panel" id="step2-' + card.id + '" style="display:none;">' +
+      '<div class="step2-counter">已揭示 <span id="revealed-' + card.id + '">0</span> / ' + totalKeywords + '</div>' +
+      '<div class="step2-text" id="blanks-container-' + card.id + '">' + blanksHTML + '</div>' +
+      '<div class="step2-actions">' +
+        '<button class="btn-reveal-all" id="revealAll-' + card.id + '" data-card="' + card.id + '">全部揭曉</button>' +
+        '<span class="step2-done-msg" id="step2msg-' + card.id + '" style="display:none;">✓ 全部完成！做得好！</span>' +
+      '</div>' +
+    '</div>' +
+
+    /* Step 3 Content */
+    '<div class="step-content step-panel" id="step3-' + card.id + '" style="display:none;">' +
+      '<textarea class="step3-textarea" id="summary-' + card.id + '" placeholder="用你自己的話總結這個概念…" data-card="' + card.id + '">' + savedSummary + '</textarea>' +
+      '<button class="step3-compare-btn" data-card="' + card.id + '">對比標準答案</button>' +
+      '<div class="step3-answer-card" id="answer-' + card.id + '">' +
+        '<div class="step3-answer-label">標準答案（僅供參考）</div>' +
+        '<div>' + esc(card.def_short) + '</div>' +
+      '</div>' +
+      '<button class="step3-done-btn" id="doneBtn-' + card.id + '" data-card="' + card.id + '">' + (isDone(card.id) ? '✓ 已完成（點擊取消）' : '完成 ✓') + '</button>' +
+    '</div>' +
+  '</div>';
+}
+
+// ===== RENDER ALL CARDS =====
+function renderAll(){
+  var main = document.getElementById('mainContent');
+  var html = '';
+  TOPICS.forEach(function(topic){
+    var topicCards = CARDS.filter(function(c){ return c.topic === topic.id; });
+    if(topicCards.length === 0) return;
+    html += '<div class="topic-section" id="section-' + topic.id + '">';
+    html += '<div class="topic-section-header"><h2>' + esc(topic.icon + ' ' + topic.name) + '</h2><span class="ts-sub">' + esc(topic.zh) + ' · ' + topicCards.length + ' cards</span></div>';
+    html += '<div class="card-grid">';
+    topicCards.forEach(function(card){
+      html += buildCardHTML(card);
+    });
+    html += '</div></div>';
+  });
+  main.innerHTML = html;
+}
+
+// ===== RENDER NAV =====
+function renderNav(){
+  var nav = document.getElementById('topicNav');
+  nav.innerHTML = TOPICS.map(function(t){
+    return '<a class="topic-pill" href="#section-' + t.id + '" data-topic="' + t.id + '">' + t.icon + ' ' + t.zh + '</a>';
+  }).join('');
+}
+
+// ===== STEP SWITCHING =====
+function switchStep(cardId, step){
+  var card = document.getElementById('card-' + cardId);
+  if(!card) return;
+
+  // Update tabs
+  var tabs = card.querySelectorAll('.step-tab');
+  tabs.forEach(function(tab){
+    var tabStep = parseInt(tab.getAttribute('data-step'));
+    if(tabStep === step){ tab.classList.add('active'); }
+    else { tab.classList.remove('active'); }
+  });
+
+  // Show/hide panels
+  for(var s=1; s<=3; s++){
+    var panel = document.getElementById('step' + s + '-' + cardId);
+    if(panel){
+      panel.style.display = (s === step) ? 'block' : 'none';
+    }
+  }
+}
+
+// ===== STEP 2: BLANK CLICK =====
+function revealBlank(cardId, idx){
+  var container = document.getElementById('blanks-container-' + cardId);
+  if(!container) return;
+  var blanks = container.querySelectorAll('.blanks-hidden[data-idx="' + idx + '"]');
+  blanks.forEach(function(span){
+    if(!span.classList.contains('revealed')){
+      span.classList.add('revealed');
+      span.classList.remove('blanks-hidden');
+      span.textContent = span.getAttribute('data-word');
+    }
+  });
+  updateRevealedCount(cardId);
+}
+
+function revealAllBlanks(cardId){
+  var container = document.getElementById('blanks-container-' + cardId);
+  if(!container) return;
+  var blanks = container.querySelectorAll('.blanks-hidden');
+  blanks.forEach(function(span){
+    span.classList.add('revealed');
+    span.classList.remove('blanks-hidden');
+    span.textContent = span.getAttribute('data-word');
+  });
+  updateRevealedCount(cardId);
+}
+
+function updateRevealedCount(cardId){
+  var container = document.getElementById('blanks-container-' + cardId);
+  if(!container) return;
+  var totalHidden = container.querySelectorAll('.blanks-hidden').length;
+  var totalAll = container.querySelectorAll('.blanks').length;
+  var revealedCount = totalAll - totalHidden;
+  
+  var counter = document.getElementById('revealed-' + cardId);
+  if(counter){ counter.textContent = revealedCount; }
+
+  // Enable/disable reveal all button
+  var btn = document.getElementById('revealAll-' + cardId);
+  if(btn){
+    btn.disabled = (totalHidden === 0);
+  }
+
+  // Show done message
+  var msg = document.getElementById('step2msg-' + cardId);
+  if(msg){
+    msg.style.display = (totalHidden === 0 && totalAll > 0) ? 'inline-flex' : 'none';
+  }
+}
+
+// ===== EVENT DELEGATION =====
+document.addEventListener('click', function(e){
+  var target = e.target;
+
+  // Step tab click
+  if(target.classList.contains('step-tab')){
+    var cardId = target.getAttribute('data-card');
+    var step = parseInt(target.getAttribute('data-step'));
+    switchStep(cardId, step);
+    return;
+  }
+
+  // Step 1 next button
+  if(target.classList.contains('step1-next')){
+    var cardId = target.getAttribute('data-card');
+    switchStep(cardId, 2);
+    return;
+  }
+
+  // Blank click
+  if(target.classList.contains('blanks-hidden')){
+    var cardId = target.getAttribute('data-card');
+    var idx = target.getAttribute('data-idx');
+    revealBlank(cardId, idx);
+    return;
+  }
+
+  // Reveal all button
+  if(target.classList.contains('btn-reveal-all')){
+    var cardId = target.getAttribute('data-card');
+    revealAllBlanks(cardId);
+    return;
+  }
+
+  // Compare button (Step 3)
+  if(target.classList.contains('step3-compare-btn')){
+    var cardId = target.getAttribute('data-card');
+    var answerEl = document.getElementById('answer-' + cardId);
+    if(answerEl){
+      answerEl.classList.toggle('show');
+    }
+    return;
+  }
+
+  // Done button (Step 3)
+  if(target.classList.contains('step3-done-btn')){
+    var cardId = target.getAttribute('data-card');
+    toggleDone(cardId);
+    return;
+  }
+});
+
+// ===== TEXTAREA AUTO-SAVE =====
+document.addEventListener('input', function(e){
+  if(e.target.classList.contains('step3-textarea')){
+    var cardId = e.target.getAttribute('data-card');
+    setSummary(cardId, e.target.value);
+  }
+});
+
+// ===== UPDATE CARD DONE UI =====
+function updateCardDoneUI(cardId){
+  var card = document.getElementById('card-' + cardId);
+  if(!card) return;
+  if(isDone(cardId)){
+    card.classList.add('done');
+  } else {
+    card.classList.remove('done');
+  }
+  var btn = document.getElementById('doneBtn-' + cardId);
+  if(btn){
+    btn.textContent = isDone(cardId) ? '✓ 已完成（點擊取消）' : '完成 ✓';
+  }
+}
+
+// ===== UPDATE PROGRESS =====
+function updateProgress(){
+  var count = doneSet.size;
+  var total = CARDS.length;
+  var pct = total > 0 ? Math.round(count/total*100) : 0;
+  document.getElementById('progressCount').textContent = count;
+  document.getElementById('progressBar').style.width = pct + '%';
+}
+
+// ===== NAV SCROLL SPY =====
+function updateActiveNav(){
+  var nav = document.getElementById('topicNav');
+  var pills = nav.querySelectorAll('.topic-pill');
+  var sections = [];
+  pills.forEach(function(pill){
+    var tid = pill.getAttribute('data-topic');
+    var sec = document.getElementById('section-' + tid);
+    if(sec){
+      sections.push({pill:pill, top:sec.getBoundingClientRect().top});
+    }
+  });
+
+  // Find the section whose top is closest to 0 (from above)
+  var activePill = null;
+  var bestDist = Infinity;
+  sections.forEach(function(s){
+    if(s.top <= 120 && (120 - s.top) < bestDist){
+      bestDist = 120 - s.top;
+      activePill = s.pill;
+    }
+  });
+  if(!activePill && sections.length > 0){
+    activePill = sections[0].pill;
+  }
+
+  pills.forEach(function(p){ p.classList.remove('active'); });
+  if(activePill) activePill.classList.add('active');
+}
+
+// ===== INIT =====
+function init(){
+  loadDone();
+  renderNav();
+  renderAll();
+
+  // Initialize blank counters for all cards
+  CARDS.forEach(function(card){
+    updateRevealedCount(card.id);
+  });
+
+  updateProgress();
+
+  // Scroll spy
+  window.addEventListener('scroll', function(){
+    updateActiveNav();
+  });
+  updateActiveNav();
+}
+
+init();
+</script>
+
+</body>
+</html>

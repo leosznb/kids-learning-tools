@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Deficiency Match · 缺乏症速配</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#fafaf8;--card:#fff;--text:#1a1a1a;--text2:#555;--text3:#888;
+  --accent:#16a34a;--accent-light:#dcfce7;--accent-border:#bbf7d0;
+  --correct:#16a34a;--correct-bg:#f0fdf4;--correct-b:#bbf7d0;
+  --wrong:#dc2626;--wrong-bg:#fef2f2;--wrong-b:#fecaca;
+  --kw:#b85c00;--kw-ul:#e5a850;
+  --shadow:0 1px 4px rgba(0,0,0,0.06),0 1px 2px rgba(0,0,0,0.04);
+  --shadow-lg:0 4px 16px rgba(0,0,0,0.08),0 2px 6px rgba(0,0,0,0.04);
+  --radius:12px;
+}
+html{font-size:18px;-webkit-text-size-adjust:100%}
+body{
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.6;
+  min-height:100vh;-webkit-tap-highlight-color:transparent;
+}
+#app{max-width:680px;margin:0 auto;padding:0 16px 40px}
+
+.app-header{padding:28px 0 16px;text-align:center}
+.app-header h1{font-size:1.6rem;font-weight:800;letter-spacing:-0.02em}
+.app-header .subtitle{font-size:1rem;color:var(--text3);font-weight:400;margin-top:2px}
+
+.top-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px}
+.timer{font-size:20px;font-weight:700;color:var(--text2);display:flex;align-items:center;gap:6px}
+.timer-icon{font-size:1.2rem}
+.progress-text{font-size:1rem;color:var(--text3);font-weight:500}
+
+.symptom-card{
+  background:var(--card);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:28px 24px;
+  border-left:5px solid var(--accent);
+  margin-bottom:22px;
+  text-align:center;
+  transition:border-color .3s ease;
+}
+.symptom-card .q-num{font-size:0.9rem;color:var(--text3);font-weight:500;margin-bottom:6px}
+.symptom-card .q-symptom{font-size:22px;font-weight:700;line-height:1.5}
+.symptom-card .q-context{font-size:0.9rem;color:var(--text2);margin-top:6px;font-style:italic}
+
+.options-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+  margin-bottom:16px;
+}
+@media(min-width:560px){
+  .options-grid{grid-template-columns:repeat(4,1fr)}
+}
+
+.opt-btn{
+  padding:16px 10px;border-radius:var(--radius);
+  border:2px solid #e5e5e0;background:var(--card);
+  font-size:1rem;font-weight:700;cursor:pointer;
+  font-family:inherit;text-align:center;
+  transition:all .15s ease;
+  will-change:transform;transform:translateZ(0);
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  min-height:68px;justify-content:center;
+}
+.opt-btn:active{transform:scale(0.95)}
+.opt-btn .o-en{font-size:1rem;line-height:1.2}
+.opt-btn .o-zh{font-size:0.85rem;color:var(--text2);font-weight:500;line-height:1.2}
+
+.opt-btn.correct{border-color:var(--correct);background:var(--correct-bg);color:var(--correct)}
+.opt-btn.wrong{border-color:var(--wrong);background:var(--wrong-bg);color:var(--wrong);animation:shake .4s ease}
+.opt-btn.reveal-correct{border-color:var(--correct);background:var(--correct-bg)}
+.opt-btn:disabled{pointer-events:none}
+
+@keyframes shake{
+  0%,100%{transform:translateX(0)}
+  20%{transform:translateX(-6px)}
+  40%{transform:translateX(6px)}
+  60%{transform:translateX(-4px)}
+  80%{transform:translateX(4px)}
+}
+
+.feedback-bar{
+  font-size:18px;line-height:1.55;padding:14px 18px;
+  border-radius:var(--radius);margin-bottom:12px;
+  text-align:center;font-weight:600;
+  display:none;
+}
+.feedback-bar.show{display:block}
+.feedback-bar.correct{background:var(--correct-bg);color:#166534;border:1px solid var(--correct-b)}
+.feedback-bar.wrong{background:var(--wrong-bg);color:#991b1b;border:1px solid var(--wrong-b)}
+.feedback-bar .kw{font-weight:700;color:var(--kw);border-bottom:2px solid var(--kw-ul)}
+
+.result-wrap{max-width:520px;margin:0 auto;text-align:center}
+.result-card{
+  background:var(--card);border-radius:var(--radius);
+  box-shadow:var(--shadow-lg);padding:28px 24px;margin-bottom:20px;
+}
+.result-icon{font-size:3rem;margin-bottom:6px}
+.result-title{font-size:1.3rem;font-weight:800}
+.result-score{font-size:2.8rem;font-weight:900;color:var(--accent);margin:6px 0 0}
+.result-score .of{font-size:1.2rem;color:var(--text3);font-weight:400}
+.result-time{font-size:1rem;color:var(--text2);margin-top:4px;font-weight:500}
+.result-msg{font-size:1rem;color:var(--text2);margin-top:8px;font-weight:500}
+
+.btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:12px 24px;border-radius:99px;font-size:18px;
+  font-weight:600;cursor:pointer;border:none;
+  font-family:inherit;transition:all .2s ease;
+  will-change:transform;transform:translateZ(0);
+}
+.btn:active{transform:scale(0.96)}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-outline{background:transparent;color:var(--accent);border:2px solid var(--accent)}
+
+.summary-wrap{max-width:760px;margin:0 auto}
+.summary-wrap h2{font-size:1.3rem;font-weight:800;text-align:center;margin-bottom:16px}
+.summary-table{
+  width:100%;border-collapse:separate;border-spacing:0;
+  background:var(--card);border-radius:var(--radius);
+  box-shadow:var(--shadow);overflow:hidden;
+}
+.summary-table th{
+  background:#fafaf8;padding:14px 10px;text-align:left;
+  font-size:0.9rem;font-weight:700;color:var(--text2);
+  border-bottom:2px solid #e5e5e0;
+}
+.summary-table td{padding:12px 10px;font-size:18px;border-bottom:1px solid #f1f1ed;line-height:1.5}
+.summary-table tr:last-child td{border-bottom:none}
+.summary-table .badge-correct{
+  display:inline-block;font-size:0.85rem;font-weight:700;
+  color:var(--correct);background:var(--correct-bg);
+  padding:2px 8px;border-radius:99px
+}
+.summary-table .badge-wrong{
+  display:inline-block;font-size:0.85rem;font-weight:700;
+  color:var(--wrong);background:var(--wrong-bg);
+  padding:2px 8px;border-radius:99px
+}
+.summary-table .kw{font-weight:700;color:var(--kw);border-bottom:2px solid var(--kw-ul)}
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="app-header">
+    <h1>🩺 Deficiency Match · 缺乏症速配</h1>
+    <div class="subtitle">F3 IS · 8 Nutrient Deficiencies · Pairing Challenge</div>
+  </div>
+  <div id="contentArea"></div>
+</div>
+
+<script>
+// ==================== DATA ====================
+const VERSION = 'v2-yourong';
+
+// 8 deficiency pairs — all F3 IS scope, English-first for EMI
+const QUESTIONS = [
+  {
+    id:"vitc",
+    symptom:"Bleeding gums; wounds take a long time to heal",
+    context:"(a sailor after a long voyage with no fresh food)",
+    answer:"vitc",
+    feedback:"Vitamin C deficiency causes <span class='kw'>Scurvy</span> — collagen synthesis is impaired, capillaries become fragile and bleed easily. 維生素 C 缺乏導致 <span class='kw'>壞血病</span>，牙齦出血、傷口難癒。",
+    ref:"Vitamin C deficiency → Scurvy（壞血病）",
+    source:"Fresh fruits (oranges, lemons) and vegetables 新鮮蔬果"
+  },
+  {
+    id:"vitd",
+    symptom:"A child has bowed legs and deformed bones — difficulty standing",
+    context:"(a toddler who rarely goes outdoors in the sun)",
+    answer:"vitd",
+    feedback:"Vitamin D deficiency causes <span class='kw'>Rickets</span> — calcium cannot be properly absorbed, leading to soft, deformed bones. The skin synthesises vitamin D when exposed to sunlight. 維生素 D 缺乏導致 <span class='kw'>佝僂病</span>，骨骼軟化變形。",
+    ref:"Vitamin D deficiency → Rickets（佝僂病）",
+    source:"Sunlight, fish liver oil, egg yolk 曬太陽、魚肝油、蛋黃"
+  },
+  {
+    id:"calcium",
+    symptom:"Bones are fragile and break easily, especially in older adults",
+    context:"(bone density scan shows significant bone loss)",
+    answer:"calcium",
+    feedback:"Calcium deficiency leads to <span class='kw'>weak, brittle bones (Osteoporosis)</span> — calcium is the main component of bones and teeth. 鈣質缺乏導致 <span class='kw'>骨骼脆弱／骨質疏鬆</span>，易骨折。",
+    ref:"Calcium deficiency → Weak bones / Osteoporosis（骨質疏鬆）",
+    source:"Dairy products, tofu, dark green vegetables 奶製品、豆腐、深綠色蔬菜"
+  },
+  {
+    id:"iron",
+    symptom:"Pale complexion; constantly tired; often feels dizzy",
+    context:"(blood test shows low haemoglobin level)",
+    answer:"iron",
+    feedback:"Iron deficiency causes <span class='kw'>Anaemia</span> — without enough iron, the body cannot produce sufficient haemoglobin (Hb), reducing the oxygen-carrying capacity of red blood cells. 鐵質缺乏導致 <span class='kw'>貧血</span>，血紅蛋白不足、易疲倦。",
+    ref:"Iron deficiency → Anaemia（貧血）",
+    source:"Red meat, liver, spinach 紅肉、肝臟、菠菜"
+  },
+  {
+    id:"protein",
+    symptom:"A child has a swollen belly but thin limbs — stunted growth",
+    context:"(diet is mostly rice with very little meat, eggs or beans)",
+    answer:"protein",
+    feedback:"Protein deficiency causes <span class='kw'>Kwashiorkor</span> — severe protein shortage leads to oedema (fluid retention in the abdomen) and growth failure. 蛋白質缺乏導致 <span class='kw'>夸希奧科症</span>，腹部腫脹、生長遲緩。",
+    ref:"Protein deficiency → Kwashiorkor（夸希奧科症）",
+    source:"Meat, fish, eggs, beans, milk 肉、魚、蛋、豆類、奶"
+  },
+  {
+    id:"vita",
+    symptom:"Vision drops sharply in dim light — almost cannot see at night",
+    context:"(difficulty moving around at night; vision normal in bright light)",
+    answer:"vita",
+    feedback:"Vitamin A deficiency causes <span class='kw'>Night blindness</span> — vitamin A is essential for the light-sensitive cells (rods) in the retina. 維生素 A 缺乏導致 <span class='kw'>夜盲症</span>，暗處視力急降。",
+    ref:"Vitamin A deficiency → Night blindness（夜盲症）",
+    source:"Carrots, pumpkin, liver, dark green vegetables 胡蘿蔔、南瓜、肝臟"
+  },
+  {
+    id:"iodine",
+    symptom:"Swelling at the front of the neck — a noticeable lump (goitre)",
+    context:"(lives in an inland mountainous area with no seafood in the diet)",
+    answer:"iodine",
+    feedback:"Iodine deficiency causes <span class='kw'>Goitre</span> — the thyroid gland enlarges (swells) due to a lack of iodine, which is needed to produce thyroid hormones. 碘質缺乏導致 <span class='kw'>甲狀腺腫</span>，頸部前方腫脹。",
+    ref:"Iodine deficiency → Goitre（甲狀腺腫／大脖子）",
+    source:"Seaweed, marine fish, iodised salt 海藻、海魚、加碘鹽"
+  },
+  {
+    id:"fibre",
+    symptom:"Difficulty passing stools; only goes to the toilet every few days; abdominal bloating",
+    context:"(diet is mainly refined rice and meat, very few vegetables)",
+    answer:"fibre",
+    feedback:"Dietary fibre deficiency leads to <span class='kw'>Constipation</span> — fibre adds bulk to faeces and stimulates peristalsis (bowel movement). 膳食纖維缺乏導致 <span class='kw'>便秘</span>，排便困難、腹脹。",
+    ref:"Dietary fibre deficiency → Constipation（便秘）",
+    source:"Whole grains, vegetables, fruits, beans 全穀類、蔬果、豆類"
+  }
+];
+
+const OPTIONS = [
+  {id:"vitc",  en:"Vitamin C",  zh:"維生素C"},
+  {id:"vitd",  en:"Vitamin D",  zh:"維生素D"},
+  {id:"calcium",en:"Calcium",   zh:"鈣質"},
+  {id:"iron",  en:"Iron",       zh:"鐵質"},
+  {id:"protein",en:"Protein",   zh:"蛋白質"},
+  {id:"vita",  en:"Vitamin A",  zh:"維生素A"},
+  {id:"iodine",en:"Iodine",     zh:"碘質"},
+  {id:"fibre", en:"Dietary fibre",zh:"膳食纖維"}
+];
+
+// ==================== STATE ====================
+const LS_BEST = 'defmatch-best-' + VERSION;
+const LS_LAST = 'defmatch-last-' + VERSION;
+
+let currentQ = 0;
+let score = 0;
+let timerSec = 0;
+let timerId = null;
+let answered = false;
+let results = [];
+let questionOrder = [];
+
+function shuffle(arr){
+  const a = [...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+function formatTime(sec){
+  const m = Math.floor(sec/60);
+  const s = sec%60;
+  return m+':'+String(s).padStart(2,'0');
+}
+
+// ==================== QUIZ ====================
+function startQuiz(){
+  questionOrder = shuffle([0,1,2,3,4,5,6,7]);
+  currentQ = 0;
+  score = 0;
+  timerSec = 0;
+  answered = false;
+  results = [];
+  startTimer();
+  renderQuiz();
+}
+
+function startTimer(){
+  timerId = setInterval(()=>{
+    timerSec++;
+    const el = document.getElementById('timerDisplay');
+    if(el) el.textContent = formatTime(timerSec);
+  }, 1000);
+}
+function stopTimer(){
+  if(timerId){clearInterval(timerId);timerId=null;}
+}
+
+function renderQuiz(){
+  if(currentQ >= 8){
+    stopTimer();
+    showResult();
+    return;
+  }
+  const qi = questionOrder[currentQ];
+  const q = QUESTIONS[qi];
+  answered = false;
+
+  let html = '<div class="top-bar">';
+  html += '<div class="timer">⏱ <span id="timerDisplay">'+formatTime(timerSec)+'</span></div>';
+  html += '<div class="progress-text">'+(currentQ+1)+' / 8</div>';
+  html += '</div>';
+
+  html += '<div class="symptom-card" id="symptomCard">';
+  html += '<div class="q-num">Question '+(currentQ+1)+'</div>';
+  html += '<div class="q-symptom">'+q.symptom+'</div>';
+  if(q.context){html+='<div class="q-context">'+q.context+'</div>';}
+  html += '</div>';
+
+  html += '<div class="options-grid">';
+  OPTIONS.forEach(o=>{
+    html += '<button class="opt-btn" id="opt-'+o.id+'" onclick="answer(\''+o.id+'\',this)">';
+    html += '<span class="o-en">'+o.en+'</span>';
+    html += '<span class="o-zh">'+o.zh+'</span>';
+    html += '</button>';
+  });
+  html += '</div>';
+
+  html += '<div class="feedback-bar" id="fb"></div>';
+  html += '<div class="next-wrap" id="nextWrap" style="display:none;justify-content:center;margin-top:6px"><button class="btn btn-primary" onclick="nextQuestion()">Next Question → 下一題</button></div>';
+
+  document.getElementById('contentArea').innerHTML = html;
+}
+
+function answer(chosen, btnEl){
+  if(answered) return;
+  answered = true;
+
+  const qi = questionOrder[currentQ];
+  const q = QUESTIONS[qi];
+  const correct = (chosen === q.answer);
+  if(correct) score++;
+
+  results.push({qIndex:qi, correct});
+
+  document.querySelectorAll('.opt-btn').forEach(b=>b.disabled=true);
+
+  const fb = document.getElementById('fb');
+
+  if(correct){
+    btnEl.classList.add('correct');
+    fb.className = 'feedback-bar correct show';
+    fb.innerHTML = '✅ <strong>Correct!</strong> '+q.feedback;
+  } else {
+    btnEl.classList.add('wrong');
+    const correctBtn = document.getElementById('opt-'+q.answer);
+    if(correctBtn) correctBtn.classList.add('reveal-correct');
+    fb.className = 'feedback-bar wrong show';
+    fb.innerHTML = '❌ <strong>Incorrect.</strong> '+q.feedback;
+  }
+
+  document.getElementById('nextWrap').style.display = 'flex';
+}
+
+function nextQuestion(){
+  currentQ++;
+  renderQuiz();
+}
+
+// ==================== RESULT ====================
+function showResult(){
+  const pct = Math.round(score/8*100);
+  let emoji, msg;
+  if(pct===100){emoji='🏆';msg='Perfect! You have mastered all 8 nutrient deficiencies! 全對！你已掌握所有缺乏症！';}
+  else if(pct>=75){emoji='👏';msg='Well done! Review the ones you missed in the summary below. 做得好！錯的看總表複習。';}
+  else if(pct>=50){emoji='💪';msg='Keep going! Use the summary table to reinforce your memory. 再加把勁！對照總表加強記憶。';}
+  else {emoji='📚';msg='No worries — deficiency diseases are tricky. Each mistake helps you remember better! 別灰心，多練幾次就記住了。';}
+
+  const timeStr = formatTime(timerSec);
+
+  try{
+    const prev = JSON.parse(localStorage.getItem(LS_BEST)||'{"score":0,"time":9999}');
+    if(score > prev.score || (score===prev.score && timerSec < prev.time)){
+      localStorage.setItem(LS_BEST, JSON.stringify({score,time:timerSec}));
+    }
+    localStorage.setItem(LS_LAST, JSON.stringify({score,time:timerSec,results}));
+  }catch(e){}
+
+  let html = '<div class="result-wrap">';
+  html += '<div class="result-card">';
+  html += '<div class="result-icon">'+emoji+'</div>';
+  html += '<div class="result-title">Challenge Complete! 挑戰完成</div>';
+  html += '<div class="result-score">'+score+'<span class="of"> / 8</span></div>';
+  html += '<div class="result-time">⏱ Time: '+timeStr+'</div>';
+  html += '<div class="result-msg">'+msg+'</div>';
+  html += '</div>';
+  html += '<div style="display:flex;flex-direction:column;gap:10px;align-items:center;">';
+  html += '<button class="btn btn-primary" onclick="startQuiz()">🔄 Retry 重新挑戰</button>';
+  html += '<button class="btn btn-outline" onclick="showSummary()">📋 View Summary Table 查看總表</button>';
+  html += '</div>';
+  html += '</div>';
+  document.getElementById('contentArea').innerHTML = html;
+}
+
+// ==================== SUMMARY TABLE ====================
+function showSummary(){
+  stopTimer();
+  let html = '<div class="summary-wrap">';
+  html += '<button class="btn btn-outline" onclick="showResult()" style="margin-bottom:16px">← Back 返回成績</button>';
+  html += '<h2>🩺 Deficiency Summary Table · 缺乏症總表（F3 IS）</h2>';
+  html += '<table class="summary-table"><thead><tr><th>Deficient Nutrient</th><th>Deficiency Disease</th><th>Key Symptom</th><th>Food Sources</th>';
+  if(results.length>0) html+='<th>Result</th>';
+  html += '</tr></thead><tbody>';
+
+  QUESTIONS.forEach((q,i)=>{
+    html += '<tr>';
+    const opt = OPTIONS.find(o=>o.id===q.answer);
+    html += '<td><strong>'+opt.en+'</strong> <span style="color:var(--text3)">'+opt.zh+'</span></td>';
+    const refParts = q.ref.split(' → ');
+    html += '<td><span class="kw">'+refParts[1]+'</span></td>';
+    html += '<td>'+q.symptom+'</td>';
+    html += '<td>'+q.source+'</td>';
+    if(results.length>0){
+      const r = results.find(r=>r.qIndex===i);
+      if(r){
+        html += '<td>'+(r.correct?'<span class="badge-correct">✅ Correct</span>':'<span class="badge-wrong">❌ Missed</span>')+'</td>';
+      } else {
+        html += '<td></td>';
+      }
+    }
+    html += '</tr>';
+  });
+  html += '</tbody></table>';
+  html += '<div style="text-align:center;margin-top:16px"><button class="btn btn-primary" onclick="startQuiz()">🔄 Retry 重新挑戰</button></div>';
+  html += '</div>';
+  document.getElementById('contentArea').innerHTML = html;
+}
+
+// ==================== INIT ====================
+startQuiz();
+</script>
+</body>
+</html>

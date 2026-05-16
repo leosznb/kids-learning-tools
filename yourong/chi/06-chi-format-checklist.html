@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>實用文格式檢查清單 — 五種文體考前速查</title>
+<style>
+:root {
+  --bg: #fafaf9; --text: #1c1c1c; --muted: #777;
+  --accent: #c0392b; --accent-soft: #fef0f0;
+  --border: #e0e0dc; --card-bg: #fff;
+  --correct: #1a7a2e; --correct-bg: #e8f5e9;
+  --radius: 6px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+  background: var(--bg); color: var(--text); line-height: 1.7;
+  padding: 20px 16px 60px; max-width: 760px; margin: 0 auto;
+  -webkit-font-smoothing: antialiased;
+}
+h1 { font-size: 1.35em; font-weight: 800; margin: 0 0 2px; }
+.subtitle { color: var(--muted); font-size: 0.85em; margin: 0 0 18px; }
+
+/* Tabs */
+.tabs { display: flex; flex-wrap: wrap; gap: 5px; margin: 0 0 16px; }
+.tab {
+  padding: 10px 16px; border: 1px solid var(--border); border-radius: 20px;
+  background: #fff; font-size: 0.85em; cursor: pointer; user-select: none;
+  transition: all 0.15s; -webkit-tap-highlight-color: transparent;
+  display: flex; align-items: center; gap: 6px;
+}
+.tab:active { background: #e8e8e4; }
+.tab.active { background: #1c1c1c; color: #fff; border-color: #1c1c1c; }
+.tab-badge {
+  font-size: 0.72em; padding: 1px 7px; border-radius: 10px;
+  font-weight: 700; background: #eee; color: var(--muted);
+}
+.tab.active .tab-badge { background: rgba(255,255,255,0.25); color: #fff; }
+.tab.done .tab-badge { background: var(--correct-bg); color: var(--correct); }
+
+/* Progress */
+.progress-bar-wrap {
+  display: flex; align-items: center; gap: 10px; margin: 0 0 14px;
+  padding: 10px 16px; background: #fff; border: 1px solid var(--border);
+  border-radius: var(--radius); font-size: 0.85em;
+}
+.progress-track {
+  flex: 1; height: 8px; background: #f0f0ec; border-radius: 4px; overflow: hidden;
+}
+.progress-fill {
+  height: 100%; border-radius: 4px; transition: width 0.4s ease;
+  background: var(--correct);
+}
+.progress-fill.warn { background: #e6a817; }
+.progress-text { font-weight: 700; min-width: 60px; text-align: right; }
+
+/* Checklist */
+.group {
+  margin: 0 0 12px; background: #fff; border: 1px solid var(--border);
+  border-radius: var(--radius); overflow: hidden;
+}
+.group-header {
+  padding: 12px 14px; font-weight: 700; font-size: 0.9em;
+  border-bottom: 1px solid var(--border); display: flex;
+  justify-content: space-between; align-items: center;
+  background: #fafaf8;
+}
+.group-score {
+  font-size: 0.78em; font-weight: 600; color: var(--muted);
+  background: #f0f0ec; padding: 2px 10px; border-radius: 10px;
+}
+.item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 14px; border-bottom: 1px solid #f5f5f2;
+  transition: background 0.15s; cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.item:last-child { border-bottom: none; }
+.item:active { background: #f9f9f6; }
+.item.checked { background: #f8fbf6; }
+.item.hidden { display: none; }
+
+/* Custom checkbox */
+.cb {
+  width: 28px; height: 28px; border: 2px solid var(--border);
+  border-radius: 6px; display: flex; align-items: center;
+  justify-content: center; flex-shrink: 0; transition: all 0.15s;
+  font-size: 0.8em; color: transparent;
+}
+.item.checked .cb {
+  background: var(--correct); border-color: var(--correct); color: #fff;
+}
+.item.checked .cb::after { content: '✓'; }
+
+.item-text { flex: 1; font-size: 0.9em; }
+.item.checked .item-text { color: var(--muted); text-decoration: line-through; text-decoration-color: #ccc; }
+
+.must-know {
+  display: inline-block; background: var(--accent-soft); color: var(--accent);
+  font-size: 0.7em; font-weight: 700; padding: 1px 7px; border-radius: 8px;
+  margin-left: 4px;
+}
+
+/* Controls */
+.controls {
+  display: flex; gap: 8px; margin: 0 0 14px; flex-wrap: wrap;
+}
+.ctrl-btn {
+  padding: 10px 18px; border: 1px solid var(--border); border-radius: 20px;
+  background: #fff; font-size: 0.82em; cursor: pointer; user-select: none;
+  font-weight: 600; font-family: inherit; transition: all 0.15s;
+  -webkit-tap-highlight-color: transparent; min-height: 40px;
+}
+.ctrl-btn:active { background: #e8e8e4; }
+.ctrl-btn.on { background: #1c1c1c; color: #fff; border-color: #1c1c1c; }
+
+.footnote {
+  font-size: 0.78em; color: var(--muted); margin: 24px 0 0;
+  padding: 14px; background: #fff; border: 1px solid var(--border); border-radius: var(--radius);
+}
+.footnote strong { color: var(--text); }
+
+@media (max-width: 600px) {
+  body { padding: 14px 10px 40px; }
+  .tab { padding: 8px 12px; font-size: 0.8em; }
+  .item { padding: 10px 12px; }
+  .cb { width: 26px; height: 26px; }
+}
+@media print {
+  body { padding: 0; font-size: 10pt; max-width: 100%; }
+  .tabs, .controls, .progress-bar-wrap { display: none; }
+  .group { break-inside: avoid; border: none; }
+  .item { padding: 6px 10px; }
+}
+</style>
+</head>
+<body>
+
+<h1>📋 實用文格式檢查清單</h1>
+<p class="subtitle">寫完實用文逐項勾 → 格式分8分不丟 | 五種文體考前速查</p>
+
+<div class="tabs" id="tabs"></div>
+<div class="controls">
+  <button class="ctrl-btn" id="hideToggle" onclick="toggleHideDone()">🔍 只顯示漏項</button>
+  <button class="ctrl-btn" onclick="resetCurrent()">↺ 重設當前文體</button>
+  <button class="ctrl-btn" onclick="resetAll()">↺ 全部重設</button>
+</div>
+<div class="progress-bar-wrap">
+  <span style="font-weight:600;">完成度</span>
+  <div class="progress-track"><div class="progress-fill" id="progFill" style="width:0%"></div></div>
+  <span class="progress-text" id="progText">0/0</span>
+</div>
+<div id="checklistArea"></div>
+
+<div class="footnote">
+  <strong>💡 使用方式</strong><br>
+  ① 寫完一篇實用文練習後，切換到對應文體<br>
+  ② 逐項勾選，確認每項格式要求都已滿足<br>
+  ③ 點「只顯示漏項」聚焦未完成的項目<br>
+  ④ 考前5分鐘快速過一遍所有文體的<span class="must-know">必知</span>項目
+</div>
+
+<script>
+const DATA = [
+  {
+    id: 'meeting',
+    name: '會議紀錄',
+    examCount: '已考2次',
+    groups: [
+      {
+        title: '標題', score: '佔格式分', items: [
+          {t:'標題置中', must:true},
+          {t:'含「會議紀錄」四字', must:true, tip:'欠此四字直接扣1分'},
+          {t:'寫明學會/組織名稱', must:true},
+          {t:'寫明「第X次會議」', must:false},
+          {t:'年份學年正確', must:true}
+        ]
+      },
+      {
+        title: '會議組織', score: '佔格式分', items: [
+          {t:'日期：年月日 ＋ 星期X', must:true, tip:'缺任何一項扣0.5分'},
+          {t:'時間：下午X時', must:true},
+          {t:'地點：完整寫出', must:true},
+          {t:'主席姓名照抄題目', must:true},
+          {t:'文書/記錄者姓名照抄題目', must:true},
+          {t:'出席者列明', must:false},
+          {t:'缺席者及原因', must:false}
+        ]
+      },
+      {
+        title: '正文', score: '內容分+行文分', items: [
+          {t:'點列式書寫（非段落）', must:true, tip:'用段落寫 → 行文最多1分'},
+          {t:'每點為完整句子', must:true, tip:'只寫關鍵詞不算完整'},
+          {t:'「1. 通過上次會議紀錄」', must:true},
+          {t:'「2. 報告事項」含活動資訊', must:true},
+          {t:'「3. 討論事項」含建議+決議', must:true, tip:'必須寫出誰建議、誰附議、通過與否'},
+          {t:'「4. 其他事項」含下次開會日期', must:false},
+          {t:'「5. 散會時間」', must:true},
+          {t:'所有數據/日期/人名照抄題目', must:true, tip:'不可憑空添加或修改'},
+          {t:'不可加「敬啟者」等書信格式', must:true, tip:'誤加即扣1分'}
+        ]
+      },
+      {
+        title: '文末', score: '佔格式分', items: [
+          {t:'主席簽署（橫線留位）', must:true},
+          {t:'文書簽署（橫線留位）', must:true},
+          {t:'通過日期：年月日', must:true}
+        ]
+      }
+    ]
+  },
+  {
+    id: 'report',
+    name: '活動報告',
+    examCount: '已考1次',
+    groups: [
+      {
+        title: '上款', score: '格式分', items: [
+          {t:'「XXX學會XXX老師」', must:true},
+          {t:'老師全名照抄題目', must:true, tip:'寫錯或簡稱扣0.5分'}
+        ]
+      },
+      {
+        title: '標題', score: '格式分', items: [
+          {t:'標題為「XXX活動報告」', must:true},
+          {t:'置中書寫', must:false}
+        ]
+      },
+      {
+        title: '正文甲：背景資料', score: '內容分', items: [
+          {t:'活動日期', must:true},
+          {t:'活動時間', must:true},
+          {t:'活動地點', must:true},
+          {t:'參與人數', must:false}
+        ]
+      },
+      {
+        title: '正文乙：活動概況', score: '內容分', items: [
+          {t:'描述活動內容', must:true},
+          {t:'寫出參與者反應/氣氛', must:false},
+          {t:'如有問卷調查，列出數據', must:false, tip:'例如「八成五同學滿意」'},
+          {t:'用具體數字而非空泛形容', must:true, tip:'「很多人」→「超過八成」'}
+        ]
+      },
+      {
+        title: '正文丙：改善建議', score: '內容分', items: [
+          {t:'至少提出兩項改善建議', must:true, tip:'只寫一項扣分'},
+          {t:'每項建議具體可行', must:true, tip:'「改善場地」→「預訂更大場地，容納50人」'},
+          {t:'格式：「第一…第二…」', must:false}
+        ]
+      },
+      {
+        title: '下款', score: '格式分', items: [
+          {t:'「XXX學會會長 XXX謹啟」', must:true},
+          {t:'會長姓名照抄題目', must:true},
+          {t:'日期：年月日', must:true, tip:'必須在呈交日期或之前'},
+          {t:'「謹啟」二字不可漏', must:true}
+        ]
+      }
+    ]
+  },
+  {
+    id: 'notice',
+    name: '通告',
+    examCount: '從未考過 🔴',
+    groups: [
+      {
+        title: '標題', score: '格式分', items: [
+          {t:'「XXX學會通告」或「關於XXX的通告」', must:true},
+          {t:'置中書寫', must:false}
+        ]
+      },
+      {
+        title: '正文', score: '內容分', items: [
+          {t:'以「逕啟者：」開頭', must:true, tip:'通告固定開頭'},
+          {t:'寫明活動目的', must:true},
+          {t:'寫明對象', must:true},
+          {t:'寫明日期、時間、地點', must:true},
+          {t:'如有比賽：主題+字數限制+截止日期+提交方式', must:false, tip:'TSA 9CW2範例'},
+          {t:'如有報名：截止日期+報名方法', must:false}
+        ]
+      },
+      {
+        title: '下款', score: '格式分', items: [
+          {t:'「XXX中學學生會主席 XXX」或對應職位', must:true},
+          {t:'姓名照抄題目', must:true},
+          {t:'日期：年月日', must:true}
+        ]
+      }
+    ]
+  },
+  {
+    id: 'announce',
+    name: '啟事',
+    examCount: '從未考過 🔴',
+    groups: [
+      {
+        title: '標題', score: '格式分', items: [
+          {t:'「XXX啟事」或「關於XXX的啟事」', must:true},
+          {t:'置中書寫', must:false}
+        ]
+      },
+      {
+        title: '正文', score: '內容分', items: [
+          {t:'先交代緣由', must:true},
+          {t:'具體內容（優惠/安排/聯絡）明確', must:true},
+          {t:'結業啟事須交代：原因+優惠+分店去向+感謝語', must:false, tip:'TSA 9CW1範例'},
+          {t:'聯絡方式（如適用）', must:false}
+        ]
+      },
+      {
+        title: '下款', score: '格式分', items: [
+          {t:'「XXX 啟」', must:true},
+          {t:'姓名照抄題目', must:true},
+          {t:'日期：年月日', must:true}
+        ]
+      }
+    ]
+  },
+  {
+    id: 'letter',
+    name: '書信',
+    examCount: '從未考過',
+    groups: [
+      {
+        title: '上款', score: '格式分', items: [
+          {t:'「XXX（收信人）：」', must:true},
+          {t:'收信人名稱正確', must:true}
+        ]
+      },
+      {
+        title: '正文', score: '內容分', items: [
+          {t:'開頭問候語', must:false},
+          {t:'主體內容分段清晰', must:true},
+          {t:'結尾祝頌語', must:false, tip:'例如「敬祝 學安」'},
+          {t:'語氣得體（視收信人身份）', must:true}
+        ]
+      },
+      {
+        title: '下款', score: '格式分', items: [
+          {t:'「XXX 敬上」或對應自稱', must:true},
+          {t:'日期：年月日', must:true}
+        ]
+      }
+    ]
+  }
+];
+
+let state = {}; // {formatId: {groupIdx_itemIdx: true}}
+let currentFormat = 0;
+let hideDone = false;
+
+function init() {
+  state = {};
+  DATA.forEach(d => {
+    state[d.id] = {};
+    d.groups.forEach((g, gi) => {
+      g.items.forEach((_, ii) => {
+        state[d.id][`${gi}_${ii}`] = false;
+      });
+    });
+  });
+  hideDone = false;
+  document.getElementById('hideToggle').className = 'ctrl-btn';
+  renderTabs();
+  renderChecklist();
+}
+
+function toggleItem(gi, ii) {
+  const d = DATA[currentFormat];
+  const key = `${gi}_${ii}`;
+  state[d.id][key] = !state[d.id][key];
+  renderChecklist();
+}
+
+function countStats() {
+  const d = DATA[currentFormat];
+  let total = 0, checked = 0;
+  d.groups.forEach((g, gi) => {
+    g.items.forEach((_, ii) => {
+      total++;
+      if (state[d.id][`${gi}_${ii}`]) checked++;
+    });
+  });
+  return { total, checked };
+}
+
+function renderTabs() {
+  document.getElementById('tabs').innerHTML = DATA.map((d, i) => {
+    let cls = 'tab';
+    if (i === currentFormat) cls += ' active';
+    const st = countFormatStats(d);
+    if (st.checked === st.total && st.total > 0) cls += ' done';
+    return `<span class="${cls}" onclick="switchFormat(${i})" role="button">
+      ${d.name} <span class="tab-badge">${d.examCount}</span>
+    </span>`;
+  }).join('');
+}
+
+function countFormatStats(d) {
+  let total = 0, checked = 0;
+  d.groups.forEach((g, gi) => {
+    g.items.forEach((_, ii) => {
+      total++;
+      if (state[d.id] && state[d.id][`${gi}_${ii}`]) checked++;
+    });
+  });
+  return { total, checked };
+}
+
+function renderChecklist() {
+  const d = DATA[currentFormat];
+  const st = countStats();
+  let html = '';
+
+  d.groups.forEach((g, gi) => {
+    let visibleCount = 0;
+    let groupHtml = '';
+    g.items.forEach((item, ii) => {
+      const key = `${gi}_${ii}`;
+      const isChecked = state[d.id][key];
+      const hidden = hideDone && isChecked;
+      if (!hidden) visibleCount++;
+      groupHtml += `<div class="item${isChecked ? ' checked' : ''}${hidden ? ' hidden' : ''}" onclick="toggleItem(${gi},${ii})" role="checkbox" aria-checked="${isChecked}">
+        <div class="cb"></div>
+        <div class="item-text">${item.t}${item.must ? '<span class="must-know">必知</span>' : ''}${item.tip ? `<br><small style="color:var(--muted);">💡 ${item.tip}</small>` : ''}</div>
+      </div>`;
+    });
+
+    if (hideDone && visibleCount === 0) return; // Skip empty groups
+
+    html += `<div class="group">
+      <div class="group-header">
+        <span>${g.title}</span>
+        <span class="group-score">${g.score}</span>
+      </div>
+      ${groupHtml}
+    </div>`;
+  });
+
+  document.getElementById('checklistArea').innerHTML = html || '<p style="text-align:center;color:var(--muted);padding:40px;">✅ 全部格式已檢查完畢！</p>';
+
+  // Update progress
+  const pct = st.total > 0 ? Math.round(st.checked / st.total * 100) : 0;
+  const fill = document.getElementById('progFill');
+  fill.style.width = pct + '%';
+  fill.className = 'progress-fill' + (pct < 100 ? ' warn' : '');
+  document.getElementById('progText').textContent = `${st.checked}/${st.total}`;
+  renderTabs();
+}
+
+function switchFormat(i) {
+  currentFormat = i;
+  renderChecklist();
+}
+
+function toggleHideDone() {
+  hideDone = !hideDone;
+  const btn = document.getElementById('hideToggle');
+  btn.className = 'ctrl-btn' + (hideDone ? ' on' : '');
+  btn.textContent = hideDone ? '📋 顯示全部項目' : '🔍 只顯示漏項';
+  renderChecklist();
+}
+
+function resetCurrent() {
+  const d = DATA[currentFormat];
+  state[d.id] = {};
+  d.groups.forEach((g, gi) => {
+    g.items.forEach((_, ii) => {
+      state[d.id][`${gi}_${ii}`] = false;
+    });
+  });
+  renderChecklist();
+}
+
+function resetAll() {
+  init();
+}
+
+init();
+</script>
+</body>
+</html>

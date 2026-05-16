@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>PEEL Paragraph Architect · Geography Essay Trainer</title>
+<style>
+/* ── Reset & Variables ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --green-dark:#2d6a4f;--green-mid:#40916c;--green-light:#d8f3dc;
+  --earth:#e07a5f;--earth-light:#ffe8d6;
+  --cream:#fefae0;--sand:#faedcd;--bark:#582f0e;
+  --text:#1b1b1b;--text2:#6b705c;--text3:#a5a58d;
+  --white:#fffef7;--card-bg:rgba(255,254,247,.92);
+  --radius:16px;--radius-sm:10px;
+  --font-body:system-ui,-apple-system,'Segoe UI',sans-serif;
+  --font-heading:'Georgia','Times New Roman',serif;
+  --shadow:0 2px 12px rgba(88,47,14,.06);
+  --shadow-lg:0 6px 28px rgba(88,47,14,.1);
+}
+
+/* ── Layout ── */
+html{font-size:16px;-webkit-text-size-adjust:100%}
+body{
+  font-family:var(--font-body);background:linear-gradient(175deg,var(--cream) 0%,var(--sand) 50%,#e9edc9 100%);
+  color:var(--text);min-height:100vh;min-height:100dvh;
+  padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  overscroll-behavior:none;-webkit-touch-callout:none;
+}
+.container{max-width:720px;margin:0 auto;padding:.75rem 1rem 6rem}
+
+/* ── Header ── */
+.header{text-align:center;padding:1.25rem 0 .5rem}
+.header h1{
+  font-family:var(--font-heading);font-size:1.5rem;color:var(--green-dark);
+  letter-spacing:-.01em;display:flex;align-items:center;justify-content:center;gap:.5rem;
+}
+.header h1 span{font-size:1.6rem}
+.header .sub{font-size:.78rem;color:var(--text2);margin-top:.2rem}
+
+/* ── Unit Tabs ── */
+.unit-tabs{display:flex;gap:.4rem;margin:1rem 0;flex-wrap:wrap;justify-content:center}
+.unit-tab{
+  padding:.45rem 1rem;border-radius:20px;font-size:.8rem;font-weight:500;
+  border:1.5px solid var(--green-mid);color:var(--green-mid);background:transparent;
+  cursor:pointer;transition:.2s;font-family:var(--font-body);
+  -webkit-tap-highlight-color:transparent;touch-action:manipulation;
+}
+.unit-tab.active{background:var(--green-mid);color:#fff;border-color:var(--green-mid)}
+.unit-tab.rainforest{border-color:#2d6a4f;color:#2d6a4f}
+.unit-tab.rainforest.active{background:#2d6a4f;color:#fff}
+.unit-tab.tourism{border-color:#40916c;color:#40916c}
+.unit-tab.tourism.active{background:#40916c;color:#fff}
+.unit-tab.geology{border-color:#52796f;color:#52796f}
+.unit-tab.geology.active{background:#52796f;color:#fff}
+
+/* ── Question Card ── */
+.q-card{
+  background:var(--card-bg);border-radius:var(--radius);padding:1.25rem;
+  box-shadow:var(--shadow);margin-bottom:1rem;
+  border-left:4px solid var(--green-dark);
+  -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+}
+.q-meta{display:flex;gap:.6rem;margin-bottom:.5rem;flex-wrap:wrap;align-items:center}
+.q-badge{
+  font-size:.65rem;padding:.15rem .55rem;border-radius:10px;
+  font-weight:600;text-transform:uppercase;letter-spacing:.03em;
+}
+.q-badge-type{background:var(--green-light);color:var(--green-dark)}
+.q-badge-marks{background:var(--earth-light);color:var(--earth)}
+.q-badge-source{background:var(--sand);color:var(--text2)}
+.q-type-hint{
+  font-size:.7rem;color:var(--text3);font-style:italic;
+  background:var(--green-light);display:inline-block;padding:.15rem .6rem;border-radius:8px;
+}
+.q-title{font-size:1.05rem;font-weight:600;line-height:1.55;color:var(--bark);margin-top:.4rem}
+
+/* ── PEEL Stepper ── */
+.peel-stepper{display:flex;gap:.3rem;margin:1rem 0 .75rem;justify-content:center}
+.stepper-dot{
+  width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-weight:700;font-size:.8rem;border:2px solid var(--text3);color:var(--text3);
+  transition:.25s;background:var(--white);
+}
+.stepper-dot.active{border-color:var(--green-dark);color:var(--green-dark);background:var(--green-light)}
+.stepper-dot.done{border-color:var(--green-mid);color:var(--green-mid);background:var(--green-light)}
+.stepper-line{
+  width:20px;height:2px;background:var(--text3);align-self:center;transition:.25s;
+}
+.stepper-line.done{background:var(--green-mid)}
+
+/* ── Step Card ── */
+.step-card{
+  background:var(--card-bg);border-radius:var(--radius);padding:1.25rem;
+  box-shadow:var(--shadow);margin-bottom:.75rem;transition:.3s;
+  -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+  border:1.5px solid transparent;
+}
+.step-card.active{border-color:var(--green-mid);box-shadow:var(--shadow-lg)}
+.step-card.done{border-color:var(--green-light)}
+.step-header{display:flex;align-items:center;gap:.5rem;margin-bottom:.75rem}
+.step-letter{
+  width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:1rem;flex-shrink:0;
+}
+.step-letter.p{background:var(--green-dark);color:#fff}
+.step-letter.e{background:var(--earth);color:#fff}
+.step-letter.l{background:var(--bark);color:#fff}
+.step-label{font-weight:600;font-size:.88rem;color:var(--text)}
+.step-desc{font-size:.72rem;color:var(--text2)}
+
+/* ── Option List ── */
+.option-list{display:flex;flex-direction:column;gap:.5rem}
+.option-item{
+  padding:.75rem 1rem;border:1.5px solid rgba(0,0,0,.08);border-radius:var(--radius-sm);
+  cursor:pointer;transition:.2s;font-size:.86rem;line-height:1.45;
+  background:var(--white);-webkit-tap-highlight-color:transparent;touch-action:manipulation;
+  display:flex;align-items:flex-start;gap:.5rem;
+}
+.option-item:hover,.option-item:active{border-color:var(--green-mid);background:var(--green-light)}
+.option-item.selected{border-color:var(--green-dark);background:var(--green-light);font-weight:500}
+.option-item.custom{border-style:dashed;border-color:var(--text3);color:var(--text3)}
+.option-item.custom.selected{border-style:solid;border-color:var(--green-dark);color:var(--text)}
+.option-radio{
+  width:20px;height:20px;border-radius:50%;border:2px solid var(--text3);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;transition:.2s;
+}
+.option-item.selected .option-radio{border-color:var(--green-dark)}
+.option-item.selected .option-radio::after{
+  content:'';width:10px;height:10px;border-radius:50%;background:var(--green-dark);
+}
+.option-item.multi .option-radio{border-radius:4px}
+.option-item.multi.selected .option-radio::after{border-radius:2px}
+
+/* ── Custom Input ── */
+.custom-input-area{margin-top:.5rem;display:none}
+.custom-input-area.show{display:block}
+.custom-input{
+  width:100%;padding:.6rem .8rem;border:1.5px solid var(--green-mid);border-radius:var(--radius-sm);
+  font-size:.85rem;font-family:var(--font-body);background:var(--white);
+  outline:none;resize:vertical;min-height:60px;
+}
+.custom-input:focus{border-color:var(--green-dark);box-shadow:0 0 0 3px rgba(45,106,79,.12)}
+.char-count{font-size:.68rem;color:var(--text3);text-align:right;margin-top:.2rem}
+
+/* ── Warning Banner ── */
+.warn-banner{
+  display:none;padding:.55rem .8rem;background:var(--earth-light);border-radius:var(--radius-sm);
+  font-size:.76rem;color:var(--earth);margin-top:.5rem;font-weight:500;
+  border-left:3px solid var(--earth);
+}
+.warn-banner.show{display:block}
+
+/* ── Paragraph Preview ── */
+.preview-card{
+  background:var(--card-bg);border-radius:var(--radius);padding:1.25rem;
+  box-shadow:var(--shadow);margin-bottom:1rem;
+  border:1.5px dashed var(--green-mid);
+  -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+}
+.preview-label{font-weight:700;color:var(--green-dark);margin-bottom:.5rem;font-size:.8rem;text-transform:uppercase;letter-spacing:.04em}
+.preview-text{
+  font-size:.9rem;line-height:1.7;color:var(--text);
+  padding:.75rem;background:var(--white);border-radius:var(--radius-sm);
+  white-space:pre-wrap;min-height:60px;
+}
+.preview-text .highlight-custom{background:rgba(45,106,79,.12);padding:.1rem .25rem;border-radius:3px;font-weight:600;color:var(--green-dark)}
+.preview-text .highlight-template{color:var(--text)}
+
+/* ── Intro/Conclusion Toggles ── */
+.section-toggle{
+  display:flex;align-items:center;gap:.5rem;margin:1rem 0 .5rem;
+  cursor:pointer;font-size:.82rem;font-weight:600;color:var(--green-dark);
+  padding:.5rem .75rem;border-radius:var(--radius-sm);
+  transition:.2s;-webkit-tap-highlight-color:transparent;touch-action:manipulation;
+}
+.section-toggle:hover{background:var(--green-light)}
+.section-toggle .arrow{transition:.25s;font-size:.7rem}
+.section-toggle.open .arrow{transform:rotate(180deg)}
+.section-body{display:none;margin-bottom:.75rem}
+.section-body.show{display:block}
+.template-select{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.5rem}
+.template-chip{
+  padding:.35rem .75rem;border-radius:15px;font-size:.75rem;border:1.5px solid var(--text3);
+  color:var(--text2);cursor:pointer;transition:.2s;
+  -webkit-tap-highlight-color:transparent;touch-action:manipulation;
+}
+.template-chip:hover,.template-chip.selected{border-color:var(--green-mid);color:var(--green-dark);background:var(--green-light)}
+
+/* ── Controls ── */
+.controls{display:flex;gap:.6rem;justify-content:center;margin:1rem 0;flex-wrap:wrap}
+.btn{
+  padding:.55rem 1.3rem;border-radius:20px;font-size:.82rem;font-weight:500;
+  cursor:pointer;border:none;font-family:var(--font-body);transition:.2s;
+  -webkit-tap-highlight-color:transparent;touch-action:manipulation;
+}
+.btn-primary{background:var(--green-dark);color:#fff}
+.btn-primary:hover{opacity:.9}
+.btn-secondary{background:var(--green-light);color:var(--green-dark);border:1.5px solid var(--green-mid)}
+.btn-ghost{background:transparent;color:var(--text2);border:1.5px solid var(--text3)}
+.btn-warn{background:var(--earth-light);color:var(--earth);border:1.5px solid var(--earth)}
+.btn:disabled{opacity:.4;pointer-events:none}
+
+/* ── Glossary Sidebar ── */
+.glossary-toggle{
+  position:fixed;top:1rem;right:1rem;z-index:100;
+  width:40px;height:40px;border-radius:50%;background:var(--green-dark);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-size:1.1rem;
+  border:none;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.15);
+  -webkit-tap-highlight-color:transparent;touch-action:manipulation;
+}
+.glossary-panel{
+  position:fixed;top:0;right:-320px;width:300px;height:100vh;height:100dvh;
+  background:var(--white);box-shadow:-4px 0 20px rgba(0,0,0,.1);z-index:99;
+  transition:right .3s;overflow-y:auto;padding:1rem;
+}
+.glossary-panel.open{right:0}
+.glossary-overlay{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,.2);z-index:98;
+}
+.glossary-overlay.show{display:block}
+.glossary-search{
+  width:100%;padding:.5rem .75rem;border:1.5px solid var(--text3);border-radius:var(--radius-sm);
+  font-size:.85rem;margin-bottom:.75rem;font-family:var(--font-body);outline:none;
+}
+.glossary-item{
+  padding:.45rem 0;border-bottom:1px solid rgba(0,0,0,.05);font-size:.78rem;
+  line-height:1.45;
+}
+.glossary-item .term{font-weight:700;color:var(--green-dark)}
+.glossary-item .def{color:var(--text2);font-size:.72rem}
+
+/* ── Final Checklist ── */
+.checklist{
+  background:var(--card-bg);border-radius:var(--radius);padding:1rem 1.25rem;
+  box-shadow:var(--shadow);margin:1rem 0;
+  -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+}
+.checklist-title{font-weight:700;color:var(--green-dark);font-size:.82rem;margin-bottom:.6rem}
+.checklist-item{
+  display:flex;align-items:center;gap:.5rem;padding:.3rem 0;font-size:.8rem;
+  cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;
+}
+.checklist-item .check-box{
+  width:18px;height:18px;border:2px solid var(--text3);border-radius:4px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;transition:.2s;
+}
+.checklist-item.checked .check-box{background:var(--green-dark);border-color:var(--green-dark)}
+.checklist-item.checked .check-box::after{content:'✓';color:#fff;font-size:.65rem;font-weight:700}
+.checklist-item.checked .check-label{color:var(--green-dark)}
+
+/* ── Toast ── */
+.toast{
+  position:fixed;bottom:5rem;left:50%;transform:translateX(-50%);
+  padding:.5rem 1.2rem;border-radius:20px;font-size:.78rem;font-weight:500;
+  z-index:150;opacity:0;transition:opacity .3s;
+  pointer-events:none;white-space:nowrap;
+}
+.toast.show{opacity:1}
+.toast.success{background:var(--green-dark);color:#fff}
+.toast.warn{background:var(--earth);color:#fff}
+.toast.info{background:var(--bark);color:#fff}
+
+/* ── Bottom Bar Sticky ── */
+.bottom-bar{
+  position:fixed;bottom:0;left:0;right:0;padding:.6rem 1rem calc(.6rem + env(safe-area-inset-bottom));
+  background:rgba(255,254,247,.95);border-top:1px solid rgba(0,0,0,.06);
+  -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);
+  display:flex;justify-content:space-between;align-items:center;z-index:50;
+}
+.step-indicator{font-size:.72rem;color:var(--text2)}
+.step-indicator strong{color:var(--green-dark)}
+.essay-counter{font-size:.72rem;color:var(--text3)}
+
+/* ── Responsive ── */
+@media (max-width:480px){
+  .container{padding:.5rem .75rem 6rem}
+  .q-title{font-size:.95rem}
+  .option-item{font-size:.82rem;padding:.6rem .8rem}
+  .glossary-panel{width:280px}
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <h1><span>🌿</span>PEEL Paragraph Architect</h1>
+    <div class="sub">Geography Essay Trainer · S3 TWGSS</div>
+  </div>
+
+  <!-- Unit Tabs -->
+  <div class="unit-tabs" id="unitTabs"></div>
+
+  <!-- Question Card -->
+  <div class="q-card" id="questionCard">
+    <div class="q-meta" id="qMeta"></div>
+    <div class="q-title" id="qTitle"></div>
+    <div class="q-type-hint" id="qHint" style="margin-top:.5rem"></div>
+  </div>
+
+  <!-- PEEL Stepper -->
+  <div class="peel-stepper" id="stepper"></div>
+
+  <!-- Step Cards (P, E, E, L) -->
+  <div id="stepCards"></div>
+
+  <!-- Warning Banner -->
+  <div class="warn-banner" id="warnBanner"></div>
+
+  <!-- Controls -->
+  <div class="controls" id="controls"></div>
+
+  <!-- Paragraph Preview -->
+  <div class="preview-card" id="previewCard">
+    <div class="preview-label">📝 Assembled Paragraph</div>
+    <div class="preview-text" id="previewText">Select your PEEL elements to build a paragraph.</div>
+  </div>
+
+  <!-- Essay Sections -->
+  <div style="margin-top:.5rem">
+    <!-- Introduction -->
+    <div class="section-toggle" id="introToggle">
+      <span class="arrow">▶</span> Introduction <span style="font-size:.7rem;color:var(--text3)">(2 marks)</span>
+    </div>
+    <div class="section-body" id="introBody">
+      <div class="template-select" id="introTemplateSelect"></div>
+      <textarea class="custom-input" id="introText" placeholder="Write your introduction here..." rows="3"></textarea>
+      <div class="char-count" id="introCount">0 chars</div>
+    </div>
+
+    <!-- Conclusion -->
+    <div class="section-toggle" id="concToggle">
+      <span class="arrow">▶</span> Conclusion <span style="font-size:.7rem;color:var(--text3)">(2 marks)</span>
+    </div>
+    <div class="section-body" id="concBody">
+      <div class="template-select" id="concTemplateSelect"></div>
+      <textarea class="custom-input" id="concText" placeholder="Write your conclusion here..." rows="3"></textarea>
+      <div class="char-count" id="concCount">0 chars</div>
+    </div>
+  </div>
+
+  <!-- Full Essay Preview -->
+  <div class="preview-card" id="essayPreview" style="display:none;border-color:var(--green-dark)">
+    <div class="preview-label">📄 Full Essay Draft</div>
+    <div class="preview-text" id="essayText" style="font-size:.85rem"></div>
+  </div>
+
+  <!-- Final Checklist -->
+  <div class="checklist" id="checklist" style="display:none">
+    <div class="checklist-title">✅ Final Review Checklist</div>
+    <div id="checklistItems"></div>
+  </div>
+
+</div>
+
+<!-- Bottom Bar -->
+<div class="bottom-bar" id="bottomBar">
+  <div class="step-indicator" id="stepIndicator"><strong>Select a question</strong> to begin</div>
+  <div class="essay-counter" id="essayCounter"></div>
+</div>
+
+<!-- Glossary Toggle & Panel -->
+<button class="glossary-toggle" id="glossaryToggle" aria-label="Glossary">📖</button>
+<div class="glossary-overlay" id="glossaryOverlay"></div>
+<div class="glossary-panel" id="glossaryPanel">
+  <input type="text" class="glossary-search" id="glossarySearch" placeholder="Search terms..." autocomplete="off">
+  <div id="glossaryList"></div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+/* ═══════════════════════════════════════════════════
+   PEEL Paragraph Architect · Geography Essay Trainer
+   ═══════════════════════════════════════════════════ */
+
+/* ── GLOSSARY (from textbook Interactive Geography / Exploring Geography) ── */
+const GLOSSARY = [
+  {term:'Carrying capacity',zh:'承載力',def:'Maximum number of visitors an area can support without damage',unit:'tourism'},
+  {term:'Sustainable tourism',zh:'可持續旅遊',def:'Tourism that balances economic, environmental and social needs for the future',unit:'tourism'},
+  {term:'Ecotourism',zh:'生態旅遊',def:'Responsible travel to natural areas that conserves the environment',unit:'tourism'},
+  {term:'Mass tourism',zh:'大眾化旅遊',def:'Large-scale tourism bringing significant economic and environmental impacts',unit:'tourism'},
+  {term:'Cultural conflict',zh:'文化衝突',def:'Tension between tourists and locals due to different values or behaviours',unit:'tourism'},
+  {term:'Overcrowding',zh:'過度擁擠',def:'Too many tourists in one place, reducing experience quality',unit:'tourism'},
+  {term:'Peak season',zh:'旺季',def:'Period of highest travel demand, often during holidays',unit:'tourism'},
+  {term:'GDP per capita',zh:'人均國內生產總值',def:'Total economic output divided by population',unit:'tourism'},
+  {term:'Deforestation',zh:'砍伐森林',def:'Clearing of forests on a large scale, often for agriculture or timber',unit:'rainforest'},
+  {term:'Slash-and-burn',zh:'刀耕火種',def:'Traditional farming method where vegetation is cut and burned to clear land',unit:'rainforest'},
+  {term:'Biodiversity',zh:'生物多樣性',def:'Variety of plant and animal life in a particular habitat',unit:'rainforest'},
+  {term:'Emergent layer',zh:'露生層',def:'Topmost rainforest layer with trees over 50m tall',unit:'rainforest'},
+  {term:'Canopy layer',zh:'樹冠層',def:'Dense continuous layer of tree crowns, home to most rainforest wildlife',unit:'rainforest'},
+  {term:'Buttress roots',zh:'板根',def:'Large, wide roots that support tall rainforest trees',unit:'rainforest'},
+  {term:'Drip-tip',zh:'滴水葉尖',def:'Pointed leaf tip that allows water to run off quickly',unit:'rainforest'},
+  {term:'Habitat loss',zh:'棲息地喪失',def:'Destruction of natural habitats, a primary threat to wildlife',unit:'rainforest'},
+  {term:'Plantation',zh:'種植園',def:'Large-scale farm growing a single crop, e.g. oil palm, rubber',unit:'rainforest'},
+  {term:'Cattle ranching',zh:'牧牛業',def:'Large-scale livestock farming, a major cause of Amazon deforestation',unit:'rainforest'},
+  {term:'Sedimentary rock',zh:'沉積岩',def:'Rock formed from compressed and cemented sediments',unit:'geology'},
+  {term:'Weathering',zh:'風化',def:'Breakdown of rocks by weather, water, or biological activity',unit:'geology'},
+  {term:'Erosion',zh:'侵蝕',def:'Wearing away and removal of rock or soil by water, wind, or ice',unit:'geology'},
+  {term:'Compaction',zh:'壓實',def:'Process where sediments are pressed together under pressure',unit:'geology'},
+  {term:'Cementation',zh:'膠結',def:'Process where minerals bind sediment particles together',unit:'geology'},
+  {term:'Lithification',zh:'岩化作用',def:'Transformation of loose sediments into solid rock',unit:'geology'},
+  {term:'Volcanic rock',zh:'火山岩',def:'Rock formed from cooled magma or lava',unit:'geology'},
+  {term:'Intrusive rock',zh:'侵入岩',def:'Igneous rock formed when magma cools slowly beneath the surface',unit:'geology'},
+  {term:'Tombolo',zh:'連島沙洲',def:'A sand or gravel bar connecting an island to the mainland',unit:'geology'},
+  {term:'Columnar jointing',zh:'柱狀節理',def:'Hexagonal rock columns formed by cooling and contraction of volcanic rock',unit:'geology'},
+  {term:'Geopark',zh:'地質公園',def:'A protected area with significant geological heritage',unit:'geology'},
+  {term:'UNESCO Global Geopark',zh:'聯合國教科文組織世界地質公園',def:'Internationally recognized area of geological significance',unit:'geology'},
+  {term:'Lamination',zh:'層理',def:'Fine layering in sedimentary rocks',unit:'geology'},
+];
+
+/* ── QUESTIIONS ── */
+const QUESTIONS = [
+  // ═══ RAINFORESTS ═══
+  {
+    id:'rf_explain',
+    unit:'rainforest', unitLabel:'Saving Our Rainforests',
+    type:'Explain', typeLabel:'Explain',
+    title:'Explain the major causes of tropical rainforest deforestation. Use specific examples to support your answer.',
+    source:'From 2324 TWGSS S3 Geog Exam (adapted)',
+    marks:12,
+    hint:'PEEL Mode: Explain causes → support with evidence → show cause-effect chain → link back to deforestation',
+    points:[
+      {id:'rf_p1',text:'Tropical rainforests are being cleared at an alarming rate due to a combination of economic activities that prioritise short-term gain over long-term environmental sustainability.',keys:['deforestation','economic activities','short-term','sustainability']},
+      {id:'rf_p2',text:'The rapid deforestation of tropical rainforests is driven primarily by agricultural expansion, commercial logging, and infrastructure development.',keys:['deforestation','agricultural expansion','logging','infrastructure']},
+      {id:'rf_p3',text:'Human activities such as slash-and-burn farming, cattle ranching, and plantation agriculture are the main causes of rainforest destruction.',keys:['slash-and-burn','cattle ranching','plantation','human activities']},
+      {id:'_custom',text:'✏️ Write your own point',keys:[],custom:true}
+    ],
+    evidences:[
+      {id:'rf_e1',text:'Amazon rainforest, Brazil: Over 20% of the original Amazon has been cleared, mainly for cattle ranching and soybean farming (Textbook C4)',keys:['Amazon','Brazil','cattle ranching','soybean'],multi:true},
+      {id:'rf_e2',text:'Indonesia: Palm oil plantations expanded by 2 million hectares in just 4 years, replacing vast areas of primary rainforest (Textbook p.38)',keys:['Indonesia','palm oil','plantation','hectares'],multi:true},
+      {id:'rf_e3',text:'Slash-and-burn farming in the Amazon contributes to habitat loss and releases large amounts of CO₂ into the atmosphere',keys:['slash-and-burn','Amazon','habitat loss','CO2'],multi:true},
+      {id:'rf_e4',text:'Logging (both legal and illegal) removes valuable timber species like mahogany, damaging the surrounding forest structure',keys:['logging','timber','mahogany','illegal'],multi:true},
+      {id:'rf_e5',text:'Road construction through rainforests, such as the Trans-Amazonian Highway, fragments habitats and opens previously inaccessible areas to development',keys:['road','Trans-Amazonian','habitat','fragmentation'],multi:true},
+      {id:'_custom',text:'✏️ Add your own evidence',keys:[],custom:true,multi:true}
+    ],
+    explanations:[
+      {id:'rf_x1',text:'When forests are cleared, the land loses its natural vegetation cover, leading to soil erosion, loss of biodiversity, and disruption of the water cycle. The economic benefits (jobs, export revenue) are often short-lived because the soil becomes infertile within a few years.',keys:['soil erosion','biodiversity','water cycle','economic','short-lived']},
+      {id:'rf_x2',text:'Each cause of deforestation creates a chain reaction: logging opens access roads → roads enable settlement and farming → farming exhausts the soil → more forest is cleared. This cycle makes deforestation self-reinforcing and difficult to stop.',keys:['chain reaction','logging','roads','farming','cycle']},
+      {id:'_custom',text:'✏️ Write your own explanation',keys:[],custom:true}
+    ],
+    links:[
+      {id:'rf_l1',text:'Therefore, addressing deforestation requires a multi-pronged approach that tackles economic, legal, and social factors simultaneously.',keys:['multi-pronged','economic','legal','social']},
+      {id:'rf_l2',text:'Without urgent action, the remaining rainforests may be lost within a generation, with irreversible consequences for global climate and biodiversity.',keys:['urgent','lost','generation','climate','biodiversity']},
+      {id:'_custom',text:'✏️ Write your own link',keys:[],custom:true}
+    ],
+    keyTerms:['deforestation','slash-and-burn','plantation','cattle ranching','logging','habitat loss','biodiversity','soil erosion']
+  },
+  {
+    id:'rf_describe',
+    unit:'rainforest', unitLabel:'Saving Our Rainforests',
+    type:'Describe', typeLabel:'Describe',
+    title:'Describe the structure of a tropical rainforest. Explain how plants in different layers have adapted to their environment.',
+    source:'Based on Textbook C4 Saving Our Rainforests',
+    marks:12,
+    hint:'Simplified P-E Mode: Describe each layer → provide examples of plant adaptations → explain why each adaptation is useful',
+    points:[
+      {id:'rfd_p1',text:'A tropical rainforest has a distinct vertical structure consisting of four main layers: the emergent layer, canopy layer, understorey, and forest floor, each with unique environmental conditions and plant adaptations.',keys:['vertical structure','emergent','canopy','understorey','forest floor']},
+      {id:'rfd_p2',text:'The rainforest can be divided into distinct layers from top to bottom, with plants in each layer developing specific adaptations to survive in different conditions of light, humidity, and competition.',keys:['layers','adaptations','light','humidity','competition']},
+      {id:'_custom',text:'✏️ Write your own point',keys:[],custom:true}
+    ],
+    evidences:[
+      {id:'rfd_e1',text:'Emergent layer: Trees over 50m tall with straight trunks and buttress roots for stability. Leaves are small and thick to withstand strong winds and direct sunlight.',keys:['emergent','50m','buttress roots','small leaves'],multi:true},
+      {id:'rfd_e2',text:'Canopy layer: Forms a dense continuous \"roof\" of tree crowns. Most rainforest wildlife lives here. Leaves have drip-tips to shed water quickly and prevent fungal growth.',keys:['canopy','drip-tips','fungal','wildlife'],multi:true},
+      {id:'rfd_e3',text:'Understorey: Young trees, shrubs, and woody plants growing in dim light. Large, broad leaves capture maximum available light. Some plants (epiphytes) grow on other trees to reach higher light levels.',keys:['understorey','dim light','broad leaves','epiphytes'],multi:true},
+      {id:'rfd_e4',text:'Forest floor: Very dark — only 2% of sunlight reaches here. Plants have very large leaves to capture light. Decomposers (fungi, bacteria) rapidly break down leaf litter in the hot, humid conditions.',keys:['forest floor','2%','decomposers','leaf litter'],multi:true},
+      {id:'_custom',text:'✏️ Add your own evidence',keys:[],custom:true,multi:true}
+    ],
+    explanations:[
+      {id:'rfd_x1',text:'Each adaptation directly solves a survival challenge in that layer: buttress roots anchor tall emergent trees against wind; drip-tips prevent waterlogging and fungal infection in the humid canopy; broad leaves maximise photosynthesis in the dim understorey.',keys:['adaptation','survival','anchor','waterlogging','photosynthesis']},
+      {id:'rfd_x2',text:'These adaptations show how plants have evolved over millions of years to occupy specific niches within the forest. Without these adaptations, plants would not survive in their respective layers due to intense competition for limited resources.',keys:['evolution','niches','competition','resources']},
+      {id:'_custom',text:'✏️ Write your own explanation',keys:[],custom:true}
+    ],
+    links:[
+      {id:'rfd_l1',text:'Understanding this layered structure is essential because deforestation destroys not just individual trees but entire ecosystems, with each layer supporting a unique community of plants and animals.',keys:['understanding','deforestation','ecosystems','unique community']},
+      {id:'_custom',text:'✏️ Write your own link',keys:[],custom:true}
+    ],
+    keyTerms:['emergent layer','canopy layer','buttress roots','drip-tip','epiphyte','understorey','forest floor','adaptation']
+  },
+
+  // ═══ TOURISM ═══
+  {
+    id:'tr_explain',
+    unit:'tourism', unitLabel:'Tourism',
+    type:'Discuss', typeLabel:'Discuss',
+    title:'Discuss the negative environmental and socio-cultural impacts of mass tourism. Support your discussion with real-world examples.',
+    source:'From 2425 TWGSS S3 Geog 1st Exam (adapted with different examples)',
+    marks:12,
+    hint:'PEEL Mode: State the negative impact → give a real case → explain the cause-effect mechanism → link to sustainable tourism',
+    points:[
+      {id:'tr_p1',text:'Mass tourism, while economically beneficial, often creates significant environmental and socio-cultural problems that can damage the very attractions tourists come to see.',keys:['mass tourism','environmental','socio-cultural','damage']},
+      {id:'tr_p2',text:'Uncontrolled mass tourism leads to overcrowding, pollution, habitat destruction, and cultural erosion in popular destinations around the world.',keys:['overcrowding','pollution','habitat destruction','cultural erosion']},
+      {id:'tr_p3',text:'The negative impacts of mass tourism can be categorised into environmental impacts (physical damage, pollution, resource depletion) and socio-cultural impacts (cultural conflict, loss of local identity).',keys:['environmental impacts','socio-cultural','resource depletion','cultural conflict']},
+      {id:'_custom',text:'✏️ Write your own point',keys:[],custom:true}
+    ],
+    evidences:[
+      {id:'tr_e1',text:'Maya Bay, Thailand: Closed indefinitely in 2018 after mass tourism destroyed over 80% of its coral reefs. Up to 5,000 visitors per day visited the 250m-long beach before closure.',keys:['Maya Bay','Thailand','coral','80%','5000'],multi:true},
+      {id:'tr_e2',text:'Bukchon Hanok Village, Seoul: A traditional residential area where 10,000+ daily tourists created noise, litter, and privacy issues. Residents protested and some moved away, eroding the living culture the tourists came to see.',keys:['Bukchon','Seoul','residents','protested','culture'],multi:true},
+      {id:'tr_e3',text:'Venice, Italy: Overtourism led to a declining resident population (from 175,000 in 1951 to under 50,000 today). The city introduced a €5 entry fee for day-trippers in 2024 to manage visitor numbers.',keys:['Venice','overtourism','resident population','entry fee'],multi:true},
+      {id:'tr_e4',text:'Barcelona, Spain: Anti-tourism protests in 2024 by residents who blamed mass tourism for rising housing costs, overcrowding, and the transformation of local neighbourhoods into tourist zones.',keys:['Barcelona','protests','housing costs','transformation'],multi:true},
+      {id:'_custom',text:'✏️ Add your own evidence',keys:[],custom:true,multi:true}
+    ],
+    explanations:[
+      {id:'tr_x1',text:'These cases share a common pattern: when tourist numbers exceed the carrying capacity of a destination, the physical environment deteriorates (coral damage, waste, noise) and local communities experience \"tourism fatigue\" — a loss of quality of life that can lead to resentment and cultural erosion.',keys:['carrying capacity','deteriorates','tourism fatigue','resentment','cultural erosion']},
+      {id:'tr_x2',text:'The root cause is that mass tourism prioritises quantity over quality. Destinations compete for ever-larger numbers of visitors without adequate planning, leading to a \"boom and bust\" cycle where the tourism product eventually destroys itself.',keys:['quantity over quality','boom and bust','planning','destroys itself']},
+      {id:'_custom',text:'✏️ Write your own explanation',keys:[],custom:true}
+    ],
+    links:[
+      {id:'tr_l1',text:'To avoid these outcomes, destinations must adopt sustainable tourism practices, such as visitor limits, seasonal closures, and community-based tourism that ensures local residents benefit from and support tourism.',keys:['sustainable tourism','visitor limits','community-based','local residents']},
+      {id:'tr_l2',text:'In conclusion, while tourism brings economic opportunities, the costs to the environment and local culture can be devastating unless managed responsibly. Governments and tourists alike share this responsibility.',keys:['economic opportunities','costs','managed responsibly','governments']},
+      {id:'_custom',text:'✏️ Write your own link',keys:[],custom:true}
+    ],
+    keyTerms:['mass tourism','carrying capacity','sustainable tourism','cultural conflict','overcrowding','overtourism','cultural erosion']
+  },
+  {
+    id:'tr_sustainable',
+    unit:'tourism', unitLabel:'Tourism',
+    type:'Evaluate', typeLabel:'Evaluate',
+    title:'Evaluate the effectiveness of sustainable tourism in reducing the negative impacts of tourism. Discuss using specific examples.',
+    source:'From 2425 TWGSS S3 Geog 1st Exam (adapted)',
+    marks:12,
+    hint:'PEEL Mode: Present sustainable tourism as a solution → give real examples → evaluate: what works and what does not → conclude whether it is enough',
+    points:[
+      {id:'trs_p1',text:'Sustainable tourism aims to minimise the negative impacts of tourism by balancing economic benefits with environmental protection and respect for local cultures, but its effectiveness varies significantly across different destinations.',keys:['sustainable tourism','balance','economic','environmental','local cultures']},
+      {id:'trs_p2',text:'While sustainable tourism offers a promising framework for reducing tourism\'s negative impacts, its real-world implementation faces challenges including high costs, weak enforcement, and continued demand for mass tourism.',keys:['sustainable tourism','challenges','costs','enforcement','demand']},
+      {id:'_custom',text:'✏️ Write your own point',keys:[],custom:true}
+    ],
+    evidences:[
+      {id:'trs_e1',text:'Costa Rica: A global leader in ecotourism. Over 25% of its land is protected. Ecotourism generates significant revenue while preserving biodiversity. However, the success has attracted mass tourism operators, creating new pressures.',keys:['Costa Rica','ecotourism','25%','revenue','mass tourism'],multi:true},
+      {id:'trs_e2',text:'Maya Bay, Thailand: After the 2018 closure, a strict visitor management system was introduced (limited daily visitors, seasonal closures, no boats in the bay). Coral has shown signs of recovery — a success story of sustainable management.',keys:['Maya Bay','closure','visitor management','coral','recovery'],multi:true},
+      {id:'trs_e3',text:'Galápagos Islands: Strict visitor quotas and mandatory guided tours have protected this unique ecosystem for decades. However, the high cost makes it inaccessible to many, raising questions about whether sustainable tourism is inherently exclusive.',keys:['Galápagos','visitor quotas','guided tours','protected','exclusive'],multi:true},
+      {id:'_custom',text:'✏️ Add your own evidence',keys:[],custom:true,multi:true}
+    ],
+    explanations:[
+      {id:'trs_x1',text:'Sustainable tourism works best when there is strong government regulation, genuine local community involvement, and a tourism model that values quality over quantity. Where these conditions are absent — such as in destinations driven purely by profit — sustainable tourism often fails to deliver on its promises.',keys:['government regulation','community involvement','quality over quantity','profit']},
+      {id:'trs_x2',text:'A key tension exists: truly sustainable tourism often means fewer visitors paying more, which conflicts with the mass tourism industry\'s business model. This economic reality means sustainable tourism may never fully replace mass tourism, but can serve as a complementary model for environmentally sensitive areas.',keys:['tension','fewer visitors','business model','complementary']},
+      {id:'_custom',text:'✏️ Write your own explanation',keys:[],custom:true}
+    ],
+    links:[
+      {id:'trs_l1',text:'Ultimately, sustainable tourism is not a perfect solution but represents the most viable path forward. Its success depends on strong political will, public education, and travellers willing to accept higher costs and fewer conveniences in exchange for protecting the places they visit.',keys:['viable','political will','education','costs','protecting']},
+      {id:'_custom',text:'✏️ Write your own link',keys:[],custom:true}
+    ],
+    keyTerms:['sustainable tourism','ecotourism','carrying capacity','visitor management','community-based tourism']
+  },
+
+  // ═══ HK GEOLOGY ═══
+  {
+    id:'ge_describe',
+    unit:'geology', unitLabel:'HK Geology & Geopark',
+    type:'Describe', typeLabel:'Describe',
+    title:'Describe the formation of sedimentary rocks. Identify and describe the major geological attractions in the Hong Kong UNESCO Global Geopark.',
+    source:'From 2425 TWGSS S3 Geog 2nd Exam (adapted — changed attractions)',
+    marks:12,
+    hint:'Simplified P-E Mode for Describe: Each step = one formation/attraction → describe process or features → link to next step',
+    points:[
+      {id:'ge_p1',text:'Sedimentary rocks form through a multi-stage process involving weathering, erosion, deposition, compaction, and cementation — collectively known as lithification.',keys:['sedimentary rocks','weathering','erosion','deposition','compaction','cementation','lithification']},
+      {id:'ge_p2',text:'The Hong Kong UNESCO Global Geopark contains world-class geological features, particularly in the Sai Kung Volcanic Rock Region, showcasing columnar jointing and coastal erosion landforms.',keys:['HK UNESCO Global Geopark','Sai Kung','columnar jointing','coastal erosion']},
+      {id:'_custom',text:'✏️ Write your own point',keys:[],custom:true}
+    ],
+    evidences:[
+      {id:'ge_e1',text:'Formation of sedimentary rocks: (1) Rocks are broken down by weathering and erosion into small particles. (2) Particles are transported by water, wind, or ice and deposited in layers. (3) Bottom layers are compacted under immense pressure. (4) Minerals in water cement the particles together — lithification. Sandstone is a common example.',keys:['weathering','erosion','transported','deposited','compacted','cemented','lithification','sandstone'],multi:true},
+      {id:'ge_e2',text:'Sai Kung Volcanic Rock Region: Features spectacular hexagonal columnar joints formed when thick volcanic ash and lava cooled and contracted ~140 million years ago. The columns at High Island Reservoir are among the best-exposed examples in the world.',keys:['hexagonal columnar joints','volcanic ash','cooled','contracted','High Island Reservoir'],multi:true},
+      {id:'ge_e3',text:'Ma Shi Chau: Features sedimentary rocks over 280 million years old with clear layering (lamination), folds, and faults. It is a \"textbook example\" of sedimentary structures and tectonic activity visible in one location.',keys:['Ma Shi Chau','280 million','lamination','folds','faults'],multi:true},
+      {id:'ge_e4',text:'Tung Ping Chau: The youngest sedimentary rocks in Hong Kong (~55 million years old). Features wave-cut platforms, sea stacks, and well-preserved fossils, demonstrating ongoing coastal erosion processes.',keys:['Tung Ping Chau','wave-cut platform','sea stack','fossils','coastal erosion'],multi:true},
+      {id:'_custom',text:'✏️ Add your own evidence',keys:[],custom:true,multi:true}
+    ],
+    explanations:[
+      {id:'ge_x1',text:'The formation of sedimentary rocks and the unique geology of Hong Kong are closely linked: Hong Kong\'s geological history of volcanic activity followed by long periods of erosion and deposition created the diverse rock types and landforms visible today. Understanding these processes helps explain why certain locations — like the Geopark — are so geologically significant.',keys:['volcanic activity','erosion','deposition','diverse rock types','geological history']},
+      {id:'_custom',text:'✏️ Write your own explanation',keys:[],custom:true}
+    ],
+    links:[
+      {id:'ge_l1',text:'In summary, the Hong Kong UNESCO Global Geopark is not only a site of outstanding natural beauty but also a living geological museum that records millions of years of Earth\'s history. Protecting these sites is essential for scientific research, education, and future generations.',keys:['natural beauty','living geological museum','protecting','education','future generations']},
+      {id:'_custom',text:'✏️ Write your own link',keys:[],custom:true}
+    ],
+    keyTerms:['sedimentary rock','weathering','erosion','compaction','cementation','lithification','columnar jointing','volcanic rock','Geopark']
+  },
+  {
+    id:'ge_explain',
+    unit:'geology', unitLabel:'HK Geology & Geopark',
+    type:'Explain', typeLabel:'Explain',
+    title:'Explain why Hong Kong has such diverse and internationally significant geological features despite its small land area.',
+    source:'Based on Textbook & HK Geopark materials',
+    marks:12,
+    hint:'PEEL Mode: Explain geological history → give specific site examples → explain why each is significant → link to conservation',
+    points:[
+      {id:'ge2_p1',text:'Hong Kong\'s geological diversity stems from its complex tectonic history spanning over 400 million years, involving volcanic eruptions, sedimentary deposition, and tectonic deformation.',keys:['tectonic history','400 million','volcanic eruptions','deposition','deformation']},
+      {id:'ge2_p2',text:'Despite its small size (1,100 km²), Hong Kong contains rocks from the Devonian to the Paleogene periods, with the majority being volcanic and intrusive rocks formed during a massive volcanic episode in the Mesozoic Era (~165-140 million years ago).',keys:['Devonian','Paleogene','volcanic','intrusive','Mesozoic','165-140']},
+      {id:'_custom',text:'✏️ Write your own point',keys:[],custom:true}
+    ],
+    evidences:[
+      {id:'ge2_e1',text:'Sai Kung Volcanic Rock Region: World-class hexagonal columnar joints formed ~140 million years ago. The columns cover an area of ~100 km² (including submarine sections), making it one of the largest such formations globally.',keys:['hexagonal columnar joints','140 million','100 km²'],multi:true},
+      {id:'ge2_e2',text:'Ma Shi Chau: Contains sedimentary rocks from multiple geological periods (Permian ~280 mya), with clearly visible folding, faulting, and lamination — a condensed record of tectonic activity.',keys:['Ma Shi Chau','sedimentary','Permian','folding','faulting'],multi:true},
+      {id:'ge2_e3',text:'Tung Ping Chau: The youngest rocks in HK (~55 mya), featuring well-preserved fossils and active coastal erosion features (wave-cut platforms, sea stacks) — rare in such a compact area.',keys:['Tung Ping Chau','youngest','fossils','wave-cut platform','sea stack'],multi:true},
+      {id:'_custom',text:'✏️ Add your own evidence',keys:[],custom:true,multi:true}
+    ],
+    explanations:[
+      {id:'ge2_x1',text:'This diversity exists because Hong Kong sits at a geologically active boundary where ancient volcanic arcs, sedimentary basins, and tectonic forces converged. The subsequent uplift and erosion exposed rocks from vastly different time periods in close proximity — something rare globally, especially for such a small area.',keys:['geologically active','volcanic arcs','sedimentary basins','tectonic','uplift','erosion','rare']},
+      {id:'_custom',text:'✏️ Write your own explanation',keys:[],custom:true}
+    ],
+    links:[
+      {id:'ge2_l1',text:'This extraordinary geological heritage makes Hong Kong\'s Geopark worthy of its UNESCO designation. Protecting these sites is crucial — not just for Hong Kong, but as part of humanity\'s shared geological heritage.',keys:['UNESCO','protecting','geological heritage','humanity']},
+      {id:'_custom',text:'✏️ Write your own link',keys:[],custom:true}
+    ],
+    keyTerms:['volcanic rock','intrusive rock','sedimentary rock','columnar jointing','folding','faulting','erosion','UNESCO Global Geopark']
+  }
+];
+
+/* ── INTRO / CONCLUSION TEMPLATES ── */
+const INTRO_TEMPLATES = [
+  'This essay will examine [topic], focusing on [key aspects]. The discussion will draw on evidence from [examples/regions] to illustrate the main points.',
+  '[Topic] is a significant geographical issue because [reason]. In this essay, I will discuss [aspect 1], [aspect 2], and [aspect 3], using specific examples to support each point.',
+  'The question of [topic] has become increasingly relevant in recent years. To address this, this essay will explore [approach], supported by case studies from [locations].',
+  '✏️ Write your own introduction'
+];
+const CONC_TEMPLATES = [
+  'In conclusion, [summary of main points]. Moving forward, [recommendation or outlook].',
+  'To sum up, the evidence clearly shows that [main finding]. Therefore, [action/solution] is essential to address this issue.',
+  'This essay has demonstrated that [key insight]. While challenges remain, [hopeful direction] offers a way forward.',
+  '✏️ Write your own conclusion'
+];
+
+/* ═══════════════════════════════════════
+   APP STATE
+   ═══════════════════════════════════════ */
+const state = {
+  currentUnit:'all',
+  currentQIdx:-1,
+  currentStep:0,      // 0=P, 1=E(evidence), 2=E(explanation), 3=L
+  steps:['P','E','E','L'],
+  stepLabels:['Point','Evidence','Explanation','Link'],
+  stepDescs:[
+    'Choose a topic sentence',
+    'Select supporting evidence (can pick multiple)',
+    'Explain the cause-effect mechanism',
+    'Link back to the question or forward to the next paragraph'
+  ],
+  // Per-question PEEL state: { pointId, evidenceIds[], explanationId, linkId }
+  peelState:{},
+  customInputs:{},    // { 'qId_step': 'custom text' }
+  introText:'',
+  concText:'',
+  checklist:{1:false,2:false,3:false,4:false},
+};
+
+/* ═══════════════════════════════════════
+   HELPERS
+   ═══════════════════════════════════════ */
+function escapeHTML(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+
+function getQ(){return state.currentQIdx >= 0 ? QUESTIONS[state.currentQIdx] : null;}
+
+function getPEEL(){
+  const q = getQ();
+  if(!q) return null;
+  const key = q.id;
+  if(!state.peelState[key]) state.peelState[key] = {pointId:null,evidenceIds:[],explanationId:null,linkId:null};
+  return state.peelState[key];
+}
+
+function showToast(msg,type='info'){
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = 'toast ' + type + ' show';
+  setTimeout(()=>t.classList.remove('show'),2000);
+}
+
+function collectAllKeys(list){
+  const s = new Set();
+  list.forEach(item=>item.keys.forEach(k=>s.add(k.toLowerCase())));
+  return s;
+}
+
+/* ── Levenshtein for fuzzy search ── */
+function levenshtein(a,b){
+  if(a.length===0)return b.length;if(b.length===0)return a.length;
+  let p=new Array(b.length+1),c=new Array(b.length+1);
+  for(let j=0;j<=b.length;j++)p[j]=j;
+  for(let i=1;i<=a.length;i++){c[0]=i;for(let j=1;j<=b.length;j++)c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1));[p,c]=[c,p];}
+  return p[b.length];
+}
+
+/* ── Check overlap between two keyword sets ── */
+function keyOverlap(setA,setB){
+  let match=0;
+  for(const k of setA){if(setB.has(k))match++;}
+  return match;
+}
+
+/* ═══════════════════════════════════════
+   RENDER
+   ═══════════════════════════════════════ */
+
+/* ── Unit tabs ── */
+function renderUnitTabs(){
+  const container = document.getElementById('unitTabs');
+  const units = [{id:'all',label:'🌍 All'},{id:'rainforest',label:'🌳 Rainforests'},{id:'tourism',label:'🏖️ Tourism'},{id:'geology',label:'⛰️ HK Geology'}];
+  container.innerHTML = units.map(u=>{
+    const cls = 'unit-tab ' + u.id + (state.currentUnit===u.id?' active':'');
+    return `<button class="${cls}" data-unit="${u.id}">${u.label}</button>`;
+  }).join('');
+}
+document.getElementById('unitTabs').addEventListener('click',e=>{
+  const btn = e.target.closest('.unit-tab');
+  if(!btn)return;
+  state.currentUnit = btn.dataset.unit;
+  state.currentQIdx = -1;
+  state.currentStep = 0;
+  state.peelState = {};
+  state.customInputs = {};
+  state.introText = '';
+  state.concText = '';
+  state.checklist = {1:false,2:false,3:false,4:false};
+  renderAll();
+});
+
+/* ── Question selector ── */
+function renderQuestionSelect(){
+  const card = document.getElementById('questionCard');
+  if(state.currentQIdx>=0){
+    const q = getQ();
+    const filteredQs = QUESTIONS.filter(qq=>state.currentUnit==='all'||qq.unit===state.currentUnit);
+    const currentNum = filteredQs.indexOf(q) + 1;
+    document.getElementById('qMeta').innerHTML = `
+      <span class="q-badge q-badge-type">${q.type}</span>
+      <span class="q-badge q-badge-marks">${q.marks} marks</span>
+      <span class="q-badge q-badge-source" style="font-size:.62rem">${q.source}</span>
+    `;
+    document.getElementById('qTitle').textContent = `Q${currentNum}: ${q.title}`;
+    document.getElementById('qHint').textContent = q.hint;
+    // Question select dropdown
+    const qSelect = document.getElementById('qSelect');
+    if(qSelect) qSelect.value = state.currentQIdx;
+    return;
+  }
+  // No question selected — show list
+  const filteredQs = QUESTIONS.filter(q=>state.currentUnit==='all'||q.unit===state.currentUnit);
+  if(filteredQs.length===0){
+    document.getElementById('qMeta').innerHTML = '';
+    document.getElementById('qTitle').textContent = 'No questions available for this unit.';
+    document.getElementById('qHint').textContent = '';
+    return;
+  }
+  document.getElementById('qMeta').innerHTML = `<span class="q-badge q-badge-type">Select a question</span>`;
+  document.getElementById('qTitle').innerHTML = filteredQs.map((q,i)=>{
+    const cls = q.unit;
+    return `<div style="margin:.4rem 0;padding:.5rem;border-radius:8px;cursor:pointer;font-size:.9rem;transition:.2s"
+      class="q-option qo-${cls}" data-qidx="${QUESTIONS.indexOf(q)}"
+      onmouseover="this.style.background='var(--green-light)'"
+      onmouseout="this.style.background='transparent'">
+      <div style="font-weight:600;color:var(--bark)">Q${i+1} · <span style="font-size:.72rem;color:var(--green-dark);text-transform:uppercase">${q.type}</span></div>
+      <div style="font-size:.82rem;color:var(--text2)">${q.title}</div>
+      <div style="font-size:.65rem;color:var(--text3);margin-top:.2rem">${q.marks} marks · ${q.unitLabel}</div>
+    </div>`;
+  }).join('');
+  document.getElementById('qHint').textContent = '👆 Select a question above to begin building your PEEL paragraph.';
+}
+document.getElementById('questionCard').addEventListener('click',e=>{
+  const opt = e.target.closest('.q-option');
+  if(!opt)return;
+  const qIdx = parseInt(opt.dataset.qidx);
+  state.currentQIdx = qIdx;
+  state.currentStep = 0;
+  const q = QUESTIONS[qIdx];
+  state.peelState = {};
+  state.customInputs = {};
+  state.introText = '';
+  state.concText = '';
+  state.checklist = {1:false,2:false,3:false,4:false};
+  // Init PEEL state
+  state.peelState[q.id] = {pointId:null,evidenceIds:[],explanationId:null,linkId:null};
+  renderAll();
+});
+
+/* ── Step card ── */
+function renderStepCard(){
+  const container = document.getElementById('stepCards');
+  const q = getQ();
+  if(!q){
+    container.innerHTML = '';
+    return;
+  }
+  const step = state.currentStep;
+  const stepLetter = state.steps[step];
+  const stepLabel = state.stepLabels[step];
+  const stepDesc = state.stepDescs[step];
+  const peel = getPEEL();
+
+  // Determine options based on step
+  let options = [];
+  let isMulti = false;
+  let selectedId = null;
+  let selectedIds = [];
+  if(step===0){options=q.points;selectedId=peel.pointId;}
+  else if(step===1){options=q.evidences;isMulti=true;selectedIds=peel.evidenceIds;}
+  else if(step===2){options=q.explanations;selectedId=peel.explanationId;}
+  else if(step===3){options=q.links;selectedId=peel.linkId;}
+
+  const customKey = q.id + '_' + stepLetter;
+  const hasCustom = state.customInputs[customKey] && state.customInputs[customKey].trim().length > 0;
+
+  let html = `<div class="step-card active">
+    <div class="step-header">
+      <div class="step-letter ${stepLetter.toLowerCase()}">${stepLetter}</div>
+      <div>
+        <div class="step-label">${stepLabel} ${isMulti?'<span style="font-size:.68rem;color:var(--text3);font-weight:400">(select all that apply)</span>':''}</div>
+        <div class="step-desc">${stepDesc}</div>
+      </div>
+    </div>
+    <div class="option-list">`;
+
+  options.forEach(opt=>{
+    const isSelected = isMulti ? selectedIds.includes(opt.id) : (selectedId===opt.id);
+    const multiClass = isMulti?' multi':'';
+    const selectedClass = isSelected?' selected':'';
+    const customClass = opt.custom?' custom':'';
+    html += `<div class="option-item ${multiClass} ${selectedClass} ${customClass}" data-optid="${opt.id}">
+      <div class="option-radio"></div>
+      <div>${escapeHTML(opt.text)}</div>
+    </div>`;
+  });
+
+  html += `</div>`;
+
+  // Custom input
+  html += `<div class="custom-input-area ${hasCustom || (selectedId==='_custom') ? 'show' : ''}" id="customArea">
+    <textarea class="custom-input" id="customInput" placeholder="Write your own ${stepLabel.toLowerCase()}...">${state.customInputs[customKey]||''}</textarea>
+    <div class="char-count" id="customCount">${(state.customInputs[customKey]||'').length} chars</div>
+  </div>`;
+
+  // Warning banner
+  html += `<div class="warn-banner" id="stepWarnBanner"></div>`;
+
+  html += `</div>`;
+
+  container.innerHTML = html;
+
+  // Bind option clicks
+  container.querySelectorAll('.option-item').forEach(item=>{
+    item.addEventListener('click',()=>{
+      const optId = item.dataset.optid;
+      if(isMulti){
+        if(optId==='_custom'){
+          // Toggle custom
+          document.getElementById('customArea').classList.toggle('show');
+          return;
+        }
+        const idx = selectedIds.indexOf(optId);
+        if(idx>=0) selectedIds.splice(idx,1);
+        else selectedIds.push(optId);
+        peel.evidenceIds = [...selectedIds];
+      }else{
+        if(optId==='_custom'){
+          document.getElementById('customArea').classList.add('show');
+          selectedId = '_custom';
+        }else{
+          selectedId = optId;
+          document.getElementById('customArea').classList.remove('show');
+        }
+        if(step===0) peel.pointId = selectedId;
+        else if(step===2) peel.explanationId = selectedId;
+        else if(step===3) peel.linkId = selectedId;
+      }
+      renderStepCard();
+      checkIntersection();
+      renderPreview();
+    });
+  });
+
+  // Custom input listener
+  const customInput = document.getElementById('customInput');
+  if(customInput){
+    customInput.addEventListener('input',()=>{
+      state.customInputs[customKey] = customInput.value;
+      document.getElementById('customCount').textContent = customInput.value.length + ' chars';
+      renderPreview();
+    });
+  }
+}
+
+/* ── Check P↔E keyword intersection ── */
+function checkIntersection(){
+  const q = getQ();
+  if(!q)return;
+  const banner = document.getElementById('stepWarnBanner');
+  if(!banner)return;
+  banner.classList.remove('show');
+  if(state.currentStep!==1)return;
+
+  const peel = getPEEL();
+  const pointOpt = q.points.find(p=>p.id===peel.pointId);
+  if(!pointOpt || pointOpt.custom)return;
+  const pointKeys = new Set(pointOpt.keys.map(k=>k.toLowerCase()));
+
+  const selectedEvs = q.evidences.filter(e=>peel.evidenceIds.includes(e.id) && !e.custom);
+  if(selectedEvs.length===0)return;
+
+  let allMatch = true;
+  for(const ev of selectedEvs){
+    const evKeys = new Set(ev.keys.map(k=>k.toLowerCase()));
+    if(keyOverlap(pointKeys,evKeys)===0){
+      allMatch = false;
+      break;
+    }
+  }
+
+  if(!allMatch){
+    banner.textContent = '⚠️ Warning: Your evidence may not match your chosen point. Consider selecting evidence that directly supports your topic sentence.';
+    banner.classList.add('show');
+  }
+}
+
+/* ── Preview assembled paragraph ── */
+function renderPreview(){
+  const q = getQ();
+  if(!q){document.getElementById('previewText').textContent='Select your PEEL elements to build a paragraph.';return;}
+  const peel = getPEEL();
+  const parts = [];
+
+  // P
+  if(peel.pointId){
+    const pOpt = q.points.find(p=>p.id===peel.pointId);
+    if(pOpt){
+      if(pOpt.custom){
+        const txt = state.customInputs[q.id+'_P']||'';
+        parts.push({text:txt,custom:true});
+      }else{
+        parts.push({text:pOpt.text,custom:false});
+      }
+    }
+  }
+
+  // E (evidence)
+  for(const eid of peel.evidenceIds){
+    const eOpt = q.evidences.find(e=>e.id===eid);
+    if(eOpt){
+      if(eOpt.custom){
+        const txt = state.customInputs[q.id+'_E']||'';
+        parts.push({text:txt,custom:true});
+      }else{
+        parts.push({text:eOpt.text,custom:false});
+      }
+    }
+  }
+
+  // E (explanation)
+  if(peel.explanationId){
+    const xOpt = q.explanations.find(x=>x.id===peel.explanationId);
+    if(xOpt){
+      if(xOpt.custom){
+        const txt = state.customInputs[q.id+'_E2']||'';
+        parts.push({text:txt,custom:true});
+      }else{
+        parts.push({text:xOpt.text,custom:false});
+      }
+    }
+  }
+
+  // L
+  if(peel.linkId){
+    const lOpt = q.links.find(l=>l.id===peel.linkId);
+    if(lOpt){
+      if(lOpt.custom){
+        const txt = state.customInputs[q.id+'_L']||'';
+        parts.push({text:txt,custom:true});
+      }else{
+        parts.push({text:lOpt.text,custom:false});
+      }
+    }
+  }
+
+  if(parts.length===0){
+    document.getElementById('previewText').innerHTML = '<span style="color:var(--text3)">Select your PEEL elements to build a paragraph.</span>';
+  }else{
+    document.getElementById('previewText').innerHTML = parts.map(p=>
+      p.custom ? `<span class="highlight-custom">${escapeHTML(p.text)}</span>` : `<span class="highlight-template">${escapeHTML(p.text)}</span>`
+    ).join(' ');
+  }
+
+  // Update full essay preview
+  renderEssayPreview();
+}
+
+/* ── Intro templates ── */
+function renderIntroSection(){
+  document.getElementById('introTemplateSelect').innerHTML = INTRO_TEMPLATES.map((t,i)=>{
+    const sel = state.introText===t?'selected':'';
+    return `<span class="template-chip ${sel}" data-idx="${i}">${t.substring(0,40)}...</span>`;
+  }).join('');
+  document.getElementById('introText').value = state.introText;
+  document.getElementById('introCount').textContent = state.introText.length + ' chars';
+}
+document.getElementById('introTemplateSelect').addEventListener('click',e=>{
+  const chip = e.target.closest('.template-chip');
+  if(!chip)return;
+  const idx = parseInt(chip.dataset.idx);
+  if(idx===INTRO_TEMPLATES.length-1){state.introText='';}
+  else{state.introText=INTRO_TEMPLATES[idx];}
+  renderIntroSection();
+  renderEssayPreview();
+});
+document.getElementById('introText').addEventListener('input',()=>{
+  state.introText = document.getElementById('introText').value;
+  document.getElementById('introCount').textContent = state.introText.length + ' chars';
+  renderEssayPreview();
+});
+
+/* ── Conclusion templates ── */
+function renderConcSection(){
+  document.getElementById('concTemplateSelect').innerHTML = CONC_TEMPLATES.map((t,i)=>{
+    const sel = state.concText===t?'selected':'';
+    return `<span class="template-chip ${sel}" data-idx="${i}">${t.substring(0,40)}...</span>`;
+  }).join('');
+  document.getElementById('concText').value = state.concText;
+  document.getElementById('concCount').textContent = state.concText.length + ' chars';
+}
+document.getElementById('concTemplateSelect').addEventListener('click',e=>{
+  const chip = e.target.closest('.template-chip');
+  if(!chip)return;
+  const idx = parseInt(chip.dataset.idx);
+  if(idx===CONC_TEMPLATES.length-1){state.concText='';}
+  else{state.concText=CONC_TEMPLATES[idx];}
+  renderConcSection();
+  renderEssayPreview();
+});
+document.getElementById('concText').addEventListener('input',()=>{
+  state.concText = document.getElementById('concText').value;
+  document.getElementById('concCount').textContent = state.concText.length + ' chars';
+  renderEssayPreview();
+});
+
+/* ── Section toggles ── */
+document.getElementById('introToggle').addEventListener('click',()=>{
+  const body = document.getElementById('introBody');
+  const toggle = document.getElementById('introToggle');
+  body.classList.toggle('show');
+  toggle.classList.toggle('open');
+});
+document.getElementById('concToggle').addEventListener('click',()=>{
+  const body = document.getElementById('concBody');
+  const toggle = document.getElementById('concToggle');
+  body.classList.toggle('show');
+  toggle.classList.toggle('open');
+});
+
+/* ── Full essay preview ── */
+function renderEssayPreview(){
+  const q = getQ();
+  const essayDiv = document.getElementById('essayPreview');
+  const essayText = document.getElementById('essayText');
+  if(!q || !state.introText || !document.getElementById('previewText').textContent.trim()){
+    // Don't show if nothing meaningful
+    return;
+  }
+  const hasBody = document.getElementById('previewText').innerHTML.length > 10;
+  const hasIntro = state.introText.trim().length > 0;
+  const hasConc = state.concText.trim().length > 0;
+  if(!hasIntro && !hasBody && !hasConc)return;
+  essayDiv.style.display = 'block';
+
+  let html = '';
+  if(hasIntro) html += `<p style="margin-bottom:.75rem"><strong style="color:var(--green-dark)">Introduction:</strong><br>${escapeHTML(state.introText)}</p>`;
+  if(hasBody) html += `<p style="margin-bottom:.75rem"><strong style="color:var(--green-dark)">Body Paragraph:</strong><br>${document.getElementById('previewText').innerHTML}</p>`;
+  if(hasConc) html += `<p><strong style="color:var(--green-dark)">Conclusion:</strong><br>${escapeHTML(state.concText)}</p>`;
+  essayText.innerHTML = html;
+
+  // Show checklist
+  document.getElementById('checklist').style.display = 'block';
+  renderChecklist();
+}
+
+/* ── Checklist ── */
+function renderChecklist(){
+  const items = [
+    {id:1, label:'Topic sentence clearly states the main argument'},
+    {id:2, label:'Specific evidence / examples are cited to support each claim'},
+    {id:3, label:'Cause-effect explanation connects evidence to the argument'},
+    {id:4, label:'Paragraph ends with a link back to the question or forward to the next point'}
+  ];
+  document.getElementById('checklistItems').innerHTML = items.map(it=>{
+    const checked = state.checklist[it.id];
+    return `<div class="checklist-item ${checked?'checked':''}" data-cid="${it.id}">
+      <div class="check-box"></div>
+      <span class="check-label">${it.label}</span>
+    </div>`;
+  }).join('');
+}
+document.getElementById('checklist').addEventListener('click',e=>{
+  const item = e.target.closest('.checklist-item');
+  if(!item)return;
+  const cid = parseInt(item.dataset.cid);
+  state.checklist[cid] = !state.checklist[cid];
+  renderChecklist();
+});
+
+/* ── Stepper ── */
+function renderStepper(){
+  const stepper = document.getElementById('stepper');
+  if(!getQ()){stepper.innerHTML='';return;}
+  let html = '';
+  for(let i=0;i<4;i++){
+    let cls = '';
+    if(i===state.currentStep)cls='active';
+    else if(i<state.currentStep)cls='done';
+    html += `<div class="stepper-dot ${cls}">${state.steps[i]}</div>`;
+    if(i<3) html += `<div class="stepper-line ${i<state.currentStep?'done':''}"></div>`;
+  }
+  stepper.innerHTML = html;
+}
+
+/* ── Controls ── */
+function renderControls(){
+  const q = getQ();
+  if(!q){
+    document.getElementById('controls').innerHTML = '';
+    return;
+  }
+  let html = '';
+  if(state.currentStep>0){
+    html += `<button class="btn btn-ghost" id="btnPrev">← Back</button>`;
+  }
+  if(state.currentStep<3){
+    html += `<button class="btn btn-primary" id="btnNext">Next Step →</button>`;
+  }else{
+    html += `<button class="btn btn-secondary" id="btnReset">🔄 New Paragraph</button>`;
+    html += `<button class="btn btn-warn" id="btnResetAll">🗑️ Start Over</button>`;
+  }
+  document.getElementById('controls').innerHTML = html;
+
+  const btnPrev = document.getElementById('btnPrev');
+  const btnNext = document.getElementById('btnNext');
+  const btnReset = document.getElementById('btnReset');
+  const btnResetAll = document.getElementById('btnResetAll');
+
+  if(btnPrev) btnPrev.addEventListener('click',()=>{
+    if(state.currentStep>0)state.currentStep--;
+    renderAll();
+  });
+  if(btnNext) btnNext.addEventListener('click',()=>{
+    if(state.currentStep<3)state.currentStep++;
+    renderAll();
+  });
+  if(btnReset) btnReset.addEventListener('click',()=>{
+    const q = getQ();
+    state.peelState[q.id] = {pointId:null,evidenceIds:[],explanationId:null,linkId:null};
+    state.currentStep=0;
+    renderAll();
+  });
+  if(btnResetAll) btnResetAll.addEventListener('click',()=>{
+    state.peelState = {};
+    state.customInputs = {};
+    state.introText = '';
+    state.concText = '';
+    state.checklist = {1:false,2:false,3:false,4:false};
+    state.currentStep = 0;
+    state.currentQIdx = -1;
+    document.getElementById('essayPreview').style.display = 'none';
+    document.getElementById('checklist').style.display = 'none';
+    renderAll();
+    showToast('All cleared — start fresh!','info');
+  });
+
+  // Step indicator
+  if(getQ()){
+    document.getElementById('stepIndicator').innerHTML = `<strong>Step ${state.currentStep+1}/4</strong> — ${state.stepLabels[state.currentStep]}`;
+  }
+}
+
+/* ── Bottom bar ── */
+function renderBottomBar(){
+  const q = getQ();
+  if(!q){
+    document.getElementById('essayCounter').textContent = '';
+    return;
+  }
+  const peel = getPEEL();
+  const hasPoint = !!peel.pointId;
+  const hasEv = peel.evidenceIds.length>0;
+  const hasExpl = !!peel.explanationId;
+  const hasLink = !!peel.linkId;
+  const done = [hasPoint,hasEv,hasExpl,hasLink].filter(Boolean).length;
+  document.getElementById('essayCounter').textContent = `PEEL: ${done}/4`;
+}
+
+/* ── Glossary ── */
+function renderGlossary(filter=''){
+  const q = getQ();
+  const unit = q ? q.unit : 'all';
+  const list = document.getElementById('glossaryList');
+  let terms = GLOSSARY;
+  if(unit!=='all') terms = terms.filter(t=>t.unit===unit||t.unit==='all');
+  if(filter){
+    const f = filter.toLowerCase();
+    terms = terms.filter(t=>t.term.toLowerCase().includes(f)||t.zh.includes(f)||t.def.toLowerCase().includes(f));
+    // Sort by relevance (Levenshtein)
+    terms.sort((a,b)=>levenshtein(f,a.term.toLowerCase())-levenshtein(f,b.term.toLowerCase()));
+  }
+  if(terms.length===0){
+    list.innerHTML = '<div style="color:var(--text3);font-size:.78rem;padding:.5rem 0">No matching terms.</div>';
+    return;
+  }
+  list.innerHTML = terms.map(t=>`
+    <div class="glossary-item">
+      <div class="term">${t.term} <span style="font-weight:400;color:var(--text3);font-size:.7rem">${t.zh}</span></div>
+      <div class="def">${t.def}</div>
+    </div>
+  `).join('');
+}
+
+/* ── Glossary toggle ── */
+document.getElementById('glossaryToggle').addEventListener('click',()=>{
+  document.getElementById('glossaryPanel').classList.toggle('open');
+  document.getElementById('glossaryOverlay').classList.toggle('show');
+});
+document.getElementById('glossaryOverlay').addEventListener('click',()=>{
+  document.getElementById('glossaryPanel').classList.remove('open');
+  document.getElementById('glossaryOverlay').classList.remove('show');
+});
+document.getElementById('glossarySearch').addEventListener('input',function(){
+  renderGlossary(this.value);
+});
+
+/* ═══════════════════════════════════════
+   MASTER RENDER
+   ═══════════════════════════════════════ */
+function renderAll(){
+  renderUnitTabs();
+  renderQuestionSelect();
+  renderStepper();
+  renderStepCard();
+  renderControls();
+  renderPreview();
+  renderIntroSection();
+  renderConcSection();
+  renderBottomBar();
+  renderGlossary();
+  // Scroll step card into view on mobile
+  setTimeout(()=>{
+    const card = document.querySelector('.step-card.active');
+    if(card) card.scrollIntoView({behavior:'smooth',block:'center'});
+  },100);
+}
+
+/* ═══════════════════════════════════════
+   INIT
+   ═══════════════════════════════════════ */
+renderAll();
+
+/* ── Visual Viewport for iPad keyboard ── */
+if(window.visualViewport){
+  window.visualViewport.addEventListener('resize',()=>{
+    const activeEl = document.activeElement;
+    if(activeEl && (activeEl.tagName==='TEXTAREA'||activeEl.tagName==='INPUT')){
+      setTimeout(()=>activeEl.scrollIntoView({behavior:'smooth',block:'center'}),150);
+    }
+  });
+}
+</script>
+
+</body>
+</html>

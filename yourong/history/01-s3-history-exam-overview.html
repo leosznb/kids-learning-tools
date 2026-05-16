@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S3 History 2nd Term Exam — Revision Overview</title>
+<style>
+  :root {
+    --bg: #fafafa; --card: #fff; --border: #e5e5e5; --text: #1a1a1a;
+    --text-dim: #666; --accent: #7c3aed; --accent-light: #f5f3ff;
+    --warn: #d97706; --warn-light: #fffbeb; --danger: #dc2626; --success: #059669;
+    --radius: 8px; --gap: 18px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: -apple-system, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif;
+    line-height: 1.7; padding: 20px 16px 48px;
+  }
+  .container { max-width: 860px; margin: 0 auto; }
+  .header {
+    text-align: center; padding: 32px 16px 24px;
+    border-bottom: 2px solid var(--accent); margin-bottom: 28px;
+  }
+  .header h1 { font-size: 1.55rem; font-weight: 700; color: var(--accent); letter-spacing: -0.01em; }
+  .header .sub { color: var(--text-dim); font-size: 0.88rem; margin-top: 4px; }
+  .header .tags { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 12px; }
+  .header .tag { background: var(--accent-light); color: var(--accent); border: 1px solid #ddd6fe; padding: 3px 12px; border-radius: 14px; font-size: 0.78rem; font-weight: 500; }
+  .section { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; margin-bottom: var(--gap); }
+  .section h2 { font-size: 1.1rem; font-weight: 700; color: var(--accent); margin-bottom: 6px; }
+  .section h2 .zh { font-size: 0.8rem; color: var(--text-dim); font-weight: 400; margin-left: 8px; }
+  .section h3 { font-size: 0.95rem; font-weight: 600; color: var(--text); margin: 20px 0 8px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
+  .section h4 { font-size: 0.85rem; color: var(--text-dim); margin: 14px 0 6px; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.84rem; margin-top: 8px; }
+  th { text-align: left; padding: 9px 10px; background: #f8fafc; font-weight: 600; font-size: 0.78rem; border-bottom: 2px solid #d1d5db; }
+  td { padding: 8px 10px; border-bottom: 1px solid #f0f0f0; vertical-align: top; }
+  tr:hover td { background: #fafafa; }
+  .lbl { font-weight: 600; }
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; margin-top: 10px; }
+  .card { background: var(--accent-light); border: 1px solid #ddd6fe; border-radius: var(--radius); padding: 14px 16px; }
+  .card .title { font-size: 0.9rem; font-weight: 600; color: var(--text); }
+  .card .zh { font-size: 0.76rem; color: var(--text-dim); margin-bottom: 6px; }
+  .card ul { font-size: 0.84rem; margin-top: 6px; padding-left: 18px; }
+  .card li { margin-bottom: 2px; }
+  .notice { background: var(--warn-light); border: 1px solid #fde68a; border-radius: 6px; padding: 12px 16px; margin: 10px 0; font-size: 0.86rem; color: #92400e; }
+  .notice strong { color: var(--warn); }
+  .badge { display: inline-block; padding: 1px 7px; border-radius: 3px; font-size: 0.7rem; font-weight: 600; margin-right: 3px; vertical-align: middle; }
+  .badge-warn { background: #fef3c7; color: var(--warn); }
+  .badge-err { background: #fecaca; color: var(--danger); }
+  .badge-new { background: #d1fae5; color: #059669; }
+  .tl-item { display: flex; gap: 12px; padding: 8px 0; border-bottom: 1px solid #f0f0f0; font-size: 0.85rem; align-items: baseline; }
+  .tl-date { min-width: 100px; font-weight: 700; color: var(--accent); font-size: 0.82rem; }
+  .tl-ev { flex: 1; }
+  .procon { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 8px; }
+  .pro { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 6px; padding: 12px; font-size: 0.82rem; }
+  .con { background: #fef2f2; border: 1px solid #fecaca; border-radius: 6px; padding: 12px; font-size: 0.82rem; }
+  .pro h5 { color: var(--success); margin-bottom: 4px; }
+  .con h5 { color: var(--danger); margin-bottom: 4px; }
+  @media (max-width: 600px) {
+    .card-grid, .procon { grid-template-columns: 1fr; }
+    table { font-size: 0.75rem; }
+    th, td { padding: 6px 7px; }
+    .header h1 { font-size: 1.3rem; }
+    .tl-date { min-width: 72px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- ===== HEADER ===== -->
+<div class="header">
+  <h1>📜 S3 History · 2nd Term Examination Overview</h1>
+  <div class="sub">Tsuen Wan Government Secondary School · 2025-2026</div>
+  <div class="tags">
+    <span class="tag">WWII</span><span class="tag">Cold War</span>
+    <span class="tag">HK Under Japanese Occupation</span><span class="tag">HK 1945–1997</span>
+    <span class="tag">Textbook 3A p.31–77, 114–157</span><span class="tag">Textbook 3B p.71–107</span>
+    <span class="tag"><span class="badge badge-new">+</span> 學校筆記</span>
+  </div>
+</div>
+
+<!-- ===== EXAM FORMAT ===== -->
+<div class="section">
+  <h2>1. Exam Format <span class="zh">考試形式</span></h2>
+  <table>
+    <tr><th>Item</th><th>Details</th></tr>
+    <tr><td>Date &amp; Time</td><td>11 June 2026 (Thursday), 8:30 – 9:30 AM</td></tr>
+    <tr><td>Duration</td><td>1 hour</td></tr>
+    <tr><td>Total Marks</td><td>50 (converted to 100)</td></tr>
+    <tr><td>Section I — MC</td><td>6 MC = 6 marks (12%)</td></tr>
+    <tr><td>Section II — Time Sense</td><td>Chronological ordering = 5 marks (10%)</td></tr>
+    <tr><td>Section III — Matching</td><td>Match concepts/events = 7 marks (14%)</td></tr>
+    <tr><td>Section IV — Essay Question</td><td>Short essay / explain causes = 8 marks (16%)</td></tr>
+    <tr><td>Section V — DBQ</td><td>2 DBQs (a)(b)(c) = 24 marks (48%)</td></tr>
+  </table>
+  <div class="notice">
+    <strong>⚠️ 48% of marks = DBQ!</strong> Master: (a) extract from Source → (b) infer → (c) Source + own knowledge. Write on <strong>ANSWER SHEET</strong>, not question paper.
+  </div>
+</div>
+
+<!-- ===== WWII ===== -->
+<div class="section">
+  <h2>2. The Second World War <span class="zh">第二次世界大戰</span></h2>
+
+  <h3>2.1 Causes of WWII <span class="zh">戰爭起因</span></h3>
+  <div class="card-grid">
+    <div class="card">
+      <div class="title"><span class="badge badge-err">Root Cause</span> The Great Depression <span style="font-weight:400;font-size:0.78rem;color:var(--text-dim);">大蕭條</span></div>
+      <ul><li>Western democracies seriously weakened</li><li>Less attention to international affairs</li><li>Weakened ability to check aggressors</li><li>→ Led to appeasement + League failure</li></ul>
+    </div>
+    <div class="card">
+      <div class="title">Failure of Collective Security <span style="font-weight:400;font-size:0.78rem;color:var(--text-dim);">集體安全失敗</span></div>
+      <ul><li>League of Nations lacked US participation</li><li>No independent army → low credibility</li><li>Unable to stop aggressor nations</li></ul>
+    </div>
+    <div class="card">
+      <div class="title">Rise of Totalitarian States <span style="font-weight:400;font-size:0.78rem;color:var(--text-dim);">極權國家崛起</span></div>
+      <ul><li>Germany: Hitler / Nazi Party</li><li>Italy: Mussolini / Fascist Party</li><li>Japan: Militarism</li><li>Aggressive expansionist policies</li></ul>
+    </div>
+    <div class="card">
+      <div class="title">Germany's Economic Problems <span style="font-weight:400;font-size:0.78rem;color:var(--text-dim);">德國經濟問題</span></div>
+      <ul><li>Post-WWI: severe unemployment + inflation</li><li>Germans favoured strong government over democracy</li><li>→ Hitler rose to power, adopted aggressive foreign policy</li></ul>
+    </div>
+  </div>
+
+  <h3>2.2 Appeasement Policy <span class="zh">綏靖政策（重點！）</span></h3>
+  <p style="font-size:0.85rem;margin-bottom:10px;"><strong>Definition:</strong> Appeasement means satisfying an aggressor's demands in order to pacify him. <span style="color:var(--text-dim);">通過滿足侵略者來安撫他。</span> Mainly supported by Britain and France.</p>
+
+  <div class="notice" style="margin-bottom:10px;">
+    <strong>Key Example — Munich Agreement (1938):</strong> Nazi Germany invaded Sudetenland (Czechoslovakia), where 3 million Germans lived. British PM Chamberlain met Hitler in Munich. Britain agreed to return Sudetenland to Germany in exchange for Hitler's promise of no further aggression. <strong>Result:</strong> Hitler broke his promise — invaded the rest of Czechoslovakia, then Poland (1939).
+  </div>
+
+  <h4>5 Reasons Why Britain &amp; France Supported Appeasement</h4>
+  <table>
+    <tr><th>Reason</th><th>Explanation</th></tr>
+    <tr><td>(i) Fear of war</td><td>Lesson from WWI — massive casualties. Britain also had economic problems from the Great Depression → couldn't afford military buildup.</td></tr>
+    <tr><td>(ii) Not militarily/economically ready</td><td>Both Britain and France were unprepared for another war.</td></tr>
+    <tr><td>(iii) Sympathy for Germany</td><td>Germany was seen as harshly treated by the Treaty of Versailles (e.g. lost land).</td></tr>
+    <tr><td>(iv) Germany as buffer state</td><td>Germany viewed as "lesser of two evils" — a strong Germany could counter the USSR (communism).</td></tr>
+    <tr><td>(v) Lack of strong allies</td><td>France had economic issues; the US pursued isolationism.</td></tr>
+  </table>
+
+  <h4>Arguments For vs Against Appeasement</h4>
+  <div class="procon">
+    <div class="pro">
+      <h5>✅ For Appeasement</h5>
+      <ol style="padding-left:18px;margin-top:4px;">
+        <li><strong>Delayed war</strong> — created a short period of peace</li>
+        <li><strong>Respected nationalism</strong> — 3M Germans in Sudetenland "should" return to Germany</li>
+        <li><strong>Strengthened Nazi Germany</strong> — to contain spread of communism</li>
+        <li><strong>"Buying time"</strong> — allowed Britain/France to rebuild economy and prepare for future war</li>
+      </ol>
+    </div>
+    <div class="con">
+      <h5>❌ Against Appeasement</h5>
+      <ol style="padding-left:18px;margin-top:4px;">
+        <li><strong>Hitler was untrustworthy</strong> — he violated the Treaty of Versailles by rearming</li>
+        <li><strong>Encouraged further aggression</strong> — appeasement emboldened Hitler to demand more</li>
+        <li><strong>Ignored Czechoslovakia's interests</strong> — sacrificed a sovereign nation</li>
+      </ol>
+    </div>
+  </div>
+
+  <h4>Consequences — Totalitarian Aggression after Appeasement</h4>
+  <table>
+    <tr><th>Country</th><th>Aggression</th></tr>
+    <tr><td><strong>Germany</strong></td><td>Invaded Austria (1938) → Sudetenland &amp; Czechoslovakia (1938) → <strong>Poland (Sep 1939)</strong> → Britain &amp; France declared war</td></tr>
+    <tr><td><strong>Italy</strong></td><td>Invaded Abyssinia (1935) → Albania (1939)</td></tr>
+    <tr><td><strong>Japan</strong></td><td>Invaded China (Manchuria, full-scale war) → Southeast Asian countries</td></tr>
+  </table>
+
+  <h3>2.3 Course of WWII — Key Events Timeline <span class="zh">戰爭進程</span></h3>
+
+  <div class="notice" style="margin-bottom:10px;">
+    <strong>Nazi-Soviet Non-aggression Pact (1939):</strong> Before invading Poland, Hitler signed a pact with Stalin — both promised not to attack each other and agreed to divide Poland. <strong>USSR's motive:</strong> gain territory, make Germany an "ally", show dissatisfaction with appeasement. <strong>Germany's motive:</strong> prevent Soviet intervention in its aggression.
+  </div>
+
+  <h4>European Theatre <span style="font-weight:400;">歐洲戰場</span></h4>
+  <div class="tl-item"><span class="tl-date">1939 Sep</span><span class="tl-ev">Germany invades Poland → WWII begins</span></div>
+  <div class="tl-item"><span class="tl-date">1940 Apr–May</span><span class="tl-ev">Germany seizes Denmark, Norway, Netherlands, Belgium, Luxembourg</span></div>
+  <div class="tl-item"><span class="tl-date">1940 May</span><span class="tl-ev">Dunkirk evacuation — Allied troops retreat from Europe</span></div>
+  <div class="tl-item"><span class="tl-date">1940 Jun</span><span class="tl-ev">Germany occupies Paris → France surrenders. Germany controls nearly all Europe except Britain &amp; USSR.</span></div>
+  <div class="tl-item"><span class="tl-date">1940 Jul–Dec</span><span class="tl-ev">Battle of Britain — Germany bombs Britain but fails to force surrender</span></div>
+  <div class="tl-item"><span class="tl-date">1941 Jun</span><span class="tl-ev">Germany attacks USSR</span></div>
+  <div class="tl-item"><span class="tl-date">1942 Winter</span><span class="tl-ev"><strong>Battle of Stalingrad</strong> — USSR defeats Germany → turning point in Europe</span></div>
+  <div class="tl-item"><span class="tl-date">1943 Sep</span><span class="tl-ev">Allies enter Italy → Italy surrenders</span></div>
+  <div class="tl-item"><span class="tl-date">1944 Jun 6</span><span class="tl-ev"><strong>D-Day (Normandy landings)</strong> — Allies launch counter-offensive, liberate France</span></div>
+  <div class="tl-item"><span class="tl-date">1945 May 8</span><span class="tl-ev"><strong>VE Day</strong> — Germany surrenders. Hitler commits suicide. War in Europe ends.</span></div>
+
+  <h4>Asia-Pacific Theatre <span style="font-weight:400;">亞太戰場</span></h4>
+  <div class="tl-item"><span class="tl-date">1937 Jul 7</span><span class="tl-ev">Lugouqiao Incident → War of Resistance against Japanese Aggression begins</span></div>
+  <div class="tl-item"><span class="tl-date">1937 Dec</span><span class="tl-ev">Japan occupies Nanjing</span></div>
+  <div class="tl-item"><span class="tl-date">1941 Dec 7</span><span class="tl-ev">Japan attacks Pearl Harbour → Pacific War begins; US abandons isolationism, joins war</span></div>
+  <div class="tl-item"><span class="tl-date">1941 Dec 25</span><span class="tl-ev">Japan occupies Hong Kong — "Black Christmas"</span></div>
+  <div class="tl-item"><span class="tl-date">1942 Feb</span><span class="tl-ev">Japan occupies Singapore</span></div>
+  <div class="tl-item"><span class="tl-date">1942 Jun</span><span class="tl-ev"><strong>Battle of Midway</strong> — US defeats Japan → turning point in Pacific</span></div>
+  <div class="tl-item"><span class="tl-date">1945 Aug 6 &amp; 9</span><span class="tl-ev">US drops atomic bombs on Hiroshima &amp; Nagasaki</span></div>
+  <div class="tl-item"><span class="tl-date">1945 Aug 15</span><span class="tl-ev"><strong>VJ Day</strong> — Japan surrenders unconditionally → WWII ends</span></div>
+
+  <h3>2.4 Opposing Camps <span class="zh">兩大陣營</span></h3>
+  <table>
+    <tr><th>Axis Powers 軸心國</th><th>Allied Powers 同盟國</th></tr>
+    <tr><td>Nazi Germany, Fascist Italy, Militarist Japan<br><span style="font-size:0.78rem;color:var(--text-dim);">Signed Berlin-Rome-Tokyo Axis Treaty</span></td><td>Britain, France, USSR, China, US (joined 1941)<br><span style="font-size:0.78rem;color:var(--text-dim);">US joined after Pearl Harbour attack</span></td></tr>
+  </table>
+
+  <h3>2.5 Results &amp; Impacts of WWII <span class="zh">戰爭結果與影響</span></h3>
+  <div class="card-grid">
+    <div class="card"><div class="title">Casualties &amp; Losses</div><div class="zh">傷亡與損失</div><ul><li>75M+ deaths (vs 18M in WWI)</li><li>60 countries involved</li><li>Economic losses > US$1 trillion</li><li>Resource shortages, inflation, unemployment</li></ul></div>
+    <div class="card"><div class="title">End of European Dominance</div><div class="zh">歐洲主導地位終結</div><ul><li>European economies &amp; militaries severely weakened</li><li>Colonies gained independence (decolonisation)</li></ul></div>
+    <div class="card"><div class="title">Rise of the US &amp; USSR</div><div class="zh">美蘇崛起</div><ul><li>Became two superpowers</li><li>Co-dominated post-war arrangements</li><li>→ Laid foundation for Cold War</li></ul></div>
+    <div class="card"><div class="title">Decolonisation</div><div class="zh">非殖民化</div><ul><li>Asian &amp; African colonies pushed for independence</li><li>European powers too weakened to control overseas colonies</li></ul></div>
+    <div class="card"><div class="title">Establishment of the United Nations</div><div class="zh">聯合國成立</div><ul><li>Founded in 1945 to maintain international peace and security</li><li>Replaced the failed League of Nations</li><li>US, UK, USSR, China, France → permanent Security Council members</li></ul></div>
+  </div>
+
+  <h3>2.6 Post-WWII Peace Settlement <span class="zh">戰後和平安排（1946巴黎和會）</span></h3>
+  <table>
+    <tr><th>Defeated Country</th><th>Settlement</th></tr>
+    <tr><td><strong>Germany</strong></td><td>Divided into 4 occupation zones (US, UK, France, USSR). Berlin also divided into 4 zones. <strong>Denazification</strong> policy implemented.</td></tr>
+    <tr><td><strong>Japan</strong></td><td>Occupied by US. Demilitarisation &amp; democratisation. Territorial losses &amp; war reparations.</td></tr>
+    <tr><td><strong>Italy</strong></td><td>1947 treaty signed; all fascist organisations dissolved.</td></tr>
+  </table>
+  <p style="font-size:0.83rem;margin-top:8px;color:var(--text-dim);">Nuremberg Trials (1945–46) prosecuted Nazi leaders for war crimes &amp; crimes against humanity. UN adopted the Genocide Convention.</p>
+</div>
+
+<!-- ===== HK UNDER JAPANESE OCCUPATION ===== -->
+<div class="section">
+  <h2>3. Hong Kong Under Japanese Occupation (1941–1945) <span class="zh">香港日佔時期</span></h2>
+
+  <h3>3.1 Invasion &amp; Surrender <span class="zh">入侵與投降</span></h3>
+  <table>
+    <tr><td class="lbl">Invasion date</td><td>8 December 1941</td></tr>
+    <tr><td class="lbl">Surrender date</td><td><strong>25 December 1941</strong> ("Black Christmas") — Governor Sir Mark Young surrendered at Peninsula Hotel</td></tr>
+    <tr><td class="lbl">Duration</td><td><strong>3 years and 8 months</strong> of Japanese occupation</td></tr>
+    <tr><td class="lbl">Administration</td><td>Japanese military government established</td></tr>
+  </table>
+
+  <h3>3.2 Japanese Rule — 3 Policy Categories <span class="zh">三大統治政策</span></h3>
+
+  <h4>Political Policies <span style="font-weight:400;">政治政策</span></h4>
+  <table>
+    <tr><th style="width:25%;">Policy</th><th>Details</th></tr>
+    <tr><td><strong>Forced Repatriation 強制遣返</strong></td><td>Due to food shortage, homeless &amp; unemployed were forced back to China. Population dropped from 1.6M to 0.6M.</td></tr>
+    <tr><td><strong>"Using Chinese to Rule Chinese" 以華制華</strong></td><td>Appointed pro-Japanese Chinese elites to handle Chinese affairs. Set up two Chinese councils: "Chinese Representative Council" and "Chinese Cooperative Council".</td></tr>
+  </table>
+
+  <h4>Economic Policies <span style="font-weight:400;">經濟政策</span></h4>
+  <table>
+    <tr><th style="width:25%;">Policy</th><th>Details</th></tr>
+    <tr><td><strong>Food Rationing 糧食配給</strong></td><td>Limited supply of rice, flour, salt. Free trade banned. → Widespread malnutrition.</td></tr>
+    <tr><td><strong>Military Notes 軍票</strong></td><td>Japanese military yen issued; HK dollar banned; forced exchange. Unlimited printing → hyperinflation. After occupation: notes became worthless paper → huge losses for residents.</td></tr>
+  </table>
+
+  <h4>Social Policies <span style="font-weight:400;">社會政策</span></h4>
+  <table>
+    <tr><th style="width:25%;">Policy</th><th>Details</th></tr>
+    <tr><td><strong>Media Control 媒體控制</strong></td><td>Controlled TV, radio, newspapers, films. Only pro-Japanese messages allowed.</td></tr>
+    <tr><td><strong>Japanisation 皇民化</strong></td><td>Forced Japanese language learning; renamed streets (e.g. Des Voeux Road → Showa-dori); introduced Japanese customs &amp; calendar.</td></tr>
+    <tr><td><strong>Imprisonment of Westerners</strong></td><td>Westerners confined to concentration camps; suffered hunger &amp; disease.</td></tr>
+    <tr><td><strong>Social Status Reversal</strong></td><td>Before war: Westerners had highest status. During occupation: Westerners had lowest status.</td></tr>
+    <tr><td><strong>Poor Sanitation 衛生惡劣</strong></td><td>Roads &amp; drainage damaged; garbage everywhere; epidemics (e.g. cholera) spread.</td></tr>
+  </table>
+
+  <h3>3.3 End of Occupation <span class="zh">佔領結束</span></h3>
+  <p style="font-size:0.85rem;">1945: Japan surrendered in WWII → Britain resumed governance of Hong Kong. Sir Mark Young returned as Governor.</p>
+</div>
+
+<!-- ===== COLD WAR ===== -->
+<div class="section">
+  <h2>4. The Cold War <span class="zh">冷戰</span></h2>
+
+  <h3>4.1 Definition &amp; Ideological Divide <span class="zh">定義與意識形態分歧（根本原因）</span></h3>
+  <p style="font-size:0.85rem;margin-bottom:10px;"><strong>Definition:</strong> Post-WWII ideological confrontation between the US and USSR — two superpowers that <strong>never directly fought each other militarily</strong>. <span style="color:var(--text-dim);">美蘇兩個超級大國在意識形態上的對立和衝突，但從未直接發生軍事衝突。</span></p>
+  <table>
+    <tr><th>Aspect</th><th>Capitalist Bloc (US-led) 資本主義</th><th>Communist Bloc (USSR-led) 共產主義</th></tr>
+    <tr><td>Politics 政治</td><td>Democratic government; multi-party system; allows opposition</td><td>Totalitarian government; one-party rule; no opposition allowed</td></tr>
+    <tr><td>Economy 經濟</td><td>Free market; respect private property; "small government" (limited intervention)</td><td>Planned economy; state interest > private interest; "big government" (price controls, intervention)</td></tr>
+    <tr><td>Society 社會</td><td>Basic human rights &amp; freedoms</td><td>Limited rights &amp; freedoms</td></tr>
+    <tr><td>Foreign Policy 外交</td><td><strong>Containment</strong> — stop spread of communism</td><td><strong>World Revolution</strong> — export communism globally</td></tr>
+  </table>
+
+  <h3>4.2 Causes of the Cold War <span class="zh">冷戰起因</span></h3>
+  <div class="card-grid">
+    <div class="card"><div class="title">① Ideological Differences</div><div class="zh">意識形態分歧</div><ul><li>Capitalism vs Communism — root of all conflict</li><li>Mutual perception of threat</li></ul></div>
+    <div class="card"><div class="title">② Long-Standing Distrust</div><div class="zh">長期不信任</div><ul><li>USSR excluded from WWI Paris Peace Conference &amp; League of Nations</li><li>Appeasement aimed to strengthen Germany to counter USSR</li><li>Early WWII: USSR left to fight Germany alone</li></ul></div>
+    <div class="card"><div class="title">③ USSR's Eastern Europe Expansion</div><div class="zh">蘇聯東歐擴張</div><ul><li>During/after WWII: USSR occupied Eastern Europe</li><li>Installed communist governments → "satellite states"</li><li>US saw this as aggressive expansion</li></ul></div>
+    <div class="card"><div class="title">④ Disputes over Post-War Settlement</div><div class="zh">戰後安排爭議</div><ul><li>Poland issue: USSR wanted pro-Soviet government</li><li>Germany issue: led to division of Europe into capitalist/communist blocs</li></ul></div>
+  </div>
+
+  <h3>4.3 Forms of Cold War Conflict <span class="zh">冷戰衝突形式</span></h3>
+  <table>
+    <tr><td>① Economic competition</td><td>② Propaganda war</td><td>③ Arms race (nuclear weapons)</td></tr>
+    <tr><td>④ Proxy wars (Korea, Vietnam, Chinese Civil War)</td><td>⑤ Rival military alliances (NATO vs Warsaw Pact)</td><td>⑥ Espionage</td></tr>
+    <tr><td colspan="3">⑦ Lack of communication between blocs</td></tr>
+  </table>
+
+  <h3>4.4 Development of the Cold War — Key Events <span class="zh">冷戰發展 — 重要事件</span></h3>
+  <table>
+    <tr><th>Year</th><th>Event / Policy</th><th>Significance</th></tr>
+    <tr><td>1946</td><td><strong>Iron Curtain Speech</strong> (Churchill)</td><td>Described the divide between communist and non-communist countries as an "Iron Curtain"</td></tr>
+    <tr><td>1947</td><td><strong>Truman Doctrine</strong></td><td>US declared support for any country resisting communism → marked shift from isolationism to <strong>containment</strong>; considered the <strong>start of the Cold War</strong></td></tr>
+    <tr><td>1947</td><td><strong>Marshall Plan</strong></td><td>US economic aid to rebuild Europe (offered to USSR but rejected) → countered Soviet influence, opened markets for US goods. USSR responded with <strong>Molotov Plan</strong> — conflict now expressed as economic competition</td></tr>
+    <tr><td>1948–49</td><td><strong>Berlin Blockade &amp; Airlift</strong></td><td>USSR blocked all land routes to West Berlin; Western powers airlifted supplies → USSR abandoned blockade. Led to formal division of Germany (East / West) and NATO founding</td></tr>
+    <tr><td>1949</td><td><strong>NATO established</strong></td><td>Western military alliance against USSR</td></tr>
+    <tr><td>1949</td><td><strong>PRC founded</strong></td><td>After Chinese Civil War, communist China established with USSR support — Cold War extended into Asia</td></tr>
+    <tr><td>1950–53</td><td><strong>Korean War</strong></td><td>Proxy war: USSR/China backed North; US backed South. Ended in armistice; Korea divided at 38th parallel</td></tr>
+    <tr><td>1955</td><td><strong>Warsaw Pact</strong></td><td>Soviet-led military alliance in response to NATO</td></tr>
+    <tr><td>1962</td><td><strong>Cuban Missile Crisis</strong></td><td>Closest to nuclear war; USSR placed missiles in Cuba → US naval blockade → negotiated removal</td></tr>
+    <tr><td>1970s</td><td><strong>Détente</strong></td><td>Period of eased tensions; SALT (Strategic Arms Limitation Talks)</td></tr>
+    <tr><td>1980s</td><td><strong>Gorbachev's Reforms</strong></td><td>Glasnost (openness) + Perestroika (restructuring)</td></tr>
+    <tr><td>1989</td><td>Fall of Berlin Wall</td><td>Symbol of Cold War's end</td></tr>
+    <tr><td>1991</td><td>USSR dissolved</td><td>Cold War formally ends</td></tr>
+  </table>
+  <div class="notice">
+    <strong>📌 Exam tip:</strong> 2024-25 exam asked: "Which USSR leader ended the Cold War?" → <strong>Gorbachev</strong>. Know the key leaders: Stalin, Khrushchev, Brezhnev, Gorbachev. The <strong>Truman Doctrine</strong> marks the start of the Cold War.
+  </div>
+</div>
+
+<!-- ===== HONG KONG 1945-1997 ===== -->
+<div class="section">
+  <h2>5. Growth &amp; Transformation of Hong Kong (1945–1997) <span class="zh">香港的發展與轉型</span></h2>
+
+  <h3>5.1 Economic Development <span class="zh">經濟發展</span></h3>
+  <table>
+    <tr><th>Period</th><th>Economic Model</th><th>Key Features</th></tr>
+    <tr><td>Pre-1950s</td><td>Entrepôt trade 轉口港</td><td>Gateway for trade between China and the world</td></tr>
+    <tr><td>1950s–60s</td><td>Light industries 輕工業 (labour-intensive)</td><td>Textiles, plastics, toys; family-based small factories; cheap labour</td></tr>
+    <tr><td>1970s–80s</td><td>Diversification</td><td>Financial services, shipping, tourism; manufacturing moves to Guangdong</td></tr>
+    <tr><td>1980s–1997</td><td>International financial centre 國際金融中心</td><td>Stock exchange, banking hub; service economy dominates</td></tr>
+  </table>
+
+  <h3>5.2 Housing <span class="zh">房屋</span></h3>
+  <div class="card-grid">
+    <div class="card"><div class="title">1953: Shek Kip Mei Fire</div><div class="zh">石硤尾大火</div><ul><li>~50,000 homeless</li><li>Colonial gov't began public housing (resettlement estates)</li></ul></div>
+    <div class="card"><div class="title">1972: Ten-Year Housing Programme</div><div class="zh">十年建屋計劃 (MacLehose)</div><ul><li>Aimed to house 1.8M people</li><li>Public housing for low-income families</li></ul></div>
+    <div class="card"><div class="title">1978: Home Ownership Scheme</div><div class="zh">居者有其屋</div><ul><li>Allowed public housing residents to buy their flats</li><li>Helped people climb social ladder</li></ul></div>
+    <div class="card"><div class="title">Impact on Governance</div><div class="zh">對管治的影響</div><ul><li>Better living → eased social discontent</li><li>Enhanced colonial gov't credibility</li><li>Greater public support for governance</li></ul></div>
+  </div>
+
+  <h3>5.3 Education &amp; Social Welfare <span class="zh">教育與社會福利</span></h3>
+  <table>
+    <tr><th>Sector</th><th>Key Developments</th></tr>
+    <tr><td><strong>Education</strong></td><td>1971: Free primary education; 1978: Free compulsory 9-year education (primary + junior secondary)</td></tr>
+    <tr><td><strong>Social Welfare</strong></td><td>Expansion of social welfare: public assistance, elderly allowances, medical services; gradually built a social safety net</td></tr>
+  </table>
+
+  <h3>5.4 Governance &amp; Return to Motherland <span class="zh">管治與回歸</span></h3>
+  <table>
+    <tr><th>Milestone</th><th>Details</th></tr>
+    <tr><td>Colonial Governance</td><td>Governor appointed by Britain; Executive &amp; Legislative Councils with limited elected elements (especially after 1980s)</td></tr>
+    <tr><td>1984: Sino-British Joint Declaration</td><td>Agreed HK returns to China on 1 July 1997 under "One Country, Two Systems"</td></tr>
+    <tr><td>1990: Basic Law</td><td>Mini-constitution of HKSAR; guaranteed high degree of autonomy, capitalist system unchanged for 50 years</td></tr>
+    <tr><td>1 July 1997</td><td><strong>Handover to China</strong> → HKSAR established</td></tr>
+  </table>
+
+
+</div>
+
+<!-- ===== EXAM STRATEGY ===== -->
+<div class="section">
+  <h2>6. Exam Strategy <span class="zh">應試策略</span></h2>
+
+  <h3>6.1 DBQ Mastery (48% of marks!) <span class="zh">資料題技巧</span></h3>
+  <table>
+    <tr><th>Part</th><th>What to Do</th><th>Marks</th></tr>
+    <tr><td class="lbl">(a) Extract / Infer</td><td>Identify key information DIRECTLY from the source. Quote. Explain what it shows.</td><td>~3</td></tr>
+    <tr><td class="lbl">(b) Explain</td><td>Use source to identify a concept or attitude. Cite specific evidence.</td><td>~3</td></tr>
+    <tr><td class="lbl">(c) Agree/Disagree + Own Knowledge</td><td><strong>①</strong> State position. <strong>②</strong> Source A &amp; B as evidence. <strong>③</strong> Own knowledge. Balanced argument required.</td><td>~6</td></tr>
+  </table>
+  <div class="notice">
+    <strong>📌 Golden Rules:</strong> ALWAYS cite sources — "In Source A, …" / "As shown in Source B, …". Own knowledge alone = zero marks for source-based parts. Common DBQ topics: Cold War US-USSR relations (cartoons/speeches) + HK economic/housing transformation.
+  </div>
+
+  <h3>6.2 Time Allocation <span class="zh">時間分配</span></h3>
+  <div class="card-grid">
+    <div class="card"><div class="title">Section I–IV</div><div class="zh">選擇+時序+配對+問答</div><ul><li>~20 min for 26 marks</li><li>Don't get stuck on one MC</li><li>MC: read ALL options carefully</li></ul></div>
+    <div class="card"><div class="title">Section V — DBQ × 2</div><div class="zh">兩題資料題</div><ul><li>~40 min for 24 marks</li><li>48% marks deserve 48% time</li><li>Read sources BEFORE questions</li></ul></div>
+    <div class="card"><div class="title">Time Sense Tips</div><div class="zh">時序題提示</div><ul><li>Key dates: 1937, 1939, 1941, 1945</li><li>Japan actions often precede European</li></ul></div>
+    <div class="card"><div class="title">Essay Tips</div><div class="zh">問答題提示</div><ul><li>Rank causes by importance if asked</li><li>Great Depression = root cause of WWII</li><li>Link causes with examples</li></ul></div>
+  </div>
+</div>
+
+<!-- ===== KEY TERMS ===== -->
+<div class="section">
+  <h2>7. Key Concepts Quick Reference <span class="zh">核心概念速查</span></h2>
+  <div class="card-grid">
+    <div class="card"><div class="title">Collective Security</div><div class="zh">集體安全</div>Nations act together to prevent aggression. League of Nations failed to provide this.</div>
+    <div class="card"><div class="title">Appeasement 綏靖政策</div>Making concessions to an aggressor to avoid war. Example: Munich Agreement (1938).</div>
+    <div class="card"><div class="title">Totalitarianism 極權主義</div>State controls ALL aspects of life. Examples: Nazi Germany, Fascist Italy, Militarist Japan.</div>
+    <div class="card"><div class="title">Nazi-Soviet Pact</div><div class="zh">蘇德互不侵犯條約</div>1939: Hitler &amp; Stalin agreed not to attack each other, divided Poland. Allowed Germany to invade without Soviet interference.</div>
+    <div class="card"><div class="title">Containment 圍堵政策</div>US Cold War strategy to stop communism's spread. Truman Doctrine (1947) marked its beginning.</div>
+    <div class="card"><div class="title">Proxy War 代理人戰爭</div>Superpowers support opposing sides without directly fighting. Example: Korean War (1950–53).</div>
+    <div class="card"><div class="title">Détente 緩和</div>1970s period of reduced US-USSR tensions. SALT agreements limited nuclear arms.</div>
+    <div class="card"><div class="title">Japanisation 皇民化</div>Japanese occupation policy: impose Japanese language, culture, names, calendar. Example: Des Voeux Road → Showa-dori.</div>
+    <div class="card"><div class="title">Military Notes 軍票</div>Japanese military yen; forced exchange from HK dollar; unlimited printing → hyperinflation → became worthless after war.</div>
+    <div class="card"><div class="title">Sino-British Joint Declaration 中英聯合聲明</div>1984: HK returns to China 1 July 1997 under "One Country, Two Systems".</div>
+    <div class="card"><div class="title">Iron Curtain 鐵幕</div>Churchill's term for the divide between communist and non-communist Europe.</div>
+    <div class="card"><div class="title">Denazification 去納粹化</div>Post-WWII policy to remove Nazi influence from German society, government, and culture.</div>
+  </div>
+</div>
+
+<!-- ===== PAST PAPERS ===== -->
+<div class="section">
+  <h2>8. Reference Materials in 荃官 KB <span class="zh">知識庫資料</span></h2>
+  <table>
+    <tr><th>Document</th><th>Type</th><th>Use For</th></tr>
+    <tr><td>下學期筆記_20260515.pdf <span class="badge badge-new">NEW</span></td><td>學校筆記</td><td>Primary review source — all 4 sections covered in detail</td></tr>
+    <tr><td>History_scope of exam_20260514.pdf</td><td>考試範圍</td><td>Exam syllabus + textbook page reference</td></tr>
+    <tr><td>Textbook History 3A_Part02_20260515.pdf</td><td>教科書</td><td>WWII detailed content (3A p.31–77)</td></tr>
+    <tr><td>2425_2nd_Exam_S3_hist_qp.pdf</td><td>2024-25 試卷</td><td>Mock exam — DBQ on Cold War (Cuban Missile Crisis) + HK (housing)</td></tr>
+    <tr><td>2425_2nd_Exam_S3_hist_ak.pdf</td><td>2024-25 評分</td><td>Marking scheme — learn how answers are scored</td></tr>
+    <tr><td>2324_2nd_Exam_S3_hist_P1.pdf</td><td>2023-24 試卷</td><td>Extra DBQ practice</td></tr>
+    <tr><td>2223_2nd_Exam_S3_hist_P1_qp.pdf</td><td>2022-23 試卷</td><td>Extra DBQ practice — Japanese occupation, Cold War, HK economy</td></tr>
+  </table>
+  <div class="notice">
+    <strong>📌 Pattern:</strong> Every year has DBQ on Cold War (US-USSR relations) + DBQ on HK (economy/housing/Japanese occupation). This is highly likely to repeat in 2026.
+  </div>
+</div>
+
+<div style="text-align:center; padding:24px 16px 8px; color:var(--text-dim); font-size:0.78rem;">
+  Generated for <strong>海納 &amp; 有容</strong> · Tsuen Wan Government Secondary School S3 · 2nd Term Exam 2025-2026<br>
+  Sources: School Notes (下學期筆記) + Textbook 3A p.31–77, 114–157; 3B p.71–107 + Past Papers
+</div>
+
+</div>
+</body>
+</html>

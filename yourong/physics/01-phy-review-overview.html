@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S3 Physics 2nd Term Exam — Review Overview (Ch 14)</title>
+<style>
+  :root {
+    --bg: #0a0c14;
+    --card: #11162b;
+    --card-hover: #161d38;
+    --border: #1e2a45;
+    --text: #d4d8e8;
+    --text-dim: #8890a8;
+    --accent: #00c8e8;
+    --accent-glow: rgba(0,200,232,0.15);
+    --purple: #8b7cf0;
+    --red: #ff5e6e;
+    --orange: #ff9e4a;
+    --yellow: #f5d442;
+    --green: #44d9a0;
+    --rank-1: #ff3b4e;
+    --rank-2: #ff6b3b;
+    --rank-3: #ff9e4a;
+    --rank-4: #f5d442;
+    --radius: 10px;
+    --font: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{font-size:16px;scroll-behavior:smooth}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--font);
+    line-height:1.65;
+    min-height:100vh;
+    padding:1.5rem 1rem 3rem;
+  }
+  body::before{
+    content:'';
+    position:fixed;top:0;left:0;right:0;bottom:0;
+    background:
+      radial-gradient(ellipse at 20% 20%, rgba(0,200,232,0.04) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 80%, rgba(139,124,240,0.03) 0%, transparent 50%);
+    pointer-events:none;z-index:0;
+  }
+  .container{max-width:860px;margin:0 auto;position:relative;z-index:1}
+
+  /* Header */
+  .header{
+    text-align:center;padding:2rem 0 1.5rem;
+    border-bottom:1px solid var(--border);margin-bottom:1.5rem;
+  }
+  .header h1{
+    font-size:1.8rem;font-weight:700;color:#fff;
+    letter-spacing:-0.02em;
+  }
+  .header h1 span{color:var(--accent)}
+  .header .sub{
+    margin-top:.5rem;color:var(--text-dim);font-size:.92rem;
+  }
+  .header .badge-row{
+    display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap;
+    margin-top:.8rem;
+  }
+  .badge{
+    display:inline-block;padding:.25rem .65rem;border-radius:99px;
+    font-size:.78rem;font-weight:600;border:1px solid;
+  }
+  .badge-time{border-color:var(--accent);color:var(--accent);background:rgba(0,200,232,0.08)}
+  .badge-mc{border-color:var(--purple);color:var(--purple);background:rgba(139,124,240,0.08)}
+  .badge-scope{border-color:var(--orange);color:var(--orange);background:rgba(255,158,74,0.08)}
+
+  /* Cards */
+  .card{
+    background:var(--card);border:1px solid var(--border);
+    border-radius:var(--radius);padding:1.3rem 1.4rem;margin-bottom:1rem;
+    transition:box-shadow .2s, border-color .2s;
+  }
+  .card:hover{border-color:#2a3a60}
+
+  /* Collapsible */
+  .collapsible summary{
+    cursor:pointer;list-style:none;display:flex;align-items:center;
+    justify-content:space-between;user-select:none;
+  }
+  .collapsible summary::-webkit-details-marker{display:none}
+  .collapsible summary::after{
+    content:'+';font-size:1.2rem;font-weight:300;color:var(--accent);
+    transition:transform .25s;min-width:1.5rem;text-align:right;
+  }
+  .collapsible[open] > summary::after{content:'−'}
+  .collapsible .card-body{margin-top:1rem}
+
+  /* Section titles */
+  .sec-title{
+    font-size:1.08rem;font-weight:700;color:#fff;
+    display:flex;align-items:center;gap:.5rem;
+  }
+  .sec-title .emoji{font-size:1.2rem}
+  .sec-num{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:1.7rem;height:1.7rem;border-radius:6px;
+    background:rgba(0,200,232,0.12);color:var(--accent);
+    font-size:.78rem;font-weight:700;flex-shrink:0;
+  }
+
+  /* Tables */
+  table{width:100%;border-collapse:collapse;font-size:.88rem}
+  thead th{
+    text-align:left;padding:.55rem .6rem;color:var(--accent);
+    font-weight:600;font-size:.78rem;text-transform:uppercase;
+    letter-spacing:.04em;border-bottom:1px solid var(--border);
+    white-space:nowrap;
+  }
+  tbody td{padding:.55rem .6rem;border-bottom:1px solid rgba(255,255,255,0.04);vertical-align:top}
+  tbody tr:hover{background:rgba(255,255,255,0.02)}
+  td.en{font-weight:600;color:#fff;white-space:nowrap}
+  td.cn{color:var(--text-dim);font-size:.82rem}
+
+  /* Rank badges */
+  .rank{display:inline-block;padding:.15rem .5rem;border-radius:99px;font-size:.76rem;font-weight:700;white-space:nowrap}
+  .rank-1{background:rgba(255,59,78,0.15);color:var(--rank-1);border:1px solid rgba(255,59,78,0.3)}
+  .rank-2{background:rgba(255,107,59,0.15);color:var(--rank-2);border:1px solid rgba(255,107,59,0.3)}
+  .rank-3{background:rgba(255,158,74,0.15);color:var(--rank-3);border:1px solid rgba(255,158,74,0.3)}
+  .rank-4{background:rgba(245,212,66,0.1);color:var(--yellow);border:1px solid rgba(245,212,66,0.25)}
+  .rank-5{background:rgba(68,217,160,0.1);color:var(--green);border:1px solid rgba(68,217,160,0.25)}
+  .rank-6{background:rgba(136,144,168,0.1);color:var(--text-dim);border:1px solid rgba(136,144,168,0.25)}
+
+  /* Formula */
+  .formula-row{
+    display:flex;flex-wrap:wrap;gap:.6rem;margin-top:.6rem;
+  }
+  .formula-chip{
+    background:rgba(0,200,232,0.08);border:1px solid rgba(0,200,232,0.2);
+    border-radius:8px;padding:.6rem .8rem;flex:1;min-width:200px;
+    font-family:'SF Mono','Consolas','Menlo',monospace;
+  }
+  .formula-chip .eq{font-size:1.05rem;color:#fff;font-weight:600}
+  .formula-chip .note{font-size:.78rem;color:var(--text-dim);margin-top:.2rem}
+
+  /* Highlight */
+  .hi{color:var(--accent);font-weight:600}
+  .hi-r{color:var(--red);font-weight:600}
+  .hi-o{color:var(--orange);font-weight:600}
+
+  /* Tags */
+  .tag{
+    display:inline-block;padding:.12rem .4rem;border-radius:4px;
+    font-size:.72rem;font-weight:600;margin-right:.2rem;
+    background:rgba(0,200,232,0.1);color:var(--accent);
+  }
+
+  /* Matrix dots */
+  .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin:0 1px}
+  .dot-on{background:var(--accent);box-shadow:0 0 6px var(--accent-glow)}
+  .dot-off{background:rgba(255,255,255,0.08)}
+
+  /* Alert */
+  .alert{
+    border-left:3px solid var(--orange);padding:.6rem .9rem;
+    border-radius:0 8px 8px 0;font-size:.88rem;margin-top:.8rem;
+    background:rgba(255,158,74,0.06);
+  }
+  .alert strong{color:var(--orange)}
+
+  /* Responsive */
+  @media(max-width:640px){
+    html{font-size:15px}
+    body{padding:.8rem .5rem 2rem}
+    .header h1{font-size:1.5rem}
+    .card{padding:1rem}
+    table{font-size:.8rem}
+    thead th,tbody td{padding:.4rem .35rem}
+    .formula-chip{min-width:140px}
+  }
+
+  /* Print */
+  @media print{
+    body{background:#fff;color:#000;font-size:12px}
+    .card{background:#fff;border:1px solid #ccc;break-inside:avoid}
+    .collapsible[open] .card-body{display:block!important}
+    details:not([open]) .card-body{display:block!important}
+    summary::after{display:none}
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- ========== HEADER ========== -->
+<header class="header">
+  <h1>S3 Physics <span>2nd Term Exam</span></h1>
+  <p class="sub">Chapter 14: Light, Colours and Beyond — Review Overview</p>
+  <div class="badge-row">
+    <span class="badge badge-time">⏱ 1 Hour</span>
+    <span class="badge badge-mc">MC ×20</span>
+    <span class="badge badge-mc">Short Q ×4</span>
+    <span class="badge badge-mc">Long Q ×4</span>
+    <span class="badge badge-scope">Book 3C 14.1–14.8</span>
+  </div>
+</header>
+
+<!-- ========== ① EXAM BRIEF ========== -->
+<div class="card">
+  <div class="sec-title"><span class="emoji">📋</span> Exam Brief</div>
+  <div class="card-body" style="margin-top:.8rem">
+    <table>
+      <tr><td class="en" style="width:30%">Scope</td><td>Oxford Mastering Science <strong>Book 3C Ch 14.1–14.8</strong> + <strong>Workbook 14.1–14.8</strong> + ALL supplementary handouts (incl. Snell's law, lens formula in concave &amp; convex lens)</td></tr>
+      <tr><td class="en">Format</td><td>Section A: MC ×20 | Section B: Short Questions ×4 | Section C: Long Questions ×4</td></tr>
+      <tr><td class="en">Duration</td><td>1 hour</td></tr>
+      <tr><td class="en">Teachers</td><td>CWC (陳偉駿) &amp; LHB (李漢邦)</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ========== ⑦ HOTSPOT PREDICTION ========== -->
+<div class="card">
+  <details class="collapsible" open>
+    <summary><div class="sec-title"><span class="emoji">🔥</span> Exam Hotspot Prediction <span style="font-weight:400;font-size:.82rem;color:var(--text-dim)">— likelihood high → low</span></div></summary>
+    <div class="card-body">
+      <table>
+        <thead><tr><th>#</th><th>Section</th><th>Likelihood</th><th>Predicted Question Types</th><th>Rationale</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="rank rank-1">1</span></td>
+            <td class="en">14.5 Lenses<br><span class="cn">(Convex &amp; Concave)</span></td>
+            <td><span class="hi-r">Must appear</span></td>
+            <td>Long Q ×2 + Short Q ×1 + MC ×3–4</td>
+            <td style="font-size:.82rem">Scope explicitly names <em>lens formula in concave &amp; convex lens</em>. All 3 past years (22–25) have lens ray diagram + calculation as standalone Long Q.</td>
+          </tr>
+          <tr>
+            <td><span class="rank rank-2">2</span></td>
+            <td class="en">14.3 Refraction<br><span class="cn">+ 14.4 Total Internal Reflection</span></td>
+            <td><span class="hi-r">Must appear</span></td>
+            <td>Long Q ×1 + Short Q ×1 + MC ×3–4</td>
+            <td style="font-size:.82rem">Scope explicitly names <em>Snell's law</em>. TIR + optical fibre is a classic Long Q template seen every year.</td>
+          </tr>
+          <tr>
+            <td><span class="rank rank-3">3</span></td>
+            <td class="en">14.2 Reflection &amp; Plane Mirror<br><span class="cn">（反射與平面鏡）</span></td>
+            <td><span class="hi-o">High</span></td>
+            <td>Short Q ×1 + MC ×3–4</td>
+            <td style="font-size:.82rem">Foundational topic; steady appearance every year. Often combined with refraction in composite questions.</td>
+          </tr>
+          <tr>
+            <td><span class="rank rank-4">4</span></td>
+            <td class="en">14.7 Colours of Light<br><span class="cn">（光的顏色）</span></td>
+            <td><span class="hi-o">Medium</span></td>
+            <td>MC ×2–3 + possible Short Q</td>
+            <td style="font-size:.82rem">RGB mixing / filters / object colour consistently appears in MC. Occasional Short Q on filter + object colour prediction.</td>
+          </tr>
+          <tr>
+            <td><span class="rank rank-4">5</span></td>
+            <td class="en">14.8 EM Spectrum<br><span class="cn">（電磁波譜）</span></td>
+            <td><span class="hi-o">Medium</span></td>
+            <td>MC ×3–4 + possible Short Q</td>
+            <td style="font-size:.82rem">Property matching + application identification, mainly MC. Short Q may ask IR/UV comparison.</td>
+          </tr>
+          <tr>
+            <td><span class="rank rank-5">6</span></td>
+            <td class="en">14.1 Light travels in straight lines<br><span class="cn">（光的直線傳播）</span></td>
+            <td><span class="hi-o">Medium-Low</span></td>
+            <td>MC ×1–2</td>
+            <td style="font-size:.82rem">Conceptual only (pinhole camera, shadow formation). Never appears as standalone Long Q.</td>
+          </tr>
+          <tr>
+            <td><span class="rank rank-6">7</span></td>
+            <td class="en">14.6 Eye &amp; Optical Instruments<br><span class="cn">（眼睛與光學儀器）</span></td>
+            <td><span class="hi-o">Low</span></td>
+            <td>MC ×1–2</td>
+            <td style="font-size:.82rem">Often absorbed by 14.5 lens questions. Low probability of standalone question.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </details>
+</div>
+
+<!-- ========== ② TOPIC MAP ========== -->
+<div class="card">
+  <details class="collapsible" open>
+    <summary><div class="sec-title"><span class="emoji">🗺️</span> Topic Map <span style="font-weight:400;font-size:.82rem;color:var(--text-dim)">— 14.1 → 14.8 resource mapping</span></div></summary>
+    <div class="card-body">
+      <table>
+        <thead><tr><th>§</th><th>Topic <span style="font-weight:400;color:var(--text-dim)">/ 課題</span></th><th>Textbook</th><th>Workbook</th><th>Supplementary Exercises</th><th>Past Papers</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>14.1</strong></td>
+            <td class="en">Light travels in straight lines<br><span class="cn">光的直線傳播</span></td>
+            <td>P.1–8</td><td>P.1–4</td>
+            <td style="font-size:.78rem;color:var(--text-dim)">— (textbook + workbook sufficient)</td>
+            <td style="font-size:.78rem">22–23 ✓ 23–24 ✓ 24–25 ✓</td>
+          </tr>
+          <tr>
+            <td><strong>14.2</strong></td>
+            <td class="en">Reflection of Light &amp; Plane Mirror<br><span class="cn">光的反射與平面鏡</span></td>
+            <td>P.9–20</td><td>P.5–8</td>
+            <td style="font-size:.78rem"><span class="tag">worksheet on Reflection</span> <span class="tag">Experiment plane mirror</span></td>
+            <td style="font-size:.78rem">22–23 ✓ 23–24 ✓ 24–25 ✓</td>
+          </tr>
+          <tr>
+            <td><strong>14.3</strong></td>
+            <td class="en">Refraction of Light<br><span class="cn">光的折射</span></td>
+            <td>P.21–35</td><td>P.9–13</td>
+            <td style="font-size:.78rem"><span class="tag">Worksheet Refraction</span> <span class="tag">Short Quiz Refraction</span> <span class="tag">Ex &amp; Solution Refraction</span></td>
+            <td style="font-size:.78rem">22–23 ✓ 23–24 ✓ 24–25 ✓</td>
+          </tr>
+          <tr>
+            <td><strong>14.4</strong></td>
+            <td class="en">Total Internal Reflection<br><span class="cn">全內反射</span></td>
+            <td>P.36–43</td><td>P.14–16</td>
+            <td style="font-size:.78rem"><span class="tag">Supp Ex Refraction &amp; TIR</span> <span class="tag">Ex TIR</span> <span class="tag">Class notes TIR</span></td>
+            <td style="font-size:.78rem">22–23 ✓ 23–24 ✓ 24–25 ✓</td>
+          </tr>
+          <tr style="background:rgba(0,200,232,0.04)">
+            <td><strong>⭐14.5</strong></td>
+            <td class="en">Lenses — Convex &amp; Concave<br><span class="cn">透鏡（凸透鏡與凹透鏡）</span></td>
+            <td>P.44–68</td><td>P.17–24</td>
+            <td style="font-size:.78rem"><span class="tag" style="background:rgba(255,107,59,0.15);color:var(--orange)">convex &amp; concave lenses</span> <span class="tag">UT2 22–23 Q&amp;A</span> <span class="tag">UT2 23–24 Q&amp;A</span> <span class="tag">UT2 24–25 Q&amp;A</span></td>
+            <td style="font-size:.78rem">22–23 ✓ 23–24 ✓ 24–25 ✓<br>+3 years UT2</td>
+          </tr>
+          <tr>
+            <td><strong>14.6</strong></td>
+            <td class="en">The Eye &amp; Optical Instruments<br><span class="cn">眼睛與光學儀器</span></td>
+            <td>P.69–80</td><td>P.25–28</td>
+            <td style="font-size:.78rem;color:var(--text-dim)">— (textbook + workbook sufficient)</td>
+            <td style="font-size:.78rem">22–23 ✓ 23–24 ✓ 24–25 ✓</td>
+          </tr>
+          <tr>
+            <td><strong>14.7</strong></td>
+            <td class="en">Colours of Light<br><span class="cn">光的顏色</span></td>
+            <td>P.81–95</td><td>P.29–34</td>
+            <td style="font-size:.78rem;color:var(--text-dim)">— (rely on textbook + past paper MC)</td>
+            <td style="font-size:.78rem">22–23 ✓ 23–24 ✓ 24–25 ✓</td>
+          </tr>
+          <tr>
+            <td><strong>14.8</strong></td>
+            <td class="en">Electromagnetic Spectrum<br><span class="cn">電磁波譜</span></td>
+            <td>P.96–121</td><td>P.35–44</td>
+            <td style="font-size:.78rem;color:var(--text-dim)">— (rely on textbook + past paper MC)</td>
+            <td style="font-size:.78rem">22–23 ✓ 23–24 ✓ 24–25 ✓</td>
+          </tr>
+        </tbody>
+      </table>
+      <p style="margin-top:.6rem;font-size:.76rem;color:var(--text-dim)">⭐ = highest exam weight. UT2 papers (22–25) provide <em>extra</em> lens-specific practice beyond 2nd Exam papers.</p>
+    </div>
+  </details>
+</div>
+
+<!-- ========== ④ KEY FORMULAS ========== -->
+<div class="card">
+  <details class="collapsible">
+    <summary><div class="sec-title"><span class="emoji">🧮</span> Key Formulas</div></summary>
+    <div class="card-body">
+      <div class="formula-row">
+        <div class="formula-chip">
+          <div class="eq">n = sin i / sin r</div>
+          <div class="note">Snell's Law — when light enters from air into medium<br>適用：14.3 Refraction</div>
+        </div>
+        <div class="formula-chip">
+          <div class="eq">n₁ sin θ₁ = n₂ sin θ₂</div>
+          <div class="note">General Snell's Law — any two media<br>適用：14.3 Multi-layer refraction</div>
+        </div>
+        <div class="formula-chip">
+          <div class="eq">sin C = 1 / n</div>
+          <div class="note">Critical angle — from medium to air<br>適用：14.4 TIR</div>
+        </div>
+        <div class="formula-chip">
+          <div class="eq">1/f = 1/u + 1/v</div>
+          <div class="note">Lens Formula<br>適用：14.5 Convex &amp; Concave lens<br><span style="color:var(--red);font-size:.76rem">⚠ f < 0 for concave lens; v < 0 for virtual image</span></div>
+        </div>
+        <div class="formula-chip">
+          <div class="eq">m = v / u</div>
+          <div class="note">Linear Magnification<br>適用：14.5 Lens image size</div>
+        </div>
+      </div>
+    </div>
+  </details>
+</div>
+
+<!-- ========== ⑧ KEY / DIFFICULT / SOLUTION ========== -->
+<div class="card">
+  <details class="collapsible">
+    <summary><div class="sec-title"><span class="emoji">🎯</span> Key Points, Difficulties &amp; Solutions</div></summary>
+    <div class="card-body">
+      <table>
+        <thead><tr><th>§</th><th>What's Heavy <span class="cn">重點</span></th><th>What's Hard <span class="cn">難點</span></th><th>How to Crack <span class="cn">解法</span></th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>14.3</strong></td>
+            <td>Snell's law calculation: n = sin i / sin r</td>
+            <td>① Forget to draw <strong>normal line</strong>; misidentify i / r<br>② Multi-layer refraction direction confusion</td>
+            <td>① <span class="hi">Draw normal first</span>, then label angles<br>② Apply Snell's law <span class="hi">layer by layer</span> independently</td>
+          </tr>
+          <tr>
+            <td><strong>14.4</strong></td>
+            <td>TIR dual conditions + critical angle sin C = 1/n</td>
+            <td>Reversing direction: forgetting TIR needs <strong>dense → less dense</strong></td>
+            <td>Mantra: <span class="hi">TIR = dense→less dense + i &gt; C</span>. Both conditions must hold; miss one = no TIR.</td>
+          </tr>
+          <tr style="background:rgba(0,200,232,0.04)">
+            <td><strong>⭐14.5<br>Convex</strong></td>
+            <td>Lens formula 1/f = 1/u + 1/v + magnification + <strong>4 ray diagrams</strong> (u&gt;2f, u=2f, f&lt;u&lt;2f, u&lt;f)</td>
+            <td>① <strong>Sign errors</strong>: real image v&gt;0, virtual v&lt;0. Concave f&lt;0.<br>② Ray diagram: missing arrows, F/2F mislabeled</td>
+            <td>① Rule: <span class="hi">real image → v positive; virtual image → v negative; concave lens → f negative</span><br>② Drill <span class="hi">3 standard rays</span> to muscle memory: through centre (straight) / parallel→through F / through F→parallel</td>
+          </tr>
+          <tr style="background:rgba(0,200,232,0.04)">
+            <td><strong>⭐14.5<br>Concave</strong></td>
+            <td>Ray diagram + image always virtual, diminished, upright</td>
+            <td>Drawing concave lens like convex lens by mistake</td>
+            <td>Concave lens rays: <span class="hi">parallel→diverge (extend backward through F)</span>. Practise separately from convex.</td>
+          </tr>
+          <tr>
+            <td><strong>14.2</strong></td>
+            <td>Image properties: virtual, laterally inverted, same size, equal distance</td>
+            <td>Virtual image position: marking distance behind mirror incorrectly</td>
+            <td><span class="hi">Mirror symmetry method</span>: object distance = image distance; line perpendicular to mirror.</td>
+          </tr>
+          <tr>
+            <td><strong>14.7</strong></td>
+            <td>RGB additive mixing vs filter subtraction + object colour</td>
+            <td>Confusing <strong>addition</strong> (light mixing) with <strong>subtraction</strong> (filters)</td>
+            <td>Contrast card: <span class="hi">Light addition</span> (RGB→white) vs <span class="hi">Filter subtraction</span> (red filter transmits only red, absorbs rest).</td>
+          </tr>
+          <tr>
+            <td><strong>14.8</strong></td>
+            <td>Frequency/wavelength ordering + band applications</td>
+            <td>Mixing up order; confusing applications across bands</td>
+            <td>Order: <span class="hi">Gamma → X-ray → UV → Visible → IR → Microwave → Radio</span> (high f → low f). Memorise <strong>one</strong> core application per band.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </details>
+</div>
+
+<!-- ========== ⑨ PROBLEM-SOLVING METHODS ========== -->
+<div class="card">
+  <details class="collapsible">
+    <summary><div class="sec-title"><span class="emoji">🛠️</span> Problem-Solving Methods <span style="font-weight:400;font-size:.82rem;color:var(--text-dim)">— within syllabus only</span></div></summary>
+    <div class="card-body">
+      <table>
+        <thead><tr><th>#</th><th>Method</th><th>When to Use</th><th>Core Steps</th><th>Common Mistake</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>1</strong></td>
+            <td class="en">Snell's Law Calculation</td>
+            <td>Find refraction angle / refractive index / speed in medium</td>
+            <td>① Draw normal ② Label i, r ③ Apply n₁ sin θ₁ = n₂ sin θ₂ ④ Solve</td>
+            <td>Angles MUST be measured from <span class="hi-r">normal</span>, not from interface</td>
+          </tr>
+          <tr>
+            <td><strong>2</strong></td>
+            <td class="en">Lens Formula Calculation</td>
+            <td>Find image distance v / focal length f / magnification m</td>
+            <td>① Confirm u, f (check signs) ② 1/f = 1/u + 1/v → solve v ③ If needed m = v/u ④ Judge real/virtual by sign of v</td>
+            <td><span class="hi-r">Concave lens: f &lt; 0; Virtual image: v &lt; 0</span></td>
+          </tr>
+          <tr>
+            <td><strong>3</strong></td>
+            <td class="en">Critical Angle Calculation</td>
+            <td>Judge if TIR occurs / find critical angle</td>
+            <td>① sin C = 1/n (medium → air) ② Compare i with C</td>
+            <td>Must be <span class="hi-r">dense → less dense</span>, otherwise no C exists</td>
+          </tr>
+          <tr>
+            <td><strong>4</strong></td>
+            <td class="en">Ray Diagram Drawing</td>
+            <td>Find image position, size, nature (real/virtual)</td>
+            <td>① Draw principal axis + mark F, 2F ② Draw ≥2 standard rays ③ Intersection = image</td>
+            <td>Arrow direction + F/2F position must be exact; <span class="hi-r">virtual image = dashed lines</span></td>
+          </tr>
+          <tr>
+            <td><strong>5</strong></td>
+            <td class="en">Plane Mirror Imaging</td>
+            <td>Find mirror image position, field of view</td>
+            <td>① image distance = object distance (behind mirror) ② Object-image line ⟂ mirror ③ Draw reflected rays (dashed extension to image)</td>
+            <td>Image is <span class="hi-r">behind mirror, use dashed lines</span></td>
+          </tr>
+          <tr>
+            <td><strong>6</strong></td>
+            <td class="en">Colour Prediction</td>
+            <td>Predict object colour under filter / coloured light</td>
+            <td>① Light source colour → ② What the filter cuts → ③ What the object reflects → ④ What the eye sees</td>
+            <td><span class="hi-r">Filter subtraction ≠ light addition</span>; do not mix the two</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="alert">
+        <strong>Out-of-syllabus (NOT included):</strong> Lens maker's formula · Wave optics (interference/diffraction/polarisation) · Microscopic derivation of refractive index · Curved mirrors (concave/convex mirror) · Calculus-based derivations. <em>These will not appear in the exam.</em>
+      </div>
+    </div>
+  </details>
+</div>
+
+<!-- ========== ⑤ PAST PAPER MATRIX ========== -->
+<div class="card">
+  <details class="collapsible">
+    <summary><div class="sec-title"><span class="emoji">📊</span> Past Paper Matrix <span style="font-weight:400;font-size:.82rem;color:var(--text-dim)">— 2nd Exam Papers</span></div></summary>
+    <div class="card-body">
+      <table>
+        <thead><tr><th>Paper</th><th>14.1</th><th>14.2</th><th>14.3</th><th>14.4</th><th>14.5</th><th>14.6</th><th>14.7</th><th>14.8</th><th>Files Available</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="en">22–23</td>
+            <td><span class="dot dot-on"></span></td>
+            <td><span class="dot dot-on"></span></td>
+            <td><span class="dot dot-on"></span></td>
+            <td><span class="dot dot-on"></span></td>
+            <td><span class="dot dot-on"></span></td>
+            <td><span class="dot dot-on"></span></td>
+            <td><span class="dot dot-on"></span></td>
+            <td><span class="dot dot-on"></span></td>
+            <td style="font-size:.76rem">QP + SA + P1_qp + P1_qa + P1_ms + MC</td>
+          </tr>
+          <tr>
+            <td class="en">23–24</td>
+            <td><span class="dot dot-on"></span></td>
+            <td><span class="dot dot-on"></span></td>
+            <td><span class="dot dot-on"></span></td>
+            <td><span class="dot dot-on"></span></td>
+            <td><span class="dot dot-on"></span></td>
+            <td><span class="dot dot-on"></span></td>
+            <td><span class="dot dot-on"></span></td>
+            <td><span class="dot dot-on"></span></td>
+            <td style="font-size:.76rem">P1_qa + P1_qp + P1_ms</td>
+          </tr>
+          <tr>
+            <td class="en">24–25</td>
+            <td><span class="dot dot-on"></span></td>
+            <td><span class="dot dot-on"></span></td>
+            <td><span class="dot dot-on"></span></td>
+            <td><span class="dot dot-on"></span></td>
+            <td><span class="dot dot-on"></span></td>
+            <td><span class="dot dot-on"></span></td>
+            <td><span class="dot dot-on"></span></td>
+            <td><span class="dot dot-on"></span></td>
+            <td style="font-size:.76rem">P1A_qp + P1B_qa + ms</td>
+          </tr>
+        </tbody>
+      </table>
+      <p style="margin-top:.5rem;font-size:.78rem;color:var(--text-dim)">● = covered in this paper. All three years cover the full Ch 14 scope. <strong>22–23 is the most complete set</strong> (QP + Answer Sheet + Marking Scheme + MC paper). Do 22–23 first as diagnostic, then 23–24 and 24–25 as timed practice.</p>
+    </div>
+  </details>
+</div>
+
+<!-- ========== ⑥ GAP ALERT + ROUTE ========== -->
+<div class="card">
+  <details class="collapsible">
+    <summary><div class="sec-title"><span class="emoji">⚠️</span> Gap Alert &amp; Suggested Route</div></summary>
+    <div class="card-body">
+      <div class="alert">
+        <strong>Gap:</strong> 14.7 Colours and 14.8 EM Spectrum have <strong>no standalone supplementary worksheets</strong> in the knowledge base. They are covered only by textbook, workbook, and past paper questions.<br>
+        <strong>Countermeasure:</strong> After completing topic review, extract all MC questions on colours / EM spectrum from the 22–23 2nd Exam paper as targeted drill.
+      </div>
+
+      <div style="margin-top:1rem">
+        <div class="sec-title" style="font-size:.95rem;margin-bottom:.6rem"><span class="emoji">🧭</span> Suggested Revision Route</div>
+        <table>
+          <thead><tr><th>Phase</th><th>Order</th><th>Focus</th><th>Strategy</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><span class="rank rank-1">1</span></td>
+              <td><strong>14.2</strong> Reflection → <strong>14.3</strong> Refraction → <strong>14.4</strong> TIR</td>
+              <td>Snell's law + TIR conditions + ray diagrams</td>
+              <td>Foundation chain: reflection → refraction → TIR builds logically. Do worksheets after each section.</td>
+            </tr>
+            <tr>
+              <td><span class="rank rank-2">2</span></td>
+              <td><strong>14.5</strong> Lenses</td>
+              <td>Lens formula + 4 ray diagrams + magnification</td>
+              <td><span class="hi">Heaviest weight.</span> Textbook P.44–68 → convex &amp; concave lenses.pdf → UT2 papers for drill → then 2nd Exam lens questions.</td>
+            </tr>
+            <tr>
+              <td><span class="rank rank-3">3</span></td>
+              <td><strong>14.6</strong> Eye</td>
+              <td>Eye structure + optical instrument basics</td>
+              <td>Quick review; low exam weight. Connect to 14.5 lens concepts.</td>
+            </tr>
+            <tr>
+              <td><span class="rank rank-4">4</span></td>
+              <td><strong>14.1</strong> Light rays → <strong>14.7</strong> Colours → <strong>14.8</strong> EM Spectrum</td>
+              <td>Concept + memory topics</td>
+              <td>Concept-heavy, calculation-light. Review textbook → drill past paper MC sections. Save for last as they are easier to retain short-term.</td>
+            </tr>
+            <tr>
+              <td><span class="rank rank-5">5</span></td>
+              <td><strong>Full Past Paper</strong></td>
+              <td>Timed practice: 1 hour, MC×20 + Short×4 + Long×4</td>
+              <td>22–23 first (diagnostic) → 23–24 (timed) → 24–25 (final). Review marking scheme after each.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </details>
+</div>
+
+<!-- ========== FOOTER ========== -->
+<footer style="text-align:center;padding:2rem 0 1rem;color:var(--text-dim);font-size:.78rem;border-top:1px solid var(--border);margin-top:1.5rem">
+  <p>S3 Physics 2nd Term Exam — Review Overview · Generated for 海納 &amp; 有容 · 荃灣官立中學</p>
+  <p style="margin-top:.3rem">Based on <em>Physics_scope of exam_20260512</em> + all materials in 荃官 Knowledge Base</p>
+</footer>
+
+</div>
+</body>
+</html>

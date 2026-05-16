@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S3 Chemistry · 歷年命題模式深度分析 | TWGSS</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --card: #fafbfc;
+    --border: #e1e4e8;
+    --cyan: #0366d6;
+    --magenta: #d73a49;
+    --green: #28a745;
+    --gold: #b08800;
+    --orange: #e36209;
+    --red: #cb2431;
+    --text: #24292e;
+    --muted: #6a737d;
+    --heading: #0366d6;
+    --table-stripe: #f6f8fa;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans TC', sans-serif;
+    line-height: 1.7;
+    padding: 2rem 1rem;
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  /* ===== HEADER ===== */
+  .header {
+    text-align: center;
+    padding: 3rem 1rem 2rem;
+    border-bottom: 2px solid var(--border);
+    margin-bottom: 2rem;
+  }
+  .header .badge {
+    display: inline-block;
+    background: #f1f8ff;
+    border: 1px solid var(--cyan);
+    color: var(--cyan);
+    padding: 0.3rem 1rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    margin-bottom: 1rem;
+    border-radius: 3px;
+  }
+  .header h1 {
+    font-size: 2rem;
+    color: var(--heading);
+    margin-bottom: 0.5rem;
+  }
+  .header .meta {
+    color: var(--muted);
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+  }
+  .header .meta span { color: var(--gold); }
+
+  /* ===== SECTION ===== */
+  section {
+    margin-bottom: 2.5rem;
+  }
+  section > h2 {
+    font-size: 1.25rem;
+    color: var(--magenta);
+    border-left: 3px solid var(--magenta);
+    padding-left: 0.8rem;
+    margin-bottom: 1rem;
+  }
+  section > h2 .cn {
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-left: 0.5rem;
+  }
+
+  /* ===== CARD ===== */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1.5rem;
+    margin-bottom: 1.2rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  .card.cyan { border-color: rgba(3,102,214,0.2); }
+  .card.warn { border-color: rgba(227,98,9,0.2); }
+
+  /* ===== TABLE ===== */
+  .table-wrap { overflow-x: auto; margin: 0.8rem 0; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+  }
+  th {
+    background: #f1f8ff;
+    color: var(--cyan);
+    font-weight: 600;
+    text-align: left;
+    padding: 0.55rem 0.7rem;
+    border-bottom: 2px solid var(--border);
+    white-space: nowrap;
+  }
+  td {
+    padding: 0.5rem 0.7rem;
+    border-bottom: 1px solid rgba(30,45,61,0.5);
+    vertical-align: top;
+  }
+  tr:nth-child(even) td { background: var(--table-stripe); }
+  tr:hover td { background: #f1f8ff; }
+
+  .star5 { color: var(--magenta); font-weight: 700; }
+  .star4 { color: var(--orange); font-weight: 600; }
+  .star3 { color: var(--gold); font-weight: 600; }
+  .star2 { color: var(--muted); }
+
+  .check-true { color: var(--green); font-weight: 700; }
+  .check-false { color: #d1d5da; }
+
+  .severity-red { color: var(--red); font-weight: 700; }
+  .severity-orange { color: var(--orange); font-weight: 700; }
+  .severity-yellow { color: var(--gold); }
+  .severity-green { color: var(--green); }
+
+  .tag {
+    display: inline-block;
+    padding: 0.15rem 0.5rem;
+    border-radius: 3px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    margin: 0.1rem 0.2rem;
+  }
+  .tag-certain { background: #e6ffed; color: var(--green); border: 1px solid #b7ebce; }
+  .tag-high { background: #fff5e6; color: var(--orange); border: 1px solid #fdd6a6; }
+  .tag-medium { background: #fffbe5; color: var(--gold); border: 1px solid #fdf0a6; }
+  .tag-low { background: #f1f3f5; color: var(--muted); border: 1px solid #d1d5da; }
+  .tag-excluded { background: #ffeef0; color: var(--red); border: 1px solid #f5c6cb; }
+
+  /* ===== SCOPE BOX ===== */
+  .scope-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  @media (max-width: 700px) {
+    .scope-grid { grid-template-columns: 1fr; }
+  }
+  .scope-box {
+    padding: 1rem;
+    border-radius: 5px;
+    border: 1px solid var(--border);
+  }
+  .scope-box.core { border-color: #b7ebce; background: #f0fff4; }
+  .scope-box.core h4 { color: var(--green); }
+  .scope-box.sub { border-color: #fdf0a6; background: #fffdf0; }
+  .scope-box.sub h4 { color: var(--gold); }
+  .scope-box.exclude { border-color: #f5c6cb; background: #fff5f5; }
+  .scope-box.exclude h4 { color: var(--red); }
+  .scope-box h4 { font-size: 0.85rem; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.1em; }
+  .scope-box ul { list-style: none; font-size: 0.8rem; line-height: 1.8; }
+  .scope-box ul li::before {
+    content: "▸ ";
+    color: var(--muted);
+  }
+
+  /* ===== ARSENAL ===== */
+  .eq-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.4rem;
+    margin: 0.8rem 0;
+  }
+  .eq-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: var(--table-stripe);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 0.6rem 0.9rem;
+    font-size: 0.8rem;
+  }
+  .eq-card .eq-num {
+    color: var(--cyan);
+    font-weight: 700;
+    min-width: 1.5rem;
+    text-align: center;
+  }
+  .eq-card .eq-name {
+    color: var(--gold);
+    min-width: 10rem;
+  }
+  .eq-card .eq-formula {
+    color: var(--text);
+    flex: 1;
+    font-family: 'Times New Roman', serif;
+    font-size: 0.9rem;
+    font-style: italic;
+  }
+  .eq-card .eq-state {
+    color: var(--muted);
+    font-size: 0.7rem;
+    min-width: 5rem;
+    text-align: right;
+  }
+
+  /* ===== TRAP ===== */
+  .trap-row {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr 1.5fr;
+    gap: 0.8rem;
+    padding: 0.55rem 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.78rem;
+    align-items: start;
+  }
+  .trap-row.header-row { color: var(--cyan); font-weight: 700; border-bottom: 2px solid var(--border); }
+  .trap-row .trap-icon { color: var(--red); font-weight: 700; }
+
+  /* ===== INDENT BOX ===== */
+  .indent-box {
+    margin-top: 0.6rem;
+    padding: 0.8rem 1rem;
+    border-left: 2px solid var(--cyan);
+    background: #f8fbff;
+    font-size: 0.78rem;
+    color: var(--muted);
+    border-radius: 0 4px 4px 0;
+  }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.7rem;
+    padding: 2rem 0 1rem;
+    border-top: 1px solid var(--border);
+    margin-top: 2rem;
+  }
+
+  h3 { color: var(--cyan); font-size: 0.95rem; margin: 1.2rem 0 0.6rem; }
+  .small-note { font-size: 0.72rem; color: var(--muted); margin: 0.5rem 0; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- ===== HEADER ===== -->
+<div class="header">
+  <div class="badge">TWGSS · S3 CHEMISTRY</div>
+  <h1>S3 Chemistry<br>Exam Pattern <span style="color:#b08800">Deep Dive</span></h1>
+  <p class="meta">
+    Based on 5 academic years (2021–2026) · 10 exam/quiz files<br>
+    OCR: <span>ima OCR</span> (6 Marking Schemes) + <span>GLM-OCR</span> (4 Question Papers)<br>
+    Analysed: <span>2026-05-15</span> · Engine: DeepSeek · Audit: ✅ v3 (6 errata corrected)
+  </p>
+</div>
+
+<!-- ===== 01 EXAM SCOPE ===== -->
+<section>
+  <h2>01<span class="cn"> · Exam Scope 考試範圍（5 年實證反推）</span></h2>
+  <div class="scope-grid">
+    <div class="scope-box core">
+      <h4>⚛ Core Modules (every year 每年必考)</h4>
+      <ul>
+        <li><strong>Atomic Structure</strong> 原子結構 — protons / neutrons / electrons / isotopes</li>
+        <li><strong>Periodic Table</strong> 週期表 — Group I/II/VII/0, electronic arrangement</li>
+        <li><strong>Chemical Equations</strong> 化學方程式 — balancing / word eq / state symbols</li>
+        <li><strong>Metals & Extraction</strong> 金屬提取 — carbon reduction / electrolysis / reactivity series</li>
+        <li><strong>Petroleum & Polymers</strong> 石油與聚合物 — fractional distillation / PE/PP/PVC/PS</li>
+        <li><strong>Experiments</strong> 實驗技能 — flame test / ion identification / Fe+S</li>
+      </ul>
+    </div>
+    <div class="scope-box sub">
+      <h4>◇ Secondary Modules (2–3 year cycle)</h4>
+      <ul>
+        <li><strong>Air & Water</strong> 空氣/水 — composition / distillation / mixture vs compound</li>
+        <li><strong>CaCO₃ Chemistry</strong> 碳酸鈣 — thermal decomposition / limewater / oyster shell + HCl</li>
+      </ul>
+    </div>
+    <div class="scope-box exclude" style="grid-column: 1/-1;">
+      <h4>✕ NOT in S3 Scope (S4+ DSE only)</h4>
+      <ul style="display:flex; flex-wrap:wrap; gap:0.5rem 2rem;">
+        <li>Redox 氧化還原</li><li>Rate & Equilibrium 化學速率</li>
+        <li>Mole Calculation 摩爾計算</li><li>Acid-Base Titration 酸鹼滴定</li>
+        <li>Organic Chemistry 有機化學</li><li>Electrochemistry 電化學</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 02 PAPER STRUCTURE ===== -->
+<section>
+  <h2>02<span class="cn"> · Paper Structure 試卷結構</span></h2>
+  <div class="card">
+    <table>
+      <tr><th colspan="5" style="text-align:center; color:var(--gold);">Uniform Test 統測</th></tr>
+      <tr><th>Section</th><th>Question Type 題型</th><th>Questions</th><th>Marks</th><th>Time</th></tr>
+      <tr><td>A</td><td>Multiple Choice 選擇題</td><td>10 Qs × 2</td><td>20</td><td>~15 min</td></tr>
+      <tr><td>B</td><td>Structured 結構題</td><td>4 Qs</td><td>30</td><td>~20 min</td></tr>
+      <tr><td><strong>Total</strong></td><td></td><td><strong>~14 Qs</strong></td><td><strong>50</strong></td><td><strong>35 min</strong></td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <table>
+      <tr><th colspan="5" style="text-align:center; color:var(--gold);">1st / 2nd Term Exam 考試</th></tr>
+      <tr><th>Section</th><th>Question Type 題型</th><th>Questions</th><th>Marks</th><th>Time Strategy</th></tr>
+      <tr><td>A</td><td>Multiple Choice 選擇題</td><td>20 Qs × 2</td><td>40</td><td>≤20 min (1 min/Q)</td></tr>
+      <tr><td>B</td><td>Structured 結構題</td><td>8–10 Qs</td><td>60</td><td>~40 min (按分值分配)</td></tr>
+      <tr><td><strong>Total</strong></td><td></td><td><strong>~30 Qs</strong></td><td><strong>100</strong></td><td><strong>1 hr</strong></td></tr>
+    </table>
+  </div>
+  <div class="card cyan">
+    <table>
+      <tr><th colspan="3" style="text-align:center;">Marking Scheme 評分結構</th></tr>
+      <tr><th>Code</th><th>Meaning 含義</th><th>Strategy 策略</th></tr>
+      <tr><td>1,2,3…</td><td>Score points (1 pt each)</td><td>每個關鍵詞/方程式/解釋均計分</td></tr>
+      <tr><td>correct formula</td><td>Chemical formula correct</td><td>先寫對化學式，即使配平錯也有分</td></tr>
+      <tr><td>balanced eq + state</td><td>Balanced + state symbols</td><td>單獨計分！漏寫 (s)/(l)/(g)/(aq) 扣 0.5–1 分</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ===== 03 TOPIC WEIGHT ===== -->
+<section>
+  <h2>03<span class="cn"> · Topic Weight 五年權重矩陣</span></h2>
+  <div class="table-wrap">
+    <table>
+      <tr><th>Topic 模塊</th><th>2122</th><th>2223</th><th>2324</th><th>2425</th><th>2526</th><th>5-Yr Freq</th><th>Hit Rate</th></tr>
+      <tr><td>Atomic Structure & Isotopes 原子結構</td><td>~15</td><td>~18</td><td>~12</td><td>~15</td><td>~20</td><td>5/5</td><td class="star5">★★★★★</td></tr>
+      <tr><td>Periodic Table & Trends 週期表</td><td>~10</td><td>~10</td><td>~8</td><td>~10</td><td>~12</td><td>5/5</td><td class="star5">★★★★★</td></tr>
+      <tr><td>Chemical Equations 方程式</td><td>~8</td><td>~5</td><td>~6</td><td>~8</td><td>~8</td><td>5/5</td><td class="star5">★★★★★</td></tr>
+      <tr><td>Metals & Extraction 金屬提取</td><td>~12</td><td>~10</td><td>~14</td><td>~14</td><td>~5</td><td>5/5</td><td class="star5">★★★★★</td></tr>
+      <tr><td>Petroleum & Fractional Distillation 石油</td><td>—</td><td>~6</td><td>~10</td><td>~12</td><td>—</td><td>3/5</td><td class="star3">★★★</td></tr>
+      <tr><td>Polymers & Plastics 聚合物</td><td>—</td><td>~6</td><td>~10</td><td>~6</td><td>—</td><td>3/5</td><td class="star3">★★★</td></tr>
+      <tr><td>Experiments 實驗</td><td>~5</td><td>~8</td><td>~14</td><td>~12</td><td>—</td><td>4/5</td><td class="star4">★★★★</td></tr>
+      <tr><td>Air & Mixtures 空氣/混合物</td><td>—</td><td>—</td><td>~6</td><td>~5</td><td>~5</td><td>3/5</td><td class="star3">★★★</td></tr>
+      <tr><td>CaCO₃ Chemistry 碳酸鈣</td><td>—</td><td>~5</td><td>~10</td><td>~8</td><td>—</td><td>3/5</td><td class="star3">★★★</td></tr>
+      <tr><td>Physical/Chemical Changes 物/化變化</td><td>~10</td><td>—</td><td>—</td><td>~5</td><td>~5</td><td>3/5</td><td class="star3">★★★</td></tr>
+      <tr><td>Ions & Ionic Compounds 離子</td><td>—</td><td>~8</td><td>~4</td><td>—</td><td>—</td><td>2/5</td><td class="star2">★★</td></tr>
+    </table>
+  </div>
+  <p class="small-note">註：「2526」列僅含 1st UT + Uniform Quiz，不含期末考試→分值偏低。分值為估算（滿分≈100）。<br>
+  ⚠ 2425 列已按學年合併納入 2425_2nd Exam，Experiments / CaCO₃ / Air 已上調（審查修正）。</p>
+</section>
+
+<!-- ===== 04 SECTION A MC ===== -->
+<section>
+  <h2>04<span class="cn"> · Section A: MC Fixed Pattern 選擇題固定分布</span></h2>
+  <div class="table-wrap">
+    <table>
+      <tr><th>Q# Range</th><th>High-Frequency Topic</th><th style="text-align:center;">5-Yr Hit</th><th>Key Point</th></tr>
+      <tr><td><strong>1–2</strong></td><td>Air Composition / Element Classification / Hazard Labels</td><td style="text-align:center;"><span class="star4">4/5</span></td><td>Air is mixture NOT compound; chlorine = toxic label</td></tr>
+      <tr><td><strong>3–4</strong></td><td>Distillation Definition / Methane Formula / Metal vs Non-metal</td><td style="text-align:center;"><span class="star4">4/5</span></td><td>Distillation = boiling + condensation; CH₄</td></tr>
+      <tr><td><strong>5–6</strong></td><td>Metal Extraction Method / Crude Oil Products</td><td style="text-align:center;"><span class="star4">4/5</span></td><td>Al → electrolysis; Fe → carbon reduction; rubber NOT from petroleum</td></tr>
+      <tr><td><strong>7–8</strong></td><td>Isotope Calculation (p⁺/n⁰/e⁻) / Atomic Symbol</td><td style="text-align:center;"><span class="star5">5/5</span></td><td>A = Z + N; atomic symbol ³⁵₁₇Cl format</td></tr>
+      <tr><td><strong>9–10</strong></td><td>Periodic Table (Group/Period / halogen trends)</td><td style="text-align:center;"><span class="star5">5/5</span></td><td>Group I stored in paraffin oil; reactivity ↓ Group VII</td></tr>
+      <tr><td><strong>11–12</strong></td><td>Plastics Properties / PE vs PP</td><td style="text-align:center;"><span class="star3">3/5</span></td><td>Plastics NOT natural; PE/PP NOT soluble in water</td></tr>
+      <tr><td><strong>13–14</strong></td><td>Metal Reactivity Order / Ion Charge</td><td style="text-align:center;"><span class="star3">3/5</span></td><td>Ca>Mg>Al>Zn>Fe>Pb>Cu>Ag; NH₄⁺=+; SO₄²⁻=−</td></tr>
+      <tr><td><strong>15–16</strong></td><td>LDPE vs HDPE / Fractional Distillation Diagram</td><td style="text-align:center;"><span class="star3">3/5</span></td><td>NOT same melting point; physical change; hydrocarbons</td></tr>
+      <tr><td><strong>17–18</strong></td><td>Petroleum Facts / Electrolysis / Halogen e⁻ arrangement</td><td style="text-align:center;"><span class="star3">3/5</span></td><td>Petroleum from sea organisms; electrolysis = decomposition by electricity</td></tr>
+      <tr><td><strong>19–20</strong></td><td>Group 0 Octet / C-12 Scale / Ion e⁻ count / Be²⁺</td><td style="text-align:center;"><span class="star3">3/5</span></td><td>Noble gases have octet (except He); C-12 = 12.00 scale</td></tr>
+    </table>
+  </div>
+  <div class="indent-box">
+    <strong>Section A 結構規律：</strong><br>
+    • 前 10 題 → 原子結構、元素分類、化學式、基本概念（單一知識點）<br>
+    • 後 10 題 → 金屬、聚合物、石油、週期表規律（綜合判斷/配對題）<br>
+    • 圖表題 → Q16–18 固定出現：分餾塔圖 / 週期表片段 / 金屬使用場景<br>
+    • 陷阱題 → 必有 1–2 題是 "INCORRECT" 或 "NOT" 反向選擇（Q11/Q15 典型）
+  </div>
+</section>
+
+<!-- ===== 05 SECTION B ===== -->
+<section>
+  <h2>05<span class="cn"> · Section B: Structured Questions 固定大題分布</span></h2>
+  <div class="table-wrap">
+    <table>
+      <tr><th>Q# Area</th><th>High-Frequency Topic</th><th style="text-align:center;">5-Yr Hit</th><th style="text-align:center;">Marks</th><th>Key Requirements</th></tr>
+      <tr><td>Petroleum</td><td>Fractional distillation diagram + fractions uses + volatility/viscosity</td><td style="text-align:center;"><span class="star3">3/5</span></td><td style="text-align:center;">8–12</td><td>繪圖標註 + 餾分命名 + 性質變化方向</td></tr>
+      <tr><td>Isotopes</td><td>Atomic no./mass no./neutrons + relative abundance + chemical properties</td><td style="text-align:center;"><span class="star5">5/5</span></td><td style="text-align:center;">6–10</td><td>設未知數解方程 + 同位素化學性質相同（因電子排佈同）</td></tr>
+      <tr><td>Periodic Table</td><td>Electronic arrangement → Group/Period + element table + group trend</td><td style="text-align:center;"><span class="star4">4/5</span></td><td style="text-align:center;">6–8</td><td>電子層數 = Period; 最外層電子 = Group</td></tr>
+      <tr><td>Metals Table</td><td>Multi-property comparison (abundance/price/density/corrosion) + use</td><td style="text-align:center;"><span class="star3">3/5</span></td><td style="text-align:center;">8–12</td><td>從表格提取數據 → 從性質推用途</td></tr>
+      <tr><td>Chemical Equations</td><td>Word equation + balanced chemical equation + state symbols</td><td style="text-align:center;"><span class="star4">4/5</span></td><td style="text-align:center;">4–8</td><td>三層給分（化學式 / 配平 / state symbols）</td></tr>
+      <tr><td>Flame Test / Ion Test</td><td>Procedure + flame colours (Na/K/Cu) + AgNO₃ test + CoCl₂ paper</td><td style="text-align:center;"><span class="star3">3/5</span></td><td style="text-align:center;">6–8</td><td>步驟順序（Pt wire → conc HCl → flame）+ dil HNO₃ 原因</td></tr>
+      <tr><td>CaCO₃ Decomposition</td><td>CaCO₃ → CaO + CO₂ + limewater test + oyster shell + HCl</td><td style="text-align:center;"><span class="star3">3/5</span></td><td style="text-align:center;">8–10</td><td>方程式 + 觀察描述（dissolves/bubbles/warm）+ Ca(OH)₂+CO₂ 變渾濁</td></tr>
+      <tr><td>Polymers</td><td>Monomer → polymer + repeating unit drawing + uses (PS/PVC/PE)</td><td style="text-align:center;"><span class="star3">3/5</span></td><td style="text-align:center;">6–8</td><td>畫重複單元（雙鍵變單鍵）+ 透明 → PS</td></tr>
+      <tr><td>Fe + S Experiment</td><td>Compound def + physical vs chemical change + appearance + separation</td><td style="text-align:center;"><span class="star3">3/5</span></td><td style="text-align:center;">4–6</td><td>安全措施（fume cupboard 防 SO₂）+ 加熱是化學變化</td></tr>
+      <tr><td>Group II / I Trends</td><td>Reactivity trend explanation + electron diagram + Ca/Mg comparison</td><td style="text-align:center;"><span class="star4">4/5</span></td><td style="text-align:center;">6–8</td><td>越往下反應性越強（電子層增 → 最外層 e⁻ 更遠 → 更易失去）</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ===== 06 FIVE-YEAR COMPARISON ===== -->
+<section>
+  <h2>06<span class="cn"> · Five-Year Topic Comparison 五年對比 + 25-26 預測</span></h2>
+  <div class="table-wrap">
+    <table>
+      <tr><th>Sub-Topic</th><th style="text-align:center;">2122</th><th style="text-align:center;">2223</th><th style="text-align:center;">2324</th><th style="text-align:center;">2425</th><th style="text-align:center;">2526</th><th style="text-align:center;">25-26<br>Prediction</th></tr>
+      <tr><td>Isotope calculation (neutrons/abundance)</td><td class="check-true">☑</td><td class="check-true">☑</td><td class="check-true">☑</td><td class="check-true">☑</td><td class="check-true">☑</td><td><span class="tag tag-certain">Certain</span></td></tr>
+      <tr><td>Atomic symbol writing</td><td class="check-true">☑</td><td class="check-true">☑</td><td class="check-true">☑</td><td class="check-true">☑</td><td class="check-true">☑</td><td><span class="tag tag-certain">Certain</span></td></tr>
+      <tr><td>Electronic arrangement → Group/Period</td><td class="check-true">☑</td><td class="check-true">☑</td><td class="check-true">☑</td><td class="check-true">☑</td><td class="check-true">☑</td><td><span class="tag tag-certain">Certain</span></td></tr>
+      <tr><td>Subatomic particles table (p⁺/n⁰/e⁻)</td><td class="check-false">—</td><td class="check-true">☑</td><td class="check-false">—</td><td class="check-false">—</td><td class="check-true">☑</td><td><span class="tag tag-certain">Certain</span></td></tr>
+      <tr><td>Isotope chemical properties</td><td class="check-false">—</td><td class="check-false">—</td><td class="check-true">☑</td><td class="check-true">☑</td><td class="check-true">☑</td><td><span class="tag tag-certain">Certain</span></td></tr>
+      <tr><td>Element classification (metal/non-metal/semi)</td><td class="check-false">—</td><td class="check-false">—</td><td class="check-false">—</td><td class="check-true">☑</td><td class="check-true">☑</td><td><span class="tag tag-high">High</span></td></tr>
+      <tr><td>Chemical equation balancing</td><td class="check-true">☑</td><td class="check-true">☑</td><td class="check-true">☑</td><td class="check-true">☑</td><td class="check-true">☑</td><td><span class="tag tag-certain">Certain</span></td></tr>
+      <tr><td>Word equation + state symbols</td><td class="check-true">☑</td><td class="check-true">☑</td><td class="check-true">☑</td><td class="check-true">☑</td><td class="check-true">☑</td><td><span class="tag tag-certain">Certain</span></td></tr>
+      <tr><td>Metal extraction (carbon reduction/electrolysis)</td><td class="check-true">☑</td><td class="check-true">☑</td><td class="check-true">☑</td><td class="check-true">☑</td><td class="check-false">—</td><td><span class="tag tag-high">High</span></td></tr>
+      <tr><td>Metal properties table (multi-dimension)</td><td class="check-true">☑</td><td class="check-false">—</td><td class="check-true">☑</td><td class="check-true">☑</td><td class="check-false">—</td><td><span class="tag tag-high">High</span></td></tr>
+      <tr><td>Reactivity series</td><td class="check-true">☑</td><td class="check-true">☑</td><td class="check-true">☑</td><td class="check-true">☑</td><td class="check-true">☑</td><td><span class="tag tag-certain">Certain</span></td></tr>
+      <tr><td>Petroleum fractional distillation</td><td class="check-false">—</td><td class="check-true">☑</td><td class="check-true">☑</td><td class="check-true">☑</td><td class="check-false">—</td><td><span class="tag tag-high">High</span></td></tr>
+      <tr><td>Fraction uses & properties (volatility/viscosity)</td><td class="check-false">—</td><td class="check-true">☑</td><td class="check-true">☑</td><td class="check-true">☑</td><td class="check-false">—</td><td><span class="tag tag-high">High</span></td></tr>
+      <tr><td>Flame test (Na/K/Cu)</td><td class="check-false">—</td><td class="check-true">☑</td><td class="check-true">☑</td><td class="check-true">☑</td><td class="check-false">—</td><td><span class="tag tag-high">High</span></td></tr>
+      <tr><td>AgNO₃ test + dilute HNO₃</td><td class="check-false">—</td><td class="check-true">☑</td><td class="check-true">☑</td><td class="check-true">☑</td><td class="check-false">—</td><td><span class="tag tag-high">High</span></td></tr>
+      <tr><td>CaCO₃ decomposition + limewater</td><td class="check-false">—</td><td class="check-true">☑</td><td class="check-true">☑</td><td class="check-true">☑</td><td class="check-false">—</td><td><span class="tag tag-high">High</span></td></tr>
+      <tr><td>Polymers (monomer/polymer/repeating unit)</td><td class="check-false">—</td><td class="check-true">☑</td><td class="check-true">☑</td><td class="check-true">☑</td><td class="check-false">—</td><td><span class="tag tag-high">High</span></td></tr>
+      <tr><td>Fe + S heating experiment</td><td class="check-false">—</td><td class="check-false">—</td><td class="check-false">—</td><td class="check-true">☑</td><td class="check-true">☑</td><td><span class="tag tag-high">High</span></td></tr>
+      <tr><td>Physical vs chemical change</td><td class="check-true">☑</td><td class="check-false">—</td><td class="check-false">—</td><td class="check-true">☑</td><td class="check-true">☑</td><td><span class="tag tag-high">High</span></td></tr>
+      <tr><td>Group II alkaline earth metals trends</td><td class="check-true">☑</td><td class="check-true">☑</td><td class="check-true">☑</td><td class="check-true">☑</td><td class="check-true">☑</td><td><span class="tag tag-certain">Certain</span></td></tr>
+    </table>
+  </div>
+  <div class="indent-box">
+    ⚠ 25-26 僅有 1st UT + Uniform Quiz，不含期末考。以下模塊尚未在 25-26 出現 → <strong style="color:var(--gold);">高概率在 25-26 1st Exam 或 2nd Exam 出現</strong>：<br>
+    Petroleum full set · Polymers · Flame test · CaCO₃ chemistry · AgNO₃ test
+  </div>
+</section>
+
+<!-- ===== 07 KEY ARSENAL ===== -->
+<section>
+  <h2>07<span class="cn"> · Key Arsenal 核心化學反應庫</span></h2>
+
+  <h3>Must-Memorise Chemical Equations 必記方程式</h3>
+  <div class="eq-grid">
+    <div class="eq-card"><span class="eq-num">1</span><span class="eq-name">CaCO₃ decomposition</span><span class="eq-formula">CaCO₃(s) → CaO(s) + CO₂(g)</span><span class="eq-state">固→固+氣</span></div>
+    <div class="eq-card"><span class="eq-num">2</span><span class="eq-name">CaO + water</span><span class="eq-formula">CaO(s) + H₂O(l) → Ca(OH)₂(aq)</span><span class="eq-state">固+液→液</span></div>
+    <div class="eq-card"><span class="eq-num">3</span><span class="eq-name">Limewater + CO₂</span><span class="eq-formula">Ca(OH)₂(aq) + CO₂(g) → CaCO₃(s) + H₂O(l)</span><span class="eq-state">液+氣→固+液</span></div>
+    <div class="eq-card"><span class="eq-num">4</span><span class="eq-name">Ca + HCl</span><span class="eq-formula">Ca(s) + 2HCl(aq) → CaCl₂(aq) + H₂(g)</span><span class="eq-state">固+液→液+氣</span></div>
+    <div class="eq-card"><span class="eq-num">5</span><span class="eq-name">PbO + carbon</span><span class="eq-formula">2PbO(s) + C(s) → 2Pb(s) + CO₂(g)</span><span class="eq-state">固+固→固+氣</span></div>
+    <div class="eq-card"><span class="eq-num">6</span><span class="eq-name">Fe + steam</span><span class="eq-formula">3Fe(s) + 4H₂O(g) → Fe₃O₄(s) + 4H₂(g)</span><span class="eq-state">固+氣→固+氣</span></div>
+    <div class="eq-card"><span class="eq-num">7</span><span class="eq-name">Al + AgNO₃</span><span class="eq-formula">Al(s) + 3AgNO₃(aq) → Al(NO₃)₃(aq) + 3Ag(s)</span><span class="eq-state">固+液→液+固</span></div>
+    <div class="eq-card"><span class="eq-num">8</span><span class="eq-name">CH₄ combustion</span><span class="eq-formula">CH₄(g) + 2O₂(g) → CO₂(g) + 2H₂O(l)</span><span class="eq-state">氣+氣→氣+液</span></div>
+    <div class="eq-card"><span class="eq-num">9</span><span class="eq-name">Electrolysis of water</span><span class="eq-formula">2H₂O(l) → 2H₂(g) + O₂(g)</span><span class="eq-state">液→氣+氣</span></div>
+  </div>
+
+  <h3>Flame Test Colours 焰色測試</h3>
+  <table>
+    <tr><th>Metal Ion</th><th>Flame Colour</th><th colspan="3"></th></tr>
+    <tr><td>Na⁺</td><td style="color:var(--gold);font-weight:700;">Golden yellow</td><td>K⁺</td><td style="color:#e0a0ff;font-weight:700;">Lilac</td></tr>
+    <tr><td>Ca²⁺</td><td style="color:#ff7043;font-weight:700;">Brick red</td><td>Cu²⁺</td><td style="color:var(--green);font-weight:700;">Bluish green</td></tr>
+  </table>
+
+  <h3>Ion Tests 離子測試</h3>
+  <table>
+    <tr><th>Test</th><th>Reagent</th><th>Positive Result</th></tr>
+    <tr><td>Water</td><td>Cobalt(II) chloride paper</td><td>Blue → Pink</td></tr>
+    <tr><td>Chloride (Cl⁻)</td><td>AgNO₃(aq) + dil HNO₃</td><td>White precipitate</td></tr>
+    <tr><td>Carbonate (CO₃²⁻)</td><td>Dilute acid</td><td>Colourless gas bubbles (CO₂)</td></tr>
+    <tr><td>Sulphate (SO₄²⁻)</td><td>BaCl₂(aq) + dil HNO₃</td><td>White precipitate</td></tr>
+  </table>
+
+  <h3>Metal Reactivity Series 金屬活性序（必背）</h3>
+  <div class="card cyan" style="text-align:center; font-size:0.9rem; padding:1rem;">
+    <span style="font-weight:700;letter-spacing:0.1em;">K &gt; Na &gt; Ca &gt; Mg &gt; Al &gt; Zn &gt; Fe &gt; Pb &gt; Cu &gt; Ag &gt; Au</span><br>
+    <span style="color:var(--muted);font-size:0.7rem;">←── Carbon Reduction 碳還原法可提取 ──→ ← Natural 天然存在 →</span><br>
+    <span style="color:var(--muted);font-size:0.7rem;">←── Electrolysis 電解法提取 ──→</span>
+  </div>
+</section>
+
+<!-- ===== 08 COMMON TRAPS ===== -->
+<section>
+  <h2>08<span class="cn"> · Common Traps 常見扣分陷阱</span></h2>
+  <div class="trap-row header-row">
+    <div>Trap 陷阱</div><div>Consequence 後果</div><div>How to Avoid 避免方法</div>
+  </div>
+  <div class="trap-row">
+    <div><span class="trap-icon">⚠</span> State symbols 漏寫</div>
+    <div>方程式扣 0.5–1 分</div>
+    <div>寫完方程式後逐個檢查 (s)/(l)/(g)/(aq)</div>
+  </div>
+  <div class="trap-row">
+    <div><span class="trap-icon">⚠</span> 混淆電荷與質量</div>
+    <div>亞原子粒子表全錯</div>
+    <div><span style="color:var(--cyan);">p⁺</span>: charge +1, mass 1 · <span style="color:var(--cyan);">n⁰</span>: charge 0, mass≈1 · <span style="color:var(--cyan);">e⁻</span>: charge −1, mass≈0</div>
+  </div>
+  <div class="trap-row">
+    <div><span class="trap-icon">⚠</span> Isotope chemical properties</div>
+    <div>寫「different chemical properties」→ 0分</div>
+    <div>同位素有<strong>相同電子排佈</strong>→相同化學性質。核性質（放射性）才不同</div>
+  </div>
+  <div class="trap-row">
+    <div><span class="trap-icon">⚠</span> Si 分類錯誤</div>
+    <div>Si 判為 metal → 0分</div>
+    <div>Si = <strong>semi-metal</strong> (metalloid)，沿週期表階梯線記</div>
+  </div>
+  <div class="trap-row">
+    <div><span class="trap-icon">⚠</span> O₂ 歸入 compounds</div>
+    <div>分類題扣分</div>
+    <div>O₂ 是 <strong>element</strong>（單質），compounds 需 ≥2 種元素化合</div>
+  </div>
+  <div class="trap-row">
+    <div><span class="trap-icon">⚠</span> Ca+HCl 產物寫 CO₂</div>
+    <div>方程式全錯</div>
+    <div>金屬 + 酸 → 鹽 + <strong>H₂</strong>（氫氣），不是 CO₂</div>
+  </div>
+  <div class="trap-row">
+    <div><span class="trap-icon">⚠</span> 方程式只寫最終答案</div>
+    <div>分三層給分，跳步驟失分</div>
+    <div>①寫化學式 → ②配平 → ③加 state symbols，每層獨立計分</div>
+  </div>
+  <div class="trap-row">
+    <div><span class="trap-icon">⚠</span> Flame test 步驟順序錯</div>
+    <div>扣步驟分</div>
+    <div>必須：<strong>Pt wire → conc HCl（清潔）→ 沾樣品 → non-luminous flame</strong></div>
+  </div>
+  <div class="trap-row">
+    <div><span class="trap-icon">⚠</span> AgNO₃ test 不加 dil HNO₃</div>
+    <div>扣 1 分</div>
+    <div>dilute HNO₃ 防止其他不溶銀鹽干擾（如 Ag₂CO₃）</div>
+  </div>
+  <div class="trap-row">
+    <div><span class="trap-icon">⚠</span> Fractional distillation 寫成 chemical change</div>
+    <div>概念分全失</div>
+    <div>分餾是<strong>物理變化</strong>（physical change），無新物質生成</div>
+  </div>
+  <div class="trap-row">
+    <div><span class="trap-icon">⚠</span> Polymer repeating unit 畫法</div>
+    <div>結構分全失</div>
+    <div>①保留主鏈 ②雙鍵變單鍵 ③用括號+下標 n ④側基保留</div>
+  </div>
+  <div class="trap-row">
+    <div><span class="trap-icon">⚠</span> 定義題只寫一半</div>
+    <div>1 分定義失 0.5</div>
+    <div>Compound: "two or more elements <strong>chemically joined</strong>" 關鍵詞不可缺</div>
+  </div>
+</section>
+
+<!-- ===== 09 STUDENT WEAK POINTS ===== -->
+<section>
+  <h2>09<span class="cn"> · Student Weak Points 海納弱項矩陣</span></h2>
+  <div class="table-wrap">
+    <table>
+      <tr><th>#</th><th>Error Type 錯誤類型</th><th style="text-align:center;">Severity</th><th>Where 出現</th><th>Recommended Drill 建議訓練</th></tr>
+      <tr>
+        <td>E1</td>
+        <td><strong>Subatomic particle confusion</strong> 亞原子粒子屬性混淆<br><span style="color:var(--muted);font-size:0.7rem;">質子電荷寫 99.4%、中子符號寫 e</span></td>
+        <td class="severity-red" style="text-align:center;">🔴<br>Fatal</td>
+        <td>1st UT Q1(a)</td>
+        <td>背誦卡片：p⁺(charge +1/mass 1)、n⁰(charge 0/mass≈1)、e⁻(charge −1/mass≈0)</td>
+      </tr>
+      <tr>
+        <td>E2</td>
+        <td><strong>Isotope chemical properties misjudged</strong> 同位素化學性質判錯<br><span style="color:var(--muted);font-size:0.7rem;">寫 "different reaction"</span></td>
+        <td class="severity-red" style="text-align:center;">🔴<br>Fatal</td>
+        <td>1st UT Q3(b)(d)</td>
+        <td>關鍵句：Isotopes have the same no. of outermost shell e⁻ → <strong>same chemical properties</strong></td>
+      </tr>
+      <tr>
+        <td>E3</td>
+        <td><strong>Element classification unstable</strong> 元素分類不穩<br><span style="color:var(--muted);font-size:0.7rem;">Si → metal、O₂ → compound</span></td>
+        <td class="severity-orange" style="text-align:center;">🟠<br>High</td>
+        <td>1st UT Q3(a)<br>Quiz Q3(b)</td>
+        <td>分類樹：element → metal/non-metal/semi-metal；compound（≥2 元素化合）</td>
+      </tr>
+      <tr>
+        <td>E4</td>
+        <td><strong>State symbols omitted</strong> State symbols 遺漏</td>
+        <td class="severity-orange" style="text-align:center;">🟠<br>High</td>
+        <td>Quiz Q2<br>Multiple</td>
+        <td>每題方程式答完後強制複檢 → 口訣：「固 s 液 l 氣 g 水溶液 aq」</td>
+      </tr>
+      <tr>
+        <td>E5</td>
+        <td><strong>Metal+acid product confused</strong> 金屬+酸產物混淆<br><span style="color:var(--muted);font-size:0.7rem;">Ca+HCl → CO₂ 而非 H₂</span></td>
+        <td class="severity-yellow" style="text-align:center;">🟡<br>Medium</td>
+        <td>1st UT Q4(c)(ii)</td>
+        <td>金屬 + 酸 → 鹽 + <strong>H₂</strong>（不是 CO₂），CO₂ 來自 carbonate+acid</td>
+      </tr>
+      <tr>
+        <td>E6</td>
+        <td><strong>Terminology spelling</strong> 術語拼寫<br><span style="color:var(--muted);font-size:0.7rem;">"protors" → protons</span></td>
+        <td class="severity-green" style="text-align:center;">🟢<br>Minor</td>
+        <td>1st UT Q3(b)</td>
+        <td>重點詞彙拼寫清單：protons, neutrons, electrons, isotopes, abundance</td>
+      </tr>
+    </table>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<div class="footer">
+  Generated by DeepSeek · Based on 10 TWGSS S3 Chemistry source files · 2026-05-15<br>
+  Audit: ✅ v3 · 6 errata corrected (Air 4/5 · Polymers 3/5 · Flame/AgNO₃/CaCO₃/Polymers @2425)
+</div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Algebra Drill — S3 Maths | Indices · Factorisation · Inequalities · Fractions</title>
+<style>
+  :root {
+    --bg: #f7f8fa;
+    --surface: #ffffff;
+    --surface2: #f0f1f4;
+    --border: #d8dce3;
+    --text: #1d1d2b;
+    --text-light: #4a4a5a;
+    --text-dim: #7d7d8f;
+    --green: #2e7d32;
+    --green-bg: #e8f5e9;
+    --green-border: #a5d6a7;
+    --red: #c62828;
+    --red-bg: #ffebee;
+    --red-border: #ef9a9a;
+    --amber: #e65100;
+    --amber-bg: #fff3e0;
+    --amber-border: #ffcc80;
+    --blue: #1565c0;
+    --blue-bg: #e3f2fd;
+    --blue-border: #90caf9;
+    --orange-tag: #d84315;
+    --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang HK', 'Microsoft YaHei', sans-serif;
+    --font-mono: 'SF Mono', 'JetBrains Mono', 'Menlo', 'Consolas', monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--text);
+    background: var(--bg);
+    min-height: 100vh;
+  }
+  .container { max-width: 780px; margin: 0 auto; padding: 24px 16px 60px; }
+
+  /* Header */
+  header {
+    text-align: center;
+    padding: 28px 0 16px;
+    margin-bottom: 20px;
+  }
+  header h1 {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--text);
+    letter-spacing: -.02em;
+    margin-bottom: 4px;
+  }
+  header h1 span { color: var(--green); }
+  header .sub {
+    font-size: 14px;
+    color: var(--text-dim);
+    font-family: var(--font-mono);
+    letter-spacing: .03em;
+  }
+
+  /* Workflow guide */
+  .workflow {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin-bottom: 22px;
+    box-shadow: 0 1px 3px rgba(0,0,0,.04);
+  }
+  .workflow h3 { font-size: 15px; font-weight: 700; margin-bottom: 10px; color: var(--text); }
+  .wf-steps {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .wf-step {
+    flex: 1;
+    min-width: 180px;
+    background: var(--surface2);
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 13px;
+    border-left: 3px solid var(--border);
+  }
+  .wf-step .num {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 700;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    border-radius: 50%;
+    color: #fff;
+    margin-right: 4px;
+  }
+  .wf-step .num.n1 { background: var(--green); }
+  .wf-step .num.n2 { background: var(--blue); }
+  .wf-step .num.n3 { background: var(--amber); }
+  .wf-step .time { font-size: 11px; color: var(--text-dim); font-family: var(--font-mono); margin-top: 4px; }
+  .wf-step strong { color: var(--text); }
+
+  /* Tabs */
+  .tabs {
+    display: flex;
+    gap: 3px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+  }
+  .tab-btn {
+    flex: 1;
+    min-width: 110px;
+    padding: 10px 8px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-dim);
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all .18s;
+    text-align: center;
+    white-space: nowrap;
+  }
+  .tab-btn:hover { border-color: var(--green); color: var(--text); }
+  .tab-btn.active {
+    background: var(--green-bg);
+    border-color: var(--green);
+    color: var(--green);
+    font-weight: 700;
+  }
+  .tab-icon { font-size: 15px; display: block; margin-bottom: 1px; }
+
+  /* Sections */
+  .section { display: none; }
+  .section.active { display: block; }
+
+  .section-intro {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 13px 16px;
+    margin-bottom: 16px;
+    font-size: 14px;
+    color: var(--text-light);
+    line-height: 1.6;
+  }
+  .section-intro strong { color: var(--green); }
+  .section-intro code {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    background: var(--surface);
+    padding: 1px 5px;
+    border-radius: 3px;
+    border: 1px solid var(--border);
+  }
+  .section-intro .alert {
+    color: var(--red);
+    font-weight: 600;
+  }
+
+  /* Score bar */
+  .score-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 16px;
+    margin-bottom: 14px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .score-num { font-weight: 700; font-size: 17px; color: var(--green); }
+  .sc-correct { color: var(--green); }
+  .sc-wrong { color: var(--red); }
+
+  /* Question card */
+  .q-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 18px;
+    margin-bottom: 12px;
+    transition: box-shadow .2s, border-color .2s;
+    box-shadow: 0 1px 2px rgba(0,0,0,.03);
+  }
+  .q-card.correct { border-color: var(--green); background: #f1f8e9; box-shadow: 0 0 0 2px rgba(46,125,50,.08); }
+  .q-card.wrong { border-color: var(--red); background: #fef2f2; box-shadow: 0 0 0 2px rgba(198,40,40,.08); }
+  .q-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .q-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--surface2);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+    border: 1px solid var(--border);
+    color: var(--text-light);
+  }
+  .q-card.correct .q-num { background: var(--green-bg); border-color: var(--green-border); color: var(--green); }
+  .q-text {
+    font-size: 16px;
+    font-family: var(--font-mono);
+    color: var(--text);
+    line-height: 1.5;
+    padding-top: 2px;
+  }
+  .trap-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--orange-tag);
+    background: #fbe9e7;
+    padding: 1px 6px;
+    border-radius: 3px;
+    margin-left: 6px;
+    vertical-align: middle;
+    letter-spacing: .04em;
+  }
+  .q-input-row {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .q-input {
+    flex: 1;
+    min-width: 140px;
+    padding: 9px 12px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 15px;
+    outline: none;
+    transition: border-color .18s;
+  }
+  .q-input:focus { border-color: var(--green); box-shadow: 0 0 0 2px rgba(46,125,50,.1); }
+  .q-input:disabled { opacity: .55; cursor: not-allowed; }
+  .btn {
+    padding: 9px 16px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .15s;
+    white-space: nowrap;
+    background: var(--surface);
+    color: var(--text-light);
+  }
+  .btn:hover { border-color: var(--text-dim); }
+  .btn-check {
+    background: var(--green);
+    color: #fff;
+    border-color: var(--green);
+  }
+  .btn-check:hover { background: #1b5e20; border-color: #1b5e20; }
+  .btn-check:disabled { opacity: .35; cursor: not-allowed; background: var(--green); border-color: var(--green); }
+  .btn-hint { color: var(--amber); border-color: var(--amber-border); }
+  .btn-hint:hover { background: var(--amber-bg); }
+  .btn-show { color: var(--text-dim); }
+  .btn-show:hover { border-color: var(--text-dim); color: var(--text); }
+  .btn-sm { padding: 6px 10px; font-size: 12px; }
+
+  /* Feedback */
+  .feedback {
+    margin-top: 9px;
+    padding: 10px 14px;
+    border-radius: 6px;
+    font-size: 14px;
+    display: none;
+    line-height: 1.5;
+  }
+  .feedback.show { display: block; }
+  .feedback.correct-msg { background: var(--green-bg); border: 1px solid var(--green-border); color: var(--green); }
+  .feedback.wrong-msg { background: var(--red-bg); border: 1px solid var(--red-border); color: var(--red); }
+  .feedback .explain { margin-top: 5px; font-size: 13px; color: var(--text-light); }
+  .feedback .explain code, .feedback code {
+    font-family: var(--font-mono); font-size: 13px;
+    background: rgba(0,0,0,.04); padding: 1px 5px; border-radius: 3px;
+  }
+  .feedback.correct-msg .explain code { background: rgba(46,125,50,.08); color: var(--text); }
+  .hint-box {
+    margin-top: 7px;
+    padding: 9px 14px;
+    background: var(--amber-bg);
+    border: 1px solid var(--amber-border);
+    border-radius: 6px;
+    font-size: 13px;
+    color: var(--amber);
+    display: none;
+    line-height: 1.5;
+  }
+  .hint-box.show { display: block; }
+
+  /* Overall score */
+  .overall-score {
+    margin-top: 22px;
+    padding: 18px 20px;
+    background: var(--surface);
+    border: 2px solid var(--green);
+    border-radius: 10px;
+    text-align: center;
+    display: none;
+  }
+  .overall-score.show { display: block; }
+  .overall-score h3 { font-size: 17px; color: var(--green); margin-bottom: 8px; }
+  .overall-score .big-num { font-size: 40px; font-weight: 800; color: var(--green); font-family: var(--font-mono); }
+  .overall-score .remark { font-size: 14px; color: var(--text-light); margin-top: 6px; }
+
+  .reset-link {
+    display: block;
+    text-align: center;
+    margin-top: 14px;
+    font-size: 13px;
+    color: var(--text-dim);
+    cursor: pointer;
+    text-decoration: underline;
+    background: none;
+    border: none;
+    font-family: var(--font-sans);
+  }
+  .reset-link:hover { color: var(--green); }
+
+  @media (max-width: 600px) {
+    .container { padding: 14px 10px 40px; }
+    header h1 { font-size: 21px; }
+    .wf-step { min-width: 100%; }
+    .tab-btn { font-size: 12px; padding: 8px 4px; }
+    .q-text { font-size: 14px; }
+    .q-input { font-size: 14px; min-width: 100px; }
+    .btn { font-size: 12px; padding: 8px 10px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>&#x2699; <span>Algebra</span> Drill</h1>
+  <div class="sub">S3 Maths · Indices / Factorisation / Inequalities / Algebraic Fractions</div>
+</header>
+
+<!-- Three-phase workflow -->
+<div class="workflow">
+  <h3>&#x1F3AF; Recommended Workflow 建議使用流程</h3>
+  <div class="wf-steps">
+    <div class="wf-step">
+      <div><span class="num n1">1</span> <strong>HTML Warm-up</strong></div>
+      <div>快速刷 1-2 個模組，每題 Check 即時反饋</div>
+      <div class="time">&#x23F1; 5-10 min</div>
+    </div>
+    <div class="wf-step">
+      <div><span class="num n2">2</span> <strong>Paper Past Paper</strong></div>
+      <div>紙筆做真題 Section B，完整演算與推導</div>
+      <div class="time">&#x23F1; 30-40 min</div>
+    </div>
+    <div class="wf-step">
+      <div><span class="num n3">3</span> <strong>HTML Precision Drill</strong></div>
+      <div>針對紙筆環節出錯的模組，回 HTML 精準打擊</div>
+      <div class="time">&#x23F1; 5 min</div>
+    </div>
+  </div>
+</div>
+
+<!-- Tabs -->
+<div class="tabs">
+  <button class="tab-btn active" data-tab="indices"><span class="tab-icon">a&#x207F;</span>Indices</button>
+  <button class="tab-btn" data-tab="factor"><span class="tab-icon">(x+a)(x+b)</span>Factorisation</button>
+  <button class="tab-btn" data-tab="ineq"><span class="tab-icon">&gt; &lt;</span>Inequalities</button>
+  <button class="tab-btn" data-tab="frac"><span class="tab-icon">a/b</span>Fractions</button>
+</div>
+
+<!-- ═══════ SECTION 1: INDICES ═══════ -->
+<div class="section active" id="section-indices">
+  <div class="section-intro">
+    <strong>Key Rules 關鍵法則：</strong>
+    a<sup>m</sup> &times; a<sup>n</sup> = a<sup>m+n</sup> &nbsp;|&nbsp;
+    a<sup>m</sup> &divide; a<sup>n</sup> = a<sup>m&minus;n</sup> &nbsp;|&nbsp;
+    (a<sup>m</sup>)<sup>n</sup> = a<sup>mn</sup> &nbsp;|&nbsp;
+    a<sup>&minus;n</sup> = 1/a<sup>n</sup><br>
+    <strong>Type format:</strong> use <code>^</code> for exponents, e.g. <code>a^8</code>. Write answers with <strong>positive indices</strong>.
+  </div>
+  <div class="score-bar">
+    <div class="score-num" id="score-indices">0/8</div>
+    <div>
+      <span class="sc-correct">&#x2714; <span id="correct-indices">0</span></span>
+      &ensp;
+      <span class="sc-wrong">&#x2718; <span id="wrong-indices">0</span></span>
+      &ensp;|&ensp;
+      Attempts: <span id="attempts-indices">0</span>
+    </div>
+  </div>
+  <div id="questions-indices"></div>
+</div>
+
+<!-- ═══════ SECTION 2: FACTORISATION ═══════ -->
+<div class="section" id="section-factor">
+  <div class="section-intro">
+    <strong>Method 步驟：</strong>
+    ① Common Factor 提公因式 &rarr; ② Cross Method 十字相乘 &rarr; ③ Check if factorisable further 檢查是否可再分解<br>
+    <strong>Type format:</strong> use <code>(x+2)(x+3)</code>. For repeated factors, use <code>(x+1)^2</code>.
+  </div>
+  <div class="score-bar">
+    <div class="score-num" id="score-factor">0/8</div>
+    <div>
+      <span class="sc-correct">&#x2714; <span id="correct-factor">0</span></span>
+      &ensp;
+      <span class="sc-wrong">&#x2718; <span id="wrong-factor">0</span></span>
+      &ensp;|&ensp;
+      Attempts: <span id="attempts-factor">0</span>
+    </div>
+  </div>
+  <div id="questions-factor"></div>
+</div>
+
+<!-- ═══════ SECTION 3: INEQUALITIES ═══════ -->
+<div class="section" id="section-ineq">
+  <div class="section-intro">
+    <strong class="alert">&#x26A0; CRITICAL 關鍵陷阱：</strong> When multiplying/dividing by a <strong>negative</strong> number, the inequality sign <strong>reverses</strong>!<br>
+    當乘/除一個<b>負數</b>時，不等號方向<b>必須反轉</b>！例：&minus;2x &gt; 6 &rarr; x &lt; &minus;3<br>
+    <strong>Type format:</strong> <code>x&gt;2</code> <code>x&lt;=-3</code> <code>x&gt;=5</code>. For integer answers, type the number only.
+  </div>
+  <div class="score-bar">
+    <div class="score-num" id="score-ineq">0/6</div>
+    <div>
+      <span class="sc-correct">&#x2714; <span id="correct-ineq">0</span></span>
+      &ensp;
+      <span class="sc-wrong">&#x2718; <span id="wrong-ineq">0</span></span>
+      &ensp;|&ensp;
+      Attempts: <span id="attempts-ineq">0</span>
+    </div>
+  </div>
+  <div id="questions-ineq"></div>
+</div>
+
+<!-- ═══════ SECTION 4: FRACTIONS ═══════ -->
+<div class="section" id="section-frac">
+  <div class="section-intro">
+    <strong>Method 步驟：</strong>
+    ① Find common denominator 找公分母 &rarr; ② Combine numerators 合併分子 &rarr; ③ Simplify 化簡<br>
+    <strong class="alert">&#x26A0; WATCH OUT:</strong> When denominators are opposites, flip the sign:<br>
+    <code>1/(a&minus;b) = &minus;1/(b&minus;a)</code><br>
+    <strong>Type format:</strong> use <code>/</code> for fraction, e.g. <code>5/x</code> or <code>2x/(x^2-1)</code>.
+  </div>
+  <div class="score-bar">
+    <div class="score-num" id="score-frac">0/6</div>
+    <div>
+      <span class="sc-correct">&#x2714; <span id="correct-frac">0</span></span>
+      &ensp;
+      <span class="sc-wrong">&#x2718; <span id="wrong-frac">0</span></span>
+      &ensp;|&ensp;
+      Attempts: <span id="attempts-frac">0</span>
+    </div>
+  </div>
+  <div id="questions-frac"></div>
+</div>
+
+<div class="overall-score" id="overall-score">
+  <h3>&#x1F3AF; All Sections Complete</h3>
+  <div class="big-num" id="overall-num">0/28</div>
+  <div class="remark" id="overall-remark"></div>
+</div>
+<button class="reset-link" onclick="resetAll()">Reset All Progress 重置全部</button>
+
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+// QUESTION BANK — 28 questions, verified
+// ═══════════════════════════════════════════
+const BANK = {
+  indices: [
+    { id:"i1", q:"Simplify: a&sup3; &times; a&#x2075;", ans:["a^8","a⁸"], hint:"a&#x1D50; &times; a&#x207F; = a&#x1D50;&#x207A;&#x207F;. 3 + 5 = ?", expl:"a&sup3; &times; a&#x2075; = a<sup>3+5</sup> = <code>a^8</code>" },
+    { id:"i2", q:"Simplify: (x&sup2;)&sup3;", ans:["x^6","x⁶"], hint:"(a&#x1D50;)&#x207F; = a&#x1D50;&#x207F;. 2 &times; 3 = ?", expl:"(x&sup2;)&sup3; = x<sup>2&times;3</sup> = <code>x^6</code>" },
+    { id:"i3", q:"Simplify: a&#x2074; &divide; a&#x2077; — write with positive indices", ans:["1/a^3","1/a³","a^-3","a⁻³"], hint:"a&#x1D50; &divide; a&#x207F; = a&#x1D50;&#x207B;&#x207F;. Then convert negative index to fraction.", expl:"a&#x2074; &divide; a&#x2077; = a<sup>4&minus;7</sup> = a<sup>&minus;3</sup> = <code>1/a^3</code>" },
+    { id:"i4", q:"Simplify: (2x&sup3;)&#x2074;", ans:["16x^12","16x¹²"], hint:"(ab)&#x207F; = a&#x207F;b&#x207F;. (2)&#x2074; = 16, (x&sup3;)&#x2074; = x<sup>3&times;4</sup> = ?", expl:"(2x&sup3;)&#x2074; = 2&#x2074; &times; (x&sup3;)&#x2074; = 16 &times; x<sup>12</sup> = <code>16x^12</code>" },
+    { id:"i5", q:"Simplify: x&#x207B;&sup2; &times; x&#x2075;", ans:["x^3","x³"], hint:"x&#x207B;&sup2; &times; x&#x2075; = x<sup>&minus;2+5</sup>", expl:"x&#x207B;&sup2; &times; x&#x2075; = x<sup>&minus;2+5</sup> = <code>x^3</code>" },
+    { id:"i6", q:"Simplify: (a&sup2;b)&sup3; &divide; a&#x2074;b&sup2;", ans:["a^2b","a²b","(a^2)(b)","a^2b^1"], hint:"Step 1: (a&sup2;b)&sup3; = a&#x2076;b&sup3;. Step 2: divide by a&#x2074;b&sup2;.", expl:"(a&sup2;b)&sup3; = a&#x2076;b&sup3;<br>a&#x2076;b&sup3; &divide; a&#x2074;b&sup2; = a<sup>6&minus;4</sup>b<sup>3&minus;2</sup> = <code>a^2 b</code>" },
+    { id:"i7", q:"Simplify: (x&sup3;/x&#x207B;&sup2;)&sup2;", ans:["x^10","x¹⁰"], hint:"Inside: x&sup3; &divide; x&#x207B;&sup2; = x<sup>3&minus;(&minus;2)</sup> = x&#x2075;. Then (x&#x2075;)&sup2; = ?", expl:"x&sup3;/x&#x207B;&sup2; = x<sup>3&minus;(&minus;2)</sup> = x&#x2075;<br>(x&#x2075;)&sup2; = <code>x^10</code>" },
+    { id:"i8", q:"Simplify: (8x&sup3;)<sup>1/3</sup>", ans:["2x","2x^1","2*x"], hint:"(ab)<sup>n</sup> = a<sup>n</sup>b<sup>n</sup>. 8<sup>1/3</sup> = &#x221B;8 = ? x<sup>3&times;1/3</sup> = ?", expl:"(8x&sup3;)<sup>1/3</sup> = 8<sup>1/3</sup> &times; x<sup>3&times;1/3</sup> = 2 &times; x<sup>1</sup> = <code>2x</code>" }
+  ],
+  factor: [
+    { id:"f1", q:"Factorise: 3x&sup2; + 6x", ans:["3x(x+2)","3x(2+x)"], hint:"Find the common factor first. What is the HCF of 3x&sup2; and 6x?", expl:"HCF of 3x&sup2; and 6x = 3x<br>3x&sup2; + 6x = <code>3x(x+2)</code>" },
+    { id:"f2", q:"Factorise: x&sup2; + 5x + 6", ans:["(x+2)(x+3)","(x+3)(x+2)","(2+x)(3+x)","(3+x)(x+2)"], hint:"Find two numbers that multiply to 6 and add to 5.", expl:"Numbers: 2 and 3 (2&times;3=6, 2+3=5)<br><code>(x+2)(x+3)</code>" },
+    { id:"f3", q:"Factorise: x&sup2; &minus; 9", ans:["(x+3)(x-3)","(x-3)(x+3)"], hint:"Difference of two squares: a&sup2; &minus; b&sup2; = (a+b)(a&minus;b)", expl:"x&sup2; &minus; 9 = x&sup2; &minus; 3&sup2; = <code>(x+3)(x-3)</code>" },
+    { id:"f4", q:"Factorise: 2x&sup2; + 7x + 3", ans:["(2x+1)(x+3)","(x+3)(2x+1)"], hint:"a=2, c=3, a&times;c=6. Find two numbers: multiply to 6, add to 7.", expl:"2&times;3=6. Numbers: 1 and 6 (1+6=7)<br>2x&sup2;+x+6x+3 = x(2x+1)+3(2x+1) = <code>(2x+1)(x+3)</code>" },
+    { id:"f5", q:"Factorise: x&sup2; &minus; 4x &minus; 5", ans:["(x-5)(x+1)","(x+1)(x-5)"], hint:"Find two numbers: multiply to &minus;5, add to &minus;4.", expl:"Numbers: &minus;5 and 1 (&minus;5+1=&minus;4, &minus;5&times;1=&minus;5)<br><code>(x-5)(x+1)</code>" },
+    { id:"f6", q:"Factorise: 4x&sup2; &minus; 25", ans:["(2x+5)(2x-5)","(2x-5)(2x+5)"], hint:"Difference of two squares: (2x)&sup2; &minus; 5&sup2;", expl:"4x&sup2; &minus; 25 = (2x)&sup2; &minus; 5&sup2; = <code>(2x+5)(2x-5)</code>" },
+    { id:"f7", q:"Factorise: x&sup2; + 2x + 1", ans:["(x+1)^2","(x+1)²","(1+x)^2","(x+1)(x+1)"], hint:"Perfect square: a&sup2; + 2ab + b&sup2; = (a+b)&sup2;", expl:"x&sup2; + 2x + 1 = x&sup2; + 2&times;x&times;1 + 1&sup2; = <code>(x+1)^2</code>" },
+    { id:"f8", q:"Factorise <strong>completely</strong>: 2x&sup2; &minus; 8", ans:["2(x+2)(x-2)","2(x-2)(x+2)","2(x-2)(2+x)","2(2+x)(x-2)"], hint:"Step 1: Common factor. Step 2: Difference of squares — don't stop at Step 1!", expl:"2x&sup2; &minus; 8 = 2(x&sup2; &minus; 4)<br>&#x26A0; <strong>2(x&sup2;&minus;4) is NOT completely factorised!</strong><br>Must continue: 2(x&minus;2)(x+2) = <code>2(x+2)(x-2)</code>" }
+  ],
+  ineq: [
+    { id:"n1", q:"Solve: 2x + 3 &gt; 7", ans:["x>2","2<x"], hint:"2x &gt; 4 &rarr; x &gt; ?", expl:"2x + 3 &gt; 7<br>2x &gt; 4<br><code>x &gt; 2</code>" },
+    { id:"n2", q:"Solve: &minus;3x + 5 &le; 11", ans:["x>=-2","x≥-2","-2<=x","-2≤x","x≧-2"], hint:"&minus;3x &le; 6. Divide by &minus;3: the sign REVERSES!", expl:"&minus;3x + 5 &le; 11<br>&minus;3x &le; 6<br>Divide by &minus;3 &rarr; sign reverses!<br><code>x &ge; &minus;2</code>" },
+    { id:"n3", q:"Solve: 5 &minus; 2x &ge; 1", ans:["x<=2","x≤2","x≦2","2>=x","2≥x"], hint:"&minus;2x &ge; &minus;4. Divide by &minus;2: REVERSE!", expl:"5 &minus; 2x &ge; 1<br>&minus;2x &ge; &minus;4<br>Divide by &minus;2 &rarr; sign reverses!<br><code>x &le; 2</code>" },
+    { id:"n4", q:"Solve: 3x &minus; 7 &lt; 2x + 1", ans:["x<8","8>x"], hint:"Move x terms: 3x &minus; 2x &lt; 1 + 7", expl:"3x &minus; 7 &lt; 2x + 1<br>x &lt; 8<br><code>x &lt; 8</code>" },
+    { id:"n5", q:"Solve: &minus;2x &gt; 6 <span class=\"trap-tag\">TRAP!</span>", ans:["x<-3","x<−3","-3>x"], hint:"Divide by &minus;2. Remember to REVERSE the sign!", expl:"&minus;2x &gt; 6<br>Divide by &minus;2 &rarr; sign reverses!<br><code>x &lt; &minus;3</code><br>&#x26A0; Common mistake: writing x &gt; &minus;3" },
+    { id:"n6", q:"Find the <strong>largest integer x</strong> satisfying: 3x &minus; 2 &lt; 10", ans:["3"], hint:"Solve: 3x &lt; 12 &rarr; x &lt; 4. Largest integer &lt; 4 is?", expl:"3x &minus; 2 &lt; 10<br>3x &lt; 12<br>x &lt; 4<br>Largest integer &lt; 4 = <code>3</code>" }
+  ],
+  frac: [
+    { id:"c1", q:"Simplify: <sup>2</sup>/<sub>x</sub> + <sup>3</sup>/<sub>x</sub>", ans:["5/x"], hint:"Same denominator — just add numerators: (2+3)/x", expl:"<sup>2</sup>/<sub>x</sub> + <sup>3</sup>/<sub>x</sub> = (2+3)/x = <code>5/x</code>" },
+    { id:"c2", q:"Simplify: <sup>x</sup>/<sub>2</sub> + <sup>x</sup>/<sub>3</sub>", ans:["5x/6","(5x)/6"], hint:"LCD of 2 and 3 = 6. Convert: 3x/6 + 2x/6", expl:"<sup>x</sup>/<sub>2</sub> + <sup>x</sup>/<sub>3</sub> = 3x/6 + 2x/6 = <code>5x/6</code>" },
+    { id:"c3", q:"Simplify: <sup>1</sup>/<sub>x+1</sub> + <sup>1</sup>/<sub>x&minus;1</sub>", ans:["2x/(x^2-1)","2x/(x²-1)","2x/((x^2)-1)"], hint:"LCD = (x+1)(x&minus;1) = x&sup2;&minus;1. Numerator: 1(x&minus;1) + 1(x+1) = ?", expl:"= (x&minus;1 + x+1) / (x&sup2;&minus;1)<br>= <code>2x/(x&sup2;&minus;1)</code>" },
+    { id:"c4", q:"Simplify: <sup>3</sup>/<sub>x+2</sub> &minus; <sup>1</sup>/<sub>x+2</sub>", ans:["2/(x+2)","2/(2+x)"], hint:"Same denominator: (3&minus;1)/(x+2)", expl:"= (3&minus;1)/(x+2) = <code>2/(x+2)</code>" },
+    { id:"c5", q:"Simplify: (x&sup2; &minus; 1) / (x + 1)", ans:["x-1","(x-1)","x−1"], hint:"Factorise numerator: x&sup2;&minus;1 = (x+1)(x&minus;1). Cancel (x+1).", expl:"x&sup2;&minus;1 = (x+1)(x&minus;1)<br>(x+1)(x&minus;1)/(x+1) = <code>x &minus; 1</code>" },
+    { id:"c6", q:"Simplify: <sup>2</sup>/<sub>x&minus;2</sub> + <sup>3</sup>/<sub>2&minus;x</sub> <span class=\"trap-tag\">TRAP!</span>", ans:["-1/(x-2)","−1/(x-2)","-1/(x−2)","1/(2-x)","1/(2−x)"], hint:"Notice: (2&minus;x) = &minus;(x&minus;2). So <sup>3</sup>/<sub>2&minus;x</sub> = &minus;<sup>3</sup>/<sub>x&minus;2</sub>. Now add!", expl:"<sup>3</sup>/<sub>2&minus;x</sub> = &minus;<sup>3</sup>/<sub>x&minus;2</sub><br><sup>2</sup>/<sub>x&minus;2</sub> + (&minus;<sup>3</sup>/<sub>x&minus;2</sub>)<br>= (2&minus;3)/(x&minus;2) = <code>&minus;1/(x&minus;2)</code>" }
+  ]
+};
+
+// ═══════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════
+const state = { indices:{}, factor:{}, ineq:{}, frac:{} };
+const SECTIONS = ['indices','factor','ineq','frac'];
+
+// ═══════════════════════════════════════════
+// NORMALISE ANSWER
+// ═══════════════════════════════════════════
+function norm(s) {
+  return s.toLowerCase()
+    .replace(/\s+/g, '')
+    .replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹]/g, c => '^'+'0123456789'['⁰¹²³⁴⁵⁶⁷⁸⁹'.indexOf(c)])
+    .replace(/[₀₁₂₃₄₅₆₇₈₉]/g, c => '_'+'0123456789'['₀₁₂₃₄₅₆₇₈₉'.indexOf(c)])
+    .replace(/−/g, '-')
+    .replace(/≥/g, '>=')
+    .replace(/≤/g, '<=')
+    .replace(/≧/g, '>=')
+    .replace(/≦/g, '<=')
+    .replace(/\*/g, '')
+    .replace(/×/g, '');
+}
+
+// ═══════════════════════════════════════════
+// RENDER
+// ═══════════════════════════════════════════
+function renderSection(key) {
+  const box = document.getElementById('questions-'+key);
+  const qs = BANK[key];
+  let h = '';
+  qs.forEach((q, i) => {
+    const st = state[key][q.id] || {};
+    h += `
+    <div class="q-card" id="card-${q.id}">
+      <div class="q-header">
+        <div class="q-num">${i+1}</div>
+        <div class="q-text">${q.q}</div>
+      </div>
+      <div class="q-input-row">
+        <input type="text" class="q-input" id="inp-${q.id}" placeholder="Type answer..." ${st.done?'disabled':''} autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+        <button class="btn btn-check" id="chk-${q.id}" onclick="check('${key}','${q.id}')" ${st.done?'disabled':''}>Check</button>
+        <button class="btn btn-hint btn-sm" id="hnt-${q.id}" onclick="hint('${key}','${q.id}')" ${st.done?'disabled':''}>Hint</button>
+        <button class="btn btn-show btn-sm" id="shw-${q.id}" onclick="show('${key}','${q.id}')">Show</button>
+      </div>
+      <div class="feedback" id="fb-${q.id}"></div>
+      <div class="hint-box" id="hb-${q.id}">${st.showHint ? '&#x1F4A1; '+q.hint : ''}</div>
+    </div>`;
+  });
+  box.innerHTML = h;
+}
+
+// ═══════════════════════════════════════════
+// CHECK
+// ═══════════════════════════════════════════
+function check(key, qid) {
+  const q = BANK[key].find(x => x.id === qid);
+  if (!q) return;
+  const inp = document.getElementById('inp-'+qid);
+  const fb = document.getElementById('fb-'+qid);
+  const card = document.getElementById('card-'+qid);
+  const ans = norm(inp.value.trim());
+  if (!ans) return;
+
+  if (!state[key][qid]) state[key][qid] = { done: false, attempts: 0, showHint: false };
+  state[key][qid].attempts++;
+
+  if (q.ans.map(norm).includes(ans)) {
+    state[key][qid].done = true;
+    card.className = 'q-card correct';
+    inp.disabled = true;
+    document.getElementById('chk-'+qid).disabled = true;
+    document.getElementById('hnt-'+qid).disabled = true;
+    fb.className = 'feedback correct-msg show';
+    fb.innerHTML = '&#x2705; <strong>Correct!</strong><div class="explain">'+q.expl+'</div>';
+  } else {
+    card.className = 'q-card wrong';
+    fb.className = 'feedback wrong-msg show';
+    fb.innerHTML = '&#x274C; <strong>Not quite.</strong> Try again or use Hint.'+
+      '<div class="explain">You typed: <code>'+esc(inp.value.trim())+'</code></div>';
+    setTimeout(() => { card.className = 'q-card'; }, 1200);
+  }
+  updateScore(key);
+}
+
+// ═══════════════════════════════════════════
+// HINT
+// ═══════════════════════════════════════════
+function hint(key, qid) {
+  const q = BANK[key].find(x => x.id === qid);
+  if (!q) return;
+  document.getElementById('hb-'+qid).innerHTML = '&#x1F4A1; '+q.hint;
+  document.getElementById('hb-'+qid).classList.add('show');
+  if (!state[key][qid]) state[key][qid] = { done: false, attempts: 0, showHint: false };
+  state[key][qid].showHint = true;
+}
+
+// ═══════════════════════════════════════════
+// SHOW ANSWER
+// ═══════════════════════════════════════════
+function show(key, qid) {
+  const q = BANK[key].find(x => x.id === qid);
+  if (!q) return;
+  const inp = document.getElementById('inp-'+qid);
+  const fb = document.getElementById('fb-'+qid);
+  const card = document.getElementById('card-'+qid);
+  inp.value = q.ans[0];
+  inp.disabled = true;
+  document.getElementById('chk-'+qid).disabled = true;
+  document.getElementById('hnt-'+qid).disabled = true;
+  card.className = 'q-card correct';
+  fb.className = 'feedback correct-msg show';
+  fb.innerHTML = '&#x1F4D6; <strong>Answer revealed:</strong> <code>'+esc(q.ans[0])+'</code><div class="explain">'+q.expl+'</div>';
+  if (!state[key][qid]) state[key][qid] = { done: false, attempts: 0, showHint: false };
+  state[key][qid].done = true;
+  updateScore(key);
+}
+
+// ═══════════════════════════════════════════
+// SCORE
+// ═══════════════════════════════════════════
+function updateScore(key) {
+  const qs = BANK[key];
+  let correct = 0, attempts = 0;
+  qs.forEach(q => {
+    const st = state[key][q.id];
+    if (st) {
+      attempts += st.attempts;
+      if (st.done) correct++;
+    }
+  });
+  document.getElementById('score-'+key).textContent = correct+'/'+qs.length;
+  document.getElementById('correct-'+key).textContent = correct;
+  document.getElementById('wrong-'+key).textContent = qs.length - correct;
+  document.getElementById('attempts-'+key).textContent = attempts;
+  checkOverall();
+}
+
+function checkOverall() {
+  let total = 0, done = 0;
+  SECTIONS.forEach(k => {
+    BANK[k].forEach(q => {
+      total++;
+      const st = state[k][q.id];
+      if (st && st.done) done++;
+    });
+  });
+  if (done === total) {
+    const ov = document.getElementById('overall-score');
+    ov.classList.add('show');
+    document.getElementById('overall-num').textContent = done+'/'+total;
+    const r = done/total;
+    let msg = '';
+    if (r >= 0.9) msg = 'Excellent! You are ready for the exam. 出色！考試準備就緒。';
+    else if (r >= 0.7) msg = 'Good progress! Review the ones you missed. 好進展！複習錯題。';
+    else msg = 'Keep practising! Focus on the fundamentals. 繼續練習，專注基礎。';
+    document.getElementById('overall-remark').textContent = msg;
+  }
+}
+
+// ═══════════════════════════════════════════
+// TABS
+// ═══════════════════════════════════════════
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    btn.classList.add('active');
+    const key = btn.dataset.tab;
+    document.getElementById('section-'+key).classList.add('active');
+    if (!document.getElementById('questions-'+key).children.length) {
+      renderSection(key);
+      updateScore(key);
+    }
+  });
+});
+
+// ═══════════════════════════════════════════
+// RESET
+// ═══════════════════════════════════════════
+function resetAll() {
+  if (!confirm('Reset all progress? This cannot be undone. 重置所有進度？此操作無法復原。')) return;
+  SECTIONS.forEach(k => { state[k] = {}; });
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector('.tab-btn[data-tab="indices"]').classList.add('active');
+  document.getElementById('section-indices').classList.add('active');
+  SECTIONS.forEach(k => {
+    document.getElementById('questions-'+k).innerHTML = '';
+    document.getElementById('score-'+k).textContent = '0/'+BANK[k].length;
+    document.getElementById('correct-'+k).textContent = '0';
+    document.getElementById('wrong-'+k).textContent = '0';
+    document.getElementById('attempts-'+k).textContent = '0';
+  });
+  document.getElementById('overall-score').classList.remove('show');
+  renderSection('indices');
+}
+
+// ═══════════════════════════════════════════
+// UTILS
+// ═══════════════════════════════════════════
+function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+// ═══════════════════════════════════════════
+// ENTER KEY
+// ═══════════════════════════════════════════
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter') {
+    const el = document.activeElement;
+    if (el && el.classList.contains('q-input')) {
+      const id = el.id.replace('inp-','');
+      for (const k of SECTIONS) {
+        if (BANK[k].find(x => x.id === id)) { check(k, id); break; }
+      }
+    }
+  }
+});
+
+// ═══════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════
+renderSection('indices');
+updateScore('indices');
+</script>
+
+</body>
+</html>

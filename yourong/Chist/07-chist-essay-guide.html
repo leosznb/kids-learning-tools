@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>中史問答題 — 答題技巧與框架模板</title>
+<style>
+:root {
+  --bg: #fafaf8;
+  --fg: #1a1a1a;
+  --muted: #6b6b6b;
+  --border: #e5e5e0;
+  --accent: #c41e3a;
+  --accent-light: #fef0f2;
+  --green: #16a34a;
+  --green-bg: #f0fdf4;
+  --amber: #d97706;
+  --amber-bg: #fffbeb;
+  --blue: #2563eb;
+  --blue-bg: #f0f4ff;
+  --purple: #7c3aed;
+  --purple-bg: #faf5ff;
+  --radius: 12px;
+  --font: -apple-system, "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--fg);
+  line-height: 1.75;
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 40px 20px 80px;
+}
+h1 { font-size: 1.9rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 4px; }
+h1 .sub { display:block; font-size: 0.92rem; font-weight: 400; color: var(--muted); margin-top: 4px; }
+h2 { font-size: 1.3rem; font-weight: 700; margin: 40px 0 14px; padding-bottom: 8px; border-bottom: 2px solid var(--border); letter-spacing: -0.01em; }
+h3 { font-size: 1.05rem; font-weight: 700; margin: 28px 0 10px; }
+h4 { font-size: 0.92rem; font-weight: 700; margin: 18px 0 6px; color: var(--accent); }
+p { margin-bottom: 10px; font-size: 0.93rem; }
+
+.intro { color: var(--muted); font-size: 0.93rem; max-width: 600px; margin-bottom: 28px; }
+
+/* Cards / boxes */
+.card {
+  background: #fff; border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 20px 22px; margin-bottom: 16px;
+}
+.card.warn { border-left: 4px solid #f59e0b; background: #fffdf5; }
+.card.good { border-left: 4px solid var(--green); background: #f8fff9; }
+.card.info { border-left: 4px solid var(--blue); background: #f8faff; }
+.card.danger { border-left: 4px solid var(--accent); background: #fffafa; }
+
+/* Tables */
+table { width: 100%; border-collapse: collapse; margin: 14px 0 18px; font-size: 0.88rem; }
+th { background: #f5f5f2; text-align: left; padding: 9px 12px; font-weight: 600; border-bottom: 2px solid var(--border); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); }
+td { padding: 9px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+tr:last-child td { border-bottom: none; }
+
+/* Highlight */
+.kw { font-weight: 700; color: #b85c00; }
+.bad { color: #dc2626; text-decoration: line-through; text-decoration-color: #fca5a5; }
+.good-text { color: #16a34a; font-weight: 600; }
+
+/* Framework diagram */
+.framework-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+@media (max-width: 500px) { .framework-grid { grid-template-columns: 1fr; } }
+.fw-box {
+  padding: 16px; border-radius: var(--radius); border: 1px solid var(--border); background: #fff;
+}
+.fw-box .fw-icon { font-size: 1.4rem; margin-bottom: 4px; }
+.fw-box .fw-title { font-weight: 700; font-size: 0.95rem; margin-bottom: 4px; }
+.fw-box .fw-sub { font-size: 0.8rem; color: var(--muted); }
+.fw-box.pol { border-left: 4px solid var(--accent); }
+.fw-box.eco { border-left: 4px solid var(--blue); }
+.fw-box.soc { border-left: 4px solid var(--amber); }
+.fw-box.cul { border-left: 4px solid var(--purple); }
+
+/* 3-step structure */
+.step-list { list-style: none; padding: 0; }
+.step-list li {
+  padding: 10px 0 10px 36px; position: relative; border-bottom: 1px solid var(--border);
+  font-size: 0.9rem;
+}
+.step-list li:last-child { border-bottom: none; }
+.step-list li::before {
+  content: attr(data-step); position: absolute; left: 0; top: 10px;
+  width: 24px; height: 24px; border-radius: 6px; text-align: center;
+  line-height: 24px; font-size: 0.78rem; font-weight: 800; color: #fff;
+}
+.step-list li.s1::before { background: var(--accent); }
+.step-list li.s2::before { background: var(--blue); }
+.step-list li.s3::before { background: var(--green); }
+
+/* Compare columns */
+.compare-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+@media (max-width: 500px) { .compare-2col { grid-template-columns: 1fr; } }
+.compare-box { padding: 16px; border-radius: var(--radius); }
+.compare-box.bad-box { background: #fef2f2; border: 1px solid #fecaca; }
+.compare-box.good-box { background: #f0fdf4; border: 1px solid #bbf7d0; }
+.compare-box h4 { margin-top: 0; font-size: 0.85rem; }
+
+/* Template card */
+.template-box {
+  background: #fff; border: 2px dashed var(--border); border-radius: var(--radius);
+  padding: 22px; margin: 16px 0;
+}
+.template-box .t-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); font-weight: 700; margin-bottom: 8px; }
+.template-box .t-blank { 
+  display: inline-block; min-width: 60px; border-bottom: 2px dashed var(--accent);
+  padding: 0 6px; color: var(--accent); font-weight: 600; margin: 0 3px;
+}
+
+/* Time strategy bar */
+.time-bar { display: flex; height: 28px; border-radius: 99px; overflow: hidden; margin: 12px 0; }
+.time-seg { display: flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 700; color: #fff; }
+.time-seg.fast { background: var(--green); }
+.time-seg.medium { background: var(--blue); }
+.time-seg.slow { background: var(--accent); }
+
+hr { border: none; border-top: 1px solid var(--border); margin: 28px 0; }
+
+.note-inline { background: #fffbeb; border: 1px solid #fcd34d; border-radius: 8px; padding: 12px 16px; margin: 14px 0; font-size: 0.88rem; }
+
+/* Tabs */
+.tabs { display: flex; gap: 6px; flex-wrap: wrap; margin: 16px 0 10px; }
+.tab {
+  padding: 8px 16px; border-radius: 99px; border: 1px solid var(--border);
+  background: #fff; font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: all 0.2s;
+  font-family: var(--font);
+}
+.tab:hover { background: #f5f5f2; }
+.tab.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* Checklist */
+.checklist { list-style: none; padding: 0; }
+.checklist li { padding: 6px 0 6px 24px; position: relative; font-size: 0.9rem; }
+.checklist li::before { content: '☐'; position: absolute; left: 0; color: var(--muted); font-size: 0.85rem; }
+</style>
+</head>
+<body>
+
+<h1>📝 中史問答題 答題技巧<span class="sub">20分 · 2題 · 四維度框架 · 關鍵詞搶分</span></h1>
+
+<p class="intro">
+  先讀這份教學，掌握「怎樣寫才能拿分」——然後用框架模板練習。問答題不是考你懂多少，是考你有沒有寫到得分點。
+</p>
+
+<!-- ═══════════════ SECTION 1 ═══════════════ -->
+<h2>一、問答題考什麼</h2>
+
+<div class="card">
+<table>
+  <tr><th style="width:100px">項目</th><th>說明</th></tr>
+  <tr><td>滿分</td><td>20分（2題，通常8+12或10+10分配）</td></tr>
+  <tr><td>時間</td><td>建議 ≤15分鐘（兩題共30分鐘，但實戰建議<strong>12-15分鐘</strong>，因為前面80分也需時間）</td></tr>
+  <tr><td>題型</td><td>成效類 / 影響類 / 原因類 / 困難類 / 關係演變類</td></tr>
+  <tr><td>三年必考</td><td>改革開放（3/3）、文化大革命（3/3）、大躍進（2425問答）、中蘇關係（2425問答）</td></tr>
+  <tr><td>2026預測</td><td><strong>① 改革開放成效+困難（90%）</strong>　② 文化大革命影響（80%）　③ 大躍進失敗原因（50%）</td></tr>
+</table>
+</div>
+
+<div class="card warn">
+  <strong>⚠️ 關鍵認知</strong>：問答題的分數是「寫到關鍵詞就拿分」，不是「寫得長就拿分」。同樣6分的題，寫200字點中4個關鍵詞 > 寫400字兜圈子。評卷老師10秒改一份——你的關鍵詞決定一切。
+</div>
+
+<!-- ═══════════════ SECTION 2 ═══════════════ -->
+<h2>二、萬能框架：四維度結構</h2>
+
+<p>任何「影響/成效/困難」類問答題，<strong>按政治→經濟→社會→文化四個維度展開</strong>，每個維度寫2-3句。這不是死板套路——這是讓評卷老師一眼看到你「有結構」的信號。</p>
+
+<div class="framework-grid">
+  <div class="fw-box pol">
+    <div class="fw-icon">🏛️</div>
+    <div class="fw-title">政治</div>
+    <div class="fw-sub">政權穩定、黨內鬥爭、制度變化、國際地位、外交關係</div>
+  </div>
+  <div class="fw-box eco">
+    <div class="fw-icon">📈</div>
+    <div class="fw-title">經濟</div>
+    <div class="fw-sub">生產力、GDP、工農業產量、人民生活水平、貧富差距</div>
+  </div>
+  <div class="fw-box soc">
+    <div class="fw-icon">👥</div>
+    <div class="fw-title">社會</div>
+    <div class="fw-sub">社會秩序、人口變動、城鄉差距、人際關係、道德風氣</div>
+  </div>
+  <div class="fw-box cul">
+    <div class="fw-icon">📚</div>
+    <div class="fw-title">文化</div>
+    <div class="fw-sub">教育、學術、文物古蹟、思想控制、科技發展</div>
+  </div>
+</div>
+
+<!-- ═══════════════ SECTION 3 ═══════════════ -->
+<h2>三、每個維度怎麼寫——三步公式</h2>
+
+<p>每個維度 = <strong>① 論點 → ② 解釋 → ③ 史例</strong></p>
+
+<ul class="step-list">
+  <li class="s1" data-step="1"><strong>論點句</strong>：一句話總結該維度的核心影響<br><small style="color:var(--muted);">例：「文化大革命對中國政治造成災難性衝擊。」</small></li>
+  <li class="s2" data-step="2"><strong>解釋句</strong>：說明原因或機制<br><small style="color:var(--muted);">例：「各級黨政機關癱瘓，大批領導幹部遭批鬥，國家政治生活陷入混亂。」</small></li>
+  <li class="s3" data-step="3"><strong>史例句</strong>：舉一個具體事例<br><small style="color:var(--muted);">例：「國家主席劉少奇被誣蔑為『走資派』，遭非法囚禁並被迫害致死。」</small></li>
+</ul>
+
+<div class="card danger" style="margin-top:16px;">
+  <strong>🚫 常見錯誤：只寫論點不寫解釋和史例</strong>。<br>
+  寫「文革對經濟造成破壞」→ 得1分。<br>
+  寫「文革對經濟造成破壞，工廠停工、生產停滯，國民經濟瀕臨崩潰邊緣，加上全國混亂導致交通運輸中斷，物資供應嚴重不足」→ 得3分。<br>
+  <strong>差別就在解釋+史例。</strong>
+</div>
+
+<!-- ═══════════════ SECTION 4 ═══════════════ -->
+<h2>四、高分 vs 低分——同一件事，不同寫法</h2>
+
+<div class="compare-2col">
+  <div class="compare-box bad-box">
+    <h4>❌ 低分寫法</h4>
+    <p style="font-size:0.85rem;">
+      改革開放後中國經濟變好了，人民生活水平提高了。<br>
+      <span style="color:var(--muted);">→ 為什麼低分？沒有任何專業術語，沒有具體例子，「變好了」不是學術語言。</span>
+    </p>
+  </div>
+  <div class="compare-box good-box">
+    <h4>✅ 高分寫法</h4>
+    <p style="font-size:0.85rem;">
+      改革開放推動中國經濟高速增長，GDP年均增速達9%以上，中國由低收入國家躍升為世界第二大經濟體。<br>
+      <span style="color:var(--muted);">→ 為什麼高分？有具體數據，有專業術語（GDP、年均增速），有量化成果。</span>
+    </p>
+  </div>
+</div>
+
+<div class="compare-2col">
+  <div class="compare-box bad-box">
+    <h4>❌ 低分寫法</h4>
+    <p style="font-size:0.85rem;">
+      大躍進失敗了，因為政策有問題。
+    </p>
+  </div>
+  <div class="compare-box good-box">
+    <h4>✅ 高分寫法</h4>
+    <p style="font-size:0.85rem;">
+      大躍進失敗原因包括：① 高指標、瞎指揮——鋼產量指標脫離實際，導致全民大煉鋼浪費資源；② 人民公社化損害農民生產積極性——平均分配造成「出工不出力」；③ 浮誇風導致決策失誤——各地虛報產量，中央誤判形勢。
+    </p>
+  </div>
+</div>
+
+<!-- ═══════════════ SECTION 5 ═══════════════ -->
+<h2>五、各課題高分關鍵詞庫</h2>
+
+<p>下面每個課題列出<strong>問答題必須出現的得分關鍵詞</strong>。海納的弱項就在這裡——知道答案但寫不出精確名詞。記住：<span class="kw">「承包制」不等於「家庭聯產承包責任制」</span>，考試寫簡稱可能不得分。</p>
+
+<div class="tabs" id="topicTabs">
+  <button class="tab active" onclick="switchTab(0)">改革開放</button>
+  <button class="tab" onclick="switchTab(1)">文化大革命</button>
+  <button class="tab" onclick="switchTab(2)">三面紅旗</button>
+  <button class="tab" onclick="switchTab(3)">外交演變</button>
+</div>
+
+<div class="tab-content active" id="tabContent0">
+  <table>
+    <tr><th>維度</th><th>必備關鍵詞</th><th>配分句示例</th></tr>
+    <tr><td>經濟</td><td><span class="kw">GDP高速增長</span>、世界第二大經濟體、<span class="kw">經濟特區</span>（深圳/珠海/汕頭/廈門/海南）、<span class="kw">家庭聯產承包責任制</span></td><td>設立經濟特區吸引外資，深圳由小漁村發展為國際都市，成為改革開放「窗口」</td></tr>
+    <tr><td>國力</td><td><span class="kw">四個現代化</span>、國際地位提升、<span class="kw">恢復對香港澳門行使主權</span>、加入WTO</td><td>1997年恢復對香港行使主權，1999年恢復對澳門行使主權，體現國力增強</td></tr>
+    <tr><td>科教</td><td>載人航天、高鐵技術、<span class="kw">義務教育普及</span>、高校擴招</td><td>科技取得突破性進展，載人航天工程和高鐵技術達到世界先進水平</td></tr>
+    <tr><td>困難</td><td><span class="kw">貧富差距擴大</span>、環境污染、<span class="kw">國企下崗</span>、腐敗問題</td><td>市場經濟轉型帶來陣痛，國企改革導致大量工人下崗，貧富差距擴大</td></tr>
+  </table>
+</div>
+
+<div class="tab-content" id="tabContent1">
+  <table>
+    <tr><th>維度</th><th>必備關鍵詞</th><th>配分句示例</th></tr>
+    <tr><td>政治</td><td><span class="kw">黨政機關癱瘓</span>、領導幹部遭批鬥、<span class="kw">劉少奇被迫害致死</span>、林彪事件</td><td>各級黨政機關癱瘓，大批領導幹部遭批鬥，國家主席劉少奇被誣蔑為「走資派」遭非法囚禁致死</td></tr>
+    <tr><td>經濟</td><td><span class="kw">國民經濟瀕臨崩潰</span>、生產停滯、交通中斷、物資短缺</td><td>文革十年動亂使國民經濟瀕臨崩潰邊緣，工業生產大幅下降，物資供應嚴重不足</td></tr>
+    <tr><td>文化</td><td><span class="kw">破四舊</span>、文物古蹟遭破壞、<span class="kw">知識分子受迫害</span>、學術停滯</td><td>紅衛兵「破四舊」運動大規模破壞寺廟、古籍、文物，高等教育中斷，知識分子被下放勞改</td></tr>
+    <tr><td>社會</td><td><span class="kw">社會秩序混亂</span>、人際關係緊張、<span class="kw">道德水平下降</span>、派系武鬥</td><td>文革引發大規模派系武鬥，社會秩序完全混亂，人際信任被嚴重破壞</td></tr>
+  </table>
+</div>
+
+<div class="tab-content" id="tabContent2">
+  <table>
+    <tr><th>維度</th><th>必備關鍵詞</th><th>配分句示例</th></tr>
+    <tr><td>經濟失誤</td><td><span class="kw">高指標瞎指揮</span>、全民大煉鋼、<span class="kw">資源浪費</span>、鋼產量虛報</td><td>全民大煉鋼運動浪費巨量人力物力，土高爐煉出的鋼多為廢品，森林資源遭破壞</td></tr>
+    <tr><td>農業破壞</td><td><span class="kw">人民公社</span>、平均分配、<span class="kw">出工不出力</span>、糧食減產</td><td>人民公社平均分配制度嚴重打擊農民生產積極性，加上自然災害，糧食大幅減產</td></tr>
+    <tr><td>後果</td><td><span class="kw">三年經濟困難</span>（1959-61）、大量人口非正常死亡、<span class="kw">廬山會議</span></td><td>高指標與浮誇風疊加自然災害，造成1959至1961年三年經濟困難，數以千萬計人口非正常死亡</td></tr>
+    <tr><td>政治</td><td>彭德懷上書、<span class="kw">黨內民主遭破壞</span>、毛澤東個人專斷</td><td>廬山會議上彭德懷上書批評大躍進，遭毛澤東打壓，標誌黨內民主生活遭到嚴重破壞</td></tr>
+  </table>
+</div>
+
+<div class="tab-content" id="tabContent3">
+  <table>
+    <tr><th>時期</th><th>必備關鍵詞</th><th>配分句示例</th></tr>
+    <tr><td>1950s友好</td><td><span class="kw">中蘇友好同盟互助條約</span>、蘇聯援助、156個重點工程</td><td>1950年中蘇結盟，蘇聯向中國提供經濟及軍事援助，幫助建設156個重點工程項目</td></tr>
+    <tr><td>1960s交惡</td><td><span class="kw">中蘇論戰</span>、珍寶島事件（1969）、<span class="kw">蘇聯撤走專家</span></td><td>中蘇因意識形態分歧關係惡化，1960年蘇聯撤走全部援華專家，1969年爆發珍寶島武裝衝突</td></tr>
+    <tr><td>1970s中美</td><td><span class="kw">乒乓外交</span>、尼克遜訪華（1972）、<span class="kw">中美建交</span>（1979）</td><td>1971年乒乓外交打破中美僵局，1972年尼克遜訪華發表《上海公報》，1979年中美正式建交</td></tr>
+    <tr><td>1970s中日</td><td><span class="kw">田中角榮訪華</span>（1972）、中日《聯合聲明》、<span class="kw">恢復聯合國席位</span>（1971）</td><td>1972年日本首相田中角榮訪華，中日實現邦交正常化；1971年中國恢復聯合國合法席位</td></tr>
+  </table>
+</div>
+
+<!-- ═══════════════ SECTION 6 ═══════════════ -->
+<h2>六、考試時間策略</h2>
+
+<p>100分，60分鐘。問答題20分是最後兩題——你前面的速度和準確度決定你留給問答題多少時間。</p>
+
+<div class="time-bar">
+  <div class="time-seg fast" style="width:45%">甲-己：48-49分 · ~25分鐘</div>
+  <div class="time-seg medium" style="width:25%">庚：22-27分 · ~18分鐘</div>
+  <div class="time-seg slow" style="width:30%">辛：20分 · ~15分鐘</div>
+</div>
+
+<div class="card info">
+  <h4 style="margin-top:0;">問答題 15 分鐘分配（2題）</h4>
+  <table>
+    <tr><td style="font-weight:600;width:80px;">0-1分鐘</td><td>讀題 → 在草稿紙寫下<strong>四個維度+關鍵詞</strong>（不寫完整句子）</td></tr>
+    <tr><td style="font-weight:600;">1-6分鐘</td><td>寫第1題（約120-180字）</td></tr>
+    <tr><td style="font-weight:600;">6-7分鐘</td><td>讀第2題 → 草稿四維度關鍵詞</td></tr>
+    <tr><td style="font-weight:600;">7-13分鐘</td><td>寫第2題</td></tr>
+    <tr><td style="font-weight:600;">13-15分鐘</td><td>檢查：每個維度有沒有寫到關鍵詞？有沒有寫解釋+史例？</td></tr>
+  </table>
+</div>
+
+<div class="note-inline">
+  <strong>⚠️ 最致命的錯誤</strong>：第1題寫太多（寫了25分鐘），第2題只剩5分鐘隨便寫兩句 → 兩題都低分。寧可每題各8分鐘寫得均衡，也不要一題滿分一題零分。
+</div>
+
+<!-- ═══════════════ SECTION 7 ═══════════════ -->
+<h2>七、考場注意事項</h2>
+
+<div class="card danger">
+  <h4 style="margin-top:0;">🚫 五大失分陷阱</h4>
+  <table>
+    <tr><th>#</th><th>錯誤</th><th>後果</th><th>正確做法</th></tr>
+    <tr><td>1</td><td>關鍵詞寫簡稱<br><small>「承包制」而非「家庭聯產承包責任制」</small></td><td>可能不得分</td><td>第一次出現時寫全稱，後面可用簡稱</td></tr>
+    <tr><td>2</td><td>只寫一個維度深度展開<br><small>改革開放的經濟寫500字，政治/社會/文化隻字不提</small></td><td>最多拿該維度的滿分（3-4分），其餘維度0分</td><td>每個維度寫2-3句即可，均勻分配</td></tr>
+    <tr><td>3</td><td>寫空泛形容詞<br><small>「很嚴重」「非常混亂」「極大影響」</small></td><td>0分——評卷老師不給形容詞分數</td><td>用具體名詞代替形容詞：混亂→「黨政機關癱瘓」</td></tr>
+    <tr><td>4</td><td>不寫例子<br><small>「文革造成很大破壞」然後結束</small></td><td>只得論點分（1分），失去解釋+史例分（2-3分）</td><td>每維度至少附一個具體史例</td></tr>
+    <tr><td>5</td><td>時間控制失誤<br><small>資料題（庚）寫太久，問答題（辛）沒時間</small></td><td>20分全丟</td><td>嚴格按時間分段，問答題務必留 ≥12分鐘</td></tr>
+  </table>
+</div>
+
+<div class="card good">
+  <h4 style="margin-top:0;">✅ 考前檢查清單</h4>
+  <ul class="checklist">
+    <li>每題是否覆蓋了至少<strong>3個維度</strong>？</li>
+    <li>每個維度是否有<strong>1個專業關鍵詞</strong>？</li>
+    <li>每個維度是否有<strong>1個具體史例</strong>？</li>
+    <li>關鍵詞是否寫了<strong>全稱</strong>？</li>
+    <li>是否避免了「很/非常/極大」等<strong>空泛形容詞</strong>？</li>
+    <li>每題字數是否在<strong>120-180字</strong>範圍內？</li>
+  </ul>
+</div>
+
+<hr>
+
+<!-- ═══════════════ SECTION 8 ═══════════════ -->
+<h2>八、答題框架模板</h2>
+<p>以下模板可以直接套用於任何「影響/成效/困難」類問答題。把 <span class="t-blank">______</span> 替換為具體內容即可。</p>
+
+<div class="template-box">
+  <div class="t-label">萬能答題模板</div>
+  <p style="font-size:0.9rem; line-height:2;">
+    <strong>政治方面</strong>，<span class="t-blank">（論點：核心影響）</span>。<span class="t-blank">（解釋：原因或機制）</span>，例如<span class="t-blank">（史例：具體事件）</span>。<br><br>
+    <strong>經濟方面</strong>，<span class="t-blank">（論點：核心影響）</span>。<span class="t-blank">（解釋：原因或機制）</span>，例如<span class="t-blank">（史例：具體事件）</span>。<br><br>
+    <strong>社會方面</strong>，<span class="t-blank">（論點：核心影響）</span>。<span class="t-blank">（解釋：原因或機制）</span>，例如<span class="t-blank">（史例：具體事件）</span>。<br><br>
+    <strong>文化方面</strong>，<span class="t-blank">（論點：核心影響）</span>。<span class="t-blank">（解釋：原因或機制）</span>，例如<span class="t-blank">（史例：具體事件）</span>。
+  </p>
+</div>
+
+<h3>模板實例：改革開放成效（10分參考答案）</h3>
+
+<div class="card good">
+  <p style="font-size:0.9rem; line-height:2;">
+    <strong>經濟方面</strong>，改革開放推動中國經濟高速增長，GDP年均增速達9%以上，中國由低收入國家躍升為世界第二大經濟體。設立深圳、珠海、汕頭、廈門及海南五個經濟特區吸引外資，其中深圳由小漁村迅速發展為國際化都市。<br><br>
+    <strong>國力方面</strong>，改革開放顯著提升了中國的國際地位和綜合國力。中國先後於1997年及1999年恢復對香港和澳門行使主權，洗刷了百年國恥，並於2001年加入世界貿易組織（WTO），融入全球經濟體系。<br><br>
+    <strong>科教方面</strong>，科技和教育事業取得突破性進展。載人航天工程、高鐵技術達到世界先進水平，義務教育全面普及，高等院校招生規模大幅擴大。<br><br>
+    <strong>社會方面</strong>，人民生活水平顯著提高，數億人口擺脫貧困。但市場經濟轉型也帶來陣痛，國企改革導致大量工人下崗，貧富差距擴大和環境污染等問題日益突出。
+  </p>
+</div>
+
+<h3>模板實例：文化大革命影響（10分參考答案）</h3>
+
+<div class="card good">
+  <p style="font-size:0.9rem; line-height:2;">
+    <strong>政治方面</strong>，文化大革命對中國政治造成災難性衝擊。各級黨政機關陷入癱瘓，大批領導幹部遭到無情批鬥，國家政治生活完全混亂。國家主席劉少奇被誣蔑為「走資派」，遭非法囚禁並被迫害致死，成為文革最大的政治悲劇。<br><br>
+    <strong>經濟方面</strong>，文革十年動亂使國民經濟瀕臨崩潰邊緣。工業生產大幅下降，交通運輸中斷，物資供應嚴重不足，國民經濟倒退數年。<br><br>
+    <strong>文化方面</strong>，紅衛兵「破四舊」運動大規模破壞寺廟、古籍和珍貴文物，高等教育中斷長達十年，學術研究完全停滯，知識分子被冠以「臭老九」之名遭下放勞改。<br><br>
+    <strong>社會方面</strong>，文革引發大規模派系武鬥，社會秩序完全失控，人與人之間的信任被嚴重破壞，道德水平急劇下降，整個社會陷入前所未有的混亂。
+  </p>
+</div>
+
+<hr>
+
+<p style="text-align:center; color:var(--muted); font-size:0.82rem;">
+  荃灣官立中學 · 中三中國歷史 · 問答題答題技巧<br>
+  基於 2223/2324/2425 三年 past paper 命題分析<br>
+  製作日期：2026年5月14日
+</p>
+
+<script>
+function switchTab(i) {
+  const tabs = document.querySelectorAll('#topicTabs .tab');
+  const contents = document.querySelectorAll('.tab-content');
+  tabs.forEach((t, idx) => t.classList.toggle('active', idx === i));
+  contents.forEach((c, idx) => c.classList.toggle('active', idx === i));
+}
+</script>
+</body>
+</html>

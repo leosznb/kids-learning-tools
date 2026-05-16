@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sine &amp; Cosine Rule Drill — S3 Maths | Trigonometry</title>
+<style>
+  :root {
+    --bg: #f7f8fa;
+    --surface: #ffffff;
+    --surface2: #f0f1f4;
+    --border: #d8dce3;
+    --text: #1d1d2b;
+    --text-light: #4a4a5a;
+    --text-dim: #7d7d8f;
+    --green: #2e7d32;
+    --green-bg: #e8f5e9;
+    --green-border: #a5d6a7;
+    --red: #c62828;
+    --red-bg: #ffebee;
+    --red-border: #ef9a9a;
+    --amber: #e65100;
+    --amber-bg: #fff3e0;
+    --amber-border: #ffcc80;
+    --blue: #1565c0;
+    --orange-tag: #d84315;
+    --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang HK', 'Microsoft YaHei', sans-serif;
+    --font-mono: 'SF Mono', 'JetBrains Mono', 'Menlo', 'Consolas', monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--text);
+    background: var(--bg);
+    min-height: 100vh;
+  }
+  .container { max-width: 780px; margin: 0 auto; padding: 24px 16px 60px; }
+  header {
+    text-align: center;
+    padding: 28px 0 16px;
+    margin-bottom: 20px;
+  }
+  header h1 { font-size: 26px; font-weight: 800; letter-spacing: -.02em; }
+  header h1 span { color: var(--green); }
+  header .sub { font-size: 14px; color: var(--text-dim); font-family: var(--font-mono); letter-spacing: .03em; margin-top: 2px; }
+
+  .workflow {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 16px 18px; margin-bottom: 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,.04);
+  }
+  .workflow h3 { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+  .wf-steps { display: flex; gap: 12px; flex-wrap: wrap; }
+  .wf-step {
+    flex: 1; min-width: 170px; background: var(--surface2);
+    border-radius: 8px; padding: 10px 12px; font-size: 13px;
+    border-left: 3px solid var(--green-border);
+  }
+  .wf-step .num {
+    display: inline-block; font-family: var(--font-mono); font-size: 12px; font-weight: 700;
+    width: 20px; height: 20px; line-height: 20px; text-align: center;
+    border-radius: 50%; color: #fff; margin-right: 4px; background: var(--green);
+  }
+  .wf-step .time { font-size: 11px; color: var(--text-dim); font-family: var(--font-mono); margin-top: 3px; }
+
+  .tabs { display: flex; gap: 3px; margin-bottom: 16px; flex-wrap: wrap; }
+  .tab-btn {
+    flex: 1; min-width: 110px; padding: 10px 8px; border: 1px solid var(--border);
+    background: var(--surface); color: var(--text-dim); font-family: var(--font-sans);
+    font-size: 13px; font-weight: 600; cursor: pointer; border-radius: 6px;
+    transition: all .18s; text-align: center; white-space: nowrap;
+  }
+  .tab-btn:hover { border-color: var(--green); color: var(--text); }
+  .tab-btn.active { background: var(--green-bg); border-color: var(--green); color: var(--green); font-weight: 700; }
+  .tab-icon { font-size: 15px; display: block; margin-bottom: 1px; }
+
+  .section { display: none; }
+  .section.active { display: block; }
+
+  .section-intro {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 13px 16px; margin-bottom: 14px;
+    font-size: 14px; color: var(--text-light); line-height: 1.6;
+  }
+  .section-intro strong { color: var(--green); }
+  .section-intro code {
+    font-family: var(--font-mono); font-size: 13px; background: var(--surface);
+    padding: 1px 5px; border-radius: 3px; border: 1px solid var(--border);
+  }
+  .section-intro .alert { color: var(--red); font-weight: 600; }
+  .formula-ref {
+    background: var(--surface); border: 2px solid var(--green-border); border-radius: 8px;
+    padding: 10px 14px; margin-bottom: 12px; font-family: var(--font-mono);
+    font-size: 14px; color: var(--green); font-weight: 600; text-align: center;
+  }
+
+  .score-bar {
+    display: flex; align-items: center; justify-content: space-between;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 10px 16px; margin-bottom: 12px;
+    font-family: var(--font-mono); font-size: 13px; flex-wrap: wrap; gap: 6px;
+  }
+  .score-num { font-weight: 700; font-size: 17px; color: var(--green); }
+  .sc-correct { color: var(--green); } .sc-wrong { color: var(--red); }
+
+  .q-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 16px 18px; margin-bottom: 12px;
+    transition: box-shadow .2s, border-color .2s;
+    box-shadow: 0 1px 2px rgba(0,0,0,.03);
+  }
+  .q-card.correct { border-color: var(--green); background: #f1f8e9; box-shadow: 0 0 0 2px rgba(46,125,50,.08); }
+  .q-card.wrong { border-color: var(--red); background: #fef2f2; box-shadow: 0 0 0 2px rgba(198,40,40,.08); }
+  .q-header { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 10px; }
+  .q-num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 26px; height: 26px; border-radius: 50%; background: var(--surface2);
+    font-family: var(--font-mono); font-size: 12px; font-weight: 700;
+    flex-shrink: 0; border: 1px solid var(--border); color: var(--text-light);
+  }
+  .q-card.correct .q-num { background: var(--green-bg); border-color: var(--green-border); color: var(--green); }
+  .q-text { font-size: 16px; color: var(--text); line-height: 1.5; padding-top: 2px; }
+  .q-text .kw { font-weight: 700; color: var(--green); }
+  .q-text .unit { font-size: 13px; color: var(--text-dim); }
+  .trap-tag {
+    display: inline-block; font-size: 10px; font-weight: 700; color: var(--orange-tag);
+    background: #fbe9e7; padding: 1px 6px; border-radius: 3px;
+    margin-left: 6px; vertical-align: middle; letter-spacing: .04em;
+  }
+  .q-input-row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+  .q-input {
+    flex: 1; min-width: 130px; padding: 9px 12px; background: var(--bg);
+    border: 1px solid var(--border); border-radius: 6px; color: var(--text);
+    font-family: var(--font-mono); font-size: 15px; outline: none;
+    transition: border-color .18s;
+  }
+  .q-input:focus { border-color: var(--green); box-shadow: 0 0 0 2px rgba(46,125,50,.1); }
+  .q-input:disabled { opacity: .55; cursor: not-allowed; }
+  .btn {
+    padding: 9px 16px; border: 1px solid var(--border); border-radius: 6px;
+    font-family: var(--font-sans); font-size: 13px; font-weight: 600;
+    cursor: pointer; transition: all .15s; white-space: nowrap;
+    background: var(--surface); color: var(--text-light);
+  }
+  .btn:hover { border-color: var(--text-dim); }
+  .btn-check { background: var(--green); color: #fff; border-color: var(--green); }
+  .btn-check:hover { background: #1b5e20; border-color: #1b5e20; }
+  .btn-check:disabled { opacity: .35; cursor: not-allowed; }
+  .btn-hint { color: var(--amber); border-color: var(--amber-border); }
+  .btn-hint:hover { background: var(--amber-bg); }
+  .btn-show { color: var(--text-dim); }
+  .btn-show:hover { border-color: var(--text-dim); color: var(--text); }
+  .btn-sm { padding: 6px 10px; font-size: 12px; }
+
+  .feedback { margin-top: 9px; padding: 10px 14px; border-radius: 6px; font-size: 14px; display: none; line-height: 1.5; }
+  .feedback.show { display: block; }
+  .feedback.correct-msg { background: var(--green-bg); border: 1px solid var(--green-border); color: var(--green); }
+  .feedback.wrong-msg { background: var(--red-bg); border: 1px solid var(--red-border); color: var(--red); }
+  .feedback .explain { margin-top: 5px; font-size: 13px; color: var(--text-light); }
+  .feedback .explain code, .feedback code {
+    font-family: var(--font-mono); font-size: 13px;
+    background: rgba(0,0,0,.04); padding: 1px 5px; border-radius: 3px;
+  }
+  .hint-box {
+    margin-top: 7px; padding: 9px 14px; background: var(--amber-bg);
+    border: 1px solid var(--amber-border); border-radius: 6px;
+    font-size: 13px; color: var(--amber); display: none; line-height: 1.5;
+  }
+  .hint-box.show { display: block; }
+
+  .overall-score {
+    margin-top: 22px; padding: 18px 20px; background: var(--surface);
+    border: 2px solid var(--green); border-radius: 10px; text-align: center; display: none;
+  }
+  .overall-score.show { display: block; }
+  .overall-score h3 { font-size: 17px; color: var(--green); margin-bottom: 8px; }
+  .overall-score .big-num { font-size: 40px; font-weight: 800; color: var(--green); font-family: var(--font-mono); }
+  .overall-score .remark { font-size: 14px; color: var(--text-light); margin-top: 6px; }
+  .reset-link {
+    display: block; text-align: center; margin-top: 14px; font-size: 13px;
+    color: var(--text-dim); cursor: pointer; text-decoration: underline;
+    background: none; border: none; font-family: var(--font-sans);
+  }
+  .reset-link:hover { color: var(--green); }
+
+  @media (max-width: 600px) {
+    .container { padding: 14px 10px 40px; }
+    header h1 { font-size: 20px; }
+    .wf-step { min-width: 100%; }
+    .tab-btn { font-size: 11px; padding: 8px 4px; }
+    .q-text { font-size: 14px; }
+    .q-input { font-size: 14px; min-width: 100px; }
+    .btn { font-size: 12px; padding: 8px 10px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>&#x25B3; <span>Sine &amp; Cosine</span> Rule Drill</h1>
+  <div class="sub">S3 Maths · Trigonometry Applications · New Syllabus 2026</div>
+</header>
+
+<div class="workflow">
+  <h3>&#x1F3AF; How to use 使用方式</h3>
+  <div class="wf-steps">
+    <div class="wf-step">
+      <div><span class="num">1</span> <strong>Pick a section</strong></div>
+      <div>Start with Sine Rule, then Cosine, then Area, finally Mixed</div>
+    </div>
+    <div class="wf-step">
+      <div><span class="num">2</span> <strong>Type your answer</strong></div>
+      <div>Numerical answer only. Press Enter or click Check</div>
+    </div>
+    <div class="wf-step">
+      <div><span class="num">3</span> <strong>Use Hint if stuck</strong></div>
+      <div>Hint tells you which formula to use — but try first!</div>
+    </div>
+  </div>
+</div>
+
+<!-- Tabs -->
+<div class="tabs">
+  <button class="tab-btn active" data-tab="sine"><span class="tab-icon">a/sinA</span>Sine Rule 正弦</button>
+  <button class="tab-btn" data-tab="cosine"><span class="tab-icon">a² = b²+c²&minus;2bc·cosA</span>Cosine Rule 餘弦</button>
+  <button class="tab-btn" data-tab="area"><span class="tab-icon">½ab sinC</span>Area 面積</button>
+  <button class="tab-btn" data-tab="mixed"><span class="tab-icon">🧭</span>Mixed 綜合</button>
+</div>
+
+<!-- ═══ SINE RULE ═══ -->
+<div class="section active" id="section-sine">
+  <div class="section-intro">
+    <strong>Sine Formula 正弦定理：</strong><br>
+    <code>a/sinA = b/sinB = c/sinC = 2R</code> (R = circumradius 外接圓半徑)<br>
+    <strong>When to use 何時使用：</strong>① Two angles + one side 兩角一邊 · ② Two sides + non-included angle 兩邊非夾角<br>
+    <strong>Answer format:</strong> number only, to <span class="kw">3 sig. fig.</span> or <span class="kw">1 d.p.</span> as specified.
+  </div>
+  <div class="formula-ref">a/sinA = b/sinB = c/sinC = 2R</div>
+  <div class="score-bar">
+    <div class="score-num" id="score-sine">0/5</div>
+    <div><span class="sc-correct">&#x2714; <span id="correct-sine">0</span></span> &ensp; <span class="sc-wrong">&#x2718; <span id="wrong-sine">0</span></span> &ensp;|&ensp; Attempts: <span id="attempts-sine">0</span></div>
+  </div>
+  <div id="questions-sine"></div>
+</div>
+
+<!-- ═══ COSINE RULE ═══ -->
+<div class="section" id="section-cosine">
+  <div class="section-intro">
+    <strong>Cosine Formula 餘弦定理：</strong><br>
+    <code>a² = b² + c² &minus; 2bc·cosA</code> &nbsp; or &nbsp; <code>cosA = (b² + c² &minus; a²) / 2bc</code><br>
+    <strong>When to use 何時使用：</strong>① Two sides + included angle 兩邊夾角 · ② Three sides (find angle) 三邊求角<br>
+    <strong>Answer format:</strong> number only, to <span class="kw">3 sig. fig.</span> or <span class="kw">1 d.p.</span> as specified.
+  </div>
+  <div class="formula-ref">a² = b² + c² &minus; 2bc·cosA &nbsp;|&nbsp; cosA = (b² + c² &minus; a²) / 2bc</div>
+  <div class="score-bar">
+    <div class="score-num" id="score-cosine">0/5</div>
+    <div><span class="sc-correct">&#x2714; <span id="correct-cosine">0</span></span> &ensp; <span class="sc-wrong">&#x2718; <span id="wrong-cosine">0</span></span> &ensp;|&ensp; Attempts: <span id="attempts-cosine">0</span></div>
+  </div>
+  <div id="questions-cosine"></div>
+</div>
+
+<!-- ═══ AREA ═══ -->
+<div class="section" id="section-area">
+  <div class="section-intro">
+    <strong>Area Formula 面積公式：</strong><br>
+    <code>Area = ½ab sinC = ½bc sinA = ½ac sinB</code><br>
+    Two sides and the <strong>included angle</strong> 兩邊及其夾角<br>
+    <strong>Answer format:</strong> number only, to <span class="kw">3 sig. fig.</span> as specified.
+  </div>
+  <div class="formula-ref">Area = ½ab sinC</div>
+  <div class="score-bar">
+    <div class="score-num" id="score-area">0/5</div>
+    <div><span class="sc-correct">&#x2714; <span id="correct-area">0</span></span> &ensp; <span class="sc-wrong">&#x2718; <span id="wrong-area">0</span></span> &ensp;|&ensp; Attempts: <span id="attempts-area">0</span></div>
+  </div>
+  <div id="questions-area"></div>
+</div>
+
+<!-- ═══ MIXED ═══ -->
+<div class="section" id="section-mixed">
+  <div class="section-intro">
+    <strong>Mixed Applications 綜合應用：</strong> Bearing 方位角 · Angles of elevation 仰角 · Real-world triangles<br>
+    <strong>Key:</strong> Identify the triangle, label sides and angles, then <strong>choose the correct formula</strong>.<br>
+    <strong>Answer format:</strong> number only, to <span class="kw">3 sig. fig.</span> as specified.
+  </div>
+  <div class="score-bar">
+    <div class="score-num" id="score-mixed">0/5</div>
+    <div><span class="sc-correct">&#x2714; <span id="correct-mixed">0</span></span> &ensp; <span class="sc-wrong">&#x2718; <span id="wrong-mixed">0</span></span> &ensp;|&ensp; Attempts: <span id="attempts-mixed">0</span></div>
+  </div>
+  <div id="questions-mixed"></div>
+</div>
+
+<div class="overall-score" id="overall-score">
+  <h3>&#x1F3AF; All 20 Questions Complete</h3>
+  <div class="big-num" id="overall-num">0/20</div>
+  <div class="remark" id="overall-remark"></div>
+</div>
+<button class="reset-link" onclick="resetAll()">Reset All Progress 重置全部</button>
+
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+// QUESTION BANK — 20 questions, numerically verified
+// ═══════════════════════════════════════════
+const BANK = {
+  sine: [
+    { id:"s1",
+      q:"In &#x25B3;ABC, <span class='kw'>A=40&deg;</span>, <span class='kw'>B=72&deg;</span>, <span class='kw'>a=10 cm</span>. Find <b>b</b> <span class='unit'>(3 sig.fig.)</span>",
+      ans:14.8, tol:0.2,
+      hint:"Use Sine Rule: b/sinB = a/sinA &rarr; b = a&times;sinB/sinA",
+      expl:"b = 10 &times; sin72&deg; / sin40&deg;<br>= 10 &times; 0.95106 / 0.64279<br>= <code>14.8 cm</code>" },
+    { id:"s2",
+      q:"In &#x25B3;ABC, <span class='kw'>A=65&deg;</span>, <span class='kw'>C=45&deg;</span>, <span class='kw'>b=20 cm</span>. Find <b>a</b> <span class='unit'>(3 sig.fig.)</span>",
+      ans:19.3, tol:0.2,
+      hint:"First find B = 180&deg;&minus;65&deg;&minus;45&deg; = 70&deg;. Then a/sin65&deg; = 20/sin70&deg;",
+      expl:"B = 180&minus;65&minus;45 = 70&deg;<br>a = 20 &times; sin65&deg; / sin70&deg;<br>= 20 &times; 0.90631 / 0.93969<br>= <code>19.3 cm</code>" },
+    { id:"s3",
+      q:"In &#x25B3;ABC, <span class='kw'>a=15 cm</span>, <span class='kw'>b=11 cm</span>, <span class='kw'>A=63&deg;</span>. Find <b>B</b> <span class='unit'>(1 d.p.)</span>",
+      ans:40.8, tol:0.2,
+      hint:"sinB = b&times;sinA/a. Check: a &gt; b, so B is acute.",
+      expl:"sinB = 11 &times; sin63&deg; / 15<br>= 11 &times; 0.89101 / 15 = 0.65341<br>B = arcsin(0.65341) = <code>40.8&deg;</code><br>(a &gt; b so B is acute, only one solution)" },
+    { id:"s4",
+      q:"In &#x25B3;ABC, <span class='kw'>a=8 cm</span>, <span class='kw'>A=30&deg;</span>. Find the <b>circumradius R</b> (外接圓半徑).",
+      ans:8.0, tol:0.05,
+      hint:"Use a/sinA = 2R. So R = a/(2&times;sinA).",
+      expl:"a/sinA = 2R<br>8/sin30&deg; = 8/0.5 = 16 = 2R<br>R = <code>8 cm</code>" },
+    { id:"s5",
+      q:"In &#x25B3;PQR, <span class='kw'>&#x2220;P=50&deg;</span>, <span class='kw'>&#x2220;Q=60&deg;</span>, <span class='kw'>QR=12 cm</span>. Find <b>PR</b> <span class='unit'>(3 sig.fig.)</span>",
+      ans:13.6, tol:0.2,
+      hint:"First find R = 70&deg;. QR is opposite P, PR is opposite Q. Use Sine Rule.",
+      expl:"R = 180&minus;50&minus;60 = 70&deg;<br>PR/sin60&deg; = QR/sin50&deg;<br>PR = 12 &times; sin60&deg; / sin50&deg;<br>= 12 &times; 0.86603 / 0.76604<br>= <code>13.6 cm</code>" }
+  ],
+  cosine: [
+    { id:"c1",
+      q:"In &#x25B3;ABC, <span class='kw'>a=7 cm</span>, <span class='kw'>b=10 cm</span>, <span class='kw'>C=55&deg;</span>. Find <b>c</b> <span class='unit'>(3 sig.fig.)</span>",
+      ans:8.29, tol:0.2,
+      hint:"Two sides + included angle &rarr; Cosine Rule: c² = a² + b² &minus; 2ab&times;cosC",
+      expl:"c² = 7² + 10² &minus; 2&times;7&times;10&times;cos55&deg;<br>= 49 + 100 &minus; 140 &times; 0.57358<br>= 149 &minus; 80.30 = 68.70<br>c = &#x221A;68.70 = <code>8.29 cm</code>" },
+    { id:"c2",
+      q:"In &#x25B3;ABC, <span class='kw'>a=5 cm</span>, <span class='kw'>b=6 cm</span>, <span class='kw'>c=7 cm</span>. Find angle <b>A</b> <span class='unit'>(1 d.p.)</span>",
+      ans:44.4, tol:0.2,
+      hint:"Three sides &rarr; Cosine Rule for angle: cosA = (b² + c² &minus; a²) / 2bc",
+      expl:"cosA = (6² + 7² &minus; 5²) / (2&times;6&times;7)<br>= (36 + 49 &minus; 25) / 84 = 60/84 = 5/7<br>A = arccos(5/7) = <code>44.4&deg;</code>" },
+    { id:"c3",
+      q:"In &#x25B3;ABC, <span class='kw'>a=12 cm</span>, <span class='kw'>b=9 cm</span>, <span class='kw'>C=120&deg;</span>. Find <b>c</b> <span class='unit'>(3 sig.fig.)</span> <span class='trap-tag'>OBTUSE!</span>",
+      ans:18.2, tol:0.2,
+      hint:"Cosine Rule. Note: cos120&deg; = &minus;0.5 (negative!). The minus sign becomes a plus.",
+      expl:"c² = 12² + 9² &minus; 2&times;12&times;9&times;cos120&deg;<br>= 144 + 81 &minus; 216 &times; (&minus;0.5)<br>= 225 + 108 = 333<br>c = &#x221A;333 = <code>18.2 cm</code>" },
+    { id:"c4",
+      q:"In &#x25B3;ABC, <span class='kw'>a=8 cm</span>, <span class='kw'>b=15 cm</span>, <span class='kw'>c=10 cm</span>. Find the <b>largest angle</b> <span class='unit'>(1 d.p.)</span>",
+      ans:112.4, tol:0.2,
+      hint:"Largest angle is opposite the longest side (b=15). Find angle B using Cosine Rule.",
+      expl:"Longest side = 15 cm &rarr; find angle B<br>cosB = (8² + 10² &minus; 15²) / (2&times;8&times;10)<br>= (64 + 100 &minus; 225) / 160 = &minus;61/160<br>B = arccos(&minus;0.38125) = <code>112.4&deg;</code>" },
+    { id:"c5",
+      q:"In &#x25B3;ABC, <span class='kw'>a=10 cm</span>, <span class='kw'>b=14 cm</span>, <span class='kw'>C=100&deg;</span>. Find <b>c</b> <span class='unit'>(3 sig.fig.)</span> <span class='trap-tag'>OBTUSE!</span>",
+      ans:18.6, tol:0.2,
+      hint:"Cosine Rule with obtuse angle. cos100&deg; is negative, so the term becomes +!",
+      expl:"c² = 10² + 14² &minus; 2&times;10&times;14&times;cos100&deg;<br>= 100 + 196 &minus; 280 &times; (&minus;0.17365)<br>= 296 + 48.62 = 344.62<br>c = &#x221A;344.62 = <code>18.6 cm</code>" }
+  ],
+  area: [
+    { id:"a1",
+      q:"In &#x25B3;ABC, <span class='kw'>a=10 cm</span>, <span class='kw'>b=12 cm</span>, <span class='kw'>C=50&deg;</span>. Find <b>area</b> <span class='unit'>(3 sig.fig.)</span>",
+      ans:46.0, tol:0.3,
+      hint:"Area = ½ab sinC. Two sides and included angle.",
+      expl:"Area = ½ &times; 10 &times; 12 &times; sin50&deg;<br>= 60 &times; 0.76604<br>= <code>46.0 cm²</code>" },
+    { id:"a2",
+      q:"In &#x25B3;ABC, <span class='kw'>a=8 cm</span>, <span class='kw'>b=6 cm</span>, <span class='kw'>C=30&deg;</span>. Find <b>area</b>.",
+      ans:12.0, tol:0.1,
+      hint:"Area = ½ab sinC. sin30&deg; = 0.5, so it should be easy!",
+      expl:"Area = ½ &times; 8 &times; 6 &times; sin30&deg;<br>= 24 &times; 0.5<br>= <code>12.0 cm²</code>" },
+    { id:"a3",
+      q:"Two sides are <span class='kw'>9 cm</span> and <span class='kw'>14 cm</span>, included angle <span class='kw'>72&deg;</span>. Find <b>area</b> <span class='unit'>(3 sig.fig.)</span>",
+      ans:59.9, tol:0.3,
+      hint:"Area = ½ &times; side1 &times; side2 &times; sin(included angle)",
+      expl:"Area = ½ &times; 9 &times; 14 &times; sin72&deg;<br>= 63 &times; 0.95106<br>= <code>59.9 cm²</code>" },
+    { id:"a4",
+      q:"In &#x25B3;ABC, area = <span class='kw'>30 cm²</span>, <span class='kw'>a=12 cm</span>, <span class='kw'>b=10 cm</span>. Find acute angle <b>C</b>.",
+      ans:30.0, tol:0.2,
+      hint:"30 = ½ &times; 12 &times; 10 &times; sinC. Solve for sinC.",
+      expl:"30 = ½ &times; 12 &times; 10 &times; sinC<br>30 = 60 &times; sinC<br>sinC = 0.5<br>C = <code>30&deg;</code>" },
+    { id:"a5",
+      q:"Triangle with sides <span class='kw'>5 cm</span>, <span class='kw'>6 cm</span>, <span class='kw'>7 cm</span>. Find <b>area</b> <span class='unit'>(3 sig.fig.)</span> — use any method.",
+      ans:14.7, tol:0.2,
+      hint:"Three sides &rarr; Heron's formula: s = (a+b+c)/2, then Area = &#x221A;[s(s&minus;a)(s&minus;b)(s&minus;c)]",
+      expl:"s = (5+6+7)/2 = 9<br>Area = &#x221A;[9&times;4&times;3&times;2] = &#x221A;216<br>= <code>14.7 cm²</code>" }
+  ],
+  mixed: [
+    { id:"m1",
+      q:"Ship A sails <span class='kw'>15 km</span> on bearing <span class='kw'>040&deg;</span>. Ship B sails <span class='kw'>20 km</span> on bearing <span class='kw'>110&deg;</span>. Find <b>distance between ships</b> <span class='unit'>(3 sig.fig.)</span>",
+      ans:20.5, tol:0.3,
+      hint:"Angle between paths = 110&deg; &minus; 40&deg; = 70&deg;. Two sides + included angle &rarr; Cosine Rule.",
+      expl:"Angle between paths = 110&minus;40 = 70&deg;<br>d² = 15² + 20² &minus; 2&times;15&times;20&times;cos70&deg;<br>= 225+400&minus;600&times;0.34202<br>= 625&minus;205.2 = 419.8<br>d = <code>20.5 km</code>" },
+    { id:"m2",
+      q:"In &#x25B3;ABC, <span class='kw'>A=38&deg;</span>, <span class='kw'>B=72&deg;</span>, <span class='kw'>a=15 cm</span>. Which formula? Find <b>b</b> <span class='unit'>(3 sig.fig.)</span>",
+      ans:23.2, tol:0.2,
+      hint:"Two angles + one side &rarr; Sine Rule. b/sin72&deg; = 15/sin38&deg;",
+      expl:"b = 15 &times; sin72&deg; / sin38&deg;<br>= 15 &times; 0.95106 / 0.61566<br>= <code>23.2 cm</code>" },
+    { id:"m3",
+      q:"From point P, angle of elevation to top of a tower = <span class='kw'>25&deg;</span>. From Q (<span class='kw'>60 m</span> closer along same line), angle = <span class='kw'>40&deg;</span>. Find <b>tower height</b> <span class='unit'>(3 sig.fig.)</span>",
+      ans:63.0, tol:0.5,
+      hint:"Let h = height, d = distance from Q to base. tan40&deg;=h/d, tan25&deg;=h/(d+60). Solve for h.",
+      expl:"h = 60&times;tan25&deg; / (1 &minus; tan25&deg;/tan40&deg;)<br>= 60&times;0.46631 / (1 &minus; 0.55572)<br>= 27.979 / 0.44428<br>= <code>63.0 m</code>" },
+    { id:"m4",
+      q:"A triangular field has sides <span class='kw'>80 m</span>, <span class='kw'>100 m</span>, <span class='kw'>140 m</span>. Find <b>area</b> <span class='unit'>(3 sig.fig.)</span>",
+      ans:3920, tol:20,
+      hint:"Three sides &rarr; Heron's formula. s = (80+100+140)/2 = 160.",
+      expl:"s = (80+100+140)/2 = 160<br>Area = &#x221A;[160&times;80&times;60&times;20]<br>= &#x221A;15,360,000<br>= <code>3,920 m²</code>" },
+    { id:"m5",
+      q:"Two sides: <span class='kw'>13 cm</span> and <span class='kw'>18 cm</span>, included angle <span class='kw'>65&deg;</span>. Find the <b>third side</b> <span class='unit'>(3 sig.fig.)</span>",
+      ans:17.2, tol:0.2,
+      hint:"Two sides + included angle &rarr; Cosine Rule to find the third side.",
+      expl:"c² = 13² + 18² &minus; 2&times;13&times;18&times;cos65&deg;<br>= 169+324&minus;468&times;0.42262<br>= 493&minus;197.79 = 295.21<br>c = <code>17.2 cm</code>" }
+  ]
+};
+
+// ═══════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════
+const state = { sine:{}, cosine:{}, area:{}, mixed:{} };
+const SECTIONS = ['sine','cosine','area','mixed'];
+
+// ═══════════════════════════════════════════
+// PARSE NUMBER
+// ═══════════════════════════════════════════
+function parseNum(s) {
+  s = s.toLowerCase().trim();
+  // Remove squared-unit patterns first (longer match before shorter)
+  s = s.replace(/cm\^2|cm\u00B2|cm²|cm2|m\^2|m\u00B2|m²|m2|km\^2|km\u00B2|km²|km2/gi, '');
+  // Remove simple unit strings (cm before m to avoid partial match)
+  s = s.replace(/cm|km|mm|m/gi, '');
+  // Remove degree symbols and words
+  s = s.replace(/[°º]/g, '');
+  s = s.replace(/deg|degree|degrees/gi, '');
+  // Remove commas, spaces, =, :
+  s = s.replace(/[,]/g, '');
+  s = s.replace(/[\s=:]/g, '');
+  const n = parseFloat(s);
+  return isNaN(n) ? null : n;
+}
+
+// ═══════════════════════════════════════════
+// RENDER
+// ═══════════════════════════════════════════
+function renderSection(key) {
+  const box = document.getElementById('questions-'+key);
+  const qs = BANK[key];
+  let h = '';
+  qs.forEach((q, i) => {
+    const st = state[key][q.id] || {};
+    h += `
+    <div class="q-card" id="card-${q.id}">
+      <div class="q-header">
+        <div class="q-num">${i+1}</div>
+        <div class="q-text">${q.q}</div>
+      </div>
+      <div class="q-input-row">
+        <input type="text" class="q-input" id="inp-${q.id}"
+          placeholder="Type your answer..." ${st.done?'disabled':''}
+          autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+          inputmode="decimal">
+        <button class="btn btn-check" id="chk-${q.id}" onclick="check('${key}','${q.id}')" ${st.done?'disabled':''}>Check</button>
+        <button class="btn btn-hint btn-sm" id="hnt-${q.id}" onclick="hint('${key}','${q.id}')" ${st.done?'disabled':''}>Hint</button>
+        <button class="btn btn-show btn-sm" id="shw-${q.id}" onclick="show('${key}','${q.id}')">Show</button>
+      </div>
+      <div class="feedback" id="fb-${q.id}"></div>
+      <div class="hint-box" id="hb-${q.id}">${st.showHint ? '&#x1F4A1; '+q.hint : ''}</div>
+    </div>`;
+  });
+  box.innerHTML = h;
+}
+
+// ═══════════════════════════════════════════
+// CHECK
+// ═══════════════════════════════════════════
+function check(key, qid) {
+  const q = BANK[key].find(x => x.id === qid);
+  if (!q) return;
+  const inp = document.getElementById('inp-'+qid);
+  const fb = document.getElementById('fb-'+qid);
+  const card = document.getElementById('card-'+qid);
+  const raw = inp.value.trim();
+  const val = parseNum(raw);
+
+  if (!state[key][qid]) state[key][qid] = { done: false, attempts: 0, showHint: false };
+  state[key][qid].attempts++;
+
+  if (val !== null && Math.abs(val - q.ans) <= q.tol) {
+    state[key][qid].done = true;
+    card.className = 'q-card correct';
+    inp.disabled = true;
+    document.getElementById('chk-'+qid).disabled = true;
+    document.getElementById('hnt-'+qid).disabled = true;
+    fb.className = 'feedback correct-msg show';
+    fb.innerHTML = '&#x2705; <strong>Correct!</strong> (Answer: '+q.ans+')<div class="explain">'+q.expl+'</div>';
+  } else {
+    card.className = 'q-card wrong';
+    fb.className = 'feedback wrong-msg show';
+    let msg = '&#x274C; <strong>Not quite.</strong> Try again or use Hint.';
+    if (val !== null) msg += '<div class="explain">You entered: <code>'+esc(raw)+'</code> (tolerance &plusmn;'+q.tol+')</div>';
+    else msg += '<div class="explain">Could not parse a number from: <code>'+esc(raw)+'</code></div>';
+    fb.innerHTML = msg;
+    setTimeout(() => { if (!state[key][qid].done) card.className = 'q-card'; }, 1200);
+  }
+  updateScore(key);
+}
+
+// ═══════════════════════════════════════════
+// HINT
+// ═══════════════════════════════════════════
+function hint(key, qid) {
+  const q = BANK[key].find(x => x.id === qid);
+  if (!q) return;
+  document.getElementById('hb-'+qid).innerHTML = '&#x1F4A1; '+q.hint;
+  document.getElementById('hb-'+qid).classList.add('show');
+  if (!state[key][qid]) state[key][qid] = { done: false, attempts: 0, showHint: false };
+  state[key][qid].showHint = true;
+}
+
+// ═══════════════════════════════════════════
+// SHOW ANSWER
+// ═══════════════════════════════════════════
+function show(key, qid) {
+  const q = BANK[key].find(x => x.id === qid);
+  if (!q) return;
+  const inp = document.getElementById('inp-'+qid);
+  const fb = document.getElementById('fb-'+qid);
+  const card = document.getElementById('card-'+qid);
+  inp.value = String(q.ans);
+  inp.disabled = true;
+  document.getElementById('chk-'+qid).disabled = true;
+  document.getElementById('hnt-'+qid).disabled = true;
+  card.className = 'q-card correct';
+  fb.className = 'feedback correct-msg show';
+  fb.innerHTML = '&#x1F4D6; <strong>Answer:</strong> <code>'+q.ans+'</code><div class="explain">'+q.expl+'</div>';
+  if (!state[key][qid]) state[key][qid] = { done: false, attempts: 0, showHint: false };
+  state[key][qid].done = true;
+  updateScore(key);
+}
+
+// ═══════════════════════════════════════════
+// SCORE
+// ═══════════════════════════════════════════
+function updateScore(key) {
+  const qs = BANK[key];
+  let correct = 0, wrong = 0, attempts = 0;
+  qs.forEach(q => {
+    const st = state[key][q.id];
+    if (st) {
+      attempts += st.attempts;
+      if (st.done) correct++;
+    }
+  });
+  wrong = qs.length - correct;
+  document.getElementById('score-'+key).textContent = correct+'/'+qs.length;
+  document.getElementById('correct-'+key).textContent = correct;
+  document.getElementById('wrong-'+key).textContent = wrong;
+  document.getElementById('attempts-'+key).textContent = attempts;
+  checkOverall();
+}
+
+function checkOverall() {
+  let total = 0, done = 0;
+  SECTIONS.forEach(k => {
+    BANK[k].forEach(q => {
+      total++;
+      const st = state[k][q.id];
+      if (st && st.done) done++;
+    });
+  });
+  if (done === total) {
+    const ov = document.getElementById('overall-score');
+    ov.classList.add('show');
+    document.getElementById('overall-num').textContent = done+'/'+total;
+    let msg = '';
+    if (done/total >= 0.9) msg = 'Excellent! Confident with Sine &amp; Cosine Rule. 出色！正餘弦定理掌握良好。';
+    else if (done/total >= 0.7) msg = 'Good! Review the missed questions on paper. 不錯，紙筆複習錯題。';
+    else msg = 'Keep practising! Redo the sections you struggled with. 繼續加油！重做薄弱環節。';
+    document.getElementById('overall-remark').textContent = msg;
+  }
+}
+
+// ═══════════════════════════════════════════
+// TABS
+// ═══════════════════════════════════════════
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    btn.classList.add('active');
+    const key = btn.dataset.tab;
+    document.getElementById('section-'+key).classList.add('active');
+    if (!document.getElementById('questions-'+key).children.length) {
+      renderSection(key);
+      updateScore(key);
+    }
+  });
+});
+
+// ═══════════════════════════════════════════
+// RESET
+// ═══════════════════════════════════════════
+function resetAll() {
+  if (!confirm('Reset all progress? 重置所有進度？')) return;
+  SECTIONS.forEach(k => { state[k] = {}; });
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector('.tab-btn[data-tab="sine"]').classList.add('active');
+  document.getElementById('section-sine').classList.add('active');
+  SECTIONS.forEach(k => {
+    document.getElementById('questions-'+k).innerHTML = '';
+    document.getElementById('score-'+k).textContent = '0/'+BANK[k].length;
+    document.getElementById('correct-'+k).textContent = '0';
+    document.getElementById('wrong-'+k).textContent = '0';
+    document.getElementById('attempts-'+k).textContent = '0';
+  });
+  document.getElementById('overall-score').classList.remove('show');
+  renderSection('sine');
+}
+
+// ═══════════════════════════════════════════
+// UTILS
+// ═══════════════════════════════════════════
+function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+// ═══════════════════════════════════════════
+// ENTER KEY
+// ═══════════════════════════════════════════
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter') {
+    const el = document.activeElement;
+    if (el && el.classList.contains('q-input')) {
+      const id = el.id.replace('inp-','');
+      for (const k of SECTIONS) {
+        if (BANK[k].find(x => x.id === id)) { check(k, id); break; }
+      }
+    }
+  }
+});
+
+// ═══════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════
+renderSection('sine');
+updateScore('sine');
+</script>
+
+</body>
+</html>

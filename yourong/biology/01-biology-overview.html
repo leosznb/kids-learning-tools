@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S3 Biology — 荃官 2nd Term Exam Overview</title>
+<style>
+:root {
+  --green-50: #f0f7f4;
+  --green-100: #d8efe3;
+  --green-200: #b0dfc7;
+  --green-300: #7cc7a0;
+  --green-400: #4aad7c;
+  --green-500: #2d8a5e;
+  --green-600: #1e7048;
+  --green-700: #1a5a3b;
+  --green-800: #164831;
+  --green-900: #0e2f20;
+  --red-500: #c0392b;
+  --amber-500: #d4a017;
+  --blue-600: #2471a3;
+  --brown-50: #fdf8f0;
+  --brown-200: #d4c5a9;
+  --brown-500: #8b6914;
+  --brown-800: #4a3510;
+  --text: #1a2e1a;
+  --text-secondary: #4a5e4a;
+  --bg: #fafbf9;
+  --card-bg: #ffffff;
+  --border: #d8e8d8;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Segoe UI', 'PingFang HK', 'Noto Sans HK', system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  background-image: 
+    radial-gradient(ellipse at 10% 0%, rgba(45,138,94,0.04) 0%, transparent 60%),
+    radial-gradient(ellipse at 90% 100%, rgba(45,138,94,0.03) 0%, transparent 60%);
+}
+
+.container { max-width: 960px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, var(--green-800) 0%, var(--green-600) 50%, var(--green-500) 100%);
+  border-radius: 1.25rem;
+  padding: 2.5rem 2rem;
+  color: #fff;
+  margin-bottom: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+.hero::after {
+  content: "🧬";
+  position: absolute;
+  right: 2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 6rem;
+  opacity: 0.15;
+}
+.hero h1 { font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; letter-spacing: -0.5px; }
+.hero .subtitle { font-size: 1.1rem; opacity: 0.9; margin-bottom: 1.25rem; }
+.hero .badge-row { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+.hero .badge {
+  background: rgba(255,255,255,0.18);
+  backdrop-filter: blur(4px);
+  padding: 0.35rem 0.9rem;
+  border-radius: 2rem;
+  font-size: 0.88rem;
+  font-weight: 500;
+}
+
+/* Section */
+.section { margin-bottom: 2rem; }
+.section-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--green-700);
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 3px solid var(--green-200);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Cards */
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 0.85rem;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+}
+.card-header {
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--green-600);
+  margin-bottom: 0.75rem;
+}
+
+/* Tables */
+table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+th, td {
+  padding: 0.55rem 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+th {
+  background: var(--green-50);
+  color: var(--green-700);
+  font-weight: 600;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+tr:hover td { background: var(--green-50); }
+
+/* Topic cards grid */
+.topic-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(440px, 1fr)); gap: 1rem; }
+.topic-card { border-left: 4px solid var(--green-300); }
+.topic-card.red { border-left-color: var(--red-500); }
+.topic-card.amber { border-left-color: var(--amber-500); }
+.topic-card.green { border-left-color: var(--green-400); }
+.topic-header { font-weight: 700; font-size: 1rem; margin-bottom: 0.5rem; }
+.topic-sub { color: var(--text-secondary); font-size: 0.88rem; line-height: 1.6; }
+.topic-sub strong { color: var(--green-700); }
+
+/* Timeline */
+.timeline { position: relative; padding-left: 2rem; }
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 0.6rem;
+  top: 0.4rem;
+  bottom: 0.4rem;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--green-300), var(--green-100));
+}
+.timeline-item {
+  position: relative;
+  padding: 0.5rem 0 0.5rem 1.5rem;
+  margin-bottom: 0.5rem;
+}
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -1.45rem;
+  top: 0.85rem;
+  width: 0.65rem;
+  height: 0.65rem;
+  border-radius: 50%;
+  background: var(--green-500);
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 2px var(--green-300);
+}
+.timeline-date { font-size: 0.82rem; color: var(--green-500); font-weight: 600; }
+.timeline-task { font-size: 0.92rem; color: var(--text); }
+
+/* Alert / callout */
+.alert {
+  border-radius: 0.6rem;
+  padding: 0.9rem 1.1rem;
+  margin-bottom: 0.75rem;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+.alert-red { background: #fdf2f2; border: 1px solid #f5c6cb; color: #721c24; }
+.alert-amber { background: #fffbf0; border: 1px solid #ffeeba; color: #856404; }
+
+/* Status pills */
+.pill { display: inline-block; padding: 0.2rem 0.65rem; border-radius: 1rem; font-size: 0.78rem; font-weight: 600; }
+.pill-red { background: #fde8e8; color: #c0392b; }
+.pill-amber { background: #fef3c7; color: #92400e; }
+.pill-green { background: #d1fae5; color: #065f46; }
+
+/* Keyword highlight */
+.kw {
+  font-weight: 700;
+  color: #b85c00;
+  background: linear-gradient(to top, rgba(184,92,0,0.12) 0%, rgba(184,92,0,0.12) 40%, transparent 40%);
+  padding: 0 2px;
+}
+.en { color: var(--blue-600); font-weight: 600; }
+
+/* Stats row */
+.stats-row { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1.25rem; }
+.stat {
+  flex: 1; min-width: 140px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 0.65rem;
+  padding: 0.85rem 1rem;
+  text-align: center;
+}
+.stat-num { font-size: 1.8rem; font-weight: 700; color: var(--green-600); }
+.stat-label { font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.15rem; }
+
+/* Danger zone table */
+.danger-table td:first-child { font-weight: 700; color: var(--red-500); width: 2em; text-align: center; }
+
+/* Probability bar */
+.prob-bar-wrap { display: flex; align-items: center; gap: 0.5rem; }
+.prob-bar { flex: 1; height: 8px; background: var(--green-100); border-radius: 4px; overflow: hidden; min-width: 60px; }
+.prob-bar-fill { height: 100%; border-radius: 4px; transition: width 0.3s; }
+.prob-bar-fill.p100 { background: var(--green-600); width: 100%; }
+.prob-bar-fill.p67 { background: var(--green-500); width: 67%; }
+.prob-bar-fill.p50 { background: var(--amber-500); width: 50%; }
+.prob-bar-fill.p33 { background: var(--red-500); width: 33%; }
+.prob-num { font-weight: 700; font-size: 0.9rem; min-width: 2.5em; text-align: right; }
+.prob-num.p100 { color: var(--green-600); }
+.prob-num.p67 { color: var(--green-500); }
+.prob-num.p50 { color: var(--amber-500); }
+.prob-num.p33 { color: var(--red-500); }
+
+/* Print */
+@media print {
+  body { background: #fff; }
+  .hero { color: #fff !important; -webkit-print-color-adjust: exact; }
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  .container { padding: 1rem; }
+  .hero { padding: 1.5rem; }
+  .hero h1 { font-size: 1.4rem; }
+  .topic-grid { grid-template-columns: 1fr; }
+  .stats-row { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<!-- HERO -->
+<div class="hero">
+  <h1>S3 Biology · 2nd Term Examination</h1>
+  <div class="subtitle">Tsuen Wan Government Secondary School · 2025–26 · Lee Ying-chol</div>
+  <div class="badge-row">
+    <span class="badge">📅 6月4日 (Thu) 08:30–09:30</span>
+    <span class="badge">⏱ 1 hour</span>
+    <span class="badge">📝 100 marks</span>
+    <span class="badge">📖 Textbook P.1–101</span>
+    <span class="badge">🖊 Bring pencil + ruler + calculator</span>
+  </div>
+</div>
+
+<!-- STATS ROW -->
+<div class="stats-row">
+  <div class="stat"><div class="stat-num">6</div><div class="stat-label">Major Topics</div></div>
+  <div class="stat"><div class="stat-num">8</div><div class="stat-label">Past Papers in KB</div></div>
+  <div class="stat"><div class="stat-num">10</div><div class="stat-label">GLM-OCR Cache Notes</div></div>
+  <div class="stat"><div class="stat-num">8</div><div class="stat-label">海纳 Bio 错题</div></div>
+  <div class="stat"><div class="stat-num">20</div><div class="stat-label">Days to Exam</div></div>
+</div>
+
+
+<!-- SECTION: EXAM STRUCTURE -->
+<div class="section">
+  <div class="section-title">📐 试卷结构 · Paper Structure</div>
+  <div class="card">
+    <table>
+      <tr><th>Section</th><th>题型 Question Type</th><th>题量</th><th>分值</th><th>关键提醒</th></tr>
+      <tr><td><strong>A</strong></td><td><span class="en">Multiple Choice</span> 选择题</td><td>20 Qs × 2 marks</td><td><strong>40</strong></td><td>MC 填格用铅笔；答在试卷上不评分</td></tr>
+      <tr><td><strong>B</strong></td><td><span class="en">Short Questions</span> 简答题</td><td>~5 Qs</td><td><strong>20–22</strong></td><td>配对、填空、简短解释</td></tr>
+      <tr><td><strong>C</strong></td><td><span class="en">Structured Questions</span> 结构题</td><td>~4–5 Qs</td><td><strong>38–40</strong></td><td>含数据分析、图表识读、实验设计</td></tr>
+    </table>
+  </div>
+</div>
+
+
+<!-- SECTION: KNOWLEDGE MAP -->
+<div class="section">
+  <div class="section-title">🗺️ 知识体系全景 · Full Topic Map</div>
+  <div class="topic-grid">
+
+    <!-- Topic 1 -->
+    <div class="card topic-card red">
+      <div class="topic-header">🔴 Topic 1: <span class="en">Food &amp; Nutrition</span> 食物与营养</div>
+      <div class="topic-sub">
+        <strong>7 food substances</strong> — <span class="kw">carbohydrates</span>, <span class="kw">lipids</span>, <span class="kw">proteins</span>, vitamins, minerals, dietary fibre, water<br>
+        <strong>Food tests</strong> — Benedict’s (reducing sugar), Iodine (starch), Biuret (protein), Spot test (lipids), DCPIP (vitamin C)<br>
+        <strong>Deficiency diseases</strong> — scurvy (vit C), night blindness (vit A), rickets (vit D/calcium), anaemia (iron), goitre (iodine), kwashiorkor (protein)<br>
+        <strong>Energy values</strong> — carbs/proteins ~17kJ/g, lipids ~38kJ/g, water 0kJ<br>
+        <strong>BMI</strong> — Weight(kg) ÷ Height²(m²)<br>
+        <strong>Food pyramid</strong> — Grains → Vegetables/Fruits → Meat/Dairy → Fats/Sugar/Salt
+      </div>
+      <p style="font-size:0.8rem;color:var(--red-500);margin-top:0.5rem;">⚠️ 海纳 MCQ 此部分失分严重</p>
+    </div>
+
+    <!-- Topic 2 -->
+    <div class="card topic-card red">
+      <div class="topic-header">🔴 Topic 2: <span class="en">Digestion &amp; Absorption</span> 消化与吸收</div>
+      <div class="topic-sub">
+        <strong>Alimentary canal</strong> — Mouth → Oesophagus → Stomach → Small intestine → Large intestine → Anus<br>
+        <strong>Digestive juices table</strong> — <span class="kw">Saliva</span> (salivary amylase), <span class="kw">Gastric juice</span> (HCl, pepsin, mucus), <span class="kw">Pancreatic juice</span> (lipase, amylase, protease), <span class="kw">Bile</span> (bile salts → <strong>emulsification 乳化</strong>, NOT an enzyme!), <span class="kw">Intestinal juice</span><br>
+        <strong>Absorption @ villi</strong> — Blood vessel A: glucose/amino acids/minerals/vit B&amp;C → liver → heart; Lymph vessel C: fatty acids/glycerol/fat-soluble vitamins<br>
+        <strong>Physical vs Chemical digestion</strong> — Bile emulsification = physical; Enzyme breakdown = chemical
+      </div>
+    </div>
+
+    <!-- Topic 3 -->
+    <div class="card topic-card amber">
+      <div class="topic-header">🟡 Topic 3: <span class="en">Enzymes</span> 酶</div>
+      <div class="topic-sub">
+        <strong>Key facts</strong> — Biological catalysts, <span class="kw">proteins</span>, <span class="kw">reusable</span> (NOT used up!), specific (lock-and-key model, active site)<br>
+        <strong>Factors</strong> — Temperature, pH; <strong>denaturation</strong> (高温/极端pH, 不可逆) ≠ <strong>inactivation</strong> (低温, 可逆)<br>
+        <strong>Common mistakes</strong> — ❌ "enzymes killed by high temp" → ✅ <strong>denatured</strong>; ❌ "enzymes used up" → ✅ <strong>reusable</strong>; ❌ "all enzymes optimum 37°C" → ✅ different enzymes = different optimum<br>
+        <strong>Application</strong> — Biological washing powder (<span class="kw">lipase</span> + <span class="kw">protease</span>)
+      </div>
+      <p style="font-size:0.8rem;color:var(--amber-500);margin-top:0.5rem;">⚠️ 海纳 Q4(d) 丢了 reusable 关键点</p>
+    </div>
+
+    <!-- Topic 4 -->
+    <div class="card topic-card red">
+      <div class="topic-header">🔴 Topic 4: <span class="en">Body Defence &amp; Diseases</span> 身体防御与疾病</div>
+      <div class="topic-sub">
+        <strong>Disease types</strong> — Infectious (bacteria/virus/fungi/protozoa) vs Non-infectious<br>
+        <strong>Transmission</strong> — Vector-borne (malaria, dengue), Airborne (flu, COVID-19), Waterborne (cholera), Contact<br>
+        <strong>Immunity curves</strong> — Primary response = slow + low; Secondary response = <strong>fast + high</strong> (memory cells!)<br>
+        <strong>Active</strong> (infection/vaccination → own antibodies) vs <strong>Passive</strong> (injected antibodies)<br>
+        <strong>Cancer risk matching</strong> — Colorectal↔diet high fat/low fibre, Lung↔smoking/asbestos, Skin↔UV, Liver↔alcohol<br>
+        <strong>Cardiovascular disease</strong> — Lipid deposit → atherosclerosis → coronary artery blockage<br>
+        <strong>Diabetes</strong> — Blood glucose graph: normal recovers in 2h; diabetic stays high; Insulin injection NOT oral
+      </div>
+    </div>
+
+    <!-- Topic 5 -->
+    <div class="card topic-card amber">
+      <div class="topic-header">🟡 Topic 5: <span class="en">DNA &amp; Biotechnology</span> DNA与生物科技</div>
+      <div class="topic-sub">
+        <strong>DNA structure</strong> — Nucleotide = phosphate + deoxyribose + base (A-T, C-G), double helix, hydrogen bonds<br>
+        <strong>DNA charge</strong> — <span class="kw">Negatively charged</span> → moves to <strong>positive terminal</strong> in gel electrophoresis → smaller fragments travel <strong>further/faster</strong><br>
+        <strong>DNA fingerprinting</strong> — extract DNA → obtain fragments → gel electrophoresis → band pattern matching<br>
+        <strong>DNA extraction steps</strong> — Detergent (break membrane) → Salt (neutralize charge) → Ice bath (prevent DNase) → Ethanol (precipitate DNA)<br>
+        <strong>GM insulin advantages</strong> — Cheaper, no rejection, <strong>high yield</strong> (NOT low yield!)
+      </div>
+    </div>
+
+    <!-- Topic 6 -->
+    <div class="card topic-card green">
+      <div class="topic-header">🟢 Topic 6: <span class="en">Plants &amp; Extra Reading</span> 植物与延伸阅读</div>
+      <div class="topic-sub">
+        <strong>7 characteristics of life</strong> — Nutrition, Respiration, Excretion, Irritability, Movement, Growth, Reproduction<br>
+        <strong>Importance of plants</strong> — Oxygen, habitat, food, air purification, soil quality, water cycle, climate, medicine<br>
+        <strong>⚠️ Supp Notes P.22–23 extra reading</strong> — <span class="kw">必考一道 MCQ！</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- SECTION: PAST PAPER MATRIX -->
+<div class="section">
+  <div class="section-title">📊 历年 Section B/C 考点矩阵 · Past Paper Topic Matrix</div>
+  <div class="card" style="overflow-x:auto;">
+    <table>
+      <tr><th>考点 Topic</th><th>2223</th><th>2324</th><th>2425</th><th>2526 UT</th><th>出题概率</th><th>趋势</th></tr>
+      <tr>
+        <td><span class="en">Digestion</span> 消化酶/吸收路径</td>
+        <td>✅</td><td>✅ C2 (9分)</td><td>✅ C2 (7分)</td><td>✅ UT2</td>
+        <td><div class="prob-bar-wrap"><div class="prob-bar"><div class="prob-bar-fill p100"></div></div><span class="prob-num p100">100%</span></div></td>
+        <td><span class="pill pill-red">必考</span></td>
+      </tr>
+      <tr>
+        <td><span class="en">Nutrition deficiency + diet</span> 营养缺乏症+饮食</td>
+        <td>✅</td><td>✅ B2 (6分)</td><td>✅ B3 (5分)</td><td>✅ UT1</td>
+        <td><div class="prob-bar-wrap"><div class="prob-bar"><div class="prob-bar-fill p100"></div></div><span class="prob-num p100">100%</span></div></td>
+        <td><span class="pill pill-red">必考</span></td>
+      </tr>
+      <tr>
+        <td><span class="en">DNA structure</span> DNA结构标注</td>
+        <td>✅</td><td>✅ B3 (6分)</td><td>✅ B4 (5分)</td><td>—</td>
+        <td><div class="prob-bar-wrap"><div class="prob-bar"><div class="prob-bar-fill p100"></div></div><span class="prob-num p100">100%</span></div></td>
+        <td><span class="pill pill-red">必考</span></td>
+      </tr>
+      <tr>
+        <td><span class="en">DNA fingerprinting gel</span> 凝胶电泳/亲子</td>
+        <td>✅</td><td>✅ C5 (7分)</td><td>✅ C5 (7分)</td><td>—</td>
+        <td><div class="prob-bar-wrap"><div class="prob-bar"><div class="prob-bar-fill p100"></div></div><span class="prob-num p100">100%</span></div></td>
+        <td><span class="pill pill-red">必考</span></td>
+      </tr>
+      <tr>
+        <td><span class="en">Immunity graph</span> 免疫曲线</td>
+        <td>—</td><td>✅ C3 (7分)</td><td>✅ C3 (8分)</td><td>—</td>
+        <td><div class="prob-bar-wrap"><div class="prob-bar"><div class="prob-bar-fill p67"></div></div><span class="prob-num p67">67%</span></div></td>
+        <td><span class="pill pill-red">高频</span></td>
+      </tr>
+      <tr>
+        <td><span class="en">Food tests</span> 食物测试 + fibre</td>
+        <td>—</td><td>✅ C1 (9分)</td><td>✅ C1 (8分)</td><td>✅ UT2</td>
+        <td><div class="prob-bar-wrap"><div class="prob-bar"><div class="prob-bar-fill p67"></div></div><span class="prob-num p67">67%</span></div></td>
+        <td><span class="pill pill-red">高频 · 上升</span></td>
+      </tr>
+      <tr>
+        <td><span class="en">Absorption pathway</span> 吸收路径 (blood vs lymph)</td>
+        <td>—</td><td>—</td><td>✅ B2 (5分)</td><td>✅ UT2</td>
+        <td><div class="prob-bar-wrap"><div class="prob-bar"><div class="prob-bar-fill p50"></div></div><span class="prob-num p50">50%</span></div></td>
+        <td><span class="pill pill-amber">趋势上升</span></td>
+      </tr>
+      <tr>
+        <td><span class="en">Enzyme pH experiment</span> 酶pH实验</td>
+        <td>—</td><td>✅ C1 (9分)</td><td>—</td><td>—</td>
+        <td><div class="prob-bar-wrap"><div class="prob-bar"><div class="prob-bar-fill p33"></div></div><span class="prob-num p33">33%</span></div></td>
+        <td>轮换 · 隔年出现</td>
+      </tr>
+      <tr>
+        <td><span class="en">Diabetes blood glucose</span> 糖尿病血糖图</td>
+        <td>—</td><td>—</td><td>✅ C4 (7分)</td><td>—</td>
+        <td><div class="prob-bar-wrap"><div class="prob-bar"><div class="prob-bar-fill p33"></div></div><span class="prob-num p33">33%</span></div></td>
+        <td><span class="pill pill-amber">新兴考点</span></td>
+      </tr>
+      <tr>
+        <td><span class="en">Cancer risk factors</span> 癌症风险配对</td>
+        <td>—</td><td>—</td><td>✅ B1 (5分)</td><td>—</td>
+        <td><div class="prob-bar-wrap"><div class="prob-bar"><div class="prob-bar-fill p33"></div></div><span class="prob-num p33">33%</span></div></td>
+        <td><span class="pill pill-amber">新兴 · 上升</span></td>
+      </tr>
+      <tr>
+        <td><span class="en">Disease classification</span> 疾病分类</td>
+        <td>✅</td><td>✅ B1 (5分)</td><td>—</td><td>—</td>
+        <td><div class="prob-bar-wrap"><div class="prob-bar"><div class="prob-bar-fill p67"></div></div><span class="prob-num p67">67%</span></div></td>
+        <td>轮换 · 今年可能回归</td>
+      </tr>
+      <tr>
+        <td><span class="en">Cardiovascular disease</span> 冠心病</td>
+        <td>—</td><td>✅ C4 (6分)</td><td>—</td><td>—</td>
+        <td><div class="prob-bar-wrap"><div class="prob-bar"><div class="prob-bar-fill p33"></div></div><span class="prob-num p33">33%</span></div></td>
+        <td>轮换 · 今年可能回归</td>
+      </tr>
+    </table>
+    <p style="margin-top:1rem;font-size:0.82rem;color:var(--text-secondary);">
+      📐 概率基于 2223–2425 三次期末 + 2526 两次 UT。100% = 三年全考；67% = 三年中两年；50% = 近期趋势上升；33% = 单次出现。<br>
+      🔮 <strong>今年预测</strong>：Immunity graph + DNA fingerprinting + Digestion + Nutrition deficiency 为绝对重点。Absorption pathway 和 Cancer risk 作为新趋势大概率延续。
+    </p>
+  </div>
+</div>
+
+
+<!-- SECTION: HIGH-RISK PITFALLS -->
+<div class="section">
+  <div class="section-title">⚠️ 高频失分陷阱 · Top 8 Pitfalls</div>
+  <div class="card">
+    <table class="danger-table">
+      <tr><th>#</th><th>陷阱 Pitfall</th><th>影响</th></tr>
+      <tr><td>1</td><td><strong>Bile contains NO enzyme</strong> — only bile salts do <span class="kw">emulsification</span> (physical digestion)</td><td><span class="pill pill-red">MCQ + C</span></td></tr>
+      <tr><td>2</td><td><strong>Primary vs Secondary response</strong> — 第二次更快更高 (memory cells)</td><td><span class="pill pill-red">免疫曲线全错</span></td></tr>
+      <tr><td>3</td><td><strong>Food test reagents 混淆</strong> — Benedict's 测还原糖 ≠ starch</td><td><span class="pill pill-red">整题零分</span></td></tr>
+      <tr><td>4</td><td><strong>Fatty acids/glycerol → lymph vessel C</strong>, NOT blood vessel A</td><td><span class="pill pill-red">Section B</span></td></tr>
+      <tr><td>5</td><td><strong>DNA negatively charged → moves to positive terminal</strong> — 方向反全错</td><td><span class="pill pill-red">电泳题</span></td></tr>
+      <tr><td>6</td><td><strong>Most water absorbed in large intestine</strong>, NOT stomach</td><td><span class="pill pill-amber">MCQ</span></td></tr>
+      <tr><td>7</td><td><strong>GM insulin advantages — high yield</strong> NOT low yield</td><td><span class="pill pill-amber">MCQ</span></td></tr>
+      <tr><td>8</td><td><strong>Insulin 不可口服</strong> — 蛋白质激素会被消化分解</td><td><span class="pill pill-amber">MCQ</span></td></tr>
+    </table>
+  </div>
+</div>
+
+
+<!-- SECTION: 海纳 STATUS -->
+<div class="section">
+  <div class="section-title">👤 海纳 Bio 现况 · Current Status</div>
+  
+  <div class="alert alert-red">
+    <strong>🔴 1st UT 得分：~20/40（已知部分）</strong><br>
+    MCQ 8/20 = 错 6 题（Food tests + Catabolic/Anabolic + Fat-soluble vitamins 概念混乱）<br>
+    Section B 已评分 Q2–Q4：12/20，Q1 答案 OCR 缺失
+  </div>
+
+  <div class="card">
+    <div class="card-header">新增薄弱点（8 条错题）</div>
+    <table>
+      <tr><th>优先级</th><th>薄弱点</th><th>错题证据</th></tr>
+      <tr><td><span class="pill pill-red">🔴</span></td><td><span class="kw">#MCQ系统性</span></td><td>10 题错 6 题 — Food tests判别/Catabolic定义/Fat-soluble vitamins全线崩溃</td></tr>
+      <tr><td><span class="pill pill-red">🔴</span></td><td><span class="kw">#酶特性</span></td><td>Q4(d) 未说 enzyme reusable — 核心得分点丢失</td></tr>
+      <tr><td><span class="pill pill-red">🔴</span></td><td><span class="kw">#开放题跑偏</span></td><td>Q4(e) 用维A洗油 — 方向完全错误</td></tr>
+      <tr><td><span class="pill pill-amber">🟡</span></td><td><span class="kw">#概念表述</span></td><td>peristalsis → "put out waste"; protein function → "body diseases"</td></tr>
+      <tr><td><span class="pill pill-amber">🟡</span></td><td><span class="kw">#疾病拼写</span></td><td>Goitre → "Golite"; Kwashiorkor → "kwashiocro"</td></tr>
+      <tr><td><span class="pill pill-amber">🟡</span></td><td><span class="kw">#症状描述</span></td><td>Kwashiorkor 症状写反 (thin limbs 非 swollen abdomen)</td></tr>
+    </table>
+  </div>
+</div>
+
+
+<!-- SECTION: 20-DAY ROADMAP -->
+<div class="section">
+  <div class="section-title">🗓️ 20天复习路线 · Revision Roadmap (5/15 → 6/4)</div>
+
+  <div class="timeline">
+
+    <div class="timeline-item">
+      <div class="timeline-date">Phase 1 · 5/15 – 5/22 (8 days)</div>
+      <div class="timeline-task">
+        <strong>Digestion 全套</strong> — 消化液表格默写 + villi吸收路径（blood A vs lymph C）+ physical vs chemical digestion
+        <br>+ <strong>Food substances</strong> — 7大物质 + 所有缺乏症配对 + 5种食物测试（试剂→对象→阳性结果）
+        <br>📋 推荐工具：消化液表格填空 HTML + 缺乏症闪卡
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-date">Phase 2 · 5/23 – 5/28 (6 days)</div>
+      <div class="timeline-task">
+        <strong>Body Defence</strong> — 免疫曲线标注训练 + 疾病分类表 + 癌症风险配对 + 糖尿病血糖图
+        <br>+ <strong>Enzymes</strong> — 三大常见误区纠错 + pH/温度实验数据分析
+        <br>📋 推荐工具：免疫曲线 interactive HTML + 酶概念正误判断练习
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-date">Phase 3 · 5/29 – 6/1 (4 days)</div>
+      <div class="timeline-task">
+        <strong>DNA + Biotechnology</strong> — 结构标注 + 电泳看图判断 + DNA extraction 步骤排序 + GM insulin advantages
+        <br>+ <strong>真题模拟</strong> — 从 2324/2425 抽一套完整试卷限时1小时
+        <br>📋 推荐工具：DNA fingerprinting gel 看图题集
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-date">Phase 4 · 6/2 – 6/3 (2 days)</div>
+      <div class="timeline-task">
+        <strong>最后冲刺</strong> — 错题库全部清零核对 + Supp Notes P.22–23 逐字精读 + 高频陷阱快速闪卡
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- SECTION: RESOURCE INVENTORY -->
+<div class="section">
+  <div class="section-title">📚 知识库资源清单 · Resource Inventory</div>
+  <div class="card">
+    <table>
+      <tr><th>类型</th><th>数量</th><th>明细</th></tr>
+      <tr><td>📖 教材</td><td>1</td><td>S3 Biology Supplementary Notes (202526)</td></tr>
+      <tr><td>📝 历年真题</td><td><strong>8 份</strong></td><td>2223 (MC+SA+QP)、2324 (MC+QA)、2425 (P1A QP+QA+SA)、2526 (2次 UT)</td></tr>
+      <tr><td>🧪 GLM-OCR 缓存</td><td><strong>10 条笔记</strong></td><td>5 GLM-4V + 5 GLM-OCR，位于 <code>Biology-GLM-OCR缓存</code> 笔记本</td></tr>
+      <tr><td>📊 命题分析</td><td>1</td><td>S3 Biology 2nd Exam Pattern Analysis</td></tr>
+      <tr><td>📋 Scope</td><td>2</td><td>2nd UT Scope + 期末 Scope（图片）</td></tr>
+      <tr><td>📝 错题库</td><td>1</td><td>海纳 Biology 8 条错题（<code>#MCQ系统性 #酶特性 #开放题跑偏</code> 等）</td></tr>
+    </table>
+  </div>
+</div>
+
+
+<!-- FOOTER -->
+<div style="text-align:center;padding:1.5rem 0;color:var(--text-secondary);font-size:0.82rem;">
+  Generated 2026-05-15 · GLM-OCR Pipeline v3 · COS Transit + glm-ocr<br>
+  Data: 荃官 KB + GLM-OCR Cache + 海納錯題庫
+</div>
+
+</div>
+</body>
+</html>
