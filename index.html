@@ -45,23 +45,29 @@ body::before{
 /* Kid cards */
 .kid-list{display:flex;flex-direction:column;gap:20px}
 .kid-card{
-  border-radius:20px;padding:18px;cursor:pointer;
-  backdrop-filter:blur(12px);
-  border:1px solid rgba(255,255,255,.1);
-  transition:all .3s;
+  position:relative;border-radius:24px;padding:28px 24px;
+  cursor:pointer;transition:all .35s cubic-bezier(.4,0,.2,1);
+  overflow:hidden;text-decoration:none;display:block;
+  border:1px solid transparent;
 }
+.kid-card::before{
+  content:'';position:absolute;inset:0;border-radius:24px;
+  background:radial-gradient(ellipse at top left,var(--glow),transparent 70%);
+  opacity:0;transition:opacity .35s;pointer-events:none;
+}
+.kid-card:hover::before{opacity:1}
+.kid-card:hover{transform:translateY(-3px);border-color:rgba(255,255,255,.1)}
 .kid-card:active{transform:scale(.98)}
-.card-content{display:flex;align-items:center;gap:16px}
+.kid-card .card-content{display:flex;align-items:center;gap:16px;position:relative;z-index:1}
 .kid-avatar{
-  width:56px;height:56px;border-radius:18px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:1.6em;flex-shrink:0;
+  width:56px;height:56px;border-radius:18px;display:flex;align-items:center;justify-content:center;
+  font-size:1.5em;flex-shrink:0;box-shadow:0 8px 30px var(--shadow);
 }
 .kid-info{flex:1;min-width:0}
-.kid-name{font-size:1.1em;font-weight:700;margin-bottom:4px;letter-spacing:-0.3px}
-.kid-grade{font-size:0.8em;opacity:0.7;margin-bottom:8px}
-.kid-meta{display:flex;gap:10px;flex-wrap:wrap}
-.kid-meta span{
+.kid-card .kid-name{font-size:1.35em;font-weight:700;margin-bottom:4px;letter-spacing:-0.3px}
+.kid-card .kid-grade{font-size:0.8em;opacity:0.7;margin-bottom:8px}
+.kid-card .kid-meta{display:flex;gap:10px;flex-wrap:wrap}
+.kid-card .kid-meta span{
   font-size:0.72em;padding:3px 10px;border-radius:20px;
   border:1px solid rgba(255,255,255,.15);
   background:rgba(255,255,255,.06);
@@ -209,231 +215,12 @@ body::before{
 
 <script>
 // ============================================================
-// Data — paths verified against GitHub repo tree
+// Data — paths verified against GitHub repo tree 2025-05-16
 // ============================================================
-const ICONS = {
-  chinese:'📖', english:'📝', maths:'📐', physics:'⚛️',
-  chemistry:'🧪', biology:'🧬', history:'📜', 'chinese-history':'🏛️',
-  geography:'🌍', general:'📚', ethics:'🙏', math:'🔢'
-};
-const SUBJECT_NAMES = {
-  chinese:'中國語文', english:'English', maths:'數學', math:'數學',
-  physics:'Physics', chemistry:'Chemistry', biology:'Biology',
-  history:'History', 'chinese-history':'中國歷史', geography:'Geography',
-  general:'常識', ethics:'倫理宗教'
-};
+const ICONS={"chinese":"📖","english":"📝","maths":"📐","physics":"⚛️","chemistry":"🧪","biology":"🧬","chinese-history":"🏛️","geography":"🌍","history":"📜","general":"📚","ethics":"🙏","math":"🔢"};
+const SUBJECT_NAMES={"chinese":"中國語文","english":"English","maths":"數學","physics":"Physics","chemistry":"Chemistry","biology":"Biology","chinese-history":"中國歷史","geography":"Geography","history":"History","general":"常識","ethics":"倫理宗教","math":"數學"};
 
-const KIDS = [
-  // ========================================================================
-  // 多多 — P5
-  // ========================================================================
-  {
-    key:'duoduo', name:'多多', grade:'P5', emoji:'🟡', css:'dd',
-    note:'迦密愛禮信小學 · 金色',
-    subjects:{
-      chinese:{tools:[
-        {icon:'📖',name:'字詞表',desc:'基礎詞彙',file:'duoduo/chin/00-chin-voca-list.html'},
-        {icon:'✍️',name:'詞語聽寫',desc:'聽寫訓練',file:'duoduo/chin/01-chin-voca-dictation.html'},
-        {icon:'🔖',name:'詞語標點',desc:'詞句標點',file:'duoduo/chin/02-chin-voca-biaodian.html'},
-        {icon:'📜',name:'文言文',desc:'文言基礎',file:'duoduo/chin/03-chin-voca-wyw.html'},
-        {icon:'🔄',name:'改寫變調',desc:'語音變調',file:'duoduo/chin/04-chin-biantiao.html'},
-        {icon:'✏️',name:'作文技巧',desc:'寫作要點',file:'duoduo/chin/04-chin-writing.html'},
-        {icon:'📖',name:'閱讀理解',desc:'精讀訓練',file:'duoduo/chin/05-chin-reading.html'},
-        {icon:'🧩',name:'重組句子',desc:'語序邏輯',file:'duoduo/chin/06-chin-juzi.html'}
-      ]},
-      english:{tools:[
-        {icon:'📋',name:'語法複習',desc:'全面梳理',file:'duoduo/eng/01-eng-grammar.html'},
-        {icon:'⏳',name:'現在完成式50題',desc:'強化練習',file:'duoduo/eng/02-eng-wanchengshi50.html'},
-        {icon:'📖',name:'精讀7篇',desc:'閱讀理解',file:'duoduo/eng/03-eng-reading.html'},
-        {icon:'🔍',name:'改錯訓練',desc:'Proofreading',file:'duoduo/eng/04-eng-proofreading.html'},
-        {icon:'✍️',name:'作文技巧',desc:'寫作要點',file:'duoduo/eng/05-eng-writing.html'},
-        {icon:'📄',name:'閱讀模擬卷',desc:'限時閱讀',file:'duoduo/eng/06-eng-reading-moke.html'},
-        {icon:'✍️',name:'寫作模擬卷',desc:'限時寫作',file:'duoduo/eng/07-eng-writing-moke.html'},
-        {icon:'🎧',name:'詞彙聽寫',desc:'聽力訓練',file:'duoduo/eng/08-eng-dictation.html'},
-        {icon:'📝',name:'詞彙精練',desc:'Vocabulary',file:'duoduo/eng/09-eng-vocabulary.html'},
-        {icon:'🔄',name:'動詞形態',desc:'時態活用',file:'duoduo/eng/10-eng-dongci.html'},
-        {icon:'💪',name:'語法加碼',desc:'進階訓練',file:'duoduo/eng/11-eng-grammar-plus.html'}
-      ]},
-      math:{tools:[{icon:'🔢',name:'數學練習',desc:'敬請期待',coming:true}]},
-      general:{tools:[
-        {icon:'📚',name:'知識精講',desc:'學科要點',file:'duoduo/general/01-gen-zhishi.html'},
-        {icon:'📄',name:'模擬卷1-10',desc:'綜合練習',file:'duoduo/general/02-gen-mock.html'},
-        {icon:'💡',name:'混淆概念與答題框架',desc:'辨析訓練',file:'duoduo/general/03-gen-gainian.html'},
-        {icon:'🃏',name:'自學手冊閃卡',desc:'記憶工具',file:'duoduo/general/04-gen-shanka.html'}
-      ]},
-      ethics:{tools:[
-        {icon:'🙏',name:'互動教學',desc:'倫宗基礎',file:'duoduo/ethics/01-ethics-jiaoxue.html'},
-        {icon:'📄',name:'模擬卷1',desc:'測驗練習',file:'duoduo/ethics/02-ethics-moke1.html'},
-        {icon:'📄',name:'模擬卷2',desc:'測驗練習',file:'duoduo/ethics/03-ethics-moke2.html'},
-        {icon:'📄',name:'模擬卷3',desc:'測驗練習',file:'duoduo/ethics/04-ethics-moke3.html'},
-        {icon:'✅',name:'模擬卷答案',desc:'參考答案',file:'duoduo/ethics/05-ethics-ma.html'}
-      ]}
-    }
-  },
-  // ========================================================================
-  // 海納 — F3
-  // ========================================================================
-  {
-    key:'haina', name:'海納', grade:'F3', emoji:'🔵', css:'hn',
-    note:'荃灣官立中學 · 藍色',
-    subjects:{
-      chinese:{tools:[
-        {icon:'📖',name:'中文總覽',desc:'學科概覽',file:'haina/chi/01-chi-overview-20260515.html'},
-        {icon:'📊',name:'評分解碼',desc:'評分標準',file:'haina/chi/02-chi-scoring-decoder.html'},
-        {icon:'🔄',name:'語譯評分',desc:'文言翻譯',file:'haina/chi/03-chi-translation-scorer.html'},
-        {icon:'📝',name:'公式填充',desc:'答題框架',file:'haina/chi/04-chi-formula-fill.html'},
-        {icon:'⚔️',name:'論證挑戰',desc:'議論文',file:'haina/chi/05-chi-argue-gauntlet.html'},
-        {icon:'✅',name:'格式清單',desc:'文體格式',file:'haina/chi/06-chi-format-checklist.html'},
-        {icon:'✍️',name:'實用文實戰',desc:'海納專用',file:'haina/chi/07-ch-practical-writing-combat-haina.html'}
-      ]},
-      english:{tools:[
-        {icon:'📖',name:'English Overview',desc:'學科總覽',file:'haina/english/01-eng_overview.html'},
-        {icon:'📝',name:'Grammar Drill',desc:'語法練習',file:'haina/english/02-eng-grammar-drill.html'},
-        {icon:'📚',name:'Vocabulary',desc:'詞彙訓練',file:'haina/english/03-eng-vocab-haina.html'},
-        {icon:'🔄',name:'Word Form',desc:'詞形變化',file:'haina/english/04-eng-wordform.html'},
-        {icon:'📖',name:'Reading Guide',desc:'閱讀指導',file:'haina/english/05-eng-reading-guide.html'}
-      ]},
-      maths:{tools:[
-        {icon:'📐',name:'數學總覽',desc:'學科概覽',file:'haina/maths/01-maths-overview.html'},
-        {icon:'🎲',name:'概率期望值',desc:'Dice模擬',file:'haina/maths/02-maths_diceexpectedvalue.html'}
-      ]},
-      physics:{tools:[
-        {icon:'⚛️',name:'物理總覽',desc:'學科概覽',file:'haina/physics/01-phy-review-overview.html'},
-        {icon:'🔍',name:'透鏡工作坊',desc:'鏡像練習',file:'haina/physics/02-phy-lens-workshop-drill.html'}
-      ]},
-      chemistry:{tools:[
-        {icon:'🧪',name:'化學總覽',desc:'學科概覽',file:'haina/chemistry/01-chem-overview.html'},
-        {icon:'🃏',name:'離子閃卡',desc:'Cations & Anions',file:'haina/chemistry/02-chem-flashcards_cationsanions-haina.html'},
-        {icon:'🔤',name:'陰陽離子',desc:'離子符號',file:'haina/chemistry/03-chem-ations-Anions.html'},
-        {icon:'⚖️',name:'方程訓練',desc:'化學方程式',file:'haina/chemistry/04-chem-equation-trainer.html'},
-        {icon:'💨',name:'MCQ閃電戰',desc:'選擇題',file:'haina/chemistry/05-chem-mcq-blitz.html'},
-        {icon:'⚠️',name:'陷阱剋星',desc:'易錯題',file:'haina/chemistry/06-chem-trap-killer.html'},
-        {icon:'✅',name:'答題規範',desc:'答題要點',file:'haina/chemistry/07-chem-answer-right.html'}
-      ]},
-      biology:{tools:[
-        {icon:'🧬',name:'生物總覽',desc:'學科概覽',file:'haina/biology/01-biology-overview.html'},
-        {icon:'🃏',name:'Flashcards',desc:'記憶閃卡',file:'haina/biology/02-bio-flashcards.html'},
-        {icon:'🧪',name:'食物測試實驗',desc:'實驗精要',file:'haina/biology/0301-bio-foodtest-lab0512.html'},
-        {icon:'🔬',name:'食物測試詳解',desc:'實驗步驟',file:'haina/biology/0302-bio-foodtest-lab.html'},
-        {icon:'⚔️',name:'生物競技場',desc:'海納專用',file:'haina/biology/04-bio-arena-haina.html'},
-        {icon:'🧱',name:'Bio Wall',desc:'海納專用',file:'haina/biology/05-bio-biowall-haina.html'},
-        {icon:'🥬',name:'營養缺乏症',desc:'海納專用',file:'haina/biology/06-bio-deficiency-haina.html'},
-        {icon:'🧬',name:'DNA解碼器',desc:'遺傳學',file:'haina/biology/07-bio-dna-decoder.html'},
-        {icon:'🔬',name:'DNA實驗',desc:'海納專用',file:'haina/biology/08-bio-dna-lab-haina.html'},
-        {icon:'⏱️',name:'免疫時間線',desc:'免疫系統',file:'haina/biology/09-bio-immune-timeline.html'},
-        {icon:'🎯',name:'Step Master',desc:'海納專用',file:'haina/biology/10-bio-stepmaster-haina.html'}
-      ]},
-      'chinese-history':{tools:[
-        {icon:'🏛️',name:'中史總覽',desc:'學科概覽',file:'haina/chist/01-chist-overview.html'},
-        {icon:'🗺️',name:'填充地圖',desc:'地圖練習',file:'haina/chist/02-chist-fillin-map.html'},
-        {icon:'⏳',name:'時間線排序',desc:'時序訓練',file:'haina/chist/03-chist-timeline-sort.html'},
-        {icon:'👥',name:'人物配對',desc:'人物關係',file:'haina/chist/04-chist-people-match.html'},
-        {icon:'🃏',name:'辯證閃卡',desc:'史實評析',file:'haina/chist/05-chist-bianzheng-cards.html'},
-        {icon:'📊',name:'資料題指南',desc:'DBQ技巧',file:'haina/chist/06-chist-data-response-guide.html'},
-        {icon:'✍️',name:'論述題指南',desc:'Essay技巧',file:'haina/chist/07-chist-essay-guide.html'}
-      ]},
-      geography:{tools:[
-        {icon:'🌍',name:'地理總覽',desc:'學科概覽',file:'haina/geography/01-geog-exam-overview.html'},
-        {icon:'🃏',name:'詞彙閃卡',desc:'地理術語',file:'haina/geography/02-geog-glossary-flashcards.html'},
-        {icon:'🔧',name:'技能工作台',desc:'地理技巧',file:'haina/geography/03-geog-skills-workbench.html'},
-        {icon:'🗺️',name:'地圖技能',desc:'地圖練習',file:'haina/geography/04-geog-map-skills-drill.html'},
-        {icon:'🏗️',name:'PEEL段落',desc:'答題結構',file:'haina/geography/05-geog-peel-paragraph-architect.html'}
-      ]},
-      history:{tools:[
-        {icon:'📜',name:'歷史總覽',desc:'學科概覽',file:'haina/history/01-s3-history-exam-overview.html'},
-        {icon:'📊',name:'DBQ訓練',desc:'資料題',file:'haina/history/02-s3-history-dbq-trainer.html'},
-        {icon:'⏳',name:'時間感',desc:'時序概念',file:'haina/history/03-s3-history-time-sense.html'},
-        {icon:'🃏',name:'概念配對',desc:'歷史概念',file:'haina/history/04-s3-history-concept-match.html'},
-        {icon:'✍️',name:'Essay訓練',desc:'論述題',file:'haina/history/05-s3-history-essay-trainer.html'},
-        {icon:'💨',name:'MCQ訓練',desc:'選擇題',file:'haina/history/06-s3-history-mc-trainer.html'}
-      ]}
-    }
-  },
-  // ========================================================================
-  // 有容 — F3
-  // ========================================================================
-  {
-    key:'yourong', name:'有容', grade:'F3', emoji:'🟢', css:'yr',
-    note:'荃灣官立中學 · 綠色',
-    subjects:{
-      chinese:{tools:[
-        {icon:'📖',name:'中文總覽',desc:'學科概覽',file:'yourong/chi/01-chi-overview-20260515.html'},
-        {icon:'📊',name:'評分解碼',desc:'評分標準',file:'yourong/chi/02-chi-scoring-decoder.html'},
-        {icon:'🔄',name:'語譯評分',desc:'文言翻譯',file:'yourong/chi/03-chi-translation-scorer.html'},
-        {icon:'📝',name:'公式填充',desc:'答題框架',file:'yourong/chi/04-chi-formula-fill.html'},
-        {icon:'⚔️',name:'論證挑戰',desc:'議論文',file:'yourong/chi/05-chi-argue-gauntlet.html'},
-        {icon:'✅',name:'格式清單',desc:'文體格式',file:'yourong/chi/06-chi-format-checklist.html'},
-        {icon:'✍️',name:'實用文實戰',desc:'有容專用',file:'yourong/chi/07-ch-practical-writing-combat-yourong.html'}
-      ]},
-      english:{tools:[
-        {icon:'📖',name:'English Overview',desc:'學科總覽',file:'yourong/english/01-eng_overview.html'},
-        {icon:'📝',name:'Grammar Drill',desc:'語法練習',file:'yourong/english/02-eng-grammar-drill.html'},
-        {icon:'📚',name:'Vocabulary',desc:'詞彙訓練-有容',file:'yourong/english/03-eng-vocab-yourong.html'},
-        {icon:'🔄',name:'Word Form',desc:'詞形變化',file:'yourong/english/04-eng-wordform.html'},
-        {icon:'📖',name:'Reading Guide',desc:'閱讀指導',file:'yourong/english/05-eng-reading-guide.html'}
-      ]},
-      maths:{tools:[
-        {icon:'📐',name:'數學總覽',desc:'學科概覽',file:'yourong/maths/01-maths-overview.html'},
-        {icon:'🔢',name:'代數訓練',desc:'代數練習',file:'yourong/maths/02-maths-algebra-drill.html'},
-        {icon:'📐',name:'正弦餘弦',desc:'三角學',file:'yourong/maths/03-maths-sine-cosine-drill.html'},
-        {icon:'📊',name:'期望值',desc:'概率期望',file:'yourong/maths/04-maths-expectedValues.html'},
-        {icon:'🎲',name:'骰子概率',desc:'Dice模擬',file:'yourong/maths/05-maths_diceexpectedvalue.html'}
-      ]},
-      physics:{tools:[
-        {icon:'⚛️',name:'物理總覽',desc:'學科概覽',file:'yourong/physics/01-phy-review-overview.html'},
-        {icon:'🔍',name:'透鏡工作坊',desc:'鏡像練習',file:'yourong/physics/02-phy-lens-workshop-drill.html'}
-      ]},
-      chemistry:{tools:[
-        {icon:'🧪',name:'化學總覽',desc:'學科概覽',file:'yourong/chemistry/01-chem-overview.html'},
-        {icon:'🔤',name:'陰陽離子',desc:'離子符號',file:'yourong/chemistry/02-chem-cations_anions.html'},
-        {icon:'⚡',name:'電解質',desc:'有容專用',file:'yourong/chemistry/03-chem-electrolytes-yourong.html'},
-        {icon:'⚖️',name:'方程訓練',desc:'化學方程式',file:'yourong/chemistry/04-chem-equation-trainer.html'},
-        {icon:'🃏',name:'離子閃卡',desc:'記憶閃卡',file:'yourong/chemistry/05-chem-flashcards_cationsanions.html'},
-        {icon:'💨',name:'MCQ閃電戰',desc:'選擇題',file:'yourong/chemistry/06-chem-mcq-blitz.html'},
-        {icon:'✅',name:'答題規範',desc:'答題要點',file:'yourong/chemistry/07-chem-answer-right.html'},
-        {icon:'⚠️',name:'陷阱剋星',desc:'易錯題',file:'yourong/chemistry/08-chem-trap-killer.html'},
-        {icon:'🧪',name:'NH₃/NH₄⁺',desc:'下標規範',file:'yourong/chemistry/09-chem-NH3-NH4.html'}
-      ]},
-      biology:{tools:[
-        {icon:'🧬',name:'生物總覽',desc:'學科概覽',file:'yourong/biology/01-biology-overview.html'},
-        {icon:'🃏',name:'Flashcards',desc:'記憶閃卡',file:'yourong/biology/02-bio-flashcards.html'},
-        {icon:'🧪',name:'食物測試實驗',desc:'實驗精要',file:'yourong/biology/0301-bio-foodtest-lab0512.html'},
-        {icon:'🔬',name:'食物測試詳解',desc:'實驗步驟',file:'yourong/biology/0302-bio-foodtest-lab.html'},
-        {icon:'⚔️',name:'生物競技場-有容',desc:'有容專用',file:'yourong/biology/04-bio-arena-yourong.html'},
-        {icon:'🧱',name:'Bio Wall',desc:'有容專用',file:'yourong/biology/05-bio-biowall-yourong.html'},
-        {icon:'🥬',name:'營養缺乏症',desc:'有容專用',file:'yourong/biology/06-bio-deficiency-yourong.html'},
-        {icon:'🧬',name:'DNA解碼器',desc:'有容專用',file:'yourong/biology/07-bio-dna-decoder-yourong.html'},
-        {icon:'🔬',name:'DNA實驗',desc:'有容專用',file:'yourong/biology/08-bio-dna-lab-yourong.html'},
-        {icon:'⏱️',name:'免疫時間線',desc:'有容專用',file:'yourong/biology/09-bio-immune-timeline-yourong.html'},
-        {icon:'🎯',name:'Step Master',desc:'有容專用',file:'yourong/biology/10-bio-stepmaster-yourong.html'}
-      ]},
-      'chinese-history':{tools:[
-        {icon:'🏛️',name:'中史總覽',desc:'學科概覽',file:'yourong/Chist/01-chist-overview.html'},
-        {icon:'🗺️',name:'填充地圖',desc:'地圖練習',file:'yourong/Chist/02-chist-fillin-map.html'},
-        {icon:'⏳',name:'時間線排序',desc:'時序訓練',file:'yourong/Chist/03-chist-timeline-sort.html'},
-        {icon:'👥',name:'人物配對',desc:'人物關係',file:'yourong/Chist/04-chist-people-match.html'},
-        {icon:'🃏',name:'辯證閃卡',desc:'史實評析',file:'yourong/Chist/05-chist-bianzheng-cards.html'},
-        {icon:'📊',name:'資料題指南',desc:'DBQ技巧',file:'yourong/Chist/06-chist-data-response-guide.html'},
-        {icon:'✍️',name:'論述題指南',desc:'Essay技巧',file:'yourong/Chist/07-chist-essay-guide.html'}
-      ]},
-      geography:{tools:[
-        {icon:'🌍',name:'地理總覽',desc:'學科概覽',file:'yourong/geography/01-geog-exam-overview.html'},
-        {icon:'🃏',name:'詞彙閃卡',desc:'地理術語',file:'yourong/geography/02-geog-glossary-flashcards.html'},
-        {icon:'🔧',name:'技能工作台',desc:'地理技巧',file:'yourong/geography/03-geog-skills-workbench.html'},
-        {icon:'🗺️',name:'地圖技能',desc:'地圖練習',file:'yourong/geography/04-geog-map-skills-drill.html'},
-        {icon:'🏗️',name:'PEEL段落',desc:'答題結構',file:'yourong/geography/05-geog-peel-paragraph-architect.html'}
-      ]},
-      history:{tools:[
-        {icon:'📜',name:'歷史總覽',desc:'學科概覽',file:'yourong/history/01-s3-history-exam-overview.html'},
-        {icon:'📊',name:'DBQ訓練',desc:'資料題',file:'yourong/history/02-s3-history-dbq-trainer.html'},
-        {icon:'⏳',name:'時間感',desc:'時序概念',file:'yourong/history/03-s3-history-time-sense.html'},
-        {icon:'🃏',name:'概念配對',desc:'歷史概念',file:'yourong/history/04-s3-history-concept-match.html'},
-        {icon:'✍️',name:'Essay訓練',desc:'論述題',file:'yourong/history/05-s3-history-essay-trainer.html'},
-        {icon:'💨',name:'MCQ訓練',desc:'選擇題',file:'yourong/history/06-s3-history-mc-trainer.html'}
-      ]}
-    }
-  }
-];
+const KIDS=[{"key":"duoduo","name":"多多","grade":"P5","emoji":"🌟","css":"dd","note":"迦密愛禮信小學 · P5 · 金色","subjects":{"chinese":{"tools":[{"icon":"📄","name":"字詞表","desc":"基礎詞彙","file":"duoduo/chin/00-chin-voca-list.html"},{"icon":"📄","name":"詞語聽寫","desc":"學科概覽","file":"duoduo/chin/01-chin-voca-dictation.html"},{"icon":"📄","name":"詞語標點","desc":"記憶訓練","file":"duoduo/chin/02-chin-voca-biaodian.html"},{"icon":"📄","name":"文言文","desc":"辨析練習","file":"duoduo/chin/03-chin-voca-wyw.html"},{"icon":"📄","name":"改寫變調","desc":"實戰練習","file":"duoduo/chin/04-chin-biantiao.html"},{"icon":"📄","name":"作文技巧","desc":"實戰練習","file":"duoduo/chin/04-chin-writing.html"},{"icon":"📄","name":"閱讀理解","desc":"答題技巧","file":"duoduo/chin/05-chin-reading.html"},{"icon":"📄","name":"重組句子","desc":"綜合訓練","file":"duoduo/chin/06-chin-juzi.html"}]},"english":{"tools":[{"icon":"📄","name":"語法複習","desc":"學科概覽","file":"duoduo/eng/01-eng-grammar.html"},{"icon":"📄","name":"現在完成式50題","desc":"記憶訓練","file":"duoduo/eng/02-eng-wanchengshi50.html"},{"icon":"📄","name":"精讀7篇","desc":"辨析練習","file":"duoduo/eng/03-eng-reading.html"},{"icon":"📄","name":"改錯訓練","desc":"實戰練習","file":"duoduo/eng/04-eng-proofreading.html"},{"icon":"📄","name":"作文技巧","desc":"答題技巧","file":"duoduo/eng/05-eng-writing.html"},{"icon":"📄","name":"閱讀模擬卷","desc":"綜合訓練","file":"duoduo/eng/06-eng-reading-moke.html"},{"icon":"📄","name":"寫作模擬卷","desc":"專項練習","file":"duoduo/eng/07-eng-writing-moke.html"},{"icon":"📄","name":"詞彙聽寫","desc":"強化訓練","file":"duoduo/eng/08-eng-dictation.html"},{"icon":"📄","name":"詞彙精練","desc":"鞏固練習","file":"duoduo/eng/09-eng-vocabulary.html"},{"icon":"📄","name":"動詞形態","desc":"全面訓練","file":"duoduo/eng/10-eng-dongci.html"},{"icon":"📄","name":"語法加碼","desc":"進階訓練","file":"duoduo/eng/11-eng-grammar-plus.html"}]},"math":{"tools":[{"icon":"📄","name":"簡易方程練習","desc":"簡易方程專項練習","file":"bonus/duoduo-simple-equations.html"}]},"general":{"tools":[{"icon":"📄","name":"知識精講","desc":"學科概覽","file":"duoduo/general/01-gen-zhishi.html"},{"icon":"📄","name":"模擬卷1-10","desc":"記憶訓練","file":"duoduo/general/02-gen-mock.html"},{"icon":"📄","name":"混淆概念與答題框架","desc":"辨析練習","file":"duoduo/general/03-gen-gainian.html"},{"icon":"📄","name":"自學手冊閃卡","desc":"實戰練習","file":"duoduo/general/04-gen-shanka.html"}]},"ethics":{"tools":[{"icon":"📄","name":"互動教學","desc":"學科概覽","file":"duoduo/ethics/01-ethics-jiaoxue.html"},{"icon":"📄","name":"模擬卷1","desc":"記憶訓練","file":"duoduo/ethics/02-ethics-moke1.html"},{"icon":"📄","name":"模擬卷2","desc":"辨析練習","file":"duoduo/ethics/03-ethics-moke2.html"},{"icon":"📄","name":"模擬卷3","desc":"實戰練習","file":"duoduo/ethics/04-ethics-moke3.html"},{"icon":"📄","name":"模擬卷答案","desc":"答題技巧","file":"duoduo/ethics/05-ethics-ma.html"}]}}},{"key":"haina","name":"海納","grade":"F3","emoji":"🔵","css":"hn","note":"荃灣官立中學 · 藍色","subjects":{"chinese":{"tools":[{"icon":"📄","name":"01 chi overview 20260515","desc":"學科概覽","file":"haina/chi/01-chi-overview-20260515.html"},{"icon":"📄","name":"02 chi scoring decoder","desc":"記憶訓練","file":"haina/chi/02-chi-scoring-decoder.html"},{"icon":"📄","name":"03 chi translation scorer","desc":"辨析練習","file":"haina/chi/03-chi-translation-scorer.html"},{"icon":"📄","name":"04 chi formula fill","desc":"實戰練習","file":"haina/chi/04-chi-formula-fill.html"},{"icon":"📄","name":"05 chi argue gauntlet","desc":"答題技巧","file":"haina/chi/05-chi-argue-gauntlet.html"},{"icon":"📄","name":"06 chi format checklist","desc":"綜合訓練","file":"haina/chi/06-chi-format-checklist.html"},{"icon":"📄","name":"07 ch practical writing combat haina","desc":"專項練習","file":"haina/chi/07-ch-practical-writing-combat-haina.html"}]},"english":{"tools":[{"icon":"📄","name":"01 eng_overview","desc":"學科概覽 · 海納專用","file":"haina/english/01-eng_overview.html"},{"icon":"📄","name":"02 eng grammar drill","desc":"記憶訓練 · 海納專用","file":"haina/english/02-eng-grammar-drill.html"},{"icon":"📄","name":"03 eng vocab haina","desc":"辨析練習 · 海納專用","file":"haina/english/03-eng-vocab-haina.html"},{"icon":"📄","name":"04 eng wordform","desc":"實戰練習 · 海納專用","file":"haina/english/04-eng-wordform.html"},{"icon":"📄","name":"05 eng reading guide","desc":"答題技巧 · 海納專用","file":"haina/english/05-eng-reading-guide.html"}]},"maths":{"tools":[{"icon":"📄","name":"01 maths overview","desc":"學科概覽 · 海納專用","file":"haina/maths/01-maths-overview.html"},{"icon":"📄","name":"02 maths_diceexpectedvalue","desc":"記憶訓練 · 海納專用","file":"haina/maths/02-maths_diceexpectedvalue.html"}]},"physics":{"tools":[{"icon":"📄","name":"01 phy review overview","desc":"學科概覽 · 海納專用","file":"haina/physics/01-phy-review-overview.html"},{"icon":"📄","name":"02 phy lens workshop drill","desc":"記憶訓練 · 海納專用","file":"haina/physics/02-phy-lens-workshop-drill.html"}]},"chemistry":{"tools":[{"icon":"📄","name":"01 chem overview","desc":"學科概覽 · 海納專用","file":"haina/chemistry/01-chem-overview.html"},{"icon":"📄","name":"02 chem flashcards_cationsanions haina","desc":"記憶訓練 · 海納專用","file":"haina/chemistry/02-chem-flashcards_cationsanions-haina.html"},{"icon":"📄","name":"03 chem ations Anions","desc":"辨析練習 · 海納專用","file":"haina/chemistry/03-chem-ations-Anions.html"},{"icon":"📄","name":"04 chem equation trainer","desc":"實戰練習 · 海納專用","file":"haina/chemistry/04-chem-equation-trainer.html"},{"icon":"📄","name":"05 chem mcq blitz","desc":"答題技巧 · 海納專用","file":"haina/chemistry/05-chem-mcq-blitz.html"},{"icon":"📄","name":"06 chem trap killer","desc":"綜合訓練 · 海納專用","file":"haina/chemistry/06-chem-trap-killer.html"},{"icon":"📄","name":"07 chem answer right","desc":"專項練習 · 海納專用","file":"haina/chemistry/07-chem-answer-right.html"}]},"biology":{"tools":[{"icon":"📄","name":"01 biology overview","desc":"學科概覽 · 海納專用","file":"haina/biology/01-biology-overview.html"},{"icon":"📄","name":"02 bio flashcards","desc":"記憶訓練 · 海納專用","file":"haina/biology/02-bio-flashcards.html"},{"icon":"📄","name":"0301 bio foodtest lab0512","desc":"實驗精要 · 海納專用","file":"haina/biology/0301-bio-foodtest-lab0512.html"},{"icon":"📄","name":"0302 bio foodtest lab","desc":"實驗步驟 · 海納專用","file":"haina/biology/0302-bio-foodtest-lab.html"},{"icon":"📄","name":"04 bio arena haina","desc":"實戰練習 · 海納專用","file":"haina/biology/04-bio-arena-haina.html"},{"icon":"📄","name":"05 bio biowall haina","desc":"答題技巧 · 海納專用","file":"haina/biology/05-bio-biowall-haina.html"},{"icon":"📄","name":"06 bio deficiency haina","desc":"綜合訓練 · 海納專用","file":"haina/biology/06-bio-deficiency-haina.html"},{"icon":"📄","name":"07 bio dna decoder","desc":"專項練習 · 海納專用","file":"haina/biology/07-bio-dna-decoder.html"},{"icon":"📄","name":"08 bio dna lab haina","desc":"強化訓練 · 海納專用","file":"haina/biology/08-bio-dna-lab-haina.html"},{"icon":"📄","name":"09 bio immune timeline","desc":"鞏固練習 · 海納專用","file":"haina/biology/09-bio-immune-timeline.html"},{"icon":"📄","name":"10 bio stepmaster haina","desc":"全面訓練 · 海納專用","file":"haina/biology/10-bio-stepmaster-haina.html"}]},"chinese-history":{"tools":[{"icon":"📄","name":"01 chist overview","desc":"學科概覽 · 海納專用","file":"haina/chist/01-chist-overview.html"},{"icon":"📄","name":"02 chist fillin map","desc":"記憶訓練 · 海納專用","file":"haina/chist/02-chist-fillin-map.html"},{"icon":"📄","name":"03 chist timeline sort","desc":"辨析練習 · 海納專用","file":"haina/chist/03-chist-timeline-sort.html"},{"icon":"📄","name":"04 chist people match","desc":"實戰練習 · 海納專用","file":"haina/chist/04-chist-people-match.html"},{"icon":"📄","name":"05 chist bianzheng cards","desc":"答題技巧 · 海納專用","file":"haina/chist/05-chist-bianzheng-cards.html"},{"icon":"📄","name":"06 chist data response guide","desc":"綜合訓練 · 海納專用","file":"haina/chist/06-chist-data-response-guide.html"},{"icon":"📄","name":"07 chist essay guide","desc":"專項練習 · 海納專用","file":"haina/chist/07-chist-essay-guide.html"},{"icon":"📄","name":"中史P55-56教學","desc":"課堂教學配套 · 海納專用","file":"bonus/chinesehistory-P55-56-teaching-hainarong-0516.html"}]},"geography":{"tools":[{"icon":"📄","name":"01 geog exam overview","desc":"學科概覽 · 海納專用","file":"haina/geography/01-geog-exam-overview.html"},{"icon":"📄","name":"02 geog glossary flashcards","desc":"記憶訓練 · 海納專用","file":"haina/geography/02-geog-glossary-flashcards.html"},{"icon":"📄","name":"03 geog skills workbench","desc":"辨析練習 · 海納專用","file":"haina/geography/03-geog-skills-workbench.html"},{"icon":"📄","name":"04 geog map skills drill","desc":"實戰練習 · 海納專用","file":"haina/geography/04-geog-map-skills-drill.html"},{"icon":"📄","name":"05 geog peel paragraph architect","desc":"答題技巧 · 海納專用","file":"haina/geography/05-geog-peel-paragraph-architect.html"}]},"history":{"tools":[{"icon":"📄","name":"01 s3 history exam overview","desc":"學科概覽 · 海納專用","file":"haina/history/01-s3-history-exam-overview.html"},{"icon":"📄","name":"02 s3 history dbq trainer","desc":"記憶訓練 · 海納專用","file":"haina/history/02-s3-history-dbq-trainer.html"},{"icon":"📄","name":"03 s3 history time sense","desc":"辨析練習 · 海納專用","file":"haina/history/03-s3-history-time-sense.html"},{"icon":"📄","name":"04 s3 history concept match","desc":"實戰練習 · 海納專用","file":"haina/history/04-s3-history-concept-match.html"},{"icon":"📄","name":"05 s3 history essay trainer","desc":"答題技巧 · 海納專用","file":"haina/history/05-s3-history-essay-trainer.html"},{"icon":"📄","name":"06 s3 history mc trainer","desc":"綜合訓練 · 海納專用","file":"haina/history/06-s3-history-mc-trainer.html"}]}}},{"key":"yourong","name":"有容","grade":"F3","emoji":"🟢","css":"yr","note":"荃灣官立中學 · 綠色","subjects":{"chinese":{"tools":[{"icon":"📄","name":"01 chi overview 20260515","desc":"學科概覽","file":"yourong/chi/01-chi-overview-20260515.html"},{"icon":"📄","name":"02 chi scoring decoder","desc":"記憶訓練","file":"yourong/chi/02-chi-scoring-decoder.html"},{"icon":"📄","name":"03 chi translation scorer","desc":"辨析練習","file":"yourong/chi/03-chi-translation-scorer.html"},{"icon":"📄","name":"04 chi formula fill","desc":"實戰練習","file":"yourong/chi/04-chi-formula-fill.html"},{"icon":"📄","name":"05 chi argue gauntlet","desc":"答題技巧","file":"yourong/chi/05-chi-argue-gauntlet.html"},{"icon":"📄","name":"06 chi format checklist","desc":"綜合訓練","file":"yourong/chi/06-chi-format-checklist.html"},{"icon":"📄","name":"07 ch practical writing combat yourong","desc":"專項練習","file":"yourong/chi/07-ch-practical-writing-combat-yourong.html"}]},"english":{"tools":[{"icon":"📄","name":"01 eng_overview","desc":"學科概覽 · 有容專用","file":"yourong/english/01-eng_overview.html"},{"icon":"📄","name":"02 eng grammar drill","desc":"記憶訓練 · 有容專用","file":"yourong/english/02-eng-grammar-drill.html"},{"icon":"📄","name":"03 eng vocab yourong","desc":"辨析練習 · 有容專用","file":"yourong/english/03-eng-vocab-yourong.html"},{"icon":"📄","name":"04 eng wordform","desc":"實戰練習 · 有容專用","file":"yourong/english/04-eng-wordform.html"},{"icon":"📄","name":"05 eng reading guide","desc":"答題技巧 · 有容專用","file":"yourong/english/05-eng-reading-guide.html"}]},"maths":{"tools":[{"icon":"📄","name":"01 maths overview","desc":"學科概覽 · 有容專用","file":"yourong/maths/01-maths-overview.html"},{"icon":"📄","name":"02 maths algebra drill","desc":"記憶訓練 · 有容專用","file":"yourong/maths/02-maths-algebra-drill.html"},{"icon":"📄","name":"03 maths sine cosine drill","desc":"辨析練習 · 有容專用","file":"yourong/maths/03-maths-sine-cosine-drill.html"},{"icon":"📄","name":"04 maths expectedValues","desc":"實戰練習 · 有容專用","file":"yourong/maths/04-maths-expectedValues.html"},{"icon":"📄","name":"05 maths_diceexpectedvalue","desc":"答題技巧 · 有容專用","file":"yourong/maths/05-maths_diceexpectedvalue.html"}]},"physics":{"tools":[{"icon":"📄","name":"01 phy review overview","desc":"學科概覽 · 有容專用","file":"yourong/physics/01-phy-review-overview.html"},{"icon":"📄","name":"02 phy lens workshop drill","desc":"記憶訓練 · 有容專用","file":"yourong/physics/02-phy-lens-workshop-drill.html"}]},"chemistry":{"tools":[{"icon":"📄","name":"01 chem overview","desc":"學科概覽 · 有容專用","file":"yourong/chemistry/01-chem-overview.html"},{"icon":"📄","name":"02 chem cations_anions","desc":"記憶訓練 · 有容專用","file":"yourong/chemistry/02-chem-cations_anions.html"},{"icon":"📄","name":"03 chem electrolytes yourong","desc":"辨析練習 · 有容專用","file":"yourong/chemistry/03-chem-electrolytes-yourong.html"},{"icon":"📄","name":"04 chem equation trainer","desc":"實戰練習 · 有容專用","file":"yourong/chemistry/04-chem-equation-trainer.html"},{"icon":"📄","name":"05 chem flashcards_cationsanions","desc":"答題技巧 · 有容專用","file":"yourong/chemistry/05-chem-flashcards_cationsanions.html"},{"icon":"📄","name":"06 chem mcq blitz","desc":"綜合訓練 · 有容專用","file":"yourong/chemistry/06-chem-mcq-blitz.html"},{"icon":"📄","name":"07 chem answer right","desc":"專項練習 · 有容專用","file":"yourong/chemistry/07-chem-answer-right.html"},{"icon":"📄","name":"08 chem trap killer","desc":"強化訓練 · 有容專用","file":"yourong/chemistry/08-chem-trap-killer.html"},{"icon":"📄","name":"09 chem NH3 NH4","desc":"鞏固練習 · 有容專用","file":"yourong/chemistry/09-chem-NH3-NH4.html"}]},"biology":{"tools":[{"icon":"📄","name":"01 biology overview","desc":"學科概覽 · 有容專用","file":"yourong/biology/01-biology-overview.html"},{"icon":"📄","name":"02 bio flashcards","desc":"記憶訓練 · 有容專用","file":"yourong/biology/02-bio-flashcards.html"},{"icon":"📄","name":"0301 bio foodtest lab0512","desc":"實驗精要 · 有容專用","file":"yourong/biology/0301-bio-foodtest-lab0512.html"},{"icon":"📄","name":"0302 bio foodtest lab","desc":"實驗步驟 · 有容專用","file":"yourong/biology/0302-bio-foodtest-lab.html"},{"icon":"📄","name":"04 bio arena yourong","desc":"實戰練習 · 有容專用","file":"yourong/biology/04-bio-arena-yourong.html"},{"icon":"📄","name":"05 bio biowall yourong","desc":"答題技巧 · 有容專用","file":"yourong/biology/05-bio-biowall-yourong.html"},{"icon":"📄","name":"06 bio deficiency yourong","desc":"綜合訓練 · 有容專用","file":"yourong/biology/06-bio-deficiency-yourong.html"},{"icon":"📄","name":"07 bio dna decoder yourong","desc":"專項練習 · 有容專用","file":"yourong/biology/07-bio-dna-decoder-yourong.html"},{"icon":"📄","name":"08 bio dna lab yourong","desc":"強化訓練 · 有容專用","file":"yourong/biology/08-bio-dna-lab-yourong.html"},{"icon":"📄","name":"09 bio immune timeline yourong","desc":"鞏固練習 · 有容專用","file":"yourong/biology/09-bio-immune-timeline-yourong.html"},{"icon":"📄","name":"10 bio stepmaster yourong","desc":"全面訓練 · 有容專用","file":"yourong/biology/10-bio-stepmaster-yourong.html"}]},"chinese-history":{"tools":[{"icon":"📄","name":"01 chist overview","desc":"學科概覽 · 有容專用","file":"yourong/Chist/01-chist-overview.html"},{"icon":"📄","name":"02 chist fillin map","desc":"記憶訓練 · 有容專用","file":"yourong/Chist/02-chist-fillin-map.html"},{"icon":"📄","name":"03 chist timeline sort","desc":"辨析練習 · 有容專用","file":"yourong/Chist/03-chist-timeline-sort.html"},{"icon":"📄","name":"04 chist people match","desc":"實戰練習 · 有容專用","file":"yourong/Chist/04-chist-people-match.html"},{"icon":"📄","name":"05 chist bianzheng cards","desc":"答題技巧 · 有容專用","file":"yourong/Chist/05-chist-bianzheng-cards.html"},{"icon":"📄","name":"06 chist data response guide","desc":"綜合訓練 · 有容專用","file":"yourong/Chist/06-chist-data-response-guide.html"},{"icon":"📄","name":"07 chist essay guide","desc":"專項練習 · 有容專用","file":"yourong/Chist/07-chist-essay-guide.html"},{"icon":"📄","name":"中史P55-56教學","desc":"課堂教學配套 · 有容專用","file":"bonus/chinesehistory-P55-56-teaching-hainarong-0516.html"}]},"geography":{"tools":[{"icon":"📄","name":"01 geog exam overview","desc":"學科概覽 · 有容專用","file":"yourong/geography/01-geog-exam-overview.html"},{"icon":"📄","name":"02 geog glossary flashcards","desc":"記憶訓練 · 有容專用","file":"yourong/geography/02-geog-glossary-flashcards.html"},{"icon":"📄","name":"03 geog skills workbench","desc":"辨析練習 · 有容專用","file":"yourong/geography/03-geog-skills-workbench.html"},{"icon":"📄","name":"04 geog map skills drill","desc":"實戰練習 · 有容專用","file":"yourong/geography/04-geog-map-skills-drill.html"},{"icon":"📄","name":"05 geog peel paragraph architect","desc":"答題技巧 · 有容專用","file":"yourong/geography/05-geog-peel-paragraph-architect.html"}]},"history":{"tools":[{"icon":"📄","name":"01 s3 history exam overview","desc":"學科概覽 · 有容專用","file":"yourong/history/01-s3-history-exam-overview.html"},{"icon":"📄","name":"02 s3 history dbq trainer","desc":"記憶訓練 · 有容專用","file":"yourong/history/02-s3-history-dbq-trainer.html"},{"icon":"📄","name":"03 s3 history time sense","desc":"辨析練習 · 有容專用","file":"yourong/history/03-s3-history-time-sense.html"},{"icon":"📄","name":"04 s3 history concept match","desc":"實戰練習 · 有容專用","file":"yourong/history/04-s3-history-concept-match.html"},{"icon":"📄","name":"05 s3 history essay trainer","desc":"答題技巧 · 有容專用","file":"yourong/history/05-s3-history-essay-trainer.html"},{"icon":"📄","name":"06 s3 history mc trainer","desc":"綜合訓練 · 有容專用","file":"yourong/history/06-s3-history-mc-trainer.html"}]}}}];
 
 let historyStack = ['home'];
 let currentKid = null;
