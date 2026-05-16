@@ -30,8 +30,6 @@ body::before{
   pointer-events:none;z-index:0;
 }
 .app{max-width:480px;margin:0 auto;padding:24px 16px 40px;position:relative;z-index:1}
-
-/* Hero */
 .hero{text-align:center;padding:32px 0 28px}
 .hero .icon{font-size:3em;display:block;margin-bottom:12px;animation:float 3s ease-in-out infinite}
 .hero h1{font-size:1.8em;font-weight:800;letter-spacing:-0.5px;
@@ -41,33 +39,22 @@ body::before{
 }
 .hero .tagline{font-size:0.85em;color:#8892b0;margin-top:8px;letter-spacing:1px}
 .hero .divider{width:40px;height:3px;background:linear-gradient(90deg,#a78bfa,#34d399);margin:16px auto 0;border-radius:2px}
-
-/* Kid cards */
 .kid-list{display:flex;flex-direction:column;gap:20px}
 .kid-card{
-  position:relative;border-radius:24px;padding:28px 24px;
-  cursor:pointer;transition:all .35s cubic-bezier(.4,0,.2,1);
-  overflow:hidden;text-decoration:none;display:block;
-  border:1px solid transparent;
+  display:flex;align-items:center;border-radius:24px;padding:18px 20px;
+  border:1px solid rgba(255,255,255,.1);cursor:pointer;transition:all .3s;
 }
-.kid-card::before{
-  content:'';position:absolute;inset:0;border-radius:24px;
-  background:radial-gradient(ellipse at top left,var(--glow),transparent 70%);
-  opacity:0;transition:opacity .35s;pointer-events:none;
-}
-.kid-card:hover::before{opacity:1}
-.kid-card:hover{transform:translateY(-3px);border-color:rgba(255,255,255,.1)}
-.kid-card:active{transform:scale(.98)}
-.kid-card .card-content{display:flex;align-items:center;gap:16px;position:relative;z-index:1}
+.kid-card:active{transform:scale(.97)}
+.card-content{display:flex;align-items:center;gap:16px;width:100%}
 .kid-avatar{
-  width:56px;height:56px;border-radius:18px;display:flex;align-items:center;justify-content:center;
-  font-size:1.5em;flex-shrink:0;box-shadow:0 8px 30px var(--shadow);
+  width:52px;height:52px;border-radius:18px;display:flex;
+  align-items:center;justify-content:center;font-size:1.6em;flex-shrink:0;
 }
 .kid-info{flex:1;min-width:0}
-.kid-card .kid-name{font-size:1.35em;font-weight:700;margin-bottom:4px;letter-spacing:-0.3px}
-.kid-card .kid-grade{font-size:0.8em;opacity:0.7;margin-bottom:8px}
-.kid-card .kid-meta{display:flex;gap:10px;flex-wrap:wrap}
-.kid-card .kid-meta span{
+.kid-name{font-size:1.15em;font-weight:700;margin-bottom:4px;letter-spacing:-0.3px}
+.kid-grade{font-size:0.8em;opacity:0.7;margin-bottom:8px}
+.kid-meta{display:flex;gap:10px;flex-wrap:wrap}
+.kid-meta span{
   font-size:0.72em;padding:3px 10px;border-radius:20px;
   border:1px solid rgba(255,255,255,.15);
   background:rgba(255,255,255,.06);
@@ -78,8 +65,6 @@ body::before{
   width:30px;text-align:center;
 }
 .kid-card:active .arrow{transform:translateX(4px);opacity:1}
-
-/* 有容 - 綠色 Nature Organic */
 .kid-card.yr{
   background:linear-gradient(135deg,rgba(22,53,30,.85),rgba(15,38,20,.9));
   border-color:rgba(52,211,153,.2);
@@ -89,10 +74,6 @@ body::before{
   background:linear-gradient(135deg,#34d399,#059669);
   box-shadow:0 8px 30px rgba(52,211,153,.35);
 }
-.kid-card.yr{--glow:rgba(52,211,153,.15);}
-.kid-card.yr .kid-avatar{--shadow:rgba(52,211,153,.35);}
-
-/* 海納 - 藍色 Ocean Tech */
 .kid-card.hn{
   background:linear-gradient(135deg,rgba(15,23,42,.85),rgba(12,18,34,.9));
   border-color:rgba(96,165,250,.2);
@@ -102,10 +83,6 @@ body::before{
   background:linear-gradient(135deg,#60a5fa,#2563eb);
   box-shadow:0 8px 30px rgba(96,165,250,.35);
 }
-.kid-card.hn{--glow:rgba(96,165,250,.15);}
-.kid-card.hn .kid-avatar{--shadow:rgba(96,165,250,.35);}
-
-/* 多多 - 金色 Warm Sun */
 .kid-card.dd{
   background:linear-gradient(135deg,rgba(40,30,10,.85),rgba(30,20,8,.9));
   border-color:rgba(251,191,36,.2);
@@ -115,18 +92,8 @@ body::before{
   background:linear-gradient(135deg,#fbbf24,#d97706);
   box-shadow:0 8px 30px rgba(251,191,36,.35);
 }
-.kid-card.dd{--glow:rgba(251,191,36,.15);}
-.kid-card.dd .kid-avatar{--shadow:rgba(251,191,36,.35);}
-
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-
-.footer{
-  text-align:center;margin-top:32px;
-  font-size:0.7em;color:#64748b;letter-spacing:1px;
-  opacity:0.6;
-}
-
-/* Back button */
+.footer{text-align:center;margin-top:32px;font-size:0.7em;color:#64748b;letter-spacing:1px;opacity:0.6}
 .back-btn{
   position:fixed;top:16px;left:16px;z-index:100;
   width:40px;height:40px;border-radius:14px;
@@ -138,13 +105,9 @@ body::before{
 }
 .back-btn.show{opacity:1;pointer-events:auto}
 .back-btn:active{transform:scale(.9)}
-
-/* Pages */
 .page{display:none}
 .page.active{display:block;animation:fadeUp .3s ease}
 @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
-
-/* Subject grid */
 .subj-header{text-align:center;padding:24px 0 20px}
 .emoji-lg{font-size:2.8em;margin-bottom:8px}
 .subj-header h2{font-size:1.4em;font-weight:700}
@@ -160,8 +123,6 @@ body::before{
 .subj-card .s-icon{font-size:2em;margin-bottom:8px}
 .subj-card .s-name{font-size:0.85em;font-weight:600}
 .subj-card .s-count{font-size:0.7em;color:#8892b0;margin-top:4px}
-
-/* Tool list */
 .tool-header{text-align:center;padding:24px 0 16px}
 .tool-list{display:flex;flex-direction:column;gap:10px}
 .tool-item{
@@ -180,61 +141,270 @@ body::before{
 .tool-item .t-desc{font-size:0.75em;color:#8892b0}
 .tool-item .t-arrow{opacity:0.4;font-size:1.1em;flex-shrink:0}
 .empty-state{text-align:center;padding:48px 0;color:#64748b;font-size:0.9em}
-.empty-state .e-icon{font-size:2.5em;margin-bottom:12px;opacity:0.5}
+.empty-state .e-icon{font-size:3em;margin-bottom:12px}
 </style>
 </head>
 <body>
-<div class="app">
+
+<div class="app" id="app">
 
   <!-- Page: Home -->
-  <div id="page-home" class="page active">
+  <div class="page active" id="page-home">
     <div class="hero">
       <span class="icon">📚</span>
       <h1>學習工具箱</h1>
-      <div class="tagline">KIDS LEARNING TOOLS</div>
+      <div class="tagline">海納 · 有容 · 多多</div>
       <div class="divider"></div>
     </div>
-    <div id="kidGrid" class="kid-list"></div>
-    <div class="footer">Built with ❤️ by Ethan</div>
+    <div class="kid-list" id="kidGrid"></div>
+    <div class="footer">kids-learning-tools · 2026</div>
   </div>
 
   <!-- Page: Subjects -->
-  <div id="page-subjects" class="page">
-    <div id="subjHeader" class="subj-header"></div>
-    <div id="subjGrid" class="subj-grid"></div>
+  <div class="page" id="page-subjects">
+    <div class="subj-header" id="subjHeader"></div>
+    <div class="subj-grid" id="subjGrid"></div>
   </div>
 
   <!-- Page: Tools -->
-  <div id="page-tools" class="page">
-    <div id="toolHeader" class="tool-header"></div>
-    <div id="toolList" class="tool-list"></div>
+  <div class="page" id="page-tools">
+    <div class="tool-header" id="toolHeader"></div>
+    <div class="tool-list" id="toolList"></div>
   </div>
 
 </div>
+
 <button id="backBtn" class="back-btn" onclick="goBack()">←</button>
 
 <script>
 // ============================================================
-// Data — paths verified against GitHub repo tree 2025-05-16
+// Data — paths verified against GitHub repo tree 2026-05-17
 // ============================================================
-const ICONS={"chinese":"📖","english":"📝","maths":"📐","physics":"⚛️","chemistry":"🧪","biology":"🧬","chinese-history":"🏛️","geography":"🌍","history":"📜","general":"📚","ethics":"🙏","math":"🔢"};
-const SUBJECT_NAMES={"chinese":"中國語文","english":"English","maths":"數學","physics":"Physics","chemistry":"Chemistry","biology":"Biology","chinese-history":"中國歷史","geography":"Geography","history":"History","general":"常識","ethics":"倫理宗教","math":"數學"};
+const ICONS = {
+  chin:'📖', chinese:'📖', english:'🔤', eng:'🔤', maths:'🔢', math:'🔢',
+  physics:'⚛️', chemistry:'🧪', biology:'🔬', history:'📜',
+  chist:'🏛️', geography:'🌍', general:'🌍', ethics:'🙏'
+};
+const SUBJECT_NAMES = {
+  chin:'中文', chinese:'中文', english:'English', eng:'English',
+  maths:'Maths', math:'Maths',
+  physics:'Physics', chemistry:'Chemistry', biology:'Biology',
+  history:'History', chist:'中史', geography:'Geography',
+  general:'常識', ethics:'倫宗'
+};
 
-const KIDS=[{"key":"duoduo","name":"多多","grade":"P5","emoji":"🌟","css":"dd","note":"迦密愛禮信小學 · P5 · 金色","subjects":{"chinese":{"tools":[{"icon":"📄","name":"字詞表","desc":"基礎詞彙","file":"duoduo/chin/00-chin-voca-list.html"},{"icon":"📄","name":"詞語聽寫","desc":"學科概覽","file":"duoduo/chin/01-chin-voca-dictation.html"},{"icon":"📄","name":"詞語標點","desc":"記憶訓練","file":"duoduo/chin/02-chin-voca-biaodian.html"},{"icon":"📄","name":"文言文","desc":"辨析練習","file":"duoduo/chin/03-chin-voca-wyw.html"},{"icon":"📄","name":"改寫變調","desc":"實戰練習","file":"duoduo/chin/04-chin-biantiao.html"},{"icon":"📄","name":"作文技巧","desc":"實戰練習","file":"duoduo/chin/04-chin-writing.html"},{"icon":"📄","name":"閱讀理解","desc":"答題技巧","file":"duoduo/chin/05-chin-reading.html"},{"icon":"📄","name":"重組句子","desc":"綜合訓練","file":"duoduo/chin/06-chin-juzi.html"}]},"english":{"tools":[{"icon":"📄","name":"語法複習","desc":"學科概覽","file":"duoduo/eng/01-eng-grammar.html"},{"icon":"📄","name":"現在完成式50題","desc":"記憶訓練","file":"duoduo/eng/02-eng-wanchengshi50.html"},{"icon":"📄","name":"精讀7篇","desc":"辨析練習","file":"duoduo/eng/03-eng-reading.html"},{"icon":"📄","name":"改錯訓練","desc":"實戰練習","file":"duoduo/eng/04-eng-proofreading.html"},{"icon":"📄","name":"作文技巧","desc":"答題技巧","file":"duoduo/eng/05-eng-writing.html"},{"icon":"📄","name":"閱讀模擬卷","desc":"綜合訓練","file":"duoduo/eng/06-eng-reading-moke.html"},{"icon":"📄","name":"寫作模擬卷","desc":"專項練習","file":"duoduo/eng/07-eng-writing-moke.html"},{"icon":"📄","name":"詞彙聽寫","desc":"強化訓練","file":"duoduo/eng/08-eng-dictation.html"},{"icon":"📄","name":"詞彙精練","desc":"鞏固練習","file":"duoduo/eng/09-eng-vocabulary.html"},{"icon":"📄","name":"動詞形態","desc":"全面訓練","file":"duoduo/eng/10-eng-dongci.html"},{"icon":"📄","name":"語法加碼","desc":"進階訓練","file":"duoduo/eng/11-eng-grammar-plus.html"}]},"math":{"tools":[{"icon":"📄","name":"簡易方程練習","desc":"簡易方程專項練習","file":"bonus/duoduo-simple-equations.html"}]},"general":{"tools":[{"icon":"📄","name":"知識精講","desc":"學科概覽","file":"duoduo/general/01-gen-zhishi.html"},{"icon":"📄","name":"模擬卷1-10","desc":"記憶訓練","file":"duoduo/general/02-gen-mock.html"},{"icon":"📄","name":"混淆概念與答題框架","desc":"辨析練習","file":"duoduo/general/03-gen-gainian.html"},{"icon":"📄","name":"自學手冊閃卡","desc":"實戰練習","file":"duoduo/general/04-gen-shanka.html"}]},"ethics":{"tools":[{"icon":"📄","name":"互動教學","desc":"學科概覽","file":"duoduo/ethics/01-ethics-jiaoxue.html"},{"icon":"📄","name":"模擬卷1","desc":"記憶訓練","file":"duoduo/ethics/02-ethics-moke1.html"},{"icon":"📄","name":"模擬卷2","desc":"辨析練習","file":"duoduo/ethics/03-ethics-moke2.html"},{"icon":"📄","name":"模擬卷3","desc":"實戰練習","file":"duoduo/ethics/04-ethics-moke3.html"},{"icon":"📄","name":"模擬卷答案","desc":"答題技巧","file":"duoduo/ethics/05-ethics-ma.html"}]}}},{"key":"haina","name":"海納","grade":"F3","emoji":"🔵","css":"hn","note":"荃灣官立中學 · 藍色","subjects":{"chinese":{"tools":[{"icon":"📄","name":"01 chi overview 20260515","desc":"學科概覽","file":"haina/chi/01-chi-overview-20260515.html"},{"icon":"📄","name":"02 chi scoring decoder","desc":"記憶訓練","file":"haina/chi/02-chi-scoring-decoder.html"},{"icon":"📄","name":"03 chi translation scorer","desc":"辨析練習","file":"haina/chi/03-chi-translation-scorer.html"},{"icon":"📄","name":"04 chi formula fill","desc":"實戰練習","file":"haina/chi/04-chi-formula-fill.html"},{"icon":"📄","name":"05 chi argue gauntlet","desc":"答題技巧","file":"haina/chi/05-chi-argue-gauntlet.html"},{"icon":"📄","name":"06 chi format checklist","desc":"綜合訓練","file":"haina/chi/06-chi-format-checklist.html"},{"icon":"📄","name":"07 ch practical writing combat haina","desc":"專項練習","file":"haina/chi/07-ch-practical-writing-combat-haina.html"}]},"english":{"tools":[{"icon":"📄","name":"01 eng_overview","desc":"學科概覽 · 海納專用","file":"haina/english/01-eng_overview.html"},{"icon":"📄","name":"02 eng grammar drill","desc":"記憶訓練 · 海納專用","file":"haina/english/02-eng-grammar-drill.html"},{"icon":"📄","name":"03 eng vocab haina","desc":"辨析練習 · 海納專用","file":"haina/english/03-eng-vocab-haina.html"},{"icon":"📄","name":"04 eng wordform","desc":"實戰練習 · 海納專用","file":"haina/english/04-eng-wordform.html"},{"icon":"📄","name":"05 eng reading guide","desc":"答題技巧 · 海納專用","file":"haina/english/05-eng-reading-guide.html"}]},"maths":{"tools":[{"icon":"📄","name":"01 maths overview","desc":"學科概覽 · 海納專用","file":"haina/maths/01-maths-overview.html"},{"icon":"📄","name":"02 maths_diceexpectedvalue","desc":"記憶訓練 · 海納專用","file":"haina/maths/02-maths_diceexpectedvalue.html"}]},"physics":{"tools":[{"icon":"📄","name":"01 phy review overview","desc":"學科概覽 · 海納專用","file":"haina/physics/01-phy-review-overview.html"},{"icon":"📄","name":"02 phy lens workshop drill","desc":"記憶訓練 · 海納專用","file":"haina/physics/02-phy-lens-workshop-drill.html"}]},"chemistry":{"tools":[{"icon":"📄","name":"01 chem overview","desc":"學科概覽 · 海納專用","file":"haina/chemistry/01-chem-overview.html"},{"icon":"📄","name":"02 chem flashcards_cationsanions haina","desc":"記憶訓練 · 海納專用","file":"haina/chemistry/02-chem-flashcards_cationsanions-haina.html"},{"icon":"📄","name":"03 chem ations Anions","desc":"辨析練習 · 海納專用","file":"haina/chemistry/03-chem-ations-Anions.html"},{"icon":"📄","name":"04 chem equation trainer","desc":"實戰練習 · 海納專用","file":"haina/chemistry/04-chem-equation-trainer.html"},{"icon":"📄","name":"05 chem mcq blitz","desc":"答題技巧 · 海納專用","file":"haina/chemistry/05-chem-mcq-blitz.html"},{"icon":"📄","name":"06 chem trap killer","desc":"綜合訓練 · 海納專用","file":"haina/chemistry/06-chem-trap-killer.html"},{"icon":"📄","name":"07 chem answer right","desc":"專項練習 · 海納專用","file":"haina/chemistry/07-chem-answer-right.html"}]},"biology":{"tools":[{"icon":"📄","name":"01 biology overview","desc":"學科概覽 · 海納專用","file":"haina/biology/01-biology-overview.html"},{"icon":"📄","name":"02 bio flashcards","desc":"記憶訓練 · 海納專用","file":"haina/biology/02-bio-flashcards.html"},{"icon":"📄","name":"0301 bio foodtest lab0512","desc":"實驗精要 · 海納專用","file":"haina/biology/0301-bio-foodtest-lab0512.html"},{"icon":"📄","name":"0302 bio foodtest lab","desc":"實驗步驟 · 海納專用","file":"haina/biology/0302-bio-foodtest-lab.html"},{"icon":"📄","name":"04 bio arena haina","desc":"實戰練習 · 海納專用","file":"haina/biology/04-bio-arena-haina.html"},{"icon":"📄","name":"05 bio biowall haina","desc":"答題技巧 · 海納專用","file":"haina/biology/05-bio-biowall-haina.html"},{"icon":"📄","name":"06 bio deficiency haina","desc":"綜合訓練 · 海納專用","file":"haina/biology/06-bio-deficiency-haina.html"},{"icon":"📄","name":"07 bio dna decoder","desc":"專項練習 · 海納專用","file":"haina/biology/07-bio-dna-decoder.html"},{"icon":"📄","name":"08 bio dna lab haina","desc":"強化訓練 · 海納專用","file":"haina/biology/08-bio-dna-lab-haina.html"},{"icon":"📄","name":"09 bio immune timeline","desc":"鞏固練習 · 海納專用","file":"haina/biology/09-bio-immune-timeline.html"},{"icon":"📄","name":"10 bio stepmaster haina","desc":"全面訓練 · 海納專用","file":"haina/biology/10-bio-stepmaster-haina.html"}]},"chinese-history":{"tools":[{"icon":"📄","name":"01 chist overview","desc":"學科概覽 · 海納專用","file":"haina/chist/01-chist-overview.html"},{"icon":"📄","name":"02 chist fillin map","desc":"記憶訓練 · 海納專用","file":"haina/chist/02-chist-fillin-map.html"},{"icon":"📄","name":"03 chist timeline sort","desc":"辨析練習 · 海納專用","file":"haina/chist/03-chist-timeline-sort.html"},{"icon":"📄","name":"04 chist people match","desc":"實戰練習 · 海納專用","file":"haina/chist/04-chist-people-match.html"},{"icon":"📄","name":"05 chist bianzheng cards","desc":"答題技巧 · 海納專用","file":"haina/chist/05-chist-bianzheng-cards.html"},{"icon":"📄","name":"06 chist data response guide","desc":"綜合訓練 · 海納專用","file":"haina/chist/06-chist-data-response-guide.html"},{"icon":"📄","name":"07 chist essay guide","desc":"專項練習 · 海納專用","file":"haina/chist/07-chist-essay-guide.html"},{"icon":"📄","name":"中史P55-56教學","desc":"課堂教學配套 · 海納專用","file":"bonus/chinesehistory-P55-56-teaching-hainarong-0516.html"}]},"geography":{"tools":[{"icon":"📄","name":"01 geog exam overview","desc":"學科概覽 · 海納專用","file":"haina/geography/01-geog-exam-overview.html"},{"icon":"📄","name":"02 geog glossary flashcards","desc":"記憶訓練 · 海納專用","file":"haina/geography/02-geog-glossary-flashcards.html"},{"icon":"📄","name":"03 geog skills workbench","desc":"辨析練習 · 海納專用","file":"haina/geography/03-geog-skills-workbench.html"},{"icon":"📄","name":"04 geog map skills drill","desc":"實戰練習 · 海納專用","file":"haina/geography/04-geog-map-skills-drill.html"},{"icon":"📄","name":"05 geog peel paragraph architect","desc":"答題技巧 · 海納專用","file":"haina/geography/05-geog-peel-paragraph-architect.html"}]},"history":{"tools":[{"icon":"📄","name":"01 s3 history exam overview","desc":"學科概覽 · 海納專用","file":"haina/history/01-s3-history-exam-overview.html"},{"icon":"📄","name":"02 s3 history dbq trainer","desc":"記憶訓練 · 海納專用","file":"haina/history/02-s3-history-dbq-trainer.html"},{"icon":"📄","name":"03 s3 history time sense","desc":"辨析練習 · 海納專用","file":"haina/history/03-s3-history-time-sense.html"},{"icon":"📄","name":"04 s3 history concept match","desc":"實戰練習 · 海納專用","file":"haina/history/04-s3-history-concept-match.html"},{"icon":"📄","name":"05 s3 history essay trainer","desc":"答題技巧 · 海納專用","file":"haina/history/05-s3-history-essay-trainer.html"},{"icon":"📄","name":"06 s3 history mc trainer","desc":"綜合訓練 · 海納專用","file":"haina/history/06-s3-history-mc-trainer.html"}]}}},{"key":"yourong","name":"有容","grade":"F3","emoji":"🟢","css":"yr","note":"荃灣官立中學 · 綠色","subjects":{"chinese":{"tools":[{"icon":"📄","name":"01 chi overview 20260515","desc":"學科概覽","file":"yourong/chi/01-chi-overview-20260515.html"},{"icon":"📄","name":"02 chi scoring decoder","desc":"記憶訓練","file":"yourong/chi/02-chi-scoring-decoder.html"},{"icon":"📄","name":"03 chi translation scorer","desc":"辨析練習","file":"yourong/chi/03-chi-translation-scorer.html"},{"icon":"📄","name":"04 chi formula fill","desc":"實戰練習","file":"yourong/chi/04-chi-formula-fill.html"},{"icon":"📄","name":"05 chi argue gauntlet","desc":"答題技巧","file":"yourong/chi/05-chi-argue-gauntlet.html"},{"icon":"📄","name":"06 chi format checklist","desc":"綜合訓練","file":"yourong/chi/06-chi-format-checklist.html"},{"icon":"📄","name":"07 ch practical writing combat yourong","desc":"專項練習","file":"yourong/chi/07-ch-practical-writing-combat-yourong.html"}]},"english":{"tools":[{"icon":"📄","name":"01 eng_overview","desc":"學科概覽 · 有容專用","file":"yourong/english/01-eng_overview.html"},{"icon":"📄","name":"02 eng grammar drill","desc":"記憶訓練 · 有容專用","file":"yourong/english/02-eng-grammar-drill.html"},{"icon":"📄","name":"03 eng vocab yourong","desc":"辨析練習 · 有容專用","file":"yourong/english/03-eng-vocab-yourong.html"},{"icon":"📄","name":"04 eng wordform","desc":"實戰練習 · 有容專用","file":"yourong/english/04-eng-wordform.html"},{"icon":"📄","name":"05 eng reading guide","desc":"答題技巧 · 有容專用","file":"yourong/english/05-eng-reading-guide.html"}]},"maths":{"tools":[{"icon":"📄","name":"01 maths overview","desc":"學科概覽 · 有容專用","file":"yourong/maths/01-maths-overview.html"},{"icon":"📄","name":"02 maths algebra drill","desc":"記憶訓練 · 有容專用","file":"yourong/maths/02-maths-algebra-drill.html"},{"icon":"📄","name":"03 maths sine cosine drill","desc":"辨析練習 · 有容專用","file":"yourong/maths/03-maths-sine-cosine-drill.html"},{"icon":"📄","name":"04 maths expectedValues","desc":"實戰練習 · 有容專用","file":"yourong/maths/04-maths-expectedValues.html"},{"icon":"📄","name":"05 maths_diceexpectedvalue","desc":"答題技巧 · 有容專用","file":"yourong/maths/05-maths_diceexpectedvalue.html"}]},"physics":{"tools":[{"icon":"📄","name":"01 phy review overview","desc":"學科概覽 · 有容專用","file":"yourong/physics/01-phy-review-overview.html"},{"icon":"📄","name":"02 phy lens workshop drill","desc":"記憶訓練 · 有容專用","file":"yourong/physics/02-phy-lens-workshop-drill.html"}]},"chemistry":{"tools":[{"icon":"📄","name":"01 chem overview","desc":"學科概覽 · 有容專用","file":"yourong/chemistry/01-chem-overview.html"},{"icon":"📄","name":"02 chem cations_anions","desc":"記憶訓練 · 有容專用","file":"yourong/chemistry/02-chem-cations_anions.html"},{"icon":"📄","name":"03 chem electrolytes yourong","desc":"辨析練習 · 有容專用","file":"yourong/chemistry/03-chem-electrolytes-yourong.html"},{"icon":"📄","name":"04 chem equation trainer","desc":"實戰練習 · 有容專用","file":"yourong/chemistry/04-chem-equation-trainer.html"},{"icon":"📄","name":"05 chem flashcards_cationsanions","desc":"答題技巧 · 有容專用","file":"yourong/chemistry/05-chem-flashcards_cationsanions.html"},{"icon":"📄","name":"06 chem mcq blitz","desc":"綜合訓練 · 有容專用","file":"yourong/chemistry/06-chem-mcq-blitz.html"},{"icon":"📄","name":"07 chem answer right","desc":"專項練習 · 有容專用","file":"yourong/chemistry/07-chem-answer-right.html"},{"icon":"📄","name":"08 chem trap killer","desc":"強化訓練 · 有容專用","file":"yourong/chemistry/08-chem-trap-killer.html"},{"icon":"📄","name":"09 chem NH3 NH4","desc":"鞏固練習 · 有容專用","file":"yourong/chemistry/09-chem-NH3-NH4.html"}]},"biology":{"tools":[{"icon":"📄","name":"01 biology overview","desc":"學科概覽 · 有容專用","file":"yourong/biology/01-biology-overview.html"},{"icon":"📄","name":"02 bio flashcards","desc":"記憶訓練 · 有容專用","file":"yourong/biology/02-bio-flashcards.html"},{"icon":"📄","name":"0301 bio foodtest lab0512","desc":"實驗精要 · 有容專用","file":"yourong/biology/0301-bio-foodtest-lab0512.html"},{"icon":"📄","name":"0302 bio foodtest lab","desc":"實驗步驟 · 有容專用","file":"yourong/biology/0302-bio-foodtest-lab.html"},{"icon":"📄","name":"04 bio arena yourong","desc":"實戰練習 · 有容專用","file":"yourong/biology/04-bio-arena-yourong.html"},{"icon":"📄","name":"05 bio biowall yourong","desc":"答題技巧 · 有容專用","file":"yourong/biology/05-bio-biowall-yourong.html"},{"icon":"📄","name":"06 bio deficiency yourong","desc":"綜合訓練 · 有容專用","file":"yourong/biology/06-bio-deficiency-yourong.html"},{"icon":"📄","name":"07 bio dna decoder yourong","desc":"專項練習 · 有容專用","file":"yourong/biology/07-bio-dna-decoder-yourong.html"},{"icon":"📄","name":"08 bio dna lab yourong","desc":"強化訓練 · 有容專用","file":"yourong/biology/08-bio-dna-lab-yourong.html"},{"icon":"📄","name":"09 bio immune timeline yourong","desc":"鞏固練習 · 有容專用","file":"yourong/biology/09-bio-immune-timeline-yourong.html"},{"icon":"📄","name":"10 bio stepmaster yourong","desc":"全面訓練 · 有容專用","file":"yourong/biology/10-bio-stepmaster-yourong.html"}]},"chinese-history":{"tools":[{"icon":"📄","name":"01 chist overview","desc":"學科概覽 · 有容專用","file":"yourong/Chist/01-chist-overview.html"},{"icon":"📄","name":"02 chist fillin map","desc":"記憶訓練 · 有容專用","file":"yourong/Chist/02-chist-fillin-map.html"},{"icon":"📄","name":"03 chist timeline sort","desc":"辨析練習 · 有容專用","file":"yourong/Chist/03-chist-timeline-sort.html"},{"icon":"📄","name":"04 chist people match","desc":"實戰練習 · 有容專用","file":"yourong/Chist/04-chist-people-match.html"},{"icon":"📄","name":"05 chist bianzheng cards","desc":"答題技巧 · 有容專用","file":"yourong/Chist/05-chist-bianzheng-cards.html"},{"icon":"📄","name":"06 chist data response guide","desc":"綜合訓練 · 有容專用","file":"yourong/Chist/06-chist-data-response-guide.html"},{"icon":"📄","name":"07 chist essay guide","desc":"專項練習 · 有容專用","file":"yourong/Chist/07-chist-essay-guide.html"},{"icon":"📄","name":"中史P55-56教學","desc":"課堂教學配套 · 有容專用","file":"bonus/chinesehistory-P55-56-teaching-hainarong-0516.html"}]},"geography":{"tools":[{"icon":"📄","name":"01 geog exam overview","desc":"學科概覽 · 有容專用","file":"yourong/geography/01-geog-exam-overview.html"},{"icon":"📄","name":"02 geog glossary flashcards","desc":"記憶訓練 · 有容專用","file":"yourong/geography/02-geog-glossary-flashcards.html"},{"icon":"📄","name":"03 geog skills workbench","desc":"辨析練習 · 有容專用","file":"yourong/geography/03-geog-skills-workbench.html"},{"icon":"📄","name":"04 geog map skills drill","desc":"實戰練習 · 有容專用","file":"yourong/geography/04-geog-map-skills-drill.html"},{"icon":"📄","name":"05 geog peel paragraph architect","desc":"答題技巧 · 有容專用","file":"yourong/geography/05-geog-peel-paragraph-architect.html"}]},"history":{"tools":[{"icon":"📄","name":"01 s3 history exam overview","desc":"學科概覽 · 有容專用","file":"yourong/history/01-s3-history-exam-overview.html"},{"icon":"📄","name":"02 s3 history dbq trainer","desc":"記憶訓練 · 有容專用","file":"yourong/history/02-s3-history-dbq-trainer.html"},{"icon":"📄","name":"03 s3 history time sense","desc":"辨析練習 · 有容專用","file":"yourong/history/03-s3-history-time-sense.html"},{"icon":"📄","name":"04 s3 history concept match","desc":"實戰練習 · 有容專用","file":"yourong/history/04-s3-history-concept-match.html"},{"icon":"📄","name":"05 s3 history essay trainer","desc":"答題技巧 · 有容專用","file":"yourong/history/05-s3-history-essay-trainer.html"},{"icon":"📄","name":"06 s3 history mc trainer","desc":"綜合訓練 · 有容專用","file":"yourong/history/06-s3-history-mc-trainer.html"}]}}}];
+const KIDS = [
+  {
+    key:'duoduo', name:'多多', grade:'P5', emoji:'🟡', css:'dd',
+    note:'迦密愛禮信小學 · 呈分試備戰',
+    subjects:{
+      chin:{tools:[
+        {icon:'📚',name:'詞彙列表',desc:'00 · 課文詞彙一覽',file:'duoduo/chin/00-chin-voca-list.html'},
+        {icon:'✍️',name:'詞彙聽寫',desc:'01 · 聽寫練習',file:'duoduo/chin/01-chin-voca-dictation.html'},
+        {icon:'🔖',name:'標點符號',desc:'02 · 標點訓練',file:'duoduo/chin/02-chin-voca-biaodian.html'},
+        {icon:'📜',name:'文言文',desc:'03 · 文言基礎',file:'duoduo/chin/03-chin-voca-wyw.html'},
+        {icon:'📝',name:'便條寫作',desc:'04 · 格式練習',file:'duoduo/chin/04-chin-biantiao.html'},
+        {icon:'✏️',name:'寫作訓練',desc:'04 · 作文技巧',file:'duoduo/chin/04-chin-writing.html'},
+        {icon:'📖',name:'閱讀理解',desc:'05 · 閱讀訓練',file:'duoduo/chin/05-chin-reading.html'},
+        {icon:'💬',name:'句式練習',desc:'06 · 句子訓練',file:'duoduo/chin/06-chin-juzi.html'}
+      ]},
+      eng:{tools:[
+        {icon:'📘',name:'Grammar 語法',desc:'01 · 文法基礎',file:'duoduo/eng/01-eng-grammar.html'},
+        {icon:'⏱️',name:'完成式50題',desc:'02 · 時態特訓',file:'duoduo/eng/02-eng-wanchengshi50.html'},
+        {icon:'📖',name:'閱讀理解',desc:'03 · 閱讀訓練',file:'duoduo/eng/03-eng-reading.html'},
+        {icon:'🔍',name:'Proofreading 改錯',desc:'04 · 校對訓練',file:'duoduo/eng/04-eng-proofreading.html'},
+        {icon:'✍️',name:'作文技巧',desc:'05 · 寫作要點',file:'duoduo/eng/05-eng-writing.html'},
+        {icon:'📄',name:'閱讀模擬卷',desc:'06 · 限時測驗',file:'duoduo/eng/06-eng-reading-moke.html'},
+        {icon:'✏️',name:'寫作模擬卷',desc:'07 · 限時寫作',file:'duoduo/eng/07-eng-writing-moke.html'},
+        {icon:'🎧',name:'詞彙聽力跟讀',desc:'08 · 聽說訓練',file:'duoduo/eng/08-eng-dictation.html'},
+        {icon:'📝',name:'Vocabulary 精練',desc:'09 · 詞彙鞏固',file:'duoduo/eng/09-eng-vocabulary.html'},
+        {icon:'🔄',name:'動詞形態變換',desc:'10 · 動詞變化',file:'duoduo/eng/10-eng-dongci.html'},
+        {icon:'💪',name:'語法加碼練習',desc:'11 · 進階訓練',file:'duoduo/eng/11-eng-grammar-plus.html'}
+      ]},
+      ethics:{tools:[
+        {icon:'🙏',name:'互動教學',desc:'01 · 倫宗基礎',file:'duoduo/ethics/01-ethics-jiaoxue.html'},
+        {icon:'📄',name:'模擬卷 1',desc:'02 · 測驗練習',file:'duoduo/ethics/02-ethics-moke1.html'},
+        {icon:'📄',name:'模擬卷 2',desc:'03 · 測驗練習',file:'duoduo/ethics/03-ethics-moke2.html'},
+        {icon:'📄',name:'模擬卷 3',desc:'04 · 測驗練習',file:'duoduo/ethics/04-ethics-moke3.html'},
+        {icon:'✅',name:'模擬卷答案',desc:'05 · 參考答案',file:'duoduo/ethics/05-ethics-ma.html'}
+      ]},
+      general:{tools:[
+        {icon:'📚',name:'知識精講',desc:'01 · 學科要點',file:'duoduo/general/01-gen-zhishi.html'},
+        {icon:'📄',name:'模擬卷 1-10',desc:'02 · 綜合練習',file:'duoduo/general/02-gen-mock.html'},
+        {icon:'💡',name:'混淆概念答題框架',desc:'03 · 辨析訓練',file:'duoduo/general/03-gen-gainian.html'},
+        {icon:'🃏',name:'自學手冊閃卡',desc:'04 · 記憶工具',file:'duoduo/general/04-gen-shanka.html'}
+      ]}
+    }
+  },
+  {
+    key:'haina', name:'海納', grade:'F3', emoji:'🔵', css:'hn',
+    note:'荃灣官立中學 · 藍色',
+    subjects:{
+      chi:{tools:[
+        {icon:'📖',name:'中文總覽',desc:'01 · 考試範圍',file:'haina/chi/01-chi-overview-20260515.html'},
+        {icon:'📊',name:'評分解碼器',desc:'02 · 得分要點',file:'haina/chi/02-chi-scoring-decoder.html'},
+        {icon:'🔄',name:'翻譯評分',desc:'03 · 語譯練習',file:'haina/chi/03-chi-translation-scorer.html'},
+        {icon:'📝',name:'公式填充',desc:'04 · 答題框架',file:'haina/chi/04-chi-formula-fill.html'},
+        {icon:'⚔️',name:'議論修羅場',desc:'05 · 議論文訓練',file:'haina/chi/05-chi-argue-gauntlet.html'},
+        {icon:'✅',name:'格式檢查表',desc:'06 · 實用文格式',file:'haina/chi/06-chi-format-checklist.html'},
+        {icon:'✍️',name:'實用文實戰',desc:'07 · 寫作訓練',file:'haina/chi/07-ch-practical-writing-combat-haina.html'}
+      ]},
+      english:{tools:[
+        {icon:'📘',name:'English 總覽',desc:'01 · 考試重點',file:'haina/english/01-eng_overview.html'},
+        {icon:'🔤',name:'Grammar Drill',desc:'02 · 語法操練',file:'haina/english/02-eng-grammar-drill.html'},
+        {icon:'📚',name:'Vocab 詞彙',desc:'03 · 詞彙表',file:'haina/english/03-eng-vocab-haina.html'},
+        {icon:'🔄',name:'Word Form 詞形',desc:'04 · 詞形變化',file:'haina/english/04-eng-wordform.html'},
+        {icon:'📖',name:'Reading Guide',desc:'05 · 閱讀攻略',file:'haina/english/05-eng-reading-guide.html'}
+      ]},
+      maths:{tools:[
+        {icon:'📊',name:'數學總覽',desc:'01 · 考試範圍',file:'haina/maths/01-maths-overview.html'},
+        {icon:'🎲',name:'骰子期望值',desc:'02 · 概率',file:'haina/maths/02-maths_diceexpectedvalue.html'}
+      ]},
+      physics:{tools:[
+        {icon:'⚛️',name:'物理總複習',desc:'01 · 考試重點',file:'haina/physics/01-phy-review-overview.html'},
+        {icon:'🔍',name:'透鏡 Workshop',desc:'02 · 光學練習',file:'haina/physics/02-phy-lens-workshop-drill.html'}
+      ]},
+      chemistry:{tools:[
+        {icon:'📅',name:'化學總覽',desc:'01 · 系統進度',file:'haina/chemistry/01-chem-overview.html'},
+        {icon:'🃏',name:'陽離子陰離子閃卡',desc:'02 · Cations & Anions',file:'haina/chemistry/02-chem-flashcards_cationsanions-haina.html'},
+        {icon:'🧪',name:'離子記憶攻略',desc:'03 · 記憶技巧',file:'haina/chemistry/03-chem-ations-Anions.html'},
+        {icon:'⚖️',name:'方程式訓練',desc:'04 · 化學方程',file:'haina/chemistry/04-chem-equation-trainer.html'},
+        {icon:'⚡',name:'MCQ Blitz',desc:'05 · 選擇題閃電戰',file:'haina/chemistry/05-chem-mcq-blitz.html'},
+        {icon:'🎯',name:'陷阱題 Killer',desc:'06 · 易錯題',file:'haina/chemistry/06-chem-trap-killer.html'},
+        {icon:'✅',name:'答題 Right',desc:'07 · 答題策略',file:'haina/chemistry/07-chem-answer-right.html'}
+      ]},
+      biology:{tools:[
+        {icon:'🔬',name:'Biology 總覽',desc:'01 · 考試範圍',file:'haina/biology/01-biology-overview.html'},
+        {icon:'🃏',name:'Bio Flashcards',desc:'02 · 記憶閃卡',file:'haina/biology/02-bio-flashcards.html'},
+        {icon:'🧪',name:'Food Test Lab A',desc:'03 · 實驗精要 A',file:'haina/biology/0301-bio-foodtest-lab0512.html'},
+        {icon:'🧪',name:'Food Test Lab B',desc:'03 · 實驗精要 B',file:'haina/biology/0302-bio-foodtest-lab.html'},
+        {icon:'⚔️',name:'生物競技場',desc:'04 · 綜合練習',file:'haina/biology/04-bio-arena-haina.html'},
+        {icon:'🧱',name:'生物牆',desc:'05 · 知識梳理',file:'haina/biology/05-bio-biowall-haina.html'},
+        {icon:'💊',name:'營養缺乏症',desc:'06 · Deficiency',file:'haina/biology/06-bio-deficiency-haina.html'},
+        {icon:'🧬',name:'DNA 解碼器',desc:'07 · 基因入門',file:'haina/biology/07-bio-dna-decoder.html'},
+        {icon:'🔬',name:'DNA Lab',desc:'08 · 實驗模擬',file:'haina/biology/08-bio-dna-lab-haina.html'},
+        {icon:'⏳',name:'免疫時間線',desc:'09 · 免疫系統',file:'haina/biology/09-bio-immune-timeline.html'},
+        {icon:'👣',name:'Step Master',desc:'10 · 步驟精熟',file:'haina/biology/10-bio-stepmaster-haina.html'}
+      ]},
+      history:{tools:[
+        {icon:'📜',name:'History 總覽',desc:'01 · 考試重點',file:'haina/history/01-s3-history-exam-overview.html'},
+        {icon:'📝',name:'DBQ Trainer',desc:'02 · 資料題訓練',file:'haina/history/02-s3-history-dbq-trainer.html'},
+        {icon:'⏳',name:'Time Sense',desc:'03 · 時間線',file:'haina/history/03-s3-history-time-sense.html'},
+        {icon:'🔗',name:'Concept Match',desc:'04 · 概念配對',file:'haina/history/04-s3-history-concept-match.html'},
+        {icon:'✍️',name:'Essay Trainer',desc:'05 · 論述題訓練',file:'haina/history/05-s3-history-essay-trainer.html'},
+        {icon:'🎯',name:'MC Trainer',desc:'06 · 選擇題訓練',file:'haina/history/06-s3-history-mc-trainer.html'}
+      ]},
+      chist:{tools:[
+        {icon:'🏛️',name:'中史總覽',desc:'01 · 考試範圍',file:'haina/chist/01-chist-overview.html'},
+        {icon:'🗺️',name:'Fill-in Map',desc:'02 · 地圖填充',file:'haina/chist/02-chist-fillin-map.html'},
+        {icon:'⏳',name:'Timeline Sort',desc:'03 · 時間排序',file:'haina/chist/03-chist-timeline-sort.html'},
+        {icon:'👥',name:'People Match',desc:'04 · 人物配對',file:'haina/chist/04-chist-people-match.html'},
+        {icon:'🃏',name:'辯證卡',desc:'05 · 辨析卡片',file:'haina/chist/05-chist-bianzheng-cards.html'},
+        {icon:'📝',name:'Data Response',desc:'06 · 資料題',file:'haina/chist/06-chist-data-response-guide.html'},
+        {icon:'✍️',name:'Essay Guide',desc:'07 · 論述題',file:'haina/chist/07-chist-essay-guide.html'}
+      ]},
+      geography:{tools:[
+        {icon:'🌍',name:'Geography 總覽',desc:'01 · 考試重點',file:'haina/geography/01-geog-exam-overview.html'},
+        {icon:'🃏',name:'Glossary 閃卡',desc:'02 · 詞彙記憶',file:'haina/geography/02-geog-glossary-flashcards.html'},
+        {icon:'🔧',name:'Skills Workbench',desc:'03 · 技能操練',file:'haina/geography/03-geog-skills-workbench.html'},
+        {icon:'🗺️',name:'Map Skills Drill',desc:'04 · 地圖閱讀',file:'haina/geography/04-geog-map-skills-drill.html'},
+        {icon:'📝',name:'PEEL 段落架構',desc:'05 · 寫作框架',file:'haina/geography/05-geog-peel-paragraph-architect.html'}
+      ]}
+    }
+  },
+  {
+    key:'yourong', name:'有容', grade:'F3', emoji:'🟢', css:'yr',
+    note:'荃灣官立中學 · 綠色',
+    subjects:{
+      chi:{tools:[
+        {icon:'📖',name:'中文總覽',desc:'01 · 考試範圍',file:'yourong/chi/01-chi-overview-20260515.html'},
+        {icon:'📊',name:'評分解碼器',desc:'02 · 得分要點',file:'yourong/chi/02-chi-scoring-decoder.html'},
+        {icon:'🔄',name:'翻譯評分',desc:'03 · 語譯練習',file:'yourong/chi/03-chi-translation-scorer.html'},
+        {icon:'📝',name:'公式填充',desc:'04 · 答題框架',file:'yourong/chi/04-chi-formula-fill.html'},
+        {icon:'⚔️',name:'議論修羅場',desc:'05 · 議論文訓練',file:'yourong/chi/05-chi-argue-gauntlet.html'},
+        {icon:'✅',name:'格式檢查表',desc:'06 · 實用文格式',file:'yourong/chi/06-chi-format-checklist.html'},
+        {icon:'✍️',name:'實用文實戰',desc:'07 · 寫作訓練',file:'yourong/chi/07-ch-practical-writing-combat-yourong.html'}
+      ]},
+      english:{tools:[
+        {icon:'📘',name:'English 總覽',desc:'01 · 考試重點',file:'yourong/english/01-eng_overview.html'},
+        {icon:'🔤',name:'Grammar Drill',desc:'02 · 語法操練',file:'yourong/english/02-eng-grammar-drill.html'},
+        {icon:'📚',name:'Vocab 詞彙',desc:'03 · 詞彙表',file:'yourong/english/03-eng-vocab-yourong.html'},
+        {icon:'🔄',name:'Word Form',desc:'04 · 詞形變化',file:'yourong/english/04-eng-wordform.html'},
+        {icon:'📖',name:'Reading Guide',desc:'05 · 閱讀攻略',file:'yourong/english/05-eng-reading-guide.html'}
+      ]},
+      maths:{tools:[
+        {icon:'📊',name:'數學總覽',desc:'01 · 考試範圍',file:'yourong/maths/01-maths-overview.html'},
+        {icon:'📝',name:'代數 Drill',desc:'02 · 代數練習',file:'yourong/maths/02-maths-algebra-drill.html'},
+        {icon:'📐',name:'Sine/Cosine Drill',desc:'03 · 三角練習',file:'yourong/maths/03-maths-sine-cosine-drill.html'},
+        {icon:'🎲',name:'Expected Values',desc:'04 · 期望值',file:'yourong/maths/04-maths-expectedValues.html'},
+        {icon:'🎲',name:'骰子期望值',desc:'05 · 概率',file:'yourong/maths/05-maths_diceexpectedvalue.html'}
+      ]},
+      physics:{tools:[
+        {icon:'⚛️',name:'物理總複習',desc:'01 · 考試重點',file:'yourong/physics/01-phy-review-overview.html'},
+        {icon:'🔍',name:'透鏡 Workshop',desc:'02 · 光學練習',file:'yourong/physics/02-phy-lens-workshop-drill.html'}
+      ]},
+      chemistry:{tools:[
+        {icon:'📅',name:'化學總覽',desc:'01 · 考試範圍',file:'yourong/chemistry/01-chem-overview.html'},
+        {icon:'🧪',name:'Cations & Anions',desc:'02 · 離子記憶',file:'yourong/chemistry/02-chem-cations_anions.html'},
+        {icon:'⚡',name:'Electrolytes 三問',desc:'03 · 電解質',file:'yourong/chemistry/03-chem-electrolytes-yourong.html'},
+        {icon:'⚖️',name:'方程式訓練',desc:'04 · 化學方程',file:'yourong/chemistry/04-chem-equation-trainer.html'},
+        {icon:'🃏',name:'離子閃卡',desc:'05 · Flashcards',file:'yourong/chemistry/05-chem-flashcards_cationsanions.html'},
+        {icon:'⚡',name:'MCQ Blitz',desc:'06 · 選擇題',file:'yourong/chemistry/06-chem-mcq-blitz.html'},
+        {icon:'✅',name:'答題 Right',desc:'07 · 答題策略',file:'yourong/chemistry/07-chem-answer-right.html'},
+        {icon:'🎯',name:'陷阱題 Killer',desc:'08 · 易錯題',file:'yourong/chemistry/08-chem-trap-killer.html'},
+        {icon:'🔤',name:'NH₃/NH₄⁺ 規範',desc:'09 · 下標上標',file:'yourong/chemistry/09-chem-NH3-NH4.html'}
+      ]},
+      biology:{tools:[
+        {icon:'🔬',name:'Biology 總覽',desc:'01 · 考試範圍',file:'yourong/biology/01-biology-overview.html'},
+        {icon:'🃏',name:'Bio Flashcards',desc:'02 · 記憶閃卡',file:'yourong/biology/02-bio-flashcards.html'},
+        {icon:'🧪',name:'Food Test Lab A',desc:'03 · 實驗精要 A',file:'yourong/biology/0301-bio-foodtest-lab0512.html'},
+        {icon:'🧪',name:'Food Test Lab B',desc:'03 · 實驗精要 B',file:'yourong/biology/0302-bio-foodtest-lab.html'},
+        {icon:'⚔️',name:'生物競技場',desc:'04 · 綜合練習',file:'yourong/biology/04-bio-arena-yourong.html'},
+        {icon:'🧱',name:'生物牆',desc:'05 · 知識梳理',file:'yourong/biology/05-bio-biowall-yourong.html'},
+        {icon:'💊',name:'營養缺乏症',desc:'06 · Deficiency',file:'yourong/biology/06-bio-deficiency-yourong.html'},
+        {icon:'🧬',name:'DNA 解碼器',desc:'07 · 基因入門',file:'yourong/biology/07-bio-dna-decoder-yourong.html'},
+        {icon:'🔬',name:'DNA Lab',desc:'08 · 實驗模擬',file:'yourong/biology/08-bio-dna-lab-yourong.html'},
+        {icon:'⏳',name:'免疫時間線',desc:'09 · 免疫系統',file:'yourong/biology/09-bio-immune-timeline-yourong.html'},
+        {icon:'👣',name:'Step Master',desc:'10 · 步驟精熟',file:'yourong/biology/10-bio-stepmaster-yourong.html'}
+      ]},
+      history:{tools:[
+        {icon:'📜',name:'History 總覽',desc:'01 · 考試重點',file:'yourong/history/01-s3-history-exam-overview.html'},
+        {icon:'📝',name:'DBQ Trainer',desc:'02 · 資料題訓練',file:'yourong/history/02-s3-history-dbq-trainer.html'},
+        {icon:'⏳',name:'Time Sense',desc:'03 · 時間線',file:'yourong/history/03-s3-history-time-sense.html'},
+        {icon:'🔗',name:'Concept Match',desc:'04 · 概念配對',file:'yourong/history/04-s3-history-concept-match.html'},
+        {icon:'✍️',name:'Essay Trainer',desc:'05 · 論述題訓練',file:'yourong/history/05-s3-history-essay-trainer.html'},
+        {icon:'🎯',name:'MC Trainer',desc:'06 · 選擇題訓練',file:'yourong/history/06-s3-history-mc-trainer.html'}
+      ]},
+      Chist:{tools:[
+        {icon:'🏛️',name:'中史總覽',desc:'01 · 考試範圍',file:'yourong/Chist/01-chist-overview.html'},
+        {icon:'🗺️',name:'Fill-in Map',desc:'02 · 地圖填充',file:'yourong/Chist/02-chist-fillin-map.html'},
+        {icon:'⏳',name:'Timeline Sort',desc:'03 · 時間排序',file:'yourong/Chist/03-chist-timeline-sort.html'},
+        {icon:'👥',name:'People Match',desc:'04 · 人物配對',file:'yourong/Chist/04-chist-people-match.html'},
+        {icon:'🃏',name:'辯證卡',desc:'05 · 辨析卡片',file:'yourong/Chist/05-chist-bianzheng-cards.html'},
+        {icon:'📝',name:'Data Response',desc:'06 · 資料題',file:'yourong/Chist/06-chist-data-response-guide.html'},
+        {icon:'✍️',name:'Essay Guide',desc:'07 · 論述題',file:'yourong/Chist/07-chist-essay-guide.html'}
+      ]},
+      geography:{tools:[
+        {icon:'🌍',name:'Geography 總覽',desc:'01 · 考試重點',file:'yourong/geography/01-geog-exam-overview.html'},
+        {icon:'🃏',name:'Glossary 閃卡',desc:'02 · 詞彙記憶',file:'yourong/geography/02-geog-glossary-flashcards.html'},
+        {icon:'🔧',name:'Skills Workbench',desc:'03 · 技能操練',file:'yourong/geography/03-geog-skills-workbench.html'},
+        {icon:'🗺️',name:'Map Skills Drill',desc:'04 · 地圖閱讀',file:'yourong/geography/04-geog-map-skills-drill.html'},
+        {icon:'📝',name:'PEEL 段落架構',desc:'05 · 寫作框架',file:'yourong/geography/05-geog-peel-paragraph-architect.html'}
+      ]}
+    }
+  }
+];
 
 let historyStack = ['home'];
 let currentKid = null;
 let currentSubject = null;
 
-// ============================================================
-// Render
-// ============================================================
 function renderHome(){
   const grid = document.getElementById('kidGrid');
   grid.innerHTML = '';
   KIDS.forEach(kid => {
     const totalTools = Object.values(kid.subjects)
-      .reduce((sum,s)=>sum + s.tools.filter(t=>!t.coming).length, 0);
+      .reduce((sum,s) => sum + s.tools.filter(t => !t.coming).length, 0);
     const card = document.createElement('div');
     card.className = `kid-card ${kid.css}`;
     card.innerHTML = `
@@ -252,7 +422,7 @@ function renderHome(){
         <span class="arrow">→</span>
       </div>
     `;
-    card.onclick = ()=>{navigateToSubjects(kid);};
+    card.onclick = () => { navigateToSubjects(kid); };
     grid.appendChild(card);
   });
 }
@@ -268,7 +438,7 @@ function renderSubjects(kid, noPush){
   grid.innerHTML = '';
   for(const skey in kid.subjects){
     const subj = kid.subjects[skey];
-    const avail = subj.tools.filter(t=>!t.coming).length;
+    const avail = subj.tools.filter(t => !t.coming).length;
     const total = subj.tools.length;
     const card = document.createElement('div');
     card.className = 'subj-card';
@@ -277,7 +447,7 @@ function renderSubjects(kid, noPush){
       <div class="s-name">${SUBJECT_NAMES[skey]||skey}</div>
       <div class="s-count">${avail}/${total} 可用</div>
     `;
-    card.onclick = ()=>{navigateToTools(kid,skey);};
+    card.onclick = () => { navigateToTools(kid,skey); };
     grid.appendChild(card);
   }
   showPage('subjects');
@@ -291,14 +461,14 @@ function renderTools(kid,subjKey, noPush){
   h.innerHTML = `
     <div class="emoji-lg">${ICONS[subjKey]||'📁'}</div>
     <h2>${SUBJECT_NAMES[subjKey]||subjKey}</h2>
-    <div class="sub">${kid.name} · ${kid.grade}</div>
+    <div class="sub">${subj.tools.length} 個工具</div>
   `;
   const list = document.getElementById('toolList');
   list.innerHTML = '';
   if(!subj.tools.length){
     list.innerHTML = '<div class="empty-state"><div class="e-icon">🔧</div>暫無工具，敬請期待</div>';
   } else {
-    subj.tools.forEach(t=>{
+    subj.tools.forEach(t => {
       const item = document.createElement('div');
       item.className = `tool-item${t.coming?' coming':''}`;
       item.innerHTML = `
@@ -310,7 +480,7 @@ function renderTools(kid,subjKey, noPush){
         <span class="t-arrow">${t.coming?'':'→'}</span>
       `;
       if(!t.coming){
-        item.onclick = ()=>{ window.open(t.file||'index.html','_blank'); };
+        item.onclick = () => { window.open(t.file||'index.html','_blank'); };
       }
       list.appendChild(item);
     });
@@ -319,20 +489,15 @@ function renderTools(kid,subjKey, noPush){
   if(!noPush) historyStack.push('tools');
 }
 
-// ============================================================
-// Navigation
-// ============================================================
 function navigateToSubjects(kid){
   currentKid = kid;
   renderSubjects(kid);
 }
-
 function navigateToTools(kid,subjKey){
   currentKid = kid;
   currentSubject = subjKey;
   renderTools(kid,subjKey);
 }
-
 function goBack(){
   if(historyStack.length<=1) return;
   historyStack.pop();
@@ -346,15 +511,10 @@ function goBack(){
     renderTools(currentKid,currentSubject, true);
   }
 }
-
 function showPage(id){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-'+id).classList.add('active');
 }
-
-// ============================================================
-// Init
-// ============================================================
 renderHome();
 </script>
 </body>
