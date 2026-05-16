@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>多多呈分試 · 便條寫作 · 格式教學與練習</title>
+<style>
+:root{--bg:#fafaf9;--card:#fff;--text:#1a1a1a;--t2:#555;--border:#e5e5e3;--accent:#b45309;--r:10px;--sh:0 1px 3px rgba(0,0,0,0.06);--font:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Microsoft JhengHei",sans-serif}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.75}
+.header{background:var(--card);border-bottom:1px solid var(--border);padding:1.2rem 1rem 0.6rem;text-align:center;position:sticky;top:0;z-index:50;backdrop-filter:blur(8px)}
+.header h1{font-size:1.3rem;font-weight:700}.header .sub{font-size:0.76rem;color:var(--t2)}
+.utabs{display:flex;justify-content:center;gap:0.2rem;margin-top:0.5rem;flex-wrap:wrap}
+.utabs button{font-family:var(--font);font-size:0.78rem;font-weight:600;padding:0.35rem 0.8rem;border:2px solid var(--border);background:var(--card);border-radius:999px;cursor:pointer;color:var(--t2)}
+.utabs button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.container{max-width:880px;margin:0 auto;padding:1rem 1rem 3rem}
+.page{display:none}.page.active{display:block}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:1.3rem;margin-bottom:0.85rem;box-shadow:var(--sh)}
+.card h2{font-size:1.05rem;font-weight:700;margin-bottom:0.3rem}
+.card h3{font-size:0.92rem;font-weight:700;margin:0.7rem 0 0.3rem;padding-top:0.5rem;border-top:1px solid var(--border)}
+.card h3:first-of-type{border-top:none;padding-top:0;margin-top:0}
+.ins{background:#fefce8;border:1px solid #fde68a;border-radius:var(--r);padding:0.7rem 0.9rem;margin-bottom:0.8rem;font-size:0.84rem;line-height:1.7}
+.badge{display:inline-block;font-size:0.65rem;font-weight:700;padding:0.1rem 0.45rem;border-radius:999px;margin-right:0.3rem}
+.b-r{background:#fef2f2;color:#dc2626}.b-b{background:#eff6ff;color:#2563eb}.b-g{background:#f0fdf4;color:#16a34a}
+
+/* ═══ FORMAT DIAGRAM ═══ */
+.fmt-box{position:relative;border:2px dashed #94a3b8;border-radius:var(--r);padding:1.5rem 1.2rem 1rem;max-width:420px;margin:0.6rem auto;background:#fefce8;font-family:var(--font);line-height:2}
+.fmt-box .fm-date{position:absolute;top:0.6rem;right:0.8rem;font-size:0.85rem;color:var(--t2)}
+.fmt-box .fm-name{font-size:0.95rem;font-weight:600;margin-bottom:0.3rem}
+.fmt-box .fm-body{margin-left:2rem;font-size:0.9rem;margin-bottom:0.5rem}
+.fmt-box .fm-sign{text-align:right;font-size:0.85rem;margin-top:0.4rem}
+.fmt-box .fm-sigdate{text-align:right;font-size:0.8rem;color:var(--t2)}
+.fmt-annot{display:flex;flex-wrap:wrap;gap:0.4rem;margin:0.5rem 0;font-size:0.78rem}
+.fmt-annot span{background:#f1f5f9;border:1px solid #e2e8f0;border-radius:5px;padding:0.15rem 0.5rem}
+
+/* ═══ COMPARISON TABLE ═══ */
+.tbl{overflow-x:auto;margin:0.4rem 0}
+.tbl table{width:100%;border-collapse:collapse;font-size:0.84rem}
+.tbl th,.tbl td{padding:0.4rem 0.55rem;border-bottom:1px solid var(--border);text-align:left;vertical-align:top}
+.tbl th{font-weight:600;font-size:0.74rem;color:var(--t2);background:#fafaf9}
+.tbl tr:last-child td{border-bottom:none}
+
+/* ═══ EXAMPLE + EXERCISE ═══ */
+.example-box{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:0.8rem 1rem;margin:0.4rem 0;font-size:0.88rem;line-height:2}
+.exercise-box{background:#f8fafc;border:1px solid var(--border);border-radius:8px;padding:0.8rem 1rem;margin:0.4rem 0;font-size:0.88rem;line-height:2}
+.exercise-box .bl{display:inline-block;min-width:5rem;border-bottom:2px dotted #94a3b8;margin:0 0.1rem}
+.atoggle{font-family:var(--font);font-size:0.78rem;font-weight:600;padding:0.35rem 0.8rem;border:1px solid var(--border);background:var(--card);border-radius:999px;cursor:pointer;margin-top:0.5rem;color:var(--t2);display:inline-block}
+.atoggle:hover{background:#f1f5f9}
+.abox{display:none;margin-top:0.4rem}.abox.show{display:block}
+.abox .ans-note{font-size:0.8rem;color:var(--t2);margin-top:0.3rem}
+
+/* ═══ CHECKLIST ═══ */
+.chk{list-style:none;padding:0;font-size:0.88rem;line-height:2.2}
+.chk li::before{content:'☐ ';font-size:1.1rem;margin-right:0.4rem;color:var(--accent)}
+
+.footer{text-align:center;color:#999;font-size:0.7rem;padding:2rem 0 1rem}
+@media print{.header{position:static;border-bottom:2px solid #000}.utabs,.atoggle{display:none}.abox{display:block!important}.page{display:block!important;page-break-before:always}.page:first-of-type{page-break-before:avoid}.card{box-shadow:none;border:1px solid #ccc;page-break-inside:avoid}body{background:#fff;font-size:10pt}.container{max-width:100%;padding:0}}
+@media(max-width:600px){.header{padding:0.8rem 0.5rem 0.5rem}.header h1{font-size:1.1rem}.card{padding:1rem}.fmt-box{max-width:100%}}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>多多呈分試 · 便條寫作</h1>
+  <p class="sub">教育局《中小學中文實用寫作參考資料》指引 · 迦密愛禮信小學</p>
+  <div class="utabs">
+    <button class="active" onclick="switchPage('format',this)">📖 格式教學</button>
+    <button onclick="switchPage('practice',this)">✏️ 範例 + 練習</button>
+    <button onclick="switchPage('mark',this)">📋 評分指引</button>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- ═══════════════════════════════════════════ -->
+<!--  PAGE 1: 格式教學                           -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="page active" id="page-format">
+
+<div class="ins">
+  <strong>📌 教育局指引：</strong>「便條的最大特點就是簡約方便。內文只需要寫明<strong>受文者姓名、正文、發文者姓名以及日期</strong>。語言應該盡量簡潔……不用客套，不拘形式。」<br>
+  ——教育署《中小學中文實用寫作參考資料（試用）》
+</div>
+
+<!-- ═══ 四要素圖 ═══ -->
+<div class="card">
+  <h2><span class="badge b-r">①</span> 便條四要素（格式圖解）</h2>
+  <div class="fmt-box">
+    <span class="fm-date">6月4日</span>
+    <div class="fm-name">陳老師：</div>
+    <div class="fm-body">我因為發燒，今天不能上學，特此請假一天。</div>
+    <div class="fm-sign">學生</div>
+    <div class="fm-sigdate">李小文 謹上</div>
+    <div class="fm-sigdate">即日</div>
+  </div>
+  <div class="fmt-annot">
+    <span>❶ 日期：右上角</span>
+    <span>❷ 稱呼：頂格 + 冒號</span>
+    <span>❸ 正文：空兩格，簡潔直接</span>
+    <span>❹ 署名：右下角 + 日期</span>
+  </div>
+
+  <h3>⚠️ 便條 vs 書信（關鍵區別）</h3>
+  <div class="tbl"><table>
+    <tr><th></th><th>便條</th><th>書信</th></tr>
+    <tr><td>祝頌語</td><td style="color:#dc2626;font-weight:700">❌ 不需要</td><td>✅ 需要（「此致 敬禮」等）</td></tr>
+    <tr><td>啟事語</td><td style="color:#dc2626;font-weight:700">❌ 不需要</td><td>✅ 需要（「敬啟者」等）</td></tr>
+    <tr><td>語言風格</td><td>簡潔直接，不用客套</td><td>較正式，需考慮收信人身份</td></tr>
+    <tr><td>日期</td><td>可簡化為「即日」</td><td>必須完整日期</td></tr>
+    <tr><td>傳遞方式</td><td>留交或轉送，不用信封</td><td>郵寄，需信封</td></tr>
+  </table></div>
+  <p style="font-size:0.8rem;color:#dc2626;margin-top:0.3rem"><strong>⚠️ 多多最易錯：把便條寫成書信！加了「此致 敬禮」會扣格式分。</strong></p>
+</div>
+
+<!-- ═══ 六種類型模板 ═══ -->
+<div class="card">
+  <h2><span class="badge b-b">②</span> 六種考試類型 · 格式模板</h2>
+
+  <h3>🟢 請假便條</h3>
+  <p style="font-size:0.82rem;color:var(--t2)">用途：向上級（老師/上司）請假。語氣需禮貌。</p>
+  <div style="background:#f8fafc;border:1px solid var(--border);border-radius:6px;padding:0.6rem 0.9rem;font-size:0.84rem;line-height:2">
+    日期：「X月X日」<br>
+    稱呼：「XX老師：」<br>
+    正文：說明請假原因 + 請假時間 + 致歉（可選「特此請假」「敬請批准」）<br>
+    署名：「學生 XXX」+「即日」
+  </div>
+
+  <h3>🟡 留言便條</h3>
+  <p style="font-size:0.82rem;color:var(--t2)">用途：給家人/朋友留訊息。語氣隨意，最簡短。</p>
+  <div style="background:#f8fafc;border:1px solid var(--border);border-radius:6px;padding:0.6rem 0.9rem;font-size:0.84rem;line-height:2">
+    日期：可寫時間（「下午三時」）或「即日」<br>
+    稱呼：直呼其名（「媽媽：」「小明：」）<br>
+    正文：直接交代事項，一兩句即可<br>
+    署名：名字即可，日期可省
+  </div>
+
+  <h3>🔵 邀約便條</h3>
+  <p style="font-size:0.82rem;color:var(--t2)">用途：邀請朋友參加活動。需寫明時間、地點、活動。</p>
+  <div style="background:#f8fafc;border:1px solid var(--border);border-radius:6px;padding:0.6rem 0.9rem;font-size:0.84rem;line-height:2">
+    正文三要素：① 活動是什麼 ② 時間地點 ③ 邀請語（「你能來嗎？」）<br>
+    常用句式：「我想邀請你……」「如果你有空……」
+  </div>
+
+  <h3>🟠 道歉便條</h3>
+  <p style="font-size:0.82rem;color:var(--t2)">用途：為某事道歉。需寫明原因 + 表達歉意。</p>
+  <div style="background:#f8fafc;border:1px solid var(--border);border-radius:6px;padding:0.6rem 0.9rem;font-size:0.84rem;line-height:2">
+    正文：① 道歉（「很抱歉/對不起」）② 原因 ③ 補救/承諾<br>
+    常用句式：「真的很抱歉……」「我以後會注意……」
+  </div>
+
+  <h3>🟣 感謝便條</h3>
+  <p style="font-size:0.82rem;color:var(--t2)">用途：感謝別人的幫助或禮物。</p>
+  <div style="background:#f8fafc;border:1px solid var(--border);border-radius:6px;padding:0.6rem 0.9rem;font-size:0.84rem;line-height:2">
+    正文：① 感謝什麼 ② 為什麼感動/開心 ③ 再次感謝<br>
+    常用句式：「非常感謝你……」「我很喜歡……」
+  </div>
+
+  <h3>🔴 回覆便條</h3>
+  <p style="font-size:0.82rem;color:var(--t2)">用途：回覆別人的便條。需先提及收到對方的便條。</p>
+  <div style="background:#f8fafc;border:1px solid var(--border);border-radius:6px;padding:0.6rem 0.9rem;font-size:0.84rem;line-height:2">
+    正文：① 提及收到便條 ② 回覆內容 ③ 可加追問<br>
+    常用句式：「收到你的便條了……」「關於你提到的事……」
+  </div>
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!--  PAGE 2: 範例 + 練習                       -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="page" id="page-practice">
+
+<div class="ins">
+  <strong>📌 六種類型 ×（1範例 + 1練習）= 共12題</strong> · 答案可點擊顯示
+</div>
+
+<!-- ═══ 請假 ═══ -->
+<div class="card">
+  <h2><span class="badge b-r">① 請假便條</span></h2>
+  <h3>📌 範例：發燒請假</h3>
+  <div class="example-box">
+    <div style="text-align:right;font-size:0.82rem">6月4日</div>
+    <div><strong>陳老師：</strong></div>
+    <div style="margin-left:2rem">我因為發燒，今天不能上學，特此請假一天。如明天退燒，會準時回校上課。</div>
+    <div style="text-align:right;margin-top:0.4rem">學生<br>李小文<br>即日</div>
+  </div>
+  <h3>✏️ 練習：看牙醫請假半天</h3>
+  <p style="font-size:0.8rem;color:var(--t2)">情境：你明天（6月5日）上午要去看牙醫，須請假半天。請寫便條給陳老師。</p>
+  <div class="exercise-box">
+    <p><span class="bl" style="min-width:5rem"></span></p>
+    <p><span class="bl" style="min-width:5rem"></span></p>
+    <p style="margin-left:2rem"><span class="bl" style="min-width:15rem"></span></p>
+    <p style="text-align:right"><span class="bl" style="min-width:5rem"></span></p>
+    <p style="text-align:right"><span class="bl" style="min-width:5rem"></span></p>
+  </div>
+  <span class="atoggle" onclick="toggleA(this)">顯示參考答案</span>
+  <div class="abox">
+    <div class="example-box">
+      <div style="text-align:right;font-size:0.82rem">6月5日</div>
+      <div><strong>陳老師：</strong></div>
+      <div style="margin-left:2rem">我明天上午要去看牙醫，須請假半天，下午會準時回校上課。敬請批准。</div>
+      <div style="text-align:right;margin-top:0.4rem">學生<br>李小文<br>即日</div>
+    </div>
+    <p class="ans-note">✅ 格式要點：右上角日期、稱呼頂格、正文空兩格、署名右下角。沒有祝頌語。</p>
+  </div>
+</div>
+
+<!-- ═══ 留言 ═══ -->
+<div class="card">
+  <h2><span class="badge b-r">② 留言便條</span></h2>
+  <h3>📌 範例：放學後遲歸</h3>
+  <div class="example-box">
+    <div style="text-align:right;font-size:0.82rem">下午三時</div>
+    <div><strong>媽媽：</strong></div>
+    <div style="margin-left:2rem">我今天放學後要留下來練習話劇，大約五時才回家，請不用擔心。</div>
+    <div style="text-align:right;margin-top:0.4rem">小文</div>
+  </div>
+  <h3>✏️ 練習：去同學家做功課</h3>
+  <p style="font-size:0.8rem;color:var(--t2)">情境：放學後你要去同學小明家一起做功課，晚上七時前回家。留便條給媽媽。</p>
+  <div class="exercise-box">
+    <p><span class="bl" style="min-width:5rem"></span></p>
+    <p><span class="bl" style="min-width:5rem"></span></p>
+    <p style="margin-left:2rem"><span class="bl" style="min-width:15rem"></span></p>
+    <p style="text-align:right"><span class="bl" style="min-width:5rem"></span></p>
+  </div>
+  <span class="atoggle" onclick="toggleA(this)">顯示參考答案</span>
+  <div class="abox">
+    <div class="example-box">
+      <div style="text-align:right;font-size:0.82rem">下午四時</div>
+      <div><strong>媽媽：</strong></div>
+      <div style="margin-left:2rem">我放學後去了小明家一起做功課，晚上七時前回家。不用擔心！</div>
+      <div style="text-align:right;margin-top:0.4rem">小文</div>
+    </div>
+    <p class="ans-note">✅ 留言便條最簡短，日期可寫時間。不必署名+日期雙行。</p>
+  </div>
+</div>
+
+<!-- ═══ 邀約 ═══ -->
+<div class="card">
+  <h2><span class="badge b-r">③ 邀約便條</span></h2>
+  <h3>📌 範例：邀請看電影</h3>
+  <div class="example-box">
+    <div style="text-align:right;font-size:0.82rem">6月3日</div>
+    <div><strong>小明：</strong></div>
+    <div style="margin-left:2rem">這個星期六下午二時，我想邀請你一起去旺角看電影。如果你有空的話，請回覆我。希望你能來！</div>
+    <div style="text-align:right;margin-top:0.4rem">小文<br>即日</div>
+  </div>
+  <h3>✏️ 練習：邀請去圖書館</h3>
+  <p style="font-size:0.8rem;color:var(--t2)">情境：你想邀請同學小美在星期日上午十時一起去中央圖書館溫習。寫便條給她。</p>
+  <div class="exercise-box">
+    <p><span class="bl" style="min-width:5rem"></span></p>
+    <p><span class="bl" style="min-width:5rem"></span></p>
+    <p style="margin-left:2rem"><span class="bl" style="min-width:15rem"></span></p>
+    <p style="text-align:right"><span class="bl" style="min-width:5rem"></span></p>
+  </div>
+  <span class="atoggle" onclick="toggleA(this)">顯示參考答案</span>
+  <div class="abox">
+    <div class="example-box">
+      <div style="text-align:right;font-size:0.82rem">6月5日</div>
+      <div><strong>小美：</strong></div>
+      <div style="margin-left:2rem">這個星期日上午十時，我想邀請你一起去中央圖書館溫習。如果你有空的話，請回覆我。希望你能來！</div>
+      <div style="text-align:right;margin-top:0.4rem">小文<br>即日</div>
+    </div>
+    <p class="ans-note">✅ 邀約三要素：活動 + 時間地點 + 邀請語。時間必須明確。</p>
+  </div>
+</div>
+
+<!-- ═══ 道歉 ═══ -->
+<div class="card">
+  <h2><span class="badge b-r">④ 道歉便條</span></h2>
+  <h3>📌 範例：弄壞同學的筆</h3>
+  <div class="example-box">
+    <div style="text-align:right;font-size:0.82rem">6月4日</div>
+    <div><strong>志明：</strong></div>
+    <div style="margin-left:2rem">真的很抱歉，我今天不小心把你的原子筆弄壞了。我明天會買一枝新的還給你，請原諒我。</div>
+    <div style="text-align:right;margin-top:0.4rem">小文<br>即日</div>
+  </div>
+  <h3>✏️ 練習：忘記還書</h3>
+  <p style="font-size:0.8rem;color:var(--t2)">情境：你答應借書給同學小欣，但忘記了帶回學校。寫道歉便條給她。</p>
+  <div class="exercise-box">
+    <p><span class="bl" style="min-width:5rem"></span></p>
+    <p><span class="bl" style="min-width:5rem"></span></p>
+    <p style="margin-left:2rem"><span class="bl" style="min-width:15rem"></span></p>
+    <p style="text-align:right"><span class="bl" style="min-width:5rem"></span></p>
+  </div>
+  <span class="atoggle" onclick="toggleA(this)">顯示參考答案</span>
+  <div class="abox">
+    <div class="example-box">
+      <div style="text-align:right;font-size:0.82rem">6月5日</div>
+      <div><strong>小欣：</strong></div>
+      <div style="margin-left:2rem">真的很抱歉，我答應了今天把書借給你，但忘記了帶回學校。我明天一定會帶來給你，請原諒我。</div>
+      <div style="text-align:right;margin-top:0.4rem">小文<br>即日</div>
+    </div>
+    <p class="ans-note">✅ 道歉三要素：說對不起 + 解釋原因 + 補救方案。</p>
+  </div>
+</div>
+
+<!-- ═══ 感謝 ═══ -->
+<div class="card">
+  <h2><span class="badge b-r">⑤ 感謝便條</span></h2>
+  <h3>📌 範例：感謝生日禮物</h3>
+  <div class="example-box">
+    <div style="text-align:right;font-size:0.82rem">6月5日</div>
+    <div><strong>阿姨：</strong></div>
+    <div style="margin-left:2rem">非常感謝你送我的生日禮物！那本故事書我很喜歡，已經開始看了。真的很謝謝你！</div>
+    <div style="text-align:right;margin-top:0.4rem">小文<br>即日</div>
+  </div>
+  <h3>✏️ 練習：感謝同學幫忙補課</h3>
+  <p style="font-size:0.8rem;color:var(--t2)">情境：你生病請假了兩天，同學小美幫你抄了筆記和告訴你功課。寫感謝便條給她。</p>
+  <div class="exercise-box">
+    <p><span class="bl" style="min-width:5rem"></span></p>
+    <p><span class="bl" style="min-width:5rem"></span></p>
+    <p style="margin-left:2rem"><span class="bl" style="min-width:15rem"></span></p>
+    <p style="text-align:right"><span class="bl" style="min-width:5rem"></span></p>
+  </div>
+  <span class="atoggle" onclick="toggleA(this)">顯示參考答案</span>
+  <div class="abox">
+    <div class="example-box">
+      <div style="text-align:right;font-size:0.82rem">6月5日</div>
+      <div><strong>小美：</strong></div>
+      <div style="margin-left:2rem">非常感謝你在我請假的兩天幫我抄筆記，還告訴我功課內容。如果沒有你幫忙，我一定跟不上進度。真的很謝謝你！</div>
+      <div style="text-align:right;margin-top:0.4rem">小文<br>即日</div>
+    </div>
+    <p class="ans-note">✅ 感謝三要素：謝什麼 + 為什麼感動 + 再次感謝。</p>
+  </div>
+</div>
+
+<!-- ═══ 回覆 ═══ -->
+<div class="card">
+  <h2><span class="badge b-r">⑥ 回覆便條</span></h2>
+  <h3>📌 範例：回覆邀約</h3>
+  <div class="example-box">
+    <div style="text-align:right;font-size:0.82rem">6月4日</div>
+    <div><strong>小文：</strong></div>
+    <div style="margin-left:2rem">收到你的便條了！星期六下午二時我有空，很樂意和你一起去看電影。到時在旺角地鐵站等吧！</div>
+    <div style="text-align:right;margin-top:0.4rem">小明<br>即日</div>
+  </div>
+  <h3>✏️ 練習：回覆圖書館邀約</h3>
+  <p style="font-size:0.8rem;color:var(--t2)">情境：小美收到你邀請她去圖書館溫習的便條。她星期日有空，答應和你一起去。請以小美的身份寫回覆便條。</p>
+  <div class="exercise-box">
+    <p><span class="bl" style="min-width:5rem"></span></p>
+    <p><span class="bl" style="min-width:5rem"></span></p>
+    <p style="margin-left:2rem"><span class="bl" style="min-width:15rem"></span></p>
+    <p style="text-align:right"><span class="bl" style="min-width:5rem"></span></p>
+  </div>
+  <span class="atoggle" onclick="toggleA(this)">顯示參考答案</span>
+  <div class="abox">
+    <div class="example-box">
+      <div style="text-align:right;font-size:0.82rem">6月6日</div>
+      <div><strong>小文：</strong></div>
+      <div style="margin-left:2rem">收到你的便條了！星期日上午十時我有空，很樂意和你一起去中央圖書館溫習。到時在圖書館門口等吧！</div>
+      <div style="text-align:right;margin-top:0.4rem">小美<br>即日</div>
+    </div>
+    <p class="ans-note">✅ 回覆要點：先提及「收到你的便條」，再回覆內容。</p>
+  </div>
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!--  PAGE 3: 評分指引                           -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="page" id="page-mark">
+
+<div class="card">
+  <h2><span class="badge b-r">評分標準</span>（對標中作卷實用文評分）</h2>
+  <div class="tbl"><table>
+    <tr><th>項目</th><th>佔比</th><th>要求</th></tr>
+    <tr><td><strong>格式正確</strong></td><td>50%</td><td>日期在右上角、稱呼頂格加冒號、正文空兩格、署名在右下角。四要素齊全。</td></tr>
+    <tr><td><strong>內容完整</strong></td><td>30%</td><td>清楚交代所有必要資訊（原因、時間、地點等），無遺漏。</td></tr>
+    <tr><td><strong>語言恰當</strong></td><td>20%</td><td>簡潔直接、不用客套（不加祝頌語/啟事語）。措辭符合便條類型和對象。</td></tr>
+  </table></div>
+  <p style="font-size:0.8rem;color:var(--t2);margin-top:0.4rem">⚠️ 寫錯格式（如漏日期、稱呼沒頂格、加了祝頌語）直接扣格式分的 50%。</p>
+</div>
+
+<div class="card">
+  <h2>🔍 多多自檢清單（寫完必查）</h2>
+  <ul class="chk">
+    <li><strong>日期</strong>寫在右上角了嗎？（不是左上角、不是中間）</li>
+    <li><strong>稱呼</strong>頂格寫了嗎？後面有冒號「：」嗎？</li>
+    <li><strong>正文</strong>開頭空了兩格嗎？</li>
+    <li><strong>署名</strong>寫在右下角了嗎？</li>
+    <li><strong>沒有</strong>寫「此致 敬禮」吧？（那是書信才用的！）</li>
+    <li>內容有把該說的事都說清楚了嗎？</li>
+    <li>有沒有錯別字？</li>
+  </ul>
+</div>
+
+<div class="card">
+  <h2>❌ 多多常見扣分點</h2>
+  <div class="tbl"><table>
+    <tr><th>錯誤</th><th>扣分原因</th><th>正確做法</th></tr>
+    <tr><td style="color:#dc2626">加了「此致 敬禮」</td><td>便條不需要祝頌語</td><td>直接署名即可</td></tr>
+    <tr><td style="color:#dc2626">日期寫在左下角</td><td>日期應在右上角</td><td>日期放右上角</td></tr>
+    <tr><td style="color:#dc2626">稱呼沒有頂格</td><td>格式錯誤</td><td>稱呼靠最左</td></tr>
+    <tr><td style="color:#dc2626">署名寫在左邊</td><td>署名應在右下</td><td>署名靠最右</td></tr>
+    <tr><td style="color:#dc2626">正文太長太客套</td><td>便條要簡潔</td><td>兩三句說完</td></tr>
+  </table></div>
+</div>
+
+</div>
+
+<div class="footer">多多呈分試 · 便條寫作 · 教育局指引 · 六種類型全覆蓋</div>
+</div>
+
+<script>
+function switchPage(name, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  document.querySelectorAll('.utabs button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+function toggleA(btn) {
+  var box = btn.nextElementSibling;
+  box.classList.toggle('show');
+  btn.textContent = box.classList.contains('show') ? '隱藏答案' : '顯示參考答案';
+}
+</script>
+</body>
+</html>

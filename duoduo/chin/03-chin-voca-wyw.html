@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>多多呈分試 · 文言文閱讀專項 · 第11–12課</title>
+<style>
+:root{--bg:#fafaf9;--card:#fff;--text:#1a1a1a;--t2:#555;--border:#e5e5e3;--accent:#b45309;--r:10px;--sh:0 1px 3px rgba(0,0,0,0.06);--font:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Microsoft JhengHei",sans-serif}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.75}
+.header{background:var(--card);border-bottom:1px solid var(--border);padding:1.3rem 1rem 0.7rem;text-align:center;position:sticky;top:0;z-index:50;backdrop-filter:blur(8px)}
+.header h1{font-size:1.35rem;font-weight:700}.header .sub{font-size:0.78rem;color:var(--t2)}
+.utabs{display:flex;justify-content:center;gap:0.2rem;margin-top:0.6rem;flex-wrap:wrap}
+.utabs button{font-family:var(--font);font-size:0.8rem;font-weight:600;padding:0.4rem 0.9rem;border:2px solid var(--border);background:var(--card);border-radius:999px;cursor:pointer;color:var(--t2)}
+.utabs button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.container{max-width:900px;margin:0 auto;padding:1.25rem 1rem 3rem}
+.page{display:none}.page.active{display:block}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:1.4rem;margin-bottom:1rem;box-shadow:var(--sh)}
+.card h2{font-size:1.05rem;font-weight:700;margin-bottom:0.3rem}
+.card h3{font-size:0.92rem;font-weight:700;margin:0.8rem 0 0.3rem;padding-top:0.5rem;border-top:1px solid var(--border)}
+.card h3:first-of-type{border-top:none;padding-top:0;margin-top:0}
+.ins{background:#fefce8;border:1px solid #fde68a;border-radius:var(--r);padding:0.7rem 0.9rem;margin-bottom:0.8rem;font-size:0.84rem}
+.badge{display:inline-block;font-size:0.65rem;font-weight:700;padding:0.1rem 0.45rem;border-radius:999px;margin-right:0.25rem}
+.b-r{background:#fef2f2;color:#dc2626}.b-b{background:#eff6ff;color:#2563eb}.b-g{background:#f0fdf4;color:#16a34a}
+
+/* ═══ PARALLEL TEXT ═══ */
+.pt-row{display:flex;gap:0;margin-bottom:0;border-bottom:1px solid var(--border);min-height:2.8rem;align-items:stretch}
+.pt-row:last-child{border-bottom:none}
+.pt-wy{flex:0 0 42%;background:#fefce8;padding:0.6rem 0.9rem;font-size:1.15rem;font-weight:700;letter-spacing:0.05em;display:flex;align-items:center;border-right:1px solid #fde68a}
+.pt-bh{flex:1;padding:0.6rem 0.9rem;font-size:0.9rem;display:flex;align-items:center}
+.pt-bh .kw{color:#dc2626;font-weight:700}
+@media(max-width:500px){.pt-row{flex-direction:column}.pt-wy{flex:auto;border-right:none;border-bottom:1px solid #fde68a}}
+
+.full-tl{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:1rem 1.2rem;margin:0.6rem 0;font-size:0.9rem;line-height:2}
+
+.tbl{overflow-x:auto;margin:0.4rem 0}
+.tbl table{width:100%;border-collapse:collapse;font-size:0.85rem}
+.tbl th,.tbl td{padding:0.45rem 0.55rem;border-bottom:1px solid var(--border);text-align:left;vertical-align:top}
+.tbl th{font-weight:600;font-size:0.75rem;color:var(--t2);background:#fafaf9}
+.tbl tr:last-child td{border-bottom:none}
+.tbl .wy{font-size:1.05rem;font-weight:700}
+
+.ex-q{margin:0.55rem 0;font-size:0.9rem}
+.ex-q .qn{font-weight:700;color:var(--t2);margin-right:0.2rem}
+.ex-q .bl{display:block;width:100%;min-height:1.6rem;border-bottom:2px dotted #94a3b8;margin:0.3rem 0;text-align:center}
+.atoggle{font-family:var(--font);font-size:0.8rem;font-weight:600;padding:0.45rem 1rem;border:1px solid var(--border);background:var(--card);border-radius:999px;cursor:pointer;margin-top:0.7rem;color:var(--t2);display:inline-block}
+.atoggle:hover{background:#f1f5f9}
+.abox{display:none;margin-top:0.5rem}.abox.show{display:block}
+.abox table{width:100%;border-collapse:collapse;font-size:0.84rem}
+.abox th,.abox td{padding:0.35rem 0.5rem;border-bottom:1px solid var(--border)}
+.abox th{font-weight:600;font-size:0.72rem;color:var(--t2);background:#fafaf9}
+.abox tr:last-child td{border-bottom:none}
+.abox .ans{font-weight:700;color:#16a34a}
+
+.highlight-box{background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:0.8rem 1rem;margin:0.5rem 0;font-size:0.86rem;line-height:1.8}
+.highlight-box h4{font-size:0.88rem;margin-bottom:0.3rem}
+.footer{text-align:center;color:#999;font-size:0.7rem;padding:2rem 0 1rem}
+@media print{.header{position:static;border-bottom:2px solid #000}.utabs,.atoggle{display:none}.abox{display:block!important}.page{display:block!important;page-break-before:always}.page:first-of-type{page-break-before:avoid}.card{box-shadow:none;border:1px solid #ccc;page-break-inside:avoid}body{background:#fff;font-size:10pt}.container{max-width:100%;padding:0}}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>多多呈分試 · 文言文閱讀專項</h1>
+  <p class="sub">第11課《鷸蚌相爭》· 第12課《自相矛盾》· 五下二 單元七</p>
+  <div class="utabs">
+    <button class="active" onclick="switchPage('l11',this)">📖 第11課 · 鷸蚌相爭</button>
+    <button onclick="switchPage('l12',this)">📖 第12課 · 自相矛盾</button>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- ═══════════════════════════════════════════ -->
+<!--  第11課：鷸蚌相爭                           -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="page active" id="page-l11">
+
+<div class="ins">
+  <strong>📌 課文出處：</strong>《戰國策》· 文體：文言寓言<br>
+  <strong>考試重點：</strong>理解文言文內容大意、掌握單音節詞→雙音節詞轉換、評價人物性格、理解寓言寓意
+</div>
+
+<div class="card">
+  <h2><span class="badge b-r">①</span> 原文逐句對譯</h2>
+  <div class="pt-row"><div class="pt-wy">蚌方出曝，</div><div class="pt-bh">一隻蚌<span class="kw">剛剛</span>出來<span class="kw">曬太陽</span>，</div></div>
+  <div class="pt-row"><div class="pt-wy">而鷸啄其肉，</div><div class="pt-bh">有一隻鷸<span class="kw">啄食牠</span>的肉，</div></div>
+  <div class="pt-row"><div class="pt-wy">蚌合而拑其喙。</div><div class="pt-bh">蚌<span class="kw">合上</span>殼，<span class="kw">夾住了牠</span>的<span class="kw">嘴巴</span>。</div></div>
+  <div class="pt-row"><div class="pt-wy">鷸曰：</div><div class="pt-bh">鷸<span class="kw">說</span>：</div></div>
+  <div class="pt-row"><div class="pt-wy">「今日不雨，明日不雨，必有死蚌。」</div><div class="pt-bh">「今天<span class="kw">不下雨</span>，明天<span class="kw">不下雨</span>，<span class="kw">一定會有</span>乾死的蚌。」</div></div>
+  <div class="pt-row"><div class="pt-wy">蚌亦謂鷸曰：</div><div class="pt-bh">蚌<span class="kw">也對</span>鷸<span class="kw">說</span>：</div></div>
+  <div class="pt-row"><div class="pt-wy">「今日不出，明日不出，必有死鷸。」</div><div class="pt-bh">「今天<span class="kw">不放開</span>，明天<span class="kw">不放開</span>，<span class="kw">一定會有</span>餓死的鷸。」</div></div>
+  <div class="pt-row"><div class="pt-wy">兩者不肯相舍，</div><div class="pt-bh">雙方都不肯<span class="kw">互相放過</span>對方，</div></div>
+  <div class="pt-row"><div class="pt-wy">漁者得而並擒之。</div><div class="pt-bh"><span class="kw">漁夫</span>就<span class="kw">趁機</span>把牠們<span class="kw">一起捉住了</span>。</div></div>
+
+  <h3>📝 全文白話連貫翻譯</h3>
+  <div class="full-tl">
+一隻蚌剛剛出來曬太陽。有一隻鷸飛過來，用長嘴去啄蚌的肉。蚌馬上合上殼，緊緊地夾住了鷸的嘴巴。<br><br>
+鷸說：「今天不下雨，明天不下雨，你就會乾死！」<br><br>
+蚌也對鷸說：「今天我不放開你，明天我不放開你，你就會餓死！」<br><br>
+雙方都不肯放過對方。結果，一個漁夫經過，趁機把牠們一起捉走了。
+  </div>
+</div>
+
+<div class="card">
+  <h2><span class="badge b-b">②</span> 文言詞彙解剖</h2>
+  <h3>核心字詞（共9個）</h3>
+  <div class="tbl"><table>
+    <tr><th>文言</th><th>粵音</th><th>白話意思</th><th>考點提示</th></tr>
+    <tr><td class="wy">鷸</td><td>wat6</td><td>一種水鳥（長嘴）</td><td>認識即可</td></tr>
+    <tr><td class="wy">蚌</td><td>pong5</td><td>水底生物（兩塊硬殼）</td><td>認識即可</td></tr>
+    <tr><td class="wy">曝</td><td>buk6</td><td>曬太陽</td><td>「曝」= 曬，不是「爆」</td></tr>
+    <tr><td class="wy">拑</td><td>kim4</td><td>夾住</td><td>⚠️ 左「扌」右「甘」，不是「鉗」</td></tr>
+    <tr><td class="wy">喙</td><td>wai6</td><td>鳥類的嘴巴</td><td>不是人類的「嘴」</td></tr>
+    <tr><td class="wy">曰</td><td>jyut6</td><td>說（文言文）</td><td>⚠️「曰」扁的，不是「日」</td></tr>
+    <tr><td class="wy">謂</td><td>wai6</td><td>對……說</td><td>「謂」+ 人 +「曰」= 對某人說</td></tr>
+    <tr><td class="wy">舍</td><td>se2</td><td>放棄</td><td>不是簡體「舍」（同形異義）</td></tr>
+    <tr><td class="wy">擒</td><td>kam4</td><td>捉住</td><td>左「扌」右「禽」</td></tr>
+  </table></div>
+
+  <h3>單音節詞 → 雙音節詞（考試重點）</h3>
+  <div class="tbl"><table>
+    <tr><th>文言（單音節）</th><th>白話（雙音節）</th><th>規律</th></tr>
+    <tr><td>曝</td><td>曝曬 / 曬太陽</td><td>加同義字</td></tr>
+    <tr><td>啄</td><td>啄食</td><td>加動作對象</td></tr>
+    <tr><td>拑</td><td>拑住 / 夾住</td><td>加「住」表持續</td></tr>
+    <tr><td>舍</td><td>捨棄 / 放棄</td><td>加同義字（舍+棄）</td></tr>
+    <tr><td>擒</td><td>擒住 / 捉住</td><td>加「住」表結果</td></tr>
+    <tr><td>雨</td><td>下雨</td><td>加動作（名詞→動詞）</td></tr>
+  </table></div>
+
+  <h3>文言虛詞</h3>
+  <div class="highlight-box">
+    <h4>「其」— 解作「牠的」</h4>
+    <p>例句：鷸啄<b>其</b>肉 → 鷸啄食<b>牠的</b>肉</p>
+    <p>例句：蚌合而拑<b>其</b>喙 → 蚌合上殼，夾住了<b>牠的</b>嘴巴</p>
+  </div>
+  <div class="highlight-box" style="margin-top:0.4rem">
+    <h4>「之」— 解作「牠們」（代詞）</h4>
+    <p>例句：漁者得而並擒<b>之</b> → 漁夫趁機一起捉住了<b>牠們</b></p>
+  </div>
+</div>
+
+<div class="card">
+  <h2><span class="badge b-g">③</span> 寓意 + 練習（8題）</h2>
+  <h3>📌 寓言寓意</h3>
+  <div class="full-tl">
+    <strong>這個故事告訴我們：</strong>雙方爭鬥不肯退讓，最後只會兩敗俱傷，讓第三方（漁夫）從中得利。<br>
+    成語「<strong>鷸蚌相爭，漁人得利</strong>」就是從這個故事來的。
+  </div>
+
+  <h4>甲、詞義理解（@2分）</h4>
+  <div class="ex-q"><span class="qn">1.</span> 「蚌方出曝」中「曝」的意思是：<br><span class="bl"></span></div>
+  <div class="ex-q"><span class="qn">2.</span> 「蚌合而拑其喙」中「喙」的意思是：<br><span class="bl"></span></div>
+  <h4>乙、句子翻譯（@3分，用完整句子作答）</h4>
+  <div class="ex-q"><span class="qn">3.</span> 把「今日不雨，明日不雨，必有死蚌」翻譯成白話文。<br><span class="bl"></span></div>
+  <div class="ex-q"><span class="qn">4.</span> 把「兩者不肯相舍，漁者得而並擒之」翻譯成白話文。<br><span class="bl"></span></div>
+  <h4>丙、寓意理解（@3分，用完整句子作答）</h4>
+  <div class="ex-q"><span class="qn">5.</span> 這個寓言告訴我們什麼道理？<br><span class="bl"></span></div>
+  <h4>丁、單音節→雙音節轉換（@2分）</h4>
+  <div class="ex-q"><span class="qn">6.</span> 「啄」的雙音節詞是：<span class="bl"></span></div>
+  <div class="ex-q"><span class="qn">7.</span> 「舍」的雙音節詞是：<span class="bl"></span></div>
+  <h4>戊、虛詞理解（@2分）</h4>
+  <div class="ex-q"><span class="qn">8.</span> 「鷸啄其肉」中的「其」是指：<br><span class="bl"></span></div>
+
+  <span class="atoggle" onclick="toggleA(this)">顯示參考答案</span>
+  <div class="abox"><table><tr><th>#</th><th>參考答案</th></tr>
+    <tr><td>1</td><td class="ans">曬太陽</td></tr>
+    <tr><td>2</td><td class="ans">鳥類的嘴巴（不是人的嘴巴）</td></tr>
+    <tr><td>3</td><td class="ans">今天不下雨，明天不下雨，一定會有乾死的蚌。</td></tr>
+    <tr><td>4</td><td class="ans">雙方都不肯互相放過對方，漁夫趁機把牠們一起捉住了。</td></tr>
+    <tr><td>5</td><td class="ans">雙方爭鬥不肯退讓，最後只會兩敗俱傷，讓第三方得利。（答案合理即可）</td></tr>
+    <tr><td>6</td><td class="ans">啄食</td></tr>
+    <tr><td>7</td><td class="ans">捨棄 / 放棄</td></tr>
+    <tr><td>8</td><td class="ans">蚌的（「其」= 牠的，指蚌）</td></tr>
+  </table></div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!--  第12課：自相矛盾                           -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="page" id="page-l12">
+
+<div class="ins">
+  <strong>📌 課文出處：</strong>《韓非子》· 文體：文言寓言<br>
+  <strong>考試重點：</strong>理解文言否定詞（莫/無/弗）、虛詞（其/之）、理解寓言寓意
+</div>
+
+<div class="card">
+  <h2><span class="badge b-r">①</span> 原文逐句對譯（與課本完全一致）</h2>
+  <div class="pt-row"><div class="pt-wy">人有鬻矛與楯者，</div><div class="pt-bh">有一個<span class="kw">賣</span>矛和盾牌的人，</div></div>
+  <div class="pt-row"><div class="pt-wy">譽其楯之堅曰：</div><div class="pt-bh"><span class="kw">讚美他的</span>盾牌<span class="kw">的</span>堅固<span class="kw">說</span>：</div></div>
+  <div class="pt-row"><div class="pt-wy">「物莫能陷也。」</div><div class="pt-bh">「<span class="kw">任何東西都不能</span>穿透它。」</div></div>
+  <div class="pt-row"><div class="pt-wy">俄而又譽其矛曰：</div><div class="pt-bh"><span class="kw">不久，又</span>讚美<span class="kw">他的</span>矛<span class="kw">說</span>：</div></div>
+  <div class="pt-row"><div class="pt-wy">「吾矛之利，</div><div class="pt-bh">「<span class="kw">我的</span>矛<span class="kw">的</span>鋒利，</div></div>
+  <div class="pt-row"><div class="pt-wy">物無不陷也。」</div><div class="pt-bh"><span class="kw">任何東西沒有不能</span>穿透的。」</div></div>
+  <div class="pt-row"><div class="pt-wy">人應之曰：</div><div class="pt-bh"><span class="kw">有人回應他</span>說：</div></div>
+  <div class="pt-row"><div class="pt-wy">「以子之矛，陷子之盾，何如？」</div><div class="pt-bh">「<span class="kw">用你的</span>矛，去刺<span class="kw">你的</span>盾，<span class="kw">怎麼樣</span>？」</div></div>
+  <div class="pt-row"><div class="pt-wy">其人弗能應也。</div><div class="pt-bh">那個人<span class="kw">不能回答</span>。</div></div>
+  <div class="pt-row"><div class="pt-wy">以不可陷之盾與無不陷之矛，</div><div class="pt-bh"><span class="kw">不能被穿透</span>的盾，和<span class="kw">沒有不能穿透</span>的矛，</div></div>
+  <div class="pt-row"><div class="pt-wy">為名不可兩立也。</div><div class="pt-bh"><span class="kw">就道理上說，不可能同時成立</span>。</div></div>
+
+  <h3>📝 全文白話連貫翻譯</h3>
+  <div class="full-tl">
+有一個賣矛和盾牌的人。他讚美自己的盾牌很堅固，說：「任何東西都不能穿透它。」<br><br>
+不久，他又讚美自己的矛說：「我的矛很鋒利，任何東西沒有不能穿透的。」<br><br>
+有人回應他說：「用你的矛去刺你的盾，會怎麼樣呢？」<br><br>
+那個人一句話也回答不出來。<br><br>
+<strong>不能被穿透的盾，和沒有不能穿透的矛，就道理上說，是不可能同時成立的。</strong>
+  </div>
+</div>
+
+<div class="card">
+  <h2><span class="badge b-b">②</span> 文言詞彙解剖</h2>
+
+  <h3>核心字詞（課本注釋，共12個）</h3>
+  <div class="tbl"><table>
+    <tr><th>文言</th><th>粵音</th><th>課本解釋</th><th>考點提示</th></tr>
+    <tr><td class="wy">鬻</td><td>juk6</td><td>賣</td><td>⚠️ 超難寫！上「粥」下「鬲」</td></tr>
+    <tr><td class="wy">矛</td><td>maa4</td><td>古代兵器，長柄裝有金屬尖頭，用以刺殺敵人</td><td>攻擊武器</td></tr>
+    <tr><td class="wy">楯</td><td>teon5/seon5</td><td>通「盾」，盾牌。防護兵器</td><td>⚠️ 課文用「循」通「盾」</td></tr>
+    <tr><td class="wy">譽</td><td>jyu6</td><td>讚美</td><td>⚠️ 譽 不是 誉</td></tr>
+    <tr><td class="wy">莫</td><td>mok6</td><td>沒有、不</td><td>否定詞；「莫能陷」= 不能穿透</td></tr>
+    <tr><td class="wy">陷</td><td>haam6</td><td>穿透</td><td>左「阝」</td></tr>
+    <tr><td class="wy">俄而</td><td>ngo4 ji4</td><td>不久、一會兒</td><td>⚠️ 直接出現在課文正文</td></tr>
+    <tr><td class="wy">吾</td><td>ng4</td><td>我（文言自稱）</td><td>「吾矛」= 我的矛</td></tr>
+    <tr><td class="wy">何如</td><td>ho4 jyu4</td><td>如何、怎麼樣</td><td>反問句式</td></tr>
+    <tr><td class="wy">弗</td><td>fat1</td><td>不（音「忽」）</td><td>文言否定詞；「弗能應」= 不能回答</td></tr>
+    <tr><td class="wy">應</td><td>jing3</td><td>回答、回應</td><td>「人應之曰」= 有人回應他說</td></tr>
+    <tr><td class="wy">立</td><td>lap6</td><td>成立、存在</td><td>「不可兩立」= 不能同時成立</td></tr>
+  </table></div>
+
+  <h3>文言否定詞專題（U7 語基重點 · 呈分試新考點）</h3>
+  <div class="tbl"><table>
+    <tr><th>否定詞</th><th>課本解釋</th><th>課文例句</th><th>用法</th></tr>
+    <tr><td class="wy">莫</td><td>沒有、不</td><td>物<b>莫</b>能陷也</td><td>「莫」+ 動詞 = 不能……</td></tr>
+    <tr><td class="wy">無</td><td>沒有</td><td>物<b>無</b>不陷也</td><td>「無」+「不」= 雙重否定 → 全部都能</td></tr>
+    <tr><td class="wy">弗</td><td>不（音「忽」）</td><td>其人<b>弗</b>能應也</td><td>「弗」+ 動詞 = 不能……</td></tr>
+  </table></div>
+
+  <h3>文言虛詞</h3>
+  <div class="highlight-box">
+    <h4>「之」— 兩種用法</h4>
+    <p>① 解作「的」：譽其楯<b>之</b>堅曰 → 讚美他的盾牌<b>的</b>堅固說</p>
+    <p>② 解作「他」（代詞）：人應<b>之</b>曰 → 有人回應<b>他</b>說</p>
+  </div>
+  <div class="highlight-box" style="margin-top:0.4rem">
+    <h4>「其」— 解作「他的」</h4>
+    <p>例句：譽<b>其</b>楯之堅曰 → 讚美<b>他的</b>盾牌的堅固說</p>
+    <p>例句：俄而又譽<b>其</b>矛曰 → 不久又讚美<b>他的</b>矛說</p>
+  </div>
+
+  <h3>單音節詞 → 雙音節詞</h3>
+  <div class="tbl"><table>
+    <tr><th>文言（單音節）</th><th>白話（雙音節）</th></tr>
+    <tr><td>鬻</td><td>售賣 / 販賣</td></tr>
+    <tr><td>譽</td><td>讚美 / 稱讚</td></tr>
+    <tr><td>陷</td><td>穿透 / 穿破</td></tr>
+    <tr><td>應</td><td>回答 / 回應</td></tr>
+  </table></div>
+</div>
+
+<div class="card">
+  <h2><span class="badge b-g">③</span> 寓意 + 練習（8題）</h2>
+  <h3>📌 寓言寓意</h3>
+  <div class="full-tl">
+    <strong>這個故事告訴我們：</strong>說話和做事要前後一致，不能自己打自己嘴巴。<br>
+    成語「<strong>自相矛盾</strong>」就是從這個故事來的，形容一個人的言論或行動前後不一致、互相衝突。<br>
+    「以不可陷之盾與無不陷之矛，<strong>為名不可兩立也</strong>」——這兩樣東西就道理上說，不可能同時成立。
+  </div>
+
+  <h4>甲、詞義理解（@2分）</h4>
+  <div class="ex-q"><span class="qn">1.</span> 「人有鬻矛與楯者」中「鬻」的意思是：<br><span class="bl"></span></div>
+  <div class="ex-q"><span class="qn">2.</span> 「其人弗能應也」中「弗」的意思是：<br><span class="bl"></span></div>
+  <h4>乙、句子翻譯（@3分，用完整句子作答）</h4>
+  <div class="ex-q"><span class="qn">3.</span> 把「物莫能陷也」翻譯成白話文。<br><span class="bl"></span></div>
+  <div class="ex-q"><span class="qn">4.</span> 把「以子之矛，陷子之盾，何如？」翻譯成白話文。<br><span class="bl"></span></div>
+  <h4>丙、寓意理解（@3分）</h4>
+  <div class="ex-q"><span class="qn">5.</span> 這個寓言告訴我們什麼道理？<br><span class="bl"></span></div>
+  <h4>丁、否定詞辨析（@2分）</h4>
+  <div class="ex-q"><span class="qn">6.</span> 「物莫能陷也」中哪個字是否定詞？它解作什麼？<br><span class="bl"></span></div>
+  <h4>戊、虛詞理解（@2分）</h4>
+  <div class="ex-q"><span class="qn">7.</span> 「人應之曰」中的「之」是指什麼？<br><span class="bl"></span></div>
+  <h4>己、白話改寫（@3分）</h4>
+  <div class="ex-q"><span class="qn">8.</span> 用你自己的文字，把《自相矛盾》這個故事用白話文寫出來（約60字）。<br><span class="bl"></span></div>
+
+  <span class="atoggle" onclick="toggleA(this)">顯示參考答案</span>
+  <div class="abox"><table><tr><th>#</th><th>參考答案</th></tr>
+    <tr><td>1</td><td class="ans">賣</td></tr>
+    <tr><td>2</td><td class="ans">不（文言否定詞，音「忽」）</td></tr>
+    <tr><td>3</td><td class="ans">任何東西都不能穿透它。</td></tr>
+    <tr><td>4</td><td class="ans">用你的矛去刺你的盾，會怎麼樣呢？</td></tr>
+    <tr><td>5</td><td class="ans">說話做事要前後一致，不能互相矛盾。不能被穿透的盾和沒有不能穿透的矛，不可能同時成立。（答案合理即可）</td></tr>
+    <tr><td>6</td><td class="ans">「莫」是否定詞，課本解釋為「沒有、不」</td></tr>
+    <tr><td>7</td><td class="ans">「之」= 他，指賣矛和盾的那個人</td></tr>
+    <tr><td>8</td><td class="ans">參考：有一個賣矛和盾牌的人。他讚美自己的盾牌很堅固，說任何東西都不能穿透它。不久又讚美自己的矛很鋒利，說任何東西沒有不能穿透的。有人回應他說：「用你的矛刺你的盾，怎麼樣？」那個人一句話也答不出來。（答案合理即可）</td></tr>
+  </table></div>
+</div>
+
+</div>
+
+<div class="footer">多多呈分試 · 文言文閱讀專項 · 第11課《鷸蚌相爭》+ 第12課《自相矛盾》</div>
+</div>
+
+<script>
+function switchPage(name, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  document.querySelectorAll('.utabs button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+function toggleA(btn) {
+  var box = btn.nextElementSibling;
+  box.classList.toggle('show');
+  btn.textContent = box.classList.contains('show') ? '隱藏答案' : '顯示參考答案';
+}
+</script>
+</body>
+</html>
