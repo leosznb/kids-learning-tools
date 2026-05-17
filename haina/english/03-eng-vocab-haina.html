@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>海納 S3 English Vocab｜Edge 3B Units 6-7</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --primary:#1e3a5f;--primary-light:#e8f0fe;--primary-mid:#3b6fa0;
+    --bg:#f0f5ff;--card:#ffffff;--text:#0a1628;--text-light:#5a6a7a;
+    --border:#bdd3e8;--success:#0d9488;--shadow:0 4px 16px rgba(30,58,95,0.12);
+    --radius:12px;--font:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;
+  }
+  body{font-family:var(--font);background:var(--bg);color:var(--text);padding:0;-webkit-font-smoothing:antialiased;font-size:18px}
+  .header{background:linear-gradient(135deg,#1e3a5f,#3b6fa0);color:#fff;padding:20px 16px 16px;text-align:center}
+  .header h1{font-size:1.2rem;font-weight:700;letter-spacing:0.3px}
+  .header .sub{font-size:0.75rem;opacity:0.85;margin-top:3px}
+  .container{max-width:680px;margin:0 auto;padding:12px 12px 80px}
+
+  .mode-tabs{display:flex;gap:8px;margin-bottom:12px}
+  .mode-tab{flex:1;padding:10px;text-align:center;border-radius:8px;font-size:0.85rem;font-weight:600;cursor:pointer;
+    border:2px solid var(--border);background:var(--card);color:var(--text-light);transition:all 0.2s}
+  .mode-tab.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+
+  .unit-tabs{display:flex;gap:6px;margin-bottom:10px}
+  .unit-tab{flex:1;padding:10px 12px;border-radius:10px;font-size:0.8rem;font-weight:600;cursor:pointer;
+    text-align:center;border:1.5px solid var(--border);background:var(--card);color:var(--text-light);transition:all 0.2s}
+  .unit-tab.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+
+  .controls{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+  .controls .label{font-size:0.7rem;color:var(--text-light);font-weight:600}
+  .speed-btn{padding:4px 10px;border-radius:12px;font-size:0.72rem;font-weight:600;cursor:pointer;
+    border:1.5px solid var(--border);background:var(--card);color:var(--text-light);transition:all 0.2s}
+  .speed-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+  .auto-btn{padding:4px 12px;border-radius:12px;font-size:0.72rem;font-weight:600;cursor:pointer;
+    border:1.5px solid var(--border);background:var(--card);color:var(--text-light);transition:all 0.2s}
+  .auto-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+
+  .progress-bar{height:4px;background:var(--border);border-radius:2px;margin:8px 0 14px;overflow:hidden}
+  .progress-bar .fill{height:100%;background:var(--primary-mid);border-radius:2px;width:0%;transition:width 0.3s}
+
+  .word-card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:28px 24px;text-align:center;margin-bottom:14px;min-height:260px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .word-card .word{font-size:2.8rem;font-weight:800;color:var(--text);margin-bottom:4px;line-height:1.3;letter-spacing:0.5px;word-break:break-word}
+  .word-card .word.phrase{font-size:2rem;line-height:1.4}
+  .word-card .pos{font-size:0.72rem;color:var(--primary-mid);background:var(--primary-light);padding:2px 10px;border-radius:8px;margin-bottom:4px;display:inline-block}
+  .word-card .meaning{font-size:1rem;color:var(--text-light);margin-bottom:4px;min-height:1.5em}
+  .word-card .exam-note{font-size:0.7rem;color:#d97706;background:#fffbeb;padding:2px 10px;border-radius:8px;margin-bottom:4px}
+  .word-card .unit-label{font-size:0.72rem;color:var(--primary-mid);margin-bottom:6px}
+
+  .play-btn{width:68px;height:68px;border-radius:50%;border:none;background:linear-gradient(135deg,#3b6fa0,#1e3a5f);
+    color:#fff;font-size:1.6rem;cursor:pointer;margin:6px 0;transition:all 0.15s;box-shadow:0 4px 14px rgba(30,58,95,0.3)}
+  .play-btn:active{transform:scale(0.92)}
+
+  .word-nav{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:10px}
+  .word-nav .nav-btn{width:44px;height:44px;border-radius:50%;border:2px solid var(--border);background:var(--card);
+    font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
+  .word-nav .nav-btn:active{background:var(--primary-light);border-color:var(--primary)}
+  .word-nav .counter{font-size:0.85rem;color:var(--text-light);font-weight:600;min-width:60px;text-align:center}
+
+  .reveal-after{background:#f0fdf4;border:1px solid rgba(13,148,136,0.2);border-radius:8px;padding:12px 16px;margin-top:10px;display:none}
+  .reveal-after.show{display:block;animation:fadeIn 0.3s}
+  .reveal-after .r-word{font-size:1.8rem;font-weight:700;color:var(--text)}
+  .reveal-after .r-info{font-size:0.88rem;color:var(--text-light);margin-top:4px}
+
+  .dict-actions{display:flex;gap:8px;margin-top:10px;justify-content:center}
+  .dict-actions button{padding:8px 20px;border-radius:20px;font-size:0.85rem;font-weight:600;cursor:pointer;border:none;transition:all 0.15s}
+  .dict-actions button:active{transform:scale(0.95)}
+  .btn-reveal{background:var(--primary);color:#fff}
+  .btn-next{background:var(--card);color:var(--text);border:1.5px solid var(--border)!important}
+
+  .stats{display:flex;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+  .stat-item{flex:1;min-width:60px;background:var(--card);border-radius:8px;padding:8px;text-align:center;
+    border:1px solid var(--border);font-size:0.7rem;color:var(--text-light)}
+  .stat-item .num{font-size:1.1rem;font-weight:700;color:var(--primary);display:block}
+
+  .status{font-size:0.78rem;color:var(--text-light);text-align:center;margin-bottom:6px}
+
+  @media(max-width:480px){
+    body{font-size:16px}
+    .word-card .word{font-size:2.2rem}
+    .word-card .word.phrase{font-size:1.6rem}
+    .word-card{padding:20px 16px;min-height:220px}
+  }
+  @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>📘 海納 · S3 English Vocab</h1>
+  <div class="sub">Edge 3B Units 6-7 ｜ Read-along + Dictation</div>
+</div>
+
+<div class="container">
+
+  <div class="stats">
+    <div class="stat-item"><span class="num" id="totalCount">0</span>Total Words</div>
+    <div class="stat-item"><span class="num" id="unitCount">0</span>This Unit</div>
+    <div class="stat-item"><span class="num" id="progressCount">0%</span>Progress</div>
+  </div>
+
+  <div class="mode-tabs">
+    <div class="mode-tab active" data-mode="read" onclick="switchMode('read')">📖 Read-along</div>
+    <div class="mode-tab" data-mode="dictate" onclick="switchMode('dictate')">✍️ Dictation</div>
+  </div>
+
+  <div class="unit-tabs">
+    <div class="unit-tab active" data-unit="6" onclick="switchUnit(6)">Unit 6 · Technology & AI</div>
+    <div class="unit-tab" data-unit="7" onclick="switchUnit(7)">Unit 7 · Conservation</div>
+  </div>
+
+  <div class="controls">
+    <span class="label">Speed</span>
+    <button class="speed-btn" data-speed="0.8" onclick="setSpeed(this,0.8)">0.8×</button>
+    <button class="speed-btn active" data-speed="1.0" onclick="setSpeed(this,1.0)">1.0×</button>
+    <button class="speed-btn" data-speed="1.2" onclick="setSpeed(this,1.2)">1.2×</button>
+    <span class="label" style="margin-left:8px">Auto</span>
+    <button class="auto-btn" id="autoBtn" onclick="toggleAuto()">Off</button>
+  </div>
+
+  <div class="progress-bar"><div class="fill" id="progressFill"></div></div>
+
+  <div class="word-card" id="wordCard">
+    <div class="unit-label" id="unitLabel"></div>
+    <div class="word" id="wordDisplay">Ready</div>
+    <div><span class="pos" id="posDisplay"></span></div>
+    <div class="meaning" id="meaningDisplay"></div>
+    <div class="exam-note" id="examNote">⚠️ May need to change word form (e.g. plural, tense)</div>
+    <button class="play-btn" id="playBtn" onclick="playCurrent()">▶</button>
+    <div class="reveal-after" id="revealAfter"></div>
+  </div>
+
+  <div class="word-nav">
+    <button class="nav-btn" onclick="prevWord()">‹</button>
+    <span class="counter" id="wordCounter">0/0</span>
+    <button class="nav-btn" onclick="nextWord()">›</button>
+  </div>
+
+  <div class="dict-actions" style="display:none" id="dictActions">
+    <button class="btn-reveal" onclick="revealAnswer()">👀 Show Answer</button>
+    <button class="btn-next" onclick="nextWord()">➡️ Next</button>
+  </div>
+
+  <div class="status" id="statusMsg">Ready</div>
+</div>
+
+<script>
+// ===================== VOCABULARY DATA =====================
+// Edge High-flyer Textbook 3B Units 6 & 7
+const ALL_WORDS = [
+  // ======= UNIT 6 (P.30-35): Technology & AI =======
+{word:'fascinate', pos:'v.', meaning:'使著迷、吸引', unit:6, page:30, phrase:false, tip:'過去式 fascinated；現在分詞 fascinating；名詞 fascination'},
+{word:'problematic', pos:'adj.', meaning:'有問題的、難處理的', unit:6, page:30, phrase:false, tip:'比較級 more problematic；副詞 problematically；名詞 problem'},
+{word:'inaccurate', pos:'adj.', meaning:'不準確的', unit:6, page:30, phrase:false, tip:'反義詞 accurate；副詞 inaccurately；名詞 inaccuracy'},
+{word:'insights', pos:'n.', meaning:'洞察力、深刻理解', unit:6, page:30, phrase:false, tip:'單數 insight；片語 gain insight into'},
+{word:'grave', pos:'adj.', meaning:'嚴重的、重大的', unit:6, page:30, phrase:false, tip:'比較級 graver；副詞 gravely；名詞 gravity'},
+{word:'threaten', pos:'v.', meaning:'威脅', unit:6, page:30, phrase:false, tip:'過去式 threatened；現在分詞 threatening；名詞 threat'},
+{word:'severe', pos:'adj.', meaning:'嚴重的、劇烈的', unit:6, page:30, phrase:false, tip:'比較級 more severe；副詞 severely；名詞 severity'},
+{word:'inhabitants', pos:'n.', meaning:'居民', unit:6, page:30, phrase:false, tip:'單數 inhabitant；動詞 inhabit'},
+{word:'remedy', pos:'n.', meaning:'補救方法、治療法', unit:6, page:30, phrase:false, tip:'複數 remedies；動詞 remedy；形容詞 remedial'},
+{word:'current', pos:'adj.', meaning:'當前的、現在的', unit:6, page:30, phrase:false, tip:'副詞 currently；名詞 currency'},
+{word:'occur', pos:'v.', meaning:'發生', unit:6, page:30, phrase:false, tip:'過去式 occurred；現在分詞 occurring；名詞 occurrence'},
+{word:'surge', pos:'v.', meaning:'急增、湧現', unit:6, page:31, phrase:false, tip:'過去式 surged；現在分詞 surging；名詞 surge'},
+{word:'skyrocketed', pos:'v.', meaning:'飆升、急劇上升', unit:6, page:31, phrase:false, tip:'原形 skyrocket；現在式 skyrockets'},
+{word:'disrupted', pos:'v.', meaning:'打亂、中斷', unit:6, page:31, phrase:false, tip:'原形 disrupt；名詞 disruption；形容詞 disruptive'},
+{word:'adequate', pos:'adj.', meaning:'足夠的、充分的', unit:6, page:31, phrase:false, tip:'副詞 adequately；反義詞 inadequate'},
+{word:'compound', pos:'v.', meaning:'使惡化、加重', unit:6, page:31, phrase:false, tip:'過去式 compounded；現在分詞 compounding；名詞 compound'},
+{word:'aggravating', pos:'v.', meaning:'使惡化、加劇', unit:6, page:31, phrase:false, tip:'原形 aggravate；名詞 aggravation'},
+{word:'dependent', pos:'adj.', meaning:'依賴的', unit:6, page:31, phrase:false, tip:'副詞 dependently；名詞 dependence；動詞 depend on'},
+{word:'pragmatic', pos:'adj.', meaning:'務實的、實用主義的', unit:6, page:31, phrase:false, tip:'副詞 pragmatically；名詞 pragmatism'},
+{word:'ethical', pos:'adj.', meaning:'道德的、倫理的', unit:6, page:31, phrase:false, tip:'副詞 ethically；名詞 ethics'},
+{word:'artificial intelligence', pos:'n. ph.', meaning:'人工智能', unit:6, page:31, phrase:true, tip:'不可數名詞；形容詞 artificial'},
+{word:'so-called', pos:'adj.', meaning:'所謂的', unit:6, page:31, phrase:true, tip:'無詞形變化；常用作定語'},
+{word:'cognitive', pos:'adj.', meaning:'認知的', unit:6, page:31, phrase:false, tip:'副詞 cognitively；名詞 cognition'},
+{word:'sophisticated', pos:'adj.', meaning:'精密複雜的', unit:6, page:31, phrase:false, tip:'比較級 more sophisticated；名詞 sophistication'},
+{word:'indistinguishable', pos:'adj.', meaning:'難以區分的', unit:6, page:31, phrase:false, tip:'反義詞 distinguishable；動詞 distinguish'},
+{word:'concerned', pos:'adj.', meaning:'擔憂的、有關的', unit:6, page:31, phrase:false, tip:'比較級 more concerned；動詞 concern；名詞 concern'},
+{word:'undoubtedly', pos:'adv.', meaning:'毫無疑問地', unit:6, page:34, phrase:false, tip:'形容詞 undoubted；動詞 doubt'},
+{word:'astonishing', pos:'adj.', meaning:'驚人的', unit:6, page:34, phrase:false, tip:'副詞 astonishingly；動詞 astonish；名詞 astonishment'},
+{word:'manipulate', pos:'v.', meaning:'操控', unit:6, page:34, phrase:false, tip:'過去式 manipulated；現在分詞 manipulating；名詞 manipulation'},
+{word:'immersed', pos:'v.', meaning:'沉浸、專注於', unit:6, page:34, phrase:false, tip:'原形 immerse；名詞 immersion；常用 be immersed in'},
+{word:'captured', pos:'v.', meaning:'捕獲、捕捉', unit:6, page:34, phrase:false, tip:'原形 capture；名詞 capture；形容詞 captivating'},
+{word:'envisions', pos:'v.', meaning:'展望、想像', unit:6, page:34, phrase:false, tip:'原形 envision；名詞 vision'},
+{word:'digital', pos:'adj.', meaning:'數碼的、數位的', unit:6, page:34, phrase:false, tip:'副詞 digitally；名詞 digit'},
+{word:'embark on', pos:'ph. v.', meaning:'開始（新旅程/事業）', unit:6, page:34, phrase:true, tip:'過去式 embarked；現在分詞 embarking；名詞 embarkation'},
+{word:'deceased', pos:'adj.', meaning:'已故的', unit:6, page:35, phrase:false, tip:'名詞 the deceased（死者）；動詞 decease'},
+{word:'fathom', pos:'v.', meaning:'理解、弄清', unit:6, page:35, phrase:false, tip:'過去式 fathomed；現在分詞 fathoming；常用 cannot fathom'},
+
+  // ======= UNIT 7 (P.56-61): Conservation & Wildlife =======
+{word:'contemplate', pos:'v.', meaning:'沉思、仔細考慮', unit:7, page:56, phrase:false, tip:'過去式 contemplated；現在分詞 contemplating；名詞 contemplation'},
+{word:'primates', pos:'n.', meaning:'靈長類動物', unit:7, page:56, phrase:false, tip:'單數 primate'},
+{word:'conservation', pos:'n.', meaning:'保育、保護', unit:7, page:56, phrase:false, tip:'動詞 conserve；形容詞 conservative'},
+{word:'haven', pos:'n.', meaning:'避風港、安全的地方', unit:7, page:56, phrase:false, tip:'複數 havens；同義詞 sanctuary'},
+{word:'deplorable', pos:'adj.', meaning:'可悲的、惡劣的', unit:7, page:56, phrase:false, tip:'副詞 deplorably；動詞 deplore'},
+{word:'trafficking', pos:'n.', meaning:'非法交易', unit:7, page:56, phrase:false, tip:'動詞 traffic（過去式 trafficked）；名詞 trafficker'},
+{word:'poaching', pos:'n.', meaning:'偷獵', unit:7, page:56, phrase:false, tip:'動詞 poach；名詞 poacher'},
+{word:'exploitation', pos:'n.', meaning:'剝削、利用', unit:7, page:57, phrase:false, tip:'動詞 exploit；形容詞 exploitative'},
+{word:'industriously', pos:'adv.', meaning:'勤奮地', unit:7, page:57, phrase:false, tip:'形容詞 industrious；名詞 industry'},
+{word:'unarguably', pos:'adv.', meaning:'無可爭辯地', unit:7, page:57, phrase:false, tip:'形容詞 unarguable；動詞 argue'},
+{word:'stimulate', pos:'v.', meaning:'刺激、促進', unit:7, page:57, phrase:false, tip:'過去式 stimulated；現在分詞 stimulating；名詞 stimulation'},
+{word:'trauma', pos:'n.', meaning:'創傷', unit:7, page:57, phrase:false, tip:'複數 traumas；形容詞 traumatic'},
+{word:'outraged', pos:'adj.', meaning:'憤怒的、震驚的', unit:7, page:57, phrase:false, tip:'動詞 outrage；名詞 outrage'},
+{word:'ignorantly', pos:'adv.', meaning:'無知地', unit:7, page:57, phrase:false, tip:'形容詞 ignorant；名詞 ignorance'},
+{word:'vulnerable', pos:'adj.', meaning:'脆弱的、易受傷害的', unit:7, page:60, phrase:false, tip:'比較級 more vulnerable；名詞 vulnerability'},
+{word:'tolerate', pos:'v.', meaning:'容忍、忍受', unit:7, page:60, phrase:false, tip:'過去式 tolerated；現在分詞 tolerating；名詞 tolerance；形容詞 tolerant'},
+{word:'solitary', pos:'adj.', meaning:'孤獨的、單獨的', unit:7, page:60, phrase:false, tip:'副詞 solitarily；名詞 solitude'},
+{word:'Yours faithfully', pos:'ph.', meaning:'謹上（正式信件結語）', unit:7, page:61, phrase:true, tip:'正式信件結語；收信人姓名未知時使用；對應 Yours sincerely'},
+{word:'brink', pos:'n.', meaning:'邊緣、瀕臨', unit:7, page:61, phrase:false, tip:'常用搭配 on the brink of（瀕臨）'},
+];
+
+// ===================== STATE =====================
+let state = {
+  mode: 'read',
+  unit: 6,
+  speed: 1.0,
+  autoPlay: false,
+  currIdx: 0,
+  filtered: []
+};
+let playCount = 0;
+
+const UNIT_NAMES = {6:'Unit 6 · Technology & AI (P.30-35)',7:'Unit 7 · Conservation & Wildlife (P.56-61)'};
+
+// ===================== INIT =====================
+function init() {
+  applyFilter();
+  updateUI();
+  document.getElementById('totalCount').textContent = ALL_WORDS.length;
+  document.addEventListener('keydown', e => {
+    if(e.key==='ArrowLeft') prevWord();
+    if(e.key==='ArrowRight'||e.key===' ') { e.preventDefault(); nextWord(); }
+    if(e.key==='Enter'&&state.mode==='dictate') revealAnswer();
+    if(e.key==='p'||e.key==='P') playCurrent();
+  });
+}
+
+function applyFilter() {
+  state.filtered = ALL_WORDS.filter(w => w.unit === state.unit);
+  if(state.currIdx >= state.filtered.length) state.currIdx = 0;
+  updateUI(); updateStats();
+}
+
+function switchUnit(u) {
+  state.unit = u;
+  state.currIdx = 0;
+  document.querySelectorAll('.unit-tab').forEach(t=>t.classList.toggle('active',parseInt(t.dataset.unit)===u));
+  applyFilter();
+  document.getElementById('revealAfter').classList.remove('show');
+}
+
+function switchMode(m) {
+  state.mode = m;
+  document.querySelectorAll('.mode-tab').forEach(t=>t.classList.toggle('active',t.dataset.mode===m));
+  document.getElementById('dictActions').style.display = m==='dictate'?'flex':'none';
+  document.getElementById('revealAfter').classList.remove('show');
+  if(m==='dictate'&&!state.autoPlay){state.autoPlay=true;document.getElementById('autoBtn').textContent='On';document.getElementById('autoBtn').classList.add('active');}
+  updateUI();
+}
+
+function prevWord() { if(state.currIdx>0){state.currIdx--;updateUI();} }
+
+function nextWord() {
+  if(state.currIdx<state.filtered.length-1){state.currIdx++;updateUI();}
+  if(state.autoPlay && state.currIdx<state.filtered.length-1){
+    setTimeout(()=>playCurrent(),500);
+  }
+  document.getElementById('revealAfter').classList.remove('show');
+}
+
+function updateUI() {
+  const w = state.filtered[state.currIdx];
+  const wd = document.getElementById('wordDisplay');
+  const md = document.getElementById('meaningDisplay');
+  const pd = document.getElementById('posDisplay');
+  const ul = document.getElementById('unitLabel');
+  const ra = document.getElementById('revealAfter');
+
+  if(!w) {
+    wd.textContent = '🎉 All done!'; wd.className='word';
+    md.textContent=''; pd.textContent=''; ul.textContent='';
+    ra.classList.remove('show');
+    document.getElementById('wordCounter').textContent='0/0';
+    document.getElementById('playBtn').style.display='none';
+    return;
+  }
+
+  document.getElementById('playBtn').style.display='block';
+  wd.textContent = w.word;
+  wd.className = w.phrase ? 'word phrase' : 'word';
+  pd.textContent = w.pos;
+  md.textContent = w.meaning;
+  const en = document.getElementById('examNote');
+  en.textContent = w.tip ? '☑️ '+w.tip : '';
+  en.style.display = w.tip ? 'block' : 'none';
+  ul.textContent = `${UNIT_NAMES[w.unit]}  |  p.${w.page}  |  ${state.currIdx+1}/${state.filtered.length}`;
+  document.getElementById('wordCounter').textContent = `${state.currIdx+1}/${state.filtered.length}`;
+
+  ra.classList.remove('show');
+  if(state.mode==='dictate') {
+    wd.style.opacity='0.2'; wd.style.filter='blur(8px)';
+    pd.style.opacity='0.2'; pd.style.filter='blur(8px)';
+    md.style.opacity='0.2'; md.style.filter='blur(8px)';
+    document.getElementById('statusMsg').textContent = '🔊 Play → Write on paper → Check answer';
+  } else {
+    wd.style.opacity='1'; wd.style.filter='none';
+    pd.style.opacity='1'; pd.style.filter='none';
+    md.style.opacity='1'; md.style.filter='none';
+    document.getElementById('statusMsg').textContent = 'Ready';
+  }
+}
+
+function updateStats() {
+  document.getElementById('unitCount').textContent = state.filtered.length;
+  const total = state.filtered.length||1;
+  document.getElementById('progressCount').textContent = Math.round((state.currIdx/total)*100)+'%';
+  document.getElementById('progressFill').style.width = Math.round((state.currIdx/total)*100)+'%';
+}
+
+function setSpeed(btn, s) {
+  state.speed = s;
+  document.querySelectorAll('.speed-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function toggleAuto() {
+  state.autoPlay = !state.autoPlay;
+  document.getElementById('autoBtn').textContent = state.autoPlay ? 'On' : 'Off';
+  document.getElementById('autoBtn').classList.toggle('active', state.autoPlay);
+}
+
+// ===================== TTS =====================
+function speakAzure(text, rate) {
+  const key = 'YOUR_AZURE_SPEECH_KEY';  // 🔑 留空則自動使用瀏覽器 TTS
+  const region = 'eastasia';
+  if(key==='YOUR_AZURE_SPEECH_KEY'){fallbackBrowser(text);return;}
+  return fetch(`https://${region}.api.cognitive.microsoft.com/sts/v1.0/issueToken`, {
+    method: 'POST', headers: {'Ocp-Apim-Subscription-Key': key}
+  })
+  .then(r => r.text())
+  .then(token => {
+    const ssml = `<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='en-GB'>
+      <voice name='en-GB-SoniaNeural'>
+        <prosody rate='${Math.round((rate-1)*100)}%'>${text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}</prosody>
+      </voice>
+    </speak>`;
+    return fetch(`https://${region}.tts.speech.microsoft.com/cognitiveservices/v1`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/ssml+xml',
+        'X-Microsoft-OutputFormat': 'audio-16khz-128kbitrate-mono-mp3'
+      },
+      body: ssml
+    });
+  })
+  .then(r => r.blob())
+  .then(blob => {
+    const url = URL.createObjectURL(blob);
+    const audio = new Audio(url);
+    audio.onended = () => { URL.revokeObjectURL(url); onPlayEnd(); };
+    return audio.play().catch(() => fallbackBrowser(text));
+  })
+  .catch(e => { console.warn('Azure fail, fallback:', e); fallbackBrowser(text); });
+}
+
+function fallbackBrowser(text) {
+  if(!window.speechSynthesis) { onPlayEnd(); return; }
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'en-GB';
+  u.rate = state.speed * 0.9;
+  const vs = speechSynthesis.getVoices();
+  const gb = vs.find(v=>v.lang.startsWith('en-GB'));
+  if(gb) u.voice = gb;
+  u.onend = () => onPlayEnd();
+  speechSynthesis.speak(u);
+}
+
+function onPlayEnd() {
+  playCount++;
+  if(playCount < 2) {
+    const w = state.filtered[state.currIdx];
+    if(w) speakAzure(w.word, state.speed);
+  } else {
+    document.getElementById('playBtn').textContent = '▶';
+    document.getElementById('statusMsg').textContent = 'Ready';
+    if(state.mode==='dictate') {
+      document.getElementById('statusMsg').textContent = '🎯 Done · Press "Show Answer" to check';
+    }
+    if(state.autoPlay && state.currIdx < state.filtered.length - 1) {
+      setTimeout(() => nextWord(), 1500);
+    }
+  }
+}
+
+function playCurrent() {
+  const w = state.filtered[state.currIdx];
+  if(!w) return;
+  playCount = 0;
+  document.getElementById('playBtn').textContent = '🔊';
+  document.getElementById('statusMsg').textContent = '🔊 Playing…';
+  document.getElementById('revealAfter').classList.remove('show');
+  speakAzure(w.word, state.speed);
+}
+
+function revealAnswer() {
+  const w = state.filtered[state.currIdx];
+  if(!w) return;
+  const ra = document.getElementById('revealAfter');
+  ra.innerHTML = `<div class="r-word">${w.word}</div>
+    <div class="r-info"><em>${w.pos}</em>  ·  ${w.meaning}  ·  p.${w.page}</div>
+    <div class="r-info" style="color:#d97706;font-size:0.82rem;margin-top:4px">☑️ ${w.tip||''}</div>`;
+  ra.classList.add('show');
+  ['wordDisplay','posDisplay','meaningDisplay'].forEach(id=>{
+    const el=document.getElementById(id); el.style.opacity='1'; el.style.filter='none';
+  });
+  document.getElementById('statusMsg').textContent = '✅ Answer revealed';
+}
+
+// ===================== START =====================
+document.addEventListener('DOMContentLoaded', init);
+if(window.speechSynthesis) speechSynthesis.getVoices();
+</script>
+</body>
+</html>
