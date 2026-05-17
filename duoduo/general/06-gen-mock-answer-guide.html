@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>常識模考答題指南 — 多多專用</title>
+<style>
+  :root {
+    --primary: #2D6A4F;
+    --primary-light: #40916C;
+    --accent: #E9C46A;
+    --accent2: #F4A261;
+    --bg: #F8FAF5;
+    --card-bg: #FFFFFF;
+    --text: #2D3436;
+    --text-light: #636E72;
+    --border: #E0E0E0;
+    --success: #27AE60;
+    --warning: #F39C12;
+    --danger: #E74C3C;
+    --blue: #2980B9;
+    --purple: #8E44AD;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: 'Noto Sans HK', -apple-system, 'PingFang HK', 'Microsoft YaHei', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+    padding: 0;
+  }
+  .header {
+    background: linear-gradient(135deg, var(--primary) 0%, #1B4332 100%);
+    color: white;
+    padding: 40px 20px 30px;
+    text-align: center;
+  }
+  .header h1 { font-size: 1.8em; margin-bottom: 8px; }
+  .header p { opacity: 0.85; font-size: 0.95em; }
+  .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+
+  /* 答題技巧導航橫幅 */
+  .tips-banner {
+    background: linear-gradient(135deg, var(--accent), #F4D03F);
+    border-radius: 16px;
+    padding: 20px 24px;
+    margin: 0 0 30px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  }
+  .tips-banner h3 { color: #5D4E37; margin-bottom: 12px; font-size: 1.1em; }
+  .tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 10px;
+  }
+  .tip-item {
+    background: rgba(255,255,255,0.6);
+    border-radius: 10px;
+    padding: 12px;
+    text-align: center;
+    font-size: 0.9em;
+    border: 2px solid transparent;
+    transition: all 0.3s;
+  }
+  .tip-item:hover { border-color: var(--primary); background: rgba(255,255,255,0.9); }
+  .tip-item .icon { font-size: 1.8em; display: block; margin-bottom: 4px; }
+
+  /* 卷標題 */
+  .paper-section { margin: 30px 0; }
+  .paper-title {
+    font-size: 1.5em;
+    color: var(--primary);
+    border-bottom: 4px solid var(--accent);
+    padding-bottom: 8px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .paper-title .num {
+    background: var(--primary);
+    color: white;
+    border-radius: 50%;
+    width: 36px; height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7em;
+    font-weight: 700;
+  }
+
+  /* 題型分類 */
+  .section-type {
+    margin: 20px 0;
+    background: var(--card-bg);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+  }
+  .section-header {
+    padding: 14px 20px;
+    font-weight: 700;
+    font-size: 1.1em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: default;
+  }
+  .section-header.fill { background: #E8F5E9; color: #2E7D32; }
+  .section-header.short { background: #E3F2FD; color: #1565C0; }
+  .section-header.long { background: #FFF3E0; color: #E65100; }
+  .section-header.think { background: #F3E5F5; color: #7B1FA2; }
+  .section-body { padding: 16px 20px; }
+
+  /* 題目卡 */
+  .q-card {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 14px;
+    transition: box-shadow 0.2s;
+  }
+  .q-card:hover { box-shadow: 0 3px 12px rgba(0,0,0,0.08); }
+  .q-card .q-num {
+    display: inline-block;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 6px;
+    font-size: 0.95em;
+  }
+  .q-card .q-text {
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 10px;
+    line-height: 1.7;
+  }
+  .q-card .q-text .blank {
+    display: inline-block;
+    min-width: 60px;
+    border-bottom: 2px dashed var(--primary-light);
+    padding: 0 4px;
+    color: var(--primary);
+    font-weight: 700;
+  }
+
+  /* 答案區域 */
+  .answer-box {
+    background: #F0FAF4;
+    border-left: 4px solid var(--success);
+    padding: 12px 16px;
+    border-radius: 0 8px 8px 0;
+    margin-top: 8px;
+  }
+  .answer-box .label {
+    font-size: 0.8em;
+    color: var(--primary);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+  .answer-box .content { font-size: 0.95em; }
+  .answer-box .content .kw {
+    font-weight: 700;
+    color: #b85c00;
+    text-decoration: underline;
+    text-decoration-color: #b85c00;
+    text-underline-offset: 3px;
+  }
+
+  /* 技巧框架 */
+  .framework {
+    background: #FFFDE7;
+    border: 2px solid var(--accent);
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin: 10px 0;
+  }
+  .framework .fw-title {
+    color: #5D4E37;
+    font-weight: 700;
+    font-size: 0.9em;
+    margin-bottom: 8px;
+  }
+  .framework .fw-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 6px;
+    font-size: 0.92em;
+  }
+  .framework .fw-step .step-num {
+    background: var(--accent);
+    color: #5D4E37;
+    border-radius: 50%;
+    min-width: 24px; height: 24px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.8em;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  /* 圖片區域（文字示意） */
+  .diagram-box {
+    background: #FAFAFA;
+    border: 1px dashed #BBB;
+    border-radius: 8px;
+    padding: 12px;
+    margin: 10px 0;
+    font-size: 0.9em;
+    text-align: center;
+  }
+  .diagram-box .label { font-weight: 700; color: var(--text-light); margin-bottom: 8px; }
+
+  /* 留空警告 */
+  .blank-warning {
+    background: #FFF5F5;
+    border: 1px solid #FECACA;
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin: 16px 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .blank-warning .icon { font-size: 2em; flex-shrink: 0; }
+  .blank-warning h4 { color: var(--danger); margin-bottom: 4px; font-size: 1em; }
+  .blank-warning p { font-size: 0.9em; color: #7F1D1D; }
+
+  /* 總分總結卡 */
+  .summary-card {
+    background: linear-gradient(135deg, var(--primary), #1B4332);
+    color: white;
+    border-radius: 16px;
+    padding: 24px;
+    margin: 30px 0;
+  }
+  .summary-card h3 { margin-bottom: 12px; }
+  .summary-card ul { padding-left: 20px; }
+  .summary-card li { margin-bottom: 6px; font-size: 0.92em; opacity: 0.9; }
+
+  @media (max-width: 600px) {
+    .header h1 { font-size: 1.4em; }
+    .tips-grid { grid-template-columns: 1fr 1fr; }
+    .container { padding: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>📚 常識模考答題指南</h1>
+  <p>多多專用 · 結構化答題訓練 · 不留白·不漏分</p>
+</div>
+
+<div class="container">
+
+<div class="tips-banner">
+  <h3>🏆 答題技巧 · 黃金三法則</h3>
+  <div class="tips-grid">
+    <div class="tip-item">
+      <span class="icon">✏️</span>
+      <strong>法則一：不留白</strong><br>
+      <small>空著=0分，寫了就有機會！</small>
+    </div>
+    <div class="tip-item">
+      <span class="icon">📊</span>
+      <strong>法則二：分數=要點</strong><br>
+      <small>X分題寫X個要點，但要寫成完整句子</small>
+    </div>
+    <div class="tip-item">
+      <span class="icon">🔑</span>
+      <strong>法則三：關鍵詞</strong><br>
+      <small>圈出題目關鍵字再答</small>
+    </div>
+    <div class="tip-item">
+      <span class="icon">📝</span>
+      <strong>法則四：分點作答</strong><br>
+      <small>用① ② ③ 或分段</small>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- 卷一：人體透視·拒絕不良行為 -->
+<!-- ============================================================ -->
+<div class="paper-section">
+  <div class="paper-title">
+    <span class="num">一</span>
+    模擬考試（卷一）人體透視·拒絕不良行為
+  </div>
+
+  <!-- === 填充題 === -->
+  <div class="section-type">
+    <div class="section-header fill">
+      <span>📝</span> 一、填充題（每空2分）
+    </div>
+    <div class="section-body">
+
+      <div class="q-card">
+        <div class="q-num">Q1</div>
+        <div class="q-text">碰到熱東西縮手，訊息路徑為：<span class="blank">感受器</span>（皮膚）→ 感覺神經 → <span class="blank">神經中樞</span>（此處為脊髓） → 運動神經 → <span class="blank">效應器</span>（肌肉）</div>
+        <div class="answer-box">
+          <div class="label">✅ 結構化答案</div>
+          <div class="content">
+            <strong>必背口訣</strong>：「感→感→脊→運→效」<br>
+            <span class="kw">感受器</span>（皮膚接收刺激）→ <span class="kw">感覺神經</span>（傳入信號）→ <span class="kw">神經中樞</span>（此處為脊髓，處理訊息）→ <span class="kw">運動神經</span>（傳出指令）→ <span class="kw">效應器</span>（肌肉做出反應）
+          </div>
+        </div>
+        <div class="framework" style="margin-top:10px;">
+          <div class="fw-title">💡 記法：五個部分，順序不能錯！</div>
+          <div class="fw-step"><span class="step-num">1</span>先有刺激（感受器）</div>
+          <div class="fw-step"><span class="step-num">2</span>再傳進去（感覺神經→神經中樞，此處為脊髓）</div>
+          <div class="fw-step"><span class="step-num">3</span>然後傳出來（運動神經）</div>
+          <div class="fw-step"><span class="step-num">4</span>最後做動作（效應器=肌肉）</div>
+        </div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-num">Q2-Q4（直接記憶型）</div>
+        <div class="q-text">Q2. 大腦負責 <span class="blank">思考和記憶</span>；小腦負責 <span class="blank">身體平衡</span></div>
+        <div class="q-text">Q3. <span class="blank">腦幹</span> 控制呼吸和心跳</div>
+        <div class="q-text">Q4. 看到梅子就流口水是一種 <span class="blank">條件反射</span></div>
+        <div class="answer-box">
+          <div class="label">✅ 答題技巧</div>
+          <div class="content">
+            <strong>大腦 vs 小腦 vs 腦幹 區分口訣</strong>：<br>
+            <span class="kw">大腦</span> = 思想記憶（最高司令）<br>
+            <span class="kw">小腦</span> = 平衡協調（走路不摔）<br>
+            <span class="kw">腦幹</span> = 呼吸心跳（活命的根本）<br>
+            <span class="kw">條件反射</span> = 後天學會的（如看到梅子流口水、聽到鈴聲分泌唾液）
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-num">Q5</div>
+        <div class="q-text">泌尿系統由 <span class="blank">腎臟</span>、<span class="blank">輸尿管</span>、<span class="blank">膀胱</span> 和 <span class="blank">尿道</span> 四個部分組成</div>
+        <div class="answer-box">
+          <div class="label">✅ 結構化答案</div>
+          <div class="content">
+            <strong>口訣</strong>：<span class="kw">腎</span>（過濾血液）→ <span class="kw">輸尿管</span>（輸送尿液）→ <span class="kw">膀胱</span>（儲存尿液）→ <span class="kw">尿道</span>（排出體外）<br>
+            <small>按順序記，問路徑時不能顛倒！</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-num">Q6-Q8（煙草危害）</div>
+        <div class="q-text">Q6. 香煙中令人上癮的物質是 <span class="blank">尼古丁</span>；降低血液攜氧能力的是 <span class="blank">一氧化碳</span></div>
+        <div class="q-text">Q7. 導致咳嗽和牙齒變黃的是 <span class="blank">焦油</span></div>
+        <div class="q-text">Q8. 吸入他人呼出的煙霧叫 <span class="blank">二手煙</span>；殘留衣物上的化學物質叫 <span class="blank">三手煙</span></div>
+        <div class="answer-box">
+          <div class="label">✅ 對比記憶</div>
+          <div class="content">
+            <span class="kw">尼古丁</span> → 令人上癮、心跳加速<br>
+            <span class="kw">一氧化碳</span> → 降低血液帶氧能力（缺氧！）<br>
+            <span class="kw">焦油</span> → 黏在肺和牙齒上（咳嗽、變黃）<br>
+            <span class="kw">二手煙</span> = 別人正在呼出的煙（即時吸入）<br>
+            <span class="kw">三手煙</span> = 殘留衣物傢俱的有害物（長期接觸）
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-num">Q9-Q10（酗酒與毒品）</div>
+        <div class="q-text">Q9. 長期酗酒會損害肝臟，導致 <span class="blank">肝硬化</span>；也會損害大腦，造成 <span class="blank">記憶力衰退／腦部損害</span></div>
+        <div class="q-text">Q10. 負責打擊販毒的政府部門是 <span class="blank">警方</span>（海關專責邊境走私）；為吸毒者提供戒毒服務的機構是 <span class="blank">戒毒治療中心／醫院／社工機構</span></div>
+        <div class="answer-box">
+          <div class="label">✅ 答題要點</div>
+          <div class="content">
+            <strong>酒 vs 煙 vs 毒 危害要分清楚</strong>：<br>
+            酗酒 → 肝臟(<span class="kw">肝硬化</span>) + 大腦(<span class="kw">記憶力衰退</span>)<br>
+            吸毒 → 身體損害 + 家庭破裂 + 違法<br>
+            戒毒的求助渠道：<span class="kw">警方</span>（執法打擊販毒）、<span class="kw">戒毒治療中心／醫院</span>（治療康復）
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- === 簡答題 === -->
+  <div class="section-type">
+    <div class="section-header short">
+      <span>📋</span> 二、簡答題（每題2分）
+    </div>
+    <div class="section-body">
+
+      <!-- 答題框架提示 -->
+      <div class="framework">
+        <div class="fw-title">🎯 簡答題答題框架（2分題）</div>
+        <div class="fw-step"><span class="step-num">①</span> 圈出題目關鍵字（問什麼？）</div>
+        <div class="fw-step"><span class="step-num">②</span> 直接回答核心內容（1-2句話）</div>
+        <div class="fw-step"><span class="step-num">③</span> 檢查：有沒有答完整？有沒有專業名詞？</div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-num">Q1. 神經系統主要由哪三個部分組成？</div>
+        <div class="answer-box">
+          <div class="label">✅ 結構化答案</div>
+          <div class="content">神經系統主要由 <span class="kw">腦</span>（包括<span class="kw">大腦</span>、<span class="kw">小腦</span>和<span class="kw">腦幹</span>）、<span class="kw">脊髓</span> 和 <span class="kw">神經</span> 三部分組成。</div>
+        </div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-num">Q2. 舉出一個保護神經系統的方法</div>
+        <div class="answer-box">
+          <div class="label">✅ 結構化答案（三選一）</div>
+          <div class="content">
+            A. <span class="kw">佩戴頭盔</span>（做運動/踩單車時保護頭部）<br>
+            B. 保持 <span class="kw">充足睡眠</span>（讓大腦休息）<br>
+            C. 保持 <span class="kw">正確坐姿</span>（保護脊髓）
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-num">Q3. 人體內負責過濾血液廢物和水分的是哪個器官？</div>
+        <div class="answer-box">
+          <div class="label">✅ 答案</div>
+          <div class="content">是 <span class="kw">腎臟</span>。（腎臟過濾血液中的廢物和水分，形成尿液）</div>
+        </div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-num">Q4. 舉出一個保護泌尿系統的方法</div>
+        <div class="answer-box">
+          <div class="label">✅ 結構化答案（三選一）</div>
+          <div class="content">
+            A. <span class="kw">不強忍小便</span>（有尿意就去洗手間）<br>
+            B. <span class="kw">多喝水</span>（稀釋尿液，減少細菌滋生）<br>
+            C. 注意 <span class="kw">個人衛生</span>（保持清潔）
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-num">Q5. 為甚麼要多喝水？寫出一個理由</div>
+        <div class="answer-box">
+          <div class="label">✅ 結構化答案（三選一）</div>
+          <div class="content">
+            A. 水能幫助身體 <span class="kw">維持正常運作</span><br>
+            B. 水能幫助腎臟 <span class="kw">排出廢物和毒素</span><br>
+            C. 水能 <span class="kw">調節體溫</span>，防止中暑
+          </div>
+        </div>
+      </div>
+
+
+      <div class="q-card">
+        <div class="q-num">Q7. 如果有人引誘你吸毒，你應該找誰求助？</div>
+        <div class="answer-box">
+          <div class="label">✅ 結構化答案（三選一）</div>
+          <div class="content">
+            A. 找 <span class="kw">家長/父母</span> 求助<br>
+            B. 找 <span class="kw">老師</span> 求助<br>
+            C. 找 <span class="kw">警察</span> 求助
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- === 問答題 === -->
+  <div class="section-type">
+    <div class="section-header long">
+      <span>📖</span> 七、問答題（每題4分）
+    </div>
+    <div class="section-body">
+
+      <div class="framework">
+        <div class="fw-title">🎯 問答題答題框架（4分題 = 寫2-4個要點）</div>
+        <div class="fw-step"><span class="step-num">①</span> 讀題：圈出 <span class="kw">分數</span> 和 <span class="kw">題目要求</span>（例：各舉一項=2項）</div>
+        <div class="fw-step"><span class="step-num">②</span> 拆解：4分題最少寫 <span class="kw">2個要點</span>（4分=2分+2分）</div>
+        <div class="fw-step"><span class="step-num">③</span> 答題：有序列號或分段，用完整句子</div>
+        <div class="fw-step"><span class="step-num">④</span> 檢查：有沒有漏答題目中的某個部分？</div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-num">Q1. 描述反射弧路徑（從感受器到效應器）並舉例（4分）</div>
+        <div class="q-text">題目要求：①路徑 ②例子 → <strong>2+2分</strong></div>
+        <div class="answer-box">
+          <div class="label">✅ 結構化答案</div>
+          <div class="content">
+            <strong>① 路徑（2分）：</strong><br>
+            <span class="kw">感受器</span>（皮膚）→ <span class="kw">感覺神經</span> → <span class="kw">神經中樞</span>（此處為脊髓）→ <span class="kw">運動神經</span> → <span class="kw">效應器</span>（肌肉）<br><br>
+            <strong>② 例子（2分）：</strong><br>
+            例如 <span class="kw">碰到熱水縮手</span>：手指皮膚（感受器）感到燙 → 訊息傳到脊髓 → 大腦還沒反應，手已經縮回來了（反射動作）
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-num">Q2. 甚麼是二手煙和三手煙？對家人有甚麼危害？（4分）</div>
+        <div class="q-text">題目要求：①二手煙定義 ②三手煙定義 ③危害 → <strong>1+1+2分</strong></div>
+        <div class="answer-box">
+          <div class="label">✅ 結構化答案</div>
+          <div class="content">
+            <strong>① 二手煙（1分）：</strong><br>
+            <span class="kw">二手煙</span> 是指吸入別人呼出的煙霧。<br><br>
+            <strong>② 三手煙（1分）：</strong><br>
+            <span class="kw">三手煙</span> 是指殘留在衣物、傢俱上的有害化學物質。<br><br>
+            <strong>③ 對家人的危害（2分）：</strong><br>
+            二手煙和三手煙都會 <span class="kw">損害呼吸系統</span>，增加患上 <span class="kw">肺癌</span>、<span class="kw">哮喘</span> 的風險，尤其對嬰兒和長者影響更大。
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-num">Q3. 泌尿系統由哪四個部分組成？按次序寫出尿液路徑（4分）</div>
+        <div class="q-text">題目要求：①四個部分 ②路徑 → <strong>2+2分</strong></div>
+        <div class="answer-box">
+          <div class="label">✅ 結構化答案</div>
+          <div class="content">
+            <strong>① 四個部分（2分）：</strong><br>
+            泌尿系統由 <span class="kw">腎臟</span>、<span class="kw">輸尿管</span>、<span class="kw">膀胱</span> 和 <span class="kw">尿道</span> 四個部分組成。<br><br>
+            <strong>② 尿液路徑（2分）：</strong><br>
+            <span class="kw">腎臟</span>（過濾血液產生尿液）→ <span class="kw">輸尿管</span>（將尿液輸送到膀胱）→ <span class="kw">膀胱</span>（儲存尿液）→ <span class="kw">尿道</span>（將尿液排出體外）
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-num">Q4. 酗酒對身體和家庭會造成哪些負面影響？各舉一項（4分）</div>
+        <div class="q-text">題目要求：①身體（2分）②家庭（2分）→ <strong>2+2分</strong></div>
+        <div class="answer-box">
+          <div class="label">✅ 結構化答案</div>
+          <div class="content">
+            <strong>① 對身體的影響（2分）：</strong><br>
+            酗酒會損害 <span class="kw">肝臟</span>（導致肝硬化），也會損害 <span class="kw">大腦</span>（造成記憶力衰退）。<br><br>
+            <strong>② 對家庭的影響（2分）：</strong><br>
+            酗酒會導致 <span class="kw">家庭不和諧</span>、<span class="kw">經濟困難</span>，甚至引發家庭暴力。
+          </div>
+        </div>
+        <div style="background:#FFF5F5; border-radius:8px; padding:10px; margin-top:10px; font-size:0.9em; border:1px solid #FECACA;">
+          ⚠️ <strong>多多上次的答案只寫了家庭方面，身體方面完全沒答，扣了2分！</strong> 記得題目說「各舉一項」，就要分成 <span class="kw">身體</span> 和 <span class="kw">家庭</span> 兩部分來答。
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- === 思考題 === -->
+  <div class="section-type">
+    <div class="section-header think">
+      <span>🧠</span> 八、思考題（每題2分）
+    </div>
+    <div class="section-body">
+
+      <div class="framework">
+        <div class="fw-title">🎯 思考題答題框架（2分題）</div>
+        <div class="fw-step"><span class="step-num">①</span> 先表態：是/不是、同意/不同意</div>
+        <div class="fw-step"><span class="step-num">②</span> 再解釋：用課堂學過的知識說明理由</div>
+        <div class="fw-step"><span class="step-num">③</span> 最後總結：一句話總結你的觀點</div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-num">Q1. 電子煙真的無害嗎？用課堂學過的知識說明理由</div>
+        <div class="answer-box">
+          <div class="label">✅ 結構化答案</div>
+          <div class="content">
+            <span class="kw">不是</span>，電子煙並非無害。<br><br>
+            因為電子煙仍然含有 <span class="kw">尼古丁</span>，會令人 <span class="kw">上癮</span>，還含有其他 <span class="kw">有害化學物質</span>，同樣會損害呼吸系統和身體健康。<br><br>
+            所以電子煙和其他煙草產品一樣，對身體有害，不應該嘗試。
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-num">Q2. 如何拒絕吸電子煙的引誘？寫出一個合理的拒絕方法</div>
+        <div class="answer-box">
+          <div class="label">✅ 結構化答案</div>
+          <div class="content">
+            我會 <span class="kw">直接說「不，我不需要」</span>，然後 <span class="kw">離開現場</span>，去找其他朋友玩。<br><br>
+            <small>💡 拒絕方法三種：①直接說不 ②離開現場 ③找大人幫忙。選一個寫出來，加上具體情境就更完整了。</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-num">Q3. 吸煙和吸毒有甚麼相似之處？舉出一項</div>
+        <div class="answer-box">
+          <div class="label">✅ 結構化答案</div>
+          <div class="content">
+            吸煙和吸毒的相似之處是：<span class="kw">都會令人上癮</span>，而且 <span class="kw">都會嚴重損害身體健康</span>（如損害肺部、心臟、大腦等）。<br><br>
+            <small>💡 只寫「對身體有害」太籠統，要說出具體危害才能拿到滿分！</small>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- ============================================================ -->
+<!-- 卷二：太陽系的奧秘 -->
+<!-- ============================================================ -->
+<div class="paper-section">
+  <div class="paper-title">
+    <span class="num">二</span>
+    模擬考試（卷二）太陽系的奧秘
+  </div>
+
+  <!-- === 填充題 === -->
+  <div class="section-type">
+    <div class="section-header fill">
+      <span>📝</span> 一、填充題（每空2分）
+    </div>
+    <div class="section-body">
+
+      <div class="q-card">
+        <div class="q-num">Q1-Q2（地球運動）</div>
+        <div class="q-text">Q1. 地球繞地軸 <span class="blank">自轉</span> 一周約需 <span class="blank">24</span> 小時，產生 <span class="blank">晝夜交替</span></div>
+        <div class="q-text">Q2. 地球圍繞太陽 <span class="blank">公轉</span> 一周約需 <span class="blank">365</span> 日，加上 <span class="blank">地軸傾斜</span>，形成 <span class="blank">四季變化</span></div>
+        <div class="answer-box">
+          <div class="label">✅ 對比記憶</div>
+          <div class="content">
+            <strong>自轉 vs 公轉</strong><br>
+            <span class="kw">自轉</span> = 地球自己轉（24小時 → 晝夜交替）<br>
+            <span class="kw">公轉</span> = 地球繞太陽轉（365日 → 四季變化，需配合地軸傾斜）
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-num">Q3-Q5（太陽與月球）</div>
+        <div class="q-text">Q3. 太陽光 <span class="blank">直射</span> 地面時溫度較高，<span class="blank">斜射</span> 地面時溫度較低</div>
+        <div class="q-text">Q4. 月球本身不發光，我們看到的是它 <span class="blank">反射</span> 太陽光的結果</div>
+        <div class="q-text">Q5. 月球自轉和公轉一周都約需 <span class="blank">27</span> 日；月相變化一周循環約 <span class="blank">30</span> 日</div>
+        <div class="answer-box">
+          <div class="label">✅ 重點記憶</div>
+          <div class="content">
+            <span class="kw">直射</span> → 熱量集中（夏天）<br>
+            <span class="kw">斜射</span> → 熱量分散（冬天）<br>
+            月球 <span class="kw">自轉=公轉=27天</span> → 所以永遠同一面朝向地球（潮汐鎖定）<br>
+            月相循環約 <span class="kw">30天</span>（一個農曆月）
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-num">Q6-Q8（蝕與天體分類）</div>
+        <div class="q-text">Q6. 月球運行到地球和太陽之間遮擋太陽光形成 <span class="blank">日蝕</span>；地球運行到月球和太陽之間遮擋太陽光形成 <span class="blank">月蝕</span></div>
+        <div class="q-text">Q7. <span class="blank">太陽</span> 是太陽系唯一的恆星</div>
+        <div class="q-text">Q8. 地球是一顆 <span class="blank">行星</span>；月球是地球的 <span class="blank">衛星</span></div>
+        <div class="answer-box">
+          <div class="label">✅ 日蝕 vs 月蝕記憶法</div>
+          <div class="content">
+            <strong>「月中日」口訣</strong>：<br>
+            <span class="kw">月</span>球在中間（月球→日→地）→ <span class="kw">日</span>蝕<br>
+            <span class="kw">地</span>球在中間（日→地→月）→ <span class="kw">月</span>蝕<br><br>
+            <strong>天體三類</strong>：<br>
+            <span class="kw">恆星</span>（自己發光，如太陽）|<span class="kw">行星</span>（繞恆星轉，不發光，如地球）|<span class="kw">衛星</span>（繞行星轉，如月球）
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-num">Q9-Q10（太陽系行星）</div>
+        <div class="q-text">Q9. 距離太陽最近的是 <span class="blank">水星</span>；體積最大的是 <span class="blank">木星</span></div>
+        <div class="q-text">Q10. 距離太陽最遠的是 <span class="blank">海王星</span>；有寬闊明亮光環的是 <span class="blank">土星</span></div>
+        <div class="answer-box">
+          <div class="label">✅ 行星口訣</div>
+          <div class="content">
+            <strong>八大行星由近至遠</strong>：<br>
+            <span class="kw">水</span>星 → <span class="kw">金</span>星 → <span class="kw">地</span>球 → <span class="kw">火</span>星 → <span class="kw">木</span>星 → <span class="kw">土</span>星 → <span class="kw">天</span>王星 → <span class="kw">海</span>王星<br>
+            <strong>口訣</strong>：「水金地火木土天海」<br>
+            <strong>特點</strong>：水星最近｜木星最大｜土星光環｜海王星最遠
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- === 簡答題 === -->
+  <div class="section-type">
+    <div class="section-header short">
+      <span>📋</span> 二、簡答題（每題2分）
+    </div>
+    <div class="section-body">
+
+      <div class="blank-warning">
+        <div class="icon">⚠️</div>
+        <div>
+          <h4>多多，這裡你留空了4題！</h4>
+          <p>卷二的簡答題你總共寫了Q1、Q5、Q6三題，Q2、Q3、Q4、Q7完全空著——直接丟了8分！<br>
+          <strong>記住原則：</strong>簡答題只要寫一句相關的話，通常就能拿到1分。空著=0分，寫了就有機會！</p>
+        </div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-num">Q1. 為甚麼地球會有晝夜？</div>
+        <div class="answer-box">
+          <div class="label">✅ 結構化答案</div>
+          <div class="content">因為地球 <span class="kw">自轉</span>，面向太陽的一面是 <span class="kw">白天</span>，背向太陽的一面是 <span class="kw">夜晚</span>，所以產生晝夜交替。</div>
+        </div>
+        <div class="framework" style="margin-top:8px;">
+          <div class="fw-step"><span class="step-num">①</span> 關鍵詞：自轉</div>
+          <div class="fw-step"><span class="step-num">②</span> 面向太陽 → 白天；背向太陽 → 夜晚</div>
+        </div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-num">Q2. 北半球的夏季，太陽直射哪個半球？</div>
+        <div class="answer-box">
+          <div class="label">✅ 答案</div>
+          <div class="content">北半球夏季時，太陽直射 <span class="kw">北半球</span>（更準確地說，直射北回歸線附近）。</div>
+        </div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-num">Q3. 月球表面的主要特徵是甚麼？</div>
+        <div class="answer-box">
+          <div class="label">✅ 答案</div>
+          <div class="content">月球表面的主要特徵是有很多 <span class="kw">環形山</span>（也叫隕石坑），是由隕石撞擊形成的。</div>
+        </div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-num">Q4. 為甚麼我們在地球上只能看到月球的同一面？</div>
+        <div class="answer-box">
+          <div class="label">✅ 結構化答案</div>
+          <div class="content">因為月球 <span class="kw">自轉</span> 和 <span class="kw">公轉</span> 的周期相同（都是約27天），所以月球始終以同一面向著地球。這叫「<span class="kw">潮汐鎖定</span>」。</div>
+        </div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-num">Q5. 觀看日蝕時要注意甚麼安全事項？</div>
+        <div class="answer-box">
+          <div class="label">✅ 答案</div>
+          <div class="content">觀看日蝕時 <span class="kw">不可以直接用肉眼看</span>，必須使用 <span class="kw">專用濾鏡或日蝕眼鏡</span>，否則會嚴重損害眼睛。</div>
+        </div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-num">Q6. 恆星和行星的主要區別是甚麼？</div>
+        <div class="answer-box">
+          <div class="label">✅ 結構化答案</div>
+          <div class="content">
+            <span class="kw">恆星</span> 能夠 <span class="kw">自己發光發熱</span>（如太陽）。<br>
+            <span class="kw">行星</span> <span class="kw">不會自己發光</span>，我們看到的是它反射恆星的光（如地球反射太陽光）。<br>
+            <small>💡 注意！不要像上次那樣寫錯成「行星不會有生命」——區別是 <strong>發不發光</strong>，不是有沒有生命！</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-num">Q7. 地球在太陽系中有甚麼獨特之處？</div>
+        <div class="answer-box">
+          <div class="label">✅ 結構化答案</div>
+          <div class="content">地球是目前已知太陽系中唯一擁有 <span class="kw">液態水</span> 和 <span class="kw">大氣層</span>、<span class="kw">適合生物生存</span> 的行星。</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- === 問答題 === -->
+  <div class="section-type">
+    <div class="section-header long">
+      <span>📖</span> 七、問答題（每題4分）
+    </div>
+    <div class="section-body">
+
+      <div class="q-card">
+        <div class="q-num">Q1. 為甚麼南半球的聖誕節在夏天？試用地球公轉和地軸傾斜解釋（4分）</div>
+        <div class="q-text">題目要求：必須使用關鍵詞「<strong>公轉</strong>」和「<strong>地軸傾斜</strong>」</div>
+        <div class="answer-box">
+          <div class="label">✅ 結構化答案</div>
+          <div class="content">
+            <strong>① 原理（2分）：</strong><br>
+            地球 <span class="kw">公轉</span> 時，由於 <span class="kw">地軸傾斜</span>（約23.5度），太陽直射點在南北半球之間移動。<br><br>
+            <strong>② 具體解釋（2分）：</strong><br>
+            聖誕節（12月）前後，太陽 <span class="kw">直射南回歸線</span> 附近，因此 <span class="kw">南半球</span> 接受較多太陽熱量，處於 <span class="kw">夏季</span>；而北半球則處於冬季。<br><br>
+            <div style="background:#FFF3E0; border-radius:8px; padding:10px; font-size:0.85em;">
+              ⚠️ <strong>多多上次答錯的重點：</strong><br>
+              ✗ 你寫了「因為太陽光 <span style="color:red;font-weight:700;">斜射</span> 南半球」<br>
+              ✓ 正確是：太陽光 <span style="color:green;font-weight:700;">直射南回歸線</span>（不是斜射！）<br>
+              ✓ 而且一定要提到 <span style="color:green;font-weight:700;">公轉</span> 和 <span style="color:green;font-weight:700;">地軸傾斜</span> 兩個關鍵詞！
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-num">Q2. 月相為甚麼會變化？從新月到滿月再到新月需多少天？（4分）</div>
+        <div class="q-text">題目要求：①原因 ②天數 → <strong>2+2分</strong></div>
+        <div class="answer-box">
+          <div class="label">✅ 結構化答案</div>
+          <div class="content">
+            <strong>① 原因（2分）：</strong><br>
+            月球 <span class="kw">繞地球公轉</span>，它與太陽的相對位置不斷改變，我們從地球上看到月球被照亮的部分（<span class="kw">受光面積</span>）也會不斷變化，形成不同的月相。<br><br>
+            <strong>② 天數（2分）：</strong><br>
+            從新月到滿月再到下一個新月，一個完整的月相循環約需 <span class="kw">30天</span>（準確說是29.5天）。<br><br>
+            <small>💡 多多上次只寫了「不停地公轉，三十天」，缺少了「受光面積改變」這個核心解釋，扣了1分！</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-num">Q3. 日蝕和月蝕的形成有甚麼不同？分別畫出位置關係（4分）</div>
+        <div class="q-text">題目要求：①日蝕位置說明 ②月蝕位置說明 ③畫圖 → <strong>1+1+2分</strong></div>
+        <div class="answer-box">
+          <div class="label">✅ 結構化答案</div>
+          <div class="content">
+            <strong>① 日蝕（1分）：</strong><br>
+            <span class="kw">月球</span> 運行到 <span class="kw">太陽和地球之間</span>，三者排成一線，月球擋住太陽光，地球上部分地區看不到太陽→ <span class="kw">日蝕</span><br><br>
+            <strong>② 月蝕（1分）：</strong><br>
+            <span class="kw">地球</span> 運行到 <span class="kw">太陽和月球之間</span>，三者排成一線，地球擋住太陽光，地球的影子投射到月球上→ <span class="kw">月蝕</span>（月亮呈暗紅色）<br><br>
+            <strong>③ 畫圖（2分）：</strong><br>
+            <div class="diagram-box">
+              <div class="label">日蝕位置：</div>
+              太陽 ☀️ → 🌑 月球 → 🌍 地球<br><br>
+              <div class="label">月蝕位置：</div>
+              太陽 ☀️ → 🌍 地球 → 🌑 月球
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-num">Q4. 寫出太陽系八大行星中任意四個，按距離太陽由近至遠排列（4分）</div>
+        <div class="q-text">題目要求：①名稱（2分）②順序（2分）</div>
+        <div class="answer-box">
+          <div class="label">✅ 結構化答案</div>
+          <div class="content">
+            <strong>由近至遠排列舉例一：</strong><br>
+            <span class="kw">水星</span> → <span class="kw">金星</span> → <span class="kw">地球</span> → <span class="kw">火星</span>（最內圈4顆，固態行星）<br><br>
+            <strong>舉例二：</strong><br>
+            <span class="kw">木星</span> → <span class="kw">土星</span> → <span class="kw">天王星</span> → <span class="kw">海王星</span>（最外圈4顆，氣態行星）<br><br>
+            <small>💡 多多上次寫了水星→金星→火星→木星，跳過了地球（次序沒錯，但寫全四個更好）。記口訣：「<strong>水金地火木土天海</strong>」</small>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- === 思考題 === -->
+  <div class="section-type">
+    <div class="section-header think">
+      <span>🧠</span> 八、思考題（每題2分）
+    </div>
+    <div class="section-body">
+
+      <div class="q-card">
+        <div class="q-num">Q1. 解釋月蝕形成的原因</div>
+        <div class="answer-box">
+          <div class="label">✅ 結構化答案</div>
+          <div class="content">
+            當 <span class="kw">太陽、地球、月球</span> 三者排成一線，<span class="kw">地球在中間</span> 時，地球擋住了太陽的光，地球的 <span class="kw">影子投射到月球表面</span>，月球看起來呈暗紅色，這就是月蝕。<br><br>
+            <small>💡 多多上次這題答得很好！「地球擋住了太陽的光，地球的影子投射到月球呈暗紅色」✓ 滿分！</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-num">Q2. 為甚麼不是每個月都有月蝕？</div>
+        <div class="answer-box">
+          <div class="label">✅ 結構化答案</div>
+          <div class="content">
+            雖然每個月都有一次滿月，但月球繞地球公轉的 <span class="kw">軌道面</span> 和地球繞太陽公轉的 <span class="kw">軌道面</span> 之間有一個約 <span class="kw">5度</span> 的夾角。<br><br>
+            所以大多數時候滿月時，月球都在地球影子的 <span class="kw">上方或下方</span> 經過，只有當三者剛好在同一平面排成一線時才會發生月蝕。<br><br>
+            <div style="background:#FFF5F5; border-radius:8px; padding:10px; font-size:0.85em;">
+              ⚠️ <strong>多多上次答錯：</strong>「月球比地球快一點」<br>
+              ✓ <strong>正確思路：</strong>不是速度快慢的問題，而是 <span style="color:green;font-weight:700;">軌道面有夾角</span>！
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-num">Q3. 會選擇在農曆哪一天前後觀看月蝕？為甚麼？</div>
+        <div class="answer-box">
+          <div class="label">✅ 結構化答案</div>
+          <div class="content">
+            我會選擇在 <span class="kw">農曆十五</span> 前後觀看月蝕。<br><br>
+            因為月蝕發生時，地球在太陽和月球之間，<span class="kw">滿月</span>（農曆十五）時月球正好在地球的背後方向，此時地球的影子才能投射到月球上，形成月蝕。
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- ============================================================ -->
+<!-- 答題技巧總結 -->
+<!-- ============================================================ -->
+<div class="summary-card">
+  <h3>📌 多多答題檢查清單（每次考試前看一遍）</h3>
+  <ul>
+    <li>✅ <strong>不留白</strong>——簡答題空著=0分，寫一句就有分！就算不確定也要寫</li>
+    <li>✅ <strong>看分數</strong>——X分題寫X個要點！2分題寫1-2句，4分題寫2-4個要點，但要寫成完整句子</li>
+    <li>✅ <strong>用關鍵詞</strong>——圈出題目中的關鍵字，答案裡一定要出現這些詞</li>
+    <li>✅ <strong>答完整</strong>——題目說「各舉一項」就要分兩部分答，不能只答一半</li>
+    <li>✅ <strong>分點作答</strong>——用① ② ③ 或分段，讓老師一眼看到你的要點</li>
+    <li>✅ <strong>檢查錯別字</strong>——「脊髓」不是「脊隨」、「一氧化碳」不是「氧化碳」</li>
+    <li>✅ <strong>填空看清口訣</strong>——自轉=晝夜交替(24h)，公轉+地軸傾斜=四季變化(365d)</li>
+  </ul>
+</div>
+
+</div>
+
+</body>
+</html>
