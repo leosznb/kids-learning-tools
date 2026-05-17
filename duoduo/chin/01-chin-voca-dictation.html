@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>多多呈分試 · 中文科全詞彙｜粵語跟讀+聽寫</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", "Noto Sans SC", "PingFang HK", "Microsoft JhengHei", sans-serif;
+    background: #fff7ed;
+    color: #333;
+    display: flex; flex-direction: column; align-items: center;
+    min-height: 100vh;
+  }
+  header {
+    width: 100%; max-width: 720px;
+    padding: 18px 16px 10px;
+    text-align: center;
+  }
+  header h1 {
+    margin: 0; font-size: 1.3rem; color: #c2410c;
+  }
+  header p { margin: 4px 0 0; font-size: 0.85rem; color: #9a3412; }
+
+  .container {
+    width: 100%; max-width: 720px;
+    padding: 0 16px 32px;
+  }
+
+  /* Lesson Tabs */
+  .lesson-tabs {
+    display: flex; gap: 8px; overflow-x: auto;
+    padding-bottom: 8px; margin-bottom: 10px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .lesson-tabs::-webkit-scrollbar { display: none; }
+  .lesson-tab {
+    flex-shrink: 0;
+    padding: 8px 16px; border-radius: 999px;
+    border: 2px solid #fdba74; background: #fff;
+    color: #c2410c; font-size: 0.85rem; font-weight: 600; cursor: pointer;
+    white-space: nowrap; transition: all .2s;
+  }
+  .lesson-tab:hover { border-color: #fb923c; }
+  .lesson-tab.active { background: #f97316; color: #fff; border-color: #f97316; }
+
+  /* Category tags */
+  .cat-row {
+    display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;
+    margin-bottom: 14px;
+  }
+  .cat-tag {
+    padding: 6px 14px; border-radius: 10px; border: 2px solid #fdba74;
+    background: #fff; color: #9a3412; font-size: 0.82rem; font-weight: 600; cursor: pointer;
+    transition: all .2s;
+  }
+  .cat-tag:hover { border-color: #fb923c; }
+  .cat-tag.active { background: #fff7ed; border-color: #f97316; color: #c2410c; box-shadow: inset 0 0 0 2px #f97316; }
+
+  /* Card */
+  .card {
+    background: #fff; border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(249,115,22,0.12);
+    padding: 28px 24px; text-align: center;
+    margin-bottom: 16px;
+    border: 1px solid #ffedd5;
+  }
+  .word-display {
+    font-size: 3rem; font-weight: 800; color: #7c2d12;
+    margin: 8px 0 10px; line-height: 1.2; word-break: break-word;
+  }
+  .word-display.hidden {
+    color: transparent;
+    text-shadow: 0 0 12px rgba(124,45,18,0.35);
+    user-select: none;
+  }
+  .pinyin-display {
+    font-size: 1.05rem; color: #9a3412; letter-spacing: 1px; margin-bottom: 6px;
+    font-family: "Noto Sans TC", sans-serif;
+  }
+  .meaning-display {
+    font-size: 1.15rem; color: #9a3412; margin-bottom: 8px;
+  }
+  .warning-display {
+    font-size: 0.88rem; color: #dc2626; background: #fef2f2;
+    padding: 8px 14px; border-radius: 10px; display: inline-block; margin-top: 4px;
+    border: 1px solid #fecaca;
+  }
+  .meta-row {
+    display: flex; gap: 8px; justify-content: center; align-items: center; margin-top: 10px;
+    flex-wrap: wrap;
+  }
+  .meta-tag {
+    display: inline-block;
+    font-size: 0.72rem; color: #fff; padding: 4px 12px; border-radius: 999px;
+  }
+  .meta-lesson { background: #f97316; }
+  .meta-cat { background: #ea580c; }
+  .phrase-tag {
+    display: inline-block;
+    font-size: 0.7rem; color: #fff; background: #f97316;
+    padding: 2px 8px; border-radius: 999px; margin-left: 6px;
+    vertical-align: middle;
+  }
+
+  /* Controls */
+  .controls {
+    display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
+    margin-bottom: 16px;
+  }
+  .btn {
+    padding: 10px 18px; border-radius: 12px; border: none;
+    font-size: 0.95rem; font-weight: 600; cursor: pointer;
+    transition: transform .1s, box-shadow .2s;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .btn:active { transform: scale(0.97); }
+  .btn-primary { background: #f97316; color: #fff; box-shadow: 0 3px 10px rgba(249,115,22,0.35); }
+  .btn-primary:hover { background: #ea580c; }
+  .btn-secondary { background: #fff; color: #c2410c; border: 2px solid #fdba74; }
+  .btn-secondary:hover { border-color: #f97316; }
+  .btn-secondary.active { background: #fff7ed; border-color: #f97316; }
+  .btn-wide { min-width: 100px; justify-content: center; }
+
+  /* Mode & Speed */
+  .row { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 12px; }
+  .seg-group { display: flex; gap: 4px; background: #ffedd5; padding: 4px; border-radius: 12px; }
+  .seg-btn {
+    padding: 8px 14px; border-radius: 10px; border: none; background: transparent;
+    color: #9a3412; font-size: 0.85rem; font-weight: 600; cursor: pointer;
+  }
+  .seg-btn.active { background: #fff; color: #c2410c; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+
+  /* Auto-play toggle */
+  .toggle-row {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    margin-bottom: 14px; font-size: 0.9rem; color: #9a3412;
+  }
+  .toggle-switch {
+    width: 46px; height: 26px; border-radius: 13px;
+    background: #fed7aa; position: relative; cursor: pointer; transition: background .2s;
+  }
+  .toggle-switch.on { background: #f97316; }
+  .toggle-switch::after {
+    content: ''; position: absolute; top: 3px; left: 3px;
+    width: 20px; height: 20px; border-radius: 50%; background: #fff;
+    transition: left .2s; box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  }
+  .toggle-switch.on::after { left: 23px; }
+
+  /* Status & Progress */
+  .status-bar {
+    text-align: center; font-size: 0.85rem; color: #9a3412; margin-bottom: 6px;
+    min-height: 22px;
+  }
+  .progress {
+    width: 100%; height: 6px; background: #fed7aa; border-radius: 3px; overflow: hidden;
+    margin-bottom: 16px;
+  }
+  .progress-fill {
+    height: 100%; background: #f97316; border-radius: 3px; transition: width .3s;
+  }
+
+  /* Reveal area */
+  .reveal-area { margin-top: 12px; }
+
+  @media (max-width: 480px) {
+    .word-display { font-size: 2.2rem; }
+    .card { padding: 22px 16px; }
+    .btn { padding: 9px 14px; font-size: 0.9rem; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>多多呈分試 · 中文科全詞彙</h1>
+  <p>粵語跟讀 + 聽寫</p>
+</header>
+
+<div class="container">
+  <!-- Lesson Tabs -->
+  <div class="lesson-tabs" id="lessonTabs"></div>
+
+  <!-- Category Tags -->
+  <div class="cat-row" id="catRow"></div>
+
+  <!-- Card -->
+  <div class="card">
+    <div class="pinyin-display" id="pinyinDisplay">—</div>
+    <div class="word-display" id="wordDisplay">—</div>
+    <div class="meaning-display" id="meaningDisplay">—</div>
+    <div id="warningArea"></div>
+    <div class="meta-row" id="metaRow"></div>
+  </div>
+
+  <!-- Mode & Speed -->
+  <div class="row">
+    <div class="seg-group">
+      <button class="seg-btn active" data-mode="read" onclick="setMode('read')">跟讀</button>
+      <button class="seg-btn" data-mode="dictate" onclick="setMode('dictate')">聽寫</button>
+    </div>
+    <div class="seg-group">
+      <button class="seg-btn" data-speed="0.8" onclick="setSpeed(0.8)">0.8×</button>
+      <button class="seg-btn active" data-speed="1.0" onclick="setSpeed(1.0)">1.0×</button>
+      <button class="seg-btn" data-speed="1.2" onclick="setSpeed(1.2)">1.2×</button>
+    </div>
+  </div>
+
+  <!-- Auto-play -->
+  <div class="toggle-row">
+    <span>Auto-play</span>
+    <div class="toggle-switch" id="autoPlayToggle" onclick="toggleAutoPlay()"></div>
+  </div>
+
+  <!-- Status & Progress -->
+  <div class="status-bar" id="statusMsg">就緒</div>
+  <div class="progress"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+
+  <!-- Main Controls -->
+  <div class="controls">
+    <button class="btn btn-secondary btn-wide" onclick="prevWord()">◀ 上個</button>
+    <button class="btn btn-primary btn-wide" id="playBtn" onclick="playCurrent()">▶ 播放</button>
+    <button class="btn btn-secondary btn-wide" onclick="nextWord()">下個 ▶</button>
+  </div>
+
+  <div class="reveal-area" style="text-align:center; display:none;" id="revealArea">
+    <button class="btn btn-secondary" style="min-width:140px;" onclick="revealAnswer()">睇答案</button>
+  </div>
+</div>
+
+<script>
+// ==================== Vocabulary Data ====================
+const VOCAB = [
+  // ======= 第5課《堅持與成功》 =======
+  {id:1, lesson:5, cat:'A', word:'眾所周知', pinyin:'zung3 so2 zau1 zi1', meaning:'每個人都知道', warning:'眾 不是「众」', phrase:true},
+  {id:2, lesson:5, cat:'A', word:'關鍵', pinyin:'gwaan1 gin6', meaning:'最重要的部分', warning:'鍵 右邊是「建」', phrase:false},
+  {id:3, lesson:5, cat:'A', word:'不可或缺', pinyin:'bat1 ho2 waak6 kyut3', meaning:'不可以缺少', warning:'或 不要寫錯', phrase:true},
+  {id:4, lesson:5, cat:'A', word:'目標', pinyin:'muk6 biu1', meaning:'想達到的目的', warning:'標 不是「标」', phrase:false},
+  {id:5, lesson:5, cat:'A', word:'簡便', pinyin:'gaan2 bin6', meaning:'簡單方便', warning:'簡 不是「简」', phrase:false},
+  {id:6, lesson:5, cat:'A', word:'間斷', pinyin:'gaan3 dyun6', meaning:'中間停頓', warning:'間 不是「间」；斷', phrase:false},
+  {id:7, lesson:5, cat:'A', word:'銳意', pinyin:'jeoi6 ji3', meaning:'意志堅定地', warning:'銳 不是「锐」', phrase:false},
+  {id:8, lesson:5, cat:'A', word:'直白', pinyin:'zik6 baak6', meaning:'直接坦白', warning:'', phrase:false},
+  {id:9, lesson:5, cat:'A', word:'大行其道', pinyin:'daai6 hang4 kei4 dou6', meaning:'非常流行', warning:'', phrase:true},
+  {id:10, lesson:5, cat:'A', word:'冷嘲熱諷', pinyin:'laang5 zaau1 jit6 fung3', meaning:'用說話挖苦人', warning:'諷 左邊是「言」', phrase:true},
+  {id:11, lesson:5, cat:'A', word:'懷疑', pinyin:'waai3 ji5', meaning:'不相信', warning:'懷 不是「怀」', phrase:false},
+  {id:12, lesson:5, cat:'A', word:'指令', pinyin:'zi2 ling6', meaning:'發出的命令', warning:'', phrase:false},
+  {id:13, lesson:5, cat:'A', word:'輸入', pinyin:'syu1 jap6', meaning:'把資料送進去', warning:'輸 不是「输」', phrase:false},
+  {id:14, lesson:5, cat:'A', word:'制訂', pinyin:'zai3 ding6', meaning:'制定計劃', warning:'制 不是「制」(小心混淆)', phrase:false},
+  {id:15, lesson:5, cat:'A', word:'豐碩', pinyin:'fung1 sek6', meaning:'成果豐富', warning:'豐 不是「丰」；碩 左邊「石」', phrase:false},
+  {id:16, lesson:5, cat:'A', word:'識笑', pinyin:'sik1 siu3', meaning:'嘲笑', warning:'識 左邊是「言」', phrase:false},
+  {id:17, lesson:5, cat:'A', word:'衝刺', pinyin:'cung1 ci3', meaning:'最後發力', warning:'衝 不是「冲」', phrase:false},
+  {id:18, lesson:5, cat:'A', word:'接種', pinyin:'zip3 zung2', meaning:'注射疫苗', warning:'種 不是「种」', phrase:false},
+  {id:19, lesson:5, cat:'A', word:'自討苦吃', pinyin:'zi6 tou2 fu2 hek3', meaning:'自己找麻煩', warning:'討 不是「讨」', phrase:true},
+  {id:20, lesson:5, cat:'A', word:'鍥而不捨', pinyin:'kit3 ji4 bat1 se2', meaning:'堅持不懈', warning:'鍥 左邊「金」；捨 不是「舍」', phrase:true},
+  {id:21, lesson:5, cat:'B', word:'堅持', pinyin:'gin1 ci4', meaning:'不放棄', warning:'堅 不是「坚」', phrase:false},
+  {id:22, lesson:5, cat:'B', word:'取法乎上', pinyin:'ceoi2 faat3 fu4 soeng6', meaning:'以高標準要求自己', warning:'', phrase:true},
+  {id:23, lesson:5, cat:'B', word:'僅得乎中', pinyin:'gan2 dak1 fu4 zung1', meaning:'結果只達到中等', warning:'', phrase:true},
+  {id:24, lesson:5, cat:'B', word:'貴在堅持', pinyin:'gwai3 zoi6 gin1 ci4', meaning:'最重要是堅持下去', warning:'', phrase:true},
+  {id:25, lesson:5, cat:'B', word:'孜孜不倦', pinyin:'zi1 zi1 bat1 koi4', meaning:'勤奮努力，不知疲倦', warning:'', phrase:true},
+  {id:26, lesson:5, cat:'B', word:'持之以恆', pinyin:'ci4 zi1 ho4 hang4', meaning:'長時間堅持下去', warning:'恆 不是「恒」', phrase:true},
+  {id:27, lesson:5, cat:'B', word:'不恥下問', pinyin:'bat1 ci2 haa6 man6', meaning:'不覺得向地位低的人請教是羞恥', warning:'', phrase:true},
+  {id:28, lesson:5, cat:'B', word:'從不間斷', pinyin:'cung4 bat1 gaan3 dyun6', meaning:'從來沒有停過', warning:'間 不是「间」；斷', phrase:true},
+  {id:29, lesson:5, cat:'B', word:'一廂情願', pinyin:'jat1 soeng1 cing4 jyun6', meaning:'單方面的願望', warning:'廂 不是「箱」', phrase:true},
+  {id:30, lesson:5, cat:'B', word:'總而言之', pinyin:'zung2 ji4 ji4 zi1', meaning:'總的來說', warning:'', phrase:true},
+  {id:31, lesson:5, cat:'B', word:'金石可鏤', pinyin:'gam1 sek6 ho2 lau4', meaning:'堅持不懈可以穿透金石', warning:'鏤 左邊「金」', phrase:true},
+  {id:32, lesson:5, cat:'C', word:'地大物博', pinyin:'dei6 daai6 mat6 bok3', meaning:'土地廣大，物產豐富', warning:'', phrase:true},
+  {id:33, lesson:5, cat:'C', word:'源遠流長', pinyin:'jyun4 jyun5 lau4 coeng4', meaning:'歷史悠久', warning:'', phrase:true},
+  {id:34, lesson:5, cat:'C', word:'賞心悅目', pinyin:'soeng2 sam1 jyut6 muk6', meaning:'看了令人心情愉快', warning:'', phrase:true},
+  {id:35, lesson:5, cat:'C', word:'一臂之力', pinyin:'jat1 bei3 zi1 lik6', meaning:'出一分力幫助', warning:'', phrase:true},
+  {id:36, lesson:5, cat:'C', word:'事半功倍', pinyin:'si6 bun3 gung1 pui5', meaning:'花少力氣，收效大', warning:'', phrase:true},
+  {id:37, lesson:5, cat:'C', word:'雙管齊下', pinyin:'soeng1 gun2 cai4 haa6', meaning:'兩方面同時進行', warning:'', phrase:true},
+  {id:38, lesson:5, cat:'C', word:'見利忘義', pinyin:'gin3 lei6 mong4 ji6', meaning:'見了利益就忘記道義', warning:'', phrase:true},
+  {id:39, lesson:5, cat:'C', word:'隨波逐流', pinyin:'ceoi4 bo1 zuk6 lau4', meaning:'沒有主見，跟著別人走', warning:'', phrase:true},
+  {id:40, lesson:5, cat:'C', word:'財迷心竅', pinyin:'coi4 mai4 sam1 hiu3', meaning:'被金錢迷住了心智', warning:'', phrase:true},
+  {id:41, lesson:5, cat:'C', word:'仗義疏財', pinyin:'zoeng6 ji6 so1 coi4', meaning:'講義氣，輕錢財', warning:'', phrase:true},
+  {id:42, lesson:5, cat:'C', word:'同流合污', pinyin:'tung4 lau4 hap6 wu1', meaning:'跟壞人一起做壞事', warning:'', phrase:true},
+  {id:43, lesson:5, cat:'C', word:'特立獨行', pinyin:'dak6 lap6 duk6 hang4', meaning:'有獨立見解，不隨大流', warning:'', phrase:true},
+  {id:44, lesson:5, cat:'C', word:'超然物外', pinyin:'ciu1 jin4 mat6 ngoi5', meaning:'超脫於世俗之外', warning:'', phrase:true},
+  {id:45, lesson:5, cat:'C', word:'水滴石穿', pinyin:'seoi2 dik6 sek6 cyun1', meaning:'堅持不懈，終能成功', warning:'', phrase:true},
+  {id:46, lesson:5, cat:'C', word:'持之以恆', pinyin:'ci4 zi1 ho4 hang4', meaning:'長時間堅持下去', warning:'', phrase:true},
+  {id:47, lesson:5, cat:'C', word:'一曝十寒', pinyin:'jat1 buk6 sap6 hon4', meaning:'做一天停十天，沒有恆心', warning:'', phrase:true},
+  {id:48, lesson:5, cat:'C', word:'半途而廢', pinyin:'bun3 tou4 ji4 fai3', meaning:'做到一半就放棄', warning:'', phrase:true},
+  // ======= 第7課《香椿魚》 =======
+  {id:49, lesson:7, cat:'A', word:'可口', pinyin:'ho2 hau2', meaning:'很好吃', warning:'', phrase:false},
+  {id:50, lesson:7, cat:'A', word:'分散', pinyin:'fan1 saan3', meaning:'分開、不集中', warning:'', phrase:false},
+  {id:51, lesson:7, cat:'A', word:'四方', pinyin:'sei3 fong1', meaning:'各個方向', warning:'', phrase:false},
+  {id:52, lesson:7, cat:'A', word:'情況', pinyin:'cing4 fong3', meaning:'事情的狀態', warning:'況 左邊「冫」', phrase:false},
+  {id:53, lesson:7, cat:'A', word:'輕描淡寫', pinyin:'hing1 miu4 daam6 se2', meaning:'輕輕帶過，不當一回事', warning:'輕 不是「轻」；寫 不是「写」', phrase:true},
+  {id:54, lesson:7, cat:'A', word:'挺', pinyin:'ting5', meaning:'很、非常', warning:'', phrase:false},
+  {id:55, lesson:7, cat:'A', word:'發芽', pinyin:'faat3 ngaa4', meaning:'植物剛長出嫩苗', warning:'發 不是「发」', phrase:false},
+  {id:56, lesson:7, cat:'A', word:'相當', pinyin:'soeng1 dong3', meaning:'非常地', warning:'當 不是「当」', phrase:false},
+  {id:57, lesson:7, cat:'A', word:'茂盛', pinyin:'mau6 sing6', meaning:'植物長得茂密旺盛', warning:'茂 上「艹」下「戊」', phrase:false},
+  {id:58, lesson:7, cat:'A', word:'回憶', pinyin:'wui4 jik1', meaning:'回想過去', warning:'憶 左邊「忄」右邊「意」', phrase:false},
+  {id:59, lesson:7, cat:'B', word:'翡翠', pinyin:'fei2 ceoi3', meaning:'綠色寶石；形容很漂亮的綠色', warning:'翡 上「非」下「羽」', phrase:false},
+  {id:60, lesson:7, cat:'B', word:'拌', pinyin:'bun6', meaning:'攪拌、混合', warning:'', phrase:false},
+  {id:61, lesson:7, cat:'B', word:'塗鴉', pinyin:'tou4 ngaa1', meaning:'亂畫東西', warning:'鴉 左「牙」右「鳥」', phrase:false},
+  {id:62, lesson:7, cat:'B', word:'視線', pinyin:'si6 sin3', meaning:'目光的方向', warning:'線 不是「线」', phrase:false},
+  {id:63, lesson:7, cat:'B', word:'止不住', pinyin:'zi2 bat1 zyu6', meaning:'忍不住、停不下來', warning:'', phrase:false},
+  {id:64, lesson:7, cat:'B', word:'獲', pinyin:'wok6', meaning:'得到', warning:'獲 不是「获」', phrase:false},
+  {id:65, lesson:7, cat:'B', word:'食', pinyin:'sik6', meaning:'吃；食物', warning:'', phrase:false},
+  {id:66, lesson:7, cat:'B', word:'嘴', pinyin:'zeoi2', meaning:'嘴巴', warning:'', phrase:false},
+  {id:67, lesson:7, cat:'B', word:'簌簌', pinyin:'cuk1 cuk1', meaning:'紛紛落下的樣子', warning:'', phrase:false},
+  {id:68, lesson:7, cat:'B', word:'砍', pinyin:'ham2', meaning:'用刀斧劈開', warning:'', phrase:false},
+  {id:69, lesson:7, cat:'B', word:'貪嘴', pinyin:'taam1 zeoi2', meaning:'貪吃', warning:'貪 上面「今」不是「令」', phrase:true},
+  {id:70, lesson:7, cat:'C', word:'敝帚自珍', pinyin:'bai6 zau2 zi6 zan1', meaning:'對自己的東西十分珍惜', warning:'', phrase:true},
+  {id:71, lesson:7, cat:'C', word:'山珍海味', pinyin:'saan1 zan1 hoi2 mei6', meaning:'極珍貴美味的食物', warning:'', phrase:true},
+  {id:72, lesson:7, cat:'C', word:'津津有味', pinyin:'gam1 gam1 jau5 mei6', meaning:'吃得很有味道', warning:'', phrase:true},
+  {id:73, lesson:7, cat:'C', word:'流連忘返', pinyin:'lau4 lyun4 maan4 faan4', meaning:'玩得忘記回家', warning:'', phrase:true},
+  {id:74, lesson:7, cat:'C', word:'回味無窮', pinyin:'wui4 mei6 mou4 kung4', meaning:'事後越想越有意思', warning:'', phrase:true},
+  // ======= 第11課《鷸蚌相爭》 =======
+  {id:75, lesson:11, cat:'D', word:'鷸', pinyin:'wat6', meaning:'一種水鳥（長嘴）', warning:'左「矞」右「鳥」·超難寫', phrase:false},
+  {id:76, lesson:11, cat:'D', word:'蚌', pinyin:'pong5', meaning:'水底生物（兩塊硬殼）', warning:'左「虫」右「丰」', phrase:false},
+  {id:77, lesson:11, cat:'D', word:'曝', pinyin:'buk6', meaning:'曬太陽', warning:'左「日」右「暴」', phrase:false},
+  {id:78, lesson:11, cat:'D', word:'拑', pinyin:'kim4', meaning:'夾住', warning:'左「扌」右「甘」·不是「鉗」', phrase:false},
+  {id:79, lesson:11, cat:'D', word:'喙', pinyin:'wai6', meaning:'鳥類的嘴巴', warning:'左「口」右「彖」', phrase:false},
+  {id:80, lesson:11, cat:'D', word:'曰', pinyin:'jyut6', meaning:'說（文言文）', warning:'「曰」扁的·不是「日」！', phrase:false},
+  {id:81, lesson:11, cat:'D', word:'謂', pinyin:'wai6', meaning:'對……說', warning:'謂 不是「谓」', phrase:false},
+  {id:82, lesson:11, cat:'D', word:'捨', pinyin:'se2', meaning:'放棄', warning:'不是簡體「舍」', phrase:false},
+  {id:83, lesson:11, cat:'D', word:'擒', pinyin:'kam4', meaning:'捉住', warning:'左「扌」右「禽」', phrase:false},
+  {id:84, lesson:11, cat:'C', word:'鷸蚌相爭', pinyin:'wat6 pong5 soeng1 zang1', meaning:'雙方爭鬥，第三方得利', warning:'', phrase:true},
+  {id:85, lesson:11, cat:'C', word:'兩敗俱傷', pinyin:'loeng5 baai6 keoi1 soeng1', meaning:'雙方都受傷吃虧', warning:'', phrase:true},
+  {id:86, lesson:11, cat:'C', word:'勢均力敵', pinyin:'sai3 gwan1 lik6 dik6', meaning:'雙方力量相當', warning:'', phrase:true},
+  {id:87, lesson:11, cat:'C', word:'兩全其美', pinyin:'loeng5 cyun4 kei4 mei5', meaning:'雙方都得到好處', warning:'', phrase:true},
+  {id:88, lesson:11, cat:'C', word:'轉危為安', pinyin:'zyun2 ngai4 wai4 on1', meaning:'從危險轉為平安', warning:'', phrase:true},
+  {id:89, lesson:11, cat:'C', word:'平分秋色', pinyin:'ping4 fan1 cau1 sik1', meaning:'雙方各佔一半，不相上下', warning:'', phrase:true},
+  {id:90, lesson:11, cat:'C', word:'旗鼓相當', pinyin:'kei4 gu2 soeng1 dong3', meaning:'雙方實力差不多', warning:'', phrase:true},
+  {id:91, lesson:11, cat:'C', word:'寡不敵眾', pinyin:'gwaa2 bat1 dik6 zung3', meaning:'人少打不過人多', warning:'', phrase:true},
+  // ======= 第12課《自相矛盾》 =======
+  {id:92, lesson:12, cat:'D', word:'矛', pinyin:'maa4', meaning:'攻擊用的長槍', warning:'', phrase:false},
+  {id:93, lesson:12, cat:'D', word:'盾', pinyin:'teon5', meaning:'防守用的擋箭牌', warning:'', phrase:false},
+  {id:94, lesson:12, cat:'D', word:'鬻', pinyin:'juk6', meaning:'賣', warning:'超難寫！上「粥」下「鬲」', phrase:false},
+  {id:95, lesson:12, cat:'D', word:'譽', pinyin:'jyu6', meaning:'讚、誇獎', warning:'譽 不是「誉」', phrase:false},
+  {id:96, lesson:12, cat:'D', word:'莫', pinyin:'mok6', meaning:'沒有（否定詞）', warning:'', phrase:false},
+  {id:97, lesson:12, cat:'D', word:'陷', pinyin:'haam6', meaning:'刺穿、攻破', warning:'左「阝」', phrase:false},
+  {id:98, lesson:12, cat:'D', word:'俄而', pinyin:'ngo4 ji4', meaning:'不久之後', warning:'', phrase:true},
+  {id:99, lesson:12, cat:'D', word:'吾', pinyin:'ng4', meaning:'我（文言文）', warning:'', phrase:false},
+  {id:100, lesson:12, cat:'D', word:'何如', pinyin:'ho4 jyu4', meaning:'怎麼樣', warning:'', phrase:true},
+  {id:101, lesson:12, cat:'D', word:'弗', pinyin:'fat1', meaning:'不（否定詞）', warning:'弗 寫法特殊，多練習', phrase:false},
+  {id:102, lesson:12, cat:'C', word:'自相矛盾', pinyin:'zi6 soeng1 maa4 teon5', meaning:'自己的話前後不一致', warning:'', phrase:true},
+  {id:103, lesson:12, cat:'C', word:'化險為夷', pinyin:'faa3 him2 wai4 ji4', meaning:'把危險變為平安', warning:'', phrase:true},
+  {id:104, lesson:12, cat:'C', word:'見仁見智', pinyin:'gin3 jan4 gin3 zi3', meaning:'各人有各人的看法', warning:'', phrase:true},
+  {id:105, lesson:12, cat:'C', word:'猶豫不決', pinyin:'jau4 jyu6 bat1 kyut3', meaning:'遲疑，不能做決定', warning:'', phrase:true},
+  {id:106, lesson:12, cat:'C', word:'裹足不前', pinyin:'gwo2 zuk1 bat1 cin4', meaning:'害怕而不敢前進', warning:'', phrase:true},
+  {id:107, lesson:12, cat:'C', word:'胸有成竹', pinyin:'hung1 jau5 sing4 zuk1', meaning:'做事前已有充分準備', warning:'', phrase:true},
+  {id:108, lesson:12, cat:'C', word:'如魚得水', pinyin:'jyu4 jyu4 dak1 seoi2', meaning:'找到適合自己的環境', warning:'', phrase:true}
+];
+const CAT_NAMES = {A:'A類·必默', B:'B類·必認', C:'C類·成語', D:'D類·文言'};
+const CAT_ORDER = ['A','B','C','D'];
+const LESSON_NAMES = {5:'第5課·堅持與成功',7:'第7課·香椿魚',11:'第11課·鷸蚌相爭',12:'第12課·自相矛盾'};
+const ALL_LESSONS = [5,7,11,12];
+
+// ==================== State ====================
+let state = {
+  currLesson: 5,
+  activeCats: new Set(['A','B','C','D']),
+  mode: 'read',
+  speed: 1.0,
+  autoPlay: false,
+  currIdx: 0,
+  filtered: []
+};
+
+function filterWords() {
+  state.filtered = VOCAB.filter(w =>
+    w.lesson === state.currLesson && state.activeCats.has(w.cat)
+  );
+  state.currIdx = 0;
+  render();
+}
+
+function renderLessonTabs() {
+  const el = document.getElementById('lessonTabs');
+  el.innerHTML = ALL_LESSONS.map(l => {
+    const cls = l === state.currLesson ? 'lesson-tab active' : 'lesson-tab';
+    return `<button class="${cls}" onclick="switchLesson(${l})">${LESSON_NAMES[l]}</button>`;
+  }).join('');
+}
+
+function switchLesson(l) {
+  state.currLesson = l;
+  renderLessonTabs();
+  filterWords();
+}
+
+function renderCatTags() {
+  const el = document.getElementById('catRow');
+  el.innerHTML = CAT_ORDER.map(c => {
+    const cls = state.activeCats.has(c) ? 'cat-tag active' : 'cat-tag';
+    return `<button class="${cls}" onclick="toggleCat('${c}')">${CAT_NAMES[c]}</button>`;
+  }).join('');
+}
+
+function toggleCat(c) {
+  if (state.activeCats.has(c)) {
+    if (state.activeCats.size > 1) state.activeCats.delete(c);
+  } else {
+    state.activeCats.add(c);
+  }
+  renderCatTags();
+  filterWords();
+}
+
+function setMode(m) {
+  state.mode = m;
+  document.querySelectorAll('[data-mode]').forEach(b => b.classList.toggle('active', b.dataset.mode === m));
+  render();
+}
+
+function setSpeed(s) {
+  state.speed = s;
+  document.querySelectorAll('[data-speed]').forEach(b => b.classList.toggle('active', parseFloat(b.dataset.speed) === s));
+}
+
+function toggleAutoPlay() {
+  state.autoPlay = !state.autoPlay;
+  document.getElementById('autoPlayToggle').classList.toggle('on', state.autoPlay);
+}
+
+function render() {
+  const w = state.filtered[state.currIdx];
+  const wordEl = document.getElementById('wordDisplay');
+  const pinyinEl = document.getElementById('pinyinDisplay');
+  const meaningEl = document.getElementById('meaningDisplay');
+  const warningEl = document.getElementById('warningArea');
+  const metaEl = document.getElementById('metaRow');
+  const revealEl = document.getElementById('revealArea');
+  const progressEl = document.getElementById('progressFill');
+
+  if (!w) {
+    wordEl.textContent = '—';
+    pinyinEl.textContent = '—';
+    meaningEl.textContent = '—';
+    warningEl.innerHTML = '';
+    metaEl.innerHTML = '';
+    revealEl.style.display = 'none';
+    progressEl.style.width = '0%';
+    return;
+  }
+
+  pinyinEl.textContent = w.pinyin;
+  meaningEl.textContent = w.meaning;
+
+  if (state.mode === 'dictate') {
+    wordEl.classList.add('hidden');
+    wordEl.textContent = w.word;
+    pinyinEl.style.visibility = 'hidden';
+    revealEl.style.display = 'block';
+  } else {
+    wordEl.classList.remove('hidden');
+    wordEl.textContent = w.word;
+    pinyinEl.style.visibility = 'visible';
+    revealEl.style.display = 'none';
+  }
+
+  warningEl.innerHTML = w.warning ? `<div class="warning-display">⚠️ ${w.warning}</div>` : '';
+
+  const phraseTag = w.phrase ? '<span class="phrase-tag">詞語</span>' : '';
+  metaEl.innerHTML = `
+    <span class="meta-tag meta-lesson">第${w.lesson}課</span>
+    <span class="meta-tag meta-cat">${CAT_NAMES[w.cat]}</span>
+    ${phraseTag}
+  `;
+
+  const pct = ((state.currIdx + 1) / state.filtered.length) * 100;
+  progressEl.style.width = pct + '%';
+
+  document.getElementById('statusMsg').textContent =
+    `${state.currIdx + 1} / ${state.filtered.length} · ${LESSON_NAMES[w.lesson]}`;
+}
+
+function revealAnswer() {
+  const w = state.filtered[state.currIdx];
+  if (!w) return;
+  const wordEl = document.getElementById('wordDisplay');
+  const pinyinEl = document.getElementById('pinyinDisplay');
+  wordEl.classList.remove('hidden');
+  pinyinEl.style.visibility = 'visible';
+  document.getElementById('revealArea').style.display = 'none';
+  document.getElementById('statusMsg').textContent = '📝 答案：' + w.word;
+}
+
+function playCurrent() {
+  const w = state.filtered[state.currIdx];
+  if (!w) return;
+  playCount = 0;
+  document.getElementById('playBtn').textContent = '⏸';
+  document.getElementById('statusMsg').textContent = '🔊 播放中…';
+  speakWord(w.word, state.speed, TTS_LANG, TTS_VOICE);
+}
+
+function nextWord() {
+  if (state.currIdx < state.filtered.length - 1) {
+    state.currIdx++;
+    render();
+    if (state.autoPlay) setTimeout(() => playCurrent(), 400);
+  }
+}
+
+function prevWord() {
+  if (state.currIdx > 0) {
+    state.currIdx--;
+    render();
+  }
+}
+
+// ==================== Keyboard ====================
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  switch(e.key) {
+    case 'ArrowRight': e.preventDefault(); nextWord(); break;
+    case 'ArrowLeft': e.preventDefault(); prevWord(); break;
+    case 'Enter': e.preventDefault(); playCurrent(); break;
+    case 'p': case 'P': e.preventDefault(); playCurrent(); break;
+  }
+});
+
+// ==================== TTS Core ====================
+const AZURE_KEY = "YOUR_AZURE_SPEECH_KEY";
+const AZURE_REGION = "eastasia";
+const TTS_LANG = "zh-HK";
+const TTS_VOICE = "zh-HK-HiuMaanNeural";
+
+function speakWord(text, rate, lang, voice) {
+  if (!AZURE_KEY || AZURE_KEY.indexOf('YOUR_') === 0 || AZURE_KEY.length < 20) {
+    speakBrowser(text, rate, lang);
+    return;
+  }
+  fetch(`https://${AZURE_REGION}.api.cognitive.microsoft.com/sts/v1.0/issueToken`, {
+    method: 'POST', headers: {'Ocp-Apim-Subscription-Key': AZURE_KEY}
+  })
+  .then(r => r.text())
+  .then(token => {
+    const ssml = `<speak version='1.0' xmlns='http://www.w3.org/1/10/synthesis' xml:lang='${lang}'><voice name='${voice}'><prosody rate='${Math.round((rate-1)*100)}%'>${text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}</prosody></voice></speak>`;
+    return fetch(`https://${AZURE_REGION}.tts.speech.microsoft.com/cognitiveservices/v1`, {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer ' + token,
+        'Content-Type': 'application/ssml+xml',
+        'X-Microsoft-OutputFormat': 'audio-16khz-128kbitrate-mono-mp3'
+      },
+      body: ssml
+    });
+  })
+  .then(r => {
+    if (!r.ok) throw new Error('Azure TTS error ' + r.status);
+    return r.blob();
+  })
+  .then(blob => {
+    const url = URL.createObjectURL(blob);
+    const audio = new Audio(url);
+    audio.onended = () => { URL.revokeObjectURL(url); onPlayEnd(); };
+    audio.onerror = () => { URL.revokeObjectURL(url); speakBrowser(text, rate, lang); };
+    audio.play().catch(() => { URL.revokeObjectURL(url); speakBrowser(text, rate, lang); });
+  })
+  .catch(() => speakBrowser(text, rate, lang));
+}
+
+function speakBrowser(text, rate, lang) {
+  if (!window.speechSynthesis) { onPlayEnd(); return; }
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = lang;
+  u.rate = rate || 1;
+  const voices = speechSynthesis.getVoices();
+  const match = voices.find(v => v.lang.startsWith(lang)) || voices.find(v => v.lang.startsWith(lang.split('-')[0]));
+  if (match) u.voice = match;
+  u.onend = () => onPlayEnd();
+  u.onerror = () => onPlayEnd();
+  window.speechSynthesis.speak(u);
+}
+
+let playCount = 0;
+function onPlayEnd() {
+  playCount++;
+  if (playCount < 2) {
+    const w = state.filtered[state.currIdx];
+    if (w) speakWord(w.word, state.speed, TTS_LANG, TTS_VOICE);
+  } else {
+    document.getElementById('playBtn').textContent = '▶ 播放';
+    document.getElementById('statusMsg').textContent = '就緒';
+    if (state.mode === 'dictate') {
+      document.getElementById('statusMsg').textContent = '🎯 聽寫完畢 · 按「睇答案」核對';
+    }
+    if (state.autoPlay && state.currIdx < state.filtered.length - 1) {
+      setTimeout(() => nextWord(), 1200);
+    }
+  }
+}
+
+// ==================== Init ====================
+renderLessonTabs();
+renderCatTags();
+filterWords();
+</script>
+</body>
+</html>
