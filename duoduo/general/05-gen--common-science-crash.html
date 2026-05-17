@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>多多常識 1小時極速補漏班</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'PingFang HK','Microsoft YaHei',sans-serif;background:#0a0e27;color:#e0e0e0;padding:20px}
+.container{max-width:768px;margin:0 auto}
+
+.header{text-align:center;padding:24px 0;background:linear-gradient(135deg,#1a1f3a,#0f1535);border-radius:16px;margin-bottom:20px;border:1px solid #2a2f5a}
+.header h1{font-size:1.8em;background:linear-gradient(90deg,#ff6b6b,#ffd93d,#6bcb77);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px}
+.header p{color:#8890b5;font-size:0.95em}
+
+.timer-bar{background:#1a1f3a;border-radius:12px;padding:12px 20px;margin-bottom:20px;display:flex;align-items:center;gap:12px;border:1px solid #2a2f5a}
+.timer-bar .label{color:#8890b5;font-size:0.9em;white-space:nowrap}
+.timer-bar .seg{height:8px;border-radius:4px;flex:1;background:#2a2f5a;position:relative;overflow:hidden}
+.timer-bar .seg .fill{height:100%;border-radius:4px;transition:width .5s}
+.fill.active{width:100%}
+.timer-bar .seg:nth-child(2) .fill{background:#6bcb77}
+.timer-bar .seg:nth-child(3) .fill{background:#ffd93d}
+.timer-bar .seg:nth-child(4) .fill{background:#ff6b6b}
+.timer-bar .seg:nth-child(5) .fill{background:#4ecdc4}
+
+.section{background:#111636;border-radius:14px;padding:20px;margin-bottom:16px;border:1px solid #1e2350;display:none}
+.section.active{display:block}
+.section h2{font-size:1.2em;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.section h2 .icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.1em}
+.section h2 .icon.red{background:#ff6b6b33}
+.section h2 .icon.yellow{background:#ffd93d33}
+.section h2 .icon.green{background:#6bcb7733}
+.section h2 .icon.blue{background:#4ecdc433}
+.section h2 .icon.purple{background:#a855f733}
+
+.tip-box{background:#1a1f3a;border-left:3px solid #ffd93d;padding:14px 18px;margin:12px 0;border-radius:0 8px 8px 0;font-size:0.92em;line-height:1.6}
+.tip-box.danger{border-left-color:#ff6b6b;background:#1a1520}
+.tip-box.success{border-left-color:#6bcb77;background:#15201a}
+
+.q-block{background:#1a1f3a;border-radius:10px;padding:16px;margin:12px 0;border:1px solid #252a50}
+.q-block .q-num{display:inline-block;background:#252a50;color:#8890b5;padding:2px 10px;border-radius:6px;font-size:0.8em;margin-bottom:8px}
+.q-block .q-text{font-size:1em;line-height:1.6;margin-bottom:12px}
+.q-block .q-text .blank{display:inline-block;min-width:60px;border-bottom:2px dashed #6bcb77;padding:0 8px;color:#6bcb77;text-align:center;margin:0 4px}
+
+.options{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.options .opt{padding:8px 16px;border:1.5px solid #2a2f5a;border-radius:8px;cursor:pointer;transition:all .2s;font-size:0.9em;background:#0f1235}
+.options .opt:hover{border-color:#6bcb77;background:#15201a}
+.options .opt.selected{border-color:#6bcb77;background:#15201a;color:#6bcb77}
+
+.match-table{width:100%;border-collapse:collapse;margin:10px 0;font-size:0.88em}
+.match-table td{padding:10px;border:1px solid #252a50;text-align:center}
+.match-table td select{padding:6px 10px;border-radius:6px;border:1px solid #2a2f5a;background:#0f1235;color:#e0e0e0;font-size:0.9em;cursor:pointer}
+
+.btn{display:inline-block;padding:10px 24px;border:none;border-radius:8px;cursor:pointer;font-size:0.95em;font-weight:600;transition:all .2s}
+.btn-check{background:linear-gradient(135deg,#6bcb77,#4ecdc4);color:#000}
+.btn-next{background:linear-gradient(135deg,#4ecdc4,#667eea);color:#fff}
+.btn-start{background:linear-gradient(135deg,#ff6b6b,#ffd93d);color:#000;font-size:1.2em;padding:14px 40px;display:block;margin:20px auto}
+
+.feedback{margin-top:12px;padding:10px 14px;border-radius:8px;font-size:0.9em;display:none}
+.feedback.correct{background:#15201a;border:1px solid #6bcb77;display:block;color:#6bcb77}
+.feedback.wrong{background:#1a1520;border:1px solid #ff6b6b;display:block;color:#ff6b6b}
+.feedback .answer{display:block;margin-top:6px;color:#ffd93d;font-weight:600}
+
+.score-bar{text-align:center;padding:14px;background:#1a1f3a;border-radius:10px;margin-top:20px;font-size:1.1em}
+.score-bar span{color:#ffd93d;font-weight:700;font-size:1.3em}
+
+.lightning-list{list-style:none;padding:0}
+.lightning-list li{padding:10px 14px;margin:6px 0;background:#1a1f3a;border-radius:8px;border-left:3px solid #4ecdc4;font-size:0.9em;line-height:1.5}
+.lightning-list li b{color:#ffd93d}
+
+.flow-chart{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:6px;padding:14px;font-size:0.85em}
+.flow-chart .node{padding:8px 12px;border-radius:8px;text-align:center;font-weight:600}
+.flow-chart .arrow{color:#8890b5;font-size:1.2em}
+.node.skin{background:#ff6b6b22;border:1px solid #ff6b6b33}
+.node.nerve{background:#ffd93d22;border:1px solid #ffd93d33}
+.node.spinal{background:#6bcb7722;border:1px solid #6bcb7733}
+.node.muscle{background:#4ecdc422;border:1px solid #4ecdc433}
+
+.phase-label{display:block;text-align:center;color:#8890b5;margin:20px 0 10px;font-size:0.85em;letter-spacing:2px}
+
+@media(max-width:500px){
+  .flow-chart{font-size:0.75em;gap:3px}
+  .flow-chart .node{padding:6px 8px}
+  .options .opt{padding:6px 12px;font-size:0.82em}
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <h1>⚡ 多多常識 1小時極速補漏班</h1>
+  <p>55分鐘練習 + 5分鐘技巧 — 呈分試衝刺</p>
+</div>
+
+<div class="timer-bar">
+  <span class="label">進度</span>
+  <div class="seg"><div class="fill active" style="width:0%" id="seg1"></div></div>
+  <div class="seg"><div class="fill active" style="width:0%" id="seg2"></div></div>
+  <div class="seg"><div class="fill active" style="width:0%" id="seg3"></div></div>
+  <div class="seg"><div class="fill active" style="width:0%" id="seg4"></div></div>
+</div>
+
+<!-- ======== INTRO ======== -->
+<div class="section active" id="sec-intro">
+  <h2><span class="icon red">🚀</span> 開戰前 — 答題技巧（5 分鐘）</h2>
+  <div class="tip-box danger">
+    <b>⚠️ 多多最大的失分點不是不會做，是沒做！</b><br>
+    69 題錯題中，有 7 題是完全空白的。不會也要猜一個答案！
+  </div>
+  <div class="tip-box">
+    <b>💡 三條黃金答題規則：</b>
+    <ul class="lightning-list">
+      <li><b>規則 1</b>：遇到空白 — 先猜一個！猜錯不扣分，空白一定 0 分</li>
+      <li><b>規則 2</b>：圈出題目裡的關鍵詞（人名、數字、時間、動詞）再作答</li>
+      <li><b>規則 3</b>：不要只寫 1-2 個字。用「完整短句」回答，有額外印象分！</li>
+    </ul>
+  </div>
+  <div class="tip-box success">
+    <b>✅ 口訣：圈關鍵詞→寫完整句→絕對不空</b>
+  </div>
+  <button class="btn btn-next" onclick="nextSection('sec-nerve')">開始練習 →</button>
+</div>
+
+<!-- ======== NERVE ======== -->
+<div class="section" id="sec-nerve">
+  <h2><span class="icon red">🧠</span> Part 1：神經系統 — 反射弧與腦部（10 分鐘）</h2>
+  <div class="tip-box">多多最常錯：把「手」當成感受器和效應器，把「腦幹」說成「後腦」</div>
+
+  <div class="q-block" id="q-nerve1">
+    <span class="q-num">Q1</span>
+    <div class="q-text">碰到熱東西縮手，路線是：<br>
+    <span class="blank" id="nb1">???</span> → 感覺神經 → <span class="blank" id="nb2">???</span> → 運動神經 → <span class="blank" id="nb3">???</span></div>
+    <input type="text" id="ni1" placeholder="第1空" style="padding:8px;border-radius:6px;border:1px solid #2a2f5a;background:#0f1235;color:#e0e0e0;width:100px;margin:4px">
+    <input type="text" id="ni2" placeholder="第2空" style="padding:8px;border-radius:6px;border:1px solid #2a2f5a;background:#0f1235;color:#e0e0e0;width:100px;margin:4px">
+    <input type="text" id="ni3" placeholder="第3空" style="padding:8px;border-radius:6px;border:1px solid #2a2f5a;background:#0f1235;color:#e0e0e0;width:100px;margin:4px">
+    <br><button class="btn btn-check" onclick="checkNerve1()">檢查</button>
+    <div class="feedback" id="fb-nerve1"></div>
+  </div>
+
+  <div class="q-block" id="q-nerve2">
+    <span class="q-num">Q2</span>
+    <div class="q-text">連線：把腦區和功能配對</div>
+    <table class="match-table">
+      <tr><td>大腦</td><td>
+        <select id="sel-brain"><option value="">--選--</option><option value="think">思考/記憶</option><option value="balance">平衡/協調</option><option value="life">呼吸/心跳</option></select>
+      </td></tr>
+      <tr><td>小腦</td><td>
+        <select id="sel-cere"><option value="">--選--</option><option value="think">思考/記憶</option><option value="balance">平衡/協調</option><option value="life">呼吸/心跳</option></select>
+      </td></tr>
+      <tr><td>腦幹</td><td>
+        <select id="sel-stem"><option value="">--選--</option><option value="think">思考/記憶</option><option value="balance">平衡/協調</option><option value="life">呼吸/心跳</option></select>
+      </td></tr>
+    </table>
+    <button class="btn btn-check" onclick="checkNerve2()">檢查</button>
+    <div class="feedback" id="fb-nerve2"></div>
+  </div>
+
+  <div class="q-block" id="q-nerve3">
+    <span class="q-num">Q3</span>
+    <div class="q-text">「望梅止渴」是什麼反應？</div>
+    <div class="options">
+      <div class="opt" onclick="selectOpt(this,'q-nerve3')">反射動作</div>
+      <div class="opt" onclick="selectOpt(this,'q-nerve3')">條件反射</div>
+      <div class="opt" onclick="selectOpt(this,'q-nerve3')">隨意動作</div>
+      <div class="opt" onclick="selectOpt(this,'q-nerve3')">習慣性行為</div>
+    </div>
+    <button class="btn btn-check" onclick="checkNerve3()">檢查</button>
+    <div class="feedback" id="fb-nerve3"></div>
+  </div>
+
+  <button class="btn btn-next" onclick="nextSection('sec-smoke')">下一部分 →</button>
+</div>
+
+<!-- ======== SMOKE ======== -->
+<div class="section" id="sec-smoke">
+  <h2><span class="icon yellow">🚬</span> Part 2：煙草 / 酒精 / 毒品 — 對比表（15 分鐘）</h2>
+
+  <div class="q-block" id="q-smoke1">
+    <span class="q-num">Q1</span>
+    <div class="q-text">殘留在衣服、頭髮、家具上的化學物質叫什麼？</div>
+    <div class="options">
+      <div class="opt" onclick="selectOpt(this,'q-smoke1')">二手煙</div>
+      <div class="opt" onclick="selectOpt(this,'q-smoke1')">三手煙</div>
+      <div class="opt" onclick="selectOpt(this,'q-smoke1')">電子煙</div>
+      <div class="opt" onclick="selectOpt(this,'q-smoke1')">尼古丁殘留</div>
+    </div>
+    <button class="btn btn-check" onclick="checkSmoke1()">檢查</button>
+    <div class="feedback" id="fb-smoke1"></div>
+  </div>
+
+  <div class="q-block" id="q-smoke2">
+    <span class="q-num">Q2</span>
+    <div class="q-text">阻止毒品流入及轉運的政府機構是？</div>
+    <input type="text" id="si2" placeholder="填寫答案" style="padding:8px;border-radius:6px;border:1px solid #2a2f5a;background:#0f1235;color:#e0e0e0;width:80%;margin:6px 0">
+    <br><button class="btn btn-check" onclick="checkSmoke2()">檢查</button>
+    <div class="feedback" id="fb-smoke2"></div>
+  </div>
+
+  <div class="q-block" id="q-smoke3">
+    <span class="q-num">Q3</span>
+    <div class="q-text">將以下損害歸入正確的類別：</div>
+    <table class="match-table">
+      <tr><td>記憶力衰退</td><td>
+        <select id="sel-alc"><option value="">--選--</option><option value="smoke">吸煙導致</option><option value="drink">酗酒導致</option><option value="both">兩者都是</option></select>
+      </td></tr>
+      <tr><td>肺癌</td><td>
+        <select id="sel-lung"><option value="">--選--</option><option value="smoke">吸煙導致</option><option value="drink">酗酒導致</option><option value="both">兩者都是</option></select>
+      </td></tr>
+      <tr><td>肝硬化</td><td>
+        <select id="sel-liver"><option value="">--選--</option><option value="smoke">吸煙導致</option><option value="drink">酗酒導致</option><option value="both">兩者都是</option></select>
+      </td></tr>
+    </table>
+    <button class="btn btn-check" onclick="checkSmoke3()">檢查</button>
+    <div class="feedback" id="fb-smoke3"></div>
+  </div>
+
+  <div class="q-block" id="q-smoke4">
+    <span class="q-num">Q4</span>
+    <div class="q-text">世界無煙日是幾月幾日？</div>
+    <input type="text" id="si4" placeholder="XX月XX日" style="padding:8px;border-radius:6px;border:1px solid #2a2f5a;background:#0f1235;color:#e0e0e0;width:60%;margin:6px 0">
+    <br><button class="btn btn-check" onclick="checkSmoke4()">檢查</button>
+    <div class="feedback" id="fb-smoke4"></div>
+  </div>
+
+  <div class="q-block" id="q-smoke5">
+    <span class="q-num">Q5</span>
+    <div class="q-text">一氧化碳（CO）對人體有什麼危害？請寫完整句子。</div>
+    <textarea id="si5" placeholder="CO會..." style="padding:8px;border-radius:6px;border:1px solid #2a2f5a;background:#0f1235;color:#e0e0e0;width:100%;height:60px;margin:6px 0;resize:vertical"></textarea>
+    <br><button class="btn btn-check" onclick="checkSmoke5()">檢查</button>
+    <div class="feedback" id="fb-smoke5"></div>
+  </div>
+
+  <button class="btn btn-next" onclick="nextSection('sec-space')">下一部分 →</button>
+</div>
+
+<!-- ======== SPACE ======== -->
+<div class="section" id="sec-space">
+  <h2><span class="icon blue">🪐</span> Part 3：太空天文 — 7 題閃卡式速測（15 分鐘）</h2>
+
+  <div class="q-block" id="q-space1">
+    <span class="q-num">Q1</span>
+    <div class="q-text">月缺月圓一個循環約需多少天？</div>
+    <div class="options">
+      <div class="opt" onclick="selectOpt(this,'q-space1')">約 20 天</div>
+      <div class="opt" onclick="selectOpt(this,'q-space1')">約 27 天</div>
+      <div class="opt" onclick="selectOpt(this,'q-space1')">約 30 天</div>
+      <div class="opt" onclick="selectOpt(this,'q-space1')">約 24 天</div>
+    </div>
+    <button class="btn btn-check" onclick="checkSpace1()">檢查</button>
+    <div class="feedback" id="fb-space1"></div>
+  </div>
+
+  <div class="q-block" id="q-space2">
+    <span class="q-num">Q2</span>
+    <div class="q-text">地球為什麼有四季變化？</div>
+    <textarea id="spi2" placeholder="因為..." style="padding:8px;border-radius:6px;border:1px solid #2a2f5a;background:#0f1235;color:#e0e0e0;width:100%;height:50px;margin:6px 0;resize:vertical"></textarea>
+    <br><button class="btn btn-check" onclick="checkSpace2()">檢查</button>
+    <div class="feedback" id="fb-space2"></div>
+  </div>
+
+  <div class="q-block" id="q-space3">
+    <span class="q-num">Q3</span>
+    <div class="q-text">火箭能升空是因為？</div>
+    <div class="options">
+      <div class="opt" onclick="selectOpt(this,'q-space3')">燃料燃燒→向下推力→反作用力向上</div>
+      <div class="opt" onclick="selectOpt(this,'q-space3')">燃料燃燒後變得更輕</div>
+      <div class="opt" onclick="selectOpt(this,'q-space3')">火箭比空氣輕</div>
+      <div class="opt" onclick="selectOpt(this,'q-space3')">地球引力把火箭推上去</div>
+    </div>
+    <button class="btn btn-check" onclick="checkSpace3()">檢查</button>
+    <div class="feedback" id="fb-space3"></div>
+  </div>
+
+  <div class="q-block" id="q-space4">
+    <span class="q-num">Q4</span>
+    <div class="q-text">第一位漫步太空的中國航天員叫什麼？</div>
+    <input type="text" id="spi4" placeholder="填寫名字" style="padding:8px;border-radius:6px;border:1px solid #2a2f5a;background:#0f1235;color:#e0e0e0;width:70%;margin:6px 0">
+    <br><button class="btn btn-check" onclick="checkSpace4()">檢查</button>
+    <div class="feedback" id="fb-space4"></div>
+  </div>
+
+  <div class="q-block" id="q-space5">
+    <span class="q-num">Q5</span>
+    <div class="q-text">太空中的物體處於什麼狀態？</div>
+    <input type="text" id="spi5" placeholder="兩個字" style="padding:8px;border-radius:6px;border:1px solid #2a2f5a;background:#0f1235;color:#e0e0e0;width:60%;margin:6px 0">
+    <br><button class="btn btn-check" onclick="checkSpace5()">檢查</button>
+    <div class="feedback" id="fb-space5"></div>
+  </div>
+
+  <div class="q-block" id="q-space6">
+    <span class="q-num">Q6</span>
+    <div class="q-text">距離太陽最遠的行星是？</div>
+    <input type="text" id="spi6" placeholder="填寫行星名" style="padding:8px;border-radius:6px;border:1px solid #2a2f5a;background:#0f1235;color:#e0e0e0;width:70%;margin:6px 0">
+    <br><button class="btn btn-check" onclick="checkSpace6()">檢查</button>
+    <div class="feedback" id="fb-space6"></div>
+  </div>
+
+  <button class="btn btn-next" onclick="nextSection('sec-body')">下一部分 →</button>
+</div>
+
+<!-- ======== BODY ======== -->
+<div class="section" id="sec-body">
+  <h2><span class="icon purple">💧</span> Part 4：人體系統功能分辨 + 終極挑戰（10 分鐘）</h2>
+
+  <div class="q-block" id="q-body1">
+    <span class="q-num">Q1</span>
+    <div class="q-text">跑步時出汗，主要目的是？</div>
+    <div class="options">
+      <div class="opt" onclick="selectOpt(this,'q-body1')">排出廢物</div>
+      <div class="opt" onclick="selectOpt(this,'q-body1')">調節體溫</div>
+      <div class="opt" onclick="selectOpt(this,'q-body1')">排出多餘水分</div>
+      <div class="opt" onclick="selectOpt(this,'q-body1')">張開毛孔</div>
+    </div>
+    <button class="btn btn-check" onclick="checkBody1()">檢查</button>
+    <div class="feedback" id="fb-body1"></div>
+  </div>
+
+  <div class="q-block" id="q-body2">
+    <span class="q-num">Q2</span>
+    <div class="q-text">人體骨骼大約有多少塊？</div>
+    <input type="text" id="bi2" placeholder="數字" style="padding:8px;border-radius:6px;border:1px solid #2a2f5a;background:#0f1235;color:#e0e0e0;width:80px;margin:6px 0">
+    <br><button class="btn btn-check" onclick="checkBody2()">檢查</button>
+    <div class="feedback" id="fb-body2"></div>
+  </div>
+
+  <div class="q-block" id="q-body3">
+    <span class="q-num">Q3 終極挑戰</span>
+    <div class="q-text">說出下列行為分別屬於哪個系統的功能（三題全對才能得分）：</div>
+    <table class="match-table">
+      <tr><td>① 呼出水蒸氣</td><td><select id="sel-resp"><option>--選--</option><option value="absorb">吸收水分</option><option value="lose">排出水分</option><option value="none">不涉及水分</option></select></td></tr>
+      <tr><td>② 上廁所排尿</td><td><select id="sel-urin"><option>--選--</option><option value="waste">排出廢物</option><option value="temp">調節體溫</option><option value="energy">提供能量</option></select></td></tr>
+      <tr><td>③ 跑步流汗</td><td><select id="sel-sweat"><option>--選--</option><option value="waste">排出廢物</option><option value="temp">調節體溫</option><option value="breathe">輔助呼吸</option></select></td></tr>
+    </table>
+    <button class="btn btn-check" onclick="checkBody3()">檢查</button>
+    <div class="feedback" id="fb-body3"></div>
+  </div>
+
+  <button class="btn btn-next" onclick="showScore()">看總成績 →</button>
+</div>
+
+<!-- ======== SCORE ======== -->
+<div class="section" id="sec-score">
+  <h2><span class="icon green">🏆</span> 練習完成！</h2>
+  <div class="score-bar" id="final-score"></div>
+  <div id="score-detail" style="margin-top:16px"></div>
+  <div class="tip-box success" style="margin-top:20px">
+    <b>✅ 最後提醒：</b><br>
+    <ul class="lightning-list">
+      <li>呈分試時，<b>圈出關鍵詞再答題</b></li>
+      <li>不會的也要<b>猜一個答案</b>，絕不留空</li>
+      <li>簡答題<b>寫完整句子</b>，不要只寫 1-2 個字</li>
+    </ul>
+  </div>
+  <button class="btn btn-next" onclick="restart()" style="margin-top:12px">再練一次 🔄</button>
+</div>
+
+<span class="phase-label" id="phase-indicator">📋 答題技巧</span>
+
+</div>
+
+<script>
+let score=0, total=0;
+let answered={};
+
+function selectOpt(el, qid){
+  el.parentElement.querySelectorAll('.opt').forEach(o=>o.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function getSelected(qid){
+  let opts=document.querySelectorAll('#'+qid+' .opt.selected');
+  return opts.length?opts[0].textContent.trim():'';
+}
+
+function showFB(qid, correct, answer, explanation){
+  let fb=document.getElementById('fb-'+qid);
+  if(correct){
+    fb.className='feedback correct';
+    fb.innerHTML='✅ 正確！'+explanation;
+    if(!answered[qid]){score++;total++}
+  }else{
+    fb.className='feedback wrong';
+    fb.innerHTML='❌ 不對。<span class="answer">正確答案：'+answer+'</span> '+explanation;
+    if(!answered[qid])total++;
+  }
+  answered[qid]=true;
+}
+
+function checkNerve1(){
+  let a1=document.getElementById('ni1').value.trim();
+  let a2=document.getElementById('ni2').value.trim();
+  let a3=document.getElementById('ni3').value.trim();
+  let correct=a1.includes('皮膚')&&a2.includes('脊髓')&&a3.includes('肌肉');
+  showFB('nerve1',correct,'皮膚 → 脊髓 → 肌肉','反射弧：皮膚（感受器）→感覺神經→脊髓（中樞）→運動神經→肌肉（效應器）');
+}
+
+function checkNerve2(){
+  let b=document.getElementById('sel-brain').value;
+  let c=document.getElementById('sel-cere').value;
+  let s=document.getElementById('sel-stem').value;
+  let correct=b==='think'&&c==='balance'&&s==='life';
+  showFB('nerve2',correct,'大腦=思考/記憶，小腦=平衡/協調，腦幹=呼吸/心跳','口訣：大腦想、小腦站、腦幹活');
+}
+
+function checkNerve3(){
+  let a=getSelected('q-nerve3');
+  let correct=a==='條件反射';
+  showFB('nerve3',correct,'條件反射','望梅止渴是後天建立的條件反射，不是天生的反射動作');
+}
+
+function checkSmoke1(){
+  let a=getSelected('q-smoke1');
+  showFB('smoke1',a==='三手煙','三手煙','殘留衣物/家具上的化學物質=三手煙。二手煙是別人呼出/點燃端的煙');
+}
+
+function checkSmoke2(){
+  let a=document.getElementById('si2').value.trim();
+  let correct=a.includes('海關');
+  showFB('smoke2',correct,'海關','阻止毒品流入和轉運的是海關（Customs），不是賽馬會禁毒所');
+}
+
+function checkSmoke3(){
+  let a=document.getElementById('sel-alc').value;
+  let l=document.getElementById('sel-lung').value;
+  let li=document.getElementById('sel-liver').value;
+  let correct=a==='drink'&&l==='smoke'&&li==='drink';
+  showFB('smoke3',correct,'記憶力衰退=酗酒，肺癌=吸煙，肝硬化=酗酒','吸煙主攻肺，酗酒主攻肝+腦');
+}
+
+function checkSmoke4(){
+  let a=document.getElementById('si4').value.trim();
+  let correct=(a.includes('5')&&a.includes('31'))||(a.includes('五')&&a.includes('三十一'));
+  showFB('smoke4',correct,'5月31日（五月三十一日）','世界無煙日是每年5月31日');
+}
+
+function checkSmoke5(){
+  let a=document.getElementById('si5').value.trim();
+  let correct=a.length>=4&&(a.includes('血')||a.includes('氧')||a.includes('頭痛'));
+  showFB('smoke5',correct,'CO會阻礙血液攜氧，引致頭痛、呼吸困難，嚴重可致命','關鍵詞：阻礙血液攜氧');
+}
+
+function checkSpace1(){
+  let a=getSelected('q-space1');
+  showFB('space1',a==='約 30 天','約 30 天（29.5天）','月球公轉一周+地球公轉的關係 = 29.5天一個月相循環');
+}
+
+function checkSpace2(){
+  let a=document.getElementById('spi2').value.trim();
+  let correct=a.length>=5&&(a.includes('傾斜')&&(a.includes('軸')||a.includes('公轉')));
+  showFB('space2',correct,'地軸傾斜約23.5°，加上地球公轉','關鍵詞：地軸傾斜+公轉。自轉只產生日夜！');
+}
+
+function checkSpace3(){
+  let a=getSelected('q-space3');
+  showFB('space3',a.includes('反作用力'),'燃料燃燒→向下推力→反作用力向上','牛頓第三定律：作用力與反作用力');
+}
+
+function checkSpace4(){
+  let a=document.getElementById('spi4').value.trim();
+  showFB('space4',a.includes('翟志剛'),'翟志剛（神舟七號，2008年）','中國第一位太空漫步的航天員');
+}
+
+function checkSpace5(){
+  let a=document.getElementById('spi5').value.trim();
+  let correct=a.includes('失重')||a.includes('漂浮')||a.includes('飄浮');
+  if(a.includes('濃浮')) correct=false;
+  showFB('space5',correct,'失重（漂浮／飄浮）','太空中的物體處於失重狀態，不是濃浮！');
+}
+
+function checkSpace6(){
+  let a=document.getElementById('spi6').value.trim();
+  showFB('space6',a.includes('海王星')||a.includes('海王'),'海王星','太陽系最遠的行星是海王星，不是淘琚！');
+}
+
+function checkBody1(){
+  let a=getSelected('q-body1');
+  showFB('body1',a==='調節體溫','調節體溫','排汗=調節體溫。排出廢物是泌尿系統的功能！');
+}
+
+function checkBody2(){
+  let a=document.getElementById('bi2').value.trim();
+  showFB('body2',a.includes('206'),'206 塊（成人）','人體骨骼約206塊');
+}
+
+function checkBody3(){
+  let r=document.getElementById('sel-resp').value;
+  let u=document.getElementById('sel-urin').value;
+  let s=document.getElementById('sel-sweat').value;
+  let correct=r==='lose'&&u==='waste'&&s==='temp';
+  showFB('body3',correct,'呼氣=排出水分，排尿=排出廢物，流汗=調節體溫','最容易搞混的三個系統功能，記住！');
+}
+
+function nextSection(id){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  let target=document.getElementById(id);
+  target.classList.add('active');
+  let phases={'sec-intro':'📋 答題技巧','sec-nerve':'🧠 神經系統','sec-smoke':'🚬 煙酒毒品','sec-space':'🪐 太空天文','sec-body':'💧 人體系統'};
+  document.getElementById('phase-indicator').textContent=phases[id]||'';
+  let segMap={'sec-nerve':'seg1','sec-smoke':'seg2','sec-space':'seg3','sec-body':'seg4'};
+  let targetSeg=segMap[id];
+  for(let i=1;i<=4;i++){
+    let seg=document.getElementById('seg'+i);
+    seg.style.width=('seg'+i)===targetSeg?'100%':'0%';
+  }
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function showScore(){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  let target=document.getElementById('sec-score');
+  target.classList.add('active');
+  document.getElementById('phase-indicator').textContent='🏆 完成';
+  document.getElementById('final-score').innerHTML='總分：<span>'+score+' / '+total+'</span> 題';
+  let pct=total>0?Math.round(score/total*100):0;
+  let msg='';
+  if(pct>=90)msg='🌟 太厲害了！太空人和神經系統都掌握得很好！';
+  else if(pct>=70)msg='👍 不錯！再複習一下錯掉的部分就能滿分了！';
+  else if(pct>=50)msg='⚠️ 加油！錯了的題目記得重新做一遍。';
+  else msg='💪 沒關係！點「再練一次」重來，你一定會更好的！';
+  document.getElementById('score-detail').innerHTML='<div class="tip-box">'+msg+'<br><b>答對 '+score+' 題</b></div>';
+  for(let i=1;i<=4;i++) document.getElementById('seg'+i).style.width='100%';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function restart(){
+  score=0;total=0;answered={};
+  document.querySelectorAll('.feedback').forEach(f=>{f.className='feedback';f.innerHTML=''});
+  document.querySelectorAll('.opt').forEach(o=>o.classList.remove('selected'));
+  document.querySelectorAll('input[type=text],textarea').forEach(i=>i.value='');
+  document.querySelectorAll('select').forEach(s=>s.selectedIndex=0);
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.getElementById('sec-intro').classList.add('active');
+  document.getElementById('phase-indicator').textContent='📋 答題技巧';
+  for(let i=1;i<=4;i++) document.getElementById('seg'+i).style.width='0%';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>
