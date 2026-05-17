@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>中史史事辨正 — 陷阱對比卡</title>
+<style>
+:root {
+  --glass-bg: rgba(255,255,255,0.72);
+  --glass-border: rgba(255,255,255,0.55);
+  --glass-shadow: 0 8px 32px rgba(0,0,0,0.08);
+  --text: #1a1a1a;
+  --text-muted: #787878;
+  --accent: #c41e3a;
+  --green: #22c55e;
+  --red: #ef4444;
+  --amber: #f59e0b;
+  --blue: #3b82f6;
+  --purple: #8b5cf6;
+  --radius: 18px;
+  --font: -apple-system, "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: var(--font);
+  background: linear-gradient(135deg, #f5f0eb 0%, #e8e0d8 30%, #f0ece6 60%, #f8f5f0 100%);
+  background-attachment: fixed;
+  min-height: 100vh; min-height: 100dvh;
+  color: var(--text);
+  -webkit-tap-highlight-color: transparent;
+}
+body::before {
+  content: ''; position: fixed; top: -50%; left: -50%; width: 200%; height: 200%;
+  background: radial-gradient(circle at 30% 20%, rgba(196,30,58,0.05) 0%, transparent 50%),
+              radial-gradient(circle at 70% 60%, rgba(139,92,246,0.04) 0%, transparent 50%);
+  pointer-events: none; z-index: 0;
+}
+.app { position: relative; z-index: 1; max-width: 640px; margin: 0 auto; padding: 24px 16px 80px; }
+header { text-align: center; margin-bottom: 24px; }
+header h1 { font-size: 1.7rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 4px; }
+header p  { font-size: 0.9rem; color: var(--text-muted); }
+
+.glass {
+  background: var(--glass-bg); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+  border: 1px solid var(--glass-border); border-radius: var(--radius);
+  box-shadow: var(--glass-shadow);
+}
+
+/* Top bar */
+.top-bar {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  padding: 12px 18px; margin-bottom: 18px; flex-wrap: wrap;
+}
+.top-bar .round-info { font-size: 0.88rem; font-weight: 600; }
+.top-bar .round-info span { color: var(--accent); }
+.top-bar .score-info { font-size: 0.82rem; color: var(--text-muted); }
+.btn {
+  display: inline-flex; align-items: center; gap: 6px; padding: 8px 18px;
+  border-radius: 99px; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.6);
+  font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.2s;
+  font-family: var(--font); color: var(--text);
+}
+.btn:hover { background: rgba(255,255,255,0.9); transform: translateY(-1px); }
+.btn:active { transform: scale(0.97); }
+.btn.accent { background: var(--accent); color: #fff; border-color: var(--accent); }
+.btn.small { padding: 6px 14px; font-size: 0.8rem; }
+
+/* Round nav dots */
+.round-dots { display: flex; justify-content: center; gap: 10px; margin-bottom: 18px; }
+.round-dot {
+  width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center;
+  justify-content: center; font-weight: 700; font-size: 0.85rem; cursor: pointer;
+  background: rgba(255,255,255,0.5); border: 1.5px solid rgba(0,0,0,0.1); transition: all 0.2s;
+}
+.round-dot.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+.round-dot.done { background: var(--green); color: #fff; border-color: var(--green); }
+
+/* ── Card ── */
+.card-stage { perspective: 1200px; margin-bottom: 16px; }
+.card-inner {
+  position: relative; min-height: 260px; transition: transform 0.5s cubic-bezier(0.4,0,0.2,1);
+  transform-style: preserve-3d;
+}
+.card-inner.flipped { transform: rotateY(180deg); }
+.card-face {
+  position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  border-radius: var(--radius); padding: 28px 24px;
+  display: flex; flex-direction: column;
+}
+.card-front {
+  background: rgba(255,255,255,0.85); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+  border: 1px solid var(--glass-border); box-shadow: var(--glass-shadow);
+  z-index: 2; cursor: pointer; align-items: center; justify-content: center;
+}
+.card-front .q-num { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px; }
+.card-front .q-sentence {
+  font-size: 1.2rem; font-weight: 600; line-height: 1.9; text-align: center; max-width: 480px;
+}
+.card-front .tap-hint {
+  font-size: 0.78rem; color: #c0c0c0; margin-top: 20px;
+  display: flex; align-items: center; gap: 6px;
+}
+.card-front .tap-hint .icon { font-size: 1rem; }
+
+.card-back {
+  background: rgba(255,255,255,0.9); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+  border: 1px solid var(--glass-border); box-shadow: var(--glass-shadow);
+  transform: rotateY(180deg); z-index: 1; align-items: flex-start;
+}
+.card-back .trap-tag {
+  display: inline-block; font-size: 0.72rem; font-weight: 700; padding: 3px 12px;
+  border-radius: 99px; margin-bottom: 14px; letter-spacing: 0.03em;
+}
+.trap-tag.type1 { background: #fef0f2; color: #c41e3a; }  /* 名詞混淆 */
+.trap-tag.type2 { background: #f0f4ff; color: #3b82f6; }  /* 人物調換 */
+.trap-tag.type3 { background: #faf5ff; color: #8b5cf6; }  /* 運動張冠李戴 */
+.trap-tag.type4 { background: #fffbeb; color: #d97706; }  /* 細節替換 */
+.trap-tag.type5 { background: #ecfdf5; color: #059669; }  /* 口號混淆 */
+
+.card-back .correction-line {
+  font-size: 1.1rem; line-height: 1.9; margin-bottom: 14px; padding: 14px 18px;
+  background: #fafaf8; border-radius: 12px; width: 100%;
+}
+.card-back .correction-line .strike {
+  text-decoration: line-through; color: var(--red); background: #fef2f2;
+  padding: 1px 6px; border-radius: 3px; font-weight: 600;
+}
+.card-back .correction-line .fix {
+  color: var(--green); background: #f0fdf4; padding: 1px 6px;
+  border-radius: 3px; font-weight: 700;
+}
+.card-back .explain {
+  font-size: 0.83rem; color: var(--text-muted); line-height: 1.6; width: 100%;
+}
+
+/* Action buttons */
+.card-actions {
+  display: flex; gap: 12px; justify-content: center; margin-top: 6px;
+}
+.card-actions .btn { min-width: 110px; justify-content: center; }
+.card-actions .btn.wrong { border-color: #fca5a5; color: #dc2626; }
+.card-actions .btn.wrong:hover { background: #fef2f2; }
+.card-actions .btn.correct { border-color: #86efac; color: #16a34a; }
+.card-actions .btn.correct:hover { background: #f0fdf4; }
+
+/* Progress dots (per round) */
+.progress-row { display: flex; justify-content: center; gap: 6px; margin-bottom: 10px; }
+.progress-dot {
+  width: 10px; height: 10px; border-radius: 50%; background: rgba(0,0,0,0.1); transition: all 0.3s;
+}
+.progress-dot.done-correct { background: var(--green); }
+.progress-dot.done-wrong { background: var(--red); }
+.progress-dot.current { background: var(--accent); transform: scale(1.3); }
+
+/* Result summary */
+.round-summary { display: none; margin-top: 16px; text-align: center; }
+.round-summary.show { display: block; }
+.round-summary .rs-score { font-size: 2rem; font-weight: 800; margin-bottom: 4px; }
+.round-summary .rs-detail { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 12px; }
+
+/* Modal */
+.modal-overlay {
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 100;
+  align-items: center; justify-content: center;
+}
+.modal-overlay.active { display: flex; }
+.modal-box {
+  background: #fff; border-radius: 20px; padding: 40px 32px; text-align: center;
+  max-width: 380px; width: 90%; box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+}
+.modal-box .m-emoji { font-size: 3.5rem; margin-bottom: 12px; }
+.modal-box h2 { font-size: 1.4rem; margin-bottom: 8px; }
+.modal-box p { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 20px; }
+
+/* Instruction */
+.instruction {
+  padding: 12px 18px; margin-bottom: 14px; font-size: 0.83rem; color: var(--text-muted);
+  display: flex; align-items: center; gap: 8px;
+}
+.instruction .instr-icon { font-size: 1.2rem; flex-shrink: 0; }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <header>
+    <h1>🔍 史事辨正 · 陷阱對比</h1>
+    <p>每句有一個錯誤 → 圈出它 → 寫出正確答案（考試：5題×2分＝10分）</p>
+  </header>
+
+  <!-- Instruction -->
+  <div class="instruction glass">
+    <span class="instr-icon">💡</span>
+    <span>先讀句子 → 在心裡找出<strong>錯誤之處</strong>並想好<strong>正確答案</strong> → 點擊卡片翻轉核對</span>
+  </div>
+
+  <!-- Round dots -->
+  <div class="round-dots" id="roundDots"></div>
+
+  <!-- Top bar -->
+  <div class="top-bar glass">
+    <div class="round-info">📋 <span id="roundLabel"></span></div>
+    <div class="score-info" id="scoreInfo"></div>
+    <button class="btn small" onclick="resetAll()">↺ 全部重置</button>
+  </div>
+
+  <!-- Progress dots -->
+  <div class="progress-row" id="progressRow"></div>
+
+  <!-- Card -->
+  <div class="card-stage">
+    <div class="card-inner" id="cardInner" onclick="flipCard()">
+      <div class="card-face card-front">
+        <div class="q-num" id="qNum"></div>
+        <div class="q-sentence" id="qSentence"></div>
+        <div class="tap-hint"><span class="icon">👆</span> 點擊查看答案</div>
+      </div>
+      <div class="card-face card-back">
+        <div class="trap-tag" id="trapTag"></div>
+        <div class="correction-line" id="correctionLine"></div>
+        <div class="explain" id="explain"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Actions -->
+  <div class="card-actions" id="cardActions" style="display:none;">
+    <button class="btn wrong" onclick="markWrong()">✗ 沒找對</button>
+    <button class="btn correct" onclick="markCorrect()">✓ 我找對了</button>
+  </div>
+
+  <!-- Round summary -->
+  <div class="round-summary glass" id="roundSummary">
+    <div class="rs-score" id="rsScore"></div>
+    <div class="rs-detail" id="rsDetail"></div>
+    <button class="btn accent" id="rsNextBtn" onclick="nextRound()">▶ 下一組</button>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-box">
+      <div class="m-emoji" id="modalEmoji"></div>
+      <h2 id="modalTitle"></h2>
+      <p id="modalDesc"></p>
+      <button class="btn accent" onclick="closeModal()">繼續</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════
+// QUESTION BANK — 3 rounds × 5 questions
+// ═══════════════════════════════════════
+const ROUNDS = [
+  {
+    label: '基礎：五大陷阱各一題',
+    questions: [
+      {
+        sentence: '1958年，全國農村普遍成立「農業合作組」，實行集體生產和平均分配。',
+        wrong: '農業合作組',
+        correct: '人民公社',
+        trapType: 1,
+        trapLabel: '名詞混淆',
+        explain: '1958年大躍進期間，將原有的農業合作社合併改組為「人民公社」，實行「一大二公」。「農業合作組」是更早期的組織形式。',
+      },
+      {
+        sentence: '文化大革命期間，鄧小平為四人幫之首，於1974年發起「批林批孔」運動。',
+        wrong: '鄧小平',
+        correct: '江青',
+        trapType: 2,
+        trapLabel: '人物調換',
+        explain: '四人幫之首為江青（毛澤東妻子），非鄧小平。鄧小平在文革中被批為「走資派」遭打倒，與四人幫立場相反。',
+      },
+      {
+        sentence: '1957年整風鳴放運動後，大量批評者被劃為「走資派」，遭到下放勞改。',
+        wrong: '走資派',
+        correct: '右派分子',
+        trapType: 3,
+        trapLabel: '運動張冠李戴',
+        explain: '1957年反右運動中，批評者被劃為「右派分子」。「走資派」是文革用語（1966年後才出現），用於批鬥劉少奇、鄧小平等。二者相隔十年，切勿混淆。',
+      },
+      {
+        sentence: '1971年，中國邀請美國籃球隊訪問中國，為中美關係正常化打破僵局，史稱「籃球外交」。',
+        wrong: '籃球隊',
+        correct: '乒乓球隊',
+        trapType: 4,
+        trapLabel: '細節替換',
+        explain: '1971年「乒乓外交」——美國乒乓球隊受邀訪華，打開中美關係大門。籃球隊為常見干擾項。記住：乒乓球（table tennis）是這件史事的關鍵標誌。',
+      },
+      {
+        sentence: '1958年社會主義建設總路線的口號之一是「百花齊放」。',
+        wrong: '百花齊放',
+        correct: '力爭上游',
+        trapType: 5,
+        trapLabel: '口號混淆',
+        explain: '總路線口號為「鼓足幹勁、力爭上游、多快好省地建設社會主義」。「百花齊放、百家爭鳴」是1956年針對知識分子的雙百方針，非總路線口號。',
+      },
+    ],
+  },
+  {
+    label: '2425/2324 真題還原',
+    questions: [
+      {
+        sentence: '1965年，朱德發表〈評新編歷史劇《海瑞罷官》〉，批判北京市副市長吳晗，成為文革序幕。',
+        wrong: '朱德',
+        correct: '姚文元',
+        trapType: 2,
+        trapLabel: '人物調換',
+        explain: '發表〈評新編歷史劇《海瑞罷官》〉的是姚文元（四人幫之一），非朱德。姚文元藉批判吳晗的《海瑞罷官》掀起文革序幕。朱德是解放軍元帥，與此事無關。',
+      },
+      {
+        sentence: '文化大革命初期，全國各地青年學生組成「紅衫軍」到處串聯，進行「破四舊、立四新」運動。',
+        wrong: '紅衫軍',
+        correct: '紅衛兵',
+        trapType: 1,
+        trapLabel: '名詞混淆',
+        explain: '文革中的學生組織為「紅衛兵」（Red Guards），非「紅衫軍」。紅衫軍是泰國政治組織，與中國文革無關。此為2324真題考點。',
+      },
+      {
+        sentence: '1955年，周恩來在印尼泗水會議上提出「求同存異」方針，提升了中國在亞非國家的影響力。',
+        wrong: '泗水會議',
+        correct: '萬隆會議',
+        trapType: 4,
+        trapLabel: '細節替換',
+        explain: '1955年在印尼舉行的亞非會議，地點為萬隆（Bandung），非泗水（Surabaya）。萬隆會議是新中國外交的重要里程碑。此為2324真題。',
+      },
+      {
+        sentence: '1948至1949年三大戰役中，天津戰役殲滅和改編國民黨軍52萬人，解放了華北全境。',
+        wrong: '天津戰役',
+        correct: '平津戰役',
+        trapType: 1,
+        trapLabel: '名詞混淆',
+        explain: '三大戰役為遼瀋、淮海、平津戰役。平津戰役解放北平（北京）和天津，殲敵52萬。不存在獨立的「天津戰役」。此為2324真題。',
+      },
+      {
+        sentence: '1958年總路線的口號之一是「百家爭鳴」。',
+        wrong: '百家爭鳴',
+        correct: '多快好省',
+        trapType: 5,
+        trapLabel: '口號混淆',
+        explain: '總路線口號為「鼓足幹勁、力爭上游、多快好省」。「百家爭鳴」與「百花齊放」同屬1956年雙百方針，針對學術和文藝領域，非經濟建設總路線口號。',
+      },
+    ],
+  },
+  {
+    label: '2026預測陷阱',
+    questions: [
+      {
+        sentence: '1972年，美國總統卡特訪華，中美兩國發表《上海公報》，兩國關係開始正常化。',
+        wrong: '卡特',
+        correct: '尼克遜',
+        trapType: 2,
+        trapLabel: '人物調換',
+        explain: '1972年訪華的是尼克遜（Nixon），中美發表《上海公報》。卡特（Carter）是1979年中美正式建交時的美國總統。此為2026高概率考點。',
+      },
+      {
+        sentence: '文化大革命期間，四人幫之首林彪於1971年策劃政變失敗，外逃途中墜機身亡。',
+        wrong: '四人幫之首',
+        correct: '毛澤東的接班人',
+        trapType: 3,
+        trapLabel: '運動張冠李戴',
+        explain: '林彪是毛澤東指定的接班人，非四人幫之首（四人幫之首為江青）。林彪≠四人幫，此為每年必考的混淆陷阱！林彪1971年九一三事件身亡，四人幫1976年才被捕。',
+      },
+      {
+        sentence: '1950年土地改革後，在全國範圍內廢除了「人民公社化制度」。',
+        wrong: '人民公社化制度',
+        correct: '封建土地所有制',
+        trapType: 1,
+        trapLabel: '名詞混淆',
+        explain: '1950年土地改革廢除的是「封建土地所有制」。人民公社化運動始於1958年（大躍進期間），遠在土改之後。二者相隔八年，時間線不可混淆。',
+      },
+      {
+        sentence: '1979年中美正式建立外交關係，時任美國總統為尼克遜。',
+        wrong: '尼克遜',
+        correct: '卡特',
+        trapType: 2,
+        trapLabel: '人物調換',
+        explain: '1979年中美建交時的總統是卡特（Jimmy Carter）。尼克遜1974年已因水門事件辭職。記住：尼克遜=1972訪華破冰，卡特=1979正式建交。',
+      },
+      {
+        sentence: '1957年整風運動後，大量知識分子和幹部被劃為「走資派」並遭到殘酷批鬥。',
+        wrong: '走資派',
+        correct: '右派分子',
+        trapType: 3,
+        trapLabel: '運動張冠李戴',
+        explain: '反右運動中批評者被劃為「右派分子」。「走資派」（走資本主義道路的當權派）是文革（1966-76）用語，批鬥對象是劉少奇、鄧小平等高層領導。時間差距十年。',
+      },
+    ],
+  },
+];
+
+// ═══════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════
+const STORAGE_KEY = 'chist_bianzheng_v1';
+function loadState() {
+  try { const raw = localStorage.getItem(STORAGE_KEY); if (raw) return JSON.parse(raw); } catch(e) {}
+  return { results: ROUNDS.map(() => []), currentRound: 0 };
+}
+function saveState(s) { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); } catch(e) {} }
+
+let state = loadState();
+let currentQIdx = 0;
+let flipped = false;
+
+function currentResults() { return state.results[state.currentRound]; }
+
+// ═══════════════════════════════════════
+// RENDER
+// ═══════════════════════════════════════
+function render() {
+  const r = ROUNDS[state.currentRound];
+  const q = r.questions[currentQIdx];
+  const results = currentResults();
+
+  // Round dots
+  let dotsHtml = '';
+  for (let i = 0; i < ROUNDS.length; i++) {
+    let cls = 'round-dot';
+    if (i === state.currentRound) cls += ' active';
+    else if (state.results[i].length === ROUNDS[i].questions.length) cls += ' done';
+    dotsHtml += `<div class="${cls}" onclick="switchRound(${i})">${i + 1}</div>`;
+  }
+  document.getElementById('roundDots').innerHTML = dotsHtml;
+
+  // Top bar
+  document.getElementById('roundLabel').textContent = r.label;
+  const correctCount = results.filter(x => x === true).length;
+  document.getElementById('scoreInfo').textContent = results.length > 0
+    ? `得分：${correctCount}/${results.length}`
+    : '';
+
+  // Progress dots
+  let progHtml = '';
+  for (let i = 0; i < r.questions.length; i++) {
+    let cls = 'progress-dot';
+    if (i < results.length) {
+      cls += results[i] ? ' done-correct' : ' done-wrong';
+    } else if (i === currentQIdx) {
+      cls += ' current';
+    }
+    progHtml += `<div class="${cls}"></div>`;
+  }
+  document.getElementById('progressRow').innerHTML = progHtml;
+
+  // Card
+  document.getElementById('qNum').textContent = `第 ${currentQIdx + 1}/${r.questions.length} 題`;
+  document.getElementById('qSentence').textContent = q.sentence;
+  document.getElementById('trapTag').textContent = q.trapLabel;
+  document.getElementById('trapTag').className = 'trap-tag type' + q.trapType;
+  document.getElementById('correctionLine').innerHTML =
+    '<span class="strike">' + q.wrong + '</span> → <span class="fix">' + q.correct + '</span>';
+  document.getElementById('explain').textContent = q.explain;
+  document.getElementById('cardInner').classList.remove('flipped');
+  document.getElementById('cardActions').style.display = 'none';
+  flipped = false;
+
+  // Round summary
+  const summary = document.getElementById('roundSummary');
+  if (results.length === r.questions.length) {
+    summary.classList.add('show');
+    const score = correctCount;
+    document.getElementById('rsScore').textContent = score + ' / ' + r.questions.length;
+    let detail = '';
+    if (score === r.questions.length) detail = '🎯 全部找對！史事辨正穩拿10分。';
+    else if (score >= 3) detail = '👍 不錯，紅色標記的題目多練幾次。';
+    else detail = '📚 陷阱辨識需加強，建議全部重做一遍。';
+    document.getElementById('rsDetail').textContent = detail;
+    document.getElementById('rsNextBtn').style.display = '';
+  } else {
+    summary.classList.remove('show');
+  }
+}
+
+// ═══════════════════════════════════════
+// INTERACTION
+// ═══════════════════════════════════════
+function flipCard() {
+  if (flipped) return;
+  document.getElementById('cardInner').classList.add('flipped');
+  document.getElementById('cardActions').style.display = 'flex';
+  flipped = true;
+}
+
+function markCorrect() {
+  currentResults()[currentQIdx] = true;
+  advance();
+}
+
+function markWrong() {
+  currentResults()[currentQIdx] = false;
+  advance();
+}
+
+function advance() {
+  const r = ROUNDS[state.currentRound];
+  if (currentQIdx < r.questions.length - 1) {
+    currentQIdx++;
+  }
+  saveState(state);
+  render();
+}
+
+function switchRound(i) {
+  state.currentRound = i;
+  currentQIdx = 0;
+  // If already completed, go to last question; otherwise start from where left off
+  const results = state.results[i];
+  if (results.length === ROUNDS[i].questions.length) {
+    currentQIdx = ROUNDS[i].questions.length - 1; // show last q for review
+  } else {
+    currentQIdx = results.length; // continue from where left
+  }
+  saveState(state);
+  render();
+}
+
+function nextRound() {
+  if (state.currentRound < ROUNDS.length - 1) {
+    state.currentRound++;
+    currentQIdx = 0;
+    saveState(state);
+    render();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  } else {
+    // All rounds done
+    const totalCorrect = state.results.flat().filter(x => x === true).length;
+    const totalQ = ROUNDS.reduce((sum, r) => sum + r.questions.length, 0);
+    showModal('🏆', '全部通關！', `三組共${totalQ}題，答對${totalCorrect}題。史事辨正陷阱已全覆蓋！`);
+    // Reset to round 1
+    state.currentRound = 0;
+    currentQIdx = 0;
+    saveState(state);
+    render();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
+
+function resetAll() {
+  if (confirm('確定要重置全部進度？所有自評記錄將被清除。')) {
+    state = { results: ROUNDS.map(() => []), currentRound: 0 };
+    currentQIdx = 0;
+    saveState(state);
+    render();
+  }
+}
+
+// ═══════════════════════════════════════
+// MODAL
+// ═══════════════════════════════════════
+function showModal(emoji, title, desc) {
+  document.getElementById('modalEmoji').textContent = emoji;
+  document.getElementById('modalTitle').textContent = title;
+  document.getElementById('modalDesc').textContent = desc;
+  document.getElementById('modalOverlay').classList.add('active');
+}
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('active');
+}
+
+// ═══════════════════════════════════════
+// KEYBOARD
+// ═══════════════════════════════════════
+document.addEventListener('keydown', (e) => {
+  if (e.key === ' ' || e.key === 'Enter') {
+    e.preventDefault();
+    if (!flipped) flipCard();
+  }
+  if (flipped) {
+    if (e.key === 'ArrowLeft' || e.key === '1') { e.preventDefault(); markWrong(); }
+    if (e.key === 'ArrowRight' || e.key === '2') { e.preventDefault(); markCorrect(); }
+  }
+});
+
+// ═══════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════
+// Start from where left off
+const savedResults = state.results[state.currentRound];
+if (savedResults.length === ROUNDS[state.currentRound].questions.length) {
+  currentQIdx = ROUNDS[state.currentRound].questions.length - 1;
+} else {
+  currentQIdx = savedResults.length;
+}
+render();
+</script>
+</body>
+</html>

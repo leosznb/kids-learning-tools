@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>資料回應題・三步教學法</title>
+<style>
+  :root {
+    --accent: #1a5c7a;
+    --accent-light: #e8f0f5;
+    --accent-mid: #3a8bb0;
+    --text: #1a1a1a;
+    --text-secondary: #4a4a4a;
+    --border: #d0d0d0;
+    --bg: #ffffff;
+    --code-bg: #f5f5f5;
+    --highlight: #c7432e;
+    --green: #2a7d4f;
+    --orange: #b85c00;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "Helvetica Neue", "Arial", "PingFang SC", "Microsoft YaHei", sans-serif;
+    color: var(--text);
+    background: var(--bg);
+    line-height: 1.7;
+    font-size: 16px;
+  }
+
+  /* ===== Header ===== */
+  header {
+    background: var(--accent);
+    color: white;
+    padding: 40px 0 32px;
+    text-align: center;
+  }
+  header h1 {
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+  header p {
+    font-size: 15px;
+    opacity: 0.85;
+    font-weight: 300;
+  }
+
+  /* ===== Container ===== */
+  .container { max-width: 880px; margin: 0 auto; padding: 0 24px; }
+
+  /* ===== Section ===== */
+  section { padding: 36px 0; border-bottom: 1px solid var(--border); }
+  section:last-child { border-bottom: none; }
+
+  .section-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-title .badge {
+    display: inline-block;
+    background: var(--accent);
+    color: white;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 2px 10px;
+    border-radius: 12px;
+    letter-spacing: 0.5px;
+  }
+
+  /* ===== Method Box ===== */
+  .method-box {
+    background: var(--accent-light);
+    border-left: 4px solid var(--accent);
+    padding: 18px 22px;
+    margin-bottom: 20px;
+    border-radius: 0 6px 6px 0;
+  }
+  .method-box h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .method-box ol, .method-box ul {
+    padding-left: 20px;
+    margin: 0;
+  }
+  .method-box li {
+    margin-bottom: 6px;
+    font-size: 15px;
+  }
+  .method-box li:last-child { margin-bottom: 0; }
+
+  /* ===== Step-by-step ===== */
+  .steps { counter-reset: step; }
+  .step {
+    counter-increment: step;
+    margin-bottom: 18px;
+    padding-left: 44px;
+    position: relative;
+  }
+  .step::before {
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .step .label {
+    font-weight: 600;
+    color: var(--accent);
+    font-size: 15px;
+  }
+  .step .desc {
+    font-size: 14.5px;
+    color: var(--text-secondary);
+    margin-top: 2px;
+  }
+  .step .example {
+    background: var(--code-bg);
+    border-radius: 4px;
+    padding: 10px 14px;
+    margin-top: 6px;
+    font-size: 14px;
+    line-height: 1.6;
+    position: relative;
+  }
+  .step .example::before {
+    content: "💡 示範";
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent-mid);
+    margin-bottom: 4px;
+  }
+
+  /* ===== Model Answer ===== */
+  .answer-box {
+    background: #fafaf8;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin-top: 12px;
+  }
+  .answer-box .label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--green);
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+  .answer-box .label::before { content: "✓ 參考答案 "; }
+  .answer-box p { font-size: 14.5px; line-height: 1.7; }
+
+  .answer-box .kw {
+    font-weight: 700;
+    color: var(--orange);
+  }
+
+  /* ===== Data Reference ===== */
+  .data-ref {
+    background: #f8f8f6;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin-bottom: 28px;
+  }
+  .data-ref h2 {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 14px;
+  }
+  .data-ref .source-block {
+    margin-bottom: 16px;
+  }
+  .data-ref .source-block:last-child { margin-bottom: 0; }
+  .data-ref .source-block h3 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--highlight);
+    margin-bottom: 4px;
+  }
+  .data-ref .source-block p, .data-ref .source-block ul {
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    padding-left: 0;
+    list-style: none;
+  }
+  .data-ref .source-block li {
+    margin-bottom: 2px;
+  }
+
+  table.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+    margin: 8px 0;
+  }
+  table.data-table th {
+    background: var(--accent);
+    color: white;
+    font-weight: 600;
+    padding: 8px 10px;
+    text-align: center;
+  }
+  table.data-table td {
+    padding: 6px 10px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+  }
+  table.data-table tr:last-child td { border-bottom: none; }
+
+  /* ===== Tips ===== */
+  .tip-box {
+    background: #fff9e6;
+    border: 1px solid #f0d87a;
+    border-radius: 6px;
+    padding: 12px 18px;
+    margin-top: 14px;
+    font-size: 14px;
+  }
+  .tip-box strong { color: var(--orange); }
+
+  /* ===== Footer ===== */
+  .footer-note {
+    padding: 24px 0;
+    text-align: center;
+    font-size: 13px;
+    color: #999;
+  }
+
+  @media (max-width: 600px) {
+    header { padding: 28px 0 22px; }
+    header h1 { font-size: 22px; }
+    .container { padding: 0 16px; }
+    .step { padding-left: 38px; }
+    .step::before { width: 28px; height: 28px; font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>資料回應題・三步教學法</h1>
+  <p>第4節 建國以來內地與香港的關係 ── 香港與內地的社會經濟關係</p>
+</header>
+
+<div class="container">
+
+<!-- ===== 資料速覽 ===== -->
+<section>
+  <div class="section-title">📋 資料速覽</div>
+  <div class="data-ref">
+    <div class="source-block">
+      <h3>資料一：香港人口數目（1946–1971年）</h3>
+      <p>1946年：160萬 → 1951年：207萬 → 1956年：268萬 → 1961年：313萬 → 1966年：371萬 → 1971年：394萬</p>
+      <p style="font-size:12px;color:#999;margin-top:4px;">（整理自彭琪瑞等《香港與澳門》）</p>
+    </div>
+    <div class="source-block">
+      <h3>資料二：香港出口貨物概況（1951–1969年）</h3>
+      <table class="data-table">
+        <tr><th>年份</th><th>香港製品出口值佔總出口比重</th><th>轉口貨品值佔總出口比重</th></tr>
+        <tr><td>1951年</td><td>12.4%</td><td>87.6%</td></tr>
+        <tr><td>1957年</td><td>39.8%</td><td>60.2%</td></tr>
+        <tr><td>1963年</td><td>76.8%</td><td>23.2%</td></tr>
+        <tr><td>1969年</td><td>79.7%</td><td>20.3%</td></tr>
+      </table>
+      <p style="font-size:12px;color:#999;margin-top:4px;">（整理自馮邦彥《香港產業結構轉型》）</p>
+    </div>
+    <div class="source-block">
+      <h3>資料三</h3>
+      <p>「（1950年代美國和聯合國的）禁運迫使香港步上從轉口貿易改為製造業的轉型。……香港華人（不管是久居此地的人還是新來港的移民）都是1949年後工業繁榮的最大功臣，他們既是生產者又是消費者。」</p>
+      <p style="font-size:12px;color:#999;margin-top:4px;">（改寫自高馬可《香港簡史》）</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Q1: 描述變化 ===== -->
+<section>
+  <div class="section-title">
+    <span>Q1 描述變化</span>
+    <span class="badge">理解 · 低階</span>
+  </div>
+  <p style="font-size:14.5px;color:var(--text-secondary);margin-bottom:14px;">
+    根據資料一，描述1946至1971年間香港人口數目的變化。
+  </p>
+
+  <div class="method-box">
+    <h3>🎯 方法框架：三步描述法</h3>
+    <ol>
+      <li><strong>看整體趨勢</strong> — 數字整體是上升、下降，還是波動不定？用一個關鍵詞概括（持續增長／急劇上升／穩步下降／先升後跌……）</li>
+      <li><strong>鎖定起終點</strong> — 找出起始年份和終止年份的具體數據，計算是增加了還是減少了多少</li>
+      <li><strong>補充特徵</strong> — 有沒有加速期、減速期、轉折點？一句補充讓答案更完整</li>
+    </ol>
+  </div>
+
+  <div class="steps">
+    <div class="step">
+      <span class="label">Step 1｜看整體趨勢</span>
+      <div class="desc">從1946到1971年，所有年份的數字都比前一年高。結論：<strong>持續增長</strong>。</div>
+      <div class="example">1946（160萬）→ 1951（207萬）→ 1956（268萬）→ 1961（313萬）→ 1966（371萬）→ 1971（394萬），<strong>節節上升，從未下跌</strong>。</div>
+    </div>
+    <div class="step">
+      <span class="label">Step 2｜鎖定起終點 + 計算變化量</span>
+      <div class="desc">起點：1946年160萬；終點：1971年394萬。增幅 = 394 − 160 = <strong>234萬</strong>。</div>
+      <div class="example">「由1946年的160萬增至1971年的394萬，<strong>增加了234萬</strong>。」</div>
+    </div>
+    <div class="step">
+      <span class="label">Step 3｜補充特徵（進階加分）</span>
+      <div class="desc">留意每個間隔的增長量：1946→1951（47萬）、1951→1956（61萬）、1956→1961（45萬）、1961→1966（58萬）、1966→1971（23萬）。前半段（1946-1966）增長較快，1966-1971增速放緩。</div>
+      <div class="example">「人口在1946至1966年間增長尤為迅速，由160萬升至371萬，但其後增速略為放緩。」</div>
+    </div>
+  </div>
+
+  <div class="answer-box">
+    <p><span class="label"></span><span class="kw">1946至1971年間，香港人口持續快速增長</span>，由1946年的160萬<span class="kw">增至</span>1971年的394萬，<span class="kw">增加了234萬</span>。其中1946至1966年間增長尤為迅速，其後增速略有放緩。</p>
+  </div>
+
+  <div class="tip-box">
+    <strong>⚠️ 常見扣分位：</strong>只用「增加了XXX」沒有交代趨勢→扣分。必須先講整體走向，再給數據。
+  </div>
+</section>
+
+<!-- ===== Q2: 引證觀點 ===== -->
+<section>
+  <div class="section-title">
+    <span>Q2 引證觀點</span>
+    <span class="badge">論證 · 中階</span>
+  </div>
+  <p style="font-size:14.5px;color:var(--text-secondary);margin-bottom:14px;">
+    資料三指出1950年代「香港步上從轉口貿易改為製造業的轉型」。試根據資料二，引證此說。
+  </p>
+
+  <div class="method-box">
+    <h3>🎯 方法框架：三步引證法</h3>
+    <ol>
+      <li><strong>抄觀點</strong> — 簡述要引證的說法（一句話點題，讓閱卷者知道你在回應哪個觀點）</li>
+      <li><strong>選數據</strong> — 從資料中挑選最能佐證觀點的關鍵數據（要有對比，前後年份對照最有力）</li>
+      <li><strong>扣題解讀</strong> — 解釋數據說明了什麼，並明確說「這印證了資料三的主張」</li>
+    </ol>
+  </div>
+
+  <div class="steps">
+    <div class="step">
+      <span class="label">Step 1｜一句話點出觀點</span>
+      <div class="desc">資料三說：1950年代香港從轉口貿易改為製造業。你要引證的就是這個「轉變」。</div>
+      <div class="example">「資料三指出，1950年代香港從轉口貿易轉向製造業發展。」</div>
+    </div>
+    <div class="step">
+      <span class="label">Step 2｜對比前後數據</span>
+      <div class="desc">資料二有1951年和1969年的數據。對比這兩個年份最有力。</div>
+      <div class="example">
+        <strong>1951年：</strong>香港製品只佔12.4%，轉口貨品佔87.6%（轉口壓倒性主導）<br>
+        <strong>1969年：</strong>香港製品佔79.7%，轉口貨品降至20.3%（製造業壓倒性主導）<br>
+        → 兩者完全逆轉！
+      </div>
+    </div>
+    <div class="step">
+      <span class="label">Step 3｜解讀 + 扣題</span>
+      <div class="desc">必須說明這組數據「反映了什麼」，並明確扣回資料三的觀點。</div>
+      <div class="example">「這反映香港出口結構發生根本性逆轉，從依賴轉口貿易轉為以本地製造業為主導，<strong>印證了資料三所述『從轉口貿易改為製造業』的經濟轉型</strong>。」</div>
+    </div>
+  </div>
+
+  <div class="answer-box">
+    <p><span class="label"></span>資料三指出，1950年代香港從轉口貿易轉向製造業發展。根據資料二，<span class="kw">1951年香港製品出口僅佔12.4%</span>，轉口貨品則佔<span class="kw">87.6%</span>，顯示當時經濟以轉口貿易為主；但至<span class="kw">1969年</span>，香港製品出口比重已升至<span class="kw">79.7%</span>，轉口貨品則降至<span class="kw">20.3%</span>，兩者地位完全逆轉。這反映<span class="kw">香港出口結構發生了根本性轉變</span>，從依賴轉口貿易轉為以本地製造業為主導，<span class="kw">印證了資料三所述「從轉口貿易改為製造業」的經濟轉型</span>。</p>
+  </div>
+
+  <div class="tip-box">
+    <strong>⚠️ 關鍵：</strong>選對數據比寫得多重要！1951年（起點）對比1969年（終點）是最佳選擇。如果只講1951或只講1969，缺少對比，力度減半。<br>
+    <strong>💡 必扣題：</strong>結尾一定要說「這印證了資料三的主張」之類的扣題句，否則會被視為「只抄資料不解釋」。
+  </div>
+</section>
+
+<!-- ===== Q3: 綜合分析 ===== -->
+<section>
+  <div class="section-title">
+    <span>Q3 綜合分析</span>
+    <span class="badge">分析 · 高階</span>
+  </div>
+  <p style="font-size:14.5px;color:var(--text-secondary);margin-bottom:14px;">
+    承上題，試綜合以上資料，並就你所知，分析促使香港經濟轉型的原因。
+  </p>
+
+  <div class="method-box">
+    <h3>🎯 方法框架：三角度分析法</h3>
+    <ol>
+      <li><strong>外部推力</strong> — 國際政治/經濟環境施加的壓力（被迫改變）</li>
+      <li><strong>內部動力</strong> — 本地企業家、資金的推動（主動求變）</li>
+      <li><strong>社會條件</strong> — 人口、勞動力、市場（提供支撐）</li>
+    </ol>
+    <p style="margin-top:8px;font-size:13.5px;color:var(--text-secondary);">
+      💡 每個角度都要做到：<strong>陳述原因事實 → 連結因果關係（如何促使轉型）</strong>
+    </p>
+  </div>
+
+  <div class="steps">
+    <div class="step">
+      <span class="label">角度一｜外部推力：禁運封鎖</span>
+      <div class="desc">資料三明確提到：1950年代美國和聯合國的禁運。香港作為轉口港，傳統貿易路線被封鎖，被迫尋找新出路。</div>
+      <div class="example">
+        <strong>事實：</strong>1950年代美國與聯合國對華實施貿易禁運。<br>
+        <strong>因果鏈接：</strong>禁運使香港傳統轉口貿易遭受嚴重打擊 → 商人無法再依賴轉口 → <strong>被迫轉向發展本地製造業</strong>。
+      </div>
+    </div>
+    <div class="step">
+      <span class="label">角度二｜內部動力：企業家群體</span>
+      <div class="desc">資料三指出有兩類企業家：本地華人企業家 + 由中國大陸湧入的企業家。他們是轉型的發動機。</div>
+      <div class="example">
+        <strong>事實：</strong>本地華人企業家與大陸移民企業家積極投資製造業。<br>
+        <strong>因果鏈接：</strong>這批企業家具備資金、技術和管理經驗 → 投入紡織、製衣等勞工密集行業 → <strong>推動香港工業化</strong>。
+      </div>
+    </div>
+    <div class="step">
+      <span class="label">角度三｜社會條件：人口與勞動力</span>
+      <div class="desc">結合資料一（人口大幅增長）和資料三（華人既是生產者又是消費者）。注意：這是「你就所知」的內容，需要連結你所知道的歷史知識。</div>
+      <div class="example">
+        <strong>事實：</strong>1946至1971年香港人口從160萬增至394萬，大量移民湧入。<br>
+        <strong>因果鏈接：</strong>大量移民提供了充裕的廉價勞動力 → 製造業得以快速擴張；同時移民也是消費者 → <strong>形成內需市場</strong>，支撐工業持續發展。
+      </div>
+    </div>
+  </div>
+
+  <div class="answer-box">
+    <p><span class="label"></span>促使香港在1950年代從轉口貿易轉向製造業的原因涉及多方面因素：</p>
+    <p style="margin-top:4px;"><strong>（一）外部推力：禁運迫使經濟轉型</strong><br>
+    資料三指出，1950年代美國與聯合國對華實施禁運，使香港傳統的轉口貿易遭受重大打擊，<span class="kw">商人無法再依賴轉口</span>，<span class="kw">被迫尋求替代產業</span>，轉向發展本地製造業。</p>
+    <p style="margin-top:4px;"><strong>（二）內部動力：企業家推動工業化</strong><br>
+    資料三提到，本地華人企業家與由中國大陸湧入的企業家<span class="kw">積極投資製造業</span>。他們帶來資金、技術與管理經驗，投入紡織、製衣等勞工密集行業，<span class="kw">為工業化提供了關鍵動力</span>。</p>
+    <p style="margin-top:4px;"><strong>（三）社會條件：人口增長提供勞動力與市場</strong><br>
+    資料一顯示，1946至1971年香港人口從160萬增至394萬，大量移民（特別是1949年前後從內地湧入者）為製造業提供了<span class="kw">充裕的廉價勞動力</span>。同時，資料三指出華人「既是生產者又是消費者」，人口增長也<span class="kw">形成了龐大的本地消費市場</span>，進一步支撐工業發展。</p>
+  </div>
+
+  <div class="tip-box">
+    <strong>⚠️ 高分關鍵：</strong><br>
+    ① <strong>每點都要有因果鏈接</strong> — 不要只寫「禁運發生」，要寫「禁運迫使XXX，從而導致XXX」<br>
+    ② <strong>扣資料</strong> — 每點都要標明用了哪個資料（資料一/二/三），這是「綜合資料」的要求<br>
+    ③ <strong>就你所知</strong> — Q3比Q2多了一個要求：「並就你所知」，所以不能只抄資料，要加入課外知識（如：大量內地移民湧入的背景、香港自由港優勢等）<br>
+    ④ <strong>分點清晰</strong> — 用（一）（二）（三）或 ①②③ 分段，不要寫成一整段
+  </div>
+</section>
+
+<!-- ===== 總結對照表 ===== -->
+<section>
+  <div class="section-title">📊 三題對照總表</div>
+  <div style="overflow-x:auto;">
+  <table class="data-table" style="font-size:14px;">
+    <tr>
+      <th style="width:18%;">題號</th>
+      <th style="width:20%;">能力層次</th>
+      <th style="width:30%;">核心方法</th>
+      <th style="width:32%;">一句話要訣</th>
+    </tr>
+    <tr>
+      <td><strong>Q1</strong></td>
+      <td>理解</td>
+      <td>三步描述法<br>（趨勢→起終點→特徵）</td>
+      <td>「由___至___，___持續___，從___到___」</td>
+    </tr>
+    <tr>
+      <td><strong>Q2</strong></td>
+      <td>論證</td>
+      <td>三步引證法<br>（抄觀點→選數據→扣題）</td>
+      <td>「資料X指出___。根據資料Y，___對比___，這印證了___」</td>
+    </tr>
+    <tr>
+      <td><strong>Q3</strong></td>
+      <td>分析</td>
+      <td>三角度分析法<br>（外部+內部+社會）</td>
+      <td>「每個角度 = 事實 + 因果鏈接 + 扣資料」</td>
+    </tr>
+  </table>
+  </div>
+
+  <div class="tip-box" style="margin-top:20px;">
+    <strong>🧠 Ethan 給海納有容的話：</strong><br>
+    這三題是同一道題的三個階梯——<strong>先看得懂 → 會找證據 → 能想原因</strong>。考試時見到資料題，先辨別它是哪一層次的問題，然後對應方法框架去做。熟練之後，看到題目就知道要用「三步描述法」還是「三角度分析法」，不需要每次都從頭想。<br><br>
+    <strong>練習建議：</strong>先在草稿紙上寫出框架（不要直接寫答案），對照框架檢查自己有沒有遺漏步驟，確認無誤後才寫成完整答案。
+  </div>
+</section>
+
+<div class="footer-note">
+  為海納和有容製作 · 資料回應題三步教學法
+</div>
+
+</div>
+</body>
+</html>
