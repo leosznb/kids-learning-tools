@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>有容 Edge 3B｜Vocabulary Read-along + Dictation</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{--primary:#16a34a;--primary-dark:#15803d;--bg:#f0fdf4;--card:#ffffff;--text:#14532d;--text-light:#22c55e;--border:#bbf7d0;--success:#16a34a;--warn:#f59e0b;--shadow:0 4px 16px rgba(22,163,74,0.12);--radius:14px;--font:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans HK',sans-serif}
+  body{font-family:var(--font);background:var(--bg);color:var(--text);padding:16px;-webkit-font-smoothing:antialiased;font-size:18px;min-height:100vh}
+  .header{text-align:center;margin-bottom:16px}
+  .header h1{font-size:1.6rem;color:var(--primary-dark);margin-bottom:4px}
+  .header p{font-size:0.85rem;color:var(--text-light)}
+  .card{background:var(--card);border-radius:var(--radius);padding:18px;margin-bottom:14px;box-shadow:var(--shadow)}
+  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:center;margin-bottom:12px}
+  .btn{border:none;border-radius:10px;padding:10px 16px;font-size:0.95rem;font-weight:600;cursor:pointer;transition:transform .1s,box-shadow .2s;background:var(--border);color:var(--text)}
+  .btn:active{transform:scale(0.96)}
+  .btn.primary{background:var(--primary);color:#fff}
+  .btn.active{background:var(--primary-dark);color:#fff;box-shadow:0 2px 8px rgba(21,128,61,0.35)}
+  .word{font-size:3.2rem;font-weight:800;text-align:center;color:var(--primary-dark);margin:10px 0;letter-spacing:0.5px}
+  .word.hidden{filter:blur(8px);opacity:0.25}
+  .pos{text-align:center;font-size:1.1rem;color:var(--text-light);margin-bottom:6px;font-style:italic}
+  .meaning{text-align:center;font-size:1.05rem;color:#475569;margin-bottom:10px;min-height:28px}
+  .exam-tip{background:#fff7ed;border-left:4px solid var(--warn);padding:10px 14px;border-radius:8px;font-size:0.85rem;color:#92400e;margin-top:10px}
+  .controls{display:flex;gap:10px;justify-content:center;align-items:center;margin-top:14px;flex-wrap:wrap}
+  .ctrl-btn{width:52px;height:52px;border-radius:50%;border:none;background:var(--primary);color:#fff;font-size:1.4rem;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 2px 8px rgba(22,163,74,0.3)}
+  .ctrl-btn:disabled{opacity:0.4;cursor:not-allowed}
+  .speed{display:flex;gap:6px;align-items:center}
+  .speed-btn{padding:6px 12px;border-radius:20px;border:2px solid var(--border);background:#fff;color:var(--text);font-size:0.8rem;cursor:pointer}
+  .speed-btn.active{border-color:var(--primary);background:var(--primary);color:#fff}
+  .progress{text-align:center;font-size:0.8rem;color:var(--text-light);margin-top:8px}
+  .status{text-align:center;font-size:0.85rem;color:var(--text-light);margin-top:6px;min-height:22px}
+  @media(min-width:768px){body{padding:24px;max-width:720px;margin:0 auto}.word{font-size:4rem}}
+</style>
+</head>
+<body>
+  <div class="header"><h1>有容 Edge 3B Vocabulary</h1><p>Read-along + Dictation · Azure TTS (British)</p></div>
+
+  <div class="card">
+    <div class="row">
+      <button class="btn primary" id="btnUnit6" onclick="selectUnit(6)">Unit 6: AI & Technology</button>
+      <button class="btn" id="btnUnit7" onclick="selectUnit(7)">Unit 7: Wildlife & Conservation</button>
+    </div>
+    <div class="row">
+      <button class="btn primary" id="btnRead" onclick="setMode('read')">📖 Read-along</button>
+      <button class="btn" id="btnDict" onclick="setMode('dictate')">✍️ Dictation</button>
+      <label style="display:flex;align-items:center;gap:6px;font-size:0.85rem;color:var(--text-light)"><input type="checkbox" id="autoCheck" onchange="toggleAuto()"> Auto-play</label>
+    </div>
+    <div class="row speed">
+      <span style="font-size:0.8rem;color:var(--text-light)">Speed:</span>
+      <button class="speed-btn" id="sp08" onclick="setSpeed(0.8)">0.8×</button>
+      <button class="speed-btn active" id="sp10" onclick="setSpeed(1.0)">1.0×</button>
+      <button class="speed-btn" id="sp12" onclick="setSpeed(1.2)">1.2×</button>
+    </div>
+  </div>
+
+  <div class="card" id="displayCard">
+    <div class="progress" id="progress">1 / 28</div>
+    <div class="word" id="wordDisplay">accurate</div>
+    <div class="pos" id="posDisplay">(adj.)</div>
+    <div class="meaning" id="meaningDisplay">準確的</div>
+    <div class="exam-tip" id="examTip">💡 考試提示：可能需改變詞形，如 more accurate / accurately</div>
+    <div class="status" id="statusMsg">Ready</div>
+    <div class="controls">
+      <button class="ctrl-btn" onclick="prevWord()">◀</button>
+      <button class="ctrl-btn" onclick="playCurrent()">▶</button>
+      <button class="ctrl-btn" onclick="nextWord()">▶▶</button>
+    </div>
+    <div class="controls" id="dictControls" style="display:none">
+      <button class="btn primary" onclick="revealAnswer()">👁 Reveal Answer</button>
+    </div>
+  </div>
+
+<script>
+const AZURE_KEY="YOUR_AZURE_SPEECH_KEY";  // 🔑 請自行填入 Azure Speech 金鑰以啟用高品質語音；留空則自動使用瀏覽器 TTS
+const AZURE_REGION="eastasia";
+
+const VOCAB=[
+{u:6,w:"accurate",p:"(adj.)",m:"準確的",tip:"比較級 more accurate；副詞 accurately"},
+{u:6,w:"accurately",p:"(adv.)",m:"準確地",tip:"形容詞 accurate；比較級 more accurately"},
+{u:6,w:"artificial intelligence",p:"(n. phr.)",m:"人工智能",tip:"簡稱 AI"},
+{u:6,w:"assistant",p:"(n.)",m:"助手",tip:"複數 assistants"},
+{u:6,w:"convenient",p:"(adj.)",m:"方便的",tip:"反義詞 inconvenient；名詞 convenience"},
+{u:6,w:"control",p:"(v./n.)",m:"控制",tip:"過去式 controlled；複數 controls"},
+{u:6,w:"data",p:"(n.)",m:"數據",tip:"單數 datum（極少用），data 視為複數"},
+{u:6,w:"development",p:"(n.)",m:"發展",tip:"動詞 develop；複數 developments"},
+{u:6,w:"efficient",p:"(adj.)",m:"有效率的",tip:"副詞 efficiently；名詞 efficiency"},
+{u:6,w:"error",p:"(n.)",m:"錯誤",tip:"複數 errors；形近詞 era"},
+{u:6,w:"hardware",p:"(n.)",m:"硬件",tip:"不可數；對應 software"},
+{u:6,w:"human",p:"(n./adj.)",m:"人類；人的",tip:"複數 humans；名詞 humanity"},
+{u:6,w:"impossible",p:"(adj.)",m:"不可能的",tip:"反義詞 possible；名詞 impossibility"},
+{u:6,w:"instruction",p:"(n.)",m:"指示",tip:"常用複數 instructions"},
+{u:6,w:"logical",p:"(adj.)",m:"合邏輯的",tip:"副詞 logically；反義詞 illogical"},
+{u:6,w:"operate",p:"(v.)",m:"操作；運作",tip:"名詞 operation；名詞 operator"},
+{u:6,w:"predict",p:"(v.)",m:"預測",tip:"名詞 prediction；形容詞 predictable"},
+{u:6,w:"programme",p:"(n.)",m:"程序；節目",tip:"美式 program；複數 programmes"},
+{u:6,w:"recognise",p:"(v.)",m:"識別；認出",tip:"美式 recognize；名詞 recognition"},
+{u:6,w:"replace",p:"(v.)",m:"取代",tip:"名詞 replacement；被動 be replaced by"},
+{u:6,w:"respond",p:"(v.)",m:"回應",tip:"名詞 response；形容詞 responsible"},
+{u:6,w:"software",p:"(n.)",m:"軟件",tip:"不可數；對應 hardware"},
+{u:6,w:"solve problems",p:"(v. phr.)",m:"解決問題",tip:"名詞 solution；名詞 problem-solving"},
+{u:6,w:"speech",p:"(n.)",m:"說話；演講",tip:"複數 speeches；動詞 speak"},
+{u:6,w:"task",p:"(n.)",m:"任務",tip:"複數 tasks；近義詞 mission"},
+{u:6,w:"technology",p:"(n.)",m:"科技",tip:"複數 technologies；形容詞 technological"},
+{u:6,w:"train",p:"(v.)",m:"訓練",tip:"名詞 training；名詞 trainer"},
+{u:6,w:"translation",p:"(n.)",m:"翻譯",tip:"動詞 translate；複數 translations"},
+{u:7,w:"captive breeding",p:"(n. phr.)",m:"人工繁殖",tip:"captive 被囚禁的；breed 繁殖"},
+{u:7,w:"chain",p:"(n.)",m:"鏈條",tip:"複數 chains；動詞 chain"},
+{u:7,w:"climate change",p:"(n. phr.)",m:"氣候變化",tip:"global warming 近義詞"},
+{u:7,w:"conservation",p:"(n.)",m:"保育",tip:"動詞 conserve；形容詞 conservative"},
+{u:7,w:"cruel",p:"(adj.)",m:"殘酷的",tip:"副詞 cruelly；名詞 cruelty"},
+{u:7,w:"damage",p:"(v./n.)",m:"破壞",tip:"不可數名詞；do damage to"},
+{u:7,w:"deforestation",p:"(n.)",m:"濫伐森林",tip:"動詞 deforest；比較 reforestation"},
+{u:7,w:"destroy",p:"(v.)",m:"摧毀",tip:"名詞 destruction；形容詞 destructive"},
+{u:7,w:"donate",p:"(v.)",m:"捐贈",tip:"名詞 donation；名詞 donor"},
+{u:7,w:"endangered",p:"(adj.)",m:"瀕危的",tip:"名詞 danger；動詞 endanger"},
+{u:7,w:"extinct",p:"(adj.)",m:"絕種的",tip:"名詞 extinction；動詞 die out 近義"},
+{u:7,w:"extinct in the wild",p:"(adj. phr.)",m:"野外絕種",tip:"wild 野外的"},
+{u:7,w:"fur",p:"(n.)",m:"毛皮",tip:"不可數；形容詞 furry"},
+{u:7,w:"habitat",p:"(n.)",m:"棲息地",tip:"複數 habitats；動詞 inhabit"},
+{u:7,w:"horn",p:"(n.)",m:"（牛、鹿等的）角",tip:"複數 horns"},
+{u:7,w:"hunting",p:"(n.)",m:"狩獵",tip:"動詞 hunt；名詞 hunter"},
+{u:7,w:"illegal",p:"(adj.)",m:"非法的",tip:"反義詞 legal；名詞 illegality"},
+{u:7,w:"ivory",p:"(n.)",m:"象牙",tip:"不可數；形容詞 ivory 象牙色的"},
+{u:7,w:"organisation",p:"(n.)",m:"組織",tip:"美式 organization；複數 organisations"},
+{u:7,w:"poaching",p:"(n.)",m:"盜獵",tip:"動詞 poach；名詞 poacher"},
+{u:7,w:"pollution",p:"(n.)",m:"污染",tip:"動詞 pollute；形容詞 polluted"},
+{u:7,w:"protect",p:"(v.)",m:"保護",tip:"名詞 protection；形容詞 protective"},
+{u:7,w:"raise awareness",p:"(v. phr.)",m:"提高意識",tip:"awareness 不可數"},
+{u:7,w:"skin",p:"(n.)",m:"皮膚；獸皮",tip:"複數 skins；動詞 skin"},
+{u:7,w:"suffer",p:"(v.)",m:"受苦",tip:"名詞 suffering；介詞搭配 suffer from"},
+{u:7,w:"trap",p:"(v./n.)",m:"設陷阱捕捉；陷阱",tip:"過去式 trapped；名詞 trapper"},
+{u:7,w:"volunteer",p:"(n./v.)",m:"義工；做義工",tip:"名詞 volunteering；形容詞 voluntary"}
+];
+
+let state={unit:6,mode:'read',currIdx:0,autoPlay:false,speed:1,filtered:VOCAB.filter(x=>x.u===6)};
+let playCount=0,currentAudio=null;
+
+function init(){
+  selectUnit(6);
+  document.addEventListener('keydown',e=>{
+    if(e.key==='ArrowLeft')prevWord();
+    if(e.key==='ArrowRight'||e.key===' ')nextWord();
+    if(e.key==='Enter'){if(state.mode==='dictate')revealAnswer();else playCurrent();}
+    if(e.key==='p'||e.key==='P')playCurrent();
+  });
+}
+function selectUnit(u){
+  state.unit=u;state.currIdx=0;state.filtered=VOCAB.filter(x=>x.u===u);
+  document.getElementById('btnUnit6').classList.toggle('active',u===6);
+  document.getElementById('btnUnit7').classList.toggle('active',u===7);
+  updateUI();
+}
+function setMode(m){
+  state.mode=m;
+  document.getElementById('btnRead').classList.toggle('active',m==='read');
+  document.getElementById('btnDict').classList.toggle('active',m==='dictate');
+  document.getElementById('dictControls').style.display=m==='dictate'?'flex':'none';
+  if(m==='dictate'){state.autoPlay=true;document.getElementById('autoCheck').checked=true;}
+  updateUI();
+}
+function toggleAuto(){state.autoPlay=document.getElementById('autoCheck').checked;}
+function setSpeed(s){state.speed=s;['08','10','12'].forEach((v,i)=>document.getElementById('sp'+v).classList.toggle('active',[0.8,1,1.2][i]===s));}
+function updateUI(){
+  const w=state.filtered[state.currIdx];
+  const wd=document.getElementById('wordDisplay');
+  const pd=document.getElementById('posDisplay');
+  const md=document.getElementById('meaningDisplay');
+  const td=document.getElementById('examTip');
+  if(!w){wd.textContent='🎉 Done!';pd.textContent='';md.textContent='';td.style.display='none';return;}
+  document.getElementById('progress').textContent=(state.currIdx+1)+' / '+state.filtered.length;
+  if(state.mode==='dictate'){wd.textContent=w.w.replace(/./g,'_');wd.classList.remove('hidden');pd.textContent='';md.textContent='Listen and write on paper';td.style.display='none';}
+  else{wd.textContent=w.w;wd.classList.remove('hidden');pd.textContent=w.p;md.textContent=w.m;td.textContent='💡 考試提示：'+w.tip;td.style.display='block';}
+  document.getElementById('statusMsg').textContent='Ready';
+}
+function prevWord(){if(state.currIdx>0){state.currIdx--;updateUI();}}
+function nextWord(){
+  if(state.currIdx<state.filtered.length-1){state.currIdx++;updateUI();}
+  if(state.autoPlay&&state.currIdx<state.filtered.length-1){setTimeout(()=>playCurrent(),500);}
+}
+function playCurrent(){
+  const w=state.filtered[state.currIdx];if(!w)return;
+  document.getElementById('statusMsg').textContent='🔊 Playing...';
+  speakTwice(w.w);
+}
+function revealAnswer(){
+  const w=state.filtered[state.currIdx];if(!w)return;
+  const wd=document.getElementById('wordDisplay');
+  wd.textContent=w.w;wd.classList.remove('hidden');
+  document.getElementById('posDisplay').textContent=w.p;
+  document.getElementById('meaningDisplay').textContent=w.m;
+  document.getElementById('examTip').textContent='💡 考試提示：'+w.tip;
+  document.getElementById('examTip').style.display='block';
+  document.getElementById('statusMsg').textContent='✓ Check your spelling!';
+}
+
+async function speakAzure(text,rate){
+  if(AZURE_KEY==='YOUR_AZURE_SPEECH_KEY'){fallbackBrowser(text,rate);return;}
+  try{
+    const url=`https://${AZURE_REGION}.tts.speech.microsoft.com/cognitiveservices/v1`;
+    const ssml=`<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='en-GB'><voice name='en-GB-SoniaNeural'><prosody rate='${rate===0.8?"-20%":rate===1.2?"+20%":"0%"}'>${text.replace(/&/g,'&amp;').replace(/</g,'&lt;')}</prosody></voice></speak>`;
+    const res=await fetch(url,{method:'POST',headers:{'Ocp-Apim-Subscription-Key':AZURE_KEY,'Content-Type':'application/ssml+xml','X-Microsoft-OutputFormat':'audio-16khz-128kbitrate-mono-mp3','User-Agent':'EdgeVocab'},body:ssml});
+    if(!res.ok)throw new Error('Azure TTS error '+res.status);
+    const blob=await res.blob();
+    const audio=new Audio(URL.createObjectURL(blob));
+    currentAudio=audio;
+    return new Promise((resolve,reject)=>{
+      audio.onended=()=>{URL.revokeObjectURL(audio.src);playCount++;if(window._speakNext)window._speakNext();resolve();};
+      audio.onerror=reject;
+      audio.play().catch(e=>{fallbackBrowser(text,rate);resolve();});
+    });
+  }catch(e){fallbackBrowser(text,rate);}
+}
+function fallbackBrowser(text,rate){
+  if(!window.speechSynthesis){document.getElementById('statusMsg').textContent='❌ TTS unavailable';return;}
+  const u=new SpeechSynthesisUtterance(text);u.lang='en-GB';u.rate=rate;
+  const voices=window.speechSynthesis.getVoices();
+  const v=voices.find(x=>x.lang==='en-GB')||voices.find(x=>x.lang.startsWith('en'))||null;
+  if(v)u.voice=v;
+  u.onend=()=>{playCount++;if(window._speakNext)window._speakNext();};
+  window.speechSynthesis.speak(u);
+}
+function speakTwice(text){
+  playCount=0;
+  const next=()=>{
+    if(playCount<2){speakAzure(text,state.speed);document.getElementById('statusMsg').textContent='🔊 Playing ('+(playCount+1)+'/2)...';}
+    else{
+      document.getElementById('statusMsg').textContent='✓ Done';
+      if(state.mode==='dictate')document.getElementById('statusMsg').textContent='🔇 Finished · Press Reveal or Enter';
+      if(state.autoPlay&&state.currIdx<state.filtered.length-1){setTimeout(()=>nextWord(),1200);}
+    }
+  };
+  window._speakNext=next;next();
+}
+if(window.speechSynthesis&&window.speechSynthesis.onvoiceschanged!==undefined){window.speechSynthesis.onvoiceschanged=()=>{};}
+init();
+</script>
+</body>
+</html>
