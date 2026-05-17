@@ -337,10 +337,10 @@ function render() {
   const uniqueSubjs = [...new Set(subjNames)];
   
   let chipsHtml = `<div class="subjects">`;
-  chipsHtml += `<button class="subj-chip ${'active':currentSubject==='all'}" onclick="switchSubject('all')">全部</button>`;
+  chipsHtml += `<button class="subj-chip ${currentSubject==='all'?'active':''}" onclick="switchSubject('all')">全部</button>`;
   subjects.forEach(s => {
     const isActive = currentSubject === s.label;
-    chipsHtml += `<button class="subj-chip ${'active':isActive}" style="${isActive ? 'background:'+s.color+';color:#fff;':''}" onclick="switchSubject('${s.label}')">${s.icon} ${s.label}</button>`;
+    chipsHtml += `<button class="subj-chip ${isActive?'active':''}" style="${isActive ? 'background:'+s.color+';color:#fff;':''}" onclick="switchSubject('${s.label}')">${s.icon} ${s.label}</button>`;
   });
   chipsHtml += `</div>`;
   
