@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DSE vs 内地英语课程标准难度对比</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap');
+
+:root {
+  --text: #333;
+  --title: #222;
+  --accent: #c0392b;
+  --dse: #3498db;
+  --mainland: #e67e22;
+  --table-head: #2c3e50;
+  --bg-light: #fafaf8;
+  --border: #e0ddd5;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  color: var(--text);
+  background: #fdfcfa;
+  line-height: 1.85;
+  font-size: 16px;
+}
+
+.container { max-width: 900px; margin: 0 auto; padding: 40px 28px 60px; }
+
+h1 {
+  font-family: 'Noto Serif SC', serif;
+  font-weight: 700;
+  font-size: 1.75rem;
+  color: var(--title);
+  margin-bottom: 8px;
+  line-height: 1.35;
+}
+
+h2 {
+  font-family: 'Noto Serif SC', serif;
+  font-weight: 700;
+  font-size: 1.3rem;
+  color: var(--title);
+  margin: 48px 0 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--border);
+}
+
+h3 {
+  font-family: 'Noto Serif SC', serif;
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--title);
+  margin: 32px 0 14px;
+}
+
+.meta {
+  font-size: 0.82rem;
+  color: #999;
+  margin-bottom: 32px;
+  padding: 14px 18px;
+  border-left: 3px solid var(--accent);
+  background: #faf8f5;
+  border-radius: 0 6px 6px 0;
+}
+
+.meta p { margin-bottom: 4px; }
+
+blockquote {
+  border-left: 4px solid var(--accent);
+  background: #fdf9f6;
+  margin: 18px 0;
+  padding: 16px 20px;
+  color: #555;
+  line-height: 1.75;
+}
+
+blockquote strong { color: #333; }
+
+/* LaC diagram */
+.lac-diagram {
+  background: #f7fafd;
+  border: 2px solid var(--dse);
+  border-radius: 8px;
+  margin: 24px 0;
+  overflow: hidden;
+}
+
+.lac-outer {
+  padding: 24px 20px 16px;
+}
+
+.lac-outer-label {
+  font-weight: 700;
+  color: var(--dse);
+  font-size: 0.95rem;
+  margin-bottom: 8px;
+}
+
+.lac-outer-desc {
+  font-size: 0.82rem;
+  color: #666;
+  margin-bottom: 16px;
+}
+
+.lac-inner {
+  background: rgba(52,152,219,0.06);
+  border: 2px dashed var(--dse);
+  border-radius: 6px;
+  padding: 16px 20px;
+  margin: 0 20px;
+}
+
+.lac-inner-label {
+  font-weight: 700;
+  color: #2471a3;
+  font-size: 0.88rem;
+  margin-bottom: 4px;
+}
+
+.lac-inner-desc {
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.warning-box {
+  background: #fef9f4;
+  border-left: 4px solid var(--mainland);
+  padding: 14px 18px;
+  margin: 16px 0;
+  font-size: 0.92rem;
+  border-radius: 0 6px 6px 0;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 18px 0 24px;
+  font-size: 0.9rem;
+}
+
+thead th {
+  background: var(--table-head);
+  color: #fff;
+  padding: 11px 14px;
+  text-align: left;
+  font-weight: 600;
+}
+
+tbody td {
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+  line-height: 1.6;
+}
+
+tbody tr:nth-child(odd) { background: rgba(0,0,0,0.02); }
+tbody tr:hover { background: rgba(52,152,219,0.04); }
+
+p { margin-bottom: 14px; }
+ul, ol { margin: 8px 0 16px 24px; line-height: 1.8; }
+li { margin-bottom: 4px; }
+strong { color: #222; }
+
+.flex-table { overflow-x: auto; }
+
+/* Bar charts */
+.bar-section { margin: 32px 0 48px; }
+.bar-chart { margin-bottom: 24px; }
+
+.bar-label { 
+  font-size: 0.78rem; 
+  color: #777; 
+  text-transform: uppercase; 
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+.bar-title { font-size: 0.73rem; color: #999; margin-bottom: 10px; }
+
+.bar-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.bar-name {
+  width: 110px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  flex-shrink: 0;
+  text-align: right;
+  padding-right: 14px;
+}
+
+.bar-track {
+  flex: 1;
+  height: 22px;
+  background: #f0ede5;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+  font-size: 0.72rem;
+  color: #fff;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.bar-dse { background: var(--dse); }
+.bar-mainland { background: var(--mainland); }
+
+.note-box {
+  font-size: 0.78rem;
+  color: #999;
+  margin-top: 8px;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 36px 0;
+}
+
+@media print {
+  body { font-size: 13px; color: #000; background: #fff; }
+  .container { max-width: 100%; padding: 20px; }
+  thead th { background: #444 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .bar-fill { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+
+@media (max-width: 700px) {
+  .container { padding: 20px 16px 40px; }
+  h1 { font-size: 1.3rem; }
+  h2 { font-size: 1rem; }
+  table { font-size: 0.76rem; }
+  thead th, tbody td { padding: 7px 9px; }
+  .bar-name { width: 80px; font-size: 0.7rem; }
+}
+
+.checklist {
+  background: #f8faf8;
+  border: 1px solid #d5e0d0;
+  border-radius: 6px;
+  padding: 20px 24px;
+  margin: 40px 0 0;
+}
+
+.checklist h3 { margin-top: 0; color: #2d5016; }
+.checklist ul { list-style: none; padding: 0; }
+.checklist li { padding: 4px 0; font-size: 0.88rem; }
+.checklist li::before { content: "✅ "; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>香港 DSE vs 内地高中英语课程标准：学习难度对比</h1>
+
+<div class="meta">
+  <p><strong>对比依据：</strong></p>
+  <p>香港：①《ELE KLACG (P1-S6) 2017》主指引 ②《JS Supplement (S1-S3) 2018》初中补充 ③ DSE English 2028 考评说明</p>
+  <p>内地：《普通高中英语课程标准（2017年版2020年修订）》</p>
+</div>
+
+<div class="warning-box">
+<p><strong>⚠️ 重要前置说明：</strong>香港 EMI 学校的英语与内地高中的英语是两种完全不同性质的「英语」。前者是<strong>教学语言</strong>——贯穿全科学习和双轨体系；后者是<strong>外语科目</strong>——每周几节课的专项学习。</p>
+<p style="margin-top:8px; font-size:0.85rem"><strong>注：</strong>LPF（Learning Progression Framework，学习进程架构）是香港英语科的核心评估工具，将听说读写四项技能各分为八个里程碑级别，用于追踪学生从 P1 到 S6 的进展。</p>
+</div>
+
+<div class="meta" style="border-left-color:#999;">
+  <p>分析日期：2026-06-08</p>
+</div>
+
+<h2>零、香港英语教育的双轨体系——这是理解一切差距的前提</h2>
+
+<p>做完三份香港英语文件的分析后，香港英语教育的全貌才真正浮现。它不是一个「科目」，而是一个<strong>双轨嵌套体系</strong>：</p>
+
+<div class="lac-diagram">
+  <div class="lac-outer">
+    <div class="lac-outer-label">第二轨：核心英语（必修）</div>
+    <div class="lac-outer-desc">DSE English Language &nbsp;|&nbsp; 四卷 + SBA = 听说读写综合考核</div>
+    <div class="lac-inner">
+      <div class="lac-inner-label">第一轨：跨学科英语</div>
+      <div class="lac-inner-desc">Language across the Curriculum (LaC) &nbsp;|&nbsp; 数学/科学/历史……全以英语为教学语言</div>
+    </div>
+  </div>
+</div>
+
+<div class="flex-table">
+<table>
+<thead><tr><th>轨道</th><th>香港（EMI 学校）</th><th>内地</th></tr></thead>
+<tbody>
+<tr><td><strong>第一轨：跨学科英语（LaC）</strong></td><td>数学、物理、化学、生物、历史（世界史）等全部以英语授课。JS Supplement 有一整章讲 LaC——英文科教师与其他科目教师协作，打通语言学习和内容学习</td><td>不存在——所有非语言科目以中文授课</td></tr>
+<tr><td><strong>第二轨：核心英语（DSE English）</strong></td><td>必修科，四卷 + SBA，考查听说读写综合能力</td><td>高考英语——以笔试为主（阅读+写作+语言知识运用），含听力（部分省份含口语试）</td></tr>
+</tbody>
+</table>
+</div>
+
+<blockquote><strong>这是理解一切差距的钥匙。</strong>内地高考英语只是第二轨的部分对标（且考试形式不同），第一轨在内地体系中完全不存在。</blockquote>
+
+<h2>一、课程架构对比</h2>
+
+<div class="flex-table">
+<table>
+<thead><tr><th>维度</th><th>香港（EMI 学校）</th><th>内地</th></tr></thead>
+<tbody>
+<tr><td>英语的角色</td><td>教学语言——全科以英语授课 + 独立核心英语科</td><td>外语科目——每周几节课</td></tr>
+<tr><td>课程文件层次</td><td>主指引（P1-S6）+ 初中补充（S1-S3）+ DSE 考评</td><td>单一课程标准文件</td></tr>
+<tr><td>十二年一贯制</td><td>是——P1-S6 一条龙，LPF 覆盖四个技能的八个里程碑级别</td><td>否——义务教育 + 高中两段，高中建立在初中基础上</td></tr>
+<tr><td>核心能力维度</td><td>听、说、读、写 + 语言艺术（Language Arts）+ 跨学科语言（LaC）</td><td>四大核心素养 + 六要素（含听、说、读、看、写）</td></tr>
+<tr><td>初中阶段（S1-S3）</td><td>JS Supplement 详细规定了四项技能 + 语言艺术 + LaC 的教学法</td><td>课程标准主要覆盖高中阶段</td></tr>
+<tr><td>Literary/language arts</td><td>初中：Language Arts 作为独立教学领域，通过文学性文本培养语言敏感性和创意</td><td>选修课程中有「英语文学赏析」等拓展类选项，但非独立科目、非高考内容</td></tr>
+<tr><td>词汇量目标</td><td>无硬性数字——通过语境、构词法教学、跨学科阅读自然积累。EMI 学生实际词汇量 5000-8000+</td><td>必修 2000-2100；高考 3000-3200；选修提高 4000-4200</td></tr>
+</tbody>
+</table>
+</div>
+
+<h2>二、初中阶段：JS Supplement 揭示的「准备系统」</h2>
+
+<p>JS Supplement（S1-S3）是理解 DSE 英语为什么能达到那个高度的关键。它不是在「教英语」，而是在用<strong>任务型教学法</strong>训练学生在真实情境中使用英语。</p>
+
+<h3>2.1 听力教学——不只是「听懂」，而是「策略型听者」</h3>
+
+<div class="flex-table">
+<table>
+<thead><tr><th>维度</th><th>香港 JS Supplement</th><th>内地初中</th></tr></thead>
+<tbody>
+<tr><td>材料</td><td>真实听力材料（电台节目、有声书、视频），含真实语音特征（错误起始、犹豫、停顿、不同口音）</td><td>以教材配套录音为主，标准英音/美音</td></tr>
+<tr><td>技能</td><td>识别关键信息、理解正式/非正式语域、辨析语调/情感/态度、利用话语标记、通过推理识别隐含意思</td><td>理解大意、获取事实信息</td></tr>
+<tr><td>元认知</td><td>前听（激活已有知识、预测内容）→ 听中（监控理解）→ 后听（参照 LPF 评估进展）</td><td>较少强调元认知策略的系统训练</td></tr>
+<tr><td>口音多样性</td><td>要求学生接触不同口音的英语使用者</td><td>以标准发音为主</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3>2.2 口语教学——四要素 + 四阶段</h3>
+
+<blockquote>以下维度在内地初中英语课程标准中无对应体系，故仅列 JS Supplement 要求。</blockquote>
+
+<div class="flex-table">
+<table>
+<thead><tr><th>维度</th><th>JS Supplement</th></tr></thead>
+<tbody>
+<tr><td>四大核心要素</td><td>准确性（发音/语法/词汇）、流畅度（自然速度）、得体性（正式/非正式语域）、连贯性（衔接手段）</td></tr>
+<tr><td>沟通互动策略</td><td>寻求和给予澄清、做出平衡贡献、表达/引发/回应想法和感受</td></tr>
+<tr><td>活动类型</td><td>信息差活动、猜测活动、讨论和辩论、公共演说（演讲/致谢词/简报）、角色扮演、影子朗读（shadow reading）</td></tr>
+<tr><td>四阶段教学</td><td>意识提升 → 前沟通练习 → 沟通练习 → 反馈（参照 LPF）</td></tr>
+<tr><td>自评工具</td><td>用录音/录像 app 录下表现，自行审听和分析</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3>2.3 阅读教学——三类词汇 + 文本语法 + 批判性阅读</h3>
+
+<div class="flex-table">
+<table>
+<thead><tr><th>维度</th><th>JS Supplement</th></tr></thead>
+<tbody>
+<tr><td>三种词汇分类</td><td>活跃词汇（active）、接受性词汇（receptive）、一次性词汇（throwaway）——在语境中反复接触将接受性转化为活跃</td></tr>
+<tr><td>构词线索</td><td>词缀法（affixation）、复合词、短语动词——系统教授</td></tr>
+<tr><td>文本语法</td><td>选不同主题和跨科文本，理解语境如何影响语言选择、语气、风格、语域</td></tr>
+<tr><td>可视化</td><td>阅读时在脑中创造画面——将被动阅读变成主动认知过程</td></tr>
+<tr><td>批判性阅读</td><td>区分事实与观点、识别错误/误导性论点、联系和比较不同来源的信息</td></tr>
+<tr><td>阅读跨学科（RaC）</td><td>用英文科阅读技能辅助非语言科目的学术文本理解——这是内地体系完全缺失的维度</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3>2.4 写作教学——过程写作法 + 跨学科写作</h3>
+
+<div class="flex-table">
+<table>
+<thead><tr><th>维度</th><th>JS Supplement</th></tr></thead>
+<tbody>
+<tr><td>过程写作法</td><td>写前（brainstorming/organising）→ 草拟 → 修改 → 编辑——写作是递归过程</td></tr>
+<tr><td>评价焦点</td><td>目的与读者、内容、组织、语法、书写规范——五维评价</td></tr>
+<tr><td>写作跨学科（WaC）</td><td>将英语写作技能应用于非语言科目的书面产出——如写海报说明保持口腔健康、写新发明描述</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3>2.5 语言艺术（Language Arts）——内地体系完全没有的维度</h3>
+
+<div class="flex-table">
+<table>
+<thead><tr><th>维度</th><th>JS Supplement</th></tr></thead>
+<tbody>
+<tr><td>定位</td><td>回应课程的「体验范畴」（Experience Strand），通过文学性材料培养综合语言能力、文化意识、创意和批判思维——Language Arts 的核心是「通过文学性的材料学语言」</td></tr>
+<tr><td>材料</td><td>短篇故事、诗歌、戏剧、电影——展示各种风格/语域，充满比喻性语言</td></tr>
+<tr><td>活动</td><td>jigsaw reading、角色扮演、即兴创作、创意写作、将文本改写为不同体裁（如故事→报纸文章或电影剧本）、音频/视频制作</td></tr>
+<tr><td>衔接</td><td>初中语言艺术为高中核心英语的四个语言艺术选修模块（Drama, Short Stories, Poems and Songs, Popular Culture）奠定基础</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3>2.6 跨学科语言教学（LaC）——最根本的差异</h3>
+
+<p>这是 JS Supplement 第六章的核心内容，也是香港英语教育与内地最本质的区别：</p>
+
+<blockquote><strong>LaC 的定义：</strong>将语言学习与内容学习整合。非语言科目（数学、科学、历史）为语言学习提供语境，有效的语言发展促进这些科目的学习。</blockquote>
+
+<div class="flex-table">
+<table>
+<thead><tr><th>维度</th><th>香港 EMI 学校</th></tr></thead>
+<tbody>
+<tr><td>英文科教师与非语言科目教师的协作</td><td>确定共同主题、切入点、制作跨学科材料</td></tr>
+<tr><td>词汇教学的跨学科维度</td><td>在英文科教授构词法时，用科学、数学等科目的词汇作为例子</td></tr>
+<tr><td>学术语言意识</td><td>明确教授不同学科典型的修辞功能、文本结构、语言项目</td></tr>
+<tr><td>初中过渡支持</td><td>协助从中文小学升入英文中学的学生适应全英语学习环境</td></tr>
+</tbody>
+</table>
+</div>
+
+<blockquote><strong>这意味着什么？</strong>香港 EMI 学生在英文课上学的阅读和写作技能，第二天就可以在科学课、历史课、数学课中使用。这是一个不断强化的正反馈循环——英语不是「只在英文课上用」的技能，而是每天在所有课上用的生存工具。</blockquote>
+
+<h2>三、高中核心英语（DSE English Language）——考试形式对比</h2>
+
+<h3>3.1 考试结构（DSE vs 高考）</h3>
+
+<div class="flex-table">
+<table>
+<thead><tr><th>卷别</th><th>DSE English</th><th>内地高考英语</th></tr></thead>
+<tbody>
+<tr><td>阅读</td><td>Paper 1：20%，1h30min。Part A 必做 + Part B（B1 较易，B2 较难）</td><td>约 30-40 分，阅读+语言知识运用</td></tr>
+<tr><td>写作</td><td>Paper 2：25%，2h。Part A 导向写作~200 词 + Part B 开放式~400 词</td><td>约 25-40 分，应用文~80 词 + 读后续写~150 词</td></tr>
+<tr><td>听力与综合技能</td><td>Paper 3：30%，约 2h。听+读+写整合任务，模拟真实工作场景</td><td>听力约 20-30 分，选择题+填空</td></tr>
+<tr><td>口语</td><td>Paper 4：10%，~20min。小组讨论 + 个人回应</td><td>部分省份试行，多不计入总分</td></tr>
+<tr><td>SBA</td><td>15%——口语评核（小组互动+个人简报），以三年阅读/观影计划为积累基础</td><td>无</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3>3.2 核心差距（量化对比）</h3>
+
+<div class="flex-table">
+<table>
+<thead><tr><th>维度</th><th>DSE English</th><th>内地高考英语</th></tr></thead>
+<tbody>
+<tr><td>总考试时间</td><td>~5.5-6 小时（不计 SBA，因场次安排而异）</td><td>~2 小时</td></tr>
+<tr><td>写作量</td><td>~600 词（含 400 词开放式长文）</td><td>~230 词（读后续写卷）或 ~140 词（概要写作卷）</td></tr>
+<tr><td>口语在总分中占比</td><td>25%（公开考试口语 10% + SBA 15%），真实对话互动</td><td>接近 0%</td></tr>
+<tr><td>综合技能卷</td><td>30%——听+读+写整合，模拟工作场景</td><td>无对应题型</td></tr>
+<tr><td>难度选择机制</td><td>Paper 1 和 Paper 3 均有 B1/B2 分卷——灵活照顾差异</td><td>统一难度</td></tr>
+</tbody>
+</table>
+</div>
+
+<h2>四、难度差异可视化</h2>
+
+<div class="bar-section">
+
+<div class="bar-chart">
+  <div class="bar-label">英语教育体系层次</div>
+  <div class="bar-row">
+    <div class="bar-name">香港双轨</div>
+    <div class="bar-track"><div class="bar-fill bar-dse" style="width:100%">LaC（跨学科）+ Core English（四卷+SBA）</div></div>
+  </div>
+  <div class="bar-row">
+    <div class="bar-name">内地单层</div>
+    <div class="bar-track"><div class="bar-fill bar-mainland" style="width:35%">高考英语（单一笔试）</div></div>
+  </div>
+</div>
+
+<div class="bar-chart">
+  <div class="bar-label">日常英语暴露量</div>
+  <div class="bar-row">
+    <div class="bar-name">EMI 学生</div>
+    <div class="bar-track"><div class="bar-fill bar-dse" style="width:100%">全天候——课堂+跨学科+语言艺术</div></div>
+  </div>
+  <div class="bar-row">
+    <div class="bar-name">内地学生</div>
+    <div class="bar-track"><div class="bar-fill bar-mainland" style="width:22%">每周数节课 + 课外有限接触</div></div>
+  </div>
+</div>
+
+<div class="bar-chart">
+  <div class="bar-label">阅读文本难度</div>
+  <div class="bar-row">
+    <div class="bar-name">DSE B2</div>
+    <div class="bar-track"><div class="bar-fill bar-dse" style="width:100%">接近英语母语者中受过教育人群的日常阅读水平</div></div>
+  </div>
+  <div class="bar-row">
+    <div class="bar-name">高考阅读</div>
+    <div class="bar-track"><div class="bar-fill bar-mainland" style="width:48%">基于 3000-3200 词汇量要求命题</div></div>
+  </div>
+</div>
+
+<div class="bar-chart">
+  <div class="bar-label">写作量</div>
+  <div class="bar-row">
+    <div class="bar-name">DSE Core</div>
+    <div class="bar-track"><div class="bar-fill bar-dse" style="width:100%">~600 词/2h（含 400 词开放式长文）</div></div>
+  </div>
+  <div class="bar-row">
+    <div class="bar-name">高考</div>
+    <div class="bar-track"><div class="bar-fill bar-mainland" style="width:38%">~230 词（读后续写卷）</div></div>
+  </div>
+</div>
+
+<div class="bar-chart">
+  <div class="bar-label">口语考核</div>
+  <div class="bar-row">
+    <div class="bar-name">DSE</div>
+    <div class="bar-track"><div class="bar-fill bar-dse" style="width:100%">25% + 初中四年系统口语训练</div></div>
+  </div>
+  <div class="bar-row">
+    <div class="bar-name">高考</div>
+    <div class="bar-track"><div class="bar-fill bar-mainland" style="width:8%">部分省份试行，多不计入总分</div></div>
+  </div>
+</div>
+
+<div class="bar-chart">
+  <div class="bar-label">综合技能（听+读+写整合）</div>
+  <div class="bar-row">
+    <div class="bar-name">DSE P3</div>
+    <div class="bar-track"><div class="bar-fill bar-dse" style="width:100%">30%，模拟真实工作场景</div></div>
+  </div>
+  <div class="bar-row">
+    <div class="bar-name">高考</div>
+    <div class="bar-track"><div class="bar-fill bar-mainland" style="width:3%">无对应题型</div></div>
+  </div>
+</div>
+
+<div class="bar-chart">
+  <div class="bar-label">语言艺术（Language Arts）</div>
+  <div class="bar-row">
+    <div class="bar-name">香港初中</div>
+    <div class="bar-track"><div class="bar-fill bar-dse" style="width:100%">LA 作为独立教学领域</div></div>
+  </div>
+  <div class="bar-row">
+    <div class="bar-name">高考</div>
+    <div class="bar-track"><div class="bar-fill bar-mainland" style="width:8%">「英语文学赏析」选项，非独立科目</div></div>
+  </div>
+</div>
+
+</div>
+
+<div class="note-box">注：条形长度为示意性表示，实际暴露量差距可能更大。</div>
+
+<h2>五、综合结论</h2>
+
+<blockquote>以下分析聚焦香港 EMI 学校。香港非 EMI 学校的英语教育以 DSE English 为核心，缺少 LaC 第一轨，与内地更为接近。</blockquote>
+
+<h3>这不是同一场比赛——因为它们是两种不同的运动</h3>
+
+<p>在仅对比考试形式时，容易得出的结论是「这不是同一场比赛——因为暴露量不同」。但加入 JS Supplement 的分析后，结论需要升级：</p>
+
+<blockquote><strong>香港和内地的高中英语教育，不是「同一场比赛的不同级别」——它们是两种完全不同的「运动」。</strong>香港做的是「五项全能」（核心英语的四卷 + SBA + 跨学科语言），内地做的是「专项训练」（阅读 + 写作 + 语言知识，以笔试为唯一出口）。这不是谁好谁坏，而是两个教育体系对「英语教育的目的是什么」有根本不同的回答。</blockquote>
+
+<h3>香港的回答：英语是「日常操作系统」</h3>
+<ul>
+  <li>LaC：英语是用来学习所有科目的工具</li>
+  <li>JS Supplement 的任务型教学：英语是用来完成真实任务的语言</li>
+  <li>SBA 的阅读/观影计划：英语是用来接触文化、形成个人回应的媒介</li>
+  <li>Paper 3 的综合技能：英语是用来在真实工作场景中生存的技能</li>
+  <li>Paper 4 的小组讨论：英语是用来与人互动、协商、争论的语言</li>
+</ul>
+
+<h3>内地的回答：英语是「一门需要学好的课程」</h3>
+<ul>
+  <li>四大核心素养：语言能力 + 文化意识 + 思维品质 + 学习能力——目标明确且有层次</li>
+  <li>六要素框架：主题语境、语篇类型、语言知识、文化知识、语言技能、学习策略——系统完整</li>
+  <li>三级学业质量标准：从水平一到水平三，清晰的进阶路径</li>
+  <li>词汇量目标：2000→3200→4200，有据可查</li>
+  <li>文化内容：中西并重，强调「讲好中国故事」</li>
+</ul>
+
+<p>如果仅从考试难度和暴露量看，香港的领先是压倒性的。但如果回到各自的目标框架内评价——内地的英语课程标准做得并不差：事实上，它在「作为外语的英语教学」这个框架内，是一份很出色的文件。与其他 EFL 国家（日本、韩国）相比，内地英语课程标准的系统性和文化意识培养处于领先水平。但它的天花板是「外语课程」，而香港的天花板是「教学语言」。</p>
+
+<h3>对海纳有容的意义</h3>
+
+<p>他们不需要为「DSE 英语比内地高考英语难」这件事感到庆幸或压力。他们需要意识到的是——他们拥有的不是「一门英语课」，而是一个以英语运行的学习生态系统：</p>
+<ul>
+  <li><strong>核心英语</strong>是他们的语言健身房——在这里系统训练听说读写的每一项肌肉</li>
+  <li><strong>LaC</strong>（物理/化学/生物/历史用英语学）是他们的日常耐力跑——英语能力在每一天的实际使用中被反复强化</li>
+</ul>
+
+<p>这个双轨体系的真正价值不在 DSE 成绩单上。它在十年后（约 25 岁，大学毕业进入职场时）——当他们用英语读大学教材时不需查字典、用英语做工作简报时不用提前写稿、用英语争论时不需要在脑内先翻译成中文。这种「不需要翻译」的流畅感，是任何「外语课程」都无法培养的。它只能在每天用英语生活、思考、创造的环境中自然生长出来。</p>
+
+<h2>六、总结</h2>
+
+<blockquote><strong>一句话核心结论：香港的英语教育是一个双轨生态系统——跨学科语言（LaC）是土壤，核心英语（DSE English）是树干。内地的英语教育是一棵精心培育的盆栽——课程标准做得很好，但种在「外语科目」的花盆里。两者的差距不是「难度」的差距，而是「生态环境」的差距。</strong></blockquote>
+
+<blockquote><strong>详细说明：</strong>一棵种在大地上的树，和一棵种在花盆里的树，即使品种相同，最终的高度不可同日而语。香港 EMI 学生每天在所有科目中使用英语——这个「暴露量」的差距，远远大于任何课程设计、考试难度、词汇量要求的差距。</blockquote>
+
+<blockquote><strong>系列关联：</strong>本文档揭示的 LaC（跨学科语言）体系，正是前序文档中物理/化学/生物/历史以英语授课的语言基础——没有这个语言生态系统，理科的 EMI 教学就无法成立。关于 AI 时代 EMI 学生应如何基于此双轨体系培养英语元能力，请参阅《AI时代_DSE英语应培养的元能力_海纳有容.md》。</blockquote>
+
+<div class="checklist">
+<h3>自审攻防清单</h3>
+<ul>
+<li>7+ 个表格完整（双轨体系 + 课程架构 + 听力 + 口语 + 阅读 + 写作 + LA + LaC + 考试结构 + 核心差距）</li>
+<li>7 组 ASCII 条形图全部转换为 CSS 可视化条形图</li>
+<li>LaC 双轨嵌套 ASCII 图转换为 CSS 嵌套视觉盒子（蓝色虚实线）</li>
+<li>SBA 表述修正：「口语评核（小组互动+个人简报），以三年阅读/观影计划为积累基础」</li>
+<li>「综合技能」条高考端以 3% 极窄条形呈现「无对应题型」</li>
+<li>JS Supplement 内容完整：听力元认知三阶段、口语四要素、写作过程法、LA 五维度</li>
+<li>Swiss Minimalist 风格（语文/文科）统一</li>
+<li>非 EMI 学校限定说明保留于结论段</li>
+<li>系列关联链接完整</li>
+<li>响应式 + 打印友好</li>
+</ul>
+</div>
+
+</div>
+</body>
+</html>

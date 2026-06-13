@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>兩地生物課標差異的根源與價值判斷 | Educational Philosophy Behind the Biology Gap — 海納有容</title>
+<style>
+  :root {
+    --bg-deep:#0a120f; --bg-card:#111a15; --bg-card-alt:#151f1a;
+    --border-subtle:#1e2e24; --border-glow:#4caf5033;
+    --text-primary:#e0e8e4; --text-secondary:#b0c0b8; --text-muted:#789080;
+    --accent-green:#4caf50; --accent-leaf:#66bb6a; --accent-teal:#00bfa5;
+    --accent-amber:#ffab00; --accent-warm:#ff8f00; --accent-pink:#ff5252;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{font-size:16px;scroll-behavior:smooth}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC","Noto Sans SC","PingFang HK","Microsoft YaHei",sans-serif;background:var(--bg-deep);color:var(--text-primary);line-height:1.75;-webkit-font-smoothing:antialiased}
+  .hero{background:linear-gradient(135deg,#0a1510 0%,#0d1f16 40%,#0a120f 100%);border-bottom:1px solid var(--border-glow);padding:3rem 1.5rem 2.5rem;text-align:center;position:relative;overflow:hidden}
+  .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 100%,rgba(76,175,80,0.06) 0%,transparent 60%);pointer-events:none}
+  .hero-badge{display:inline-block;background:rgba(76,175,80,0.12);border:1px solid var(--border-glow);color:var(--accent-green);font-size:.8rem;font-weight:600;padding:.25rem 1rem;border-radius:50px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:1.2rem}
+  .hero h1{font-size:clamp(1.4rem,3.2vw,2rem);font-weight:800;color:#fff;max-width:760px;margin:0 auto .8rem;letter-spacing:.02em;position:relative}
+  .hero h1 .hk{color:var(--accent-leaf)} .hero h1 .cn{color:var(--accent-amber)}
+  .hero .subtitle{font-size:.85rem;color:var(--text-muted);max-width:660px;margin:0 auto;position:relative;line-height:1.6}
+  .hero .meta-line{font-size:.75rem;color:var(--text-muted);margin-top:.5rem}
+
+  .container{max-width:900px;margin:0 auto;padding:2rem 1.5rem 4rem}
+  .section{margin-bottom:3rem}
+  .section-title{font-size:1.2rem;font-weight:700;color:#fff;margin-bottom:1.2rem;padding-bottom:.5rem;border-bottom:2px solid var(--border-glow);display:flex;align-items:center;gap:.5rem}
+  .section-title .num{display:inline-flex;align-items:center;justify-content:center;width:2rem;height:2rem;background:rgba(76,175,80,0.12);border:1px solid var(--border-glow);border-radius:6px;color:var(--accent-green);font-size:.85rem;font-weight:700;flex-shrink:0}
+
+  .subsection{margin-bottom:1.5rem}
+  .subsection-title{font-size:.95rem;font-weight:700;color:#fff;margin-bottom:.6rem;padding-left:.6rem;border-left:3px solid var(--accent-green)}
+  .subsection-title.cn{border-left-color:var(--accent-amber)}
+
+  .gene-list{list-style:none;padding:0}
+  .gene-list li{background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:8px;padding:.9rem 1.1rem;margin-bottom:.5rem;position:relative;font-size:.85rem;color:var(--text-secondary);line-height:1.6}
+  .gene-list li .gene-num{display:inline-flex;align-items:center;justify-content:center;width:1.35rem;height:1.35rem;border-radius:50%;font-size:.7rem;font-weight:700;margin-right:.45rem;vertical-align:middle}
+  .gene-dse .gene-num{background:rgba(76,175,80,0.15);color:var(--accent-leaf);border:1px solid rgba(76,175,80,0.3)}
+  .gene-cn .gene-num{background:rgba(255,143,0,0.12);color:var(--accent-amber);border:1px solid rgba(255,143,0,0.25)}
+  .gene-list li .gene-label{font-weight:700;font-size:.85rem;color:var(--text-primary);display:inline}
+
+  .table-wrap{overflow-x:auto;margin:1rem 0;-webkit-overflow-scrolling:touch;border:1px solid var(--border-subtle);border-radius:8px}
+  table{width:100%;border-collapse:collapse;font-size:.82rem;min-width:550px}
+  thead th{background:rgba(76,175,80,0.06);border-bottom:2px solid var(--border-glow);color:var(--accent-teal);font-weight:700;text-align:left;padding:.45rem .7rem;font-size:.73rem;letter-spacing:.04em;text-transform:uppercase}
+  tbody td{padding:.4rem .7rem;border-bottom:1px solid var(--border-subtle);color:var(--text-secondary);vertical-align:top;line-height:1.5}
+  tbody tr:last-child td{border-bottom:none}
+  tbody tr:hover td{background:rgba(76,175,80,0.02)}
+  tbody td:first-child{font-weight:600;color:var(--text-primary);white-space:nowrap}
+
+  .pro-con-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem}
+  @media(max-width:640px){.pro-con-grid{grid-template-columns:1fr}}
+  .pro-card,.con-card{border-radius:10px;padding:1.3rem;border:1px solid}
+  .pro-card{background:linear-gradient(135deg,rgba(76,175,80,0.05),rgba(0,191,165,0.03));border-color:rgba(76,175,80,0.2)}
+  .con-card{background:linear-gradient(135deg,rgba(255,143,0,0.04),rgba(255,171,0,0.03));border-color:rgba(255,143,0,0.18)}
+  .card-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.7rem}
+  .pro-card .card-label{color:var(--accent-teal)} .con-card .card-label{color:var(--accent-amber)}
+  .pc-item{padding:.4rem 0;border-bottom:1px solid var(--border-subtle);font-size:.84rem;color:var(--text-secondary);line-height:1.55}
+  .pc-item:last-child{border-bottom:none}
+  .pc-item strong{color:#fff;font-size:.86rem}
+
+  .path-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:.6rem;margin:1rem 0}
+  .path-card{background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:8px;padding:.85rem 1rem;font-size:.84rem;color:var(--text-secondary);line-height:1.55}
+  .path-card .pa{display:block;color:var(--accent-teal);font-weight:700;font-size:.72rem;letter-spacing:.04em;margin-bottom:.3rem}
+  .path-card strong{color:#fff}
+
+  .advice-list{list-style:none;padding:0}
+  .advice-list li{background:var(--bg-card-alt);border:1px solid var(--border-subtle);border-radius:8px;padding:.85rem 1rem .85rem 2.3rem;margin-bottom:.5rem;position:relative;font-size:.86rem;color:var(--text-secondary);line-height:1.6}
+  .advice-list li::before{content:'▸';position:absolute;left:.85rem;top:.85rem;color:var(--accent-leaf);font-weight:700}
+
+  .summary-card{background:linear-gradient(135deg,rgba(76,175,80,0.05),rgba(0,191,165,0.03));border:1px solid var(--border-glow);border-radius:12px;padding:1.6rem;text-align:center}
+  .summary-card .core{font-size:1.05rem;font-weight:800;color:#fff;margin-bottom:1rem;line-height:1.6}
+  .summary-card .detail{font-size:.85rem;color:var(--text-secondary);line-height:1.7;text-align:left;max-width:660px;margin:0 auto}
+
+  blockquote{border-left:3px solid var(--accent-teal);background:rgba(0,191,165,0.04);padding:.85rem 1.1rem;margin:1rem 0;border-radius:0 8px 8px 0;font-size:.86rem;color:var(--text-secondary);line-height:1.65}
+
+  @media(max-width:640px){.hero{padding:2rem 1rem 1.8rem}.container{padding:1.2rem .9rem 2.5rem}.section-title{font-size:1.05rem}}
+  @media print{body{background:#fff;color:#111}.hero{background:#f5f5f5;border-bottom:2px solid #ccc}.gene-list li,.path-card,.pro-card,.con-card,.advice-list li,.summary-card{background:#fafafa;border:1px solid #ddd}table thead th{background:#eee;color:#111}.container{padding:1rem}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-badge">DSE Biology · Educational Philosophy</div>
+  <h1>兩地生物課標差異的<span class="cn">根源</span>、<span class="hk">目的</span>與價值判斷</h1>
+  <p class="subtitle">接續《DSE_vs_內地_生物課程標準難度對比》的分析，追問：為什麼會有這些差異？各自想達成什麼？孰好孰劣？</p>
+  <p class="meta-line">分析日期：2026-06-07</p>
+</header>
+
+<div class="container">
+
+<!-- §1 -->
+<section class="section">
+  <h2 class="section-title"><span class="num">1</span> Origins: A Deeper Genetic Fork Than Physics or Chemistry <span style="font-weight:400;color:var(--text-muted);font-size:.85rem">差異根源：比物理和化學更深的基因分叉</span></h2>
+  <p style="font-size:.86rem;color:var(--text-secondary);margin-bottom:1rem">物理和化學的差異根源於英式 vs 蘇式教育傳統。生物的差異同樣有這個維度，但更深層——它根源於兩種<strong style="color:#fff">對「生物學是什麼」的根本不同的回答</strong>。</p>
+
+  <div class="subsection">
+    <h3 class="subsection-title">1.1 The British Biology Tradition: The Naturalist's Eye <span style="font-weight:400;color:var(--text-muted);font-size:.8rem">英國生物傳統：博物學家的眼睛</span></h3>
+    <p style="font-size:.84rem;color:var(--text-secondary);margin-bottom:.6rem">現代生物學的兩個源頭都在英國：</p>
+    <ul style="font-size:.84rem;color:var(--text-secondary);padding-left:1.2rem;margin-bottom:.6rem">
+      <li><strong style="color:var(--accent-teal)">達爾文</strong>（1809-1882）乘小獵犬號環球五年，收集了數千種標本，用一雙博物學家的眼睛看遍了從加拉帕戈斯雀喙到珊瑚礁的每一處細節。《物種起源》不是從幾個公式推導出來的——它是在幾十年的觀察、分類、比對中慢慢浮現的。</li>
+      <li><strong style="color:var(--accent-teal)">大衛·愛登堡</strong>（1926- ）用七十年的紀錄片生涯向全世界展示了同一種方法：<strong>先看，再理解；先描述，再解釋。</strong></li>
+    </ul>
+    <p style="font-size:.84rem;color:var(--text-secondary);margin-bottom:.4rem">這種博物學傳統滲透進了英國 A-Level 生物課程，進而遺傳給 DSE：</p>
+    <ol class="gene-list gene-dse">
+      <li><span class="gene-num">1</span><span class="gene-label">你必須知道腎臟的每一段腎小管叫什麼名字、分別重吸收什麼</span></li>
+      <li><span class="gene-num">2</span><span class="gene-label">你必須知道眼睛的睫狀肌收縮時晶狀體變厚還是變薄</span></li>
+      <li><span class="gene-num">3</span><span class="gene-label">你必須能畫出花的結構並標註花藥、花絲、柱頭、花柱、子房</span></li>
+      <li><span class="gene-num">4</span><span class="gene-label">你必須走到野外，用樣方和樣線調查一個真實的生境</span></li>
+    </ol>
+    <p style="font-size:.84rem;color:var(--text-secondary);margin-top:.4rem"><strong style="color:var(--accent-leaf)">這是一門「描述性」的自然科學——它的首要任務是準確地看、準確地命名、準確地描述。</strong> 解釋是第二步的事。</p>
+  </div>
+
+  <div class="subsection">
+    <h3 class="subsection-title cn">1.2 The Mainland Biology Tradition: From "Description" to "Principle" <span style="font-weight:400;color:var(--text-muted);font-size:.8rem">內地生物傳統：從「描述」到「原理」的轉向</span></h3>
+    <p style="font-size:.84rem;color:var(--text-secondary);margin-bottom:.6rem">中國生物教育的基因更複雜。1950 年代的生物教材沿襲蘇聯體系，也重視描述性內容（米丘林遺傳學、巴甫洛夫生理學）。但經歷了幾個關鍵的轉向：</p>
+    <ol class="gene-list gene-cn">
+      <li><span class="gene-num">1</span><span class="gene-label">第一次轉向：改革開放後（1980s）</span><br>國際上分子生物學革命（DNA 雙螺旋→中心法則→基因工程）徹底改變了生物學的面貌。生物學不再只是「觀察和描述」，變成了「在分子水平上理解和操縱生命」。內地教材逐步增加了分子生物學內容的比重。</li>
+      <li><span class="gene-num">2</span><span class="gene-label">第二次轉向：2017 核心素養改革</span><br>2017 版課程標準是一次根本性的教育哲學轉向——明確提出了「內容聚焦大概念」的原則，追求「少而精」。這意味著：不再要求學生記住腎臟每一段腎小管的名稱，而是要求他們理解「內環境穩態是通過反饋調節維持的」這個大概念。具體的解剖細節是大概念的「例子」而非必須記憶的「知識點」。<br><br><strong style="color:var(--accent-amber)">這是故意的設計選擇，而非遺漏。</strong> 2017 版課程標準的編寫者認為，在知識爆炸的時代，記住腎小管各段的名稱遠不如理解穩態的調節原理重要——前者可以隨時查閱，後者是終身受用的思維框架。當然，在實際高考備考中，為了深入理解「反饋調節」，學生往往還是需要掌握必要的解剖細節（如近曲小管與集合管的功能差異），但最終目的是服務於原理的理解。</li>
+    </ol>
+  </div>
+
+  <div class="subsection">
+    <h3 class="subsection-title">1.3 "Vertical Narrative" vs "Horizontal Narrative": Institutional Roots <span style="font-weight:400;color:var(--text-muted);font-size:.8rem">「垂直敘事」vs「水平敘事」的制度根源</span></h3>
+    <div class="table-wrap"><table><thead><tr><th>Factor 因素</th><th>DSE (British Natural History Gene)</th><th>Mainland (Core Literacy Reform Gene)</th></tr></thead><tbody>
+      <tr><td>Discipline Philosophy 學科哲學</td><td>生物學是「關於生物體的科學」——從分子到生態系統，每個組織層次都值得仔細描述</td><td>生物學是「關於生命原理的科學」——掌握大概念後，具體細節可以按需獲取</td></tr>
+      <tr><td>Curriculum Logic 課程組織邏輯</td><td>垂直：分子→細胞→組織→器官→系統→個體→生態，每個層次逐一深入</td><td>水平：基本原理（必修）→ 三個應用方向（選擇性必修：調節、生態、工程）</td></tr>
+      <tr><td>Definition of "Good Student" 對「好學生」的定義</td><td>能準確描述一個生物系統的結構和功能，能將結構和功能聯繫起來</td><td>能運用大概念解釋新情境中的生命現象，能在生物技術和倫理議題中做出有依據的判斷</td></tr>
+      <tr><td>Knowledge View 知識觀</td><td>知識本身就是目的——知道人體的工作機制是有內在價值的</td><td>知識是工具——用它來解決問題、做出決策、理解社會議題</td></tr>
+      <tr><td>Strategy for Knowledge Explosion 應對知識爆炸的策略</td><td>選修機制——你可以選擇不學微生物學或生物工程，但學了就必須學得深</td><td>「少而精」——減少細節量，聚焦核心概念，讓所有選考生都掌握共同的思維框架</td></tr>
+    </tbody></table></div>
+  </div>
+</section>
+
+<!-- §2 -->
+<section class="section">
+  <h2 class="section-title"><span class="num">2</span> Different Purposes: Two Answers to "What Is Biology For?" <span style="font-weight:400;color:var(--text-muted);font-size:.85rem">各自目的：兩個「生物學有什麼用」的不同回答</span></h2>
+  <div class="table-wrap"><table><thead><tr><th>Dimension 維度</th><th>DSE Biology</th><th>Mainland Biology</th></tr></thead><tbody>
+    <tr><td>Answer to "What Is Biology?" 對「生物學是什麼」的回答</td><td>生物學是<strong>關於生命體如何在各個層次上運作的科學</strong>——從分子機器到生態系統</td><td>生物學是<strong>關於生命活動規律的科學</strong>——它是農業、醫藥、環境科學的基礎</td></tr>
+    <tr><td>Core Narrative 核心敘事</td><td>從消化一片麵包到跑完 100 米——人體如何在分子、細胞、器官、系統各層次協調工作</td><td>從 DNA 到蛋白質到穩態到生態平衡——生命現象背後的統一原理</td></tr>
+    <tr><td>Typical Student Portrait 典型學生畫像</td><td>一個能畫出心臟結構並標註四個腔室和瓣膜、解釋組織液如何形成、描述光合作用中光解水產生 NADPH 和 ATP 的學生</td><td>一個能運用穩態與平衡觀解釋血糖調節、用進化與適應觀分析抗藥性、設計基因工程四步流程的學生</td></tr>
+    <tr><td>Social Function 社會功能</td><td>銜接大學醫學/護理/營養/體育科學/環境科學等專業</td><td>雙重功能：生物學素養底盤（必修）+ 大學理工農醫篩選器（選擇性必修）</td></tr>
+    <tr><td>Attitude Towards Memorisation 對「記憶」的態度</td><td>記憶是必要的——生物體本身就是複雜的，簡化它就是歪曲它</td><td>記憶應該服務於理解——「少而精」原則要求減少不必要的事實記憶</td></tr>
+  </tbody></table></div>
+</section>
+
+<!-- §3 -->
+<section class="section">
+  <h2 class="section-title"><span class="num">3</span> Which Is Better? <span style="font-weight:400;color:var(--text-muted);font-size:.85rem">孰好孰劣？</span></h2>
+
+  <blockquote><strong>DSE 生物和內地生物的差異不只是內容取捨的不同，而是對「生物學這門學科應該怎麼教」這個根本問題的兩種截然不同的回答。</strong> DSE 認為生物學應該是一門「訓練觀察力和描述力」的學科，內地認為生物學應該是一門「訓練原理性思維」的學科。這兩種回答在 21 世紀都有充分的理由——因為「生物學」本身正在經歷從描述性科學向工程科學的轉變。</blockquote>
+
+  <div class="pro-con-grid">
+    <div class="pro-card">
+      <div class="card-label">🎁 Four Things DSE Does Better</div>
+      <div class="pc-item"><strong>1. "See to Understand" — Observation Training</strong><br>DSE 生物要求學生在顯微鏡下觀察、繪圖、標註——洋蔥表皮細胞、葉橫切面、血塗片。本地生境研習要求學生走到野外，用樣方和樣線採集數據。這些訓練培養的是一種<strong>「用眼睛思考」</strong>的能力——在看到結構和功能之間的關聯之前，先要學會準確、完整、無偏見地記錄你看到了什麼。AI 可以識別顯微鏡圖像中的每一個細胞，但 AI 不會告訴你「這個樣本是否具有代表性」「這片葉子上的斑點是不是人為損傷」——這些判斷需要觀察力在真實世界中的長期訓練。</div>
+      <div class="pc-item"><strong>2. From Organ Systems to Whole-Body Integration — The "Human Body Panorama"</strong><br>DSE 用 84 小時貫穿了消化、呼吸、循環、神經、激素、生殖、骨骼肌肉——這不是七門獨立的課，而是一個統一的「人是怎麼活的」的故事。讀完 DSE 生物的學生，對自己身體的理解是<strong>具體的、有血有肉的</strong>——他知道自己吃的麵包在十二指腸被胰蛋白酶分解，葡萄糖從小腸絨毛進入毛細血管，經肝門靜脈到達肝臟，一部分轉化為糖原儲存，剩餘進入循環系統供全身細胞進行需氧呼吸。這種具體性難以通過「大概念」教學獲得。</div>
+      <div class="pc-item"><strong>3. Health & Disease as an Independent Compulsory Theme</strong><br>DSE 課題四（14h）——傳染病學、非特異性防禦、免疫反應——這是一個完整的「一個人的身體如何應對外來入侵者」的知識體系。在抗生素耐藥性成為全球公共衛生危機的今天，在 mRNA 疫苗改寫免疫學規則的當下，這套知識不是「錦上添花」，而是<strong>一個有科學素養的公民應該具備的基本裝備</strong>。內地將這些內容放在選擇性必修模塊 1 中——不選考生物的學生永遠不會系統地學到免疫系統的工作原理。</div>
+      <div class="pc-item"><strong>4. SBA + 20h Investigative Study: The Deepest Lab Tradition Among the Three Sciences</strong><br>生物學本質上是實驗科學。DSE 的 SBA 包括顯微鏡操作、生物繪圖、解剖、生理學實驗、實地生態調查——這些訓練讓學生在進入大學醫學/生物實驗室之前，已經建立了基本的實驗素養和安全習慣。</div>
+    </div>
+
+    <div class="con-card">
+      <div class="card-label">🔵 Four Things Mainland Does Better</div>
+      <div class="pc-item"><strong>1. "Less but Deeper" — A Sober Choice in the Knowledge Explosion Era</strong><br>2017 版內地課程標準的設計者面對一個殘酷的問題：如果一個高中生不可能學會所有的生物學知識，那麼什麼才是真正值得他學會的？答案是「大概念」：不要記住消化系統的每一段，但要理解「結構決定功能」；不要記住每一種激素的名字，但要理解「反饋調節維持穩態」；不要記住每一種生物的分類位置，但要理解「進化導致多樣性和統一性」。DSE 的策略是「多學一點，可以選考」——4 選 2 選修讓學生避開不感興趣的領域。內地的策略是「少學一點，但學透」——聚焦核心概念，用它們去打任何新知識的地基。</div>
+      <div class="pc-item"><strong>2. "Biotechnology & Engineering" — Paradigm Shift from Descriptive Science to Engineering Science</strong><br>內地選擇性必修模塊 3 是生物三科對比中最獨特的存在。發酵工程、細胞工程（植物/動物）、基因工程、蛋白質工程、胚胎工程——這不是「生物學」，這是<strong>「生物工程學」</strong>。這反映了中國對生物技術產業的戰略定位。當 DSE 學生在學習眼睛的睫狀肌如何調節焦距時，內地學生在學習如何用限制酶和 DNA 連接酶構建一個表達載體、導入大腸桿菌、篩選陽性克隆。</div>
+      <div class="pc-item"><strong>3. Epigenetics and Modern Neuroscience — Keeping Up with the Frontiers</strong><br>DSE 課程指引編寫於 2007 年（2015 年更新但核心框架未變）。2017 年內地生物課程標準已經在必修模塊中涉及了表觀遺傳學的基本概念（如 DNA 甲基化），選擇性必修模塊中納入了靜息電位/動作電位的定量描述和自主神經系統——這些是現代生物學的核心前沿。</div>
+      <div class="pc-item"><strong>4. Population Ecology Mathematical Models — Quantitative Thinking in Biology</strong><br>內地選擇性必修模塊 2 要求「嘗試建立數學模型解釋種群的數量變動」——J 型和 S 型增長曲線、邏輯斯蒂方程。DSE 的生態學主要使用描述性方法，但在野外實地調查方面有獨特的訓練——辛普森多樣性指數的計算與採樣設計。數學模型為生態學加入了<strong>預測能力</strong>——不僅是「這個生態系統現在是什麼樣」，而是「它在未來會變成什麼樣」。</div>
+    </div>
+  </div>
+</section>
+
+<!-- §4 -->
+<section class="section">
+  <h2 class="section-title"><span class="num">4</span> Two Portraits of a "Biologist" <span style="font-weight:400;color:var(--text-muted);font-size:.85rem">不是孰好孰劣，而是兩種「生物學家」的畫像</span></h2>
+  <div class="table-wrap"><table><thead><tr><th></th><th>DSE's Portrait DSE 培養的畫像</th><th>Mainland's Portrait 內地培養的畫像</th></tr></thead><tbody>
+    <tr><td>Resembles 更像誰</td><td><strong>博物學家 + 醫生</strong>——用眼睛觀察、用手繪製、用結構解釋功能的傳統生物學家</td><td><strong>分子生物學家 + 生物工程師</strong>——用原理推導、用技術操作的現代生物學家</td></tr>
+    <tr><td>Core Tools 核心工具</td><td>顯微鏡、解剖刀、樣方框、生物繪圖鉛筆</td><td>PCR 儀、電泳槽、限制酶、表達載體</td></tr>
+    <tr><td>Way of Seeing 看世界的方式</td><td>一個活生生的有機體，有其不可簡化的複雜性和美</td><td>一套可被理解和操縱的分子機制</td></tr>
+    <tr><td>Attitude to Knowledge 知識的態度</td><td>描述性知識有其內在價值——知道腎臟怎麼工作本身就有意義</td><td>知識是應用的基礎——學穩態是為了理解疾病，學基因工程是為了製造藥物</td></tr>
+  </tbody></table></div>
+
+  <h3 style="font-size:.9rem;color:var(--accent-teal);margin:1.3rem 0 .7rem">Adapting to Different Paths <span style="font-weight:400;color:var(--text-muted);font-size:.82rem">適配不同路徑</span></h3>
+  <div class="path-grid">
+    <div class="path-card"><span class="pa">→ 醫學/護理/物理治療/營養學/運動科學</span><strong>DSE 的大體量人體生理學是最好的地基</strong>——你需要的正是「準確知道每一塊肌肉和每一條神經的名字」</div>
+    <div class="path-card"><span class="pa">→ 生物技術/基因工程/合成生物學/藥物研發</span><strong>內地的生物技術與工程模塊 + 表觀遺傳學 + 蛋白質工程更對口</strong></div>
+    <div class="path-card"><span class="pa">→ 生態學/環境科學/保育生物學</span><strong>DSE 的本地生境研習 + 應用生態學選修 + 實地調查經驗是天然優勢</strong></div>
+    <div class="path-card"><span class="pa">→ 神經科學/認知科學</span><strong>內地的靜息電位/動作電位/自主神經系統給你更好的起點</strong></div>
+    <div class="path-card"><span class="pa">→ 出國讀生物相關專業</span><strong>DSE 的 SBA + 實驗素養 + 水平參照成績更符合海外大學預期</strong></div>
+    <div class="path-card"><span class="pa">→ 衝清北復交的生命科學/醫學</span><strong>內地高考生物的遺傳推理 + 工程流程 + 實驗設計題是剛需</strong></div>
+  </div>
+</section>
+
+<!-- §5 -->
+<section class="section">
+  <h2 class="section-title"><span class="num">5</span> Implications for 海納 &amp; 有容 <span style="font-weight:400;color:var(--text-muted);font-size:.85rem">對海納有容的啟示</span></h2>
+  <p style="font-size:.86rem;color:var(--text-secondary);margin-bottom:.8rem">他們走 DSE 路線。DSE 生物給他們的是<strong style="color:var(--accent-leaf)">一副有血有肉的人體全圖 + 實驗和實地調查的真本事</strong>。但有三塊可以課外補的缺口：</p>
+  <ul class="advice-list">
+    <li><strong style="color:var(--accent-teal)">1. 現代分子生物學的思維升級：</strong>DSE 教了 DNA→RNA→蛋白質（中心法則），但沒有教<strong>基因表達調控</strong>（啟動子、增強子、轉錄因子、RNA 干擾），沒有教<strong>表觀遺傳學</strong>（DNA 甲基化、組蛋白修飾），沒有教<strong>生物信息學</strong>的基本概念。可以借一本內地的選擇性必修模塊 3 或一本大學入門教材，建立從「基因是什麼」到「基因如何被調控」的思維升級。</li>
+    <li><strong style="color:var(--accent-teal)">2. 種群生態學的數學模型：</strong>DSE 的生態學主要是描述性的——碳循環、氮循環、食物網、演替。如果能加上「J 型增長曲線→S 型增長曲線→環境承載量 K」這個數學模型框架，整個生態學的邏輯會更清晰。這不是為了考試，而是為了建立「生物學也可以定量預測」的思維習慣。</li>
+    <li><strong style="color:var(--accent-teal)">3. 生物技術流程的「工程師視角」：</strong>DSE 選修課題八雖然涉及重組 DNA、PCR、DNA 指紋分析、基因治療，但更像是一個「技術目錄」而非「工程流程」。可以嘗試把每一項技術畫成流程圖——從樣本到結果的每一步用了什麼試劑、什麼條件、什麼操作——這種「工程師視角」是內地模塊 3 最強的地方。</li>
+  </ul>
+  <p style="font-size:.84rem;color:var(--text-leaf);margin-top:.8rem"><strong style="color:var(--accent-leaf)">DSE 的強項要充分用好的：</strong></p>
+  <ul style="list-style:none;padding:0;font-size:.84rem;color:var(--text-secondary)">
+    <li style="padding:.15rem 0">▸ <strong>SBA 實驗素養</strong>是三科中最深厚的——顯微鏡、解剖、繪圖、實地考察，做好每一項</li>
+    <li style="padding:.15rem 0">▸ <strong>人體生理學的全圖景</strong>是內地學生很難獲得的——珍惜課題三的 84 小時</li>
+    <li style="padding:.15rem 0">▸ <strong>健康與疾病</strong>的知識體系在抗生素耐藥性和新發傳染病的時代比任何時候都重要</li>
+  </ul>
+</section>
+
+<!-- §6 -->
+<section class="section">
+  <h2 class="section-title"><span class="num">6</span> Cross-Subject WHY Analysis Summary <span style="font-weight:400;color:var(--text-muted);font-size:.85rem">三科 WHY 分析的交叉總結</span></h2>
+  <div class="table-wrap"><table><thead><tr><th>Dimension 維度</th><th>Physics 物理</th><th>Chemistry 化學</th><th>Biology 生物</th></tr></thead><tbody>
+    <tr><td>British Gene 英式基因</td><td>定量計算 + 應用廣度</td><td>有機化學為主角</td><td>博物學 + 描述性科學 + 人體全圖</td></tr>
+    <tr><td>Soviet/Chinese Gene 蘇式/中特基因</td><td>理論系統完整性</td><td>物理化學為根基</td><td>大概念→應用 + 生物工程</td></tr>
+    <tr><td>DSE's Most Unique Gift</td><td>電磁學定量 + 波動光學</td><td>有機化學全體系 + 儀器分析</td><td>人體生理學 84h + 顯微鏡/解剖/實地調查</td></tr>
+    <tr><td>Mainland's Most Unique Gift</td><td>相對論 + 熱力學全體系</td><td>水溶液多重平衡 + 結構理論</td><td>生物技術與工程全流程 + 表觀遺傳學</td></tr>
+    <tr><td>Most AI-Resistant Ability</td><td>建模直覺 + 數字直覺</td><td>合成思維 + 分析拆解</td><td>觀察力 + 生命系統的整體思維</td></tr>
+  </tbody></table></div>
+</section>
+
+<!-- §7 -->
+<section class="section">
+  <h2 class="section-title"><span class="num">7</span> Summary <span style="font-weight:400;color:var(--text-muted);font-size:.85rem">總結</span></h2>
+  <div class="summary-card">
+    <p class="core">一句話核心結論：<br><span style="color:var(--accent-leaf)">DSE 生物是寫給「生命本身」的情書</span>，<span style="color:var(--accent-amber)">內地生物是「現代生命科學的使用手冊」</span><br>——前者給人血肉，後者給人骨架。</p>
+    <p class="detail"><strong>詳細說明：</strong>DSE 生物是一封寫給「生命本身」的情書——它相信，一個受過教育的人應該知道自己身體裡的每一塊肌肉、每一條神經、每一個酶的名字和功能，因為這種具體知識本身就是理解生命的方式。內地生物則是一份「現代生命科學的使用手冊」——它相信，在知識爆炸的時代，掌握少數幾個大概念並用它們去理解和改造生物世界，比記住腎小管各段的名字更重要。前者給人血肉，後者給人骨架。最好的生物教育，恐怕是兩者都有一點。</p>
+  </div>
+</section>
+
+</div>
+</body>
+</html>

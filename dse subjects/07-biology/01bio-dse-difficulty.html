@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DSE vs 內地高中生物：學習難度對比 | Biology Curriculum Difficulty Comparison — 海納有容</title>
+<style>
+  :root {
+    --bg-deep: #0a120f;
+    --bg-card: #111a15;
+    --bg-card-alt: #151f1a;
+    --border-subtle: #1e2e24;
+    --border-glow: #4caf5033;
+    --text-primary: #e0e8e4;
+    --text-secondary: #b0c0b8;
+    --text-muted: #789080;
+    --accent-green: #4caf50;
+    --accent-leaf: #66bb6a;
+    --accent-teal: #00bfa5;
+    --accent-emerald: #26a69a;
+    --accent-amber: #ffab00;
+    --accent-warm: #ff8f00;
+    --accent-pink: #ff5252;
+    --bar-bg: #1a2a20;
+    --dse-color: #66bb6a;
+    --cn-color: #ff8f00;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 16px; scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", "Noto Sans SC", "PingFang HK", "Microsoft YaHei", sans-serif;
+    background: var(--bg-deep);
+    color: var(--text-primary);
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .hero {
+    background: linear-gradient(135deg, #0a1510 0%, #0d1f16 40%, #0a120f 100%);
+    border-bottom: 1px solid var(--border-glow);
+    padding: 3rem 1.5rem 2.5rem; text-align: center; position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content:''; position:absolute; inset:0;
+    background: radial-gradient(ellipse at 50% 100%, rgba(76,175,80,0.06) 0%, transparent 60%);
+    pointer-events:none;
+  }
+  .hero-badge {
+    display:inline-block; background:rgba(76,175,80,0.12); border:1px solid var(--border-glow);
+    color:var(--accent-green); font-size:0.8rem; font-weight:600; padding:0.25rem 1rem;
+    border-radius:50px; letter-spacing:0.08em; text-transform:uppercase; margin-bottom:1.2rem;
+  }
+  .hero h1 {
+    font-size:clamp(1.4rem,3.2vw,2.1rem); font-weight:800; color:#fff;
+    max-width:780px; margin:0 auto 0.8rem; letter-spacing:0.02em; position:relative;
+  }
+  .hero h1 .hk { color:var(--accent-leaf); }
+  .hero h1 .cn { color:var(--accent-amber); }
+  .hero .subtitle { font-size:0.85rem; color:var(--text-muted); max-width:680px; margin:0 auto; position:relative; line-height:1.6; }
+  .hero .meta-line { font-size:0.75rem; color:var(--text-muted); margin-top:0.5rem; }
+
+  .container { max-width:920px; margin:0 auto; padding:2rem 1.5rem 4rem; }
+  .section { margin-bottom:3rem; }
+
+  .section-title {
+    font-size:1.25rem; font-weight:700; color:#fff; margin-bottom:1.2rem;
+    padding-bottom:0.5rem; border-bottom:2px solid var(--border-glow);
+    display:flex; align-items:center; gap:0.5rem;
+  }
+  .section-title .num {
+    display:inline-flex; align-items:center; justify-content:center;
+    width:2rem; height:2rem; background:rgba(76,175,80,0.12);
+    border:1px solid var(--border-glow); border-radius:6px;
+    color:var(--accent-green); font-size:0.85rem; font-weight:700; flex-shrink:0;
+  }
+
+  .subsection { margin-bottom:1.5rem; }
+  .subsection-title {
+    font-size:0.95rem; font-weight:700; color:#fff; margin-bottom:0.6rem;
+    padding-left:0.6rem; border-left:3px solid var(--accent-green);
+  }
+  .subsection-title.cn { border-left-color:var(--accent-amber); }
+
+  .table-wrap {
+    overflow-x:auto; margin:1rem 0; -webkit-overflow-scrolling:touch;
+    border:1px solid var(--border-subtle); border-radius:8px;
+  }
+  table {
+    width:100%; border-collapse:collapse; font-size:0.83rem; min-width:600px;
+  }
+  thead th {
+    background:rgba(76,175,80,0.06); border-bottom:2px solid var(--border-glow);
+    color:var(--accent-teal); font-weight:700; text-align:left;
+    padding:0.5rem 0.7rem; font-size:0.74rem; letter-spacing:0.04em; text-transform:uppercase;
+  }
+  tbody td {
+    padding:0.45rem 0.7rem; border-bottom:1px solid var(--border-subtle);
+    color:var(--text-secondary); vertical-align:top; line-height:1.5;
+  }
+  tbody tr:last-child td { border-bottom:none; }
+  tbody tr:hover td { background:rgba(76,175,80,0.02); }
+  tbody td:first-child { font-weight:600; color:var(--text-primary); white-space:nowrap; }
+
+  .matrix-table td:nth-child(2),
+  .matrix-table td:nth-child(3) { text-align:center; font-weight:600; }
+  .matrix-table td:nth-child(4) { font-weight:700; }
+  .winner-dse { color:var(--accent-leaf); }
+  .winner-cn { color:var(--accent-amber); }
+  .winner-tie { color:var(--text-muted); }
+  .check { color:var(--accent-leaf); }
+  .cross { color:#ff5252; }
+
+  /* ── Viz bars ── */
+  .viz-group { margin-bottom:1.4rem; }
+  .viz-label {
+    font-size:0.83rem; font-weight:700; color:var(--text-primary);
+    margin-bottom:0.5rem; letter-spacing:0.02em;
+  }
+  .viz-bar-row { display:flex; align-items:center; gap:0.5rem; margin-bottom:0.3rem; }
+  .viz-bar-row .tag {
+    font-size:0.7rem; font-weight:600; width:3rem; text-align:right; flex-shrink:0; letter-spacing:0.03em;
+  }
+  .tag.dse { color:var(--dse-color); }
+  .tag.cn { color:var(--cn-color); }
+  .viz-bar-outer { flex:1; height:1.3rem; background:var(--bar-bg); border-radius:3px; overflow:hidden; }
+  .viz-bar-inner {
+    height:100%; border-radius:3px; display:flex; align-items:center;
+    padding-left:0.5rem; font-size:0.66rem; font-weight:600; white-space:nowrap; color:#fff;
+  }
+  .viz-bar-inner.dse { background:linear-gradient(90deg, rgba(76,175,80,0.7), var(--accent-green)); }
+  .viz-bar-inner.cn { background:linear-gradient(90deg, rgba(255,143,0,0.7), var(--accent-amber)); }
+
+  /* ── Narrative diagram ── */
+  .narrative-row {
+    display:flex; gap:1rem; margin:1rem 0; flex-wrap:wrap;
+  }
+  .narrative-box {
+    flex:1; min-width:280px; border-radius:8px; padding:1rem 1.2rem;
+    border:1px solid var(--border-subtle); font-size:0.82rem; color:var(--text-secondary); line-height:1.55;
+  }
+  .narrative-box.dse { background:rgba(76,175,80,0.04); border-color:rgba(76,175,80,0.2); }
+  .narrative-box.cn { background:rgba(255,143,0,0.03); border-color:rgba(255,143,0,0.2); }
+  .narrative-box .nb-title {
+    font-size:0.78rem; font-weight:700; letter-spacing:0.04em; text-transform:uppercase;
+    margin-bottom:0.4rem;
+  }
+  .narrative-box.dse .nb-title { color:var(--accent-leaf); }
+  .narrative-box.cn .nb-title { color:var(--accent-amber); }
+  .narrative-box code {
+    display:block; background:rgba(0,0,0,0.3); padding:0.5rem 0.7rem;
+    border-radius:5px; font-size:0.78rem; line-height:1.4; margin:0.5rem 0;
+    color:var(--text-secondary); white-space:pre; overflow-x:auto;
+  }
+
+  /* ── Blockquote ── */
+  blockquote {
+    border-left:3px solid var(--accent-teal); background:rgba(0,191,165,0.04);
+    padding:0.9rem 1.2rem; margin:1rem 0; border-radius:0 8px 8px 0;
+    font-size:0.88rem; color:var(--text-secondary); line-height:1.7;
+  }
+
+  /* ── 3-subject summary table ── */
+  .three-subject-table thead th { white-space:nowrap; }
+
+  /* ── Advice list ── */
+  .advice-list { list-style:none; padding:0; }
+  .advice-list li {
+    background:var(--bg-card-alt); border:1px solid var(--border-subtle);
+    border-radius:8px; padding:0.9rem 1.2rem 0.9rem 2.5rem; margin-bottom:0.5rem;
+    position:relative; font-size:0.88rem; color:var(--text-secondary); line-height:1.6;
+  }
+  .advice-list li::before {
+    content:'▸'; position:absolute; left:1rem; top:0.9rem;
+    color:var(--accent-leaf); font-weight:700;
+  }
+
+  /* ── Summary ── */
+  .conclusion-card {
+    background:linear-gradient(135deg, rgba(76,175,80,0.05), rgba(0,191,165,0.03));
+    border:1px solid var(--border-glow); border-radius:10px; padding:1.5rem;
+    margin-bottom:1rem;
+  }
+
+  @media (max-width:640px) {
+    .hero { padding:2rem 1rem 1.8rem; }
+    .container { padding:1.2rem 0.9rem 2.5rem; }
+    .section-title { font-size:1.1rem; }
+    table { font-size:0.74rem; }
+    .narrative-row { flex-direction:column; }
+  }
+  @media print {
+    body { background:#fff; color:#111; }
+    .hero { background:#f5f5f5; border-bottom:2px solid #ccc; }
+    .narrative-box, .conclusion-card, .advice-list li { background:#fafafa; border:1px solid #ddd; }
+    table thead th { background:#eee; color:#111; }
+    .container { padding:1rem; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-badge">DSE Biology · Curriculum Comparison</div>
+  <h1><span class="hk">香港 DSE</span> vs <span class="cn">內地高中生物</span>課程標準：學習難度對比</h1>
+  <p class="subtitle">對比依據：《高中課程及評估指引 生物(中四至中六) 二零零七年 (二零一五年十一月更新)》vs《普通高中生物學課程標準（2017年版2020年修訂）》——兩份文件均已完整提取並逐項對比。</p>
+  <p class="meta-line">分析日期：2026-06-07</p>
+</header>
+
+<div class="container">
+
+<!-- ═══ §1: Architecture ═══ -->
+<section class="section">
+  <h2 class="section-title"><span class="num">1</span> Course Architecture Overview <span style="font-weight:400;color:var(--text-muted);font-size:0.85rem;">課程架構概覽</span></h2>
+  <div class="table-wrap"><table><thead><tr><th>Dimension 維度</th><th>Hong Kong DSE</th><th>Mainland China 內地（2017/2020）</th></tr></thead><tbody>
+    <tr><td>Total Hours 總課時</td><td>250h（必修 200h + 選修 50h + 探究 20h，探究含在總課時內）</td><td>10 學分，約 180 學時（必修 4 學分 72 學時 + 選擇性必修 6 學分 108 學時）</td></tr>
+    <tr><td>Compulsory 必修結構</td><td>4 大課題（200h）+ 科學探究 20h（跨課題）</td><td>2 個模塊（4 學分），全體必修</td></tr>
+    <tr><td>Advanced 進階結構</td><td>4 個選修課題任選 1（約 50h）</td><td>3 個選擇性必修模塊全部修讀（6 學分）</td></tr>
+    <tr><td>Assessment 考核組成</td><td>80% 公開考試（卷一 60% + 卷二 20%）+ 20% 校本評核（SBA）</td><td>100% 筆試（合格考 + 等級考 / 高考）</td></tr>
+    <tr><td>Core Competencies 核心素養</td><td>知識理解、技能過程、價值觀態度（三維）</td><td>生命觀念、科學思維、科學探究、社會責任（四維）</td></tr>
+    <tr><td>Hours Comparison 課時對比</td><td>250h，遠多於 180 學時</td><td>180 學時，但選擇性必修覆蓋了更多元的內容</td></tr>
+  </tbody></table></div>
+</section>
+
+<!-- ═══ §2: Content Depth ═══ -->
+<section class="section">
+  <h2 class="section-title"><span class="num">2</span> Content Depth Comparison <span style="font-weight:400;color:var(--text-muted);font-size:0.85rem;">內容深度逐項對比</span></h2>
+
+  <h3 style="color:var(--accent-leaf);margin-bottom:0.6rem;">🔴 Topics Where DSE Goes Significantly Deeper</h3>
+
+  <div class="subsection">
+    <h4 class="subsection-title">2.1 Human &amp; Plant Physiology — DSE's Absolute Advantage <span style="font-weight:400;color:var(--text-muted);font-size:0.8rem;">人體與植物生理學——DSE 的絕對優勢領域</span></h4>
+    <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:0.6rem;">DSE 用時 <strong style="color:var(--accent-leaf);">84 小時</strong>（課題 III「生物與環境」+ 課題 IV「人體生理學與健康」）建立了一套從分子到器官系統的完整生理學體系。</p>
+    <div class="table-wrap"><table><thead><tr><th>Dimension 維度</th><th>DSE Requirement</th><th>Mainland Requirement</th></tr></thead><tbody>
+      <tr><td>Human Nutrition &amp; Digestion 人體營養與消化</td><td>食物需求、均衡膳食、消化系統的完整結構與功能、消化酶的種類與作用位點、吸收的機制（絨毛結構）、<strong>肝的代謝角色</strong>（糖原儲存、脫氨作用、解毒）</td><td>選擇性必修模塊 1「穩態與調節」聚焦調節機制，消化的解剖細節較淺</td></tr>
+      <tr><td>Human Gas Exchange 人體氣體交換</td><td>呼吸系統結構、<strong>換氣機制</strong>（肋間肌/膈肌的協調、胸腔體積與壓力變化）、氣體轉運（氧合血紅蛋白曲線、二氧化碳的三種轉運方式）</td><td>選擇性必修模塊 1 以內環境和調節為主，呼吸解剖細節較淺</td></tr>
+      <tr><td>Human Circulatory System 人體循環系統</td><td>心臟結構、心動週期、血管類型與結構-功能關係、血液成分與功能、<strong>組織液的形成與淋巴系統</strong></td><td>選擇性必修模塊 1 涉及但深度不及</td></tr>
+      <tr><td>Human Coordination 人體協調與反應</td><td><strong>眼睛</strong>（結構、視覺調節、色覺、近視/遠視）、<strong>耳朵</strong>（結構與聽覺機制）；神經系統（CNS 結構、神經元、<strong>突觸傳遞</strong>、反射弧、隨意動作）；<strong>骨骼肌肉系統</strong>（關節類型、拮抗肌作用、槓桿原理）</td><td>選擇性必修模塊 1 聚焦神經調節和體液調節，感官和骨骼系統的解剖細節較少</td></tr>
+      <tr><td>Plant Physiology 植物生理學</td><td>植物營養（自養、礦物質需求、<strong>氮循環與豆科植物固氮</strong>）；氣體交換（氣孔機制）；<strong>蒸騰作用</strong>（過程、重要性、影響因素）；物質轉運（木質部/韌皮部的結構與功能、蒸騰拉力、<strong>壓力流假說</strong>）；植物的支持；植物生殖（花結構、傳粉、受精、種子/果實散播）；<strong>向光性</strong>（生長素的不對稱分佈與作用機制）</td><td>必修階段植物內容極少；選擇性必修模塊 1 涉及植物激素調節但無完整植物生理學體系</td></tr>
+      <tr><td>Human Reproduction 人體生殖</td><td>男女生殖系統結構、月經週期（激素調控）、受精、胚胎發育、<strong>胎盤結構與功能</strong>、分娩、親代撫育、生育控制</td><td>選擇性必修模塊 3「胚胎工程」聚焦技術層面，生殖解剖細節較少</td></tr>
+    </tbody></table></div>
+  </div>
+
+  <div class="subsection">
+    <h4 class="subsection-title">2.2 Biochemical Pathways — DSE More Specific <span style="font-weight:400;color:var(--text-muted);font-size:0.8rem;">生化途徑——DSE 更具體</span></h4>
+    <div class="table-wrap"><table><thead><tr><th>Dimension</th><th>DSE Requirement</th><th>Mainland Requirement</th></tr></thead><tbody>
+      <tr><td>Photosynthesis 光合作用</td><td><strong>光化學反應</strong>：光解水、生成 NADPH 和 ATP；<strong>碳固定</strong>：卡爾文循環的主要步驟；影響光合速率的因素（光強、CO₂ 濃度、溫度）</td><td>必修模塊 1：光合作用的光反應和暗反應（卡爾文循環），但<strong>步驟細節不如 DSE 具體</strong></td></tr>
+      <tr><td>Respiration 呼吸作用</td><td><strong>糖酵解</strong>、<strong>克雷伯氏循環</strong>、<strong>氧化磷酸化</strong>的具體步驟和發生位置；ATP 的生成數量與角色；<strong>缺氧途徑</strong>（乳酸發酵和酒精發酵的詳細過程與產物）；比較需氧與缺氧呼吸的 ATP 產量差異</td><td>必修模塊 1：有氧呼吸與無氧呼吸，步驟細節較少</td></tr>
+      <tr><td>Enzymology 酶學</td><td>活性部位、專一性（鎖鑰假說）、影響速率的因素（溫度/pH/抑制劑）的詳細機制、酶的日常應用（生物洗衣粉等）</td><td>必修模塊 1：酶的本質、特性及影響因素，深度相近</td></tr>
+    </tbody></table></div>
+  </div>
+
+  <div class="subsection">
+    <h4 class="subsection-title">2.3 Ecology — DSE Full Coverage in Compulsory <span style="font-weight:400;color:var(--text-muted);font-size:0.8rem;">生態學——DSE 在必修中就全覆蓋</span></h4>
+    <div class="table-wrap"><table><thead><tr><th>Dimension</th><th>DSE Requirement</th><th>Mainland Requirement</th></tr></thead><tbody>
+      <tr><td>Ecosystem Function 生態系統運作</td><td><strong>碳循環和氮循環</strong>的完整生化過程（含硝化、反硝化、固氮、氨化等）；數量錐體和<strong>生物量錐體</strong>；生態演替與頂級群落</td><td>選擇性必修模塊 2 涉及碳循環和氮循環，但 DSE 的氮循環細節更多（含微生物角色）</td></tr>
+      <tr><td>Local Habitat Study 本地生境研習</td><td><strong>必修要求</strong>：取樣法（樣方、樣線）、量度非生物因子、數據收集與分析</td><td>無實地生態調查的必修要求</td></tr>
+      <tr><td>Applied Ecology (Elective) 應用生態學</td><td>污水處理原理、<strong>污染控制</strong>（空氣/水/噪音的完整分析）、<strong>全球性議題</strong>（可持續發展、全球暖化、酸雨、富營養化、資源管理）</td><td>選擇性必修模塊 2「生物與環境」涉及，深度相近</td></tr>
+    </tbody></table></div>
+  </div>
+
+  <div class="subsection">
+    <h4 class="subsection-title">2.4 Microbiology (Elective Topic VII) <span style="font-weight:400;color:var(--text-muted);font-size:0.8rem;">微生物學（選修課題七）</span></h4>
+    <div class="table-wrap"><table><thead><tr><th>Dimension</th><th>DSE Requirement</th><th>Mainland Requirement</th></tr></thead><tbody>
+      <tr><td>Microbial Diversity 微生物多樣性</td><td><strong>病毒的增殖</strong>（裂解週期和溶源週期）；細菌、原生生物、真菌的多樣性與比較；<strong>微生物的生長條件、階段與量度</strong>（生長曲線）；無菌操作的原理與安全</td><td>選擇性必修模塊 3「發酵工程」涉及微生物培養，但不如 DSE 系統</td></tr>
+      <tr><td>Microbial Applications 微生物應用</td><td>食物發酵、疫苗生產、抗生素、工業用酶、污水處理與沼氣生產——全方位的應用覆蓋</td><td>模塊 3 聚焦發酵工程，覆蓋面較窄</td></tr>
+    </tbody></table></div>
+  </div>
+
+  <div class="subsection">
+    <h4 class="subsection-title">2.5 Health &amp; Disease (Topic IV, 14h) — DSE-Only Compulsory Theme <span style="font-weight:400;color:var(--text-muted);font-size:0.8rem;">健康與疾病——DSE 獨有的必修主題</span></h4>
+    <div class="table-wrap"><table><thead><tr><th>Dimension</th><th>DSE Requirement</th><th>Mainland Requirement</th></tr></thead><tbody>
+      <tr><td>Infectious Diseases 傳染病學</td><td>傳染病的成因（病原體類型）、<strong>傳播途徑</strong>、<strong>治療（抗生素及其濫用問題）</strong></td><td>選修模塊涉及，非必修</td></tr>
+      <tr><td>Non-specific Defence 非特異性防禦</td><td>皮膚、黏液、吞噬細胞、<strong>炎性反應</strong>的完整描述</td><td>選擇性必修模塊 1 涉及</td></tr>
+      <tr><td>Immune Response 免疫反應</td><td>抗原-抗體關係、淋巴細胞（B 細胞/T 細胞）、<strong>初次與再次免疫反應的比較</strong>、主動免疫與被動免疫</td><td>選擇性必修模塊 1「穩態與調節」涉及體液免疫和細胞免疫，深度相近</td></tr>
+    </tbody></table></div>
+  </div>
+
+  <h3 style="color:var(--accent-amber);margin:1.5rem 0 0.6rem;">🔵 Topics Where Mainland China Goes Significantly Deeper</h3>
+
+  <div class="subsection">
+    <h4 class="subsection-title cn">2.6 Biotechnology &amp; Engineering — Mainland's Most Complete Module <span style="font-weight:400;color:var(--text-muted);font-size:0.8rem;">生物技術與工程——內地最完整的模塊</span></h4>
+    <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:0.6rem;">內地選擇性必修模塊 3「生物技術與工程」是獨步天下的，把現代生物技術按工程類別分為六個完整體系。</p>
+    <div class="table-wrap"><table><thead><tr><th>Engineering Category 工程類別</th><th>Mainland Requirement</th><th>DSE Counterpart</th></tr></thead><tbody>
+      <tr><td>Fermentation Engineering 發酵工程</td><td>滅菌技術、無菌操作、培養基配方設計、<strong>平板劃線法和稀釋塗布平板法</strong>、顯微鏡計數法、工業化發酵生產流程</td><td>DSE 選修課題七（微生物與人類）涉及，但不如內地系統</td></tr>
+      <tr><td>Cell Engineering (Plant) 細胞工程（植物）</td><td>植物組織培養（癒傷組織誘導與再分化）、<strong>植物體細胞雜交技術</strong>（去壁→融合→篩選）、快速繁殖、脫毒、育種</td><td>DSE 選修課題八（生物工程）涉及植物組織培養，但無體細胞雜交</td></tr>
+      <tr><td>Cell Engineering (Animal) 細胞工程（動物）</td><td>動物細胞培養條件與過程、<strong>動物細胞核移植技術</strong>（克隆）、<strong>動物細胞融合技術</strong>、<strong>單克隆抗體製備</strong>（完整的製備流程）、幹細胞應用</td><td>DSE 選修課題八涉及動物克隆和幹細胞，但細胞融合和單抗製備的流程細節不及</td></tr>
+      <tr><td>Genetic Engineering 基因工程</td><td><strong>限制酶、DNA 連接酶、載體</strong>三種工具；<strong>目的基因獲取→表達載體構建→導入受體細胞→檢測鑑定</strong>的完整四步流程；基因工程在農牧/食品/醫藥的應用</td><td>DSE 選修課題八涉及重組 DNA 技術，但工程流程的內地更系統</td></tr>
+      <tr><td>Protein Engineering 蛋白質工程</td><td>根據基因工程原理進行蛋白質設計和改造——<strong>這是 DSE 完全沒有的概念</strong></td><td>DSE 不涉及蛋白質工程</td></tr>
+      <tr><td>Embryo Engineering 胚胎工程</td><td>體外受精、胚胎移植、胚胎分割——完整的胚胎操作技術鏈</td><td>DSE 在必修生殖部分涉及，但不作為工程技術教學</td></tr>
+    </tbody></table></div>
+    <blockquote><strong>核心差異：</strong>內地的模塊 3 是<strong>以工程流程為主線</strong>的——從滅菌到發酵、從組織培養到體細胞雜交、從基因克隆到蛋白質設計——學生學完後能畫出每個技術的完整流程圖。DSE 的生物工程選修（課題八）覆蓋面廣但流程化程度不如。值得注意的是：內地所有選考生物的學生（100%）都要學模塊 3，而 DSE 學生只有選了「生物工程」選修的才系統接觸這些內容——這意味著<strong style="color:var(--accent-amber);">內地學生的生物技術基礎素養（Biotech Literacy）普遍高於 DSE 學生</strong>。</blockquote>
+  </div>
+
+  <div class="subsection">
+    <h4 class="subsection-title cn">2.7 Epigenetics — Mainland Updated, DSE Not Covered <span style="font-weight:400;color:var(--text-muted);font-size:0.8rem;">表觀遺傳學——內地已更新，DSE 未覆蓋</span></h4>
+    <div class="table-wrap"><table><thead><tr><th>Topic</th><th>Mainland Requirement</th><th>DSE Requirement</th></tr></thead><tbody>
+      <tr><td>Epigenetics 表觀遺傳</td><td>必修模塊 2「遺傳與進化」明確要求：「概述某些基因中鹼基序列不變但表型改變的表觀遺傳現象」</td><td><strong>未列入</strong>（DSE 指引為 2007 年版，2015 年更新，表觀遺傳學當時尚未進入高中課標）</td></tr>
+    </tbody></table></div>
+  </div>
+
+  <div class="subsection">
+    <h4 class="subsection-title cn">2.8 Neurobiology — Mainland Goes Deeper <span style="font-weight:400;color:var(--text-muted);font-size:0.8rem;">神經生物學——內地更深入</span></h4>
+    <div class="table-wrap"><table><thead><tr><th>Topic</th><th>Mainland Requirement</th><th>DSE Requirement</th></tr></thead><tbody>
+      <tr><td>Resting &amp; Action Potential 靜息電位與動作電位</td><td>選擇性必修模塊 1：<strong>神經細胞膜內外在靜息狀態具有電位差</strong>，受到刺激後形成<strong>動作電位並沿神經纖維傳導</strong>——定量描述膜電位變化</td><td>課題 IV 涉及神經元和突觸傳遞，但不涉及膜電位的定量描述</td></tr>
+      <tr><td>Autonomic Nervous System 自主神經系統</td><td><strong>中樞神經系統通過自主神經來調節內臟的活動</strong>——交感與副交感神經的拮抗作用</td><td>DSE 不涉及自主神經系統的分類</td></tr>
+      <tr><td>Language &amp; Conditioned Reflex 語言活動與條件反射</td><td>語言活動和條件反射是由大腦皮層控制的高級神經活動</td><td>DSE 不涉及</td></tr>
+    </tbody></table></div>
+  </div>
+
+  <div class="subsection">
+    <h4 class="subsection-title cn">2.9 Plant Hormone System — Mainland More Complete <span style="font-weight:400;color:var(--text-muted);font-size:0.8rem;">植物激素系統——內地更完整</span></h4>
+    <div class="table-wrap"><table><thead><tr><th>Topic</th><th>Mainland Requirement</th><th>DSE Requirement</th></tr></thead><tbody>
+      <tr><td>Five Major Plant Hormones 五大植物激素</td><td>生長素、<strong>細胞分裂素、赤黴素、脫落酸、乙烯</strong>——全部五種激素的協同和拮抗調控網絡</td><td>DSE 僅涉及生長素（向光性），其他激素不涉及</td></tr>
+      <tr><td>Other Regulatory Factors 其他調節因素</td><td>光、重力和溫度對植物生命活動的調節</td><td>DSE 涉及光（向光性），其他不涉及</td></tr>
+    </tbody></table></div>
+  </div>
+
+  <div class="subsection">
+    <h4 class="subsection-title cn">2.10 Population Ecology Mathematical Models <span style="font-weight:400;color:var(--text-muted);font-size:0.8rem;">種群生態學的數學模型</span></h4>
+    <div class="table-wrap"><table><thead><tr><th>Topic</th><th>Mainland Requirement</th><th>DSE Requirement</th></tr></thead><tbody>
+      <tr><td>Population Growth Models 種群增長模型</td><td>選擇性必修模塊 2：「嘗試建立<strong>數學模型</strong>解釋種群的數量變動」——涉及 J 型和 S 型增長曲線</td><td>DSE 在生態系部分涉及但不強調數學模型</td></tr>
+      <tr><td>Population Characteristics 種群特徵</td><td>種群密度、出生率/死亡率、遷入率/遷出率、年齡結構、性別比例——完整的種群參數體系</td><td>DSE 在生態系部分涉及但不系統</td></tr>
+    </tbody></table></div>
+  </div>
+</section>
+
+<!-- ═══ §3: Narrative Difference ═══ -->
+<section class="section">
+  <h2 class="section-title"><span class="num">3</span> Core Organisational Difference: Two Ways of Narrating "Biology" <span style="font-weight:400;color:var(--text-muted);font-size:0.85rem;">課程組織的核心差異：兩種「生物學」的敘事方式</span></h2>
+
+  <p style="font-size:0.88rem;color:var(--text-secondary);margin-bottom:1rem;">這是生物對比中最獨特的發現。物理和化學的差異更多是「廣度和深度」的差異，<strong style="color:#fff;">生物的差異則是「敘事結構」的根本不同</strong>。</p>
+
+  <div class="narrative-row">
+    <div class="narrative-box dse">
+      <div class="nb-title">DSE: Vertical "Organisational Hierarchy" Axis 垂直「組織層次」軸</div>
+      <code>分子 → 細胞 → 組織 → 器官 → 系統 → 個體 → 種群 → 群落 → 生態系統
+  ↑                  ↑                                        ↑
+課題一              課題三+課題四                            課題三(f)
+(細胞與生命分子)  (生物與環境+人體生理)                    (生態系)
+44h                84h</code>
+      <p style="font-size:0.8rem;margin-top:0.4rem;">DSE 用 84 小時（佔總必修 42%）沿著「組織層次」軸線垂直貫穿：從消化系統的酶（分子）到小腸絨毛（組織）到胃（器官）到循環系統（器官系統），最後到人的整體協調（神經系統 + 激素 + 體內平衡）。這種敘事讓<strong>人體成為一個有血有肉的整體</strong>——結構、功能、調節三者交織在一起。</p>
+    </div>
+    <div class="narrative-box cn">
+      <div class="nb-title">Mainland: Horizontal "Science→Technology→Society" Axis 水平「科學→技術→社會」軸</div>
+      <code>必修                              選擇性必修
+模塊1: 分子與細胞 (2學分)    →   模塊1: 穩態與調節 (2學分)
+模塊2: 遺傳與進化 (2學分)    →   模塊2: 生物與環境 (2學分)
+                              →   模塊3: 生物技術與工程 (2學分)
+
+「生命的基本原理」            →   「原理的應用和拓展」</code>
+      <p style="font-size:0.8rem;margin-top:0.4rem;">內地用必修兩個模塊建立「生命科學的基本原理」（分子、細胞、遺傳、進化），然後用三個選擇性必修模塊分別展開「這些原理在個體、生態和技術三個方向上的應用」。這種敘事使生物學成為一門<strong>更像物理學的演繹科學</strong>——從大概念出發，向各個應用領域展開。</p>
+    </div>
+  </div>
+
+  <div class="table-wrap" style="margin-top:1rem;"><table><thead><tr><th>Dimension</th><th>DSE (Vertical Narrative)</th><th>Mainland (Horizontal Narrative)</th></tr></thead><tbody>
+    <tr><td>Memorisation Load 記憶量</td><td>更大——需要記住大量具體的解剖結構、生理過程和生物化學名稱</td><td>較小——以概念和原理為主線，具體事實為輔助</td></tr>
+    <tr><td>Understanding Depth 理解深度</td><td>人體/植物的器官系統級理解更深</td><td>分子機制和調節網絡的理解更抽象和系統</td></tr>
+    <tr><td>Integration Ability 整合能力</td><td>結構-功能關係的整合更強（同一個系統從結構到功能到調節）</td><td>跨模塊的橫向整合更強（遺傳學原理應用於基因工程、生態學原理應用於環境保護）</td></tr>
+    <tr><td>Technology Orientation 技術導向</td><td>微生物和生物技術作為選修</td><td>生物技術與工程作為選擇性必修核心模塊，所有選考生必修</td></tr>
+  </tbody></table></div>
+</section>
+
+<!-- ═══ §4: Lab & Investigation ═══ -->
+<section class="section">
+  <h2 class="section-title"><span class="num">4</span> Laboratory &amp; Investigation Comparison <span style="font-weight:400;color:var(--text-muted);font-size:0.85rem;">實驗與探究對比</span></h2>
+  <div class="table-wrap"><table><thead><tr><th>Dimension</th><th>DSE</th><th>Mainland</th></tr></thead><tbody>
+    <tr><td>Scientific Investigation Hours 科學探究課時</td><td><strong>20 小時</strong>（跨課題），用於大型或跨課題探究活動</td><td>無單列探究課時（探究內容嵌入各模塊的教學提示中）</td></tr>
+    <tr><td>SBA 校本評核</td><td>佔 <strong>20%</strong> 總成績，中五中六期間多輪實驗技能評核，含實驗設計、操作、數據分析、報告撰寫</td><td>無</td></tr>
+    <tr><td>Required Experiments 必做實驗</td><td>無統一清單，由教師按課程指引在 SBA 中設計</td><td>每個模塊有明確「教學提示」中的實驗活動建議</td></tr>
+    <tr><td>Field Work 實地考察</td><td><strong>本地生境研習</strong>為必修（取樣法、量度非生物因子）</td><td>選擇性必修模塊 2 涉及生態調查但非強制</td></tr>
+    <tr><td>Biological Drawing 生物繪圖</td><td>SBA 要求生物繪圖技能（顯微鏡觀察後繪製標註圖）</td><td>無明確繪圖考核要求</td></tr>
+  </tbody></table></div>
+</section>
+
+<!-- ═══ §5: Exam Difficulty ═══ -->
+<section class="section">
+  <h2 class="section-title"><span class="num">5</span> Examination Difficulty Comparison <span style="font-weight:400;color:var(--text-muted);font-size:0.85rem;">考核難度對比</span></h2>
+  <div class="table-wrap"><table><thead><tr><th>Dimension</th><th>DSE</th><th>Gaokao 內地高考</th></tr></thead><tbody>
+    <tr><td>Memorisation Load 記憶量</td><td>極大——大量解剖結構、生理過程、生化路徑的名稱和細節</td><td>較大——以概念和原理為主，但選擇性必修模塊 3 的工程流程記憶量大</td></tr>
+    <tr><td>Question Types 題型</td><td>多選 + 短題目 + 結構式題目 + 論述題</td><td>單選 + 多選 + 填空 + 實驗設計 + 遺傳推理 + 綜合論述</td></tr>
+    <tr><td>Genetic Reasoning 遺傳推理題</td><td>譜系分析 + ABO 血型 + 性連鎖</td><td>更複雜的多代遺傳推理 + 基因互作 + 概率計算</td></tr>
+    <tr><td>Data Analysis 數據分析題</td><td>實驗數據解讀、圖表分析</td><td>更強調從數據中建模和預測</td></tr>
+    <tr><td>STS Issues STS 議題</td><td>生物倫理學、基因工程的道德/社會/經濟議題的批判性評價</td><td>生殖性克隆人等社會熱點議題的科學評價</td></tr>
+    <tr><td>Lab Assessment 實驗考核</td><td>SBA 20%：真做實驗</td><td>筆試中考查實驗設計和分析</td></tr>
+  </tbody></table></div>
+</section>
+
+<!-- ═══ §6: Difficulty Visualization ═══ -->
+<section class="section">
+  <h2 class="section-title"><span class="num">6</span> Difficulty Visualization <span style="font-weight:400;color:var(--text-muted);font-size:0.85rem;">難度差異可視化</span></h2>
+
+  <div class="viz-group">
+    <div class="viz-label">Human/Plant Physiology Depth 人體/植物生理學深度 → <span style="font-weight:400;color:var(--text-muted);">(DSE 壓倒性優勢)</span></div>
+    <div class="viz-bar-row"><span class="tag dse">DSE</span><div class="viz-bar-outer"><div class="viz-bar-inner dse" style="width:100%">84h：消化→呼吸→循環→神經→激素→骨骼→生殖→植物全系統</div></div></div>
+    <div class="viz-bar-row"><span class="tag cn">內地</span><div class="viz-bar-outer"><div class="viz-bar-inner cn" style="width:48%">選擇性必修模塊 1「穩態與調節」，聚焦調節機制，解剖細節較淺</div></div></div>
+  </div>
+  <div class="viz-group">
+    <div class="viz-label">Biochemical Pathway Detail 生化途徑細節 → <span style="font-weight:400;color:var(--text-muted);">(DSE 更深)</span></div>
+    <div class="viz-bar-row"><span class="tag dse">DSE</span><div class="viz-bar-outer"><div class="viz-bar-inner dse" style="width:100%">光合(光解水/NADPH/ATP/卡爾文) + 呼吸(糖酵解/克雷伯/氧化磷酸化/發酵)</div></div></div>
+    <div class="viz-bar-row"><span class="tag cn">內地</span><div class="viz-bar-outer"><div class="viz-bar-inner cn" style="width:58%">必修模塊 1 涉及，步驟細節較少</div></div></div>
+  </div>
+  <div class="viz-group">
+    <div class="viz-label">Biotechnology &amp; Engineering 生物技術與工程 → <span style="font-weight:400;color:var(--text-muted);">(內地更系統)</span></div>
+    <div class="viz-bar-row"><span class="tag cn">內地</span><div class="viz-bar-outer"><div class="viz-bar-inner cn" style="width:100%">發酵工程 + 細胞工程(植物/動物) + 基因工程 + 蛋白質工程 + 胚胎工程</div></div></div>
+    <div class="viz-bar-row"><span class="tag dse">DSE</span><div class="viz-bar-outer"><div class="viz-bar-inner dse" style="width:60%">選修課題八(生物工程)涉及，覆蓋面廣但流程化程度不及</div></div></div>
+  </div>
+  <div class="viz-group">
+    <div class="viz-label">Neurobiology 神經生物學 → <span style="font-weight:400;color:var(--text-muted);">(內地更深)</span></div>
+    <div class="viz-bar-row"><span class="tag cn">內地</span><div class="viz-bar-outer"><div class="viz-bar-inner cn" style="width:100%">靜息/動作電位 + 自主神經 + 語言/條件反射</div></div></div>
+    <div class="viz-bar-row"><span class="tag dse">DSE</span><div class="viz-bar-outer"><div class="viz-bar-inner dse" style="width:65%">神經元 + 突觸 + 反射弧，無膜電位定量</div></div></div>
+  </div>
+  <div class="viz-group">
+    <div class="viz-label">Plant Hormone System 植物激素系統 → <span style="font-weight:400;color:var(--text-muted);">(內地更完整)</span></div>
+    <div class="viz-bar-row"><span class="tag cn">內地</span><div class="viz-bar-outer"><div class="viz-bar-inner cn" style="width:100%">五大激素(生長素/細胞分裂素/赤黴素/脫落酸/乙烯) + 協同拮抗</div></div></div>
+    <div class="viz-bar-row"><span class="tag dse">DSE</span><div class="viz-bar-outer"><div class="viz-bar-inner dse" style="width:28%">僅生長素(向光性)</div></div></div>
+  </div>
+  <div class="viz-group">
+    <div class="viz-label">Memorisation Load 記憶量 → <span style="font-weight:400;color:var(--text-muted);">(DSE 明顯更大)</span></div>
+    <div class="viz-bar-row"><span class="tag dse">DSE</span><div class="viz-bar-outer"><div class="viz-bar-inner dse" style="width:100%">大量解剖名稱 + 生化路徑 + 生物分類 + 疾病/免疫細節</div></div></div>
+    <div class="viz-bar-row"><span class="tag cn">內地</span><div class="viz-bar-outer"><div class="viz-bar-inner cn" style="width:58%">概念和原理為主，但工程流程模塊 3 也有記憶量</div></div></div>
+  </div>
+  <div class="viz-group">
+    <div class="viz-label">Hands-On Lab Work 實驗實戰 → <span style="font-weight:400;color:var(--text-muted);">(DSE 真做實驗)</span></div>
+    <div class="viz-bar-row"><span class="tag dse">DSE</span><div class="viz-bar-outer"><div class="viz-bar-inner dse" style="width:100%">20% 總成績 + 20h 探究</div></div></div>
+    <div class="viz-bar-row"><span class="tag cn">內地</span><div class="viz-bar-outer"><div class="viz-bar-inner cn" style="width:30%">筆試考實驗設計，無實操分數</div></div></div>
+  </div>
+</section>
+
+<!-- ═══ §7: Comprehensive Conclusion ═══ -->
+<section class="section">
+  <h2 class="section-title"><span class="num">7</span> Comprehensive Conclusion <span style="font-weight:400;color:var(--text-muted);font-size:0.85rem;">綜合結論</span></h2>
+
+  <div class="conclusion-card">
+    <h3 style="font-size:1rem;color:var(--accent-teal);margin-bottom:0.6rem;">Biology Is the Most Distinctive Among the Three Sciences <span style="font-weight:400;color:var(--text-muted);font-size:0.85rem;">生物是物理化學三科中差異格局最獨特的一科</span></h3>
+    <p style="font-size:0.88rem;color:var(--text-secondary);line-height:1.75;">物理和化學的對比都驗證了同一個模式：<strong>DSE 應用深、內地理論全</strong>。但生物的差異格局完全不一樣：</p>
+    <ol style="color:var(--text-secondary);padding-left:1.2rem;font-size:0.86rem;line-height:1.7;margin-top:0.5rem;">
+      <li><strong style="color:var(--accent-leaf);">DSE 生物的「記憶量＋細節量」碾壓內地</strong>——84 小時的人體/植物生理學包含大量需要準確記憶的解剖結構、生理過程和生化路徑名稱。這是物理和化學中沒有的維度。內地生物雖然概念和原理覆蓋面廣，但具體的器官系統解剖細節遠不如 DSE 密集。</li>
+      <li><strong style="color:var(--accent-leaf);">DSE 生物的敘事是「垂直的」</strong>——從分子到細胞到組織到器官到系統到個體到生態，一條線貫穿。學生學完後對「人體怎麼工作」有完整圖景。內地生物的敘事是「水平的」——先學基本原理（必修），再向三個應用方向展開（選擇性必修）——更接近「用生物學原理解決生物問題」的工程思維。</li>
+      <li><strong style="color:var(--accent-amber);">內地的「生物技術與工程」模塊是獨一無二的優勢</strong>——發酵工程、細胞工程（植物+動物）、基因工程、蛋白質工程、胚胎工程構成一個完整的現代生物技術操作體系。DSE 的生物工程選修覆蓋面廣但缺乏內地的流程化體系。</li>
+      <li><strong style="color:var(--accent-amber);">內地已納入表觀遺傳學，DSE 課程（2007 年版）未覆蓋</strong>——這是一個時代差距。DSE 課程雖然 2015 年更新過，但核心框架仍停留在人類基因組計劃時代。</li>
+      <li><strong style="color:var(--accent-leaf);">DSE 的 SBA + 探究研習繼續保持壓倒性優勢</strong>——與物理和化學一致。</li>
+    </ol>
+  </div>
+
+  <h3 style="font-size:0.95rem;color:var(--accent-teal);margin-bottom:0.6rem;">Three-Subject Summary: One-Line Comparison <span style="font-weight:400;color:var(--text-muted);font-size:0.85rem;">一句話總結三科的差異模式</span></h3>
+  <div class="table-wrap"><table class="three-subject-table"><thead><tr><th>Subject 科目</th><th>Essence of Difference 差異本質</th><th>DSE's Greatest Strength</th><th>Mainland's Greatest Strength</th></tr></thead><tbody>
+    <tr><td><strong>Physics</strong> 物理</td><td>定量計算 vs 理論系統</td><td>電磁學定量 + 波動光學 + SBA</td><td>相對論 + 熱力學 + 建模推理</td></tr>
+    <tr><td><strong>Chemistry</strong> 化學</td><td>有機/應用 vs 物化/結構</td><td>有機化學全體系 + 速率方程/阿列紐斯 + 儀器分析 + SBA</td><td>水溶液多重平衡 + 雜化軌道/配合物 + 工藝流程題</td></tr>
+    <tr><td><strong>Biology</strong> 生物</td><td>垂直敘事(組織層次) vs 水平敘事(原理→應用)</td><td>人體/植物生理學全系統 + 記憶量/細節量 + SBA</td><td>生物技術與工程的完整體系 + 表觀遺傳 + 神經生物學深度</td></tr>
+  </tbody></table></div>
+
+  <blockquote style="margin-top:1rem;">
+    <strong>生物特有的結論：</strong>DSE 生物是三科中「記憶量」最大的一科——消化系統的每一個酶、呼吸系統的每一塊肌肉、神經系統的每一條通路、光合作用的每一個步驟，都需要準確記憶和復述。這個特徵使它更像一門<strong style="color:var(--accent-leaf);">「描述性的自然科學」</strong>而非「演繹性的自然科學」。內地生物在三科中則是最接近<strong style="color:var(--accent-amber);">「工程思維」</strong>的一科——尤其是選擇性必修模塊 3，學生學的是怎麼操作細胞、怎麼克隆基因、怎麼設計蛋白質，這已經不是傳統意義上的「生物」，而是「生物工程」的入門訓練。
+  </blockquote>
+</section>
+
+<!-- ═══ §8: Advice ═══ -->
+<section class="section">
+  <h2 class="section-title"><span class="num">8</span> Implications for 海納 &amp; 有容 <span style="font-weight:400;color:var(--text-muted);font-size:0.85rem;">對海納有容的啟示</span></h2>
+
+  <ul class="advice-list">
+    <li><strong style="color:var(--accent-leaf);">DSE 生物是醫學/護理方向的天然預備課。</strong>84 小時的人體生理學訓練——從心臟的瓣膜到腎臟的亨利氏環、從免疫的 B 細胞到激素的反饋調節——這套知識體系在醫學預科階段直接復用。如果將來走醫學/護理/康復方向，DSE 生物給他們的底子比內地學生更紮實。</li>
+    <li><strong style="color:var(--accent-amber);">但有一個關鍵的盲區需要注意：</strong>如果他們沒有選「生物工程」（課題八）作為選修，那麼基因工程、細胞工程、蛋白質工程這些現代生物技術的核心內容就完全不會系統接觸。內地的學生（100% 選考）都學了這些。這個差距可以在課外彌補——看紀錄片（如 Human Nature 關於 CRISPR）、讀科普文章、甚至自學內地選擇性必修模塊 3 的流程圖。</li>
+    <li><strong style="color:var(--accent-leaf);">在「垂直敘事」中找到自己的定位：</strong>DSE 生物的獨特之處在於它讓學生理解「人是怎麼運作的」——從吃下一口飯到細胞呼吸產生 ATP，從吸進一口氣到氧氣與血紅蛋白結合。這是內地生物教育很難提供的「人體全景圖」。珍惜這個視角——它是對生命最直接的尊重。</li>
+  </ul>
+
+  <div style="font-size:0.8rem;color:var(--text-muted);padding:0.8rem 1rem;border-left:3px solid rgba(76,175,80,0.3);background:rgba(76,175,80,0.03);border-radius:0 6px 6px 0;margin-top:1rem;">
+    <strong style="color:var(--accent-teal);">延伸閱讀 Extended Reading：</strong>關於這些差異背後的教育理念根源，請參閱《兩地生物課標差異根源與價值判斷》。關於 AI 時代 DSE 生物應培養的元能力，請參閱《AI時代_DSE生物應培養的元能力_海納有容》。
+  </div>
+</section>
+
+<!-- ═══ Appendix ═══ -->
+<section class="section">
+  <h2 class="section-title"><span class="num">A</span> Appendix: Knowledge Coverage Matrix <span style="font-weight:400;color:var(--text-muted);font-size:0.85rem;">附錄：兩套課程知識覆蓋矩陣</span></h2>
+  <div class="table-wrap"><table class="matrix-table"><thead><tr><th>Knowledge Domain 知識領域</th><th>DSE</th><th>Mainland</th><th>Who Goes Deeper</th></tr></thead><tbody>
+    <tr><td>Biomolecules 生命分子（碳水/脂質/蛋白質/核酸）</td><td class="check">✅ 課題一 44h</td><td class="check">✅ 必修模塊 1</td><td class="winner-tie">相當</td></tr>
+    <tr><td>Cell Structure &amp; Function 細胞結構與功能</td><td class="check">✅ 課題一</td><td class="check">✅ 必修模塊 1</td><td class="winner-tie">相當</td></tr>
+    <tr><td>Cell Membrane / Transport 細胞膜/物質轉運</td><td class="check">✅ 課題一</td><td class="check">✅ 必修模塊 1</td><td class="winner-tie">相當</td></tr>
+    <tr><td>Enzymes 酶</td><td class="check">✅ 課題一</td><td class="check">✅ 必修模塊 1</td><td class="winner-dse">DSE（抑制劑機制更詳細）</td></tr>
+    <tr><td>Photosynthesis 光合作用</td><td class="check">✅ 課題一</td><td class="check">✅ 必修模塊 1</td><td class="winner-dse"><strong>DSE</strong>（光解水/NADPH/ATP 步驟更具體）</td></tr>
+    <tr><td>Respiration 呼吸作用</td><td class="check">✅ 課題一</td><td class="check">✅ 必修模塊 1</td><td class="winner-dse"><strong>DSE</strong>（糖酵解/克雷伯/氧化磷酸化 + 兩種發酵）</td></tr>
+    <tr><td>Cell Cycle / Mitosis / Meiosis 細胞週期/有絲分裂/減數分裂</td><td class="check">✅ 課題一</td><td class="check">✅ 必修模塊 1 + 必修模塊 2</td><td class="winner-tie">相當</td></tr>
+    <tr><td>Mendelian Genetics 孟德爾遺傳學</td><td class="check">✅ 課題二 38h</td><td class="check">✅ 必修模塊 2</td><td class="winner-tie">相當</td></tr>
+    <tr><td>Molecular Genetics 分子遺傳學（DNA/RNA/蛋白質合成）</td><td class="check">✅ 課題二</td><td class="check">✅ 必修模塊 2</td><td class="winner-tie">相當</td></tr>
+    <tr><td>Chromosomes / Gene Mutation 染色體/基因突變</td><td class="check">✅ 課題二</td><td class="check">✅ 必修模塊 2</td><td class="winner-tie">相當</td></tr>
+    <tr><td>Epigenetics 表觀遺傳學</td><td class="cross">❌</td><td class="check">✅ 必修模塊 2</td><td class="winner-cn"><strong>內地</strong>（DSE 未覆蓋）</td></tr>
+    <tr><td>Evolution &amp; Speciation 進化與物種形成</td><td class="check">✅ 課題二</td><td class="check">✅ 必修模塊 2</td><td class="winner-tie">相當</td></tr>
+    <tr><td>Taxonomy (3-Domain System) 生物分類（三域系統）</td><td class="check">✅ 課題二</td><td class="cross">❌（初中內容）</td><td class="winner-dse"><strong>DSE</strong></td></tr>
+    <tr><td><strong>Human Digestive System</strong> 人體消化系統</td><td class="check">✅ 課題三 84h</td><td class="check">✅ 選擇必修 1</td><td class="winner-dse"><strong>DSE</strong>（解剖細節+消化酶系統）</td></tr>
+    <tr><td><strong>Human Gas Exchange</strong> 人體氣體交換</td><td class="check">✅ 課題三</td><td class="check">✅ 選擇必修 1</td><td class="winner-dse"><strong>DSE</strong>（換氣機制+氣體轉運方式）</td></tr>
+    <tr><td><strong>Human Circulatory System</strong> 人體循環系統</td><td class="check">✅ 課題三</td><td class="check">✅ 選擇必修 1</td><td class="winner-dse"><strong>DSE</strong>（組織液/淋巴系統）</td></tr>
+    <tr><td><strong>Nervous System</strong> 神經系統</td><td class="check">✅ 課題三</td><td class="check">✅ 選擇必修 1</td><td class="winner-cn"><strong>內地</strong>（動作電位+自主神經）</td></tr>
+    <tr><td><strong>Sensory Organs (Eye/Ear)</strong> 感官（眼/耳）</td><td class="check">✅ 課題三</td><td class="cross">❌</td><td class="winner-dse"><strong>DSE</strong></td></tr>
+    <tr><td><strong>Skeletal &amp; Muscular System</strong> 骨骼肌肉系統</td><td class="check">✅ 課題三</td><td class="cross">❌</td><td class="winner-dse"><strong>DSE</strong></td></tr>
+    <tr><td><strong>Endocrine System</strong> 內分泌系統</td><td class="check">✅ 課題三</td><td class="check">✅ 選擇必修 1</td><td class="winner-tie">相當</td></tr>
+    <tr><td>Homeostasis (Blood Glucose) 體內平衡（血糖調節）</td><td class="check">✅ 課題三</td><td class="check">✅ 選擇必修 1</td><td class="winner-cn">內地（更系統的穩態概念）</td></tr>
+    <tr><td><strong>Plant Physiology (Full System)</strong> 植物生理學（全系統）</td><td class="check">✅ 課題三</td><td class="cross">❌（分散且淺）</td><td class="winner-dse"><strong>DSE</strong>（無可比對象）</td></tr>
+    <tr><td><strong>Plant Reproduction</strong> 植物生殖</td><td class="check">✅ 課題三</td><td class="cross">❌</td><td class="winner-dse"><strong>DSE</strong></td></tr>
+    <tr><td>Human Reproduction &amp; Development 人體生殖與發育</td><td class="check">✅ 課題三</td><td class="check">✅ 選擇必修 3（胚胎工程）</td><td class="winner-dse">DSE（解剖+生理細節更多）</td></tr>
+    <tr><td>Ecosystem (Energy Flow / Nutrient Cycles) 生態系</td><td class="check">✅ 課題三</td><td class="check">✅ 選擇必修 2</td><td class="winner-dse">DSE（氮循環細節更多）</td></tr>
+    <tr><td>Ecological Succession 生態演替</td><td class="check">✅ 課題三</td><td class="check">✅ 選擇必修 2</td><td class="winner-tie">相當</td></tr>
+    <tr><td>Local Habitat Study (Field Work) 本地生境研習</td><td class="check">✅ 課題三（必修）</td><td class="cross">❌（非強制）</td><td class="winner-dse"><strong>DSE</strong></td></tr>
+    <tr><td>Population Ecology (Math Models) 種群生態學（數學模型）</td><td class="cross">❌</td><td class="check">✅ 選擇必修 2</td><td class="winner-cn"><strong>內地</strong></td></tr>
+    <tr><td>Health &amp; Disease 健康與疾病</td><td class="check">✅ 課題四 14h</td><td class="cross">❌（選修系列涉及）</td><td class="winner-dse"><strong>DSE</strong></td></tr>
+    <tr><td>Infectious Diseases / Transmission 傳染病學/傳播途徑</td><td class="check">✅ 課題四</td><td class="cross">❌（選修系列涉及）</td><td class="winner-dse"><strong>DSE</strong></td></tr>
+    <tr><td>Immune Response 免疫反應（非特異/特異）</td><td class="check">✅ 課題四</td><td class="check">✅ 選擇必修 1</td><td class="winner-tie">相當</td></tr>
+    <tr><td>Human Physiological Regulation (Elective V) 人體生理調節</td><td class="check">✅ 選修 25h</td><td class="check">✅ 選擇必修 1</td><td class="winner-dse"><strong>DSE</strong>（水份/體溫/血氣/生殖的完整調節鏈）</td></tr>
+    <tr><td>Applied Ecology (Elective VI) 應用生態學</td><td class="check">✅ 選修 25h</td><td class="check">✅ 選擇必修 2</td><td class="winner-tie">相當</td></tr>
+    <tr><td>Microbiology (Elective VII) 微生物學</td><td class="check">✅ 選修 25h</td><td class="check">✅ 選擇必修 3（發酵工程）</td><td class="winner-dse"><strong>DSE</strong>（病毒/細菌/真菌/原生生物的全面覆蓋）</td></tr>
+    <tr><td>Biotechnology (Elective VIII) 生物工程</td><td class="check">✅ 選修 25h</td><td class="check">✅ 選擇必修 3</td><td class="winner-cn"><strong>內地</strong>（更完整的工程流程體系）</td></tr>
+    <tr><td>Fermentation Engineering 發酵工程</td><td class="check">✅（嵌入微生物選修）</td><td class="check">✅ 選擇必修 3</td><td class="winner-cn"><strong>內地</strong>（獨立工程模塊）</td></tr>
+    <tr><td>Plant Tissue Culture 植物組織培養</td><td class="check">✅ 選修 VIII</td><td class="check">✅ 選擇必修 3</td><td class="winner-cn">內地（含體細胞雜交）</td></tr>
+    <tr><td>Animal Cell Engineering 動物細胞工程（核移植/融合）</td><td class="check">✅ 選修 VIII</td><td class="check">✅ 選擇必修 3</td><td class="winner-cn"><strong>內地</strong>（含單克隆抗體製備流程）</td></tr>
+    <tr><td>Genetic Engineering (Recombinant DNA/PCR) 基因工程</td><td class="check">✅ 選修 VIII</td><td class="check">✅ 選擇必修 3</td><td class="winner-cn"><strong>內地</strong>（四步流程更系統）</td></tr>
+    <tr><td>Protein Engineering 蛋白質工程</td><td class="cross">❌</td><td class="check">✅ 選擇必修 3</td><td class="winner-cn"><strong>內地</strong>（DSE 完全未覆蓋）</td></tr>
+    <tr><td>Embryo Engineering 胚胎工程</td><td class="cross">❌</td><td class="check">✅ 選擇必修 3</td><td class="winner-cn"><strong>內地</strong></td></tr>
+    <tr><td>Bioethics 生物倫理學</td><td class="check">✅ 選修 VIII</td><td class="check">✅ 選擇必修 3 + 社會責任維度</td><td class="winner-tie">相當</td></tr>
+    <tr><td>Plant Hormones (5 Major) 植物激素（五大激素）</td><td class="cross">❌（僅生長素）</td><td class="check">✅ 選擇必修 1</td><td class="winner-cn"><strong>內地</strong></td></tr>
+    <tr><td>SBA Lab Assessment SBA 實驗評核</td><td class="check">✅ 20%</td><td class="cross">❌</td><td class="winner-dse"><strong>DSE</strong></td></tr>
+    <tr><td>20h Investigative Study 20h 探究研習</td><td class="check">✅</td><td class="cross">❌</td><td class="winner-dse"><strong>DSE</strong></td></tr>
+  </tbody></table></div>
+</section>
+
+</div>
+</body>
+</html>

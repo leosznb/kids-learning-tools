@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 时代 DSE 中国语文应培养的元能力 · 海纳有容</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap');
+
+:root {
+  --text: #333;
+  --title: #222;
+  --accent: #c0392b;
+  --table-head: #2c3e50;
+  --border: #e0ddd5;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  color: var(--text);
+  background: #fdfcfa;
+  line-height: 1.85;
+  font-size: 16px;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 28px 60px;
+}
+
+h1 {
+  font-family: 'Noto Serif SC', serif;
+  font-weight: 700;
+  font-size: 1.75rem;
+  color: var(--title);
+  margin-bottom: 8px;
+  line-height: 1.35;
+}
+
+h2 {
+  font-family: 'Noto Serif SC', serif;
+  font-weight: 700;
+  font-size: 1.3rem;
+  color: var(--title);
+  margin: 48px 0 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--border);
+}
+
+h3 {
+  font-family: 'Noto Serif SC', serif;
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--title);
+  margin: 32px 0 14px;
+}
+
+.meta {
+  font-size: 0.85rem;
+  color: #999;
+  margin-bottom: 32px;
+}
+
+.meta p { margin-bottom: 4px; }
+
+blockquote {
+  border-left: 4px solid var(--accent);
+  background: #fdf9f6;
+  margin: 18px 0;
+  padding: 16px 20px;
+  color: #555;
+  line-height: 1.75;
+}
+
+blockquote strong { color: #333; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 18px 0 24px;
+  font-size: 0.9rem;
+}
+
+thead th {
+  background: var(--table-head);
+  color: #fff;
+  padding: 12px 14px;
+  text-align: left;
+  font-weight: 600;
+}
+
+tbody td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+  line-height: 1.65;
+}
+
+tbody tr:nth-child(odd) { background: rgba(0,0,0,0.02); }
+tbody tr:hover { background: rgba(52,152,219,0.04); }
+
+p { margin-bottom: 14px; }
+
+ul, ol { margin: 8px 0 16px 24px; line-height: 1.8; }
+li { margin-bottom: 6px; }
+
+strong { color: #222; }
+
+hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 36px 0;
+}
+
+/* Meta-ability card */
+.ability {
+  margin-bottom: 32px;
+}
+
+.ability-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.ability h3 {
+  margin-top: 0;
+  margin-bottom: 12px;
+  font-size: 1.08rem;
+}
+
+.ability-section {
+  margin: 10px 0;
+  padding-left: 16px;
+  border-left: 3px solid #eee;
+}
+
+.ability-section.strong {
+  border-left-color: var(--accent);
+  background: #fef9f6;
+  padding: 10px 16px;
+  border-radius: 0 4px 4px 0;
+}
+
+.section-title {
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: #777;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Root metaphor box */
+.root-box {
+  background: #fef9f4;
+  border-left: 4px solid var(--accent);
+  padding: 20px 24px;
+  margin: 20px 0;
+  line-height: 1.8;
+}
+
+/* Print */
+@media print {
+  body { font-size: 13px; color: #000; background: #fff; }
+  .container { max-width: 100%; padding: 20px; }
+  thead th { background: #333 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  blockquote { border-left-color: #999; }
+  .ability-section { border-left-color: #ccc; }
+}
+
+@media (max-width: 700px) {
+  .container { padding: 20px 16px 40px; }
+  h1 { font-size: 1.3rem; }
+  h2 { font-size: 1.05rem; }
+  table { font-size: 0.78rem; }
+  thead th, tbody td { padding: 8px 10px; }
+}
+
+.checklist {
+  background: #f8faf8;
+  border: 1px solid #d5e0d0;
+  border-radius: 6px;
+  padding: 20px 24px;
+  margin: 40px 0 0;
+}
+
+.checklist h3 { margin-top: 0; color: #2d5016; }
+.checklist ul { list-style: none; padding: 0; }
+.checklist li { padding: 5px 0; font-size: 0.9rem; }
+.checklist li::before { content: "✅ "; }
+
+.flex-table { overflow-x: auto; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>修读 DSE 中国语文应培养的元能力：给海纳有容的 AI 时代准备清单</h1>
+
+<div class="meta">
+  <p>问题背景：在 AI 可以生成任何中文文本、可以翻译任何语言的时代，学好母语还有什么意义？EMI 学校的学生在英语的汪洋大海中，守住并深化自己的中文能力，到底在守住什么？</p>
+  <p>基于《DSE_vs_内地_语文课程标准难度对比.md》揭示的「互换领先」格局和《两地语文课标差异根源与价值判断.md》中「文化底盘 vs 实战能力」的价值判断，本文档进一步追问：在 AI 时代，EMI 学生应如何通过中文学习守住并深化自己的「根系」？</p>
+  <p style="margin-top:8px">分析日期：2026-06-08</p>
+</div>
+
+<h2>一、中文对海纳有容的特殊意义：不是「一门科目」，是「不被翻译的自我」</h2>
+
+<p>对海纳有容来说，中文与其他所有科目都不一样。</p>
+
+<p>物理、化学、生物——他们用英语学。历史（世界史）——他们用英语学。数学——他们用英语学。在荃官 EMI 的每一天，他们的大脑大部分时间在英语中运行。</p>
+
+<p>中文是唯一的例外。它是他们用母语学习的唯一科目。</p>
+
+<div class="root-box">
+<p><strong>这意味着一个极其重要的事实：中文课是他们在校期间唯一一次「不需要切换语言就能进行深度学术思考和表达」的时刻。</strong> 在其他课上，他们总是在「用第二语言理解世界」——即使英语已经很流利，仍然存在一道几乎不可见的翻译层。只有中文课上，思想可以直接从脑中流到口头或笔端，不经过任何转换。</p>
+
+<p>在 AI 时代，这个事实变得更加尖锐。AI 可以翻译任何东西——但 AI 的翻译永远是一种「等效替代」，不是「原文」。当你用中文跟妈妈抱怨「今天好累」时，那个「累」字里包含的撒娇、期待安慰的语气，是英文 "I'm tired" 无法完全传达的——这些是 AI 翻译不出来的。</p>
+</div>
+
+<blockquote><strong>守住中文，就是守住「不被翻译的自我」。</strong></blockquote>
+
+<h2>二、七项需要刻意培养的元能力</h2>
+
+<!-- 1. 母语深读力 -->
+<div class="ability">
+  <div class="ability-label">元能力 1</div>
+  <h3>母语深读力（Deep Reading in Mother Tongue）——在母语中进入文本的最深层</h3>
+
+  <div class="ability-section">
+    <div class="section-title">是什么</div>
+    <p>不是「读懂字面意思」，而是在母语中做到逐字逐句地品味、质疑、对话。读鲁迅的一句话，你能感受到他的讽刺背后有没有悲哀；读苏轼的一句词，你能听到他的豁达背后有没有无奈。这种「听出弦外之音」的能力，只有在母语中才能达到最深处。</p>
+  </div>
+
+  <div class="ability-section">
+    <div class="section-title">DSE 中文在哪里练</div>
+    <ul>
+      <li><strong>卷一阅读</strong>：指定文言篇章 + 课外篇章（现代文 + 文言文）。考题要求你分析作者的写作目的、观点、手法，感受作品的艺术形象和语文之美。</li>
+      <li><strong>初中课程</strong>强调的「细读文本」：深入精读经典作品，含英咀华，提升阅读深度。</li>
+    </ul>
+  </div>
+
+  <div class="ability-section strong">
+    <div class="section-title">为什么 AI 替代不了</div>
+    <p>AI 可以总结一篇文章的「主要内容」、可以列出它的「写作手法」、甚至可以用文学批评术语分析它。但 AI 可以识别一篇文章的情感特征，却不具备真实的主观体验——它不会「被打动」，只会「识别出打动的模式」。母语深读的本质是你用一生的中文经验——你听过的歌、看过的电影、与家人的对话——去回应一段文字。这种回应是独一无二的，因为你的中文经验是独一无二的。</p>
+  </div>
+
+  <div class="ability-section">
+    <div class="section-title">怎么刻意练</div>
+    <p>读任何一篇文章后，写下「这句话最打动我，因为……」——不是因为「它运用了什么修辞手法」，而是因为它让你想起了什么、感受到了什么。这种个人化的回应，是 AI 永远写不出来的。</p>
+  </div>
+</div>
+
+<!-- 2. 母语精准写作力 -->
+<div class="ability">
+  <div class="ability-label">元能力 2</div>
+  <h3>母语精准写作力（Precision Writing in Mother Tongue）——让每一个字都是你选的</h3>
+
+  <div class="ability-section">
+    <div class="section-title">是什么</div>
+    <p>在母语中达到「每个词都不可替代」的写作精度。不是「写对了」，是「写准了」——「高兴」和「欣喜」和「雀跃」之间的细微差别，你能感受到并做出选择。</p>
+  </div>
+
+  <div class="ability-section">
+    <div class="section-title">DSE 中文在哪里练</div>
+    <ul>
+      <li><strong>卷二写作 45%，2h15min，两篇完整文章</strong>：这是 DSE 所有科目中权重最高、时间最长的写作考核。实用写作（甲部）要求精准控制格式、语气、受众意识；命题写作（乙部）要求立意、选材、结构、语言的全方位能力。</li>
+      <li><strong>五维评分</strong>：内容 + 表达 + 结构 + 标点字体 + 错别字——每一个字的选择都在被审视。</li>
+    </ul>
+  </div>
+
+  <div class="ability-section strong">
+    <div class="section-title">为什么 AI 替代不了</div>
+    <p>AI 可以生成一篇「语法正确、结构合理」的中文文章。但「AI 选的那个词」和「你选的那个词」之间的差距，就是「任何人都能写」和「只有你这样写」之间的差距。当你写「我祖母的手」时，你是写「粗糙的手」「满是皱纹的手」还是「像老树皮一样的手」？AI 会给你最常用的形容词。只有你——那个被这双手牵过、被这双手做过饭的人——知道哪个词才是真的。</p>
+  </div>
+
+  <div class="ability-section">
+    <div class="section-title">怎么刻意练</div>
+    <p>每篇作文写完后，找三个你不太满意的词，各找三个候选替换词，逐一感受它们之间的细微差别。最终选择不是「哪个更高级」，而是「哪个更准确」。</p>
+  </div>
+</div>
+
+<!-- 3. 实用母语沟通力 -->
+<div class="ability">
+  <div class="ability-label">元能力 3</div>
+  <h3>实用母语沟通力（Practical Communication in Mother Tongue）——知道对谁说什么话、用什么语气</h3>
+
+  <div class="ability-section">
+    <div class="section-title">是什么</div>
+    <p>能在真实的社会情境中，用中文完成一次有效的沟通——给校长写一封建议书、在会议上做一次简报、写一封得体的邀请函。这不是「文采」，是「在正确的时间、对正确的人、用正确的方式说话」。</p>
+  </div>
+
+  <div class="ability-section">
+    <div class="section-title">DSE 中文在哪里练</div>
+    <ul>
+      <li><strong>卷二甲部实用写作</strong>：书信、报告、建议书、演讲辞、新闻稿、启事——因应目的、对象、场合，选择合适的格式和用语。</li>
+      <li><strong>SBA</strong>（含阅读汇报的书面报告 + 口语沟通的口头简报）：用中文就阅读书目做书面整理和口头表达，并回应教师提问。</li>
+    </ul>
+  </div>
+
+  <div class="ability-section strong">
+    <div class="section-title">为什么 AI 替代不了</div>
+    <p>AI 可以生成一封格式完美的建议书。但「收件人是王校长还是李主任」——这个信息决定了你应该用什么语气、举什么例子、强调什么论点——AI 不知道这些。实用沟通的深层能力不是「会写格式」，是「会读人」——知道对方在乎什么、担心什么、想听到什么。这种对人的判断力，来自在真实世界中反复沟通的积累。</p>
+  </div>
+
+  <div class="ability-section">
+    <div class="section-title">怎么刻意练</div>
+    <p>每次写实用文之前，先花两分钟在纸上写下：收件人是谁？他最关心什么？我希望他看完后做什么？这三个问题的答案决定了整篇文章的策略——格式只是最后一步。</p>
+  </div>
+</div>
+
+<!-- 4. 口头表达与临场思辨力 -->
+<div class="ability">
+  <div class="ability-label">元能力 4</div>
+  <h3>口头表达与临场思辨力（Oral Expression &amp; Real-Time Reasoning）——嘴巴和大脑同时工作</h3>
+
+  <div class="ability-section">
+    <div class="section-title">是什么</div>
+    <p>不是「背好一段话然后念出来」，而是用母语在压力下清晰地思考并表达——面对一个意想不到的提问、在讨论中即时回应、在汇报时根据听众反应调整节奏。母语口头表达的最高境界是「说出来的时候才知道自己是怎么想的」。</p>
+  </div>
+
+  <div class="ability-section">
+    <div class="section-title">DSE 中文在哪里练</div>
+    <ul>
+      <li><strong>SBA 口头汇报</strong>：就一本读过的书，做一次完整的口头报告并回应教师提问——全过程用中文。</li>
+      <li><strong>初中听说训练的延续</strong>：小组讨论、个人汇报、朗诵、角色扮演、辩论——多年的口语系统训练。</li>
+    </ul>
+  </div>
+
+  <div class="ability-section strong">
+    <div class="section-title">为什么 AI 替代不了</div>
+    <p>AI 可以帮你准备演讲稿。但当你站在台上，一个你事先不知道会被问到的问题抛过来时——你只有你自己。母语的临场思辨是唯一无法外包给机器的语言能力——因为思考的过程和表达的过程是同时发生的，没有「翻译」的缝隙。</p>
+  </div>
+
+  <div class="ability-section">
+    <div class="section-title">怎么刻意练</div>
+    <p>每周找一个话题（新闻、一本书、一个争议性问题），用手机录一段 3 分钟的中文即兴发言。然后回听——你在哪里卡住了？是因为想不到词，还是因为想不到论点？前者是语言问题，后者是思维问题——区分清楚。</p>
+  </div>
+</div>
+
+<!-- 5. 文言独立阅读力 -->
+<div class="ability">
+  <div class="ability-label">元能力 5</div>
+  <h3>文言独立阅读力（Independent Classical Chinese Literacy）——不靠翻译直接触摸两千年的文字</h3>
+
+  <div class="ability-section">
+    <div class="section-title">是什么</div>
+    <p>不依赖白话翻译，能独立拿起一篇陌生文言文——无论是一篇唐宋散文、一封古人的书信、还是一段笔记小说——借助基本的文言词汇和语法知识，读懂它。这不是「背过这篇文章」，是「有阅读古代汉语的工具箱」。</p>
+  </div>
+
+  <div class="ability-section">
+    <div class="section-title">DSE 中文在哪里练</div>
+    <ul>
+      <li><strong>小学到高中的十二年渐进链</strong>：诵读（初小）→ 感受 + 适量背诵（高小）→ 系统学文言语法 + 鉴赏（初中）→ 独立阅读 + 深度分析（高中）。</li>
+      <li><strong>卷一甲部</strong>指定文言篇章 + <strong>乙部</strong>课外文言篇章：考核的不是「这篇文章你背过没有」，而是「给你一篇你没读过的文言文，你能不能读懂」。</li>
+    </ul>
+  </div>
+
+  <div class="ability-section strong">
+    <div class="section-title">为什么 AI 替代不了</div>
+    <p>AI 可以在毫秒内把任何文言文翻译成白话。但翻译是一个中间人。当你读「先天下之忧而忧，后天下之乐而乐」时，你不需要翻译——这十个字本身就是你的一部分。AI 可以解释它们的含义，但它无法代替你直接感受原文的节奏、力量和美感。一个能用原文读《史记》的人和一个只能读白话翻译的人，他们读到的不是「同一本书的中文版和英文版」——他们读到的是完全不同的东西。</p>
+  </div>
+
+  <div class="ability-section">
+    <div class="section-title">怎么刻意练</div>
+    <p>每周拿一段你没读过的短小文言文（可以从《世说新语》或《聊斋志异》中选），不看白话翻译，用自己的文言知识独立读懂。你不需要「翻译」——你需要的是「直接理解」。</p>
+  </div>
+</div>
+
+<!-- 6. 审美判断力 -->
+<div class="ability">
+  <div class="ability-label">元能力 6</div>
+  <h3>审美判断力（Aesthetic Judgment）——在 AI 生成的文本洪流中分辨好坏</h3>
+
+  <div class="ability-section">
+    <div class="section-title">是什么</div>
+    <p>不是「知道什么是好文章」，而是能感受到一篇文章好不好、具体好在哪里、为什么好。这是一种经过长期阅读和写作训练后形成的直觉性判断力——不需要对照评分标准，你的审美系统会自动告诉你「这段文字有东西」或「这段文字是空的」。不同于深读力的「被打动」，审美判断力更进一步——它能告诉你「为什么好」以及「哪里不够好」。</p>
+  </div>
+
+  <div class="ability-section">
+    <div class="section-title">DSE 中文在哪里练</div>
+    <ul>
+      <li><strong>文学范畴</strong>：感受→鉴赏→创作三级递进。感受内容美和形式美，在感受基础上进行评价和分析，再将所思所感付诸创作。</li>
+      <li><strong>初中文学学习</strong>：「整体感性认识为先，理性分析为后」——先被打动，再分析为什么被打动。</li>
+      <li><strong>卷一阅读</strong>：鉴赏作品的思想内容和写作手法，评价其优劣。</li>
+    </ul>
+  </div>
+
+  <div class="ability-section strong">
+    <div class="section-title">为什么 AI 替代不了</div>
+    <p>AI 可以生成风格各异的文本，但这些文本缺乏真实生命经验的支撑——它的「完美」是算法拟合的结果，而非从生活中生长出来的表达。分辨「精致但空洞」和「粗糙但有力量」——这个判断需要一个人用全部的阅读经验、生命体验和审美训练来做出。在 AI 时代，每个人都被 AI 生成的「看起来不错」的文本包围。审美判断力是你在洪流中不被淹没的救生圈。</p>
+  </div>
+
+  <div class="ability-section">
+    <div class="section-title">怎么刻意练</div>
+    <p>每个月找一篇文章——不是「公认的名篇」，而是你自己在阅读中偶然碰到的、真正打动你的。然后写一段话：它为什么打动你？不要用「语言优美」「感情真挚」这种套话——找到最具体、最精确的那个原因。</p>
+  </div>
+</div>
+
+<!-- 7. 双语身份自觉 -->
+<div class="ability">
+  <div class="ability-label">元能力 7</div>
+  <h3>双语身份自觉（Bilingual Identity Awareness）——不被任何一种语言完全定义</h3>
+
+  <div class="ability-section">
+    <div class="section-title">是什么</div>
+    <p>与英语篇的「双语思维切换」不同——那是认知层面的操作系统转换，这是情感和身份层面的自我确认——你在每种语言中是谁。理解并珍惜一个事实——你用中文和英文时，是两个不同的「你」。中文的你可以引用唐诗表达思乡、用成语在精确和效率之间找到平衡、在含蓄和迂回中传达微妙的情感。英文的你可以更直接地争论、更结构化地论证、接触一套完全不同的文化和知识体系。这两个「你」不是对立的——它们是互补的。你在中文中学会的含蓄让你在英文中更有分寸，你在英文中学会的清晰让你在中文中更有力量。</p>
+  </div>
+
+  <div class="ability-section">
+    <div class="section-title">DSE 中文在哪里练</div>
+    <ul>
+      <li>这不是 DSE 中文考试中的一个部分，而是整个 EMI 教育的内在产物。每一天，海纳有容都在两种语言之间切换。中文课是他们唯一不需要切换的时刻——在这里，他们可以完整地用母语表达他们的全部深度。</li>
+      <li><strong>中华文化范畴</strong>：「认识→反思→认同」——在这个过程中，学生不是在「学文化知识」，而是在确认自己与这种文化的关系。</li>
+    </ul>
+  </div>
+
+  <div class="ability-section strong">
+    <div class="section-title">为什么 AI 替代不了</div>
+    <p>AI 可以在中英文之间无缝切换。但 AI 不会「想念」一种语言。当你在英语环境中待了一整天后，回家用中文叫一声「妈」——那个瞬间的舒适感，AI 永远不会有。双语身份自觉不是「会两种语言」——是知道自己在每种语言中是谁。这个认识是 AI 无法提供也无法替代的——因为 AI 没有「身份」，只有「功能」。</p>
+  </div>
+
+  <div class="ability-section">
+    <div class="section-title">怎么刻意练</div>
+    <p>偶尔，用中文写一篇日记。不是翻译你今天用英语想过的那些东西——是用中文从零开始想。你会发现你和自己说中文的方式，和你和自己说英文的方式，根本不同。珍惜这种不同——它是你拥有两个灵魂的证据。</p>
+  </div>
+</div>
+
+<h2>三、七项元能力与 AI 协作</h2>
+
+<div class="flex-table">
+<table>
+<thead><tr><th>元能力</th><th>人做得更好的部分</th><th>AI 做得更好的部分</th><th>最佳协作模式</th></tr></thead>
+<tbody>
+<tr><td><strong>母语深读力</strong></td><td>被打动、产生个人化的回应和联想</td><td>总结内容、列出写作手法</td><td>人深度阅读和感受 → AI 辅助查找背景资料 → 人形成个人判断</td></tr>
+<tr><td><strong>母语精准写作力</strong></td><td>选择「唯一对的词」、注入真实的个人经验</td><td>生成结构合理、语法正确的文章</td><td>人写初稿 → AI 辅助检查语病 → 人做出最终的字词选择</td></tr>
+<tr><td><strong>实用母语沟通力</strong></td><td>判断对象、场合、策略</td><td>生成符合格式的模板</td><td>人定沟通策略 → AI 辅助格式 → 人做出最终调整</td></tr>
+<tr><td><strong>口头思辨力</strong></td><td>临场思考和表达、读取听众反应</td><td>准备话题素材</td><td>人即兴表达 → AI 辅助事后分析 → 人改进策略</td></tr>
+<tr><td><strong>文言独立阅读力</strong></td><td>直接感受原文的节奏和美感</td><td>翻译成白话</td><td>人独立阅读原文 → AI 辅助理解疑难词句 → 人欣赏原文之美</td></tr>
+<tr><td><strong>审美判断力</strong></td><td>形成和捍卫自己的品味判断</td><td>生成符合任何风格的文本</td><td>人形成审美判断 → AI 辅助提供参照 → 人独立判断</td></tr>
+<tr><td><strong>双语身份自觉</strong></td><td>在两种语言中体验和确认不同的自我</td><td>双语翻译</td><td>人用两种语言独立思考和表达 → 不依赖 AI 翻译</td></tr>
+</tbody>
+</table>
+</div>
+
+<h2>四、语文与其他六科元能力的终极互补</h2>
+
+<div class="flex-table">
+<table>
+<thead><tr><th>科目</th><th>该科训练什么</th><th>语文为它补充什么</th></tr></thead>
+<tbody>
+<tr><td><strong>物理</strong></td><td>把复杂简化成模型</td><td>在母语中精确描述那个模型</td></tr>
+<tr><td><strong>化学</strong></td><td>从积木搭建目标</td><td>在母语中记录和分享那个搭建过程</td></tr>
+<tr><td><strong>生物</strong></td><td>拥抱不可简化的复杂</td><td>在母语中感受生命的诗意</td></tr>
+<tr><td><strong>中史</strong></td><td>在残缺证据中做出判断</td><td>在母语中与两千年前的古人对话</td></tr>
+<tr><td><strong>经济</strong></td><td>在约束下做最优决策</td><td>在母语中说服别人你的决策是对的</td></tr>
+<tr><td><strong>英语</strong></td><td>用另一种语言思考、感受、表达</td><td>中文是「在家」的语言——英语让你走向世界，中文让你找到自己</td></tr>
+</tbody>
+</table>
+</div>
+
+<h2>五、对海纳有容的具体建议</h2>
+
+<h3>EMI 学生的中文：守住的不是「科目」，是「根系」</h3>
+
+<p>他们在英语的汪洋大海中长大。物理是英语的、化学是英语的、他们每天醒着的大部分时间都在用英语思考。中文课是他们唯一一块母语土壤。守住它，不是守住「一个科目的分数」，是守住一个完整的自己。</p>
+
+<div class="num-list" style="margin: 20px 0;">
+
+<div style="margin-bottom:18px; padding-left:28px; position:relative">
+  <span style="position:absolute; left:0; top:0; font-weight:700; color:var(--accent);">1.</span>
+  <strong>中文写作不是你最怕的卷——是你最重要的表达通道</strong>
+  <p style="margin:4px 0 0">卷二 45% 的权重不是刁难，是提醒：在一个全英语的学术环境中，用母语做一次有深度的自我表达，是稀有的机会。不要把写作当「应试」，当「练习说自己真正想说的话」。每一篇作文是你用母语留下的足迹。</p>
+</div>
+
+<div style="margin-bottom:18px; padding-left:28px; position:relative">
+  <span style="position:absolute; left:0; top:0; font-weight:700; color:var(--accent);">2.</span>
+  <strong>读一点与考试无关的中文书</strong>
+  <p style="margin:4px 0 0">在物理化学的英语教材堆里，放一本中文书——鲁迅的杂文、余光中的散文、白先勇的小说、甚至金庸的武侠。不是为了「提高阅读理解」，是为了让你的中文不只是「考试用的中文」，而是「活着的中文」。</p>
+</div>
+
+<div style="margin-bottom:18px; padding-left:28px; position:relative">
+  <span style="position:absolute; left:0; top:0; font-weight:700; color:var(--accent);">3.</span>
+  <strong>SBA 口头汇报：用你最舒服的语言，做一次认真的表达</strong>
+  <p style="margin:4px 0 0">在其他课上做 presentation，你用英语——在构思和表达之间总有一层转换。SBA 的中文口头汇报是你唯一一次用母语做学术表达的机会。珍惜这种「不经过翻译」的流畅感。</p>
+</div>
+
+<div style="margin-bottom:18px; padding-left:28px; position:relative">
+  <span style="position:absolute; left:0; top:0; font-weight:700; color:var(--accent);">4.</span>
+  <strong>文言文：把它当成密码，不是负担</strong>
+  <p style="margin:4px 0 0">你现在能读懂的每一段文言文，都是你与两千年的中文写作之间的直接通道。AI 可以用白话告诉你《史记》写了什么——但它不能替你感受司马迁写完《伯夷列传》后那一句「悲夫！闾巷之人，欲砥行立名者，非附青云之士，恶能施于后世哉？」——那种普通人想留名后世却无力自达的苍凉。</p>
+</div>
+
+</div>
+
+<h3>家长可以配合做什么</h3>
+
+<ul>
+  <li>在家保持中文的日常深度对话——不是「今天学了什么」，而是「你怎么看这件事」</li>
+  <li>推荐他们读你年轻时喜欢的中文书——父子共用一套文化密码</li>
+  <li>偶尔一起看一部中文电影或纪录片，然后讨论——中文不只是「科目」，是「家庭的语言」</li>
+</ul>
+
+<h2>六、总结</h2>
+
+<blockquote><strong>一句话核心结论：中文不是你的技能，是你的根系——它让你不管飘到世界哪个角落，都知道自己从哪里来。</strong></blockquote>
+
+<blockquote><strong>详细说明：</strong>对 EMI 学校的海纳有容来说，学好中文不是为了「掌握一门语言工具」——英语已经替他们做到了。学好中文是为了：在 AI 可以替你翻译一切的时代，你仍然拥有一个不需要翻译就能思考、感受、表达的自我。中文不是你的「技能」，是你的「根系」。根系不需要向任何人证明它有用——它只是在那里，让你不管飘到世界哪个角落，都知道自己是从哪片土地长出来的。</blockquote>
+
+<div class="checklist">
+<h3>自审攻防清单</h3>
+<ul>
+<li>7 项元能力全部保留——母语深读、精准写作、实用沟通、口头思辨、文言独立阅读、审美判断、双语身份自觉</li>
+<li>每项元能力四段式结构完整：是什么 / DSE 在哪里练 / 为什么 AI 替代不了 / 怎么刻意练</li>
+<li>2 个表格完整：七项元能力与 AI 协作 + 语文与其他六科互补</li>
+<li>去重完成：移除第二节/第三节标题重复、第 3/4 项元能力 SBA 描述重复</li>
+<li>4 条具体建议 + 3 条家长建议完整保留</li>
+<li>文言阅读例子从《世说新语》《聊斋志异》入手——初中可及文本</li>
+<li>Swiss Minimalist 风格：衬线标题 + 无衬线正文 + 白底大量留白</li>
+<li>「为什么 AI 替代不了」段以红色左边框高亮区隔</li>
+<li>响应式适配 + 打印友好</li>
+<li>blockquote 与强调段左边框颜色一致（accent #c0392b）</li>
+</ul>
+</div>
+
+</div>
+</body>
+</html>

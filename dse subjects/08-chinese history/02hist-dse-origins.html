@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>兩地中史課標差異的根源、目的與價值判斷 — 海納有容</title>
+<style>
+  :root {
+    --bg:#0d0d14; --surface:#161622; --surface2:#1c1c2a;
+    --border:#2a2a3a; --border-accent:#5c6bc033;
+    --text:#e8e8f0; --text2:#b0b0c0; --text3:#707080;
+    --accent:#5c6bc0; --accent2:#7986cb; --accent-amber:#ffa726; --accent-pink:#ef5350;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{font-size:16px;scroll-behavior:smooth}
+  body{font-family:"Noto Serif TC","Noto Serif SC","Songti SC","PingFang HK","Microsoft YaHei",serif;background:var(--bg);color:var(--text);line-height:1.85;-webkit-font-smoothing:antialiased;font-weight:400}
+
+  .hero{padding:3.5rem 1.5rem 2.5rem;text-align:center;border-bottom:1px solid var(--border)}
+  .hero-badge{display:inline-block;font-size:.75rem;font-weight:600;color:var(--accent);letter-spacing:.1em;border:1px solid var(--border-accent);padding:.2rem .9rem;border-radius:50px;margin-bottom:1.2rem}
+  .hero h1{font-size:clamp(1.5rem,3.5vw,2.1rem);font-weight:700;color:#fff;max-width:680px;margin:0 auto .6rem;letter-spacing:.03em}
+  .hero .subtitle{font-size:.84rem;color:var(--text3);max-width:640px;margin:0 auto;line-height:1.7}
+  .hero .meta-line{font-size:.72rem;color:var(--text3);margin-top:.5rem}
+
+  .container{max-width:860px;margin:0 auto;padding:2.5rem 1.5rem 5rem}
+  .section{margin-bottom:3.5rem}
+  .section-title{font-size:1.2rem;font-weight:700;color:#fff;margin-bottom:1.2rem;padding-bottom:.4rem;border-bottom:1px solid var(--border);letter-spacing:.03em}
+  .section-title .num{color:var(--accent);font-size:.85rem;margin-right:.3rem}
+
+  h3{font-size:1rem;font-weight:700;color:#fff;margin:1.3rem 0 .5rem;letter-spacing:.02em}
+  h3.dse{color:var(--accent)} h3.cn{color:var(--accent-pink)}
+  h4{font-size:.9rem;font-weight:700;color:var(--accent2);margin:1rem 0 .4rem}
+
+  .table-wrap{overflow-x:auto;margin:1rem 0;-webkit-overflow-scrolling:touch}
+  table{width:100%;border-collapse:collapse;font-size:.83rem;min-width:550px}
+  thead th{background:var(--surface2);border-bottom:2px solid var(--border);color:var(--accent2);font-weight:600;text-align:left;padding:.45rem .65rem;font-size:.74rem;letter-spacing:.04em}
+  tbody td{padding:.4rem .65rem;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top;line-height:1.6;font-size:.82rem}
+  tbody tr:last-child td{border-bottom:none}
+  tbody td:first-child{font-weight:600;color:var(--text);white-space:nowrap}
+
+  blockquote{border-left:2px solid var(--accent);padding:.8rem 1.1rem;margin:1rem 0;font-size:.86rem;color:var(--text2);font-style:italic;line-height:1.7;background:rgba(92,107,192,0.03)}
+
+  .pro-con-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem}
+  @media(max-width:640px){.pro-con-grid{grid-template-columns:1fr}}
+  .pro-card,.con-card{padding:1.2rem;border:1px solid}
+  .pro-card{background:rgba(92,107,192,0.04);border-color:rgba(92,107,192,0.2)}
+  .con-card{background:rgba(239,83,80,0.03);border-color:rgba(239,83,80,0.15)}
+  .card-label{font-size:.73rem;font-weight:700;letter-spacing:.05em;margin-bottom:.7rem}
+  .pro-card .card-label{color:var(--accent2)} .con-card .card-label{color:var(--accent-pink)}
+  .pc-item{padding:.45rem 0;border-bottom:1px solid var(--border);font-size:.84rem;color:var(--text2);line-height:1.6}
+  .pc-item:last-child{border-bottom:none}
+  .pc-item strong{color:#fff;font-size:.86rem}
+
+  .path-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:.6rem;margin:1rem 0}
+  .path-card{background:var(--surface);border:1px solid var(--border);padding:.8rem 1rem;font-size:.84rem;color:var(--text2);line-height:1.55}
+  .path-card .pa{display:block;color:var(--accent2);font-weight:700;font-size:.72rem;letter-spacing:.03em;margin-bottom:.25rem}
+  .path-card strong{color:#fff}
+
+  .advice-list{list-style:none;padding:0}
+  .advice-list li{background:var(--surface);border:1px solid var(--border);padding:.8rem 1rem .8rem 2.2rem;margin-bottom:.45rem;position:relative;font-size:.85rem;color:var(--text2);line-height:1.65}
+  .advice-list li::before{content:'▸';position:absolute;left:.8rem;top:.8rem;color:var(--accent);font-weight:700}
+
+  .summary-card{background:var(--surface);border:1px solid var(--border-accent);padding:1.5rem;text-align:center}
+  .summary-card .core{font-size:1.05rem;font-weight:700;color:#fff;margin-bottom:.8rem;line-height:1.7}
+  .summary-card .detail{font-size:.84rem;color:var(--text2);line-height:1.75;text-align:left;max-width:660px;margin:0 auto}
+
+  .en-note{font-size:.75rem;color:var(--text3);font-weight:400;margin-left:.3rem}
+
+  @media(max-width:640px){.hero{padding:2rem 1rem 1.5rem}.container{padding:1.5rem .9rem 3rem}.section-title{font-size:1.1rem}table{font-size:.75rem}}
+  @media print{body{background:#fff;color:#111}.hero{border-bottom:1px solid #ccc}blockquote{background:#f9f9f9}.pro-card,.con-card,.path-card,.advice-list li,.summary-card{background:#fafafa;border:1px solid #ddd}table thead th{background:#f0f0f0;color:#111}.container{padding:1rem}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-badge">DSE 中國歷史 · 教育哲學篇</div>
+  <h1>兩地中史課標差異的根源、目的與價值判斷</h1>
+  <p class="subtitle">接續《DSE vs 內地 歷史課程標準難度對比》的分析，追問：為什麼會有這些差異？各自想達成什麼？孰好孰劣？</p>
+  <p class="meta-line">分析日期：2026-06-07</p>
+</header>
+
+<div class="container">
+
+<!-- 一 -->
+<section class="section">
+  <h2 class="section-title"><span class="num">一、</span>差異根源：一個科目還是兩個科目——這不是教育選擇，是歷史遺產</h2>
+  <p style="font-size:.85rem;color:var(--text2);margin-bottom:1rem">物理、化學、生物的差異都可以追溯到英式 vs 蘇式教育傳統。中史的差異要追到更遠——追到<strong style="color:#fff">殖民統治如何塑造了一個地方的知識分類體系</strong>。</p>
+
+  <h3 class="dse">1.1 香港：「中國歷史」為什麼是一門獨立的科目</h3>
+  <p style="font-size:.85rem;color:var(--text2);margin-bottom:.6rem">在香港的中學課程表上，有兩門歷史科目：</p>
+  <ul style="font-size:.85rem;color:var(--text2);padding-left:1.2rem;margin-bottom:.6rem;line-height:1.8">
+    <li><strong style="color:var(--accent)">中國歷史科</strong>——只研究中國史</li>
+    <li><strong style="color:var(--accent2)">歷史科</strong>——事實上是<strong>世界史</strong>（必修涵蓋從古代至現代的主要文明發展，選修以 20 世紀國際關係、戰爭、冷戰等專題為主）</li>
+  </ul>
+  <p style="font-size:.85rem;color:var(--text2);margin-bottom:.6rem">這個二分法不是自然形成的。它是<strong style="color:#fff">英國殖民教育體系的產品</strong>。在殖民時期的香港，英文學校的「History」教的是歐洲史、大英帝國史——這是「主流」的歷史。中文學校則增設「中國歷史」作為對學生自身文化傳統的某種承認。兩門歷史長期在不同的語言媒介中教授（History 用英文，中國歷史用中文），面向不同語言背景的學生群體，承載著不同的身份認同功能。</p>
+  <p style="font-size:.85rem;color:var(--text2)">回歸後，這個二分結構被保留下來。2007 年課程改革將中國歷史重新定位為一門「培養歷史思維」的探究式學科——強調「點、線、面」（事件→聯繫→現象）的分析方法，淡化死記硬背。但它作為一門<strong>獨立的、只做中國史</strong>的科目這一根本定位，始終未變。</p>
+  <blockquote>DSE 中國歷史的課程定位暗含一個前提：<strong>一個香港中學生有權選擇「只研究中國歷史」而不碰世界史。</strong> 這不是遺漏，是有意為之——照顧那些對中國文化傳統有認同需求、但對世界史沒有同等興趣的學生。</blockquote>
+
+  <h3 class="cn">1.2 內地：「歷史」為什麼必須是中外合一的</h3>
+  <p style="font-size:.85rem;color:var(--text2);margin-bottom:.6rem">內地只有一門「歷史」。2017 版課程標準將必修模塊命名為《中外歷史綱要》——這個名稱本身就說明了一切：<strong>中國史和世界史在同一個課程框架內不可分割。</strong></p>
+  <ul style="font-size:.85rem;color:var(--text2);padding-left:1.2rem;line-height:1.8">
+    <li><strong style="color:var(--accent-pink)">第一層：馬克思主義史學的世界觀。</strong>唯物史觀認為，人類歷史有統一的演進規律——從原始社會→奴隸社會→封建社會→資本主義社會→社會主義社會。在這個框架下，中國史和世界史是同一個宏大敘事的不同章節。把中國史從世界史中分離出來，在哲學上是說不通的——就像不能只讀《紅樓夢》的前四十回。</li>
+    <li><strong style="color:var(--accent-pink)">第二層：蘇聯教育體系的影響。</strong>蘇聯的歷史教育一直採用「世界史+本國史」的並置結構。中國在 1950 年代引入了這個模式。學生需要知道：法國大革命、工業革命、十月革命——不僅因為它們是「世界歷史的大事」，而是因為它們<strong>解釋了中國革命的來龍去脈</strong>。在唯物史觀下，中國近代革命是世界無產階級革命的一部分。</li>
+    <li><strong style="color:var(--accent-pink)">第三層：2017 核心素養改革。</strong>五大核心素養中，「家國情懷」明確要求「從歷史的角度認識中國的國情，形成對祖國的認同感」。這個素養的實現需要兩個錨點：一個是中國史提供的縱向深度（「我們是誰，從哪裡來」），一個是世界史提供的橫向參照（「我們在世界中的位置是什麼」）。單純的中國史或單純的世界史都不足以支撐這個素養。</li>
+  </ul>
+  <blockquote>內地歷史的課程定位暗含另一個前提：<strong>所有中國高中生都必須同時了解中國史和世界史——因為一個人的國家認同，既來自對自己歷史的了解，也來自對世界格局的認識。</strong></blockquote>
+
+  <h4>1.3 兩個前提之間的張力</h4>
+  <div class="table-wrap"><table><thead><tr><th>維度</th><th>DSE 中國歷史的前提</th><th>內地歷史的前提</th></tr></thead><tbody>
+    <tr><td>學科邊界</td><td>中國史是一塊完整、自洽的知識領域，可以獨立研究</td><td>中國史必須在世界史的參照框架下才能被完整理解</td></tr>
+    <tr><td>學生的選擇權</td><td>學生可以選擇只研究中國史（230h 深挖）</td><td>學生無選擇權——必須同時學中外史</td></tr>
+    <tr><td>世界史的去處</td><td>交給另一門科目「歷史科」</td><td>在同一門科目內與中史並置</td></tr>
+    <tr><td>對「為什麼學歷史」的回答</td><td>了解自己文化的來龍去脈 + 訓練歷史思維</td><td>理解人類社會發展規律 + 建立唯物史觀 + 形成家國情懷</td></tr>
+    <tr><td>理論框架</td><td>無強制理論框架，鼓勵多元視角</td><td>唯物史觀為統一理論入口</td></tr>
+  </tbody></table></div>
+</section>
+
+<!-- 二 -->
+<section class="section">
+  <h2 class="section-title"><span class="num">二、</span>各自目的：兩門課想要培養什麼樣的人</h2>
+  <div class="table-wrap"><table><thead><tr><th>維度</th><th>DSE 中國歷史</th><th>內地歷史</th></tr></thead><tbody>
+    <tr><td>核心教育目標</td><td>培養能<strong>獨立進行歷史探究</strong>的人——釐清史實、分析因果、評價得失、辨別偏見</td><td>培養具有<strong>歷史學科核心素養</strong>的公民——唯物史觀、時空觀念、史料實證、歷史解釋、家國情懷</td></tr>
+    <tr><td>知識的定位</td><td>歷史知識是<strong>思維訓練的素材</strong>——通過研究中國歷史的具體案例來學會歷史思維的方法</td><td>歷史知識是<strong>世界觀的基礎</strong>——理解人類社會從低級到高級發展的規律</td></tr>
+    <tr><td>對「好學生」的定義</td><td>能基於多元史料提出有論證的歷史解釋，能比較和評價不同觀點，能寫出有獨立分析的歷史論文</td><td>能運用唯物史觀分析歷史現象，能在時空框架下對史事做出合理解釋，能從歷史角度認識國情</td></tr>
+    <tr><td>價值觀傳遞方式</td><td>通過歷史案例自然滲透（如從抗日戰爭中體會民族精神，從改革開放中理解發展）</td><td>通過「家國情懷」素養顯性培育，在課程標準中有明確表述和要求</td></tr>
+    <tr><td>學術嚴謹性</td><td>強調「求真」——史料辨析、多元視角、避免單一敘事</td><td>強調「求是」——唯物史觀引導下的科學分析、揭示規律</td></tr>
+    <tr><td>與社會的關係</td><td>歷史是公民素養的一部分——一個受過教育的人應該了解自己文化的脈絡</td><td>歷史是立德樹人的重要途徑——歷史教育直接服務於社會主義核心價值觀的培養</td></tr>
+  </tbody></table></div>
+</section>
+
+<!-- 三 -->
+<section class="section">
+  <h2 class="section-title"><span class="num">三、</span>孰好孰劣？</h2>
+  <blockquote>理科三科的對比，我們可以在「孰好孰劣」上給出有條件的判斷——因為它們在教<strong>同一門學科</strong>。中史的對比，在做任何價值判斷之前，必須先承認一個事實：<strong>兩套課程教的不是同一門學科。</strong> DSE「中國歷史」和內地「歷史」的關係，就像「法國文學」和「比較文學」——前者是一門國別專精課，後者是一門跨國通覽課。比較它們的「優劣」，就像問「專精好還是通覽好」——答案是：看你想幹什麼。</blockquote>
+
+  <div class="pro-con-grid">
+    <div class="pro-card"><div class="card-label">DSE 中國歷史做得更好的四件事</div>
+      <div class="pc-item"><strong>一、230 小時的專精深度——「學透一個文明」</strong><br>沒有哪個高中課程像 DSE 中國歷史一樣，讓學生在一個文明上花 230 小時。從夏商周的分封制到改革開放的政經局勢，每一個時代都不是「幾段話帶過」——是真正地紮進去。這種深度訓練的回報是：學生不是「聽說了很多朝代」，而是<strong>真正理解了少數幾個關鍵轉折</strong>。</div>
+      <div class="pc-item"><strong>二、水平評核——獎勵真正的歷史思維</strong><br>DSE 卷二的論文評分採用水平評核——不數你提了幾個要點，而是看你整篇論文<strong>展現了什麼層次的思維</strong>。一篇只羅列事實的論文拿不到高分，一篇能比較不同史料的可信度、討論不同歷史解釋的局限、提出有論證的獨立判斷的論文才能拿到。</div>
+      <div class="pc-item"><strong>三、歷史研習方法的獨立課時——不只是口號</strong><br>12 小時的獨立課時專門訓練「怎樣像一個歷史學家一樣工作」——怎麼判斷史料的可信度、怎麼辨別偏見、怎麼建構論證。不考評不等於不重要——這 12 小時是方法論的內化，是「授人以漁」。</div>
+      <div class="pc-item"><strong>四、六選一的專題選修——研究興趣的早期培養</strong><br>「時代與知識分子」（孔子、司馬遷、王安石、何啟、梁啟超的個案研究）和「女性社會地位：傳統與變遷」是內地歷史課程中沒有獨立設置的方向。一個對思想史或個人史感興趣的學生，可以在 DSE 體系中找到對應的學術訓練。</div>
+    </div>
+    <div class="con-card"><div class="card-label">內地歷史做得更好的四件事</div>
+      <div class="pc-item"><strong>一、中外史並置——理解「中國在世界中的位置」</strong><br>內地必修《中外歷史綱要》的最大價值不是「多學了世界史的知識」，而是<strong>把中國史放在世界史的坐標系中</strong>。一個只學了中國史的學生，可能會默認「中國的歷史軌跡是唯一的、必然的」。只有同時看到中國的中央集權 vs 歐洲的封建分權、中國的科舉制 vs 歐洲的貴族世襲——才能理解中國歷史的每一個轉折在國際比較中的意義。</div>
+      <div class="pc-item"><strong>二、唯物史觀——一套「入門級」的歷史分析工具</strong><br>唯物史觀對於尚未掌握多種理論工具的高中生來說，其實是一個非常友好的入口。它不是讓學生空手去分析歷史現象——它給了他們一套明確的「工具」：看生產力水平、看階級關係、看經濟基礎如何決定了上層建築。DSE 學生的優勢是「沒有被單一框架約束」，但劣勢是「在沒有框架的情況下可能不知道從哪裡開始分析」。</div>
+      <div class="pc-item"><strong>三、三個專題史模塊全部必修——多維度的歷史素養</strong><br>內地選擇性必修的三個模塊分別覆蓋政治制度史、經濟生活史、文化交流史——全部必修。一個選考歷史的內地學生，必須在「政治」「經濟」「文化」三個維度上都有系統的專題訓練。DSE 學生可以在六個選修專題中只選一個。</div>
+      <div class="pc-item"><strong>四、史料實證的分級訓練體系——從「看史料」到「用史料做研究」</strong><br>內地的史料實證素養有四個明確水平——從「知道史料有不同類型」（水平一）到「比較分析不同來源、不同觀點的史料，辨別作者意圖」（水平四）。這套分級標準使史料教學擺脫了隨意性，變成了一個可以系統推進的能力培養路徑。</div>
+    </div>
+  </div>
+</section>
+
+<!-- 四 -->
+<section class="section">
+  <h2 class="section-title"><span class="num">四、</span>適配不同路徑</h2>
+  <div class="path-grid">
+    <div class="path-card"><span class="pa">→ 「中國問題專家」——歷史 / 政治 / 法律 / 新聞</span><strong>DSE 的 230h 中國史專精是不可替代的底子</strong></div>
+    <div class="path-card"><span class="pa">→ 國際關係 / 比較政治 / 全球史</span><strong>內地的中外史並置 + 唯物史觀框架提供更好的起點</strong></div>
+    <div class="path-card"><span class="pa">→ 強烈的中華文化認同需求</span><strong>DSE 中國歷史的專精訓練會強化這種認同</strong>——但注意：完全不了解世界史可能會限制他對「中華文明獨特性」的理解深度</div>
+    <div class="path-card"><span class="pa">→ 出國讀大學</span><strong>DSE 的水平評核論文題 + 獨立探究方法訓練更接近海外大學的學術寫作要求</strong></div>
+    <div class="path-card"><span class="pa">→ 衝清北復交的人文社科專業</span><strong>內地歷史的高考體系是剛需</strong>——但 DSE 學生可通過 DSE 成績報考港校及海外大學</div>
+  </div>
+</section>
+
+<!-- 五 -->
+<section class="section">
+  <h2 class="section-title"><span class="num">五、</span>對海納有容的啟示</h2>
+  <p style="font-size:.85rem;color:var(--text2);margin-bottom:.8rem">海納喜歡中國歷史。如果他選修 DSE 中國歷史，這門課會是他高中三年最愛的一門——230 小時沉浸在從夏商周到改革開放的歷史中，對一個喜歡歷史的孩子來說不是負擔，是享受。</p>
+  <p style="font-size:.85rem;color:var(--text2);margin-bottom:.8rem">但他需要意識到 DSE 中國歷史的一個<strong style="color:var(--accent-amber)">「隱藏代價」</strong>：<strong>它不教世界史。</strong>一個只學了 DSE 中國歷史的學生，可能對法國大革命、工業革命、美國獨立、冷戰格局只有零散的常識性了解。更深層的問題是——缺乏世界史的「橫向參照」，會使他對中國歷史本身的判斷也不完整。例如：學「明清君主集權」時，如果不知道同時期西方正在經歷文藝復興和大航海時代，就很難真正理解中國為何在近代落後。學「鴉片戰爭」時，如果不了解同時期的世界殖民體系，就容易把它簡化成一個「侵略與反抗」的簡單故事。</p>
+
+  <p style="font-size:.85rem;color:var(--accent);font-weight:700;margin-bottom:.4rem">建議課外補的：</p>
+  <ul class="advice-list">
+    <li><strong>一本世界近代史的通覽性讀物</strong>——不需要深度，需要建立基本的時空框架。推薦斯塔夫里阿諾斯的《全球通史》或類似「全球史」視角的讀物——這類書的價值不在於「記住了多少史實」，而在於幫你建立「中國歷史的每一個階段，在世界坐標系中對應什麼位置」的直覺。</li>
+    <li><strong>關注中外比較的視角：</strong>每一次中國歷史的大事件（鴉片戰爭、洋務運動、五四運動），在國際上同時在發生什麼？這種「並置閱讀」習慣是內地中外史綱要最值得借鑑的方法。</li>
+    <li><strong>唯物史觀也可以了解一下</strong>——不是作為「政治正確」，而是作為<strong>分析歷史的諸多工具之一</strong>。任何學科都需要分析框架，唯物史觀是其中一個歷史悠久、影響深遠的框架。</li>
+  </ul>
+
+  <p style="font-size:.85rem;color:var(--accent);font-weight:700;margin:1.2rem 0 .4rem">DSE 中國歷史的強項要充分用好的：</p>
+  <ul style="list-style:none;padding:0;font-size:.85rem;color:var(--text2);line-height:1.8">
+    <li style="padding:.2rem 0">▸ <strong>卷二的歷史論文訓練</strong>——這是他在高中階段能獲得的最接近大學水平的學術寫作訓練</li>
+    <li style="padding:.2rem 0">▸ <strong>選修專題的選擇</strong>——既然喜歡歷史，建議選「時代與知識分子」（單元三）或「制度與政治演變」（單元四）。前者讓你通過孔子、司馬遷、王安石的生平理解他們的時代；後者讓你看穿中國政治制度兩千年的變與不變</li>
+    <li style="padding:.2rem 0">▸ <strong>歷史研習方法（12h）</strong>——不要因為不考評就輕視。這是「怎樣做一個好的歷史讀者和寫作者」的入門課</li>
+  </ul>
+</section>
+
+<!-- 六 -->
+<section class="section">
+  <h2 class="section-title"><span class="num">六、</span>四科 WHY 分析的交叉總結</h2>
+  <div class="table-wrap"><table><thead><tr><th>根源</th><th>物理</th><th>化學</th><th>生物</th><th>中史</th></tr></thead><tbody>
+    <tr><td>英式基因</td><td>實驗 + 定量應用</td><td>有機化學是主角</td><td>博物學 + 人體全圖</td><td><strong>殖民遺產：兩門歷史科的分立</strong></td></tr>
+    <tr><td>蘇式 / 中特基因</td><td>理論系統完整</td><td>物理化學是根基</td><td>大概念→應用</td><td><strong>唯物史觀 + 中外史合一</strong></td></tr>
+    <tr><td>最深層的差異</td><td>計算深度 vs 理論廣度</td><td>有機 vs 物理化學</td><td>描述性 vs 原理性科學</td><td><strong>學科邊界本身不同</strong></td></tr>
+    <tr><td>DSE 最不可替代的</td><td>SBA 真實驗</td><td>有機化學全體系 + 儀器分析</td><td>人體生理學 84h + 實地考察</td><td>230h 中國史專精 + 水平評核論文</td></tr>
+    <tr><td>內地最不可替代的</td><td>相對論 + 熱力學</td><td>水溶液平衡 + 雜化軌道</td><td>生物技術工程全流程</td><td>中外史並置 + 唯物史觀框架</td></tr>
+  </tbody></table></div>
+</section>
+
+<!-- 七 -->
+<section class="section">
+  <h2 class="section-title"><span class="num">七、</span>總結</h2>
+  <div class="summary-card">
+    <p class="core">一句話核心結論：<br>理科三科的差異是<strong style="color:var(--accent)">「怎麼教」</strong>，中史的差異是<strong style="color:var(--accent-pink)">「教什麼」</strong>——前者同科異側重，後者根本是兩門不同的學科。</p>
+    <p class="detail"><strong>詳細說明：</strong>理科三科的差異是「怎麼教」的差異——同一門學科，英國走應用和實驗路線，蘇聯/中國走理論和系統路線。中史的差異是「教什麼」的差異——香港把中國史和世界史拆成兩門獨立的科目（殖民時代的遺產），內地把中國史和世界史放在同一個唯物史觀框架下（馬克思主義史學的邏輯）。這不是教育哲學的偏好，是制度設計的路徑依賴。對海納有容而言，DSE 中國歷史的 230 小時專精訓練會給他一套紮實的「中國通」底子；補上世界史的橫向框架，這套底子才能安放在一個完整的全球視野中。</p>
+  </div>
+</section>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>修讀 DSE 物理應培養的元能力 | Meta-Abilities from DSE Physics — 海納有容 AI 時代準備清單</title>
+<style>
+  :root {
+    --bg-deep: #080816;
+    --bg-card: #111122;
+    --bg-card-alt: #151528;
+    --border-subtle: #1e1e38;
+    --border-glow: #448aff33;
+    --text-primary: #e2e2f0;
+    --text-secondary: #b0b0cc;
+    --text-muted: #7878a0;
+    --accent-blue: #448aff;
+    --accent-cyan: #40c4ff;
+    --accent-purple: #7c4dff;
+    --accent-amber: #ffab00;
+    --accent-green: #69f0ae;
+    --accent-pink: #ff5252;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 16px; scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", "Noto Sans SC", "PingFang HK", "Microsoft YaHei", sans-serif;
+    background: var(--bg-deep);
+    color: var(--text-primary);
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Hero ── */
+  .hero {
+    background: linear-gradient(135deg, #08081a 0%, #0d1028 40%, #0a0a20 100%);
+    border-bottom: 1px solid var(--border-glow);
+    padding: 3.2rem 1.5rem 2.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 50% 100%, rgba(68,138,255,0.07) 0%, rgba(124,77,255,0.03) 50%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(68,138,255,0.12);
+    border: 1px solid var(--border-glow);
+    color: var(--accent-blue);
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.25rem 1rem;
+    border-radius: 50px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 1.2rem;
+  }
+  .hero h1 {
+    font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+    font-weight: 800;
+    color: #fff;
+    max-width: 820px;
+    margin: 0 auto 0.8rem;
+    letter-spacing: 0.02em;
+    position: relative;
+  }
+  .hero h1 .en { color: var(--accent-cyan); }
+  .hero .subtitle {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    max-width: 680px;
+    margin: 0 auto;
+    position: relative;
+  }
+  .hero .meta-line {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 0.5rem;
+  }
+
+  /* ── Layout ── */
+  .container { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+  /* ── Section ── */
+  .section { margin-bottom: 3.2rem; }
+  .section-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 1.2rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--border-glow);
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .section-title .num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 2rem; height: 2rem;
+    background: rgba(68,138,255,0.12);
+    border: 1px solid var(--border-glow);
+    border-radius: 6px;
+    color: var(--accent-blue);
+    font-size: 0.85rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  /* ── Cards ── */
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 10px;
+    padding: 1.6rem;
+    margin-bottom: 1.4rem;
+    transition: border-color 0.2s;
+  }
+  .card:hover { border-color: var(--border-glow); }
+  .card-header {
+    display: flex; align-items: baseline; gap: 0.5rem;
+    margin-bottom: 0.7rem;
+  }
+  .card-header .en-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--accent-cyan);
+    letter-spacing: 0.02em;
+  }
+  .card-header .cn-title {
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+  .card .tag-row {
+    display: flex; flex-wrap: wrap; gap: 0.35rem;
+    margin-bottom: 0.8rem;
+  }
+  .card .tag {
+    font-size: 0.68rem;
+    padding: 0.12rem 0.6rem;
+    border-radius: 4px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+  .tag-what { background: rgba(64,196,255,0.1); color: var(--accent-cyan); border: 1px solid rgba(64,196,255,0.2); }
+  .tag-where { background: rgba(68,138,255,0.1); color: var(--accent-blue); border: 1px solid rgba(68,138,255,0.2); }
+  .tag-why { background: rgba(255,171,0,0.1); color: var(--accent-amber); border: 1px solid rgba(255,171,0,0.2); }
+  .tag-how { background: rgba(124,77,255,0.1); color: var(--accent-purple); border: 1px solid rgba(124,77,255,0.2); }
+
+  .sub-block { margin-bottom: 0.7rem; }
+  .sub-block .label {
+    font-size: 0.73rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    margin-bottom: 0.2rem;
+    display: flex; align-items: center; gap: 0.3rem;
+  }
+  .sub-block .label::before {
+    content: '';
+    display: inline-block;
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0.5;
+  }
+  .sub-block p, .sub-block ul { font-size: 0.9rem; color: var(--text-secondary); }
+  .sub-block ul { padding-left: 1.2rem; }
+  .sub-block ul li { margin-bottom: 0.15rem; }
+  .sub-block ul li::marker { color: var(--accent-blue); }
+
+  .highlight { color: var(--accent-cyan); font-weight: 600; }
+  .en-term { color: var(--accent-blue); font-weight: 600; }
+
+  /* ── Blockquote ── */
+  blockquote {
+    border-left: 3px solid var(--accent-cyan);
+    background: rgba(64,196,255,0.04);
+    padding: 0.9rem 1.2rem;
+    margin: 1rem 0;
+    border-radius: 0 8px 8px 0;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+
+  /* ── Tables ── */
+  .table-wrap {
+    overflow-x: auto;
+    margin: 1.2rem 0;
+    -webkit-overflow-scrolling: touch;
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.84rem;
+    min-width: 600px;
+  }
+  thead th {
+    background: rgba(68,138,255,0.08);
+    border-bottom: 2px solid var(--border-glow);
+    color: var(--accent-cyan);
+    font-weight: 700;
+    text-align: left;
+    padding: 0.55rem 0.75rem;
+    font-size: 0.76rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  tbody td {
+    padding: 0.45rem 0.75rem;
+    border-bottom: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover td { background: rgba(68,138,255,0.02); }
+  tbody td:first-child { font-weight: 600; color: var(--text-primary); white-space: nowrap; }
+
+  /* ── Advice list ── */
+  .advice-list { counter-reset: adv; list-style: none; padding: 0; }
+  .advice-list li {
+    counter-increment: adv;
+    background: var(--bg-card-alt);
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+    padding: 1rem 1.3rem 1rem 3rem;
+    margin-bottom: 0.6rem;
+    position: relative;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+  .advice-list li::before {
+    content: counter(adv);
+    position: absolute;
+    left: 0.9rem;
+    top: 1rem;
+    width: 1.5rem; height: 1.5rem;
+    background: rgba(68,138,255,0.12);
+    border: 1px solid var(--border-glow);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--accent-blue);
+  }
+
+  /* ── Parent box ── */
+  .parent-box {
+    background: linear-gradient(135deg, rgba(255,171,0,0.05), rgba(124,77,255,0.04));
+    border: 1px solid rgba(255,171,0,0.18);
+    border-radius: 10px;
+    padding: 1.3rem 1.5rem;
+    margin-top: 1.2rem;
+  }
+  .parent-box .box-label {
+    font-size: 0.73rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--accent-amber);
+    margin-bottom: 0.5rem;
+  }
+  .parent-box ul { list-style: none; padding: 0; }
+  .parent-box ul li {
+    padding: 0.25rem 0;
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+  }
+
+  /* ── Summary ── */
+  .summary-card {
+    background: linear-gradient(135deg, rgba(68,138,255,0.06), rgba(124,77,255,0.04));
+    border: 1px solid rgba(124,77,255,0.2);
+    border-radius: 12px;
+    padding: 1.8rem;
+    text-align: center;
+  }
+  .summary-card .core {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 1rem;
+    line-height: 1.6;
+  }
+  .summary-card .detail {
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    line-height: 1.75;
+    text-align: left;
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  /* ── Print ── */
+  @media print {
+    body { background: #fff; color: #111; }
+    .hero { background: #f5f5f5; border-bottom: 2px solid #ccc; }
+    .card, .advice-list li, .parent-box, .summary-card { background: #fafafa; border: 1px solid #ddd; }
+    table thead th { background: #eee; color: #111; }
+    .en-term, .card-header .en-title { color: #0059b3; }
+    .container { padding: 1rem; }
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 640px) {
+    .hero { padding: 2rem 1rem 1.8rem; }
+    .container { padding: 1.2rem 0.9rem 2.5rem; }
+    .card { padding: 1.1rem; }
+    .card-header { flex-direction: column; gap: 0.15rem; }
+    .advice-list li { padding: 0.9rem 0.9rem 0.9rem 2.5rem; }
+    .advice-list li::before { left: 0.5rem; top: 0.9rem; }
+    .summary-card { padding: 1.2rem; }
+    .section-title { font-size: 1.1rem; }
+    table { font-size: 0.74rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════ HERO ═══════════ -->
+<header class="hero">
+  <div class="hero-badge">DSE Physics · Meta-Ability Framework</div>
+  <h1>修讀 <span class="en">DSE Physics</span> 應培養的元能力<br>給海納有容的 AI 時代準備清單</h1>
+  <p class="subtitle">問題背景：孩子們在 AI 時代面前，大學方向和職業選擇都不確定。修讀 DSE 物理的過程中，應該刻意培養哪些超越考試、終身受用的元能力？</p>
+  <p class="meta-line">分析日期：2026-06-06</p>
+</header>
+
+<div class="container">
+
+<!-- ═══════════ Why ═══════════ -->
+<section class="section">
+  <h2 class="section-title"><span class="num">✦</span> Why This Question Matters <span style="font-weight:400;color:var(--text-muted);font-size:0.85rem;">為什麼問這個問題是對的</span></h2>
+
+  <p style="font-size:0.92rem;color:var(--text-secondary);line-height:1.8;">
+    DSE 物理的知識點本身——光柵方程、法拉第定律、pV=nRT——十年後很可能被 AI 代勞。但學好物理的過程中訓練出來的思維方式，是 AI 替代不了的。
+  </p>
+
+  <blockquote>
+    E = mc² 可以 Google 到，但把一團混亂的現實簡化為一個可解的物理模型的直覺，只有通過長時間的訓練才能長在自己身上。
+  </blockquote>
+
+  <p style="font-size:0.92rem;color:var(--text-secondary);line-height:1.8;">
+    DSE 物理恰好有一個獨特的優勢：<strong style="color:var(--accent-blue);">它是少有的同時要求（1）公式推演 +（2）動手實驗 +（3）探究寫作的高中科目</strong>。這三個維度的組合，天然訓練了 AI 時代最稀缺的能力。
+  </p>
+</section>
+
+<!-- ═══════════ 7 Meta-Abilities ═══════════ -->
+<section class="section">
+  <h2 class="section-title"><span class="num">7</span> Seven Meta-Abilities to Deliberately Cultivate <span style="font-weight:400;color:var(--text-muted);font-size:0.85rem;">七項需要刻意培養的元能力</span></h2>
+
+  <!-- 1 -->
+  <div class="card">
+    <div class="card-header">
+      <span class="en-title">1. Abstraction &amp; Modeling</span>
+      <span class="cn-title">建模直覺</span>
+    </div>
+    <div class="tag-row">
+      <span class="tag tag-what">What</span>
+      <span class="tag tag-where">Mechanics, Projectile Motion</span>
+    </div>
+    <div class="sub-block">
+      <div class="label">What It Is 是什麼</div>
+      <p>面對一團混亂的現實情境，能判斷什麼重要、什麼可以忽略，把問題簡化成一個可解的模型。</p>
+    </div>
+    <div class="sub-block">
+      <div class="label">Where DSE Physics Trains It DSE 物理在哪裡練</div>
+      <ul>
+        <li>每一道應用題本質上都是一個建模練習——「一輛車從斜坡滑下」→ 忽略空氣阻力 → 斜面 + 牛頓第二定律 → 解出加速度</li>
+        <li>拋體運動：水平方向勻速 + 豎直方向自由落體，兩個獨立運動疊加——這是典型的<strong>分解複雜問題為獨立子問題</strong>的思維</li>
+      </ul>
+    </div>
+    <div class="sub-block">
+      <div class="label">Why AI Cannot Replace It 為什麼 AI 替代不了</div>
+      <p>AI 可以在已有模型框架內做推演，但判斷「這個問題該用哪個模型框架」，目前仍然是人類的領地。更關鍵的是：<strong style="color:var(--accent-cyan);">AI 擅長在給定模型內求解，人擅長定義模型的邊界條件</strong>——哪些變量重要、哪些可以忽略、哪些假設需要在此情境中修正。建模直覺是<strong style="color:#fff;">把現實翻譯成數學</strong>的能力，這需要大量的刻意練習。</p>
+    </div>
+    <div class="sub-block">
+      <div class="label">How to Deliberately Practice 怎麼刻意練</div>
+      <p>做題時不要急著代公式。先花 30 秒問自己——這道題的物理情境是什麼？哪些條件是干擾信息？我應該用哪個物理原理切入？</p>
+    </div>
+  </div>
+
+  <!-- 2 -->
+  <div class="card">
+    <div class="card-header">
+      <span class="en-title">2. Empirical Verification</span>
+      <span class="cn-title">實驗思維與實證檢驗</span>
+    </div>
+    <div class="tag-row">
+      <span class="tag tag-what">What</span>
+      <span class="tag tag-where">SBA (20%)</span>
+    </div>
+    <div class="sub-block">
+      <div class="label">What It Is 是什麼</div>
+      <p>不滿足於「理論上應該是對的」，必須用實驗數據說話。設計實驗 → 操作 → 收集數據 → 分析誤差 → 修正假設，形成一個完整的驗證循環。</p>
+    </div>
+    <div class="sub-block">
+      <div class="label">Where DSE Physics Trains It DSE 物理在哪裡練</div>
+      <ul>
+        <li><strong>校本評核（SBA）</strong>：這是 DSE 物理最獨特、最寶貴的部分。學生必須真刀真槍設計探究、寫實驗報告、分析誤差來源</li>
+        <li>內地高考物理沒有這種實操評核環節——實驗考核僅限於筆試中的實驗設計題，DSE 學生在這方面有不可替代的優勢</li>
+      </ul>
+    </div>
+    <div class="sub-block">
+      <div class="label">Why AI Cannot Replace It 為什麼 AI 替代不了</div>
+      <p>AI 可以生成漂亮的實驗方案，但不能替你判斷「這個數據是不是因為傳感器沒校準」。在 AI 輸出的可信度越來越難判斷的時代，<strong style="color:var(--accent-cyan);">親自驗證過假設的人，對 AI 的產出會有一層天然的免疫力</strong>——他知道真實世界的數據有多髒、有多容易被誤解。</p>
+    </div>
+    <div class="sub-block">
+      <div class="label">How to Deliberately Practice 怎麼刻意練</div>
+      <p>做 SBA 實驗時，不要把「做出和課本一樣的答案」當目標。把「數據出乎意料」當成最好的學習機會——為什麼偏了？是系統誤差還是操作失誤？下次怎麼改進？這些追問比完美的數據更有價值。</p>
+    </div>
+  </div>
+
+  <!-- 3 -->
+  <div class="card">
+    <div class="card-header">
+      <span class="en-title">3. Numerical Literacy &amp; Dimensional Awareness</span>
+      <span class="cn-title">量綱意識與數字直覺</span>
+    </div>
+    <div class="tag-row">
+      <span class="tag tag-what">What</span>
+      <span class="tag tag-where">EM, Wave Optics, Mechanics</span>
+    </div>
+    <div class="sub-block">
+      <div class="label">What It Is 是什麼</div>
+      <p>看到一個數字能本能地判斷它是否合理。計算出的速度是 300 m/s 還是 3 m/s？力的數量級是牛頓還是千牛？這種直覺在 AI 時代是一道防火牆。</p>
+    </div>
+    <div class="sub-block">
+      <div class="label">Where DSE Physics Trains It DSE 物理在哪裡練</div>
+      <p>DSE 的定量計算密度很高——電磁學、波動光學、力學都有大量數值計算。每一次計算都是訓練數字直覺的機會。</p>
+    </div>
+    <div class="sub-block">
+      <div class="label">Why AI Cannot Replace It 為什麼 AI 替代不了</div>
+      <p>AI 有時候會輸出看起來很精確但完全荒謬的數字（幻覺的一種）。<strong style="color:var(--accent-cyan);">沒有數字直覺的人，會被 AI 的錯誤帶偏而不自知。</strong> 有數字直覺的人，會本能地說「等等，這個數字不對」。</p>
+    </div>
+    <div class="sub-block">
+      <div class="label">How to Deliberately Practice 怎麼刻意練</div>
+      <p>每次算出答案後，多做一步——用常識檢驗。一輛車的加速度真的是 50 m/s² 嗎（5 個 g，F1 賽車級別）？一段導線的電阻真的是 0.0001Ω 嗎？養成這種「回頭看」的習慣。</p>
+    </div>
+  </div>
+
+  <!-- 4 -->
+  <div class="card">
+    <div class="card-header">
+      <span class="en-title">4. First-Principles Thinking</span>
+      <span class="cn-title">第一性原理思維</span>
+    </div>
+    <div class="tag-row">
+      <span class="tag tag-what">What</span>
+      <span class="tag tag-where">Mechanics, EM</span>
+    </div>
+    <div class="sub-block">
+      <div class="label">What It Is 是什麼</div>
+      <p>不滿足於「公式是這樣寫的」，追問到物理學最基本的幾條原理——牛頓定律、能量守恆、動量守恆——看問題從底層往上推，而不是從記憶往下套。</p>
+    </div>
+    <div class="sub-block">
+      <div class="label">Where DSE Physics Trains It DSE 物理在哪裡練</div>
+      <ul>
+        <li>力學：幾乎所有問題歸根到底是 F=ma 和能量守恆</li>
+        <li>電磁學：法拉第定律和楞次定律的精神滲透在每一道電磁感應題中——從基本實驗定律出發推理和分析電磁現象</li>
+        <li>當一道題的解法不是參照例題，而是從基本原理重新推導時，就在訓練第一性原理思維</li>
+      </ul>
+    </div>
+    <div class="sub-block">
+      <div class="label">Why AI Cannot Replace It 為什麼 AI 替代不了</div>
+      <p>AI 擅長模式匹配（這道題類似題庫裡的哪一道），但不擅長從零開始重構推理鏈。未來最有價值的人類工作者，是能在 AI 的輸出之上做<strong style="color:var(--accent-cyan);">原理層面的審視和糾偏</strong>的人。</p>
+    </div>
+    <div class="sub-block">
+      <div class="label">How to Deliberately Practice 怎麼刻意練</div>
+      <p>遇到生題時，不要先想「類似題怎麼做」，先想「這道題涉及哪幾個基本物理原理」。從原理出發推一遍，哪怕最終和標準解法一樣，思維路徑完全不同。</p>
+    </div>
+  </div>
+
+  <!-- 5 -->
+  <div class="card">
+    <div class="card-header">
+      <span class="en-title">5. Comfort with Uncertainty</span>
+      <span class="cn-title">不確定性的舒適感</span>
+    </div>
+    <div class="tag-row">
+      <span class="tag tag-what">What</span>
+      <span class="tag tag-where">Error Analysis, Kinetic Theory</span>
+    </div>
+    <div class="sub-block">
+      <div class="label">What It Is 是什麼</div>
+      <p>接受「所有測量都有誤差」「所有模型都有適用範圍」「沒有一個答案是絕對正確的」。在不確定性中做出最好的判斷，而不是追求虛假的確定性。</p>
+    </div>
+    <div class="sub-block">
+      <div class="label">Where DSE Physics Trains It DSE 物理在哪裡練</div>
+      <ul>
+        <li>實驗誤差分析：系統誤差 vs 隨機誤差——系統誤差像「認知偏見」（總往一個方向偏），隨機誤差像「環境波動」（忽高忽低無法預測），理解二者的區別，本身就是一種思維訓練。不確定度的計算</li>
+        <li>牛頓力學的局限性：速度接近光速時牛頓力學失效，需要相對論——DSE 知識體系中沒有相對論，但力學章節末尾會提及</li>
+        <li>氣體的分子運動論：宏觀規律背後是概率統計</li>
+      </ul>
+    </div>
+    <div class="sub-block">
+      <div class="label">Why AI Cannot Replace It 為什麼 AI 替代不了</div>
+      <p>AI 的輸出本質上是概率分佈上的採樣。<strong style="color:var(--accent-cyan);">理解不確定性的本質，是與 AI 有效協作的前提。</strong> 把 AI 的輸出當「絕對真理」的人會被誤導；把 AI 的輸出當「一個需要驗證的概率性建議」的人才能駕馭它。</p>
+    </div>
+    <div class="sub-block">
+      <div class="label">How to Deliberately Practice 怎麼刻意練</div>
+      <p>每次做完實驗，認真寫誤差分析。不要把「人為誤差」當萬能答案——區分系統誤差（儀器零點沒校準）和隨機誤差（讀數時的微小波動），思考各自怎麼減小。這個習慣會滲透到他們看待一切數據的思維方式中。</p>
+    </div>
+  </div>
+
+  <!-- 6 -->
+  <div class="card">
+    <div class="card-header">
+      <span class="en-title">6. Technical Communication</span>
+      <span class="cn-title">技術溝通能力</span>
+    </div>
+    <div class="tag-row">
+      <span class="tag tag-what">What</span>
+      <span class="tag tag-where">SBA Reports, Structured Questions</span>
+    </div>
+    <div class="sub-block">
+      <div class="label">What It Is 是什麼</div>
+      <p>能把一個複雜的技術問題，用清晰、有邏輯、有結構的文字表達出來。物理不只是算答案，還是解釋答案。</p>
+    </div>
+    <div class="sub-block">
+      <div class="label">Where DSE Physics Trains It DSE 物理在哪裡練</div>
+      <ul>
+        <li>SBA 實驗報告：要求結構化寫作（目的 → 原理 → 步驟 → 數據 → 分析 → 結論）</li>
+        <li>公開考試的結構式題目和論述題：要求用物理術語和邏輯鏈作答</li>
+        <li>探究研習（16 小時）：需要獨立完成一個探究項目並呈現結果</li>
+      </ul>
+    </div>
+    <div class="sub-block">
+      <div class="label">Why AI Cannot Replace It 為什麼 AI 替代不了</div>
+      <p>AI 可以生成報告，但<strong style="color:var(--accent-cyan);">決定「什麼值得說」「對誰說」「怎麼說對方才懂」</strong>，是人的判斷。在 AI 時代，技術溝通的價值不是「寫報告快不快」，而是「能不能把一個複雜想法翻譯成讓不同背景的人都能理解的表達」。</p>
+    </div>
+    <div class="sub-block">
+      <div class="label">How to Deliberately Practice 怎麼刻意練</div>
+      <p>寫實驗報告時，假想讀者是一個不懂物理的家人。能不能用日常語言講清楚這個實驗在做什麼、為什麼重要、結果意味著什麼？這種「翻譯能力」比用術語堆砌報告要難得多，也值錢得多。</p>
+    </div>
+  </div>
+
+  <!-- 7 -->
+  <div class="card">
+    <div class="card-header">
+      <span class="en-title">7. Failure Diagnosis / Debugging</span>
+      <span class="cn-title">失敗診斷能力</span>
+    </div>
+    <div class="tag-row">
+      <span class="tag tag-what">What</span>
+      <span class="tag tag-where">Circuit Labs, Mechanics Labs</span>
+    </div>
+    <div class="sub-block">
+      <div class="label">What It Is 是什麼</div>
+      <p>當結果和預期不符時，不慌張、不放棄，系統性地排查——是假設錯了？是測量有問題？是忽略了某個因素？一層一層追溯，直到找到根源。</p>
+    </div>
+    <div class="sub-block">
+      <div class="label">Where DSE Physics Trains It DSE 物理在哪裡練</div>
+      <ul>
+        <li>電路實驗：燈泡不亮——是電池沒電？導線接觸不良？電阻接錯？</li>
+        <li>力學實驗：數據點不落在理論線上——是摩擦力沒考慮？是計時不準？是釋放位置不一致？</li>
+        <li>這些「意外」不是教學的失敗，而是最好的學習機會</li>
+      </ul>
+    </div>
+    <div class="sub-block">
+      <div class="label">Why AI Cannot Replace It 為什麼 AI 替代不了</div>
+      <p>AI 可以幫你列出可能的故障原因，但<strong style="color:var(--accent-cyan);">親自排查過故障的人，會對系統的脆弱點有肌肉記憶般的敏感度</strong>。這種敏感度在面對複雜系統（無論是工程系統、商業系統還是社會系統）時都是無價的。</p>
+    </div>
+    <div class="sub-block">
+      <div class="label">How to Deliberately Practice 怎麼刻意練</div>
+      <p>當實驗失敗或計算結果和預期不符時，不要急著找正確答案。先給自己 10 分鐘，寫下至少三種可能的解釋，然後逐一排查。培養「失敗是信息，不是挫折」的心態。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ AI Collaboration ═══════════ -->
+<section class="section">
+  <h2 class="section-title"><span class="num">🤝</span> How the 7 Meta-Abilities Collaborate with AI <span style="font-weight:400;color:var(--text-muted);font-size:0.85rem;">七項元能力如何與 AI 協作</span></h2>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Meta-Ability 元能力</th>
+          <th>Human Superiority 人做得更好的部分</th>
+          <th>AI Superiority AI 做得更好的部分</th>
+          <th>Optimal Collaboration 最佳協作模式</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Abstraction &amp; Modeling 建模直覺</td>
+          <td>判斷什麼重要、選什麼框架</td>
+          <td>在給定框架內快速推演</td>
+          <td>人定框架 → AI 執行 → 人檢驗</td>
+        </tr>
+        <tr>
+          <td>Empirical Verification 實驗檢驗</td>
+          <td>設計實驗、判斷數據可信度</td>
+          <td>分析大量實驗數據</td>
+          <td>人設計 → 人操作 → AI 輔助分析</td>
+        </tr>
+        <tr>
+          <td>Numerical Literacy 數字直覺</td>
+          <td>判斷數量級是否合理</td>
+          <td>精確計算</td>
+          <td>AI 計算 → 人用直覺覆核</td>
+        </tr>
+        <tr>
+          <td>First-Principles Thinking 第一性原理</td>
+          <td>從零建構推理鏈</td>
+          <td>記憶和匹配已知模式</td>
+          <td>人確定原理 → AI 輔助推導</td>
+        </tr>
+        <tr>
+          <td>Comfort with Uncertainty 不確定性的舒適</td>
+          <td>在模糊中做決策</td>
+          <td>量化和呈現概率</td>
+          <td>AI 量化不確定性 → 人基於此決策</td>
+        </tr>
+        <tr>
+          <td>Technical Communication 技術溝通</td>
+          <td>判斷受眾、選擇表達層次</td>
+          <td>潤色、翻譯、格式化</td>
+          <td>人確定信息結構 → AI 輔助生成</td>
+        </tr>
+        <tr>
+          <td>Failure Diagnosis 失敗診斷</td>
+          <td>產生假設、直覺定位根因</td>
+          <td>窮舉可能原因</td>
+          <td>人提出假設 → AI 逐一檢核</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══════════ Specific Advice ═══════════ -->
+<section class="section">
+  <h2 class="section-title"><span class="num">🎯</span> Specific Advice for 海納 &amp; 有容 <span style="font-weight:400;color:var(--text-muted);font-size:0.85rem;">對海納有容的具體建議</span></h2>
+
+  <h3 style="font-size:0.95rem;color:var(--accent-cyan);margin-bottom:0.8rem;">在 DSE 三年裡刻意做這幾件事</h3>
+
+  <ol class="advice-list">
+    <li><strong style="color:#fff;">每次做題，多問一句「這個問題的物理本質是什麼」</strong>——訓練建模直覺。不求速度快，求思維深。</li>
+    <li><strong style="color:#fff;">珍惜每一個 SBA 實驗，尤其是不順利的實驗</strong>——失敗診斷和實驗思維的唯一訓練場。完美數據是漂亮的分數，糟糕數據是真正的學習。</li>
+    <li><strong style="color:#fff;">養成 Fermi 估算的習慣</strong>——看到任何數字（新聞裡的能耗、手機的電量、NBA 三分球的拋物線高度），用物理直覺估一下數量級。例如：估算教室的空氣質量——先估教室體積（10m×8m×3m≈240m³），空氣密度約 1.2 kg/m³，所以空氣質量約 300 kg。這就是數字直覺最好的日常練習。</li>
+    <li><strong style="color:#fff;">做實驗報告時，嘗試向家人（非物理背景）解釋你的實驗</strong>——訓練技術溝通。如果能讓你爸聽懂，就能讓任何人聽懂。</li>
+    <li><strong style="color:#fff;">不要把物理學成背公式</strong>——AI 背公式比你快 100 倍。把物理學成「用最少的原理，解釋最多的現象」。力、能量、守恆——這是物理的三把鑰匙，絕大多數題目都能用它們打開。</li>
+  </ol>
+
+  <div class="parent-box">
+    <div class="box-label">For Parents 家長可以配合做什麼</div>
+    <ul>
+      <li>▸ 當他們分享實驗經歷時，多問「為什麼」（為什麼數據偏了？為什麼選這個方法？），少問「幾分」</li>
+      <li>▸ 帶他們讀科學新聞、看科技紀錄片，建立物理和真實世界的連接</li>
+      <li>▸ 鼓勵他們用物理解釋日常——為什麼足球的香蕉球會拐彎（伯努利原理）？為什麼 NBA 球員投籃要盡量高弧線（最佳入射角）？</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ═══════════ Summary ═══════════ -->
+<section class="section">
+  <h2 class="section-title"><span class="num">✦</span> Summary <span style="font-weight:400;color:var(--text-muted);font-size:0.85rem;">總結</span></h2>
+
+  <div class="summary-card">
+    <p class="core">
+      一句話核心結論：<br>
+      <span style="color:var(--accent-blue);">DSE 物理教的知識十年後可能過時，但它訓練的建模直覺、實驗思維和失敗診斷能力，在任何一個 AI 時代都不會過時。</span>
+    </p>
+    <p class="detail">
+      <strong>詳細說明：</strong>DSE 物理教的知識十年後可能過時，但它訓練的七項元能力——建模直覺、實驗思維、數字直覺、第一性原理、不確定性的舒適感、技術溝通、失敗診斷——在任何一個 AI 時代都不會過時。海納有容今天在實驗室裡排查電路故障的耐心，就是十年後他們在任何領域排查複雜系統故障的底氣。
+    </p>
+  </div>
+</section>
+
+</div>
+
+</body>
+</html>

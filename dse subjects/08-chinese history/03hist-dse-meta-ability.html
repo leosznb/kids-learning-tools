@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>修讀 DSE 中國歷史應培養的元能力 — 海納有容 AI 時代準備清單</title>
+<style>
+  :root {
+    --bg:#0d0d14; --surface:#161622; --surface2:#1c1c2a;
+    --border:#2a2a3a; --border-accent:#5c6bc033;
+    --text:#e8e8f0; --text2:#b0b0c0; --text3:#707080;
+    --accent:#5c6bc0; --accent2:#7986cb; --accent-amber:#ffa726; --accent-pink:#ef5350; --accent-purple:#b388ff;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{font-size:16px;scroll-behavior:smooth}
+  body{font-family:"Noto Serif TC","Noto Serif SC","Songti SC","PingFang HK","Microsoft YaHei",serif;background:var(--bg);color:var(--text);line-height:1.85;-webkit-font-smoothing:antialiased;font-weight:400}
+
+  .hero{padding:3.5rem 1.5rem 2.5rem;text-align:center;border-bottom:1px solid var(--border)}
+  .hero-badge{display:inline-block;font-size:.75rem;font-weight:600;color:var(--accent);letter-spacing:.1em;border:1px solid var(--border-accent);padding:.2rem .9rem;border-radius:50px;margin-bottom:1.2rem}
+  .hero h1{font-size:clamp(1.4rem,3.2vw,2rem);font-weight:700;color:#fff;max-width:760px;margin:0 auto .6rem;letter-spacing:.03em}
+  .hero .subtitle{font-size:.85rem;color:var(--text3);max-width:640px;margin:0 auto;line-height:1.7}
+  .hero .meta-line{font-size:.72rem;color:var(--text3);margin-top:.5rem}
+
+  .container{max-width:880px;margin:0 auto;padding:2.5rem 1.5rem 5rem}
+  .section{margin-bottom:3.5rem}
+  .section-title{font-size:1.2rem;font-weight:700;color:#fff;margin-bottom:1.2rem;padding-bottom:.4rem;border-bottom:1px solid var(--border);letter-spacing:.03em}
+  .section-title .num{color:var(--accent);font-size:.85rem;margin-right:.3rem}
+
+  .card{background:var(--surface);border:1px solid var(--border);padding:1.4rem;margin-bottom:1.2rem;transition:border-color .2s}
+  .card:hover{border-color:var(--border-accent)}
+  .card-header{font-size:1rem;font-weight:700;color:var(--accent2);margin-bottom:.5rem;letter-spacing:.02em}
+  .card-header .cn{font-size:.88rem;color:var(--text);font-weight:600}
+  .card .tag-row{display:flex;flex-wrap:wrap;gap:.25rem;margin-bottom:.6rem}
+  .card .tag{font-size:.64rem;padding:.08rem .5rem;border-radius:3px;font-weight:600;letter-spacing:.04em}
+  .tag-what{background:rgba(121,134,203,0.1);color:var(--accent2);border:1px solid rgba(121,134,203,0.2)}
+  .tag-where{background:rgba(92,107,192,0.1);color:var(--accent);border:1px solid rgba(92,107,192,0.2)}
+  .tag-why{background:rgba(255,167,38,0.1);color:var(--accent-amber);border:1px solid rgba(255,167,38,0.2)}
+  .tag-how{background:rgba(179,136,255,0.1);color:var(--accent-purple);border:1px solid rgba(179,136,255,0.2)}
+
+  .sub-block{margin-bottom:.6rem}
+  .sub-block .label{font-size:.7rem;font-weight:700;color:var(--text3);margin-bottom:.15rem;letter-spacing:.04em}
+  .sub-block p,.sub-block ul,.sub-block ol{font-size:.83rem;color:var(--text2);line-height:1.65}
+  .sub-block ul,.sub-block ol{padding-left:1.1rem}
+  .sub-block ul li,.sub-block ol li{margin-bottom:.1rem}
+  .sub-block ul li::marker{color:var(--accent)}
+
+  blockquote{border-left:2px solid var(--accent);padding:.8rem 1.1rem;margin:1rem 0;font-size:.86rem;color:var(--text2);font-style:italic;line-height:1.7;background:rgba(92,107,192,0.03)}
+
+  .table-wrap{overflow-x:auto;margin:1rem 0;-webkit-overflow-scrolling:touch}
+  table{width:100%;border-collapse:collapse;font-size:.8rem;min-width:580px}
+  thead th{background:var(--surface2);border-bottom:2px solid var(--border);color:var(--accent2);font-weight:600;text-align:left;padding:.4rem .6rem;font-size:.72rem;letter-spacing:.04em}
+  tbody td{padding:.38rem .6rem;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top;line-height:1.5}
+  tbody tr:last-child td{border-bottom:none}
+  tbody td:first-child{font-weight:600;color:var(--text);white-space:nowrap}
+
+  .advice-list{counter-reset:adv;list-style:none;padding:0}
+  .advice-list li{counter-increment:adv;background:var(--surface);border:1px solid var(--border);padding:.85rem 1rem .85rem 2.8rem;margin-bottom:.45rem;position:relative;font-size:.84rem;color:var(--text2);line-height:1.6}
+  .advice-list li::before{content:counter(adv);position:absolute;left:.8rem;top:.85rem;width:1.4rem;height:1.4rem;background:rgba(92,107,192,0.1);border:1px solid rgba(92,107,192,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;color:var(--accent)}
+
+  .parent-box{background:var(--surface);border:1px solid rgba(255,167,38,0.2);padding:1rem 1.2rem;margin-top:1rem}
+  .parent-box .box-label{font-size:.7rem;font-weight:700;color:var(--accent-amber);margin-bottom:.4rem;letter-spacing:.04em}
+  .parent-box ul{list-style:none;padding:0}
+  .parent-box ul li{padding:.15rem 0;font-size:.83rem;color:var(--text2)}
+
+  .summary-card{background:var(--surface);border:1px solid var(--border-accent);padding:1.5rem;text-align:center}
+  .summary-card .core{font-size:1rem;font-weight:700;color:#fff;margin-bottom:.8rem;line-height:1.7}
+  .summary-card .detail{font-size:.83rem;color:var(--text2);line-height:1.7;text-align:left;max-width:660px;margin:0 auto}
+
+  @media(max-width:640px){.hero{padding:2rem 1rem 1.5rem}.container{padding:1.5rem .9rem 3rem}.card{padding:1rem}.section-title{font-size:1.05rem}table{font-size:.72rem}}
+  @media print{body{background:#fff;color:#111}.hero{border-bottom:1px solid #ccc}.card,.advice-list li,.parent-box,.summary-card{background:#fafafa;border:1px solid #ddd}blockquote{background:#f9f9f9}table thead th{background:#f0f0f0;color:#111}.container{padding:1rem}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-badge">DSE 中國歷史 · 元能力框架</div>
+  <h1>修讀 DSE 中國歷史應培養的元能力<br>給海納有容的 AI 時代準備清單</h1>
+  <p class="subtitle">問題背景：在 AI 時代一切不確定的前提下，修讀 DSE 中國歷史的過程中應該刻意培養哪些終身受用的元能力？</p>
+  <p class="meta-line">分析日期：2026-06-07</p>
+</header>
+
+<div class="container">
+
+<section class="section">
+  <h2 class="section-title"><span class="num">✦</span>為什麼歷史的元能力是 AI 最難攻破的堡壘</h2>
+  <p style="font-size:.85rem;color:var(--text2);line-height:1.8;margin-bottom:.8rem">物理教你把複雜世界簡化成模型，化學教你在分子積木中搭建新東西，生物教你面對不可簡化的生命系統。歷史教的東西，與它們都不同——<strong style="color:#fff">歷史教你面對「已經發生了、不會再重複、只留下殘缺證據」的過去，給出一個負責任的判斷。</strong></p>
+  <ul style="font-size:.84rem;color:var(--text2);padding-left:1.2rem;line-height:1.8">
+    <li>AI 擅長<strong style="color:var(--accent-amber)">回憶</strong>（從訓練數據中檢索事實）——但歷史不是回憶，是<strong>在不確定的證據中做出判斷</strong></li>
+    <li>AI 擅長<strong style="color:var(--accent-amber)">模式匹配</strong>——但每個歷史情境都是<strong>獨一無二的</strong>，沒有兩個朝代滅亡的原因完全相同</li>
+    <li>AI 擅長<strong style="color:var(--accent-amber)">生成流暢的敘述</strong>——但流暢不等於<strong>可信</strong>，流暢的歷史敘述可能是一個精巧的虛構</li>
+  </ul>
+  <p style="font-size:.85rem;color:var(--text2);line-height:1.8">DSE 中國歷史有一個獨特的訓練場：<strong style="color:var(--accent)">卷二的歷史專題論文 + 水平評核</strong>。在 1 小時 20 分鐘內寫兩篇完整的專題論文，每一篇都需要：提出一個論點→援引多種史料支持→比較不同歷史解釋→做出有論證的判斷。這不是「考試」，這是<strong>模擬歷史學家的工作</strong>。這種訓練在 AI 時代不是貶值了，是升值了——因為 AI 可以生成一千篇「看起來像論文」的東西，但判斷哪一篇<strong>真的站得住腳</strong>，仍然需要人的歷史思維。</p>
+</section>
+
+<section class="section">
+  <h2 class="section-title"><span class="num">九</span>項需要刻意培養的元能力</h2>
+
+  <!-- 1 -->
+  <div class="card"><div class="card-header"><span class="cn">一、史料辨析力</span>——「誰說的？為誰說的？為什麼信它？」</div>
+    <div class="tag-row"><span class="tag tag-what">是什麼</span><span class="tag tag-where">卷一多項資料題</span></div>
+    <div class="sub-block"><div class="label">是什麼</div><p>面對任何一段「歷史敘述」，不是默認接受，而是本能地追問：這是一個什麼類型的史料？作者是誰？他的立場是什麼？他寫這個東西的目的是什麼？這段敘述和同時期的其他史料是否一致？不一致的地方說明了什麼？</p></div>
+    <div class="sub-block"><div class="label">DSE 中史在哪裡練</div><ul>
+      <li><strong>卷一「多項資料題」</strong>——同時給你一段奏折、一幅漫畫、一段後人評論，要求你在三種不同類型的史料之間做比較和互證</li>
+      <li><strong>必修甲部：秦始皇「焚書坑儒」</strong>——《史記》的記載 vs 考古發現 vs 後世儒家的批評——到底是殘暴還是統一思想？史料本身在「站隊」</li>
+      <li><strong>必修乙部：抗日戰爭</strong>——國共兩黨的戰報、日本的官方記錄、第三方的觀察——同一場戰爭有三種截然不同的數字和敘事</li>
+    </ul></div>
+    <div class="sub-block"><div class="label">為什麼 AI 替代不了</div><p>AI 可以自動「事實核查」——把一段敘述與已知的數據庫比對。但<strong style="color:var(--accent-amber)">AI 很難做出「這段史料在當時的政治語境下為什麼被寫成這個樣子」的判斷。</strong>一份清代地方官員上奏的災情報告說「受災三成」，是真的受災三成，還是按慣例減半上報以免顯得治理不力？AI 可以查證數字是否自洽，但無法判斷「為什麼會有這個偏差」和「這個偏差意味著什麼」——因為那需要對人性、官僚制度和政治文化的綜合理解。</p></div>
+    <div class="sub-block"><div class="label">怎麼刻意練</div><ol><li><strong>標註來源</strong>：這是一手史料還是二手史料？誰寫的？什麼年代寫的？</li><li><strong>追問動機</strong>：這個人寫這個東西是為了什麼？他想說服誰？</li><li><strong>交叉驗證</strong>：同一件事，有沒有其他角度的記載？差異在哪裡？</li></ol><p>這三步做完，你就不是「讀歷史」，而是「做歷史」。</p></div>
+  </div>
+
+  <!-- 2 -->
+  <div class="card"><div class="card-header"><span class="cn">二、複雜因果推理</span>——承認「不只一個原因」</div>
+    <div class="tag-row"><span class="tag tag-what">是什麼</span><span class="tag tag-where">必修甲部·乙部·選修單元四</span></div>
+    <div class="sub-block"><div class="label">是什麼</div><p>理解任何一個重大歷史事件——安史之亂、鴉片戰爭的失敗、清王朝的覆滅——都不能歸因於「一個人」或「一個錯誤」。歷史事件是經濟、政治、軍事、文化、外交、個人性格——多種力量在特定時刻的匯聚。複雜因果推理不是簡單的「因為 A 所以 B」，而是<strong>「A₁ + A₂ + A₃ + 偶然事件 + 時機 → B」</strong>。</p></div>
+    <div class="sub-block"><div class="label">DSE 中史在哪裡練</div><ul>
+      <li><strong>安史之亂</strong>：起因不是「安祿山造反」而是唐玄宗晚年怠政 + 府兵制崩潰 + 節度使權力集中 + 楊國忠與安祿山的政治鬥爭 + 安祿山個人野心——多種因素疊加</li>
+      <li><strong>抗日戰爭</strong>：中國為什麼能堅持八年？國共合作建立民族統一戰線 + 日本多線作戰資源分散 + 國際反法西斯同盟的支持 + 中國廣袤的國土使日本陷入消耗戰</li>
+      <li><strong>均田制為什麼崩潰？</strong>——人口增長、土地兼併、戰亂破壞、稅制改革、地方勢力坐大——沒有一個單一原因</li>
+    </ul></div>
+    <div class="sub-block"><div class="label">為什麼 AI 替代不了</div><p>AI 擅長「列舉可能的原因」。但<strong style="color:var(--accent-amber)">AI 不擅長在給定篇幅內判斷「哪個原因比哪個更重要」和「原因之間的互動關係是什麼」。</strong>你必須在有限時間內做出<strong>權重判斷</strong>：哪些是必要條件（沒有它就不會發生）？哪些是加速因素？哪些是導火索？這種權重判斷，需要歷史思維。</p></div>
+    <div class="sub-block"><div class="label">怎麼刻意練</div><p>用一個「因果層次表」：<strong style="color:#ef5350">必要條件</strong>（沒有就不會發生）→ <strong style="color:#ffa726">加速因素</strong>（加快了進程但不改變結局）→ <strong style="color:var(--accent)">導火索</strong>（恰好在这一刻引爆）。這個習慣逼你區分原因的「分量」。</p></div>
+  </div>
+
+  <!-- 3 -->
+  <div class="card"><div class="card-header"><span class="cn">三、跨時空共情</span>——用他們的眼睛看世界</div>
+    <div class="tag-row"><span class="tag tag-what">是什麼</span><span class="tag tag-where">選修單元三·單元六·必修甲部</span></div>
+    <div class="sub-block"><div class="label">是什麼</div><p>能暫時放下自己的現代價值觀，進入一個古人的世界——理解他為什麼認為「忠君」是最高美德、為什麼覺得「女子無才便是德」、為什麼相信天象能預示人間變亂。這不是同意他，而是<strong>理解他</strong>——理解他在他的時空局限下，為什麼做出在我們看來不可思議的選擇。</p></div>
+    <div class="sub-block"><div class="label">DSE 中史在哪裡練</div><ul>
+      <li><strong>孔子為什麼「知其不可而為之」周遊列國？</strong>——因為在那個時代，士人的自我實現只能通過輔佐君主來實現——他沒有「自主創業」的選項</li>
+      <li><strong>東漢戚宦掌權</strong>——外戚和宦官真的只是「貪權」嗎？還是在一個充滿不確定性的政治體制中，他們是「不掌權就會被清洗」？</li>
+      <li><strong>清代婦女接受纏足</strong>——是「被壓迫而不自知」，還是在那個社會中，這是她獲得體面婚姻和家庭地位的<strong>唯一途徑</strong>？</li>
+    </ul></div>
+    <div class="sub-block"><div class="label">為什麼 AI 替代不了</div><p>AI 可以生成「從古人角度看問題」的文字。但<strong style="color:var(--accent-amber)">真正的共情需要在想像中「暫時成為一個不同的人」——這是人類獨有的認知能力。</strong>跨時空共情的本質是：放下「後見之明」——不因為我們知道了結局，就斥責當時的人「蠢」或「壞」。</p></div>
+    <div class="sub-block"><div class="label">怎麼刻意練</div><p>每學完一個歷史事件，做一個思想實驗：假設你是當時的一個普通人（不是皇帝、不是將軍，是一個普通的農家子弟或小商販），你對這個事件的第一反應可能是什麼？你有什麼信息渠道？你能做什麼？</p></div>
+  </div>
+
+  <!-- 4 -->
+  <div class="card"><div class="card-header"><span class="cn">四、反事實推理</span>——「如果……會怎樣？」</div>
+    <div class="tag-row"><span class="tag tag-what">是什麼</span><span class="tag tag-where">必修甲部·乙部</span></div>
+    <div class="sub-block"><div class="label">是什麼</div><p>不是問「發生了什麼」，而是問「如果沒有發生 X，歷史會怎麼走？」。反事實推理是歷史學家的核心工具：<strong>要理解一個事件的重要性，最好的方法就是想「如果沒有它會發生什麼」。</strong></p></div>
+    <div class="sub-block"><div class="label">DSE 中史在哪裡練</div><ul>
+      <li><strong>漢武帝獨尊儒術</strong>——如果漢武帝選擇了繼續用法家治國（像秦始皇一樣），漢帝國的意識形態會怎樣？對比秦的速亡和漢的四百年——儒術的「教化功能」在維持帝國穩定中到底起了什麼作用？</li>
+      <li><strong>戊戌變法</strong>——如果慈禧沒有發動政變、變法持續推行，晚清能避免滅亡嗎？這個問題讓你意識到變法的內在局限——不僅是保守派反對，而是整個官僚體系和社會結構都沒有準備好</li>
+    </ul></div>
+    <div class="sub-block"><div class="label">為什麼 AI 替代不了</div><p>AI 可以寫反事實小說。但<strong style="color:var(--accent-amber)">真正的歷史反事實推理不是想像力遊戲，而是「通過移除一個變量，測量這個變量在真實歷史中的影響權重」。</strong>這是一種思想實驗——它的嚴謹性來自於你對真實歷史因果鏈的深入理解。</p></div>
+    <div class="sub-block"><div class="label">怎麼刻意練</div><p>每次學完一個重大抉擇或轉折點，花兩分鐘寫一個「反事實三部曲」：①如果這個事件沒有發生，最直接的後果是什麼？②這個後果會通過什麼機制影響後續的歷史進程？③這個思想實驗告訴我：這個事件在歷史上真正的「分量」是什麼？</p></div>
+  </div>
+
+  <!-- 5 -->
+  <div class="card"><div class="card-header"><span class="cn">五、長時段模式識別</span>——在百年的尺度上看見重複和斷裂</div>
+    <div class="tag-row"><span class="tag tag-what">是什麼</span><span class="tag tag-where">必修甲部·選修單元三·四</span></div>
+    <div class="sub-block"><div class="label">是什麼</div><p>能從跨越數百年甚至上千年的中國史中，識別出反覆出現的模式——王朝的興衰週期、中央與地方的博弈、民族融合的方式——同時也能識別出真正的斷裂——那些「中國從此不一樣了」的時刻。</p></div>
+    <div class="sub-block"><div class="label">DSE 中史在哪裡練</div><ul>
+      <li><strong>必修甲部的整個設計</strong>——從周代分封到明清君主集權，一條政治制度演變的千年長線</li>
+      <li><strong>選修單元四「制度與政治演變」</strong>——土地與賦役制度（井田→均田→兩稅法→一條鞭法）、兵制（府兵→募兵→衛所→八旗）、科舉制——同樣的制度問題在不同朝代的不同解法</li>
+      <li><strong>選修單元三「時代與知識分子」</strong>——孔子→司馬遷→王安石→何啟→梁啟超——跨越兩千年的知識分子如何在集權體制中尋找自己的位置</li>
+    </ul></div>
+    <div class="sub-block"><div class="label">為什麼 AI 替代不了</div><p>AI 擅長從 10 年、20 年的數據中識別短期趨勢。但<strong style="color:var(--accent-amber)">在 500 年、2000 年的尺度上出現的歷史模式，需要的不是「數據挖掘」而是「概念框架」——你需要先有一個理論（如「王朝週期律」），再去檢驗它。</strong>長時段模式識別本質上是一種<strong>理論構建</strong>能力——這是人類認知的最高層次之一。</p></div>
+    <div class="sub-block"><div class="label">怎麼刻意練</div><p>把必修甲部的五個時期（夏商周→秦漢→魏晉南北朝→隋唐→宋元明清）各用一句話概括「這個時期的中國正在解決什麼問題」——然後看這五個「問題」之間是不是有某種邏輯關係。</p></div>
+  </div>
+
+  <!-- 6 -->
+  <div class="card"><div class="card-header"><span class="cn">六、敘事建構力</span>——讓碎片成為故事</div>
+    <div class="tag-row"><span class="tag tag-what">是什麼</span><span class="tag tag-where">卷二歷史專題論文</span></div>
+    <div class="sub-block"><div class="label">是什麼</div><p>不是「按時間順序羅列事件」，而是<strong>選擇哪些事件是重要的、建立它們之間的因果聯繫、圍繞一個核心論點組織材料、用清晰的邏輯和流暢的語言呈現出來。</strong></p></div>
+    <div class="sub-block"><div class="label">DSE 中史在哪裡練</div><p><strong>卷二的歷史專題論文</strong>——這是整套訓練的核心。在 1 小時 20 分鐘內寫兩篇完整的論文，每篇都要求：①一個清晰的開場論點 ②分層展開的論證（從政治→經濟→文化，或從短期→中期→長期）③具體史實的援引 ④多個視角的比較 ⑤有說服力的結論。</p></div>
+    <div class="sub-block"><div class="label">為什麼 AI 替代不了</div><p>AI 寫出來的敘事是「所有可能敘述的平均」。它沒有<strong>觀點</strong>——因為觀點來自於「我認為什麼重要」，而 AI 不知道什麼重要。<strong style="color:var(--accent-amber)">敘事建構的本質是「選擇」和「判斷」——這兩個動作都需要一個「有立場的人」。</strong></p></div>
+    <div class="sub-block"><div class="label">怎麼刻意練</div><p>卷二論文訓練的每一次，都在寫完初稿後做一個「刪減練習」——如果只能保留一半的篇幅，你會刪掉什麼、保留什麼？保留的標準是什麼？這個練習訓練的正是敘事建構的核心——<strong>知道什麼重要，什麼可以刪。</strong></p></div>
+  </div>
+
+  <!-- 7 -->
+  <div class="card"><div class="card-header"><span class="cn">七、多元視角切換</span>——同一件事，不同的人有不同的「真相」</div>
+    <div class="tag-row"><span class="tag tag-what">是什麼</span><span class="tag tag-where">必修乙部·選修單元一</span></div>
+    <div class="sub-block"><div class="label">是什麼</div><p>能同時看到：同一個歷史事件，從勝利者、失敗者、旁觀者、後世評論者的角度，分別是什麼樣子的。他們各看到了什麼？各漏掉了什麼？多元視角不是「誰都可以說」，而是<strong>「誰都只能看到一部分——把不同部分拼接起來，才接近全貌」。</strong></p></div>
+    <div class="sub-block"><div class="label">DSE 中史在哪裡練</div><ul>
+      <li><strong>國共分合</strong>——國民黨的視角（共產黨叛變、破壞統一）、共產黨的視角（國民黨背叛革命、血腥清黨）、普通民眾的視角（戰亂中誰贏了都一樣苦）</li>
+      <li><strong>改革開放</strong>——中央政府（經濟增長、脫貧成就）、下崗工人（鐵飯碗碎了）、港澳台（投資機會與政治變數）、國際視角（中國崛起對世界秩序的影響）</li>
+    </ul></div>
+    <div class="sub-block"><div class="label">為什麼 AI 替代不了</div><p>AI 可以從不同來源中提取不同的觀點。但<strong style="color:var(--accent-amber)">「持有一個視角和知道一個視角」是不同的認知層次。</strong>當你閱讀國民黨的敘述時，你能理解為什麼一個國民黨老兵至死都認為「共產黨是叛徒」——同時當你閱讀共產黨的敘述時，你也能理解為什麼一個共產黨老戰士至死都認為「國民黨是劊子手」。這種<strong>情感上的共情和對「真相」不確定性的同時容納</strong>，是人類歷史思維的獨特產物。</p></div>
+    <div class="sub-block"><div class="label">怎麼刻意練</div><p>對任何一個有爭議的歷史事件，畫一個「視角矩陣」——至少四個格子：當事人 A、當事人 B、同時期旁觀者 C、後世評論者 D。每個格子寫出他們在該事件中「看到了什麼」和「看不到什麼」。你會意識到——沒有人擁有「全景」，包括現在的我們。</p></div>
+  </div>
+
+  <!-- 8 -->
+  <div class="card"><div class="card-header"><span class="cn">八、證據為本的論證力</span>——不是「我覺得」，是「證據表明」</div>
+    <div class="tag-row"><span class="tag tag-what">是什麼</span><span class="tag tag-where">水平評核·卷一多項資料題</span></div>
+    <div class="sub-block"><div class="label">是什麼</div><p>能區分——「我覺得唐朝很厲害」vs「唐代開元年間人均糧食產量達到 X、長安人口突破 Y、西域三十餘國遣使朝貢」——後者是論證，前者是表態。證據為本的論證要求：每一個論斷都能找到史料支持、不確定的地方要坦率承認證據的局限、推論要標示清楚是「推論」而非「事實」。</p></div>
+    <div class="sub-block"><div class="label">DSE 中史在哪裡練</div><ul>
+      <li><strong>水平評核的整套邏輯</strong>——不是數你列了多少史實，而是判斷你的論證有沒有結構、有沒有證據支持、有沒有考慮反方觀點</li>
+      <li><strong>卷一「多項資料題」</strong>——給你三四種不同類型的史料，要求你「根據資料 A 和資料 B」分析問題——不是在考你「知不知道」，是在考你「能不能用給定的證據做論證」</li>
+    </ul></div>
+    <div class="sub-block"><div class="label">為什麼 AI 替代不了</div><p>AI 可以幫你「找到證據」。但<strong style="color:var(--accent-amber)">「這個證據是否可信？」「多個證據之間的衝突怎麼解決？」「證據的空白處該怎麼處理？」——這三個問題需要的不是「檢索能力」，而是「判斷力」。</strong></p></div>
+    <div class="sub-block"><div class="label">怎麼刻意練</div><p>卷二論文的每一段，在段末加一句（可以寫在草稿上不用寫進答卷）：<strong>「支持這一段論證的最強證據是什麼？如果有一個反方挑戰我的論證，他會用什麼證據？我如何回應？」</strong>這會讓你的論證從「單向展示」變成「雙向對話」。</p></div>
+  </div>
+
+  <!-- 9 -->
+  <div class="card"><div class="card-header"><span class="cn">九、模糊性的安全感</span>——「我不知道」是一種力量</div>
+    <div class="tag-row"><span class="tag tag-what">是什麼</span><span class="tag tag-where">水平評核·卷二論文</span></div>
+    <div class="sub-block"><div class="label">是什麼</div><p>接受一個簡單的事實——關於過去的很多事情，我們永遠無法確切知道。不是因為「努力不夠」，而是因為史料本來就是殘缺的、矛盾的、模糊的。優秀的歷史學者不是「知道所有答案的人」，而是<strong>「知道哪些問題可能永遠沒有答案，但仍然能從殘缺的證據中得出負責任的判斷的人」。</strong></p></div>
+    <div class="sub-block"><div class="label">DSE 中史在哪裡練</div><ul>
+      <li><strong>夏商周的歷史</strong>——文字記載極度有限，大量依賴考古發現和後世追述</li>
+      <li><strong>光緒帝的死因</strong>——是病逝還是被毒殺？直到 2008 年頭髮檢測才用砷含量證實中毒。<strong>建文帝的下落</strong>——是死於宮中大火還是逃出了南京？至今無定論</li>
+      <li>水平評核不是「對答案」，是評「論證質量」——即使你的結論和「標準答案」不同，只要論證過程嚴謹，仍可拿到高分</li>
+    </ul></div>
+    <div class="sub-block"><div class="label">為什麼 AI 替代不了</div><p>AI 的底層邏輯是「概率」——給定訓練數據，最可能的回答是什麼。但<strong style="color:var(--accent-amber)">歷史研究的核心能力是：當概率本身也無法確定時（每種解釋都只有 30-40% 的證據支持），你仍然能給出一個「在現有證據下最合理的判斷」並標註它的不確定性。</strong>AI 會給你「最可能的答案」並自信地陳述它；歷史學者會給你「最可能的答案」並告訴你「為什麼這個答案仍然不確定」。後者是<strong>理智的誠實</strong>——在 AI 時代比任何時候都稀缺。</p></div>
+    <div class="sub-block"><div class="label">怎麼刻意練</div><p>在卷二論文中至少用一次「然而……由於……史料有限，我們無法確知……」這樣的句式。這不是示弱，是展示「你知道證據的邊界在哪裡」——這是最高層次的學術自律。</p></div>
+  </div>
+</section>
+
+<section class="section">
+  <h2 class="section-title"><span class="num">🤝</span>九項元能力如何與 AI 協作</h2>
+  <div class="table-wrap"><table><thead><tr><th>元能力</th><th>人做得更好的部分</th><th>AI 做得更好的部分</th><th>最佳協作模式</th></tr></thead><tbody>
+    <tr><td>史料辨析</td><td>判斷史料背後的動機和政治語境</td><td>大規模比對不同版本的事實陳述</td><td>人提出甄別維度 → AI 快速比對 → 人判斷動機</td></tr>
+    <tr><td>複雜因果推理</td><td>判斷各原因的權重和互動關係</td><td>從文獻中窮舉所有被提及的原因</td><td>人建立因果框架 → AI 搜索補充 → 人分配權重</td></tr>
+    <tr><td>跨時空共情</td><td>想像不同時空的「生活世界」</td><td>生成多視角的文字描述</td><td>人設定共情目標 → AI 輔助模擬 → 人校正</td></tr>
+    <tr><td>反事實推理</td><td>設計有意義的反事實假設</td><td>展開假設的推演鏈</td><td>人設計假設 → AI 展開 → 人判斷合理性</td></tr>
+    <tr><td>長時段模式識別</td><td>提出跨時代的「理論框架」</td><td>檢驗框架與數據的吻合度</td><td>人提出理論 → AI 檢驗 → 人修正理論</td></tr>
+    <tr><td>敘事建構</td><td>選擇角度、建立聯繫、做出判斷</td><td>生成流暢的文字和組織材料</td><td>人定論點+結構 → AI 輔助初稿 → 人深度修改</td></tr>
+    <tr><td>多元視角切換</td><td>情感共情 + 容納矛盾</td><td>提取不同來源的觀點摘要</td><td>人切換視角 → AI 補充盲區 → 人整合</td></tr>
+    <tr><td>證據為本論證</td><td>判斷證據質量和空白</td><td>搜索和匹配證據</td><td>人定論證方向 → AI 輔助檢索 → 人判斷證據</td></tr>
+    <tr><td>模糊性的安全感</td><td>在不確定中做負責任的判斷</td><td>量化不確定性的範圍</td><td>人接受模糊 → AI 量化範圍 → 人做出判斷</td></tr>
+  </tbody></table></div>
+</section>
+
+<section class="section">
+  <h2 class="section-title"><span class="num">📊</span>四科元能力全景圖：海納有容的「AI 時代思維裝備箱」</h2>
+  <div class="table-wrap"><table><thead><tr><th>元能力類型</th><th>物理</th><th>化學</th><th>生物</th><th>中史</th></tr></thead><tbody>
+    <tr><td>面對世界的方式</td><td>簡化——從混亂中抽象出模型</td><td>建構——從積木搭建目標</td><td>觀察——接受不可簡化的複雜性</td><td><strong>判斷——在殘缺證據中給出負責任的解釋</strong></td></tr>
+    <tr><td>核心追問</td><td>為什麼這樣動？</td><td>用什麼路徑製造？</td><td>為什麼長這樣？怎麼活著？</td><td><strong>我們怎麼知道發生過什麼？意味著什麼？</strong></td></tr>
+    <tr><td>信息處理</td><td>從現象到方程</td><td>從反應到路徑</td><td>從樣本到系統</td><td><strong>從史料到敘述</strong></td></tr>
+    <tr><td>不確定性應對</td><td>用誤差分析量化</td><td>用產率計算接受</td><td>用實地經驗判斷</td><td><strong>接受「永遠無法完全確知」</strong></td></tr>
+    <tr><td>AI 最難替代的</td><td>建模直覺</td><td>合成思維</td><td>精準觀察 + 跨尺度整合</td><td><strong>史料辨析 + 複雜因果 + 模糊性安全感</strong></td></tr>
+    <tr><td>最有價值的產出</td><td>解釋世界的模型</td><td>自然界沒有的分子</td><td>對生命系統的理解</td><td><strong>對過去的負責任的理解和敘述</strong></td></tr>
+  </tbody></table></div>
+</section>
+
+<section class="section">
+  <h2 class="section-title"><span class="num">🎯</span>對海納有容的具體建議</h2>
+  <p style="font-size:.85rem;color:var(--text2);margin-bottom:.8rem">海納喜歡中國歷史。這可能是他高中三年最喜歡、也最能發揮天賦的科目。以下建議不只是「怎麼考好 DSE」，更是「怎麼在喜歡的事情上做出別人做不出的深度」。</p>
+  <ol class="advice-list">
+    <li><strong>把卷二論文當成你的「代表作」來寫，而不是「答題」。</strong>大多數學生把卷二論文當「答題」——堆史實、套框架、求過關。你可以把它當「作品」。一個具體標準：你的論文能不能讓你爸（一個非歷史專業但有見識的成年人）讀完後說「嗯，你讓我對這個問題有了新的理解」？</li>
+    <li><strong>建立一個「史料日誌」。</strong>每次遇到一段讓你印象深刻的史料（一份奏折、一段回憶錄、一張照片、一組數據），記下來——不只是內容，更要記：誰寫的？寫給誰的？為什麼可信或不可信？這個日誌會成為你理解「信息如何被製造和扭曲」的終身參考框架。</li>
+    <li><strong>選修專題的選擇：追隨你的好奇心，而不是「哪個好拿分」。</strong>既然你喜歡歷史，六選一的專題是你高中三年唯一一次「自主選擇研究方向」的機會。對知識分子感興趣（孔子、司馬遷、王安石的內心世界），選單元三；對制度感興趣，選單元四；對宗教和文化交流感興趣，選單元五。好奇心驅動的研究，產出質量遠高於功利驅動的應付。</li>
+    <li><strong>用「反事實」當作娛樂。</strong>和一個也喜歡歷史的朋友，偶爾討論：如果秦始皇沒有統一文字，中國會不會像歐洲一樣分裂成幾十個語言不通的小國？如果鄭和的船隊到達了美洲，世界歷史會怎樣？最優秀的歷史學者都有一顆「小說家的心」——能想像「另一個可能的世界」的人，才能深刻理解「這個真實的世界」。</li>
+    <li><strong>讀至少一本好的歷史專著，不是教科書。</strong>DSE 課本給你的是「標準化的歷史敘述」。但這個世界上最好的歷史作品——黃仁宇的《萬曆十五年》、史景遷的《追尋現代中國》、孔飛力的《叫魂》——它們都在告訴你：歷史可以這樣寫。這種視野會讓你的論文從同齡人中脫穎而出。</li>
+  </ol>
+  <div class="parent-box"><div class="box-label">家長可以配合做什麼</div>
+    <ul>
+      <li>▸ 和海納討論歷史話題——不是「考他」，而是「你是怎麼看的？」「為什麼你這麼認為？」——讓他習慣在對話中即興建構和捍衛自己的歷史判斷</li>
+      <li>▸ 帶他去一次歷史遺址——西安、南京、洛陽。站在古城牆上和坐在書桌前看課本，是兩種完全不同的「歷史體驗」</li>
+      <li>▸ 鼓勵他讀「有意思的歷史書」而非「有用的歷史書」——在歷史的入口處，興趣比效率重要一百倍</li>
+    </ul>
+  </div>
+</section>
+
+<section class="section">
+  <h2 class="section-title"><span class="num">✦</span>總結</h2>
+  <div class="summary-card">
+    <p class="core">一句話核心結論：<br><span style="color:var(--accent)">DSE 中國歷史給你三樣東西——在殘缺證據中判斷、在多元視角中理解、在永遠不確定的過去面前保持從容。</span></p>
+    <p class="detail"><strong>詳細說明：</strong>DSE 中國歷史給海納的最大禮物，不是背下來的朝代順序或變法條目，而是三樣東西：一套在殘缺證據中做出負責任判斷的思維習慣（史料辨析→複雜因果→證據論證）、一種切換視角理解不同時代不同立場的人的能力（跨時空共情→多元視角）、以及面對「永遠無法完全確知」的過去時的從容（模糊性的安全感）。在 AI 可以生成任何你想要的「事實」和「敘述」的未來，這三種能力不僅不會過時——它們會是人類區分「AI 生成的內容」和「可信的知識」的最後一道防線。歷史學不是一個「學了過去就完了」的學科——它是人類唯一用來回答「我們怎麼知道發生過的那些事是真的」這個問題的學科。這個問題在今天比在任何一個時代都更緊迫。</p>
+  </div>
+</section>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DSE 經濟科：學習難度、目的與元能力 — 海納有容</title>
+<style>
+  :root {
+    --bg:#0d0d14; --surface:#161622; --surface2:#1c1c2a;
+    --border:#2a2a3a; --border-accent:#ff8f0033;
+    --text:#e8e8f0; --text2:#b0b0c0; --text3:#707080;
+    --accent:#ff8f00; --accent2:#ffa726; --accent-blue:#42a5f5; --accent-green:#66bb6a; --accent-pink:#ef5350;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{font-size:16px;scroll-behavior:smooth}
+  body{font-family:"Noto Sans TC","PingFang HK","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.8;-webkit-font-smoothing:antialiased;font-weight:400}
+
+  .hero{padding:3.5rem 1.5rem 2.5rem;text-align:center;border-bottom:1px solid var(--border)}
+  .hero-badge{display:inline-block;font-size:.75rem;font-weight:600;color:var(--accent);letter-spacing:.1em;border:1px solid var(--border-accent);padding:.2rem .9rem;border-radius:50px;margin-bottom:1.2rem}
+  .hero h1{font-size:clamp(1.4rem,3.2vw,2rem);font-weight:700;color:#fff;max-width:720px;margin:0 auto .6rem;letter-spacing:.03em}
+  .hero .subtitle{font-size:.82rem;color:var(--text3);max-width:660px;margin:0 auto;line-height:1.7}
+  .hero .meta-line{font-size:.72rem;color:var(--text3);margin-top:.5rem}
+
+  .container{max-width:880px;margin:0 auto;padding:2.5rem 1.5rem 5rem}
+  .section{margin-bottom:3.2rem}
+  .section-title{font-size:1.18rem;font-weight:700;color:#fff;margin-bottom:1.1rem;padding-bottom:.4rem;border-bottom:1px solid var(--border);letter-spacing:.03em}
+  .section-title .num{color:var(--accent);font-size:.85rem;margin-right:.3rem}
+
+  .table-wrap{overflow-x:auto;margin:1rem 0;-webkit-overflow-scrolling:touch}
+  table{width:100%;border-collapse:collapse;font-size:.8rem;min-width:550px}
+  thead th{background:var(--surface2);border-bottom:2px solid var(--border);color:var(--accent2);font-weight:600;text-align:left;padding:.4rem .6rem;font-size:.72rem;letter-spacing:.04em}
+  tbody td{padding:.38rem .6rem;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top;line-height:1.5}
+  tbody tr:last-child td{border-bottom:none}
+  tbody td:first-child{font-weight:600;color:var(--text);white-space:nowrap}
+
+  blockquote{border-left:2px solid var(--accent);padding:.8rem 1.1rem;margin:1rem 0;font-size:.85rem;color:var(--text2);font-style:italic;line-height:1.7;background:rgba(255,143,0,0.03)}
+
+  .triangle-viz{display:flex;justify-content:center;align-items:center;margin:1.2rem 0;text-align:center}
+  .triangle-viz svg{max-width:340px}
+  .triangle-text{font-size:.78rem;fill:var(--accent2);font-weight:600;text-anchor:middle}
+
+  .card{background:var(--surface);border:1px solid var(--border);padding:1.3rem;margin-bottom:1rem;transition:border-color .2s}
+  .card:hover{border-color:var(--border-accent)}
+  .card-header{font-size:.98rem;font-weight:700;color:var(--accent2);margin-bottom:.4rem}
+  .card .tag-row{display:flex;flex-wrap:wrap;gap:.25rem;margin-bottom:.5rem}
+  .card .tag{font-size:.64rem;padding:.08rem .5rem;border-radius:3px;font-weight:600;letter-spacing:.04em}
+  .tag-what{background:rgba(255,167,38,0.1);color:var(--accent2);border:1px solid rgba(255,167,38,0.2)}
+  .tag-where{background:rgba(255,143,0,0.08);color:var(--accent);border:1px solid rgba(255,143,0,0.2)}
+  .tag-why{background:rgba(66,165,245,0.08);color:var(--accent-blue);border:1px solid rgba(66,165,245,0.2)}
+  .tag-how{background:rgba(102,187,106,0.08);color:var(--accent-green);border:1px solid rgba(102,187,106,0.2)}
+
+  .sub-block{margin-bottom:.55rem}
+  .sub-block .label{font-size:.7rem;font-weight:700;color:var(--text3);margin-bottom:.12rem;letter-spacing:.04em}
+  .sub-block p,.sub-block ul,.sub-block ol{font-size:.82rem;color:var(--text2);line-height:1.65}
+  .sub-block ul,.sub-block ol{padding-left:1.1rem}
+  .sub-block ul li,.sub-block ol li{margin-bottom:.08rem}
+
+  .advice-list{counter-reset:adv;list-style:none;padding:0}
+  .advice-list li{counter-increment:adv;background:var(--surface);border:1px solid var(--border);padding:.8rem 1rem .8rem 2.6rem;margin-bottom:.4rem;position:relative;font-size:.83rem;color:var(--text2);line-height:1.6}
+  .advice-list li::before{content:counter(adv);position:absolute;left:.75rem;top:.8rem;width:1.35rem;height:1.35rem;background:rgba(255,143,0,0.1);border:1px solid rgba(255,143,0,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;color:var(--accent)}
+
+  .parent-box{background:var(--surface);border:1px solid rgba(255,167,38,0.2);padding:.9rem 1.2rem;margin-top:1rem}
+  .parent-box .box-label{font-size:.7rem;font-weight:700;color:var(--accent2);margin-bottom:.3rem;letter-spacing:.04em}
+  .parent-box ul{list-style:none;padding:0}
+  .parent-box ul li{padding:.12rem 0;font-size:.82rem;color:var(--text2)}
+
+  .summary-card{background:var(--surface);border:1px solid var(--border-accent);padding:1.4rem;text-align:center}
+  .summary-card .core{font-size:1rem;font-weight:700;color:#fff;margin-bottom:.8rem;line-height:1.7}
+  .summary-card .detail{font-size:.82rem;color:var(--text2);line-height:1.7;text-align:left;max-width:660px;margin:0 auto}
+
+  @media(max-width:640px){.hero{padding:2rem 1rem 1.5rem}.container{padding:1.5rem .9rem 3rem}.section-title{font-size:1.05rem}table{font-size:.72rem}}
+  @media print{body{background:#fff;color:#111}.hero{border-bottom:1px solid #ccc}.card,.advice-list li,.parent-box,.summary-card{background:#fafafa;border:1px solid #ddd}table thead th{background:#f0f0f0;color:#111}.container{padding:1rem}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-badge">DSE 經濟科 · 難度 · 目的 · 元能力</div>
+  <h1>DSE 經濟科：學習難度、目的與海納有容應培養的元能力</h1>
+  <p class="subtitle">分析依據：《經濟課程及評估指引（中四至中六）》（2025 年更新）+《補充文件》（2025 年更新）+ 2028 年考評說明。經濟科是 DSE 獨有的選科，無內地高中對應科目，本分析為純 DSE 視角。</p>
+  <p class="meta-line">分析日期：2026-06-08</p>
+</header>
+
+<div class="container">
+
+<!-- 一 -->
+<section class="section">
+  <h2 class="section-title"><span class="num">一、</span>課程速覽</h2>
+  <div class="table-wrap"><table><thead><tr><th>維度</th><th>DSE 經濟</th></tr></thead><tbody>
+    <tr><td>總課時</td><td>250 小時（必修 194h + 選修 24h + 探究活動 32h）</td></tr>
+    <tr><td>必修課題</td><td>10 個（A-J），從基本概念到國際貿易</td></tr>
+    <tr><td>選修課題</td><td>2 選 1——壟斷定價與競爭政策 / 貿易延伸與經濟增長</td></tr>
+    <tr><td>考核組成</td><td>100% 公開考試：卷一 MC 30% + 卷二寫作 70%（短題 26% + 結構/論文 33% + 選修 11%）</td></tr>
+    <tr><td>考試總時長</td><td>3 小時 30 分鐘（卷一 1h + 卷二 2h30min）</td></tr>
+    <tr><td>2028 重要更新</td><td>學生可<strong>選擇不修讀選修部分</strong>，純必修也可獲 5 級</td></tr>
+    <tr><td>校本評核</td><td><strong>無</strong>——100% 筆試</td></tr>
+  </tbody></table></div>
+</section>
+
+<!-- 二 -->
+<section class="section">
+  <h2 class="section-title"><span class="num">二、</span>課程內容全圖</h2>
+
+  <p style="font-size:.84rem;font-weight:700;color:var(--accent2);margin-bottom:.5rem">必修部分（194 小時，10 個課題）</p>
+  <div class="table-wrap"><table><thead><tr><th>課題</th><th>課時</th><th>核心內容</th></tr></thead><tbody>
+    <tr><td>A. 基本經濟概念</td><td>12h</td><td>稀少性與機會成本、三個基本經濟問題、專門化與交易、循環流程、實證 vs 規範性陳述</td></tr>
+    <tr><td>B. 廠商與生產</td><td>30h</td><td>所有權形式、生產要素、邊際回報遞減定律、生產成本（FC/VC/TC/MC/AC）、規模經濟、廠商擴張與結合、利潤極大化</td></tr>
+    <tr><td>C. 市場與價格</td><td>32h</td><td>需求定律、供需曲線、均衡價格、消費者盈餘與生產者盈餘、價格彈性、市場干預（價格管制/配額/稅/津貼）</td></tr>
+    <tr><td>D. 競爭與市場結構</td><td>8h</td><td>完全競爭、壟斷性競爭、寡頭壟斷、壟斷——四類市場結構的特徵比較</td></tr>
+    <tr><td>E. 效率、公平和政府角色</td><td>18h</td><td>效率條件、偏離效率（淨損失）、界外效應、公平（洛倫茨曲線、堅尼係數）、收入不均的緣由與政策取捨</td></tr>
+    <tr><td>F. 經濟表現的量度</td><td>12h</td><td>GDP（三種計算方式）、名義 vs 實質 GDP、GNP/GNI、物價水平（CPI/GDP 平減指數）、失業率與就業不足率</td></tr>
+    <tr><td>G. 國民收入決定及價格水平</td><td>16h</td><td>總需求（AD）曲線、短期與長期總供應（SRAS/LRAS）、AS-AD 模型決定均衡產出和物價、比較靜態分析</td></tr>
+    <tr><td>H. 貨幣與銀行</td><td>18h</td><td>貨幣定義與功能、商業銀行與中央銀行、貨幣供應（M1/M2/M3）、信貸創造與銀行乘數、貨幣需求、利率決定、香港金融中心</td></tr>
+    <tr><td>I. 宏觀經濟問題與政策</td><td>30h</td><td>經濟週期、通脹與通縮、失業、<strong>財政政策</strong>、<strong>貨幣政策</strong></td></tr>
+    <tr><td>J. 國際貿易和金融</td><td>18h</td><td>絕對優勢與比較優勢、貿易獲益、貿易障礙、國際收支平衡表、匯率與香港聯繫匯率制度</td></tr>
+  </tbody></table></div>
+
+  <p style="font-size:.84rem;font-weight:700;color:var(--accent2);margin:1rem 0 .4rem">選修部分（24 小時，二選一）</p>
+  <div class="table-wrap"><table><thead><tr><th>選修單元</th><th>核心內容</th></tr></thead><tbody>
+    <tr><td>單元一：壟斷定價、反競爭行為及競爭政策</td><td>簡單壟斷定價（MR=MC）、價格分歧、反競爭行為、<strong>香港競爭條例</strong></td></tr>
+    <tr><td>單元二：貿易理論延伸、經濟增長及發展</td><td>PPC 輔助分析比較優勢、全球化、經濟增長因素、人類發展指數、可持續發展</td></tr>
+  </tbody></table></div>
+
+  <p style="font-size:.84rem;font-weight:700;color:var(--accent2);margin:1rem 0 .4rem">探究活動（32 小時）</p>
+  <p style="font-size:.82rem;color:var(--text2)">聯繫和運用各課題內容，探究日常生活及經濟現象——不是「做實驗」（與理科不同），而是<strong>用經濟學的框架分析真實世界</strong>。</p>
+</section>
+
+<!-- 三 -->
+<section class="section">
+  <h2 class="section-title"><span class="num">三、</span>學習難度：在文理之間的「第三條路」</h2>
+  <p style="font-size:.84rem;color:var(--text2);margin-bottom:.8rem">DSE 經濟的難度特徵與其他科目有顯著不同。它不屬於理科（不要求實驗），也不像純文科（不是純記憶和論述），而是處在一個獨特的中間地帶。</p>
+
+  <p style="font-size:.84rem;font-weight:700;color:var(--accent2);margin-bottom:.4rem">3.1 與其他 DSE 科目的難度比較</p>
+  <div class="table-wrap"><table><thead><tr><th>難度維度</th><th>物理</th><th>化學</th><th>生物</th><th>中史</th><th><strong>經濟</strong></th></tr></thead><tbody>
+    <tr><td>數學要求</td><td>高</td><td>中高</td><td>低</td><td>無</td><td><strong>中</strong>——彈性計算、GDP 計算、成本計算、銀行乘數</td></tr>
+    <tr><td>圖表分析</td><td>高</td><td>中</td><td>中</td><td>無</td><td><strong>高</strong>——供需曲線、成本曲線、AS-AD 模型、Lorenz 曲線……圖表是經濟學的「語言」</td></tr>
+    <tr><td>記憶量</td><td>中低</td><td>中</td><td>極高</td><td>極高</td><td><strong>中</strong>——概念和定義需要記憶，但更強調理解和應用</td></tr>
+    <tr><td>論述寫作</td><td>中</td><td>中</td><td>中</td><td>極高</td><td><strong>高</strong>——卷二結構/論文題要求用經濟學論證</td></tr>
+    <tr><td>考試速度要求</td><td>高</td><td>高</td><td>中高</td><td>高</td><td><strong>極高</strong>——卷一 45 題/60 分鐘=80 秒/題；卷二 2h30min 需完成大量分析寫作</td></tr>
+    <tr><td>應試靈活性</td><td>低</td><td>低</td><td>低</td><td>中</td><td><strong>高</strong>——可選不修選修部分仍可獲 5 級</td></tr>
+  </tbody></table></div>
+
+  <p style="font-size:.84rem;font-weight:700;color:var(--accent2);margin:1.2rem 0 .4rem">3.2 經濟科獨特的「難度三角」</p>
+  <div class="triangle-viz">
+    <svg viewBox="0 0 360 190" width="100%" height="auto">
+      <polygon points="180,15 20,165 340,165" fill="none" stroke="var(--accent2)" stroke-width="1.5" opacity="0.6"/>
+      <text x="180" y="45" class="triangle-text" fill="var(--accent2)" style="font-size:14px;font-weight:700">概念理解</text>
+      <text x="180" y="62" class="triangle-text" fill="var(--text3)" style="font-size:11px">（定義、術語、理論）</text>
+      <text x="45" y="178" class="triangle-text" fill="var(--accent2)" style="font-size:14px;font-weight:700">圖表分析</text>
+      <text x="45" y="193" class="triangle-text" fill="var(--text3)" style="font-size:10px">（供需圖、成本曲線、AS-AD）</text>
+      <text x="315" y="178" class="triangle-text" fill="var(--accent2)" style="font-size:14px;font-weight:700">論述寫作</text>
+      <text x="315" y="193" class="triangle-text" fill="var(--text3)" style="font-size:10px">（結構題、論文題）</text>
+      <text x="180" y="100" class="triangle-text" fill="var(--accent)" style="font-size:16px;font-weight:800">經<br>濟<br>科</text>
+    </svg>
+  </div>
+  <p style="font-size:.83rem;color:var(--text2)">經濟科同時要求學生在這三個頂點上都有能力——缺一個都不行：只會背概念但不會畫圖→卷二拿不到高分；會畫圖但不會寫論證→論述題失分嚴重；會寫論證但概念不清→選擇題錯漏百出。</p>
+
+  <p style="font-size:.84rem;font-weight:700;color:var(--accent2);margin:1.2rem 0 .4rem">3.3 具體難點</p>
+  <p style="font-size:.83rem;color:var(--text2);line-height:1.7"><strong style="color:var(--accent)">難點一：圖表是第二語言。</strong>經濟學用圖表思考。供需曲線的移位、彈性的大小、AS-AD 模型的短期 vs 長期分析、壟斷定價的 MR=MC 條件——這一切都必須在圖表上完成推理。不是「畫完就好」，而是<strong>用圖表來推導和證明</strong>。每一條線的移位都要有經濟學理由。</p>
+  <p style="font-size:.83rem;color:var(--text2);line-height:1.7;margin-top:.4rem"><strong style="color:var(--accent)">難點二：概念間的精密區分。</strong>經濟科充滿了「差一個字就不一樣」的概念對：需求<strong>量</strong>改變 vs <strong>需求</strong>改變（沿曲線移動 vs 曲線整體移位）；短期 vs 長期；名義 GDP vs 實質 GDP；消費者盈餘 vs 生產者盈餘 vs 總社會盈餘；絕對優勢 vs 比較優勢；經常賬戶 vs 資本賬戶 vs 金融賬戶。</p>
+  <p style="font-size:.83rem;color:var(--text2);line-height:1.7;margin-top:.4rem"><strong style="color:var(--accent)">難點三：AS-AD 模型比較靜態分析。</strong>課題 G 的 AS-AD 模型是整套宏觀經濟學的中樞。學生需要：識別一個事件影響的是 AD、SRAS 還是 LRAS → 判斷曲線移動方向 → 分析對均衡產出和價格水平的影響 → 區分短期效應和長期效應。這是一個<strong>多步驟的邏輯推理鏈</strong>，每一步都可能出錯。</p>
+  <p style="font-size:.83rem;color:var(--text2);line-height:1.7;margin-top:.4rem"><strong style="color:var(--accent)">難點四：考試時間壓力。</strong>卷一：45 道 MC / 60 分鐘 = 每道約 80 秒。部分 MC 題需要畫圖或計算（如彈性、GDP、銀行乘數），時間極為緊張。卷二：2h30min 完成短題目 + 結構/論文題 + 選修。論文題要求學生<strong>構建完整的經濟學論證</strong>——用概念、圖表和實例支撐論點——在半小時內完成一篇結構嚴謹的短文。</p>
+</section>
+
+<!-- 四 -->
+<section class="section">
+  <h2 class="section-title"><span class="num">四、</span>學習目的：DSE 經濟科想培養什麼樣的人</h2>
+
+  <p style="font-size:.84rem;font-weight:700;color:var(--accent2);margin-bottom:.3rem">4.1 做一個「懂經濟的公民」</p>
+  <p style="font-size:.83rem;color:var(--text2);margin-bottom:.6rem">經濟科的第一層目的是<strong>公民教育</strong>。理解政府的財政政策、貨幣政策、貿易議題、收入不均——這些不是「考完就忘」的知識，它們是每一個生活在現代社會的成年人每天都在碰到的議題。</p>
+
+  <p style="font-size:.84rem;font-weight:700;color:var(--accent2);margin-bottom:.3rem">4.2 學會一套「經濟學家的思維方式」</p>
+  <ul style="font-size:.83rem;color:var(--text2);padding-left:1.2rem;line-height:1.7;margin-bottom:.6rem">
+    <li><strong>稀少性思維</strong>：一切選擇都有代價（機會成本）——在任何決策中都問「放棄了什麼？」</li>
+    <li><strong>邊際分析</strong>：不是「該不該做」，而是「再多做一點值不值得？」（邊際成本 vs 邊際利益）</li>
+    <li><strong>均衡思維</strong>：市場在供需相等時「沒有改變的傾向」——這種「系統會自動調整到穩定狀態」的視角，可以遷移到任何複雜系統</li>
+    <li><strong>實證 vs 規範的分辨</strong>：什麼是「事實是這樣」vs 什麼是「應該是這樣」</li>
+  </ul>
+
+  <p style="font-size:.84rem;font-weight:700;color:var(--accent2);margin-bottom:.3rem">4.3 銜接大學社會科學 / 商科</p>
+  <p style="font-size:.83rem;color:var(--text2)">經濟科是大學 BBA（工商管理）、經濟學、金融學、公共政策等專業最直接的入門訓練。AS-AD 模型、彈性分析、比較優勢理論——這些是大學一年級經濟學的核心內容。</p>
+</section>
+
+<!-- 五 -->
+<section class="section">
+  <h2 class="section-title"><span class="num">五、</span>海納有容修讀 DSE 經濟應培養的七項元能力</h2>
+
+  <div class="card"><div class="card-header">一、機會成本思維——在所有選擇中看見「放棄了什麼」</div>
+    <div class="tag-row"><span class="tag tag-what">是什麼</span><span class="tag tag-where">課題 A</span></div>
+    <div class="sub-block"><div class="label">是什麼</div><p>面對任何選擇——選擇科目、分配時間、使用零用錢——不只看「選了能得到什麼」，而是看「<strong>放棄了的最有價值的替代選擇</strong>」。這是經濟學給一個人最底層的思維習慣。</p></div>
+    <div class="sub-block"><div class="label">DSE 經濟在哪裡練</div><p>課題 A 是整個課程的地基。稀少性→選擇→機會成本——這三個概念定義了「經濟學家怎麼看世界」。利息被定義為「提早獲取資源的代價」——把時間也納入成本計算。</p></div>
+    <div class="sub-block"><div class="label">AI 時代為什麼重要</div><p>AI 可以做最優化的資源分配。但<strong>「什麼是值得優化？」——這個判斷需要你先定義目標函數。</strong>機會成本思維的核心就是幫你定義「什麼對你是重要的」。AI 不能替你回答這個問題。</p></div>
+    <div class="sub-block"><div class="label">怎麼刻意練</div><p>每次做選擇時（哪怕小到「今晚複習哪科」），用一句話寫下：我選了 X，放棄了 Y。Y 就是我選 X 的機會成本。堅持一個月。</p></div>
+  </div>
+
+  <div class="card"><div class="card-header">二、邊際分析能力——不糾結「要不要」，問「多一點點值不值」</div>
+    <div class="tag-row"><span class="tag tag-what">是什麼</span><span class="tag tag-where">課題 B、E</span></div>
+    <div class="sub-block"><div class="label">是什麼</div><p>不是問「廠商應該生產嗎？」（看總利潤），而是問「<strong>再多生產一件值不值得？</strong>」（看邊際成本 vs 邊際利益）。不是問「我應該讀到幾點？」而是問「<strong>再多讀半小時，多學到的東西值不值少睡的那半小時？</strong>」</p></div>
+    <div class="sub-block"><div class="label">DSE 經濟在哪裡練</div><p>課題 B 的利潤極大化（MC = MR 時停止增產）；課題 E 的效率條件（邊際利益 = 邊際成本時總社會盈餘最大）。整個微觀經濟學的決策邏輯都建立在邊際分析上。</p></div>
+    <div class="sub-block"><div class="label">AI 時代為什麼重要</div><p>AI 擅長做全局優化。但現實生活中，大多數決策是<strong>增量決策</strong>——你不需要知道「完美的選擇是什麼」，你只需要知道「下一步該往哪個方向走」。邊際分析教你的就是這種<strong>「不求最優、但求更好」</strong>的迭代思維。</p></div>
+    <div class="sub-block"><div class="label">怎麼刻意練</div><p>把「再多做一件事」的成本和收益同時列出來，判斷「邊際上」是否值得。這個習慣可以用在任何地方——學習、運動、花錢。</p></div>
+  </div>
+
+  <div class="card"><div class="card-header">三、均衡與動態系統思維——世界會自動調整</div>
+    <div class="tag-row"><span class="tag tag-what">是什麼</span><span class="tag tag-where">課題 C、G、E</span></div>
+    <div class="sub-block"><div class="label">是什麼</div><p>理解「市場會自動找到一個沒有改變傾向的價格和數量（均衡）」，然後——外力衝擊來了→市場偏離均衡→價格信號引導調整→新的均衡。這不是「靜止」的思維，是<strong>「系統如何在衝擊後重新穩定」</strong>的思維。</p></div>
+    <div class="sub-block"><div class="label">DSE 經濟在哪裡練</div><p>課題 C（供需模型的市場調整）、課題 G（AS-AD 模型中的短期 vs 長期均衡、比較靜態分析）、課題 E（價格管制的「淨損失」——干預市場的代價）。</p></div>
+    <div class="sub-block"><div class="label">AI 時代為什麼重要</div><p>AI 可以做精確的系統模擬。但<strong>「這個系統在受到衝擊後是會自動恢復還是加速崩潰？」</strong>——這種對系統穩定性的直覺，需要反覆在供需模型、AS-AD 模型的思維訓練中積累。它讓你面對任何複雜系統時，本能地問：反饋機制是什麼？均衡在哪裡？外力會讓它偏移多遠？</p></div>
+    <div class="sub-block"><div class="label">怎麼刻意練</div><p>每次分析一個市場事件（油價上漲、房價下跌、港元走強），用供需圖做一次「比較靜態分析」——原均衡→衝擊→新均衡。三步做完，你對這件事的理解就不只是「新聞標題」了。</p></div>
+  </div>
+
+  <div class="card"><div class="card-header">四、成本效益分析——決策的通用語言</div>
+    <div class="tag-row"><span class="tag tag-what">是什麼</span><span class="tag tag-where">課題 E、I</span></div>
+    <div class="sub-block"><div class="label">是什麼</div><p>任何決策——個人、企業、政府——都可以被分解為：成本（私人的 + 外部的）vs 效益（私人的 + 外部的）。不是「支持還是反對」，而是<strong>「在給定約束下，成本和效益的權衡是什麼樣的」</strong>。這是所有政策討論的通用語言。</p></div>
+    <div class="sub-block"><div class="label">DSE 經濟在哪裡練</div><p>課題 E 的界外效應分析（私人代價 vs 社會代價）、公平與效率的取捨、財政政策（稅項和轉移的抑制作用）、課題 I 的通脹再分配效應。</p></div>
+    <div class="sub-block"><div class="label">AI 時代為什麼重要</div><p>AI 可以列出成本和效益的數據。但<strong>「哪一項成本『值得』計入？哪一項效益的『權重』更高？」——這是價值判斷，不是數據分析。</strong>成本效益分析訓練的不是「算得有多準」，而是「判斷力和結構化的思維框架」。</p></div>
+    <div class="sub-block"><div class="label">怎麼刻意練</div><p>讀新聞時，遇到任何爭議性政策（最低工資、樓市辣招、碳稅），用一張紙列出：誰受益？誰受損？分別受益/受損多少？這個簡單的框架會瓦解大多數「一邊倒」的立場。</p></div>
+  </div>
+
+  <div class="card"><div class="card-header">五、實證 vs 規範的辨別力——在「是什麼」和「應該怎樣」之間畫一條線</div>
+    <div class="tag-row"><span class="tag tag-what">是什麼</span><span class="tag tag-where">課題 A·卷二論文</span></div>
+    <div class="sub-block"><div class="label">是什麼</div><p>能本能地識別——「最低工資提高 10% 會使就業減少 1-3%」是<strong>實證性陳述</strong>（可以用證據檢驗真偽）；「政府應該提高最低工資」是<strong>規範性陳述</strong>（涉及價值判斷，無法用事實證偽）。這條線的兩邊，使用兩種完全不同的「語言遊戲」。</p></div>
+    <div class="sub-block"><div class="label">DSE 經濟在哪裡練</div><p>課題 A 最後一個課題明確要求掌握實證性和規範性陳述的分別。卷二的論文題常要求對經濟政策「作出有識見的評價」——你需要先用實證分析搞清楚「事實是什麼」，再用規範立場表達「我認為應該怎樣」。</p></div>
+    <div class="sub-block"><div class="label">AI 時代為什麼最重要</div><p>這是七項元能力中<strong style="color:var(--accent)">最緊迫的一項</strong>。AI 生成的文字流暢地混合了「事實」「推論」「觀點」和「偏見」——不標註邊界。一個沒有實證/規範辨別力的人會被 AI 文本「聽起來都對」的流暢性欺騙。一個有辨別力的人在讀任何文字時，自動在腦中標註：「這一句是事實陳述→可以去驗證」「這一句是價值判斷→這個人/這個 AI 在站隊」。</p></div>
+    <div class="sub-block"><div class="label">怎麼刻意練</div><p>讀任何經濟新聞或評論時，用兩支不同顏色的熒光筆——一支標實證句（「數據顯示……」「研究表明……」），一支標規範句（「應該……」「最有效的方案是……」）。你會驚訝地發現大多數「經濟分析」其實主要是規範陳述。</p></div>
+  </div>
+
+  <div class="card"><div class="card-header">六、圖形素養與數據判讀——用圖表思考和溝通</div>
+    <div class="tag-row"><span class="tag tag-what">是什麼</span><span class="tag tag-where">全課程·卷二</span></div>
+    <div class="sub-block"><div class="label">是什麼</div><p>能把一個複雜的現象翻譯成一張供需圖，也能從一張供需圖中讀出一個完整的故事。能看懂 GDP 增長率的折線圖、堅尼係數的條形圖、洛倫茨曲線——從圖表中提取「這意味著什麼」。</p></div>
+    <div class="sub-block"><div class="label">DSE 經濟在哪裡練</div><p>整個課程以圖表為核心語言。供需曲線、成本曲線、AS-AD 模型、洛倫茨曲線、PPC——每一個經濟學概念都有對應的圖形表達。卷二的評分強調「用圖輔助說明」。</p></div>
+    <div class="sub-block"><div class="label">AI 時代為什麼重要</div><p>AI 可以生成精美的圖表和自動標註趨勢。但<strong>「選擇用什麼類型的圖表來呈現數據」——這個決定本身就隱含了一個敘事。</strong>同樣是 GDP 增長數據，用折線圖還是用對數刻度？基年是 2010 還是 2019？圖形素養讓你不僅是圖表的「消費者」，而是能<strong>批判性地閱讀圖表</strong>——問「畫這張圖的人想讓我看到什麼？他不想讓我看到什麼？」</p></div>
+    <div class="sub-block"><div class="label">怎麼刻意練</div><p>卷二論文的每一題，強迫自己<strong>先畫圖、再寫字</strong>。圖幫你理清邏輯，字幫你展開論證。圖在前、字在後——這應該是你回答所有經濟學題目的默認順序。</p></div>
+  </div>
+
+  <div class="card"><div class="card-header">七、多角度政策評估力——沒有「完美政策」</div>
+    <div class="tag-row"><span class="tag tag-what">是什麼</span><span class="tag tag-where">課題 E、C、I、J</span></div>
+    <div class="sub-block"><div class="label">是什麼</div><p>任何經濟政策都有贏家和輸家。減稅→富人受益更多還是窮人受益更多？關稅→保護了本地生產者還是傷害了消費者？寬鬆貨幣政策→刺激經濟還是推高通脹？<strong>好政策不是「完美」的政策，是「在約束下最好」的政策。</strong></p></div>
+    <div class="sub-block"><div class="label">DSE 經濟在哪裡練</div><p>課題 E（效率與公平的取捨——不能同時最大化）、課題 C（市場干預的分析——價格上限幫助了消費者但製造了短缺）、課題 I（財政政策與貨幣政策的比較——各有利弊）、課題 J（自由貿易 vs 貿易保護——消費者和生產者的利益衝突）。</p></div>
+    <div class="sub-block"><div class="label">AI 時代為什麼重要</div><p>AI 可以模擬不同政策方案的效果。但<strong>「這個政策 10 年後的二階效應是什麼？它對不同人群的利益和傷害如何分佈？它在政治上的可行性有多大？」</strong>——這些判斷需要多維度的整合思維，需要共情不同利益群體的處境，需要對「人會對政策做出什麼行為反應」有現實的估計。這是現代公民最核心的能力之一。</p></div>
+    <div class="sub-block"><div class="label">怎麼刻意練</div><p>對任何一個經濟政策（最低工資、樓市調控、碳排放稅），強迫自己寫出「支持方的最強論據」和「反對方的最強論據」——不是調侃諷刺，是真正地試圖站在對方的立場上做出最有說服力的論證。這個練習比「搞清楚哪個立場是對的」更重要——因為大多數真實世界的問題沒有「對的立場」，只有「在特定約束和價值觀下的最優選擇」。</p></div>
+  </div>
+</section>
+
+<!-- 六 -->
+<section class="section">
+  <h2 class="section-title"><span class="num">六、</span>七項元能力與 AI 協作</h2>
+  <div class="table-wrap"><table><thead><tr><th>元能力</th><th>人做得更好的部分</th><th>AI 做得更好的部分</th><th>最佳協作模式</th></tr></thead><tbody>
+    <tr><td>機會成本思維</td><td>定義「什麼是有價值的替代選擇」</td><td>列出所有可能的選擇</td><td>人定目標和價值 → AI 列出選項 → 人判斷機會成本</td></tr>
+    <tr><td>邊際分析</td><td>判斷「多一點點」是否值得</td><td>精確計算邊際成本和收益</td><td>人定義邊際問題 → AI 計算 → 人判斷</td></tr>
+    <tr><td>均衡系統思維</td><td>直覺判斷系統穩定性和調整方向</td><td>精確模擬動態調整過程</td><td>人定性判斷 → AI 定量驗證 → 人修正</td></tr>
+    <tr><td>成本效益分析</td><td>判斷哪些成本/效益值得計入</td><td>收集和計算成本效益數據</td><td>人定框架和權重 → AI 搜集數據 → 人做最終判斷</td></tr>
+    <tr><td>實證 vs 規範辨別</td><td>識別文本中的價值判斷和隱含立場</td><td>事實核查和證據檢索</td><td>人標註實證/規範邊界 → AI 驗證實證句 → 人做規範判斷</td></tr>
+    <tr><td>圖形素養</td><td>選擇「用什麼圖講什麼故事」</td><td>生成精美的圖表</td><td>人定圖表類型和敘事 → AI 生成 → 人審訊圖表</td></tr>
+    <tr><td>多角度政策評估</td><td>共情不同利益群體的處境</td><td>模擬政策效果的數據</td><td>人定評估維度 → AI 模擬 → 人做綜合判斷</td></tr>
+  </tbody></table></div>
+</section>
+
+<!-- 七 -->
+<section class="section">
+  <h2 class="section-title"><span class="num">七、</span>對海納有容的具體建議</h2>
+
+  <p style="font-size:.84rem;color:var(--text2);margin-bottom:.7rem">海納有容讀的是 EMI 學校，他們已經在修讀物理、化學、生物/中史等理科和人文科目。經濟科的角色是<strong>補充一種完全不同的思維模式</strong>——它不是「理科的邏輯」也不是「人文的敘事」，而是<strong>「在約束下做最優決策」的思維</strong>。這套思維在任何一個職業方向上都用得到。</p>
+
+  <p style="font-size:.84rem;font-weight:700;color:var(--accent2);margin-bottom:.4rem">如果他們選修 DSE 經濟</p>
+  <ol class="advice-list">
+    <li><strong>把這門課當成「思維訓練」而不是「知識學習」。</strong>經濟學不是一個「學完就忘了」的科目。機會成本、邊際分析、供需模型——它們不是「知識點」，是<strong>看待世界的工具</strong>。每學一個概念，找一個生活中的例子（零用錢怎麼分配？為什麼球隊的季票平均每場比單場票便宜？）。經濟學在你身邊——找出來。</li>
+    <li><strong>先畫圖，再寫字。</strong>卷二的論文題，最常犯的錯誤是「寫了一堆字但邏輯混亂」。養成條件反射：看到任何經濟問題，第一反應是「這個現象可以用哪個模型？」→畫圖→在圖上完成分析→然後用文字「解說」你的圖。圖是你的思維地圖，文字是導遊詞。</li>
+    <li><strong>MC 的速度訓練。</strong>卷一 45 題 / 60 分鐘，速度是硬指標。做完一套 MC 後統計——不是「對了幾道」，而是「哪幾道花了超過 2 分鐘」以及「為什麼？」。</li>
+    <li><strong>關注香港經濟新聞。</strong>經濟學最怕脫離現實。香港的經濟議題——樓價、聯繫匯率、最低工資、財政預算案、貿易戰的影響——每天都在發生。DSE 經濟卷二的資料回應題經常直接引用真實的經濟數據和政策。</li>
+    <li><strong>選修選擇：</strong>對商科/法律/公共政策感興趣 → 選修單元一（壟斷定價與競爭政策）；對國際關係/發展經濟學/全球化議題感興趣 → 選修單元二（貿易延伸與經濟增長）。</li>
+  </ol>
+
+  <div class="parent-box"><div class="box-label">家長可以配合做什麼</div>
+    <ul>
+      <li>▸ 討論家庭經濟決策（為什麼選擇這筆投資而不是那筆？什麼是機會成本？）</li>
+      <li>▸ 讓他們讀預算案新聞，然後用五分鐘向你「簡報」政府今年的財政政策是擴張性還是緊縮性</li>
+      <li>▸ 如果炒股或買保險，讓他們分析背後的經濟邏輯</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 八 -->
+<section class="section">
+  <h2 class="section-title"><span class="num">八、</span>總結</h2>
+  <div class="summary-card">
+    <p class="core">一句話核心結論：<br><span style="color:var(--accent)">DSE 經濟給你的不是賺錢術，而是一套終身受用的決策框架——機會成本、邊際分析、均衡思維。</span></p>
+    <p class="detail"><strong>詳細說明：</strong>DSE 經濟不是一門「教你賺錢」的課，而是一門「教你用稀少性和選擇兩個概念理解所有人類行為」的課。它給海納有容的最寶貴禮物不是供需曲線的畫法或 GDP 的公式，而是一套終身受用的決策框架：看到一個選擇時自動計算機會成本、看到一條新聞時自動分辨事實和價值判斷、看到一個政策時自動分析成本和效益在誰身上。在 AI 可以用毫秒級速度做出最優化的世界裡，知道「什麼值得被優化」——這個機會成本思維——比任何計算技能都更保值。</p>
+  </div>
+</section>
+
+</div>
+</body>
+</html>

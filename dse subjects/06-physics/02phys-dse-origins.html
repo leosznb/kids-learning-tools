@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>兩地物理課標差異的根源與價值判斷 | Educational Philosophy Behind the Gap — 海納有容</title>
+<style>
+  :root {
+    --bg-deep: #080816;
+    --bg-card: #111122;
+    --bg-card-alt: #151528;
+    --border-subtle: #1e1e38;
+    --border-glow: #448aff33;
+    --border-glow2: #7c4dff22;
+    --text-primary: #e2e2f0;
+    --text-secondary: #b0b0cc;
+    --text-muted: #7878a0;
+    --accent-blue: #448aff;
+    --accent-cyan: #40c4ff;
+    --accent-purple: #7c4dff;
+    --accent-amber: #ffab00;
+    --accent-green: #69f0ae;
+    --accent-pink: #ff5252;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 16px; scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", "Noto Sans SC", "PingFang HK", "Microsoft YaHei", sans-serif;
+    background: var(--bg-deep);
+    color: var(--text-primary);
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Hero ── */
+  .hero {
+    background: linear-gradient(135deg, #08081a 0%, #0d1028 40%, #0a0a20 100%);
+    border-bottom: 1px solid var(--border-glow);
+    padding: 3rem 1.5rem 2.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 50% 100%, rgba(68,138,255,0.06) 0%, rgba(124,77,255,0.03) 50%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(124,77,255,0.12);
+    border: 1px solid rgba(124,77,255,0.25);
+    color: var(--accent-purple);
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.25rem 1rem;
+    border-radius: 50px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 1.2rem;
+  }
+  .hero h1 {
+    font-size: clamp(1.4rem, 3.2vw, 2.1rem);
+    font-weight: 800;
+    color: #fff;
+    max-width: 800px;
+    margin: 0 auto 0.8rem;
+    letter-spacing: 0.02em;
+    position: relative;
+  }
+  .hero h1 .hk { color: var(--accent-blue); }
+  .hero h1 .cn { color: var(--accent-pink); }
+  .hero .subtitle {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    max-width: 680px;
+    margin: 0 auto;
+    position: relative;
+    line-height: 1.6;
+  }
+  .hero .meta-line {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 0.5rem;
+  }
+
+  /* ── Layout ── */
+  .container { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+  /* ── Section ── */
+  .section { margin-bottom: 3.2rem; }
+  .section-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 1.2rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--border-glow);
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .section-title .num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 2rem; height: 2rem;
+    background: rgba(68,138,255,0.12);
+    border: 1px solid var(--border-glow);
+    border-radius: 6px;
+    color: var(--accent-blue);
+    font-size: 0.85rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .section-title .num.purple {
+    background: rgba(124,77,255,0.12);
+    border-color: rgba(124,77,255,0.25);
+    color: var(--accent-purple);
+  }
+
+  /* ── Subsection ── */
+  .subsection { margin-bottom: 1.8rem; }
+  .subsection-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 0.8rem;
+    padding-left: 0.7rem;
+    border-left: 3px solid var(--accent-blue);
+  }
+  .subsection-title.dse { border-left-color: var(--accent-blue); }
+  .subsection-title.cn { border-left-color: var(--accent-pink); }
+
+  /* ── Gene cards ── */
+  .gene-list { list-style: none; padding: 0; }
+  .gene-list li {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+    padding: 1rem 1.2rem;
+    margin-bottom: 0.6rem;
+    position: relative;
+  }
+  .gene-list li .gene-num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 1.4rem; height: 1.4rem;
+    border-radius: 50%;
+    font-size: 0.72rem;
+    font-weight: 700;
+    margin-right: 0.5rem;
+    flex-shrink: 0;
+    vertical-align: middle;
+  }
+  .gene-dse .gene-num { background: rgba(68,138,255,0.15); color: var(--accent-blue); border: 1px solid rgba(68,138,255,0.3); }
+  .gene-cn .gene-num { background: rgba(255,82,82,0.12); color: var(--accent-pink); border: 1px solid rgba(255,82,82,0.25); }
+  .gene-list li .gene-label {
+    font-weight: 700;
+    font-size: 0.88rem;
+    color: var(--text-primary);
+    display: inline;
+  }
+  .gene-list li p {
+    margin-top: 0.3rem;
+    font-size: 0.86rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* ── Tables ── */
+  .table-wrap {
+    overflow-x: auto;
+    margin: 1.2rem 0;
+    -webkit-overflow-scrolling: touch;
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    min-width: 600px;
+  }
+  thead th {
+    background: rgba(68,138,255,0.08);
+    border-bottom: 2px solid var(--border-glow);
+    color: var(--accent-cyan);
+    font-weight: 700;
+    text-align: left;
+    padding: 0.55rem 0.8rem;
+    font-size: 0.76rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  thead th:first-child { white-space: nowrap; }
+  tbody td {
+    padding: 0.5rem 0.8rem;
+    border-bottom: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    vertical-align: top;
+    line-height: 1.55;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover td { background: rgba(68,138,255,0.02); }
+  tbody td:first-child { font-weight: 600; color: var(--text-primary); white-space: nowrap; }
+
+  /* ── Better/worse cards ── */
+  .pro-con-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem;
+    margin-bottom: 1.8rem;
+  }
+  @media (max-width: 640px) {
+    .pro-con-grid { grid-template-columns: 1fr; }
+  }
+  .pro-card, .con-card {
+    border-radius: 10px;
+    padding: 1.4rem;
+    border: 1px solid;
+  }
+  .pro-card {
+    background: linear-gradient(135deg, rgba(68,138,255,0.05), rgba(64,196,255,0.03));
+    border-color: rgba(68,138,255,0.2);
+  }
+  .con-card {
+    background: linear-gradient(135deg, rgba(255,82,82,0.04), rgba(255,171,0,0.03));
+    border-color: rgba(255,82,82,0.18);
+  }
+  .pro-card .card-label {
+    font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--accent-cyan); margin-bottom: 0.8rem;
+  }
+  .con-card .card-label {
+    font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--accent-amber); margin-bottom: 0.8rem;
+  }
+  .pro-con-item {
+    padding: 0.55rem 0;
+    border-bottom: 1px solid var(--border-subtle);
+    font-size: 0.86rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+  .pro-con-item:last-child { border-bottom: none; }
+  .pro-con-item strong { color: #fff; font-size: 0.88rem; }
+  .pro-con-item .en { color: var(--accent-cyan); font-weight: 500; font-size: 0.78rem; }
+
+  /* ── Path matching ── */
+  .path-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 0.8rem;
+    margin: 1.2rem 0;
+  }
+  .path-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+    padding: 1rem 1.2rem;
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    transition: border-color 0.2s;
+  }
+  .path-card:hover { border-color: var(--border-glow); }
+  .path-card .path-arrow {
+    display: block;
+    color: var(--accent-purple);
+    font-weight: 700;
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    margin-bottom: 0.4rem;
+  }
+  .path-card strong { color: #fff; }
+
+  /* ── Advice list ── */
+  .advice-list { list-style: none; padding: 0; }
+  .advice-list li {
+    background: var(--bg-card-alt);
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+    padding: 0.9rem 1.2rem 0.9rem 2.5rem;
+    margin-bottom: 0.6rem;
+    position: relative;
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+  .advice-list li::before {
+    content: '▸';
+    position: absolute;
+    left: 1rem;
+    top: 0.9rem;
+    color: var(--accent-purple);
+    font-weight: 700;
+  }
+
+  /* ── Summary ── */
+  .summary-card {
+    background: linear-gradient(135deg, rgba(68,138,255,0.06), rgba(124,77,255,0.04));
+    border: 1px solid var(--border-glow2);
+    border-radius: 12px;
+    padding: 1.8rem;
+    text-align: center;
+  }
+  .summary-card .core {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 1rem;
+    line-height: 1.6;
+  }
+  .summary-card .detail {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.8;
+    text-align: left;
+    max-width: 680px;
+    margin: 0 auto;
+  }
+  .summary-card .hk-phrase { color: var(--accent-blue); font-weight: 600; }
+  .summary-card .cn-phrase { color: var(--accent-pink); font-weight: 600; }
+
+  /* ── Blockquote ── */
+  blockquote {
+    border-left: 3px solid var(--accent-purple);
+    background: rgba(124,77,255,0.04);
+    padding: 1rem 1.3rem;
+    margin: 1rem 0;
+    border-radius: 0 8px 8px 0;
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+  }
+
+  /* ── Print ── */
+  @media print {
+    body { background: #fff; color: #111; }
+    .hero { background: #f5f5f5; border-bottom: 2px solid #ccc; }
+    .gene-list li, .path-card, .pro-card, .con-card, .advice-list li, .summary-card { background: #fafafa; border: 1px solid #ddd; }
+    table thead th { background: #eee; color: #111; }
+    .container { padding: 1rem; }
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 640px) {
+    .hero { padding: 2rem 1rem 1.8rem; }
+    .container { padding: 1.2rem 0.9rem 2.5rem; }
+    .section-title { font-size: 1.1rem; }
+    .gene-list li { padding: 0.8rem 0.9rem; }
+    .pro-card, .con-card { padding: 1rem; }
+    .summary-card { padding: 1.2rem; }
+    .advice-list li { padding: 0.8rem 0.8rem 0.8rem 2rem; }
+    .advice-list li::before { left: 0.6rem; top: 0.8rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════ HERO ═══════════ -->
+<header class="hero">
+  <div class="hero-badge">DSE Physics · Educational Philosophy</div>
+  <h1>兩地物理課標差異的<span class="cn">根源</span>、<span class="hk">目的</span>與價值判斷</h1>
+  <p class="subtitle">
+    接續《DSE_vs_內地_物理課程標準難度對比》的分析，追問：為什麼會有這些差異？各自想達成什麼？孰好孰劣？
+  </p>
+  <p class="meta-line">分析日期：2026-06-06</p>
+</header>
+
+<div class="container">
+
+<!-- ═══════════ 1. Roots of Difference ═══════════ -->
+<section class="section">
+  <h2 class="section-title"><span class="num">1</span> Origins of the Divergence: Historical Genes Set Two Paths <span style="font-weight:400;color:var(--text-muted);font-size:0.85rem;">差異根源：歷史基因決定了兩條路</span></h2>
+
+  <!-- DSE -->
+  <div class="subsection">
+    <h3 class="subsection-title dse">Hong Kong DSE — British Elite Education × Pragmatic Tradition <span style="font-weight:400;color:var(--text-muted);font-size:0.8rem;">香港 DSE：英式精英教育 × 實用主義傳統</span></h3>
+    <p style="font-size:0.88rem;color:var(--text-secondary);margin-bottom:0.8rem;">DSE 物理的血統追溯到<strong style="color:var(--accent-blue);">英國 A-Level（現 GCE）物理</strong>，幾個基因特徵：</p>
+    <ol class="gene-list gene-dse" style="counter-reset:none;">
+      <li>
+        <span class="gene-num">1</span><span class="gene-label">「寬度優先」的知識觀 Breadth-First Knowledge</span>
+        <p>英式教育傳統認為，高中物理應該讓學生看到物理學的全貌——從熱力學到天文學、從醫學物理到能源科學。與其在一個點上挖到微積分層面，不如讓學生知道物理學能做什麼。這就是為什麼 DSE 設了 4 個應用性極強的選修（天文、原子世界、能源、醫學物理），每個都直指真實的職業場景。</p>
+      </li>
+      <li>
+        <span class="gene-num">2</span><span class="gene-label">實驗是真的要做的 Real Lab Work</span>
+        <p>英國 GCSE/A-Level 一直有 coursework/practical assessment 傳統。香港完整繼承——校本評核（SBA）佔 20%，學生必須親手設計實驗、寫報告、接受教師評核。背後的信念：物理是實驗科學，不是紙上推演。</p>
+      </li>
+      <li>
+        <span class="gene-num">3</span><span class="gene-label">水平參照而非常模參照 Standards-Referenced, Not Norm-Referenced</span>
+        <p>DSE 的 1–5** 等級描述的是「這個學生能做什麼」，而不是「這個學生打敗了百分之幾的人」。這是英式評估哲學——能力有絕對標準，不依賴競爭排名。</p>
+      </li>
+      <li>
+        <span class="gene-num">4</span><span class="gene-label">自由選科的制度前提 Elective System</span>
+        <p>香港高中採用選科制，約有 30-35% 的高中生選修物理（通常是對科學有興趣的學生）。課程設計因此可以更有針對性，不需要為「所有學生必須掌握的最低標準」而妥協。</p>
+      </li>
+    </ol>
+  </div>
+
+  <!-- 内地 -->
+  <div class="subsection">
+    <h3 class="subsection-title cn">Mainland China — Soviet System × Gaokao Baton × Core Literacy Reform <span style="font-weight:400;color:var(--text-muted);font-size:0.8rem;">內地：蘇聯體系 × 高考指揮棒 × 核心素養改革</span></h3>
+    <p style="font-size:0.88rem;color:var(--text-secondary);margin-bottom:0.8rem;">內地物理課程標準的基因有三層沉積：</p>
+    <ol class="gene-list gene-cn" style="counter-reset:none;">
+      <li>
+        <span class="gene-num">1</span><span class="gene-label">蘇聯底子（1950s）——系統性、理論性極強 Soviet Foundation</span>
+        <p>蘇聯物理教育強調從第一性原理出發的嚴密推導。這就是為什麼內地課程標準保留了：「分子動理論 → 熱力學定律」的理論縱深、「簡諧運動 → 機械波 → 干涉衍射」的完整理論鏈條、必修階段的相對論初步（長度收縮、時間延緩）。DSE 沒有這種理論體系的完整性要求——它優先看到物理的應用面而非理論面。</p>
+      </li>
+      <li>
+        <span class="gene-num">2</span><span class="gene-label">高考指揮棒（1977–）——可標準化、可區分度、可量化 Gaokao as Director</span>
+        <p>當 100% 的升學命運取決於一場筆試，課程設計必然走向：必修 + 選擇性必修全部進入等級考筆試，無任何實操分數；壓軸題建模能力要求（情境 → 模型 → 方程 → 求解）成為核心篩選機制；學業質量標準被精確劃分為 5 級，合格考卡水平 2、等級考卡水平 4；命題要求「真實性、探究性、開放性」情境，但探究只能在卷子上完成。</p>
+      </li>
+      <li>
+        <span class="gene-num">3</span><span class="gene-label">核心素養改革（2017）——轉向但受約束 Core Literacy Reform: Right Direction, Constrained Execution</span>
+        <p>2017 版課程標準是一次重大的教育哲學轉向——從「知識傳授」轉向「素養培養」。四個核心素養（物理觀念、科學思維、科學探究、科學態度與責任）表面看和 DSE 的三維目標很像，但落地時被高考這個約束條件拉回現實：「科學探究」在筆試中只能考「設計實驗步驟」，無法閉環；「科學態度」只能在題目中體現「STSE 情境」，無法像 SBA 那樣真做實驗。改革的方向是對的，但執行工具（純筆試）限制了改革效果的釋放。</p>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- ═══════════ 2. Different Purposes ═══════════ -->
+<section class="section">
+  <h2 class="section-title"><span class="num">2</span> Different Purposes: Surface Similarity, Fundamental Divergence <span style="font-weight:400;color:var(--text-muted);font-size:0.85rem;">各自目的：表面相似，本質不同</span></h2>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Dimension 維度</th>
+          <th>DSE Physics DSE 物理</th>
+          <th>Mainland Physics 內地物理</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Educational Positioning 教育定位</td>
+          <td>培養「能思考的公民」，物理是通識教育的一部分</td>
+          <td>培養「社會主義建設者和接班人」，物理是立德樹人的載體之一</td>
+        </tr>
+        <tr>
+          <td>Direct Objective 直接目標</td>
+          <td>為大學選科做準備，銜接大學理學院/工學院</td>
+          <td>合格考（畢業門檻）+ 等級考（高考選拔），一科雙責</td>
+        </tr>
+        <tr>
+          <td>Student Population 學生群體</td>
+          <td>選修物理的約 25% 高中生（自選，通常對科學有興趣）</td>
+          <td>100% 高中生必修物理（必修模塊），約 40-50% 加選選擇性必修</td>
+        </tr>
+        <tr>
+          <td>Definition of "Good Student" 對「好學生」的定義</td>
+          <td>能獨立設計探究、批判性分析數據、在陌生情境應用知識</td>
+          <td>能系統理解概念體系、將實際情境轉化為物理模型、多步推理解決問題</td>
+        </tr>
+        <tr>
+          <td>Social Function 社會功能</td>
+          <td>個人升學工具，選科組合靈活（物理+化學+經濟也可）</td>
+          <td>社會分層工具，高考物理是頂尖大學理工科的核心篩選器</td>
+        </tr>
+        <tr>
+          <td>Difficulty Adjustment 難度調節機制</td>
+          <td>教師可跳過延展課題、選修可調適深度——「不是所有人都需要學到同一個深度」</td>
+          <td>統一學業質量 5 級水平，所有人朝同一個標準努力——「有一個應該達到的標準」</td>
+        </tr>
+        <tr>
+          <td>Minimum Standard Philosophy 最低標準哲學</td>
+          <td>不存在統一的最低標準——不選物理的學生中三後就不再接觸物理</td>
+          <td>所有高中生必須通過物理合格考——全民科學素養底盤</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══════════ 3. Which Is Better? ═══════════ -->
+<section class="section">
+  <h2 class="section-title"><span class="num">3</span> Which Is Better? Two Curricula, Two Coordinate Systems <span style="font-weight:400;color:var(--text-muted);font-size:0.85rem;">孰好孰劣？兩套課程不在同一個坐標系裡</span></h2>
+
+  <blockquote>
+    用同一個尺度去量，會覺得「這邊高那邊低」。但 DSE 和內地物理課程的差異，本質上是<strong style="color:#fff;">兩種不同的教育哲學</strong>，各自適配不同的社會結構和個人目標。
+  </blockquote>
+
+  <div class="pro-con-grid">
+    <div class="pro-card">
+      <div class="card-label">🎁 Three Things DSE Does Better DSE 做得更好的三件事</div>
+      <div class="pro-con-item">
+        <strong>1. 實驗不是紙上的</strong> <span class="en">Lab Work Is Real, Not on Paper</span><br>
+        SBA 讓學生真正經歷「假設 → 設計 → 操作 → 分析 → 報告」的完整探究循環。內地等級考水平 4 也要求「能制定探究方案」，但只能在卷子上寫出來，永遠不是閉環。對想讀工程、醫學的學生，這個差距是真實的——他們更早知道實驗室長什麼樣。
+      </div>
+      <div class="pro-con-item">
+        <strong>2. 知識與社會有連接</strong> <span class="en">Knowledge Connected to Society</span><br>
+        醫學物理（內窺鏡、CT 掃描、核素成像）、能源效率（建築和運輸業）、天文學——這些選修課題讓學生看到物理不只是公式，還是職業世界的一部分。這在激發學習動機上是一個巨大的優勢。
+      </div>
+      <div class="pro-con-item">
+        <strong>3. 學生有選擇權</strong> <span class="en">Students Have Real Choice</span><br>
+        4 選 2 的選修機制讓學生可以揚長避短。一個對醫學感興趣的學生可以不碰天文學，一個喜歡理論的學生可以選原子世界。這種彈性在高度標準化的系統中很難實現。
+      </div>
+    </div>
+
+    <div class="con-card">
+      <div class="card-label">🔵 Three Things Mainland Does Better 內地做得更好的三件事</div>
+      <div class="pro-con-item">
+        <strong>1. 理論體系的完整性</strong> <span class="en">Complete Theoretical System</span><br>
+        從必修到選擇性必修：力學 → 熱學 → 電磁學 → 光學 → 原子物理 → 相對論，是一條完整的知識鏈。DSE 沒有熱力學和相對論，知識地圖上有明顯的缺口。對於將來要學物理專業的學生，內地的底子更系統。
+      </div>
+      <div class="pro-con-item">
+        <strong>2. 建模能力的刻意訓練——AI 時代的人類核心競爭力</strong> <span class="en">Deliberate Modelling Training: Humanity's Core Edge in the AI Era</span><br>
+        高考壓軸題的「情境 → 模型 → 方程 → 求解」四步法，逼出了一套強大的抽象思維習慣。在 AI 時代，「把模糊的現實問題轉化為清晰的數學模型」正是人類相對於 AI 最稀缺的能力之一。內地學生因為高考被迫高強度訓練這種能力，這其實是他們未來從事科研或複雜工程的一個隱性優勢。DSE 的情境題相對常規，且公式提示多（試卷上常給出公式），獨立建模的要求不如高考——DSE 學生需要有意識地去彌補這一短板，否則容易變成「只會套用公式」的工具人。
+      </div>
+      <div class="pro-con-item">
+        <strong>3. 知識的下沉與普及</strong> <span class="en">Knowledge Popularization for All</span><br>
+        因為必修模塊覆蓋所有高中生，每個內地高中生都學過牛頓定律、機械能守恆、電路歐姆定律。這是一種全民科學素養的底盤。香港是選科制，不選物理的學生中三之後就再不見物理了。從社會整體科學素養的角度，內地的做法有其價值。
+      </div>
+    </div>
+  </div>
+
+  <!-- Path matching -->
+  <h3 style="font-size:0.95rem;color:var(--accent-purple);margin:1.5rem 0 0.8rem;">Adapting to Different Paths, Not Judging Superiority <span style="font-weight:400;color:var(--text-muted);font-size:0.85rem;">適配不同路徑，而非評判高下</span></h3>
+
+  <div class="path-grid">
+    <div class="path-card">
+      <span class="path-arrow">→ 物理系 / 科研</span>
+      <strong>內地的系統性和建模訓練更有優勢</strong>
+    </div>
+    <div class="path-card">
+      <span class="path-arrow">→ 工程 / 醫學 / 應用路線</span>
+      <strong>DSE 的廣度 + 實驗 + 應用選修更對口</strong>
+    </div>
+    <div class="path-card">
+      <span class="path-arrow">→ 出國讀大學</span>
+      <strong>DSE 的水平參照成績 + SBA 更符合海外大學審閱習慣</strong>
+    </div>
+    <div class="path-card">
+      <span class="path-arrow">→ 衝清北復交</span>
+      <strong>高考物理的建模能力和解題速度是剛需，DSE 的應試訓練方向不完全匹配</strong>
+    </div>
+    <div class="path-card">
+      <span class="path-arrow">→ 留香港讀港三大</span>
+      <strong>DSE 就是最直接的通道，無需繞路</strong>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 4. Implications ═══════════ -->
+<section class="section">
+  <h2 class="section-title"><span class="num">4</span> Implications for 海納 & 有容 <span style="font-weight:400;color:var(--text-muted);font-size:0.85rem;">對海納和有容的啟示</span></h2>
+
+  <p style="font-size:0.9rem;color:var(--text-secondary);margin-bottom:1rem;line-height:1.7;">
+    他們走的是 DSE 路線，DSE 物理就是他們的戰場。知道內地物理在哪些方面更強，不是為了轉軌，而是可以在 DSE 框架之外補一些缺口：
+  </p>
+
+  <ul class="advice-list">
+    <li>
+      <strong style="color:var(--accent-purple);">相對論的基本概念 Relativity Basics</strong><br>
+      DSE 僅在力學章節末簡略提及牛頓力學的局限性，不包含相對論的定量內容或系統教學；但這是現代物理的基石，可以課外了解——不需要啃教材，BBC 紀錄片《宇宙的奇蹟》或科普書《時間簡史》就是很好的起點。
+    </li>
+    <li>
+      <strong style="color:var(--accent-purple);">熱力學的思維框架 Thermodynamics Framework</strong><br>
+      DSE 的 23 小時熱學太薄，可以補充熱力學定律的基本邏輯——同樣可以從科普入手，如《熵的簡史》這類入門讀物，先建立物理直覺再考慮深入。
+    </li>
+    <li>
+      <strong style="color:var(--accent-purple);">建模意識的培養 Modelling Awareness</strong><br>
+      在做 DSE 題目時，刻意練習「把情境翻譯成物理模型」這個動作，而不只是代公式。這是 DSE 訓練中最需要主動補強的一塊肌肉。
+    </li>
+  </ul>
+
+  <blockquote style="margin-top:1.2rem;">
+    讓他們既有 DSE 的實戰能力（SBA 是真本事），又不至於在知識體系中留下盲區。
+  </blockquote>
+</section>
+
+<!-- ═══════════ 5. Summary ═══════════ -->
+<section class="section">
+  <h2 class="section-title"><span class="num purple">5</span> Summary <span style="font-weight:400;color:var(--text-muted);font-size:0.85rem;">總結</span></h2>
+
+  <div class="summary-card">
+    <p class="core">
+      一句話核心結論：<br>
+      <span class="hk-phrase">DSE 物理教「物理學能做什麼」</span>，<span class="cn-phrase">內地物理教「物理學是什麼」</span><br>
+      ——前者寬而實，後者深而全。
+    </p>
+    <p class="detail">
+      <strong>詳細說明：</strong>DSE 物理教學生「物理學能做什麼」，內地物理教學生「物理學是什麼」。前者寬而實（真做實驗），後者深而全（理論體系完整）。沒有絕對的好壞，只有適不適合你孩子的升學路徑和學習氣質。
+    </p>
+  </div>
+</section>
+
+</div>
+
+</body>
+</html>

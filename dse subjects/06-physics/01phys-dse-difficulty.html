@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DSE vs 內地高中物理：學習難度對比 | Physics Curriculum Difficulty Comparison — 海納有容</title>
+<style>
+  :root {
+    --bg-deep: #080816;
+    --bg-card: #111122;
+    --bg-card-alt: #151528;
+    --border-subtle: #1e1e38;
+    --border-glow: #448aff33;
+    --border-glow2: #7c4dff22;
+    --text-primary: #e2e2f0;
+    --text-secondary: #b0b0cc;
+    --text-muted: #7878a0;
+    --accent-blue: #448aff;
+    --accent-cyan: #40c4ff;
+    --accent-purple: #7c4dff;
+    --accent-amber: #ffab00;
+    --accent-green: #69f0ae;
+    --accent-pink: #ff4081;
+    --code-bg: #1a1a30;
+    --dse-color: #448aff;
+    --cn-color: #ff5252;
+    --bar-bg: #1a1a35;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 16px; scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", "Noto Sans SC", "PingFang HK", "Microsoft YaHei", sans-serif;
+    background: var(--bg-deep);
+    color: var(--text-primary);
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Hero ── */
+  .hero {
+    background: linear-gradient(135deg, #08081a 0%, #0d1028 40%, #0a0a20 100%);
+    border-bottom: 1px solid var(--border-glow);
+    padding: 3.2rem 1.5rem 2.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 50% 100%, rgba(68,138,255,0.06) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(68,138,255,0.12);
+    border: 1px solid var(--border-glow);
+    color: var(--accent-blue);
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.25rem 1rem;
+    border-radius: 50px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 1.2rem;
+  }
+  .hero h1 {
+    font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+    font-weight: 800;
+    color: #fff;
+    max-width: 800px;
+    margin: 0 auto 0.8rem;
+    letter-spacing: 0.02em;
+    position: relative;
+  }
+  .hero h1 .hk { color: var(--accent-blue); }
+  .hero h1 .cn { color: var(--accent-pink); }
+  .hero .subtitle {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    max-width: 700px;
+    margin: 0 auto;
+    position: relative;
+    line-height: 1.6;
+  }
+  .hero .meta-line {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 0.5rem;
+  }
+
+  /* ── Layout ── */
+  .container { max-width: 920px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+  /* ── Section ── */
+  .section { margin-bottom: 3.2rem; }
+  .section-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 1.2rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--border-glow);
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .section-title .num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 2rem; height: 2rem;
+    background: rgba(68,138,255,0.12);
+    border: 1px solid var(--border-glow);
+    border-radius: 6px;
+    color: var(--accent-blue);
+    font-size: 0.85rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  /* ── Tables ── */
+  .table-wrap {
+    overflow-x: auto;
+    margin: 1.2rem 0;
+    -webkit-overflow-scrolling: touch;
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.86rem;
+    min-width: 600px;
+  }
+  thead th {
+    background: rgba(68,138,255,0.08);
+    border-bottom: 2px solid var(--border-glow);
+    color: var(--accent-cyan);
+    font-weight: 700;
+    text-align: left;
+    padding: 0.6rem 0.8rem;
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  tbody td {
+    padding: 0.5rem 0.8rem;
+    border-bottom: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    vertical-align: top;
+    line-height: 1.55;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover td { background: rgba(68,138,255,0.025); }
+  tbody td:first-child { font-weight: 600; color: var(--text-primary); white-space: nowrap; }
+
+  .badge-row td:first-child {
+    position: relative;
+    padding-left: 1.2rem;
+  }
+  .badge-dse td:first-child::marker { color: var(--accent-blue); }
+  .badge-cn td:first-child { color: var(--accent-pink) !important; }
+
+  /* DSE deeper highlight */
+  .dse-deeper { color: var(--accent-blue); font-weight: 600; }
+  .cn-deeper { color: var(--accent-pink); font-weight: 600; }
+
+  /* ── Bar charts (Section 5) ── */
+  .viz-group { margin-bottom: 1.8rem; }
+  .viz-label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.6rem;
+    letter-spacing: 0.03em;
+  }
+  .viz-bar-row {
+    display: flex; align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.4rem;
+  }
+  .viz-bar-row .tag {
+    font-size: 0.72rem;
+    font-weight: 600;
+    width: 3rem;
+    text-align: right;
+    flex-shrink: 0;
+    letter-spacing: 0.03em;
+  }
+  .viz-bar-row .tag.dse { color: var(--accent-blue); }
+  .viz-bar-row .tag.cn { color: var(--accent-pink); }
+  .viz-bar-outer {
+    flex: 1;
+    height: 1.4rem;
+    background: var(--bar-bg);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .viz-bar-inner {
+    height: 100%;
+    border-radius: 3px;
+    display: flex; align-items: center;
+    padding-left: 0.5rem;
+    font-size: 0.68rem;
+    font-weight: 600;
+    white-space: nowrap;
+    color: #fff;
+  }
+  .viz-bar-inner.dse { background: linear-gradient(90deg, rgba(68,138,255,0.7), var(--accent-blue)); }
+  .viz-bar-inner.cn { background: linear-gradient(90deg, rgba(255,82,82,0.7), var(--accent-pink)); }
+  .viz-comment {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-style: italic;
+    margin-top: 0.25rem;
+    padding-left: 3.6rem;
+  }
+
+  /* ── Conclusion list ── */
+  .conclusion-list { list-style: none; padding: 0; }
+  .conclusion-list li {
+    counter-increment: conc;
+    background: var(--bg-card-alt);
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+    padding: 1rem 1.3rem 1rem 3.2rem;
+    margin-bottom: 0.7rem;
+    position: relative;
+    font-size: 0.92rem;
+    color: var(--text-secondary);
+    line-height: 1.65;
+  }
+  .conclusion-list li::before {
+    content: counter(conc);
+    position: absolute;
+    left: 1rem;
+    top: 1.05rem;
+    width: 1.5rem; height: 1.5rem;
+    background: rgba(68,138,255,0.12);
+    border: 1px solid var(--border-glow);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--accent-blue);
+  }
+
+  /* ── Blockquote ── */
+  blockquote {
+    border-left: 3px solid var(--accent-cyan);
+    background: rgba(64,196,255,0.04);
+    padding: 1rem 1.3rem;
+    margin: 1.2rem 0;
+    border-radius: 0 8px 8px 0;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+
+  /* ── Gift / Blindspot boxes ── */
+  .gift-box {
+    background: linear-gradient(135deg, rgba(68,138,255,0.06), rgba(64,196,255,0.03));
+    border: 1px solid rgba(68,138,255,0.2);
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  .gift-box .box-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--accent-cyan);
+    margin-bottom: 0.7rem;
+  }
+  .blind-box {
+    background: linear-gradient(135deg, rgba(255,82,82,0.05), rgba(255,171,0,0.04));
+    border: 1px solid rgba(255,82,82,0.18);
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  .blind-box .box-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--accent-amber);
+    margin-bottom: 0.7rem;
+  }
+
+  .highlight { color: var(--accent-cyan); font-weight: 600; }
+  .en-term { color: var(--accent-blue); font-weight: 600; }
+
+  /* ── Appendix matrix ── */
+  .matrix-table td:nth-child(1) { font-weight: 600; color: var(--text-primary); }
+  .matrix-table td:nth-child(2),
+  .matrix-table td:nth-child(3) { text-align: center; font-weight: 600; }
+  .matrix-table td:nth-child(4) { font-weight: 700; }
+  .matrix-table .winner-dse { color: var(--accent-blue); }
+  .matrix-table .winner-cn { color: var(--accent-pink); }
+  .matrix-table .winner-tie { color: var(--text-muted); }
+  .check { color: var(--accent-green); }
+  .cross { color: #ff5252; }
+
+  /* ── Ext link ── */
+  .ext-links {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    padding: 1rem 1.2rem;
+    border-left: 3px solid var(--border-glow2);
+    background: rgba(124,77,255,0.04);
+    border-radius: 0 6px 6px 0;
+    margin-top: 1rem;
+  }
+
+  /* ── Math conclusion ── */
+  .math-conclusion {
+    background: rgba(68,138,255,0.06);
+    border: 1px solid rgba(68,138,255,0.15);
+    border-radius: 8px;
+    padding: 0.9rem 1.2rem;
+    margin-top: 0.8rem;
+    font-size: 0.88rem;
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  /* ── Print ── */
+  @media print {
+    body { background: #fff; color: #111; }
+    .hero { background: #f5f5f5; border-bottom: 2px solid #ccc; }
+    .gift-box, .blind-box, .conclusion-list li, .math-conclusion { background: #fafafa; border: 1px solid #ddd; }
+    table thead th { background: #eee; color: #111; }
+    .en-term { color: #0059b3; }
+    .section-title { border-bottom-color: #ccc; }
+    .container { padding: 1rem; }
+    .viz-bar-inner.dse, .viz-bar-inner.cn { color: #fff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 640px) {
+    .hero { padding: 2rem 1rem 1.8rem; }
+    .container { padding: 1.2rem 0.9rem 2.5rem; }
+    .section-title { font-size: 1.1rem; }
+    table { font-size: 0.76rem; }
+    .conclusion-list li { padding: 0.9rem 0.9rem 0.9rem 2.5rem; }
+    .conclusion-list li::before { left: 0.5rem; top: 0.9rem; }
+    .viz-bar-row .tag { width: 2.5rem; font-size: 0.68rem; }
+    .viz-comment { padding-left: 3.1rem; }
+    .gift-box, .blind-box { padding: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════ HERO ═══════════ -->
+<header class="hero">
+  <div class="hero-badge">DSE Physics · Curriculum Comparison</div>
+  <h1><span class="hk">香港 DSE</span> vs <span class="cn">內地高中物理</span>課程標準：學習難度對比</h1>
+  <p class="subtitle">
+    對比依據：《高中課程及評估指引 物理(中四至中六) 二零零七年 (二零一五年十一月更新)》vs《普通高中物理課程標準（2017年版2020年修訂）》
+  </p>
+  <p class="meta-line">分析日期：2026-06-06</p>
+</header>
+
+<div class="container">
+
+<!-- ═══════════ 1. Course Architecture ═══════════ -->
+<section class="section">
+  <h2 class="section-title"><span class="num">1</span> Course Architecture Overview <span style="font-weight:400;color:var(--text-muted);font-size:0.85rem;">課程架構概覽</span></h2>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Dimension 維度</th>
+          <th>Hong Kong DSE 香港 DSE</th>
+          <th>Mainland China 內地（2017/2020）</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Total Hours 總課時</td>
+          <td>250 小時（必修 184h + 選修 50h + 探究 16h）</td>
+          <td>12 學分（必修 6 + 選擇性必修 6），標準課時約 216h（1學分=18課時）。若計入高三複習和習題課，實際約 300+h——與 DSE 的 250h 基本相當，但若計入全部複習時間則內地更多</td>
+        </tr>
+        <tr>
+          <td>Study Mode 修讀方式</td>
+          <td>所有物理學生統一修讀必修 + 4 選 2 選修</td>
+          <td>全體必修 → 升學加選選擇性必修</td>
+        </tr>
+        <tr>
+          <td>Assessment 考核組成</td>
+          <td>80% 公開考試 + 20% 校本評核（實驗探究）</td>
+          <td>100% 筆試（合格考 + 等級考 / 高考）</td>
+        </tr>
+        <tr>
+          <td>Grading 等級制度</td>
+          <td>1–5**（7 級），水平參照</td>
+          <td>等級賦分制（各省不同）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══════════ 2. Content Depth Comparison ═══════════ -->
+<section class="section">
+  <h2 class="section-title"><span class="num">2</span> Content Depth Comparison <span style="font-weight:400;color:var(--text-muted);font-size:0.85rem;">內容深度逐項對比</span></h2>
+
+  <h3 style="font-size:0.95rem;color:var(--accent-blue);margin-bottom:0.7rem;">🔴 Topics Where DSE Goes Significantly Deeper <span style="color:var(--text-muted);font-weight:400;font-size:0.85rem;">DSE 明顯更深的知識點</span></h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Topic 知識點</th><th>DSE Requirement DSE 要求</th><th>Mainland Requirement 內地要求</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Wave Optics</strong> 波動光學</td>
+          <td>楊氏雙縫 Δy = λD/a、<strong>平面透射光柵 d sinθ = nλ</strong>、駐波</td>
+          <td>僅定性了解干涉衍射，無光柵方程</td>
+        </tr>
+        <tr>
+          <td><strong>Electromagnetism Calculations</strong> 電磁學計算</td>
+          <td>直導線磁場 <strong>B = μ₀I/2πr</strong>、螺線管 <strong>B = μ₀NI/l</strong>、運動電荷受力 <strong>F = BQv sinθ</strong>、法拉第定律定量應用</td>
+          <td>磁場定量要求較低，不要求 B = μ₀I/2πr 等公式</td>
+        </tr>
+        <tr>
+          <td><strong>Gas Laws</strong> 氣體定律</td>
+          <td><strong>pV = nRT</strong> 理想氣體狀態方程、<strong>分子運動論</strong>定量解釋溫度</td>
+          <td>選擇性必修 3 中涉及，非必修</td>
+        </tr>
+        <tr>
+          <td><strong>Radioactive Decay</strong> 放射衰變</td>
+          <td><strong>N = N₀e⁻ᵏᵗ</strong> 指數衰變方程、輻射劑量 (Sv) 定量</td>
+          <td>半衰期定性為主，無指數方程</td>
+        </tr>
+        <tr>
+          <td><strong>Projectile Motion</strong> 拋體運動</td>
+          <td>獨立章節，定量計算（含斜拋）</td>
+          <td>平拋運動在必修 2，高考常以平拋結合電磁場形成「類平拋」壓軸模型</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 style="font-size:0.95rem;color:var(--accent-pink);margin:1.5rem 0 0.7rem;">🔵 Topics Where Mainland China Goes Significantly Deeper <span style="color:var(--text-muted);font-weight:400;font-size:0.85rem;">內地明顯更深的知識點</span></h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Topic 知識點</th><th>Mainland Requirement 內地要求</th><th>DSE Requirement DSE 要求</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Relativity</strong> 相對論</td>
+          <td>必修課程必學：時空觀定性理解、質能方程（E=mc²），長度收縮與時間延緩多為概念性介紹</td>
+          <td>未列入課程</td>
+        </tr>
+        <tr>
+          <td><strong>Thermodynamics</strong> 熱力學</td>
+          <td>選擇性必修 3：<strong>分子動理論、熱力學第一/第二定律</strong>、晶體與非晶體、表面張力</td>
+          <td>熱學僅 23 小時，不涉及熱力學定律</td>
+        </tr>
+        <tr>
+          <td><strong>Atomic Physics</strong> 原子物理</td>
+          <td><strong>玻爾能級躍遷</strong>定量計算（Eₙ = E₁/n²）、核反應方程、結合能</td>
+          <td>盧瑟福模型為主，光電效應在選修</td>
+        </tr>
+        <tr>
+          <td><strong>Sensors</strong> 傳感器</td>
+          <td>選擇性必修 2 獨立章節：非電學量轉換、常見傳感器原理與應用</td>
+          <td>未單獨設立</td>
+        </tr>
+        <tr>
+          <td><strong>Mechanical Vibration</strong> 機械振動</td>
+          <td>簡諧運動、單擺週期、<strong>受迫振動與共振</strong></td>
+          <td>未列入</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══════════ 3. Math Requirements ═══════════ -->
+<section class="section">
+  <h2 class="section-title"><span class="num">3</span> Mathematical Requirements Comparison <span style="font-weight:400;color:var(--text-muted);font-size:0.85rem;">數學要求對比</span></h2>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Dimension 維度</th><th>DSE</th><th>Mainland 內地</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Use of Calculus 微積分使用</td>
+          <td>顯式使用指數/對數函數（衰變方程），公式多為定量計算式</td>
+          <td>強調「極限」思想用於瞬時速度，但高考不要求微積分運算</td>
+        </tr>
+        <tr>
+          <td>Formula Density 公式密度</td>
+          <td>每章節含大量需記憶應用的定量公式</td>
+          <td>公式量相近，但更強調推導過程而非直接代公式</td>
+        </tr>
+        <tr>
+          <td>Computational Complexity 計算複雜度</td>
+          <td>波動電磁學計算步驟多、數值複雜</td>
+          <td>高考壓軸題建模層次深，多步推理要求高</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="math-conclusion">
+    <strong>Conclusion 結論：</strong>DSE 數學工具「面寬」（公式更多樣），內地「縱深」（單題推理鏈更長）。
+  </div>
+</section>
+
+<!-- ═══════════ 4. Exam Difficulty ═══════════ -->
+<section class="section">
+  <h2 class="section-title"><span class="num">4</span> Examination Difficulty Comparison <span style="font-weight:400;color:var(--text-muted);font-size:0.85rem;">考核難度對比</span></h2>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Dimension 維度</th><th>DSE</th><th>Gaokao 內地高考</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Question Types 題型</td>
+          <td>多選 + 短題目 + 結構式 + 論述題</td>
+          <td>單選 + 多選 + 實驗填空 + 計算論述</td>
+        </tr>
+        <tr>
+          <td>Context Novelty 情境新穎性</td>
+          <td>部分題目涉及陌生情境應用</td>
+          <td>命題明確要求「真實性、探究性、開放性」情境</td>
+        </tr>
+        <tr>
+          <td>Modelling Requirement 建模要求</td>
+          <td>中等</td>
+          <td><strong>極高</strong>——高考命題強調「真實情境」，要求學生具備將陌生情境抽象為物理模型的能力（遠超課標基礎要求）</td>
+        </tr>
+        <tr>
+          <td>Lab Assessment 實驗考核</td>
+          <td>校本評核 20%：真做實驗、寫報告</td>
+          <td>筆試中的實驗題（紙上實驗）</td>
+        </tr>
+        <tr>
+          <td>Top Differentiation 頂尖區分度</td>
+          <td>5** ≈ 前 1-2%</td>
+          <td>清北線 ≈ 前 0.1-0.5%</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══════════ 5. Difficulty Visualization ═══════════ -->
+<section class="section">
+  <h2 class="section-title"><span class="num">5</span> Difficulty Visualization <span style="font-weight:400;color:var(--text-muted);font-size:0.85rem;">難度差異可視化</span></h2>
+
+  <!-- Breadth -->
+  <div class="viz-group">
+    <div class="viz-label">Knowledge Breadth 知識廣度 → <span style="font-weight:400;color:var(--text-muted);">(內地略勝)</span></div>
+    <div class="viz-bar-row"><span class="tag cn">內地</span><div class="viz-bar-outer"><div class="viz-bar-inner cn" style="width:92%">12 學分覆蓋傳統物理分支（含相對論/熱力學/傳感器）</div></div></div>
+    <div class="viz-bar-row"><span class="tag dse">DSE</span><div class="viz-bar-outer"><div class="viz-bar-inner dse" style="width:78%">必修 + 2 選 2，熱力學/相對論不涉及</div></div></div>
+    <div class="viz-comment">但在天文/醫學/能源等應用領域有獨特涉獵</div>
+  </div>
+
+  <!-- Depth: EM -->
+  <div class="viz-group">
+    <div class="viz-label">Single-Point Depth: Electromagnetism 電磁學深度 → <span style="font-weight:400;color:var(--text-muted);">(DSE 更深)</span></div>
+    <div class="viz-bar-row"><span class="tag dse">DSE</span><div class="viz-bar-outer"><div class="viz-bar-inner dse" style="width:100%">定量磁場計算 + 法拉第定律完整應用</div></div></div>
+    <div class="viz-bar-row"><span class="tag cn">內地</span><div class="viz-bar-outer"><div class="viz-bar-inner cn" style="width:60%">定性為主，少定量公式</div></div></div>
+  </div>
+
+  <!-- Depth: Wave Optics -->
+  <div class="viz-group">
+    <div class="viz-label">Single-Point Depth: Wave Optics 波動光學深度 → <span style="font-weight:400;color:var(--text-muted);">(DSE 更深)</span></div>
+    <div class="viz-bar-row"><span class="tag dse">DSE</span><div class="viz-bar-outer"><div class="viz-bar-inner dse" style="width:100%">光柵方程 + 雙縫干涉完整計算</div></div></div>
+    <div class="viz-bar-row"><span class="tag cn">內地</span><div class="viz-bar-outer"><div class="viz-bar-inner cn" style="width:40%">定性了解</div></div></div>
+  </div>
+
+  <!-- Problem-solving -->
+  <div class="viz-group">
+    <div class="viz-label">Problem-Solving Thinking 解題思維 → <span style="font-weight:400;color:var(--text-muted);">(內地更考驗建模能力)</span></div>
+    <div class="viz-bar-row"><span class="tag cn">高考</span><div class="viz-bar-outer"><div class="viz-bar-inner cn" style="width:100%">多步推理 + 陌生情境 + 模型建構</div></div></div>
+    <div class="viz-bar-row"><span class="tag dse">DSE</span><div class="viz-bar-outer"><div class="viz-bar-inner dse" style="width:72%">定量計算強，情境相對常規</div></div></div>
+  </div>
+
+  <!-- Lab -->
+  <div class="viz-group">
+    <div class="viz-label">Hands-On Lab Work 實驗實戰 → <span style="font-weight:400;color:var(--text-muted);">(DSE 要求真做實驗)</span></div>
+    <div class="viz-bar-row"><span class="tag dse">DSE</span><div class="viz-bar-outer"><div class="viz-bar-inner dse" style="width:100%">20% 分數來自真實實驗探究（SBA）</div></div></div>
+    <div class="viz-bar-row"><span class="tag cn">內地</span><div class="viz-bar-outer"><div class="viz-bar-inner cn" style="width:28%">筆試考實驗設計，不記實際操作分</div></div></div>
+  </div>
+</section>
+
+<!-- ═══════════ 6. Comprehensive Conclusion ═══════════ -->
+<section class="section">
+  <h2 class="section-title"><span class="num">6</span> Comprehensive Conclusion <span style="font-weight:400;color:var(--text-muted);font-size:0.85rem;">綜合結論</span></h2>
+
+  <p style="font-size:0.95rem;color:var(--text-primary);font-weight:700;margin-bottom:1rem;">
+    Overall difficulty is roughly equivalent, but the <em>direction</em> of difficulty differs:<br>
+    <span style="font-weight:400;color:var(--text-secondary);font-size:0.9rem;">整體難度基本相當，但「難」的方向不同：</span>
+  </p>
+
+  <ol class="conclusion-list" style="counter-reset:conc;">
+    <li>
+      <strong class="dse-deeper">DSE 難在「定量計算的廣度」</strong> —— 電磁學和波動光學領域公式多、數值計算要求高，且學生必須真刀真槍做實驗拿分（校本評核佔 20%），無法紙上談兵。
+    </li>
+    <li>
+      <strong class="cn-deeper">內地高考難在「建模推理的深度」</strong> —— 壓軸題往往需要學生從零開始將陌生情境轉化為物理模型，推理鏈路長、思維層級深，且競爭烈度遠超 DSE（清北錄取率遠低於港三大）。
+    </li>
+    <li>
+      <strong style="color:var(--text-primary);">內容取捨差異明顯</strong>：內地必修相對論（DSE 完全沒碰），DSE 必修光柵方程和磁場定量計算（內地不要求）。兩者走的不是同一條路。
+    </li>
+  </ol>
+
+  <blockquote>
+    若以一個 Band 1A EMI 學校學生為參照：他在 DSE 物理中需要攻克的最大挑戰是<strong style="color:var(--accent-blue);">電磁學和波動光學的公式體系 + 校本評核的實驗報告</strong>；如果他轉考內地高考物理，最大挑戰會變成<strong style="color:var(--accent-pink);">從實際情境中抽象物理模型的建模能力 + 壓軸題的超長推理鏈</strong>。兩者的「難」是不同的肌肉群。
+  </blockquote>
+</section>
+
+<!-- ═══════════ 7. Advice for 海納有容 ═══════════ -->
+<section class="section">
+  <h2 class="section-title"><span class="num">7</span> Implications for 海納 & 有容 <span style="font-weight:400;color:var(--text-muted);font-size:0.85rem;">對海納有容的啟示</span></h2>
+
+  <p style="font-size:0.92rem;color:var(--text-secondary);margin-bottom:1.2rem;line-height:1.75;">
+    他們是 EMI 學校的學生，物理用英語學——這本身就是優勢：物理概念以英語編碼意味著進入大學後直接對接國際教材，不需要經歷「中學中文物理→大學英文物理」的術語轉換陣痛。
+  </p>
+
+  <div class="gift-box">
+    <div class="box-label">🎁 DSE Physics's Three Greatest Gifts DSE 物理給他們最大的三份禮物</div>
+    <ul style="list-style:none;padding:0;">
+      <li style="padding:0.35rem 0;color:var(--text-secondary);font-size:0.9rem;">
+        <strong style="color:var(--accent-blue);">Electromagnetism Quantitative Ability 電磁學定量能力：</strong>B = μ₀I/2πr、法拉第定律定量應用——這些公式內地高考不考，但在大學物理（尤其是工程方向）中是基礎語言。DSE 學生在這方面領先了一個身位。
+      </li>
+      <li style="padding:0.35rem 0;color:var(--text-secondary);font-size:0.9rem;">
+        <strong style="color:var(--accent-blue);">SBA Lab Literacy (20%) SBA 實驗素養：</strong>真做實驗的習慣是無法靠刷題獲得的。進大學實驗室的第一天，他們不會站在那裡不知道移液管怎麼拿（那是化學），但他們知道怎麼連接電路、收集數據、寫誤差分析。
+      </li>
+      <li style="padding:0.35rem 0;color:var(--text-secondary);font-size:0.9rem;">
+        <strong style="color:var(--accent-blue);">Elective Flexibility 選修的靈活性：</strong>4 選 2 的選修機制讓他們可以揚長避短——對工程感興趣的選天文學和能源，對醫學感興趣的選醫學物理。
+      </li>
+    </ul>
+  </div>
+
+  <div class="blind-box">
+    <div class="box-label">⚠️ Blind Spots to Watch 需要留意的短板</div>
+    <ul style="list-style:none;padding:0;">
+      <li style="padding:0.35rem 0;color:var(--text-secondary);font-size:0.9rem;">
+        <strong style="color:var(--accent-amber);">Modelling Depth 建模推理的深度：</strong>DSE 的題目情境相對常規，不像內地高考壓軸題那樣要求從零開始抽象物理模型。如果將來走物理/工程方向，建議在備考之餘，偶爾找一兩道內地高考的壓軸題來「折磨」一下自己——不是為了學知識點，而是為了訓練「從混亂中找結構」的能力。
+      </li>
+      <li style="padding:0.35rem 0;color:var(--text-secondary);font-size:0.9rem;">
+        <strong style="color:var(--accent-amber);">Mainland-Only Content 內地獨有的內容（相對論/熱力學/玻爾能級）：</strong>這些在大學物理中是必修內容，DSE 完全沒有覆蓋。如果大學方向是物理系，建議中五暑假自修內地選擇性必修教材的相關章節。
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- ═══════════ Further Reading ═══════════ -->
+<div class="ext-links">
+  <strong style="color:var(--accent-purple);">延伸閱讀 Extended Reading：</strong>關於這些差異背後的教育理念根源，請參閱《兩地物理課標差異根源與價值判斷》。關於 AI 時代 DSE 物理應培養的元能力，請參閱《AI時代_DSE物理應培養的元能力_海納有容》。<br>
+  <span style="font-size:0.78rem;color:var(--text-muted);">For the educational philosophy behind these differences, see the companion piece on curriculum origins. For the meta-abilities DSE Physics cultivates in the AI era, see the physics meta-ability framework.</span>
+</div>
+
+<!-- ═══════════ Appendix ═══════════ -->
+<section class="section" style="margin-top:2rem;">
+  <h2 class="section-title"><span class="num">A</span> Appendix: Knowledge Coverage Matrix <span style="font-weight:400;color:var(--text-muted);font-size:0.85rem;">附錄：兩套課程知識覆蓋矩陣</span></h2>
+
+  <div class="table-wrap">
+    <table class="matrix-table">
+      <thead>
+        <tr><th>Knowledge Domain 知識領域</th><th>DSE</th><th>Mainland 內地</th><th>Who Goes Deeper 誰更深</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Kinematics 運動學（勻變速、自由落體）</td><td class="check">✅</td><td class="check">✅</td><td class="winner-tie">相當</td></tr>
+        <tr><td>Newton's Laws 牛頓運動定律</td><td class="check">✅</td><td class="check">✅</td><td class="winner-tie">相當</td></tr>
+        <tr><td>Projectile Motion 拋體運動</td><td class="check">✅ 含斜拋</td><td class="check">✅ 平拋為主</td><td class="winner-dse">DSE</td></tr>
+        <tr><td>Work, Energy, Power 功、能、功率</td><td class="check">✅</td><td class="check">✅</td><td class="winner-tie">相當</td></tr>
+        <tr><td>Momentum & Conservation 動量與動量守恆</td><td class="check">✅</td><td class="check">✅ 選擇性必修</td><td class="winner-tie">相當</td></tr>
+        <tr><td>Uniform Circular Motion 勻速圓周運動</td><td class="check">✅</td><td class="check">✅</td><td class="winner-tie">相當</td></tr>
+        <tr><td>Gravitation 萬有引力</td><td class="check">✅</td><td class="check">✅</td><td class="winner-tie">相當</td></tr>
+        <tr><td>Relativity 相對論初步</td><td class="cross">❌</td><td class="check">✅ 必修</td><td class="winner-cn">內地</td></tr>
+        <tr><td>Thermal / Gas 熱學/氣體</td><td class="check">✅ 23h</td><td class="check">✅ 選擇性必修</td><td class="winner-cn">內地（熱力學定律）</td></tr>
+        <tr><td>Wave Basics 波動基礎</td><td class="check">✅ 47h</td><td class="check">✅ 選擇性必修</td><td class="winner-dse">DSE（光柵方程）</td></tr>
+        <tr><td>Geometric Optics 幾何光學</td><td class="check">✅ 含透鏡公式</td><td class="check">✅</td><td class="winner-tie">相當</td></tr>
+        <tr><td>Wave Optics 波動光學</td><td class="check">✅ 雙縫+光柵</td><td class="check">✅ 定性為主</td><td class="winner-dse"><strong>DSE</strong></td></tr>
+        <tr><td>Acoustics 聲學</td><td class="check">✅</td><td class="cross">❌（無獨立專題，聲波在機械振動與機械波模塊中涉及）</td><td class="winner-dse">DSE</td></tr>
+        <tr><td>Electrostatics 靜電學</td><td class="check">✅</td><td class="check">✅</td><td class="winner-tie">相當</td></tr>
+        <tr><td>DC Circuits 直流電路</td><td class="check">✅</td><td class="check">✅</td><td class="winner-tie">相當</td></tr>
+        <tr><td>Magnetic Fields 磁場</td><td class="check">✅ 定量</td><td class="check">✅ 偏定性</td><td class="winner-dse"><strong>DSE</strong></td></tr>
+        <tr><td>Electromagnetic Induction 電磁感應</td><td class="check">✅ 定量</td><td class="check">✅</td><td class="winner-tie">相當</td></tr>
+        <tr><td>AC / Transformers 交流電/變壓器</td><td class="check">✅</td><td class="check">✅</td><td class="winner-tie">相當</td></tr>
+        <tr><td>Sensors 傳感器</td><td class="cross">❌</td><td class="check">✅ 選擇性必修</td><td class="winner-cn">內地</td></tr>
+        <tr><td>Mechanical Vibration 機械振動</td><td class="cross">❌</td><td class="check">✅ 選擇性必修</td><td class="winner-cn">內地</td></tr>
+        <tr><td>Radioactivity / Nuclear 放射性/核能</td><td class="check">✅ 含指數衰變</td><td class="check">✅ 選擇性必修</td><td class="winner-dse">DSE（衰變定量）</td></tr>
+        <tr><td>Atomic Physics 原子物理</td><td class="check">✅ 盧瑟福模型</td><td class="check">✅ 含能級躍遷</td><td class="winner-cn">內地（能級定量）</td></tr>
+        <tr><td>Photoelectric Effect 光電效應/波粒二象性</td><td class="check">✅ 選修</td><td class="check">✅ 選擇性必修</td><td class="winner-tie">相當</td></tr>
+        <tr><td>Astronomy 天文學</td><td class="check">✅ 選修</td><td class="cross">❌</td><td class="winner-dse">DSE</td></tr>
+        <tr><td>Medical Physics 醫學物理</td><td class="check">✅ 選修</td><td class="cross">❌</td><td class="winner-dse">DSE</td></tr>
+        <tr><td>Energy 能源</td><td class="check">✅ 選修</td><td class="check">✅ 必修</td><td class="winner-tie">相當</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+</div>
+
+</body>
+</html>

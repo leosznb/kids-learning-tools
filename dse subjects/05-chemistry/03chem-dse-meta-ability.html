@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>修讀 DSE 化學應培養的元能力 | Meta-Abilities from DSE Chemistry — 海納有容 AI 時代準備清單</title>
+<style>
+  :root {
+    --bg-deep: #08080f;
+    --bg-card: #111119;
+    --bg-card-alt: #15151f;
+    --border-subtle: #1e1e2e;
+    --border-glow: #00bfa533;
+    --text-primary: #e2e2ea;
+    --text-secondary: #b0b0c0;
+    --text-muted: #787890;
+    --accent-cyan: #00e5ff;
+    --accent-teal: #00bfa5;
+    --accent-green: #39ff14;
+    --accent-amber: #ffab00;
+    --accent-pink: #ff4081;
+    --accent-purple: #b388ff;
+    --code-bg: #1a1a28;
+    --danger: #ff5252;
+    --success: #69f0ae;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 16px; scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", "Noto Sans SC", "PingFang HK", "Microsoft YaHei", sans-serif;
+    background: var(--bg-deep);
+    color: var(--text-primary);
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Header ── */
+  .hero {
+    background: linear-gradient(135deg, #0a0a1a 0%, #0d1a1a 50%, #0a0a1a 100%);
+    border-bottom: 1px solid var(--border-glow);
+    padding: 3.5rem 1.5rem 2.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 50% 100%, rgba(0,191,165,0.08) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(0,191,165,0.12);
+    border: 1px solid var(--border-glow);
+    color: var(--accent-teal);
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.25rem 1rem;
+    border-radius: 50px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 1.2rem;
+  }
+  .hero h1 {
+    font-size: clamp(1.5rem, 3.5vw, 2.3rem);
+    font-weight: 800;
+    color: #fff;
+    max-width: 860px;
+    margin: 0 auto 0.8rem;
+    letter-spacing: 0.02em;
+    position: relative;
+  }
+  .hero h1 .en { color: var(--accent-cyan); }
+  .hero .subtitle {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    max-width: 680px;
+    margin: 0 auto;
+    position: relative;
+  }
+  .hero .meta-line {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-top: 0.6rem;
+  }
+
+  /* ── Layout ── */
+  .container { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+  /* ── Section ── */
+  .section { margin-bottom: 3.5rem; }
+  .section-title {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 1.2rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--border-glow);
+    display: flex; align-items: center; gap: 0.6rem;
+  }
+  .section-title .num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 2rem; height: 2rem;
+    background: rgba(0,191,165,0.15);
+    border: 1px solid var(--border-glow);
+    border-radius: 6px;
+    color: var(--accent-teal);
+    font-size: 0.85rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  /* ── Cards ── */
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 10px;
+    padding: 1.8rem;
+    margin-bottom: 1.5rem;
+    transition: border-color 0.2s;
+  }
+  .card:hover { border-color: var(--border-glow); }
+  .card-header {
+    display: flex; align-items: baseline; gap: 0.6rem;
+    margin-bottom: 0.8rem;
+  }
+  .card-header .en-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--accent-cyan);
+    letter-spacing: 0.02em;
+  }
+  .card-header .cn-title {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+  .card .tag-row {
+    display: flex; flex-wrap: wrap; gap: 0.4rem;
+    margin-bottom: 0.9rem;
+  }
+  .card .tag {
+    font-size: 0.7rem;
+    padding: 0.15rem 0.65rem;
+    border-radius: 4px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+  .tag-what { background: rgba(0,229,255,0.1); color: var(--accent-cyan); border: 1px solid rgba(0,229,255,0.2); }
+  .tag-where { background: rgba(0,191,165,0.1); color: var(--accent-teal); border: 1px solid rgba(0,191,165,0.2); }
+  .tag-why { background: rgba(255,171,0,0.1); color: var(--accent-amber); border: 1px solid rgba(255,171,0,0.2); }
+  .tag-how { background: rgba(179,136,255,0.1); color: var(--accent-purple); border: 1px solid rgba(179,136,255,0.2); }
+
+  .sub-block { margin-bottom: 0.8rem; }
+  .sub-block .label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    margin-bottom: 0.25rem;
+    display: flex; align-items: center; gap: 0.35rem;
+  }
+  .sub-block .label::before {
+    content: '';
+    display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0.6;
+  }
+  .sub-block p, .sub-block ul { font-size: 0.92rem; color: var(--text-secondary); }
+  .sub-block ul { padding-left: 1.3rem; }
+  .sub-block ul li { margin-bottom: 0.2rem; }
+  .sub-block ul li::marker { color: var(--accent-teal); }
+
+  .highlight { color: var(--accent-teal); font-weight: 600; }
+  .en-term { color: var(--accent-cyan); font-weight: 600; }
+
+  /* ── Quote ── */
+  blockquote {
+    border-left: 3px solid var(--accent-cyan);
+    background: rgba(0,229,255,0.04);
+    padding: 1rem 1.3rem;
+    margin: 1.2rem 0;
+    border-radius: 0 8px 8px 0;
+    font-size: 0.92rem;
+    color: var(--text-secondary);
+  }
+
+  /* ── Tables ── */
+  .table-wrap {
+    overflow-x: auto;
+    margin: 1.2rem 0;
+    -webkit-overflow-scrolling: touch;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+    min-width: 600px;
+  }
+  thead th {
+    background: rgba(0,191,165,0.08);
+    border-bottom: 2px solid var(--border-glow);
+    color: var(--accent-teal);
+    font-weight: 700;
+    text-align: left;
+    padding: 0.65rem 0.8rem;
+    font-size: 0.8rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  tbody td {
+    padding: 0.55rem 0.8rem;
+    border-bottom: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+  }
+  tbody tr:hover td { background: rgba(0,229,255,0.02); }
+  tbody td:first-child { font-weight: 600; color: var(--text-primary); white-space: nowrap; }
+
+  /* ── Advice list ── */
+  .advice-list { counter-reset: advice; list-style: none; padding: 0; }
+  .advice-list li {
+    counter-increment: advice;
+    background: var(--bg-card-alt);
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+    padding: 1.2rem 1.4rem 1.2rem 3.2rem;
+    margin-bottom: 0.8rem;
+    position: relative;
+    font-size: 0.92rem;
+    color: var(--text-secondary);
+  }
+  .advice-list li::before {
+    content: counter(advice);
+    position: absolute;
+    left: 1rem;
+    top: 1.2rem;
+    width: 1.6rem; height: 1.6rem;
+    background: rgba(0,191,165,0.15);
+    border: 1px solid var(--border-glow);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--accent-teal);
+  }
+
+  .direction-list { list-style: none; padding: 0; }
+  .direction-list li {
+    padding: 0.5rem 0 0.5rem 1.5rem;
+    position: relative;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+  }
+  .direction-list li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--accent-cyan);
+    font-weight: 700;
+  }
+
+  /* ── Parent box ── */
+  .parent-box {
+    background: linear-gradient(135deg, rgba(255,171,0,0.06), rgba(255,64,129,0.04));
+    border: 1px solid rgba(255,171,0,0.2);
+    border-radius: 10px;
+    padding: 1.4rem 1.6rem;
+    margin-top: 1.4rem;
+  }
+  .parent-box .label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--accent-amber);
+    margin-bottom: 0.5rem;
+  }
+
+  /* ── Summary ── */
+  .summary-card {
+    background: linear-gradient(135deg, rgba(0,191,165,0.08), rgba(0,229,255,0.04));
+    border: 1px solid var(--border-glow);
+    border-radius: 12px;
+    padding: 2rem;
+    text-align: center;
+  }
+  .summary-card .core {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 1rem;
+    line-height: 1.6;
+  }
+  .summary-card .core .en { color: var(--accent-cyan); }
+  .summary-card .detail {
+    font-size: 0.92rem;
+    color: var(--text-secondary);
+    line-height: 1.8;
+    text-align: left;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  /* ── Print ── */
+  @media print {
+    body { background: #fff; color: #111; }
+    .hero { background: #f5f5f5; border-bottom: 2px solid #ccc; }
+    .card, .advice-list li, .parent-box, .summary-card { background: #fafafa; border: 1px solid #ddd; }
+    table thead th { background: #eee; color: #111; }
+    .en-term, .card-header .en-title { color: #00695c; }
+    .highlight { color: #00695c; }
+    .container { padding: 1rem; }
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 640px) {
+    .hero { padding: 2rem 1rem 1.8rem; }
+    .container { padding: 1.2rem 0.9rem 2.5rem; }
+    .card { padding: 1.2rem; }
+    .card-header { flex-direction: column; gap: 0.2rem; }
+    .advice-list li { padding: 1rem 1rem 1rem 2.6rem; }
+    .advice-list li::before { left: 0.6rem; top: 1rem; }
+    .summary-card { padding: 1.3rem; }
+    .section-title { font-size: 1.15rem; }
+    table { font-size: 0.78rem; }
+  }
+
+  /* ── Back to top ── */
+  .back-top {
+    position: fixed; bottom: 1.5rem; right: 1.5rem;
+    width: 2.4rem; height: 2.4rem;
+    background: rgba(0,191,165,0.15);
+    border: 1px solid var(--border-glow);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--accent-teal);
+    font-size: 1.2rem;
+    cursor: pointer;
+    text-decoration: none;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+  }
+  .back-top:hover { opacity: 1; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════ HERO ═══════════ -->
+<header class="hero">
+  <div class="hero-badge">DSE Chemistry · Meta-Ability Framework</div>
+  <h1>修讀 <span class="en">DSE Chemistry</span> 應培養的元能力<br>給海納有容的 AI 時代準備清單</h1>
+  <p class="subtitle">問題背景：在 AI 時代一切不確定的前提下，修讀 DSE 化學的過程中應該刻意培養哪些終身受用的元能力？</p>
+  <p class="meta-line">分析日期：2026-06-07</p>
+</header>
+
+<div class="container">
+
+<!-- ═══════════ SECTION: Why Chemistry ═══════════ -->
+<section class="section">
+  <h2 class="section-title"><span class="num">✦</span> Why Chemistry's Meta-Ability Training Is Unique <span style="font-weight:400;color:var(--text-muted);font-size:0.85rem;">為什麼化學的元能力訓練是獨特的</span></h2>
+
+  <p style="font-size:0.95rem;color:var(--text-secondary);line-height:1.85;">
+    物理訓練的是「把複雜現實簡化成可解的模型」（<span class="en-term">Reductionism</span> 還原論思維），化學訓練的是完全不同的肌肉群——<strong style="color:#fff;">「在已知的分子積木中設計出一條從 A 到 B 的路徑」</strong>（<span class="en-term">Constructivism</span> 建構論思維）。如果說物理教你怎麼拆解世界，化學教你怎麼搭建世界。
+  </p>
+
+  <p style="font-size:0.95rem;color:var(--text-secondary);line-height:1.85;margin-top:0.8rem;">
+    DSE 化學有一份獨一無二的禮物：它是<strong style="color:var(--accent-teal);">極少數同時訓練（1）合成路徑設計、（2）實驗操作、（3）儀器判讀、（4）獨立探究的高中科目</strong>。在 AI 時代，這些恰好是人類最不該外包給機器的能力。
+  </p>
+</section>
+
+<!-- ═══════════ SECTION: 8 Meta-Abilities ═══════════ -->
+<section class="section">
+  <h2 class="section-title"><span class="num">8</span> Eight Meta-Abilities to Deliberately Cultivate <span style="font-weight:400;color:var(--text-muted);font-size:0.85rem;">八項需要刻意培養的元能力</span></h2>
+
+  <!-- Ability 1 -->
+  <div class="card" id="ability-1">
+    <div class="card-header">
+      <span class="en-title">1. Synthetic Thinking</span>
+      <span class="cn-title">合成思維——從積木到目標</span>
+    </div>
+    <div class="tag-row">
+      <span class="tag tag-what">What</span>
+      <span class="tag tag-where">Topics 11, 13</span>
+    </div>
+
+    <div class="sub-block">
+      <div class="label">What It Is 是什麼</div>
+      <p>給定一個目標分子，能從原料出發，通過一系列官能基轉換，設計出一條可行的合成路徑。這是「從零到一」的創造能力，而不是「從給定選項中選擇正確答案」。</p>
+    </div>
+
+    <div class="sub-block">
+      <div class="label">Where DSE Chemistry Trains It DSE 化學在哪裡練</div>
+      <ul>
+        <li><strong>課題十一</strong>（碳化合物的化學，25h）：官能基互換的完整合成路徑設計——醇 → 醛 → 羧酸 → 酯，烯 → 鹵烷 → 醇……</li>
+        <li>百分產率計算：每一步都有損耗，真實世界的合成不可能 100% 產率</li>
+        <li><strong>選修課題十三</strong>（工業化學）：哈柏法合成氨、從合成氣製甲醇——工業尺度上的合成思維</li>
+      </ul>
+    </div>
+
+    <div class="sub-block">
+      <div class="label">Why AI Cannot Replace It 為什麼 AI 替代不了</div>
+      <p>AI 可以逆合成分析（<span class="en-term">retrosynthetic analysis</span>）——給定目標，倒推出可能的合成路線。但 <strong style="color:var(--danger);">AI 不會告訴你哪種路線在經濟上可行、哪種路線的副產物可以忍受、哪種路線在實驗室裡真的跑得通。</strong> 合成思維的真正價值不是「知道反應」，而是<strong style="color:var(--accent-teal);">在約束條件下（成本、產率、安全、環保）做出最優決策</strong>。這本質上是工程思維，在任何一個領域都通用。</p>
+    </div>
+
+    <div class="sub-block">
+      <div class="label">How to Deliberately Practice 怎麼刻意練</div>
+      <p>做合成路徑題時，不只追求「寫出正確路線」。多想一步：這一步的產率大概多少？有沒有更短的路線？副產物怎麼處理？這不是考試要求，但這是合成思維的肌肉。</p>
+    </div>
+  </div>
+
+  <!-- Ability 2 -->
+  <div class="card" id="ability-2">
+    <div class="card-header">
+      <span class="en-title">2. Molecular Spatial Intuition</span>
+      <span class="cn-title">分子空間直覺——在不可見的世界裡導航</span>
+    </div>
+    <div class="tag-row">
+      <span class="tag tag-what">What</span>
+      <span class="tag tag-where">Topics 11, 6, 2</span>
+    </div>
+
+    <div class="sub-block">
+      <div class="label">What It Is 是什麼</div>
+      <p>能在腦中「看到」分子的三維形狀——哪個基團朝前、哪個朝後、分子整體是對稱的還是手性的、兩個分子能不能像鑰匙和鎖一樣匹配。這是把二維的結構式「翻譯」成三維空間的想像力。</p>
+    </div>
+
+    <div class="sub-block">
+      <div class="label">Where DSE Chemistry Trains It DSE 化學在哪裡練</div>
+      <ul>
+        <li><strong>課題十一</strong>：順-反異構（<span class="en-term">cis-trans isomerism</span>）和對映異構（<span class="en-term">enantiomerism</span>）——同一個分子式，因為空間排列不同，性質截然不同</li>
+        <li><strong>課題六</strong>（微觀世界 II）：分子形狀預測——直線型、平面三角、四面體……</li>
+        <li><strong>課題二</strong>的巨型共價結構：金剛石 vs 石墨 vs 石英——同樣是碳，三維排列不同，一個是最硬的天然物質，一個可以寫字</li>
+      </ul>
+    </div>
+
+    <div class="sub-block">
+      <div class="label">Why AI Cannot Replace It 為什麼 AI 替代不了</div>
+      <p>AI 可以把蛋白質的三維結構精確渲染出來，但 <strong style="color:var(--danger);">AI 不具備「這個分子能不能穿過細胞膜」「這個手性異構體有沒有毒性」的直覺。</strong> 沙利度胺（<span class="en-term">thalidomide</span>）的悲劇——一種對映體是有效的鎮靜劑，另一種導致胎兒畸形——是最殘酷的提醒：分子空間的直覺不是錦上添花，是關乎生命的判斷力。</p>
+    </div>
+
+    <div class="sub-block">
+      <div class="label">How to Deliberately Practice 怎麼刻意練</div>
+      <p>每次畫結構式時，用分子模型（物理的或者 App）把同一個分子轉一轉、看一看。順反異構的「順」和「反」到底長什麼樣？對映異構的左手和右手版本為什麼不能重疊？養成「看到結構式就自動翻譯成 3D」的本能。</p>
+    </div>
+  </div>
+
+  <!-- Ability 3 -->
+  <div class="card" id="ability-3">
+    <div class="card-header">
+      <span class="en-title">3. Analytical Decomposition</span>
+      <span class="cn-title">分析拆解能力——面對一個未知物，怎麼知道它是什麼</span>
+    </div>
+    <div class="tag-row">
+      <span class="tag tag-what">What</span>
+      <span class="tag tag-where">Topic 15</span>
+    </div>
+
+    <div class="sub-block">
+      <div class="label">What It Is 是什麼</div>
+      <p>面對一個成分未知的樣品，能系統性地判斷它含有什麼——先做什麼測試、排除什麼、確認什麼、最後用什麼儀器驗證。這是「面對黑箱，一層層剝開」的能力。</p>
+    </div>
+
+    <div class="sub-block">
+      <div class="label">Where DSE Chemistry Trains It DSE 化學在哪裡練</div>
+      <ul>
+        <li><strong>選修課題十五</strong>（分析化學，<span class="en-term">Analytical Chemistry</span>）：系統化學物種檢測——焰色試驗 → 陽離子試驗 → 陰離子試驗 → 氣體測試 → 官能基測試（2,4-二硝基苯肼/托倫斯試劑）。每一個結果都在縮小可能性範圍</li>
+        <li>儀器分析：紅外光譜（鑑定官能基）→ 質譜（確定分子量和碎裂模式）→ 綜合推斷結構</li>
+        <li>色譜法：紙色譜/薄層色譜/柱色譜——物理分離混合物，然後逐個鑑定</li>
+      </ul>
+    </div>
+
+    <div class="sub-block">
+      <div class="label">Why AI Cannot Replace It 為什麼 AI 替代不了</div>
+      <p>AI 可以分析複雜的譜圖數據，但 <strong style="color:var(--danger);">「這個樣品應該先做哪個測試」——這個判斷來自於對化學物種性質的深入理解，而不是模式識別。</strong> 在一個信息泛濫的時代，「收集所有數據再說」的成本越來越高。分析思維的真正價值是<strong style="color:var(--accent-teal);">用最少的測試獲取最多信息</strong>。</p>
+    </div>
+
+    <div class="sub-block">
+      <div class="label">How to Deliberately Practice 怎麼刻意練</div>
+      <p>做定性分析題時，不滿足於「寫出陽性結果」。追問：如果這個測試是陰性，排除了什麼？下一個測試應該是什麼？建立一張心理上的「決策樹」——這比任何一個具體的測試方法都值錢。</p>
+    </div>
+  </div>
+
+  <!-- Ability 4 -->
+  <div class="card" id="ability-4">
+    <div class="card-header">
+      <span class="en-title">4. Dynamic Equilibrium Thinking</span>
+      <span class="cn-title">動態平衡思維——世界不是靜止的</span>
+    </div>
+    <div class="tag-row">
+      <span class="tag tag-what">What</span>
+      <span class="tag tag-where">Topics 10, 4, 7</span>
+    </div>
+
+    <div class="sub-block">
+      <div class="label">What It Is 是什麼</div>
+      <p>理解一個系統中存在多個同時進行的正反過程，改變一個條件會導致整個系統重新調整到新的平衡狀態。不是「A 變成 B」，而是「A ⇌ B 這個天平可以向左也可以向右推」。</p>
+    </div>
+
+    <div class="sub-block">
+      <div class="label">Where DSE Chemistry Trains It DSE 化學在哪裡練</div>
+      <ul>
+        <li><strong>課題十</strong>（化學平衡，<span class="en-term">Chemical Equilibrium</span>，10h）：動態平衡的本質——反應沒有停止，只是正反速率相等。濃度變化導致平衡移動但 Kc 不變，溫度變化導致 Kc 改變</li>
+        <li><strong>課題四</strong>（酸和鹽基）：弱酸弱鹼不完全離解——醋酸溶液裡同時存在 CH₃COOH、CH₃COO⁻、H⁺、OH⁻ 的動態平衡</li>
+        <li><strong>課題七</strong>（氧化還原）：電化學平衡——電池放電時平衡向產物方向移動</li>
+      </ul>
+    </div>
+
+    <div class="sub-block">
+      <div class="label">Why AI Cannot Replace It 為什麼 AI 替代不了</div>
+      <p>AI 擅長分析靜態的快照數據，但 <strong style="color:var(--accent-teal);">動態平衡思維讓人理解「系統被擾動後會怎樣」——這是預測能力，不是分析能力。</strong> 經濟學的供需平衡、生態系統的種群平衡、人際關係的付出回報平衡——都是動態平衡。DSE 化學的 Kc 思維是一個入口，通向「一切穩定態都是多個對抗力量在特定條件下的暫時妥協」這個更深的洞察。</p>
+    </div>
+
+    <div class="sub-block">
+      <div class="label">How to Deliberately Practice 怎麼刻意練</div>
+      <p>把 Kc 不只是當作一個計算工具。每次算完 Kc 後問自己：如果溫度升高，平衡往哪移？如果加水稀釋呢？如果加催化劑呢？這種「如果……會怎樣」的思維體操，是動態平衡思維的核心。</p>
+    </div>
+  </div>
+
+  <!-- Ability 5 -->
+  <div class="card" id="ability-5">
+    <div class="card-header">
+      <span class="en-title">5. Experimental Discipline</span>
+      <span class="cn-title">實驗素養——真本事長在手上</span>
+    </div>
+    <div class="tag-row">
+      <span class="tag tag-what">What</span>
+      <span class="tag tag-where">SBA (20%), Topic 3</span>
+    </div>
+
+    <div class="sub-block">
+      <div class="label">What It Is 是什麼</div>
+      <p>不只是「會做實驗」，而是對實驗有一套完整的自我要求——安全第一、記錄如實、誤差要分析、失敗要診斷。這是一種<strong style="color:#fff;">負責任地動手</strong>的品格。</p>
+    </div>
+
+    <div class="sub-block">
+      <div class="label">Where DSE Chemistry Trains It DSE 化學在哪裡練</div>
+      <ul>
+        <li><strong>校本評核（SBA，20%）</strong>：中五中六期間多輪實驗評核——滴定、量熱、製備、分離——教師現場觀察和評分</li>
+        <li><strong>探究研習（20 小時）</strong>：以實驗為本的獨立探究，含風險評估、實驗操作、數據效度與信度評估、成果簡報</li>
+        <li><strong>課題三</strong>（金屬）：製備可溶鹽和不溶鹽，然後分離、提純、乾燥——一個完整的實驗流程</li>
+      </ul>
+    </div>
+
+    <div class="sub-block">
+      <div class="label">Why AI Cannot Replace It 為什麼 AI 替代不了</div>
+      <p>AI 可以模擬實驗、可以生成完美的數據。但 <strong style="color:var(--danger);">AI 不會告訴你「為什麼你的產率只有 40% 而理論上應該是 85%」——因為在真實世界裡，產物會粘在濾紙上、會在轉移中灑落、會因溫度控制不準而副反應增多。</strong> 只有親手做過實驗的人，才知道「理論值」和「實際值」之間的鴻溝有多大，以及如何縮小它。更重要的是：<strong style="color:var(--accent-teal);">一次失敗的實驗，往往比一次順利的實驗教得更多</strong>——從失敗中反推原因（是溫度？是純度？是操作順序？），這種逆向診斷能力是實驗素養的最高境界。</p>
+    </div>
+
+    <div class="sub-block">
+      <div class="label">How to Deliberately Practice 怎麼刻意練</div>
+      <p>每次 SBA 實驗結束後，認認真真寫一段反思——不寫「人為誤差」（那是廢話），具體寫出至少一個系統誤差的來源和下一次的改進方案。這份反思的習慣，比實驗報告本身的分數重要一百倍。</p>
+    </div>
+  </div>
+
+  <!-- Ability 6 -->
+  <div class="card" id="ability-6">
+    <div class="card-header">
+      <span class="en-title">6. Instrumentation Literacy</span>
+      <span class="cn-title">儀器判讀素養——不盲信機器的輸出</span>
+    </div>
+    <div class="tag-row">
+      <span class="tag tag-what">What</span>
+      <span class="tag tag-where">Topic 15, Topic 8</span>
+    </div>
+
+    <div class="sub-block">
+      <div class="label">What It Is 是什麼</div>
+      <p>理解分析儀器的基本原理和局限——紅外光譜為什麼能鑑定官能基？質譜為什麼會產生碎裂峰？色譜的比移值為什麼不是絕對的？這種理解讓你在看儀器的輸出時，心裡有一個「信度標尺」。</p>
+    </div>
+
+    <div class="sub-block">
+      <div class="label">Where DSE Chemistry Trains It DSE 化學在哪裡練</div>
+      <ul>
+        <li><strong>選修課題十五</strong>：紅外光譜（<span class="en-term">IR Spectroscopy</span>）——特徵吸收峰對應官能基振動；質譜（<span class="en-term">Mass Spectrometry</span>）——分子離子峰 M⁺ 和碎片離子 R⁺、RCO⁺ 的模式；色譜——比移值 Rf 的計算</li>
+        <li><strong>課題八</strong>（化學反應與能量）：量熱法——一個簡單但很容易出錯的測量，每一次數據偏差都能讓你感受到「儀器不是神」</li>
+      </ul>
+    </div>
+
+    <div class="sub-block">
+      <div class="label">Why AI Cannot Replace It 為什麼 AI 替代不了</div>
+      <p>未來 AI 會越來越擅長解析譜圖數據。但 <strong style="color:var(--danger);">「這個峰是真實信號還是噪音？」「這個基線漂移正常嗎？」「這個樣品是不是在進樣時被污染了？」——這些判斷需要機器內部原理的理解，不是純數據驅動的。</strong> 在 AI 時代，最危險的不是「不會用 AI」，而是「無條件相信 AI 的輸出」。儀器判讀素養就是在培養一種健康的懷疑主義。</p>
+    </div>
+
+    <div class="sub-block">
+      <div class="label">How to Deliberately Practice 怎麼刻意練</div>
+      <p>如果選擇了課題十五（分析化學），在學 IR 和 MS 時，不只記「C=O 在 ~1700 cm⁻¹」，多問一句：為什麼是這裡？為什麼不同的羰基化合物（醛、酮、羧酸、酯）的 C=O 峰位置會有微小的偏移？這種「為什麼」的追問，是把儀器知識轉化為儀器素養的關鍵。</p>
+    </div>
+  </div>
+
+  <!-- Ability 7 -->
+  <div class="card" id="ability-7">
+    <div class="card-header">
+      <span class="en-title">7. Classification & Pattern Recognition</span>
+      <span class="cn-title">分類與模式識別——建立自己的知識導航系統</span>
+    </div>
+    <div class="tag-row">
+      <span class="tag tag-what">What</span>
+      <span class="tag tag-where">Topics 11, 2, 12</span>
+    </div>
+
+    <div class="sub-block">
+      <div class="label">What It Is 是什麼</div>
+      <p>面對大量的化學事實（112 種元素、幾百萬種有機物、無窮多的反應），不是死記硬背，而是建立有效的分類體系——官能基分類、反應類型分類、元素週期表——然後在新情境中識別出這些分類模式。</p>
+    </div>
+
+    <div class="sub-block">
+      <div class="label">Where DSE Chemistry Trains It DSE 化學在哪裡練</div>
+      <ul>
+        <li><strong>課題十一</strong>：有機化合物按官能基分類——每一種官能基有一套可預測的反應模式</li>
+        <li><strong>課題二</strong>：週期表——按族排列的元素有遞變的化學性質</li>
+        <li><strong>課題十二</strong>：Li 到 Ar 的元素週期律——熔點、導電性、氧化物酸鹼性的週期變化</li>
+      </ul>
+    </div>
+
+    <div class="sub-block">
+      <div class="label">Why AI Cannot Replace It 為什麼 AI 替代不了</div>
+      <p>AI 比你更擅長「記住所有事實」，但 <strong style="color:var(--danger);">AI 的分類是數據驅動的（聚類），不是概念驅動的（按共同特徵分組）。定義分類標準——決定在這個問題下按什麼標準分類——是人的特權。</strong> 建立一個好的分類系統——知道把什麼和什麼歸為一類、用什麼標準分類——這是一種「知識架構」能力。當你面對一個全新的領域，分類能力決定了你多快能上手。</p>
+    </div>
+
+    <div class="sub-block">
+      <div class="label">How to Deliberately Practice 怎麼刻意練</div>
+      <p>學完一個課題後，畫一張屬於自己的概念圖。每個官能基作為一個節點，箭頭代表「可以轉化為什麼」，箭頭旁邊標註條件。這比刷十套題都管用——因為你在構建自己的知識導航，而不是背誦別人的地圖。</p>
+    </div>
+  </div>
+
+  <!-- Ability 8 -->
+  <div class="card" id="ability-8">
+    <div class="card-header">
+      <span class="en-title">8. Risk Assessment & Safety Awareness</span>
+      <span class="cn-title">風險評估與安全素養——化學家的獨特禮物</span>
+    </div>
+    <div class="tag-row">
+      <span class="tag tag-what">What</span>
+      <span class="tag tag-where">SBA, Investigative Study</span>
+    </div>
+
+    <div class="sub-block">
+      <div class="label">What It Is 是什麼</div>
+      <p>在動手之前，本能地評估潛在風險——這個反應會放熱嗎？這個試劑有毒嗎？這個操作需要通風櫥嗎？這不是膽怯，是專業性。</p>
+    </div>
+
+    <div class="sub-block">
+      <div class="label">Where DSE Chemistry Trains It DSE 化學在哪裡練</div>
+      <ul>
+        <li>探究研習的第一階段就是「風險評估」——在定計劃之前，先列出所有潛在危險和控制措施</li>
+        <li>SBA 實驗的每一次操作，教師都在觀察安全習慣——護目鏡、試劑標籤方向、廢液處理</li>
+      </ul>
+    </div>
+
+    <div class="sub-block">
+      <div class="label">Why AI Cannot Replace It 為什麼 AI 替代不了</div>
+      <p>AI 可以列出化學反應的全部已知風險，但 <strong style="color:var(--danger);">「在這個具體的實驗室裡、用這台具體的設備、今天濕度高試劑可能受潮了」——這種實時情境中的風險判斷，需要人在現場的感知和經驗。</strong> 而且，風險評估的思維習慣是可以遷移到任何一個領域的——投資、創業、公共政策——在不確定性中評估最壞情況並提前準備，是成熟決策的核心。</p>
+    </div>
+
+    <div class="sub-block">
+      <div class="label">How to Deliberately Practice 怎麼刻意練</div>
+      <p>不只是遵守安全規則，而是理解每條規則背後的邏輯。為什麼濃硫酸要往水裡倒而不是反過來？（密度差 + 劇烈放熱會飛濺。）理解了「為什麼」，安全規則就從「束縛」變成了「保護」。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ SECTION: AI Collaboration Table ═══════════ -->
+<section class="section">
+  <h2 class="section-title"><span class="num">🤝</span> How the 8 Meta-Abilities Collaborate with AI <span style="font-weight:400;color:var(--text-muted);font-size:0.85rem;">八項元能力如何與 AI 協作</span></h2>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Meta-Ability 元能力</th>
+          <th>Human Superiority 人做得更好的部分</th>
+          <th>AI Superiority AI 做得更好的部分</th>
+          <th>Optimal Collaboration 最佳協作模式</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Synthetic Thinking 合成思維</td>
+          <td>在約束條件下選擇最優路線</td>
+          <td>窮舉所有可能的合成路徑</td>
+          <td>人定約束條件 → AI 生成候選路線 → 人判斷最佳</td>
+        </tr>
+        <tr>
+          <td>Molecular Spatial Intuition 分子空間直覺</td>
+          <td>判斷分子的「行為」（能否穿膜、是否有毒）</td>
+          <td>精確計算和渲染三維結構</td>
+          <td>人提出假設 → AI 計算驗證 → 人解釋結果</td>
+        </tr>
+        <tr>
+          <td>Analytical Decomposition 分析拆解</td>
+          <td>設計檢測策略（先測什麼、後測什麼）</td>
+          <td>分析大量譜圖數據</td>
+          <td>人定策略 → 人/儀器執行 → AI 輔助解析數據</td>
+        </tr>
+        <tr>
+          <td>Dynamic Equilibrium Thinking 動態平衡思維</td>
+          <td>預測系統被擾動後的行為方向</td>
+          <td>精確計算平衡組成</td>
+          <td>人定「如果」場景 → AI 計算 → 人判斷影響</td>
+        </tr>
+        <tr>
+          <td>Experimental Discipline 實驗素養</td>
+          <td>操作、觀察、判斷異常</td>
+          <td>生成實驗方案、分析數據</td>
+          <td>人操作 + 觀察 → AI 輔助數據分析</td>
+        </tr>
+        <tr>
+          <td>Instrumentation Literacy 儀器判讀</td>
+          <td>判斷數據質量、識別假信號</td>
+          <td>解析譜圖、匹配數據庫</td>
+          <td>人判斷數據可信度 → AI 輔助解析</td>
+        </tr>
+        <tr>
+          <td>Classification & Pattern Recognition 分類模式識別</td>
+          <td>建立分類框架和標準</td>
+          <td>記憶和匹配所有已知模式</td>
+          <td>人建框架 → AI 在框架內匹配</td>
+        </tr>
+        <tr>
+          <td>Risk Assessment 風險評估</td>
+          <td>在具體情境中做出判斷</td>
+          <td>列出已知危險</td>
+          <td>人做最終判斷 → AI 輔助列出風險清單</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══════════ SECTION: Chemistry vs Physics ═══════════ -->
+<section class="section">
+  <h2 class="section-title"><span class="num">⚛️</span> Chemistry vs Physics: Complementary Meta-Abilities <span style="font-weight:400;color:var(--text-muted);font-size:0.85rem;">化學 vs 物理：兩套元能力的互補</span></h2>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Meta-Ability Dimension 元能力維度</th>
+          <th>Physics Training 物理訓練</th>
+          <th>Chemistry Training 化學訓練</th>
+          <th>Complementary Value 互補價值</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Thinking Mode 思維方式</td>
+          <td>Reductionism 還原論——拆解到最基本原理</td>
+          <td>Constructivism 建構論——從積木搭建目標</td>
+          <td>拆解 + 搭建 = 完整的問題解決循環</td>
+        </tr>
+        <tr>
+          <td>Spatial Sense 空間感</td>
+          <td>Macroscopic space 宏觀空間（運動、力場）</td>
+          <td>Microscopic space 微觀空間（分子三維結構）</td>
+          <td>跨尺度的空間想像力</td>
+        </tr>
+        <tr>
+          <td>Systems View 系統觀</td>
+          <td>Conservation laws 守恆定律（能量、動量）</td>
+          <td>Dynamic equilibrium 動態平衡（Kc）*</td>
+          <td>封閉系統 + 開放系統的思維</td>
+        </tr>
+        <tr>
+          <td>Experiment 實驗</td>
+          <td>Mechanics / electricity measurement 力學/電學測量</td>
+          <td>Chemical synthesis / analysis 化學合成/分析</td>
+          <td>物理測量 + 化學製備</td>
+        </tr>
+        <tr>
+          <td>Creation 創造</td>
+          <td>Explaining the world 解釋世界</td>
+          <td>Creating new substances 製造新物質</td>
+          <td>理解 + 創造</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="font-size:0.78rem;color:var(--text-muted);margin-top:0.4rem;font-style:italic;">* Ksp 為內地選擇性必修內容，DSE 不涉及，此處僅作化學學科一般對比。</p>
+</section>
+
+<!-- ═══════════ SECTION: Specific Advice for 海納有容 ═══════════ -->
+<section class="section">
+  <h2 class="section-title"><span class="num">🎯</span> Specific Advice for 海納 & 有容 <span style="font-weight:400;color:var(--text-muted);font-size:0.85rem;">對海納有容的具體建議</span></h2>
+
+  <h3 style="font-size:1rem;color:var(--accent-cyan);margin-bottom:1rem;">在 DSE 三年裡刻意做這幾件事</h3>
+
+  <ol class="advice-list">
+    <li>
+      <strong style="color:#fff;">把有機化學當成一門「語言」來學，而不是一堆反應</strong>——官能基是字母，反應類型是語法規則，合成路徑是造句。學語言不是為了通過考試，是為了「表達」——設計自己的合成路線。
+    </li>
+    <li>
+      <strong style="color:#fff;">選課題時認真考慮自己的方向：</strong>
+      <ul class="direction-list" style="margin-top:0.5rem;">
+        <li>對醫學/藥學感興趣 → <strong>課題十五（分析化學）強烈推薦</strong>——IR/MS/色譜是實驗室的通用語言</li>
+        <li>對工程/材料感興趣 → <strong>課題十四（物料化學）</strong>——液晶、納米、聚合物加工</li>
+        <li>對科研/理論感興趣 → <strong>課題十三（工業化學）</strong>——速率方程和阿列紐斯是大學物理化學的預習</li>
+      </ul>
+    </li>
+    <li>
+      <strong style="color:#fff;">每一次 SBA 實驗，寫一段不納入評分的「給自己的反思」</strong>——什麼東西讓我意外？下次怎麼做會更好？這份私下的記錄，比正式的報告更有長期價值。
+    </li>
+    <li>
+      <strong style="color:#fff;">在腦中建立一個「錯誤博物館」</strong>——每一個操作失誤、每道錯題、每次數據異常，都值得被歸檔。十年後你不會記得哪次滴定得了滿分，但你會記得那次把濃硫酸倒進水裡結果燒杯發燙的經歷教會你的東西。
+    </li>
+    <li>
+      <strong style="color:#fff;">關注化學新聞</strong>——新藥、新材料、環境化學事件。讓課本知識和真實世界建立連接。化學不是實驗室裡的瓶瓶罐罐，是塑造現代文明的看不見的手。
+    </li>
+  </ol>
+
+  <div class="parent-box">
+    <div class="label">For Parents 家長可以配合做什麼</div>
+    <ul style="list-style:none;padding:0;">
+      <li style="padding:0.3rem 0;color:var(--text-secondary);">▸ 帶他們參觀大學開放日的化學實驗室，看真正的儀器長什麼樣</li>
+      <li style="padding:0.3rem 0;color:var(--text-secondary);">▸ 對化學新聞表現出興趣（哪怕你自己不懂）——這個項目是他們人生中第一次擁有真正的科研自主權，選擇比執行更重要</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ═══════════ SECTION: Summary ═══════════ -->
+<section class="section">
+  <h2 class="section-title"><span class="num">✦</span> Summary <span style="font-weight:400;color:var(--text-muted);font-size:0.85rem;">總結</span></h2>
+
+  <div class="summary-card">
+    <p class="core">
+      一句話核心結論：<br>
+      <span class="en">DSE Chemistry</span> 在不可見的分子世界裡，訓練一個人面對可見世界的方式——<br>
+      <span style="color:var(--accent-teal);">觀察 → 假設 → 操作 → 分析 → 修正。</span>
+    </p>
+    <p class="detail">
+      <strong>詳細說明：</strong>今天 DSE 化學課堂上那個正在小心翼翼滴加最後一滴標準溶液的學生，正在訓練的不只是「中和反應」——他正在訓練「在不確定性中精確操作」的肌肉。三十年後，當他面對一個沒有人知道正確答案的全新問題時，肌肉記憶會在那裡。不是記憶告訴他怎麼做，而是「觀察→假設→操作→分析→修正」的習慣告訴他怎麼做。<br><br>
+      這就是化學教育的深層回報：它在不可見的分子世界裡，訓練了一個人面對可見世界的方式。
+    </p>
+  </div>
+</section>
+
+</div>
+
+<!-- Back to top -->
+<a href="#" class="back-top" title="Back to top">↑</a>
+
+</body>
+</html>

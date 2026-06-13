@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DSE 九科元能力全景圖 — 跨科目融合分析</title>
+<style>
+  :root {
+    --bg:#0d0d14; --surface:#161622; --surface2:#1c1c2a;
+    --border:#2a2a3a; --text:#e8e8f0; --text2:#b0b0c0; --text3:#707080;
+    --accent:#7c4dff; --accent2:#b388ff; --accent-teal:#00bfa5;
+    --phy:#42a5f5; --chem:#00bfa5; --bio:#66bb6a; --hist:#5c6bc0; --econ:#ff8f00; --civ:#ef5350; --eng:#ec407a; --chi:#ab47bc; --math:#26a69a;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{font-size:16px;scroll-behavior:smooth}
+  body{font-family:"Noto Sans TC","PingFang HK","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.8;-webkit-font-smoothing:antialiased}
+
+  .hero{padding:3.5rem 1.5rem 2.5rem;text-align:center;border-bottom:1px solid var(--border)}
+  .hero-badge{display:inline-block;font-size:.75rem;font-weight:600;color:var(--accent);letter-spacing:.1em;border:1px solid rgba(124,77,255,.25);padding:.2rem .9rem;border-radius:50px;margin-bottom:1.2rem}
+  .hero h1{font-size:clamp(1.4rem,3.2vw,2rem);font-weight:700;color:#fff;max-width:720px;margin:0 auto .6rem}
+  .hero .subtitle{font-size:.82rem;color:var(--text3);max-width:680px;margin:0 auto;line-height:1.7}
+  .hero .meta-line{font-size:.72rem;color:var(--text3);margin-top:.5rem}
+
+  .container{max-width:920px;margin:0 auto;padding:2.5rem 1.5rem 5rem}
+  .section{margin-bottom:3.2rem}
+  .section-title{font-size:1.15rem;font-weight:700;color:#fff;margin-bottom:1.1rem;padding-bottom:.4rem;border-bottom:1px solid var(--border);letter-spacing:.02em}
+  .section-title .num{color:var(--accent);font-size:.85rem;margin-right:.3rem}
+
+  .table-wrap{overflow-x:auto;margin:1rem 0;-webkit-overflow-scrolling:touch}
+  table{width:100%;border-collapse:collapse;font-size:.78rem;min-width:600px}
+  thead th{background:var(--surface2);border-bottom:2px solid var(--border);color:var(--accent2);font-weight:600;text-align:center;padding:.38rem .45rem;font-size:.7rem;letter-spacing:.03em}
+  thead th:first-child{text-align:left}
+  tbody td{padding:.35rem .45rem;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top;line-height:1.45;text-align:center}
+  tbody td:first-child{font-weight:600;color:var(--text);text-align:left;white-space:nowrap}
+  tbody tr:last-child td{border-bottom:none}
+  .check{color:#66bb6a;font-weight:700} .dash{color:var(--text3)}
+
+  .training-table tbody td{text-align:left}
+  .training-table tbody td:first-child{text-align:center}
+
+  blockquote{border-left:2px solid var(--accent);padding:.8rem 1.1rem;margin:1rem 0;font-size:.85rem;color:var(--text2);font-style:italic;line-height:1.7;background:rgba(124,77,255,0.03)}
+
+  h3{font-size:.95rem;font-weight:700;color:var(--accent2);margin:1.4rem 0 .5rem}
+  h4{font-size:.86rem;font-weight:700;color:var(--accent-teal);margin:1rem 0 .3rem}
+
+  .pair-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:.6rem;margin:1rem 0}
+  .pair-card{background:var(--surface);border:1px solid var(--border);padding:.9rem 1rem;font-size:.82rem;color:var(--text2);line-height:1.55}
+  .pair-card strong{color:#fff}
+
+  .pyramid{display:flex;flex-direction:column;align-items:center;gap:.5rem;margin:1.2rem 0}
+  .pyramid-level{padding:.7rem 1.2rem;border-radius:6px;text-align:center;font-size:.78rem;color:var(--text2);line-height:1.45;max-width:500px;width:100%}
+  .pyramid-level.top{background:rgba(124,77,255,0.1);border:1px solid rgba(124,77,255,0.25);width:65%}
+  .pyramid-level.mid{background:rgba(0,191,165,0.08);border:1px solid rgba(0,191,165,0.2);width:80%}
+  .pyramid-level.mid2{background:rgba(66,165,245,0.08);border:1px solid rgba(66,165,245,0.2);width:95%}
+  .pyramid-level.base{background:rgba(102,187,106,0.08);border:1px solid rgba(102,187,106,0.2);width:100%}
+  .pyramid-level strong{color:#fff;display:block;font-size:.85rem;margin-bottom:.15rem}
+  .pyramid-arrow{color:var(--text3);font-size:.7rem}
+
+  .advice-list{list-style:none;padding:0}
+  .advice-list li{background:var(--surface);border:1px solid var(--border);padding:.7rem 1rem .7rem 2.2rem;margin-bottom:.35rem;position:relative;font-size:.83rem;color:var(--text2);line-height:1.55}
+  .advice-list li::before{content:'▸';position:absolute;left:.8rem;top:.7rem;color:var(--accent);font-weight:700}
+
+  .summary-card{background:linear-gradient(135deg,rgba(124,77,255,0.05),rgba(0,191,165,0.03));border:1px solid rgba(124,77,255,0.2);padding:1.4rem;text-align:center}
+  .summary-card .core{font-size:1rem;font-weight:700;color:#fff;margin-bottom:.8rem;line-height:1.7}
+  .summary-card .detail{font-size:.83rem;color:var(--text2);line-height:1.7;text-align:left;max-width:680px;margin:0 auto}
+
+  @media(max-width:640px){.hero{padding:2rem 1rem 1.5rem}.container{padding:1.5rem .9rem 3rem}.section-title{font-size:1rem}table{font-size:.7rem}}
+  @media print{body{background:#fff;color:#111}.hero{border-bottom:1px solid #ccc}.pair-card,.advice-list li,.summary-card{background:#fafafa;border:1px solid #ddd}.pyramid-level{background:#f5f5f5!important;border:1px solid #ddd!important}table thead th{background:#f0f0f0;color:#111}.container{padding:1rem}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-badge">DSE 全科 · 元能力全景圖</div>
+  <h1>DSE 各科之間的相融相通：跨科目元能力全景圖</h1>
+  <p class="subtitle">基於教育思考文件夾 25 篇分析的綜合提煉。回答兩個問題：DSE 各科之間如何相輔相成？有哪些共同的最基本的元能力需要掌握？</p>
+  <p class="meta-line">分析日期：2026-06-11（v4：加入公民與社會發展科）</p>
+</header>
+
+<div class="container">
+
+<!-- §0 -->
+<section class="section">
+  <h2 class="section-title"><span class="num">零、</span>一個發現：九科不是「九門獨立的課」，是一張互相咬合的網</h2>
+  <p style="font-size:.84rem;color:var(--text2);line-height:1.8">做完九科的 WHAT-WHY-SO WHAT 分析後，回頭看這些文章，一個模式浮現出來：<strong style="color:#fff">各科不是在教「不同的知識」，而是在用不同的材料訓練同一組核心元能力。</strong>物理的「建模直覺」、化學的「合成思維」、生物的「精準觀察」、中史的「史料辨析」、經濟的「機會成本」、英語的「精準表達」、語文的「母語深讀」、數學的「數據批判」、公民科的「資訊素養」——它們分別訓練的能力，合在一起才構成一個完整的人面對 AI 時代所需要的全部思維裝備。</p>
+</section>
+
+<!-- §1 -->
+<section class="section">
+  <h2 class="section-title"><span class="num">一、</span>跨科目元能力矩陣：哪項能力被哪些科目共同訓練</h2>
+  <div class="table-wrap"><table><thead><tr><th>元能力</th><th>物理</th><th>化學</th><th>生物</th><th>中史</th><th>經濟</th><th>公民</th><th>英語</th><th>語文</th><th>數學</th><th>訓練科目數</th></tr></thead><tbody>
+    <tr><td><strong>證據為本的推理</strong></td><td class="check">✅</td><td class="check">✅</td><td class="check">✅</td><td class="check">✅</td><td class="check">✅</td><td class="check">✅</td><td class="check">✅</td><td class="check">✅</td><td class="check">✅</td><td><strong style="color:var(--accent)">9/9</strong></td></tr>
+    <tr><td><strong>模型化/抽象化思維</strong></td><td class="check">✅</td><td class="check">✅</td><td class="check">✅</td><td class="dash">—</td><td class="check">✅</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td><td class="check">✅</td><td>5/9</td></tr>
+    <tr><td><strong>系統思維</strong></td><td class="check">✅</td><td class="check">✅</td><td class="check">✅</td><td class="dash">—</td><td class="check">✅</td><td class="check">✅</td><td class="dash">—</td><td class="dash">—</td><td class="check">✅</td><td>6/9</td></tr>
+    <tr><td><strong>精準表達與溝通</strong></td><td class="check">✅</td><td class="check">✅</td><td class="check">✅</td><td class="check">✅</td><td class="dash">—</td><td class="check">✅</td><td class="check">✅</td><td class="check">✅</td><td class="dash">—</td><td>7/9</td></tr>
+    <tr><td><strong>不確定性管理</strong></td><td class="check">✅</td><td class="dash">—</td><td class="dash">—</td><td class="check">✅</td><td class="check">✅</td><td class="check">✅</td><td class="dash">—</td><td class="dash">—</td><td class="check">✅</td><td>5/9</td></tr>
+    <tr><td><strong>多視角/跨文化思維</strong></td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td><td class="check">✅</td><td class="check">✅</td><td class="check">✅</td><td class="check">✅</td><td class="check">✅</td><td class="dash">—</td><td>5/9</td></tr>
+    <tr><td><strong>元認知/方法選擇力</strong></td><td class="check">✅</td><td class="check">✅</td><td class="dash">—</td><td class="dash">—</td><td class="check">✅</td><td class="check">✅</td><td class="check">✅</td><td class="check">✅</td><td class="check">✅</td><td>7/9</td></tr>
+    <tr><td><strong>道德/倫理判斷</strong></td><td class="dash">—</td><td class="check">✅</td><td class="check">✅</td><td class="dash">—</td><td class="dash">—</td><td class="check">✅</td><td class="dash">—</td><td class="check">✅</td><td class="dash">—</td><td>4/9</td></tr>
+  </tbody></table></div>
+  <p style="font-size:.82rem;color:var(--accent);margin-top:.4rem"><strong>發現：</strong>「證據為本的推理」被全部九科共同訓練——它不是某一科的專屬能力，是所有科目的<strong>底層操作系統</strong>。</p>
+</section>
+
+<!-- §2 -->
+<section class="section">
+  <h2 class="section-title"><span class="num">二、</span>五項最根本的跨科目元能力</h2>
+
+  <h3>一、證據為本的推理——九科共煉</h3>
+  <p style="font-size:.83rem;color:var(--text2);margin-bottom:.5rem"><strong>它是什麼：</strong>不憑直覺、不憑權威、不憑「大家都這麼說」來做判斷。而是：找到可驗證的證據、評估證據的質量、基於證據得出結論、標註結論的不確定性。</p>
+  <div class="table-wrap"><table class="training-table"><thead><tr><th>科目</th><th>訓練方式</th></tr></thead><tbody>
+    <tr><td>物理/化學/生物</td><td>SBA 實驗：提出假設→設計實驗→收集數據→分析誤差→得出結論。數據偏了就是偏了，不能「我覺得」</td></tr>
+    <tr><td>中史</td><td>史料辨析：這份史料是誰寫的？寫給誰看的？有什麼動機？同一事件的不同記載，哪個更可信？</td></tr>
+    <tr><td>經濟</td><td>成本效益分析：這個政策有利有弊——證據是什麼？數據支持哪一方？</td></tr>
+    <tr><td>數學</td><td>數據批判：「這份統計報告用了什麼抽樣方法？樣本量多大？因果推斷站得住腳嗎？」</td></tr>
+    <tr><td>公民</td><td>資料回應與資訊素養：面對多份不同類型的資料，判斷各自的可信度、整合出整體故事、辨別虛假資訊</td></tr>
+    <tr><td>語文</td><td>文本分析：「作者為什麼用這個詞？從文本中找到證據支持你的解讀」</td></tr>
+  </tbody></table></div>
+  <blockquote><strong>為什麼它是 AI 時代最保值的元能力：</strong>AI 可以給你任何「答案」，但不能替你判斷「這個答案的證據基礎是什麼」。證據為本的推理是你面對 AI 輸出時的最後一道防火牆。</blockquote>
+
+  <h3>二、模型化 / 抽象化思維——五科共煉</h3>
+  <p style="font-size:.83rem;color:var(--text2);margin-bottom:.5rem"><strong>它是什麼：</strong>面對一團複雜的現實，能判斷「什麼重要、什麼可以忽略」，把問題簡化成一個可解的模型。然後在得出答案後，再放回現實中檢驗。</p>
+  <div class="table-wrap"><table class="training-table"><thead><tr><th>科目</th><th>訓練方式</th></tr></thead><tbody>
+    <tr><td>物理</td><td>「一輛車從斜坡滑下」→ 忽略空氣阻力 → 斜面+牛頓第二定律 → 解出加速度</td></tr>
+    <tr><td>化學</td><td>給定目標分子 → 倒推合成路徑 → 選擇官能基轉換 → 計算產率</td></tr>
+    <tr><td>生物</td><td>「為什麼長這樣？」→ 結構-功能分析 → 肺泡壁單層上皮 → 最小化氣體擴散距離</td></tr>
+    <tr><td>經濟</td><td>「要不要漲價？」→ 需求價格彈性模型 → 彈性&gt;1 則不漲，彈性&lt;1 則漲</td></tr>
+    <tr><td>數學</td><td>「怎麼安排生產？」→ 線性規劃模型 → 變量/約束/目標函數 → 在可行域中找到最優解</td></tr>
+  </tbody></table></div>
+
+  <h3>三、系統思維——六科共煉</h3>
+  <p style="font-size:.83rem;color:var(--text2);margin-bottom:.5rem"><strong>它是什麼：</strong>不是只看「A 導致 B」，而是看「A 影響 B，B 又反過來影響 A」「整個系統在被擾動後會怎麼重新穩定」「多個因素之間怎麼互相牽制」。</p>
+  <div class="table-wrap"><table class="training-table"><thead><tr><th>科目</th><th>訓練方式</th></tr></thead><tbody>
+    <tr><td>物理</td><td>能量守恆、動量守恆——輸入=輸出+儲存，系統不能憑空產生或消滅</td></tr>
+    <tr><td>化學</td><td>動態平衡（Kc）——溫度升高平衡往吸熱方向移，濃度變化平衡移動但 Kc 不變</td></tr>
+    <tr><td>生物</td><td>人體穩態——血糖升高→胰島素→血糖下降→胰島素減少——一個完整的負反饋循環</td></tr>
+    <tr><td>經濟</td><td>供需均衡——外力衝擊→偏離均衡→價格信號引導調整→新的均衡</td></tr>
+    <tr><td>數學</td><td>線性規劃——多個約束互相牽制，改變一個約束會改變整個可行域</td></tr>
+    <tr><td>公民</td><td>系統演變思維——從不平等條約到回歸、從改革開放到當代發展、從全球化到互聯依存</td></tr>
+  </tbody></table></div>
+
+  <h3>四、精準表達與溝通——七科共煉</h3>
+  <p style="font-size:.83rem;color:var(--text2);margin-bottom:.5rem"><strong>它是什麼：</strong>能把一個複雜的技術問題，用清晰、有邏輯、有結構的方式表達出來——不只是「會寫」，是「能讓對方聽懂並信服」。</p>
+  <div class="table-wrap"><table class="training-table"><thead><tr><th>科目</th><th>訓練方式</th></tr></thead><tbody>
+    <tr><td>物理/化學/生物</td><td>SBA 實驗報告：目的→原理→步驟→數據→分析→結論——結構化寫作的肌肉記憶</td></tr>
+    <tr><td>中史</td><td>卷二歷史論文：論點→證據→分析→結論——水平評核獎勵論證質量</td></tr>
+    <tr><td>英語</td><td>Paper 2 寫作（600 詞）+ Paper 4 小組討論——書面 + 口頭雙重訓練</td></tr>
+    <tr><td>語文</td><td>卷二寫作（45% 權重）+ SBA 口頭匯報——母語中的深度表達</td></tr>
+    <tr><td>公民</td><td>資料回應題的結構化作答——從多份資料中提取要點、整合信息、用有邏輯的論證回應問題</td></tr>
+  </tbody></table></div>
+
+  <h3>五、不確定性管理——五科共煉</h3>
+  <p style="font-size:.83rem;color:var(--text2);margin-bottom:.5rem"><strong>它是什麼：</strong>接受三個基本事實——①很多事情無法確知；②但不確定不等於無法決策；③在不確定性中做出負責任的判斷，本身就是一種能力。</p>
+  <div class="table-wrap"><table class="training-table"><thead><tr><th>科目</th><th>訓練方式</th></tr></thead><tbody>
+    <tr><td>物理</td><td>實驗誤差分析——所有測量都有誤差，關鍵是知道誤差來自哪裡、怎麼減小</td></tr>
+    <tr><td>中史</td><td>史料殘缺——關於過去，很多事永遠無法確知，但不妨礙在現有證據下做出負責任的判斷</td></tr>
+    <tr><td>經濟</td><td>成本效益分析——面對不確定的市場，仍然能做出「在約束下最好」的選擇</td></tr>
+    <tr><td>數學</td><td>概率思維——「有 70% 的成功率」——不是在迴避不確定性，是用數字精確描述不確定性</td></tr>
+    <tr><td>公民</td><td>資訊素養——在 AI 生成內容氾濫的時代，判斷一段信息的真偽本身就是在不確定性中做出負責任的判斷</td></tr>
+  </tbody></table></div>
+</section>
+
+<!-- §3 -->
+<section class="section">
+  <h2 class="section-title"><span class="num">三、</span>科目之間的雙向互補：誰在給誰補什麼</h2>
+
+  <h4>3.1 數學 → 所有理科：提供定量建模的工具箱</h4>
+  <p style="font-size:.83rem;color:var(--text2)">物理中的力學方程、化學中的摩爾計算、生物中的統計檢驗——所有理科的定量分析都依賴數學提供的工具。DSE 數學必修部分雖然不教微積分，但它的統計深度（四分位數、標準差、正態分佈）恰恰是三科實驗數據分析的基礎。<em style="font-size:.78rem;color:var(--text3)">互補實例：生物 SBA 實驗中計算標準差和標準分來判斷一組數據是否「顯著偏離」——這是數學課上學到的概念在生物實驗中的直接使用。</em></p>
+
+  <h4>3.2 物理 ↔ 化學：兩種不同的「建模」互相印證</h4>
+  <p style="font-size:.83rem;color:var(--text2)">物理學的是「忽略摩擦、忽略空氣阻力——建立理想化模型」；化學學的是「副反應、不純物、產率永遠低於 100%——模型和現實之間的鴻溝」。前者是<strong>簡化世界的藝術</strong>，後者是<strong>接受複雜性的紀律</strong>。兩套訓練加在一起，才不會只學會一種思維而忘了另一種。</p>
+
+  <h4>3.3 生物 + 化學：微觀世界的兩副眼鏡</h4>
+  <p style="font-size:.83rem;color:var(--text2)">化學訓練了分子層面的「結構決定性質」，生物訓練了細胞和系統層面的「結構決定功能」。同一套思維邏輯（結構決定功能），在化學中用於非生命系統，在生物中用於生命系統——互相印證，互相增強。</p>
+
+  <h4>3.4 中史 + 語文 + 英語：三種「敘述」的對話</h4>
+  <p style="font-size:.83rem;color:var(--text2)">中史卷二的論文要求你用中文構建一個基於史料的論證；DSE 語文的寫作卷要求你用母語做深度自我表達；DSE 英語的 SBA 口頭匯報要求你用第二語言就閱讀作出個人回應。三科訓練的是同一種能力——<strong>「把碎片化的信息編織成一個有說服力的故事」</strong>——但分別在三種語言和三種語境中訓練。</p>
+
+  <h4>3.5 經濟 + 數學：從定性判斷到定量優化</h4>
+  <p style="font-size:.83rem;color:var(--text2)">經濟訓練的是「稀缺性思維」——一切選擇都有機會成本，做決策前先問「放棄了什麼」。數學訓練的是「約束條件下求最優解」——線性規劃把這個問題翻譯成數學。前者建立問題意識，後者提供求解工具。</p>
+
+  <h4>3.6 SBA 的共同基因：跨文理的探究與表達</h4>
+  <p style="font-size:.83rem;color:var(--text2)">物理、化學、生物、語文、英語——五科都有校本評核（SBA）。雖然形式不同（理科偏實驗操作與報告、語文偏閱讀匯報與口頭表達、英語偏閱讀觀影與口語討論），但它們共同訓練了三項底層能力：<strong>實驗/探究素養</strong>（安全意識、記錄如實、誤差分析）、<strong>失敗診斷力</strong>（結果和預期不符時系統排查）、<strong>技術溝通力</strong>（寫結構化的報告/論文，做有說服力的口頭匯報）。這是內地高考體系中沒有的維度。</p>
+
+  <h4>3.7 英語（LaC）+ 所有學科：跨學科語言的橋樑</h4>
+  <p style="font-size:.83rem;color:var(--text2)">英語在香港 EMI 學校不是「一門科目」，是所有科目（除語文和中史）的教學語言。英文課上學的閱讀和寫作策略，第二天可以在物理、化學、生物、經濟課上直接使用。用英語學習科學概念時，概念的「原生語言」就是英文——不需要翻譯這一層。這種<strong>跨學科語言使用（LaC）</strong>是香港 EMI 教育最獨特、最值錢的部分。</p>
+
+  <h4>3.8 公民科 + 中史 + 經濟：當代、歷史與市場的三重奏</h4>
+  <p style="font-size:.83rem;color:var(--text2)">公民科與中史的關係是「當代 vs 歷史」——中史提供縱向的兩千年深度，公民科提供橫向的當代廣度。公民科與經濟的關係是「政策 vs 市場」——經濟分析市場如何運作，公民分析政府如何決策。三科合在一起，構成了一張「理解中國如何在時間軸上走到今天、在經濟邏輯上如何運行、在政策框架上如何治理」的完整認知地圖。</p>
+</section>
+
+<!-- §4 -->
+<section class="section">
+  <h2 class="section-title"><span class="num">四、</span>學科之間的「互補對」</h2>
+  <div class="table-wrap"><table><thead><tr><th>互補對</th><th>A 訓練什麼</th><th>B 訓練什麼</th><th>為什麼必須兩者都有</th></tr></thead><tbody>
+    <tr><td><strong>物理 + 生物</strong></td><td>簡化——忽略次要因素，建立理想化模型</td><td>擁抱複雜性——不能忽略，簡化就會誤解</td><td>世界有些問題需要簡化才能解決（設計一座橋），有些問題簡化了就會出錯（理解一個生態系統）</td></tr>
+    <tr><td><strong>化學 + 生物</strong></td><td>分子層面的「結構決定性質」——非生命系統</td><td>細胞/器官層面的「結構決定功能」——生命系統</td><td>同一套思維邏輯（結構決定功能），在兩套完全不同的系統中並行訓練，互相印證</td></tr>
+    <tr><td><strong>經濟 + 語文</strong></td><td>計算最優解</td><td>表達和說服</td><td>知道最優解是一回事，說服別人接受是另一回事</td></tr>
+    <tr><td><strong>英語 + 語文</strong></td><td>用第二語言進入另一個文化世界</td><td>用母語守住「不需要翻譯的自我」</td><td>英語讓你走向世界，中文讓你找到自己</td></tr>
+    <tr><td><strong>數學 + 中史</strong></td><td>確定性——一個方程只有一個正確答案</td><td>模糊性——同一事件有多種合理敘述</td><td>兩者的界限決定了你什麼時候追求精確、什麼時候擁抱模糊</td></tr>
+    <tr><td><strong>公民 + 數學</strong></td><td>在信息洪流中辨別真偽</td><td>用概率和數據精確描述</td><td>公民科訓練「這條新聞可信嗎」的懷疑本能，數學訓練「可信到什麼程度」的量化工具</td></tr>
+  </tbody></table></div>
+</section>
+
+<!-- §5 -->
+<section class="section">
+  <h2 class="section-title"><span class="num">五、</span>九科的「元能力金字塔」</h2>
+  <div class="pyramid">
+    <div class="pyramid-level top"><strong>自我認知</strong>為什麼學？為誰而學？<br><span style="font-size:.73rem;color:var(--text3)">語文：我是誰？英語：我可以成為誰？中史：我們過去做了什麼選擇？經濟：我的每個選擇放棄了什麼？</span></div>
+    <div class="pyramid-arrow">↓</div>
+    <div class="pyramid-level mid"><strong>溝通與說服</strong>怎麼把我知道的講清楚？<br><span style="font-size:.73rem;color:var(--text3)">寫（SBA報告、論文、作文）+ 說（小組討論、口頭匯報、辯論）——語文+英語+SBA報告</span></div>
+    <div class="pyramid-arrow">↓</div>
+    <div class="pyramid-level mid2"><strong>系統思維與建模思維</strong>怎麼理解這個複雜的世界？<br><span style="font-size:.73rem;color:var(--text3)">物理/化學/生物/經濟/數學：建立模型→求解→檢驗</span></div>
+    <div class="pyramid-arrow">↓</div>
+    <div class="pyramid-level base"><strong>證據評估與批判性思維</strong>我怎麼知道這是真的？<br><span style="font-size:.73rem;color:var(--text3)">中史：史料辨析 · 數學：數據批判 · 所有SBA：實驗檢驗 · 全九科共同訓練</span></div>
+  </div>
+  <p style="font-size:.82rem;color:var(--accent);text-align:center;margin-top:.5rem">最底層（證據評估）是所有九科的公共地基——如果一個人沒有能力判斷「一段信息是否可信」，那他在任何一科上的知識都是建在沙上的城堡。</p>
+</section>
+
+<!-- §6 -->
+<section class="section">
+  <h2 class="section-title"><span class="num">六、</span>對海納有容的意義</h2>
+  <p style="font-size:.84rem;color:var(--text2);margin-bottom:.8rem">他們不需要每科都考 5**。他們需要的是：<strong style="color:#fff">讓九科訓練的共同元能力互相強化，而不是互相隔離。</strong></p>
+  <ul class="advice-list">
+    <li><strong>學了數學的統計，就用它去審視生物實驗中的數據和你讀到的一切統計新聞</strong>——別讓標準差只活在數學卷裡</li>
+    <li><strong>學了中史的史料辨析，就用它去審視經濟新聞中的「數據來源」和「因果推斷」</strong>——「誰說的？為誰說的？證據是什麼？」是通用問題，不只屬於歷史課</li>
+    <li><strong>在物理化學 SBA 中學會的實驗報告寫作，用到語文的實用寫作中去</strong>——結構化的技術寫作能力在任何領域都是稀缺品</li>
+    <li><strong>英語的跨文化素養和語文的文化傳承可以互補</strong>——英語讓你打開世界，語文讓你找到根系</li>
+    <li><strong>經濟的「機會成本思維」用到選科、分配時間、規劃未來中</strong>——一切選擇都有代價，經濟學只是把它明說出來了</li>
+  </ul>
+  <p style="font-size:.84rem;font-weight:700;color:var(--accent2);margin:1rem 0 .3rem">家長可以配合做的事</p>
+  <ul style="list-style:none;padding:0;font-size:.83rem;color:var(--text2)">
+    <li style="padding:.15rem 0">▸ 在孩子面前把不同科目的概念連接起來——「你物理課上學的這個，不就是你在數學課上學到的那個嗎？」</li>
+    <li style="padding:.15rem 0">▸ 讓他們看到：世界不是分成「物理」「化學」「生物」「中史」這些互不相關的格子——世界是一個整體，學科只是從不同角度照亮它的燈光</li>
+  </ul>
+</section>
+
+<!-- §7 -->
+<section class="section">
+  <h2 class="section-title"><span class="num">七、</span>總結</h2>
+  <div class="summary-card">
+    <p class="core">一句話核心結論：<br><span style="color:var(--accent)">九科在用不同的材料反覆打磨同一組底層能力——證據為本的推理，是所有科目共同訓練的思維底盤。</span></p>
+    <p class="detail"><strong>詳細說明：</strong>DSE 九科不是在教九種不同的知識——它們是在用九種不同的材料，反覆打磨同一組將被 AI 時代珍視的底層能力：看到證據時追問來源、面對複雜時建立模型、做出判斷時用數據說話、表達想法時讓對方能聽懂。物理的誤差分析、化學的合成路徑、生物的實地觀察、中史的史料辨析、經濟的機會成本、公民的資訊素養、英語的實時辯論、語文的深度寫作、數學的數據批判——它們分別從不同角度訓練同一種核心能力（證據為本的推理），同時又各自貢獻了獨特的思維工具。合在一起，構成了一個海納有容在面對 AI 和不確定的未來時，不會被任何機器替代的思維底盤。</p>
+  </div>
+</section>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>修讀 DSE 生物應培養的元能力 | Meta-Abilities from DSE Biology — 海納有容 AI 時代準備清單</title>
+<style>
+  :root {
+    --bg-deep:#0a120f; --bg-card:#111a15; --bg-card-alt:#151f1a;
+    --border-subtle:#1e2e24; --border-glow:#4caf5033;
+    --text-primary:#e0e8e4; --text-secondary:#b0c0b8; --text-muted:#789080;
+    --accent-green:#4caf50; --accent-leaf:#66bb6a; --accent-teal:#00bfa5;
+    --accent-amber:#ffab00; --accent-warm:#ff8f00; --accent-purple:#b388ff;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{font-size:16px;scroll-behavior:smooth}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC","Noto Sans SC","PingFang HK","Microsoft YaHei",sans-serif;background:var(--bg-deep);color:var(--text-primary);line-height:1.75;-webkit-font-smoothing:antialiased}
+
+  .hero{background:linear-gradient(135deg,#0a1510 0%,#0d1f16 40%,#0a120f 100%);border-bottom:1px solid var(--border-glow);padding:3rem 1.5rem 2.5rem;text-align:center;position:relative;overflow:hidden}
+  .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 100%,rgba(76,175,80,0.06) 0%,transparent 60%);pointer-events:none}
+  .hero-badge{display:inline-block;background:rgba(76,175,80,0.12);border:1px solid var(--border-glow);color:var(--accent-green);font-size:.8rem;font-weight:600;padding:.25rem 1rem;border-radius:50px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:1.2rem}
+  .hero h1{font-size:clamp(1.4rem,3.2vw,2.1rem);font-weight:800;color:#fff;max-width:800px;margin:0 auto .8rem;letter-spacing:.02em;position:relative}
+  .hero h1 .en{color:var(--accent-teal)}
+  .hero .subtitle{font-size:.88rem;color:var(--text-secondary);max-width:660px;margin:0 auto;position:relative}
+  .hero .meta-line{font-size:.75rem;color:var(--text-muted);margin-top:.5rem}
+
+  .container{max-width:900px;margin:0 auto;padding:2rem 1.5rem 4rem}
+  .section{margin-bottom:3rem}
+  .section-title{font-size:1.2rem;font-weight:700;color:#fff;margin-bottom:1.1rem;padding-bottom:.5rem;border-bottom:2px solid var(--border-glow);display:flex;align-items:center;gap:.5rem}
+  .section-title .num{display:inline-flex;align-items:center;justify-content:center;width:2rem;height:2rem;background:rgba(76,175,80,0.12);border:1px solid var(--border-glow);border-radius:6px;color:var(--accent-green);font-size:.85rem;font-weight:700;flex-shrink:0}
+
+  .card{background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:10px;padding:1.5rem;margin-bottom:1.3rem;transition:border-color .2s}
+  .card:hover{border-color:var(--border-glow)}
+  .card-header{display:flex;align-items:baseline;gap:.5rem;margin-bottom:.6rem}
+  .card-header .en-title{font-size:1.02rem;font-weight:700;color:var(--accent-teal);letter-spacing:.02em}
+  .card-header .cn-title{font-size:.86rem;color:var(--text-secondary);font-weight:500}
+  .card .tag-row{display:flex;flex-wrap:wrap;gap:.3rem;margin-bottom:.7rem}
+  .card .tag{font-size:.66rem;padding:.1rem .55rem;border-radius:4px;font-weight:600;letter-spacing:.04em}
+  .tag-what{background:rgba(0,191,165,0.1);color:var(--accent-teal);border:1px solid rgba(0,191,165,0.2)}
+  .tag-where{background:rgba(76,175,80,0.1);color:var(--accent-leaf);border:1px solid rgba(76,175,80,0.2)}
+  .tag-why{background:rgba(255,171,0,0.1);color:var(--accent-amber);border:1px solid rgba(255,171,0,0.2)}
+  .tag-how{background:rgba(179,136,255,0.1);color:var(--accent-purple);border:1px solid rgba(179,136,255,0.2)}
+
+  .sub-block{margin-bottom:.65rem}
+  .sub-block .label{font-size:.71rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);margin-bottom:.18rem;display:flex;align-items:center;gap:.25rem}
+  .sub-block .label::before{content:'';display:inline-block;width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.5}
+  .sub-block p,.sub-block ul{font-size:.87rem;color:var(--text-secondary)}
+  .sub-block ul{padding-left:1.1rem}
+  .sub-block ul li{margin-bottom:.12rem}
+  .sub-block ul li::marker{color:var(--accent-leaf)}
+
+  .highlight{color:var(--accent-teal);font-weight:600}
+  .en-term{color:var(--accent-leaf);font-weight:600}
+
+  blockquote{border-left:3px solid var(--accent-teal);background:rgba(0,191,165,0.04);padding:.85rem 1.1rem;margin:1rem 0;border-radius:0 8px 8px 0;font-size:.87rem;color:var(--text-secondary);line-height:1.65}
+
+  .table-wrap{overflow-x:auto;margin:1.1rem 0;-webkit-overflow-scrolling:touch;border:1px solid var(--border-subtle);border-radius:8px}
+  table{width:100%;border-collapse:collapse;font-size:.82rem;min-width:580px}
+  thead th{background:rgba(76,175,80,0.06);border-bottom:2px solid var(--border-glow);color:var(--accent-teal);font-weight:700;text-align:left;padding:.45rem .65rem;font-size:.72rem;letter-spacing:.04em;text-transform:uppercase}
+  tbody td{padding:.4rem .65rem;border-bottom:1px solid var(--border-subtle);color:var(--text-secondary);vertical-align:top;line-height:1.48}
+  tbody tr:last-child td{border-bottom:none}
+  tbody tr:hover td{background:rgba(76,175,80,0.02)}
+  tbody td:first-child{font-weight:600;color:var(--text-primary);white-space:nowrap}
+
+  .advice-list{counter-reset:adv;list-style:none;padding:0}
+  .advice-list li{counter-increment:adv;background:var(--bg-card-alt);border:1px solid var(--border-subtle);border-radius:8px;padding:.85rem 1rem .85rem 2.8rem;margin-bottom:.5rem;position:relative;font-size:.87rem;color:var(--text-secondary);line-height:1.6}
+  .advice-list li::before{content:counter(adv);position:absolute;left:.8rem;top:.85rem;width:1.45rem;height:1.45rem;background:rgba(76,175,80,0.12);border:1px solid var(--border-glow);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.73rem;font-weight:700;color:var(--accent-leaf)}
+
+  .parent-box{background:linear-gradient(135deg,rgba(255,171,0,0.05),rgba(76,175,80,0.04));border:1px solid rgba(255,171,0,0.18);border-radius:10px;padding:1.2rem 1.4rem;margin-top:1rem}
+  .parent-box .box-label{font-size:.71rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--accent-amber);margin-bottom:.5rem}
+  .parent-box ul{list-style:none;padding:0}
+  .parent-box ul li{padding:.2rem 0;font-size:.85rem;color:var(--text-secondary)}
+
+  .summary-card{background:linear-gradient(135deg,rgba(76,175,80,0.05),rgba(0,191,165,0.03));border:1px solid var(--border-glow);border-radius:12px;padding:1.6rem;text-align:center}
+  .summary-card .core{font-size:1.05rem;font-weight:800;color:#fff;margin-bottom:.9rem;line-height:1.6}
+  .summary-card .detail{font-size:.85rem;color:var(--text-secondary);line-height:1.7;text-align:left;max-width:660px;margin:0 auto}
+
+  @media(max-width:640px){.hero{padding:2rem 1rem 1.8rem}.container{padding:1.2rem .9rem 2.5rem}.card{padding:1.1rem}.card-header{flex-direction:column;gap:.1rem}.advice-list li{padding:.8rem .8rem .8rem 2.3rem}.advice-list li::before{left:.5rem;top:.8rem}.summary-card{padding:1.2rem}.section-title{font-size:1.05rem}}
+  @media print{body{background:#fff;color:#111}.hero{background:#f5f5f5;border-bottom:2px solid #ccc}.card,.advice-list li,.parent-box,.summary-card{background:#fafafa;border:1px solid #ddd}table thead th{background:#eee;color:#111}.en-term,.card-header .en-title{color:#00695c}.container{padding:1rem}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-badge">DSE Biology · Meta-Ability Framework</div>
+  <h1>修讀 <span class="en">DSE Biology</span> 應培養的元能力<br>給海納有容的 AI 時代準備清單</h1>
+  <p class="subtitle">問題背景：在 AI 時代一切不確定的前提下，修讀 DSE 生物的過程中應該刻意培養哪些終身受用的元能力？</p>
+  <p class="meta-line">分析日期：2026-06-07</p>
+</header>
+
+<div class="container">
+
+<section class="section">
+  <h2 class="section-title"><span class="num">✦</span> Why Biology's Meta-Ability Training Is the Most Unique <span style="font-weight:400;color:var(--text-muted);font-size:.85rem">為什麼生物的元能力訓練是最特殊的一副牌</span></h2>
+  <p style="font-size:.9rem;color:var(--text-secondary);line-height:1.8">
+    物理訓練的是「把複雜現實簡化成可解的模型」，化學訓練的是「在分子積木中設計從 A 到 B 的路徑」。生物訓練的是完全不同的東西——<strong style="color:#fff">「面對一個活著的、不可簡化的系統，學會觀察它、理解它、在其中找到模式和原理。」</strong>
+  </p>
+  <blockquote>物理學可以假設「忽略空氣阻力」，化學可以假設「在標準條件下」。生物不能——一個活細胞裡有幾千種分子同時反應，一個生態系統裡有幾萬種生物同時互動。<strong style="color:var(--accent-leaf)">生物學的起點是承認：你面對的東西太複雜了，簡化它就會誤解它。</strong> 這種「擁抱複雜性」的思維習慣，在 AI 時代比「追求簡潔」的思維習慣更有競爭力。</blockquote>
+  <p style="font-size:.9rem;color:var(--text-secondary);line-height:1.8">
+    DSE 生物有一份三科中獨一無二的禮物：它是<strong style="color:var(--accent-leaf)">唯一要求你用顯微鏡看、用鉛筆畫、用解剖刀切開、用腳走到野外去的高中科目</strong>。眼睛、手、腳——這些人類最古老的信息輸入渠道——在 AI 時代反而是最不該荒廢的。
+  </p>
+</section>
+
+<section class="section">
+  <h2 class="section-title"><span class="num">9</span> Nine Meta-Abilities to Deliberately Cultivate <span style="font-weight:400;color:var(--text-muted);font-size:.85rem">九項需要刻意培養的元能力</span></h2>
+
+  <!-- 1 -->
+  <div class="card"><div class="card-header"><span class="en-title">1. Precision Observation</span><span class="cn-title">精準觀察力——看見真實，不是看見預期</span></div>
+    <div class="tag-row"><span class="tag tag-what">What</span><span class="tag tag-where">Microscopy, Drawing, Dissection, Field Work</span></div>
+    <div class="sub-block"><div class="label">What It Is</div><p>能準確地、不加預設地觀察一個生物樣本，記錄你真正看到的，而不是你「以為應該看到的」。</p></div>
+    <div class="sub-block"><div class="label">Where DSE Biology Trains It</div><ul>
+      <li><strong>顯微鏡操作</strong>：洋蔥表皮細胞、葉橫切面、血塗片——每一個標本都需要聚焦到細胞層面</li>
+      <li><strong>生物繪圖</strong>：畫下你在顯微鏡中看到的，標註每一個可辨認的結構——不能畫你「知道」在那裡的結構</li>
+      <li><strong>實地生態調查</strong>：用樣方和樣線在真實生境中採集數據——不是從課本上抄一個食物網</li>
+      <li><strong>解剖</strong>：豬心或牛眼的解剖——血管、瓣膜、睫狀肌——它們的位置和課本插圖永遠不會一模一樣</li>
+    </ul></div>
+    <div class="sub-block"><div class="label">Why AI Cannot Replace It</div><p>AI 可以在一秒內識別一千張顯微鏡圖像中的細胞。但 AI 不會告訴你「這個切片切歪了」「這個標本染色過度了」「這片葉子上的斑點不是細胞結構而是黴菌污染」。<strong style="color:var(--accent-teal)">當一個 AI 訓練出來的病理學家開始漏診時，漏診的不是那些「典型」的病例——漏掉的是那些「不符合任何訓練集模式」的異常。</strong> 精準觀察力追求的正是這種「看見異常」的能力。</p></div>
+    <div class="sub-block"><div class="label">How to Deliberately Practice</div><p>每次畫生物圖時，多花兩分鐘。不是「畫完就交」，而是「再看一眼——有沒有我沒注意到的結構？」顯微鏡操作中最有價值的時刻不是你找到教科書結構的瞬間，而是你看到課本沒提到的東西的時候。</p></div>
+  </div>
+
+  <!-- 2 -->
+  <div class="card"><div class="card-header"><span class="en-title">2. Living Systems Thinking</span><span class="cn-title">生命系統的整體思維——擁抱不可簡化的複雜性</span></div>
+    <div class="tag-row"><span class="tag tag-what">What</span><span class="tag tag-where">Topics III+IV (84h), Homeostasis, Ecology, Immunity</span></div>
+    <div class="sub-block"><div class="label">What It Is</div><p>理解一個生命系統——無論是細胞、個體還是生態系統——不能通過「拆成零件再組裝」來理解。零件拆開後，生命就消失了。理解生命需要同時看多個層次、多個反饋迴路、多個時間尺度。</p></div>
+    <div class="sub-block"><div class="label">Where DSE Biology Trains It</div><ul>
+      <li><strong>課題三+四（84h）的整個組織邏輯</strong>：消化不是「胃在消化」，而是酶→胃蛋白酶→多肽→胰蛋白酶→氨基酸→小腸絨毛吸收→肝門靜脈→肝臟代謝——一個跨越分子、細胞、器官、系統的完整鏈條</li>
+      <li><strong>體內平衡（血糖調節）</strong>：血糖升高→胰臟 β 細胞釋放胰島素→肝細胞吸收葡萄糖→血糖下降——完整的負反饋循環</li>
+      <li><strong>生態系</strong>：碳循環——植物→動物→微生物→大氣→海洋→沉積岩中所有碳庫之間幾千年的流動</li>
+      <li><strong>免疫反應</strong>：非特異性防禦→吞噬細胞呈遞抗原→輔助 T 細胞活化→B 細胞分化→漿細胞分泌抗體→記憶細胞保留——多重防線在空間和時間上協同作戰</li>
+    </ul></div>
+    <div class="sub-block"><div class="label">Why AI Cannot Replace It</div><p>AI 可以模擬複雜系統的行為（天氣預報、蛋白質折疊），但<strong style="color:var(--accent-teal)">AI 不擅長在信息不完整的情況下做出關於複雜系統的「足夠好」的判斷。</strong> 面對一個真實的人——他的血糖、血壓、激素水平、免疫狀態和情緒同時變化——「這個化驗結果的輕微偏離是實驗室誤差還是早期病變」這種判斷，需要對生命系統整體性的長期浸染。</p></div>
+    <div class="sub-block"><div class="label">How to Deliberately Practice</div><p>每學完一個生理系統（如消化系統），畫一張跨層次的流程圖：從「吃進一口飯」到「肌肉細胞利用葡萄糖進行呼吸作用」，把涉及的每一個器官、每一種酶、每一條激素信號都畫上去。</p></div>
+  </div>
+
+  <!-- 3 -->
+  <div class="card"><div class="card-header"><span class="en-title">3. Structure-Function Reasoning</span><span class="cn-title">結構-功能推理——為什麼長這樣？</span></div>
+    <div class="tag-row"><span class="tag tag-what">What</span><span class="tag tag-where">Topics I, II, III, IV</span></div>
+    <div class="sub-block"><div class="label">What It Is</div><p>看到任何一個生物結構，本能地問「為什麼是這個形狀？它服務於什麼功能？」——小腸絨毛為什麼是手指狀的？紅細胞為什麼是雙凹碟形的？心肌為什麼有閏盤？這是一場永不停息的福爾摩斯式推理——生物體的每一個結構都是自然選擇「設計」來解決某個問題的。</p></div>
+    <div class="sub-block"><div class="label">Where DSE Biology Trains It</div><ul>
+      <li><strong>課題一（細胞）</strong>：線粒體內膜的嵴結構——增大氧化磷酸化的表面積；葉綠體的類囊體堆疊成基粒——最大化光反應效率</li>
+      <li><strong>課題三+四（人體生理）</strong>：肺泡壁和毛細血管壁都是單層扁平上皮——最小化氣體擴散距離；腎小球毛細血管有孔洞——允許濾過但阻止血細胞通過</li>
+      <li><strong>課題三（植物生理）</strong>：木質部導管是死細胞、中空——無障礙的水分運輸；韌皮部篩管有篩板和伴胞——需要活細胞提供能量進行主動轉運</li>
+      <li><strong>課題二（進化）</strong>：達爾文雀的喙形與食物類型的對應——結構適應功能的經典案例</li>
+    </ul></div>
+    <div class="sub-block"><div class="label">Why AI Cannot Replace It</div><p>AI 可以從結構數據庫中匹配出功能相似的已知結構。但<strong style="color:var(--accent-teal)">當面對一個自然界中全新的結構時，AI 不擅長從結構反推功能。</strong> 一個結構-功能推理訓練有素的生物學家，第一次看到某種深海魚的發光器形態，可以推測它可能是用來誘捕獵物——因為它的位置、形狀和發光模式與已知的誘捕結構相似。這種跨領域的類比推理，是結構-功能思維的核心。</p></div>
+    <div class="sub-block"><div class="label">How to Deliberately Practice</div><p>每學到一個新結構，停下來問自己：「如果這個結構變成另一種形狀會怎樣？」如果肺泡是立方形的？如果小腸絨毛是球狀的？這個思想實驗會迫使你理解結構為何「必須是這樣」。</p></div>
+  </div>
+
+  <!-- 4 -->
+  <div class="card"><div class="card-header"><span class="en-title">4. Multi-Scale Navigation</span><span class="cn-title">跨尺度導航力——從納米到千米的思維跳躍</span></div>
+    <div class="tag-row"><span class="tag tag-what">What</span><span class="tag tag-where">Photosynthesis, Genetics, Disease</span></div>
+    <div class="sub-block"><div class="label">What It Is</div><p>能在分子（nm）、細胞（μm）、組織（mm）、器官（cm）、個體（m）、生態系統（km）之間自由切換視角，理解同一個生命現象在不同尺度上的表現。沒有哪門學科比生物學更需要在尺度之間跳躍。</p></div>
+    <div class="sub-block"><div class="label">Where DSE Biology Trains It</div><ul>
+      <li><strong>光合作用</strong>：從光子（亞原子）→ 葉綠素分子（nm）→ 類囊體膜 → 葉綠體（μm）→ 葉肉細胞 → 葉片（cm）→ 整棵植物（m）→ 森林冠層 → 全球碳循環（全球）</li>
+      <li><strong>遺傳信息</strong>：從 DNA 鹼基對（nm）→ 基因 → 染色體（μm）→ 細胞核 → 細胞 → 組織 → 器官 → 生物個體 → 種群（km）→ 進化（百萬年）</li>
+      <li><strong>疾病</strong>：從病毒顆粒（nm）→ 宿主細胞入侵（μm）→ 局部感染（mm）→ 全身症狀（m）→ 傳播到他人 → 群體免疫（社會層面）</li>
+    </ul></div>
+    <div class="sub-block"><div class="label">Why AI Cannot Replace It</div><p>AI 模型通常被訓練在<strong>單一尺度</strong>上——AlphaFold 預測單個蛋白質的三維結構，但它不會同時考慮「這個蛋白質在細胞中的濃度受什麼激素調控」「這個激素的分泌又受什麼環境信號的影響」。<strong style="color:var(--accent-teal)">跨尺度思維是人類獨有的認知優勢</strong>——把多個 AI 在不同尺度上產生的結果串聯成一個完整的故事，需要一個「總導演」。</p></div>
+    <div class="sub-block"><div class="label">How to Deliberately Practice</div><p>給每一個學過的生物過程做一個三列的「尺度表」：分子層面發生了什麼？細胞層面發生了什麼？組織/器官/個體層面發生了什麼？這個習慣會讓你養成本能——每當聽到一個生物事實，自動追問「這在更大的尺度上意味著什麼？在更小的尺度上是什麼機制在驅動？」</p></div>
+  </div>
+
+  <!-- 5 -->
+  <div class="card"><div class="card-header"><span class="en-title">5. Field Data Literacy</span><span class="cn-title">實地數據素養——在混亂的真實世界中收集有意義的信息</span></div>
+    <div class="tag-row"><span class="tag tag-what">What</span><span class="tag tag-where">Local Habitat Study (Compulsory)</span></div>
+    <div class="sub-block"><div class="label">What It Is</div><p>能在一個不受控制的自然環境（而非實驗室）中，設計一個合理的取樣方案、採集可靠的數據、判斷數據的局限性——並接受「你不能控制所有變量」。這是和實驗室工作完全不同的能力。</p></div>
+    <div class="sub-block"><div class="label">Where DSE Biology Trains It</div><ul>
+      <li><strong>本地生境研習（必修）</strong>：用樣方（quadrat）和樣線（transect）調查植物的分佈，用捉放標記法估算動物種群大小，量度非生物因子（光照、溫度、濕度、pH）——在真實的野外環境中</li>
+      <li><strong>生態調查的局限性</strong>：取樣偏差（你只能調查你走得到的地方）、季節性變化、天氣干擾——這些是真實生態學家的日常</li>
+    </ul></div>
+    <div class="sub-block"><div class="label">Why AI Cannot Replace It</div><p>AI 可以分析衛星圖像和無人機拍攝的影像來估算植被覆蓋率。但<strong style="color:var(--accent-teal)">AI 不會走進一片紅樹林、聞到硫化氫的氣味、踩到泥裡的螃蟹洞、判斷「今天潮水太淺，我們的樣方應該往內陸移 50 米」。</strong> 實地數據素養本質上是「在混亂中做出合理判斷」的能力——它追求的是「在給定的限制下，我能得到的最可信的結論是什麼」。</p></div>
+    <div class="sub-block"><div class="label">How to Deliberately Practice</div><p>做生境研習時注意——你的每個數據點背後都有一個「採樣決策」：為什麼把樣方放在這裡而不是那裡？如果你重做一次，你會改變什麼？這種對自己方法的反思，是數據素養的核心。</p></div>
+  </div>
+
+  <!-- 6 -->
+  <div class="card"><div class="card-header"><span class="en-title">6. Evolutionary Thinking</span><span class="cn-title">進化思維——複雜系統如何在沒有設計師的情況下湧現</span></div>
+    <div class="tag-row"><span class="tag tag-what">What</span><span class="tag tag-where">Topic II, Topic IV (Immunity)</span></div>
+    <div class="sub-block"><div class="label">What It Is</div><p>理解「變異→選擇→遺傳」這個簡單算法，如何在幾十億年的時間裡產生了地球上所有生命形式的驚人複雜性。進化思維的本質是：<strong>有序可以從無序中自然湧現，不需要一個外部的設計者。</strong></p></div>
+    <div class="sub-block"><div class="label">Where DSE Biology Trains It</div><ul>
+      <li><strong>課題二（遺傳與進化）</strong>：自然選擇（達爾文雀的喙形、細菌的抗藥性）；物種形成；進化的證據（化石紀錄、比較解剖學、分子生物學）</li>
+      <li><strong>課題四（免疫）</strong>：免疫系統本身就是一個微觀的進化過程——B 細胞的突變和克隆選擇，本質上是在你體內實時發生的「自然選擇」</li>
+    </ul></div>
+    <div class="sub-block"><div class="label">Why AI Cannot Replace It</div><p>進化思維是一種<strong style="color:var(--accent-teal)">區別於工程思維的根本不同的創造觀</strong>。工程思維是「設計→建造→測試」（你自己想出解決方案）。進化思維是「生成大量變異→環境篩選→保留最優」（你只需要設定條件和選擇標準）。在 AI 時代，進化算法和生成式 AI 的背後就是進化思維——理解這種「不靠設計而靠選擇來創造」的邏輯，是理解 AI 本身如何工作的鑰匙。</p></div>
+    <div class="sub-block"><div class="label">How to Deliberately Practice</div><p>每次看到一種生物的適應特徵（長頸鹿的脖子、駱駝的駝峰、蝙蝠的回聲定位），追問：「這個特徵的前身可能是什麼？中間過渡形態有什麼生存優勢？」你會發現適應不是「憑空出現」的，而是「從已有的結構改造出來的」——這個洞察適用於任何複雜系統的演進。</p></div>
+  </div>
+
+  <!-- 7 -->
+  <div class="card"><div class="card-header"><span class="en-title">7. Health Literacy &amp; Somatic Awareness</span><span class="cn-title">健康素養與身體自覺——了解你住的這座房子</span></div>
+    <div class="tag-row"><span class="tag tag-what">What</span><span class="tag tag-where">Topics III+IV, Homeostasis</span></div>
+    <div class="sub-block"><div class="label">What It Is</div><p>不打折地了解自己的身體——每個器官在做什麼、吃了什麼會有什麼後果、病了是因為什麼機制、如何用科學證據做健康決策。在所有學科中，只有生物給學生這份禮物。</p></div>
+    <div class="sub-block"><div class="label">Where DSE Biology Trains It</div><ul>
+      <li><strong>課題三+四（人體生理）</strong>：消化（你吃的麵包最後變成了你肌肉收縮的 ATP）→ 呼吸（你跑步喘氣是因為需氧呼吸跟不上你肌肉的 ATP 需求）→ 循環（你的心跳加速是因為腎上腺素的 β-腎上腺素受體激活了竇房結）</li>
+      <li><strong>課題四（健康與疾病）</strong>：傳染病（為什麼醫生叫你吃完整個療程的抗生素——不是在症狀消失時細菌就死光了）、免疫（為什麼疫苗是主動免疫而抗蛇毒血清是被動免疫——它們保護你的時間長度完全不同）</li>
+      <li><strong>體內平衡</strong>：血糖調節——為什麼吃高 GI 食物後會犯困（胰島素急劇分泌導致血糖快速下降）；為什麼運動有助於控制血糖（肌肉細胞 GLUT4 轉運體能不依賴胰島素攝取葡萄糖）</li>
+    </ul></div>
+    <div class="sub-block"><div class="label">Why AI Cannot Replace It</div><p>AI 可以提供個性化的飲食和運動建議。但<strong style="color:var(--accent-teal)">關於你的身體——疼痛的位置、疲累的感覺、心跳的變化——這些信息只有你自己能感受和判斷。</strong> 健康素養的深層價值不是「知道 BMI 公式」，而是對自己的身體信號有一套科學的解讀框架。更深一層：DSE 生物對人體機制的透徹訓練——從心肌的閏盤到腎小球的濾過屏障，從 B 細胞的克隆選擇到胰島素的負反饋調節——是成為醫生、物理治療師、營養師等醫療專業人員的第一塊基石。在 AI 輔助診斷日益普及的時代，最好的醫療專業人員不是「會查 AI」的人，而是<strong>「體內的每一個生理過程早已成為直覺」</strong>的人。</p></div>
+    <div class="sub-block"><div class="label">How to Deliberately Practice</div><p>把課題三和課題四的知識和自己的日常生活對接。今天吃了什麼？消化系統在做什麼？跑了多久的步？肌肉細胞在進行哪種呼吸方式？這種「知識落地到身體」的習慣，會把生物從一門考試變成一套終身受用的身體使用手冊。</p></div>
+  </div>
+
+  <!-- 8 -->
+  <div class="card"><div class="card-header"><span class="en-title">8. Classification &amp; Pattern Recognition</span><span class="cn-title">分類與模式識別——給生命世界建一個圖書館</span></div>
+    <div class="tag-row"><span class="tag tag-what">What</span><span class="tag tag-where">Topic II, IV, III</span></div>
+    <div class="sub-block"><div class="label">What It Is</div><p>面對難以窮舉的多樣性（幾百萬種生物、幾千種疾病），不靠死記硬背，而是建立分類框架——二叉式檢索表、三域分類系統（細菌域、古菌域、真核域）、按病原體類型組織傳染病知識——用分類來駕馭複雜性。</p></div>
+    <div class="sub-block"><div class="label">Where DSE Biology Trains It</div><ul>
+      <li><strong>課題二（分類）</strong>：沃斯的三域系統（細菌域、古菌域、真核域）、雙名法、<strong>二叉式檢索表</strong>——用二分法層級化地識別未知生物</li>
+      <li><strong>課題四（疾病）</strong>：按病原體類型（病毒→流感/艾滋病、細菌→霍亂/肺結核、原生生物→瘧疾、真菌→腳癬）組織傳染病知識</li>
+      <li><strong>課題三（植物生理）</strong>：C3 植物 vs C4 植物 vs CAM 植物——按光合作用的碳固定方式分類，對應不同的生態環境</li>
+    </ul></div>
+    <div class="sub-block"><div class="label">Why AI Cannot Replace It</div><p>AI 擅長在數據中自動聚類，但<strong style="color:var(--accent-teal)">AI 不會告訴你「哪種分類方式對解決當前問題最有幫助」。</strong> 一個好的分類框架是一個概念工具——它決定你能多快地在信息海洋中找到你需要的那個條目。這在任何需要處理大量異質信息的領域都至關重要。</p></div>
+    <div class="sub-block"><div class="label">How to Deliberately Practice</div><p>不要把分類當成「需要背誦的內容」。把每一種分類法當成一個「導航系統」——拿到一個未知生物樣本，你怎麼用二叉式檢索表一層層縮小可能性？拿到一種未知傳染病，你怎麼從病原體類型推斷傳播途徑和預防措施？分類的價值在於<strong>降低搜尋成本</strong>。</p></div>
+  </div>
+
+  <!-- 9 -->
+  <div class="card"><div class="card-header"><span class="en-title">9. Bioethical Reasoning</span><span class="cn-title">生命倫理推理——當科技觸碰生命時怎麼判斷對錯</span></div>
+    <div class="tag-row"><span class="tag tag-what">What</span><span class="tag tag-where">Elective VIII, Topic II, Topic IV</span></div>
+    <div class="sub-block"><div class="label">What It Is</div><p>面對基因編輯嬰兒、克隆人、幹細胞治療、轉基因作物這些沒有先例可循的倫理問題，不是憑直覺站隊，而是<strong>結構化地分析</strong>：科學層面（這個技術能做到什麼？有什麼不確定的風險？）、道德層面（誰受益、誰受損？）、社會層面（這項技術會加劇不平等嗎？如何監管？）。</p></div>
+    <div class="sub-block"><div class="label">Where DSE Biology Trains It</div><ul>
+      <li><strong>選修課題八（生物工程）</strong>：重組 DNA、基因治療、幹細胞治療、轉基因動植物、動物克隆——每一項技術都附帶了<strong>生物倫理學</strong>的討論</li>
+      <li><strong>課題二（遺傳學）</strong>：產前篩查和胚胎選擇——是不是在「淘汰」某些基因型？</li>
+      <li><strong>課題四（抗生素濫用）</strong>：個人使用抗生素的便利 vs 全社會的耐藥性危機——一個典型的「公地悲劇」</li>
+    </ul></div>
+    <div class="sub-block"><div class="label">Why AI Cannot Replace It</div><p>AI 可以總結正反雙方的觀點。但<strong style="color:var(--accent-teal)">「在這個具體情況下，什麼才是對的？」——這種判斷需要一個對生命有敬畏、對技術後果有預見、對不同價值觀能共情的人。</strong> 生命倫理推理的本質是：當沒有標準答案時，你用什麼方法來逼近一個負責任的判斷？這個能力在任何一個需要面對倫理困境的領域——AI 治理、環境政策、公共衛生——都不可或缺。</p></div>
+    <div class="sub-block"><div class="label">How to Deliberately Practice</div><p>遇到一個生物倫理議題時，先把自己的直覺立場寫在紙上。然後強迫自己為反方寫一段有說服力的論證——不是調侃諷刺，是認真地試圖理解「為什麼一個善良理性的人會持相反觀點」。這個練習訓練的不是「誰對誰錯」，而是<strong>「理解不同價值觀如何導向不同結論」</strong>——這是民主社會公民的核心能力。</p></div>
+  </div>
+</section>
+
+<!-- AI Collaboration -->
+<section class="section">
+  <h2 class="section-title"><span class="num">🤝</span> How the 9 Meta-Abilities Collaborate with AI <span style="font-weight:400;color:var(--text-muted);font-size:.85rem">九項元能力如何與 AI 協作</span></h2>
+  <div class="table-wrap"><table><thead><tr><th>Meta-Ability</th><th>Human Superiority</th><th>AI Superiority</th><th>Optimal Collaboration</th></tr></thead><tbody>
+    <tr><td>Precision Observation</td><td>判斷樣本質量、發現異常</td><td>識別和分類已知結構</td><td>人檢查標本質量 → AI 輔助識別 → 人確認異常</td></tr>
+    <tr><td>Living Systems Thinking</td><td>跨層次串聯因果、判斷「足夠好」</td><td>模擬特定層次的動態</td><td>人定問題邊界 → AI 模擬 → 人解釋系統行為</td></tr>
+    <tr><td>Structure-Function Reasoning</td><td>從新結構推測功能（類比推理）</td><td>搜索已知結構-功能配對</td><td>人提出假設 → AI 搜索類似案例 → 人判斷</td></tr>
+    <tr><td>Multi-Scale Navigation</td><td>在尺度之間跳轉，串成完整敘事</td><td>在單一尺度內深度分析</td><td>人跨尺度提問 → AI 深度學習 → 人整合</td></tr>
+    <tr><td>Field Data Literacy</td><td>採樣決策、判斷數據可信度</td><td>分析大量數據</td><td>人設計採樣方案 + 採集 → AI 分析</td></tr>
+    <tr><td>Evolutionary Thinking</td><td>理解湧現的哲學含義</td><td>運行進化算法</td><td>人設定選擇標準 → AI 執行進化 → 人解讀結果</td></tr>
+    <tr><td>Health Literacy</td><td>感知自己的身體信號</td><td>分析個體化健康數據</td><td>人報告感受 → AI 分析數據 → 人做決策</td></tr>
+    <tr><td>Classification &amp; Pattern Recognition</td><td>設計分類框架</td><td>大規模自動分類</td><td>人建框架 → AI 執行 → 人校驗邊界案例</td></tr>
+    <tr><td>Bioethical Reasoning</td><td>跨價值觀共情、做出負責任的判斷</td><td>總結文獻中的各種觀點</td><td>人定義倫理框架 → AI 收集證據 → 人判斷</td></tr>
+  </tbody></table></div>
+</section>
+
+<!-- Three-subject dashboard -->
+<section class="section">
+  <h2 class="section-title"><span class="num">📊</span> Three-Subject Meta-Ability Dashboard <span style="font-weight:400;color:var(--text-muted);font-size:.85rem">三科元能力的交匯：海納有容的「元能力儀表盤」</span></h2>
+  <div class="table-wrap"><table><thead><tr><th>Dimension</th><th>Physics</th><th>Chemistry</th><th>Biology</th></tr></thead><tbody>
+    <tr><td>Way of Seeing</td><td>Reductionism 還原論——拆解</td><td>Constructivism 建構論——搭建</td><td>Holism 整體論——擁抱複雜性</td></tr>
+    <tr><td>Core Question</td><td>為什麼這樣動？</td><td>用什麼路徑製造？</td><td>為什麼長這樣？怎麼活著？</td></tr>
+    <tr><td>Spatial Thinking</td><td>Macro space 宏觀空間（運動軌跡）</td><td>Micro space 微觀空間（分子三維）</td><td>Cross-scale 跨尺度（nm→km）</td></tr>
+    <tr><td>Temporal Thinking</td><td>物理過程的時間</td><td>反應動力學的時間</td><td>Evolutionary deep time 進化尺度的深度時間</td></tr>
+    <tr><td>Experimental Style</td><td>Precision measurement 精確測量</td><td>Synthesis &amp; separation 合成與分離</td><td>Observation, description, dissection, field work 觀察、描述、解剖、實地調查</td></tr>
+    <tr><td>What It Creates</td><td>Models that explain the world</td><td>Molecules not found in nature</td><td>Understanding of and intervention in living systems</td></tr>
+    <tr><td>Hardest for AI</td><td>建模直覺 + 數字直覺</td><td>合成思維 + 分析拆解</td><td>精準觀察 + 跨尺度整合 + 生命倫理判斷</td></tr>
+  </tbody></table></div>
+</section>
+
+<!-- Advice -->
+<section class="section">
+  <h2 class="section-title"><span class="num">🎯</span> Specific Advice for 海納 &amp; 有容 <span style="font-weight:400;color:var(--text-muted);font-size:.85rem">對海納有容的具體建議</span></h2>
+  <h3 style="font-size:.92rem;color:var(--accent-teal);margin-bottom:.7rem">在 DSE 三年裡刻意做這幾件事</h3>
+  <ol class="advice-list">
+    <li><strong style="color:#fff">好好畫每一張生物圖</strong>——不只是為了 SBA 分數。手繪迫使你用眼睛看每一個細節。將來你面對顯微鏡圖像、診斷影像、衛星照片——這種「仔細看到不想看的東西」的習慣，是任何 AI 輔助工具都給不了你的。</li>
+    <li><strong style="color:#fff">珍惜那 20 小時的探究研習和每一次 SBA 實驗</strong>——與物理和化學一樣，這是你們在 AI 時代最值錢的資產。尤其生物的解剖、繪圖和實地考察——沒人能替你積累手握解剖刀和腳踏樣方的經驗。</li>
+    <li><strong style="color:#fff">把人體生理學當成「自己的身體使用手冊」</strong>——不是背來考試的。你是你自己的身體唯一的終身使用者。了解它怎麼運作、怎麼出故障、怎麼修復——這是其他任何學科都給不了你的知識。</li>
+    <li><strong style="color:#fff">讀一本關於進化論的非教科書</strong>——比如 Dawkins 的《自私的基因》或 Ridley 的《基因組》。進化思維遠不止於生物——它是理解技術變革、市場演化、文化傳播的一套通用算法。</li>
+    <li><strong style="color:#fff">選修課題選擇：</strong>對醫學/健康科學感興趣 → 課題五（人體生理學：調節與控制）；對環境/生態感興趣 → 課題六（應用生態學）；對實驗室研究/生物技術感興趣 → 課題八（生物工程）；對微生物學/感染病感興趣 → 課題七（微生物與人類）</li>
+    <li><strong style="color:#fff">在結構-功能推理上多做一步</strong>：看到一個結構，先不看課本解釋，自己猜一下它可能的功能。猜錯了不重要——這個過程才是訓練。</li>
+  </ol>
+  <div class="parent-box"><div class="box-label">For Parents 家長可以配合做什麼</div>
+    <ul>
+      <li>▸ 帶他們去一次郊野公園的實地生態觀察——不一定是課題要求的，純出於好奇</li>
+      <li>▸ 對他們的身體變化（運動、飲食、睡眠）表現出科學的好奇——讓他們教你</li>
+      <li>▸ 生物倫理學話題（基因編輯嬰兒、安樂死、器官交易）是絕佳的餐桌討論——沒有標準答案，但有討論的方法</li>
+    </ul>
+  </div>
+</section>
+
+<!-- Summary -->
+<section class="section">
+  <h2 class="section-title"><span class="num">✦</span> Summary <span style="font-weight:400;color:var(--text-muted);font-size:.85rem">總結</span></h2>
+  <div class="summary-card">
+    <p class="core">一句話核心結論：<br><span style="color:var(--accent-leaf)">DSE 生物給你三樣東西——顯微鏡下的眼睛、跨尺度的思維、對自己身體完整的理解和尊重。</span></p>
+    <p class="detail"><strong>詳細說明：</strong>DSE 生物給海納有容的最大禮物，不是背下來的腎小管名稱或卡爾文循環步驟，而是三樣東西：一雙能在顯微鏡下看見「不是應該在那裡」的東西的眼睛、一套能在 nm→km 之間自由跳轉的思維、以及對自己這副「活著的機器」完整的理解和尊重。在 AI 可以診斷疾病、設計藥物、編輯基因的未來，這三種能力不會過時——因為 AI 可以告訴你「身體在發生什麼」，但「身體是你的，你得自己做決定」這件事，永遠不會外包。</p>
+  </div>
+</section>
+
+</div>
+</body>
+</html>

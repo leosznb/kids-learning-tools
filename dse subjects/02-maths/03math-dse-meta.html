@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 时代 DSE 数学必修应培养的元能力 · 海纳有容</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@300;400;500;600&family=Noto+Sans+SC:wght@400;500;700&display=swap');
+
+:root {
+  --bg: #0a0c10;
+  --surface: #13161d;
+  --surface2: #1a1e28;
+  --text: #c8d0da;
+  --text-dim: #7a8290;
+  --accent: #00e5a0;
+  --accent2: #5dade2;
+  --accent3: #f39c12;
+  --border: #252a35;
+  --table-head: #161b25;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Inter', 'Noto Sans SC', sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  line-height: 1.85;
+  font-size: 16px;
+}
+
+.container {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 40px 28px 60px;
+}
+
+h1 {
+  font-family: 'Space Mono', 'Noto Sans SC', monospace;
+  font-weight: 700;
+  font-size: 1.55rem;
+  color: var(--accent);
+  margin-bottom: 8px;
+  line-height: 1.35;
+  text-shadow: 0 0 20px rgba(0,229,160,0.12);
+}
+
+h2 {
+  font-family: 'Space Mono', 'Noto Sans SC', monospace;
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: var(--accent2);
+  margin: 48px 0 18px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--border);
+}
+
+h3 {
+  font-family: 'Space Mono', 'Noto Sans SC', monospace;
+  font-weight: 600;
+  font-size: 0.98rem;
+  color: var(--accent3);
+  margin: 32px 0 12px;
+}
+
+.meta {
+  font-size: 0.82rem;
+  color: var(--text-dim);
+  margin-bottom: 32px;
+  background: var(--surface);
+  padding: 16px 20px;
+  border-radius: 6px;
+  border-left: 3px solid var(--accent);
+}
+
+.meta p { margin-bottom: 4px; }
+
+blockquote {
+  border-left: 3px solid var(--accent);
+  background: var(--surface);
+  margin: 18px 0;
+  padding: 16px 20px;
+  color: #a0aab5;
+  border-radius: 0 6px 6px 0;
+  font-size: 0.9rem;
+}
+
+blockquote strong { color: var(--accent); }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 18px 0 24px;
+  font-size: 0.88rem;
+  background: var(--surface);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+thead th {
+  background: var(--table-head);
+  color: var(--accent);
+  padding: 11px 14px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 2px solid var(--accent);
+}
+
+tbody td {
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+  line-height: 1.6;
+}
+
+tbody tr:nth-child(odd) { background: rgba(255,255,255,0.015); }
+tbody tr:hover { background: rgba(0,229,160,0.03); }
+
+p { margin-bottom: 14px; }
+ul, ol { margin: 8px 0 16px 24px; line-height: 1.85; }
+li { margin-bottom: 6px; }
+
+strong { color: #e0e6f0; }
+
+.flex-table { overflow-x: auto; }
+
+/* Ability card */
+.ability {
+  margin-bottom: 28px;
+}
+
+.ability-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  font-weight: 700;
+  margin-bottom: 2px;
+  font-family: 'Space Mono', monospace;
+}
+
+.ability h3 {
+  margin-top: 0;
+  margin-bottom: 14px;
+}
+
+.ability-section {
+  margin: 8px 0;
+  padding-left: 16px;
+  border-left: 3px solid var(--border);
+}
+
+.ability-section.strong {
+  border-left-color: var(--accent);
+  background: rgba(0,229,160,0.03);
+  padding: 10px 16px;
+  border-radius: 0 4px 4px 0;
+  margin: 10px 0;
+}
+
+.section-title {
+  font-weight: 700;
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.info-box {
+  background: var(--surface);
+  border-left: 3px solid var(--accent3);
+  padding: 14px 18px;
+  margin: 16px 0;
+  border-radius: 0 6px 6px 0;
+  font-size: 0.9rem;
+}
+
+.info-box strong { color: var(--accent3); }
+
+.num-list { margin: 12px 0 20px; }
+.num-item {
+  margin-bottom: 16px;
+  padding-left: 28px;
+  position: relative;
+}
+.num-item .num {
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-weight: 700;
+  color: var(--accent);
+  font-family: 'Space Mono', monospace;
+}
+
+@media print {
+  body { font-size: 13px; color: #000; background: #fff; }
+  .container { max-width: 100%; padding: 20px; }
+  thead th { background: #444 !important; color: #fff; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  h1 { text-shadow: none; }
+}
+
+@media (max-width: 700px) {
+  .container { padding: 20px 16px 40px; }
+  h1 { font-size: 1.15rem; }
+  h2 { font-size: 0.92rem; }
+  table { font-size: 0.74rem; }
+  thead th, tbody td { padding: 7px 9px; }
+}
+
+.checklist {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 20px 24px;
+  margin: 40px 0 0;
+}
+
+.checklist h3 { margin-top: 0; color: var(--accent); }
+.checklist ul { list-style: none; padding: 0; }
+.checklist li { padding: 4px 0; font-size: 0.85rem; }
+.checklist li::before { content: "✅ "; color: var(--accent); }
+
+/* Data Q checklist */
+.data-q {
+  background: var(--surface2);
+  padding: 12px 16px;
+  border-radius: 4px;
+  margin: 8px 0;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.84rem;
+}
+.data-q li { margin-bottom: 3px; }
+.data-q li::before { content: "▹ "; color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>修读 DSE 数学（必修部分）应培养的元能力：给海纳有容的 AI 时代准备清单</h1>
+
+<div class="meta">
+  <p>问题背景：在 AI 可以计算、求解、建模、生成图形的时代，学数学还有什么意义？不修 M2（没有微积分、没有矩阵）的 DSE 必修数学，还能给海纳有容留下什么考试分数以外的、终身受用的东西？</p>
+  <p>基于《DSE_vs_内地_数学课程标准难度对比.md》的事实分析和《两地数学课标差异根源与价值判断_v3.md》的价值判断，本文档进一步追问：在已知 DSE 必修数学「有退路」的前提下，AI 时代应如何最大化其教育回报？</p>
+  <p style="margin-top:8px">分析日期：2026-06-08</p>
+</div>
+
+<h2>一、核心悖论：DSE 必修数学在 AI 时代反而升值了</h2>
+
+<p>在 AI 时代，DSE 必修数学恰好站在一个有趣的位置上。</p>
+
+<p>它不教微积分——但 AI 可以在一秒内求出任何函数的导数。它不教矩阵——但 AI 可以瞬间完成任何线性变换。从「知识点还值不值钱」的角度看，DSE 必修数学教的大部分东西——解二次方程、算概率、画框线图——AI 都能做，而且做得比人更准确。</p>
+
+<p>但 DSE 必修数学在三个维度上形成了相对优势——<strong>统计的深度、模型的广度、对数据本身的批判性反思</strong>——而这三个维度恰好是内地高中数学因课时被微积分、立体几何、复数占据而相对薄弱的领域：</p>
+
+<div class="flex-table">
+<table>
+<thead><tr><th>AI 擅长</th><th>人类（通过 DSE 数学训练后）擅长</th></tr></thead>
+<tbody>
+<tr><td>在给定明确公式和输入条件下精确求解</td><td>判断「这个结果合理吗？」</td></tr>
+<tr><td>执行明确定义的算法步骤</td><td>建立数学模型</td></tr>
+<tr><td>按公式求解</td><td>选择「哪种方法更适合这个问题？」</td></tr>
+<tr><td>生成数据</td><td>识别「这组数据有没有误导性？」</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="flex-table">
+<table>
+<thead><tr><th>DSE 必修数学的侧重</th><th>对应培养的不可替代能力</th></tr></thead>
+<tbody>
+<tr><td>离差度量、正态分布、统计应用误用</td><td>数据批判力——判断「这个结果合理吗？」</td></tr>
+<tr><td>变分、线性规划、数列应用题</td><td>模型化思维——把现实问题转化为数学结构</td></tr>
+<tr><td>概率方法、统计方法、三角函数方法</td><td>元认知/方法选择——「哪种方法更适合这个问题？」</td></tr>
+<tr><td>统计的应用及误用（批判性评估）</td><td>信息素养——识别「这组数据有没有误导性？」</td></tr>
+</tbody>
+</table>
+</div>
+
+<h2>二、五项元能力清单</h2>
+
+<p>DSE 必修数学的 250 小时，如果只盯着考试，你得到的是分数。但如果刻意去提取，你可以从中带走五样终身受用的东西。</p>
+
+<!-- 1 -->
+<div class="ability">
+  <div class="ability-label">元能力 1</div>
+  <h3>数量级直觉与估算能力</h3>
+
+  <div class="ability-section">
+    <div class="section-title">是什么</div>
+    <p>在按下计算器之前，先预判答案的大致范围；看到一个数字时，本能地判断它是否合理。</p>
+  </div>
+
+  <div class="ability-section strong">
+    <div class="section-title">为什么 AI 替代不了</div>
+    <p>AI 可以给你精确到小数点后十位的答案，但它不会替你判断你是否打错了数字、选错了公式、或者把「万」误当成「亿」。估算是一种「答案合理性的快速校验」，是人类在 AI 时代必须保留的最后一道防线。</p>
+  </div>
+
+  <div class="ability-section">
+    <div class="section-title">在 DSE 中如何训练</div>
+    <p>DSE 允许使用计算器，这反而创造了独特的训练机会——每一次按键之前先问自己：「答案大概在什么范围？」。利率应用题中的数量级估算、概率值是否在 0 到 1 之间、三角比的取值范围——这些都可以成为估算训练的素材。</p>
+  </div>
+
+  <div class="ability-section">
+    <div class="section-title">对海纳有容的具体建议</div>
+    <p>做每一道题之前先做一次「预判」——不要求精确，只要求数量级。例如「这个增长率应用题，答案应该在 5% 到 15% 之间」，然后再用计算器验证。如果计算器给出的答案偏离你的预判，先怀疑计算器（可能打错了），而不是怀疑自己。</p>
+  </div>
+</div>
+
+<!-- 2 -->
+<div class="ability">
+  <div class="ability-label">元能力 2</div>
+  <h3>概率思维与数据批判力</h3>
+
+  <div class="ability-section">
+    <div class="section-title">是什么</div>
+    <p>理解「可能性」不等于「确定性」；识别统计数据的误导性；在不确定条件下做出理性决策。</p>
+  </div>
+
+  <div class="ability-section strong">
+    <div class="section-title">为什么 AI 替代不了</div>
+    <p>AI 可以计算出「这个药物的有效率为 85%」，但它不会替你做决策：「基于这 85% 的有效率，我该不该用这个药？」。决策需要价值判断——你对风险的承受能力、你对副作用的容忍度——AI 无法替你回答这些问题。</p>
+  </div>
+
+  <div class="ability-section">
+    <div class="section-title">在 DSE 中如何训练</div>
+    <p>DSE 必修数学有 38 小时的统计与概率（内地仅约 18 小时），涵盖离差度量、正态分布、统计的应用及误用。其中「统计的应用及误用」是整个 DSE 体系中最有价值的单元之一——它教你怎么识别「这组数据在说谎」。</p>
+  </div>
+
+  <div class="ability-section">
+    <div class="section-title">对海纳有容的具体建议</div>
+    <p>把「统计的应用及误用」这一课当作公民素养课来学。读新闻时看到任何百分比，问三个问题：</p>
+    <ol class="data-q">
+      <li>样本量多大？（样本越小，波动越大）</li>
+      <li>分母是什么？（「满意度提升 50%」——从 2% 到 3% 还是从 40% 到 60%？）</li>
+      <li>有无对照组？（「使用某产品后 8 成人觉得皮肤变好」——没使用的人是否也有同样比例觉得皮肤变好了？）</li>
+    </ol>
+  </div>
+</div>
+
+<!-- 3 -->
+<div class="ability">
+  <div class="ability-label">元能力 3</div>
+  <h3>模型化思维</h3>
+
+  <div class="ability-section">
+    <div class="section-title">是什么</div>
+    <p>把模糊的现实问题转化为清晰的数学模型；识别哪些变量重要、哪些可以忽略；在「精确」和「可用」之间找到平衡。</p>
+  </div>
+
+  <div class="ability-section strong">
+    <div class="section-title">为什么 AI 替代不了</div>
+    <p>AI 擅长在给定模型内求解，但它不擅长定义模型——也就是说，AI 不会替你决定「这个问题应该用什么数学结构来描述」。线性规划？概率？方程？——选择模型本身就是最难的一步。AI 可以在你选定模型后帮你求解，但「把现实翻译成数学」这件事，仍然需要人的判断。</p>
+  </div>
+
+  <div class="ability-section">
+    <div class="section-title">在 DSE 中如何训练</div>
+    <p>变分（求最优值）、线性规划（在约束下求最优解）、数列应用题（把文字描述转化为递推关系）——这些单元的本质都是「建立数学模型」。尤其是线性规划，它和成年人的真实决策同构：有限资源、多个约束、需要最优选择。</p>
+  </div>
+
+  <div class="ability-section">
+    <div class="section-title">对海纳有容的具体建议</div>
+    <p>线性规划这道题的思维框架值得记住——<strong>「目标函数 + 约束条件 → 可行域 → 最优解」</strong>。把这道题的框架记住，因为它和你将来在人生中无数次面对的选择是同一种结构：怎么安排复习时间？怎么分配零用钱？怎么选择大学 offer？</p>
+  </div>
+</div>
+
+<!-- 4 -->
+<div class="ability">
+  <div class="ability-label">元能力 4</div>
+  <h3>逻辑推理与论证链</h3>
+
+  <div class="ability-section">
+    <div class="section-title">是什么</div>
+    <p>从已知条件出发，通过严密的逻辑推导，得出必然的结论；能够识别推理链中的漏洞。</p>
+  </div>
+
+  <div class="ability-section strong">
+    <div class="section-title">为什么 AI 替代不了</div>
+    <p>AI 可以一秒内证明任何几何题，但「信任 AI 的证明」本身需要一个前提——你具备判断这个证明是否逻辑自洽的能力。如果你完全不懂逻辑推理，你就只能「信 AI」或「不信 AI」，而不能「判断 AI 给出的结论凭什么成立」。几何证明训练的是「因为我看到了前提和推理过程，所以我信任这个结论」——这种信任感无法外包。</p>
+  </div>
+
+  <div class="ability-section">
+    <div class="section-title">在 DSE 中如何训练</div>
+    <p>平面几何的演绎证明（「因为……所以……」的推理链）、三角恒等式的推导（从左到右的等价变换）、概率问题中的逻辑条件判断。DSE 的几何证明虽然范围不如内地宽广，但保留了完整的演绎推理训练。</p>
+  </div>
+
+  <div class="ability-section">
+    <div class="section-title">对海纳有容的具体建议</div>
+    <p>当你面对 AI 给出的任何结论时（不是一个几何题，而是 AI 告诉你「这个产品值得投资」），你会问：「你这个结论凭什么成立？你的已知条件是什么？你的推理路径是完整的吗？」——你在几何证明中学会的「因为……所以……」，就是你在 AI 时代不被忽悠的最后防线。</p>
+  </div>
+</div>
+
+<!-- 5 -->
+<div class="ability">
+  <div class="ability-label">元能力 5</div>
+  <h3>元认知与方法选择</h3>
+
+  <div class="ability-section">
+    <div class="section-title">是什么</div>
+    <p>面对一个问题时，不仅知道「怎么解」，还知道「为什么用这种方法而不是那种方法」；能够评估不同方法的优劣；对自己的解题过程有反思和监控。</p>
+  </div>
+
+  <div class="ability-section strong">
+    <div class="section-title">为什么 AI 替代不了</div>
+    <p>AI 可以执行任何一种你指定给它的方法，但它不会替你选择「哪种方法更适合这个问题」。方法选择需要元认知——对自己思维过程的认知和调节。这是一种「高阶思维」，是学习能力的核心。</p>
+  </div>
+
+  <div class="ability-section">
+    <div class="section-title">在 DSE 中如何训练</div>
+    <p>DSE 的考核特点鼓励方法选择——例如一道概率题可能可以用列举法、树形图、排列组合公式等多种方法求解。选择哪种方法取决于题目特点和你对方法的理解深度。统计题中的「该用平均数还是中位数？」、三角学中的「该用正弦公式还是余弦公式？」——每一次方法选择都是元认知的训练。</p>
+  </div>
+
+  <div class="ability-section">
+    <div class="section-title">对海纳有容的具体建议</div>
+    <p>做完一道题后，不要止步于「答案对了」。多问自己一句：「这道题还有没有其他解法？如果有，哪种更简洁？哪种更不容易出错？」这种反思习惯比多刷十道题更有价值。</p>
+  </div>
+</div>
+
+<h2>三、DSE 必修数学独有的优势单元</h2>
+
+<p>以下四个单元是 DSE 必修数学相较内地高中数学具有结构性优势的领域，值得特别投入：</p>
+
+<div class="flex-table">
+<table>
+<thead><tr><th>单元</th><th>课时（约）</th><th>内地对应情况</th><th>AI 时代的独特价值</th></tr></thead>
+<tbody>
+<tr><td><strong>统计的应用及误用</strong></td><td>6h</td><td>无对应内容</td><td>数据批判力的核心训练——识别误导性统计</td></tr>
+<tr><td><strong>正态分布及其应用</strong></td><td>6h</td><td>仅选修</td><td>理解「钟形曲线」的普遍性和局限性</td></tr>
+<tr><td><strong>离差度量</strong></td><td>8h</td><td>约 3h</td><td>理解「平均值」不是故事的全部——标准差告诉你数据的离散程度</td></tr>
+<tr><td><strong>变分</strong></td><td>6h</td><td>无对应内容</td><td>建立最优化的基本直觉——「极值」是什么？</td></tr>
+</tbody>
+</table>
+</div>
+
+<h2>四、需要刻意补强的领域</h2>
+
+<p>DSE 必修数学有「退路」，也有「盲区」。以下短板需要主动补强：</p>
+
+<h3>4.1 微积分直觉（M2 独占，必修不教）</h3>
+
+<p><strong>缺失什么：</strong>变化率的直觉、累积的直觉——即「导数」和「积分」的基本概念。</p>
+
+<p><strong>为什么重要：</strong>微积分是现代科学的语言。不懂微积分的人，面对经济学中的「边际」、物理学中的「速率」、生物学中的「种群增长模型」，都只能理解表面。</p>
+
+<p><strong>如何补强：</strong>不需要学计算（AI 可以帮你算）。用科普资源建立微积分直觉：</p>
+<ul>
+  <li>YouTube: 3Blue1Brown《微积分的本质》系列</li>
+  <li>书籍：《微积分入门》（小平邦彦）——以概念理解为主，不追求计算熟练度</li>
+</ul>
+
+<p>目标是理解「导数描述变化率」「积分描述累积」这两个核心直觉。</p>
+
+<h3>4.2 矩阵与线性变换</h3>
+
+<p><strong>缺失什么：</strong>向量空间的直觉、线性变换的几何理解。</p>
+
+<p><strong>为什么重要：</strong>矩阵是 AI 和机器学习的底层数学语言。虽然你不学 M2 意味着你不会用矩阵做计算，但理解「矩阵是什么」的直觉仍然有用——尤其是当 AI 告诉你「这个模型用了矩阵分解技术」时，你至少知道它在说什么。</p>
+
+<p><strong>如何补强：</strong>3Blue1Brown《线性代数的本质》系列。只需要前 5 集，建立「矩阵 = 对空间的线性变换」这个几何直觉即可。</p>
+
+<h2>五、对海纳有容的具体建议</h2>
+
+<p>他们不修 M2。这意味着 DSE 数学留给他们的不是微积分的分析工具，而是一套「面对数据和不确定性时如何思考」的底层系统。</p>
+
+<div class="num-list">
+  <div class="num-item"><span class="num">1.</span> <strong>统计不是因为你将来要用它，而是因为它会改变你看世界的方式</strong>
+    <p>DSE 必修数学最值钱的东西是那 38 小时的统计和概率。不是因为它们比导数更容易，而是因为在 AI 时代面对信息时，它们是使用频率最高的数学工具——读新闻、看广告、做决策——每一刻你都需要识别「这组数据在讲什么？」和「这个结论有没有道理？」。AI 时代最重要的不是「会算」，而是「会读」——统计训练的就是「会读」。</p>
+  </div>
+
+  <div class="num-item"><span class="num">2.</span> <strong>线性规划是你离「真实决策」最近的一次</strong>
+    <p>DSE 必修数学中，线性规划和数列应用题是最接近「成年人的世界」的内容——有限资源、多个约束、需要最优选择（线性规划）；利率、增长、折旧的长期计算（数列）。线性规划这道题的思维结构，和「怎么安排复习时间」「怎么分配零用钱」「怎么选择大学 offer」是同一种结构。把这道题的框架记住。</p>
+  </div>
+
+  <div class="num-item"><span class="num">3.</span> <strong>几何证明的训练在 AI 时代不是贬值了，是升值了</strong>
+    <p>AI 可以一秒内证明任何几何题，但「信任 AI 的证明」的前提是「你自己具备一步一步走到它」的能力——这种信任感无法外包。当你面对 AI 给出的任何结论时（不是一个几何题，而是 AI 告诉你「这个产品值得投资」），你会问：「你这个结论凭什么成立？你的已知条件是什么？你的推理路径是完整的吗？」——你在几何证明中学会的「因为……所以……」，就是你在 AI 时代不被忽悠的最后防线。</p>
+  </div>
+
+  <div class="num-item"><span class="num">4.</span> <strong>计算器让你不用精算，但你需要更强的估算能力</strong>
+    <p>DSE 允许计算器，所以你的手算能力不如内地学生——这是事实。但估算能力——在按下计算器之前先预判答案的大致范围——是你需要刻意培养来弥补这个差距的。每一次按键之前先问自己：「答案大概在什么范围？」这会拯救你无数因为「打错了数字但没意识到」导致的错误。</p>
+  </div>
+</div>
+
+<h3>家长可以配合做什么</h3>
+
+<ul>
+  <li>和他们一起读数据新闻（比如「今年香港的失业率变了多少？这意味着什么？」），或者从他们身边切入——「这次测验的班级平均分和中位数差距很大，说明什么？」——用平均数和中位数这类直观概念去理解</li>
+  <li>在日常生活中用约束优化的思维做决策示范——「我们今晚的预算和食材有限，怎么搭配最好？」</li>
+  <li>看到「某种产品有效率达 XX%」的广告时，用概率思维讨论：「如果把样本量放大到一万人，这个数据还会这么漂亮吗？」</li>
+</ul>
+
+<h2>六、总结</h2>
+
+<blockquote><strong>一句话核心结论：AI 可以替你算，但不能替你判断——DSE 必修数学的 250 小时，培养的是「怎么判断」的能力。</strong></blockquote>
+
+<blockquote><strong>详细说明：</strong>DSE 必修数学不教微积分。但它教的东西——数量级直觉、数据批判力、模型化思维、约束优化、概率思维、逻辑推理——在 AI 时代恰好是不可替代的。AI 可以算出任何数字，但不能替你判断「这个数字合理吗？这个数据在说谎吗？这个模型适合这个问题吗？这个概率意味着我该怎么做？」。DSE 必修数学的 250 小时不是让你成为数学家——是让你成为一个面对数据和不确定性时，知道自己该怎么思考的普通人。在一个 AI 可以替你解决所有「怎么算」的问题的时代，知道自己「怎么判断」——这就是最后一块高地。</blockquote>
+
+<div class="checklist">
+<h3>自审攻防清单</h3>
+<ul>
+<li>5 项元能力四段式结构完整（是什么 / 为什么AI替代不了 / 在DSE中如何训练 / 具体建议）</li>
+<li>4 个表格完整（AI vs 人类 + DSE侧重 vs 能力 + 优势单元 + 本段落首两个对比表）</li>
+<li>数据批判力「三个问题」以等宽字体高亮 block 呈现</li>
+<li>5 项元能力与之前难度对比/根源篇的分析一致（38h统计、计算器、无微积分等）</li>
+<li>「STEM 三孔洞」不在本文档（此为必修不修M2视角），正确不涉及</li>
+<li>微积分/矩阵补强建议保留（3Blue1Brown + 小平邦彦）</li>
+<li>4 条具体建议 + 3 条家长建议 完整保留</li>
+<li>Cyberpunk 深色实验室风格统一（数学理科）</li>
+<li>「为什么 AI 替代不了」段以青绿色左边框高亮区隔</li>
+<li>响应式 + 打印友好</li>
+</ul>
+</div>
+
+</div>
+</body>
+</html>

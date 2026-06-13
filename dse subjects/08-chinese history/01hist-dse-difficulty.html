@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DSE vs 內地高中歷史：學習難度對比 | History Curriculum Comparison — 海納有容</title>
+<style>
+  :root {
+    --bg:#0d0d14; --surface:#161622; --surface2:#1c1c2a;
+    --border:#2a2a3a; --border-accent:#5c6bc033;
+    --text:#e8e8f0; --text2:#b0b0c0; --text3:#707080;
+    --accent:#5c6bc0; --accent2:#7986cb; --accent-amber:#ffa726; --accent-pink:#ef5350;
+    --dse:#5c6bc0; --cn:#ef5350;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{font-size:16px;scroll-behavior:smooth}
+  body{font-family:"Noto Serif TC","Noto Serif SC","Songti SC","Noto Sans TC","PingFang HK","Microsoft YaHei",serif;background:var(--bg);color:var(--text);line-height:1.8;-webkit-font-smoothing:antialiased;font-weight:400}
+
+  .hero{padding:3.5rem 1.5rem 2.5rem;text-align:center;border-bottom:1px solid var(--border)}
+  .hero-badge{display:inline-block;font-size:.75rem;font-weight:600;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;margin-bottom:1.2rem;border:1px solid var(--border-accent);padding:.2rem .9rem;border-radius:50px}
+  .hero h1{font-size:clamp(1.4rem,3.2vw,2rem);font-weight:700;color:#fff;max-width:720px;margin:0 auto .6rem;letter-spacing:.02em}
+  .hero h1 .hk{color:var(--accent)} .hero h1 .cn{color:var(--accent-pink)}
+  .hero .subtitle{font-size:.82rem;color:var(--text3);max-width:640px;margin:0 auto;line-height:1.6}
+  .hero .meta-line{font-size:.72rem;color:var(--text3);margin-top:.5rem}
+
+  .container{max-width:860px;margin:0 auto;padding:2.5rem 1.5rem 5rem}
+  .section{margin-bottom:3.5rem}
+  .section-title{font-size:1.15rem;font-weight:700;color:#fff;margin-bottom:1.2rem;padding-bottom:.4rem;border-bottom:1px solid var(--border);letter-spacing:.02em}
+  .section-title .num{color:var(--accent);font-size:.85rem;margin-right:.4rem}
+
+  h3{font-size:.95rem;font-weight:700;color:#fff;margin:1.3rem 0 .5rem}
+  h3.dse{color:var(--accent)} h3.cn{color:var(--accent-pink)}
+
+  .table-wrap{overflow-x:auto;margin:1rem 0;-webkit-overflow-scrolling:touch}
+  table{width:100%;border-collapse:collapse;font-size:.82rem;min-width:550px}
+  thead th{background:var(--surface2);border-bottom:2px solid var(--border);color:var(--accent2);font-weight:600;text-align:left;padding:.45rem .65rem;font-size:.73rem;letter-spacing:.04em;text-transform:uppercase}
+  tbody td{padding:.4rem .65rem;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top;line-height:1.55;font-size:.81rem}
+  tbody tr:last-child td{border-bottom:none}
+  tbody td:first-child{font-weight:600;color:var(--text);white-space:nowrap}
+
+  .matrix-table td:nth-child(2),.matrix-table td:nth-child(3){text-align:center;font-weight:600}
+  .matrix-table td:nth-child(4){font-weight:700}
+  .winner-dse{color:var(--accent)} .winner-cn{color:var(--accent-pink)} .winner-tie{color:var(--text3)}
+  .check{color:#66bb6a} .cross{color:#ef5350}
+
+  blockquote{border-left:2px solid var(--accent);padding:.8rem 1.1rem;margin:1rem 0;font-size:.85rem;color:var(--text2);font-style:italic;line-height:1.7;background:rgba(92,107,192,0.03)}
+
+  /* Viz bars */
+  .viz-group{margin-bottom:1.2rem}
+  .viz-label{font-size:.82rem;font-weight:600;color:var(--text);margin-bottom:.4rem}
+  .viz-label .note{font-weight:400;color:var(--text3);font-size:.78rem}
+  .viz-row{display:flex;align-items:center;gap:.5rem;margin-bottom:.2rem}
+  .viz-row .tag{font-size:.7rem;font-weight:600;width:3.5rem;text-align:right;flex-shrink:0;letter-spacing:.03em}
+  .tag.dse{color:var(--dse)} .tag.cn{color:var(--cn)}
+  .viz-outer{flex:1;height:1.2rem;background:var(--surface2);border-radius:2px;overflow:hidden}
+  .viz-inner{height:100%;border-radius:2px;display:flex;align-items:center;padding-left:.4rem;font-size:.64rem;font-weight:600;white-space:nowrap;color:#fff}
+  .viz-inner.dse{background:var(--accent)} .viz-inner.cn{background:var(--accent-pink)}
+
+  .advice-box{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:1.1rem 1.3rem;margin-top:1rem;font-size:.84rem;color:var(--text2);line-height:1.7}
+
+  @media(max-width:640px){.hero{padding:2rem 1rem 1.5rem}.container{padding:1.5rem .9rem 3rem}.section-title{font-size:1.05rem}table{font-size:.74rem}}
+  @media print{body{background:#fff;color:#111}.hero{border-bottom:1px solid #ccc}.hero-badge{border-color:#ccc}blockquote{background:#f9f9f9}table thead th{background:#f0f0f0;color:#111}.surface,.surface2{background:#fafafa}.container{padding:1rem}.viz-inner{color:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-badge">DSE Chinese History · Curriculum Comparison</div>
+  <h1><span class="hk">香港 DSE</span> vs <span class="cn">內地高中歷史</span>課程標準：學習難度對比</h1>
+  <p class="subtitle">對比依據：《中國歷史課程及評估指引（中四至中六）2007（2015年11月更新）》vs《普通高中歷史課程標準（2017年版2020年修訂）》——兩份文件均已完整提取並逐項對比。</p>
+  <p class="meta-line">分析日期：2026-06-07</p>
+</header>
+
+<div class="container">
+
+<!-- §1 -->
+<section class="section">
+  <h2 class="section-title"><span class="num">一、</span>Course Architecture Overview 課程架構概覽</h2>
+  <div class="table-wrap"><table><thead><tr><th>Dimension 維度</th><th>Hong Kong DSE Chinese History</th><th>Mainland China（2017/2020）</th></tr></thead><tbody>
+    <tr><td>Total Hours 總課時</td><td>250h（概論 8h + 方法 12h + 必修 160h + 選修 70h）</td><td>10 學分，約 180 學時（必修 4 學分 + 選擇性必修 6 學分）</td></tr>
+    <tr><td>Course Nature 課程性質</td><td>選修科</td><td>必修（全體）+ 選擇性必修（升學）</td></tr>
+    <tr><td>Core Content 核心內容組織</td><td><strong>純中國史</strong>：以時間為軸（歷代發展）+ 一個專題（六選一）</td><td><strong>中外歷史</strong>：必修以通史方式覆蓋中國史和世界史 + 三個專題模塊（按政治/經濟/文化分類）</td></tr>
+    <tr><td>World History 世界史</td><td><strong>不涉及</strong></td><td>必修模塊中<strong>中國史和世界史並重</strong>（中外歷史綱要共 24 個專題）</td></tr>
+    <tr><td>Grading 等級制度</td><td>1–5**（7 級），水平參照</td><td>等級賦分制（各省不同）</td></tr>
+    <tr><td>Assessment 考核組成</td><td>100% 公開考試（卷一 70% + 卷二 30%），無 SBA</td><td>100% 筆試（合格考 + 等級考 / 高考）</td></tr>
+    <tr><td>Core Competencies 核心素養</td><td>建構歷史知識、掌握研習技能、培養態度和價值觀（三維）</td><td>唯物史觀、時空觀念、史料實證、歷史解釋、家國情懷（五維）</td></tr>
+  </tbody></table></div>
+</section>
+
+<!-- §2 -->
+<section class="section">
+  <h2 class="section-title"><span class="num">二、</span>Content Scope: A World Apart 內容範圍對比——一個天壤之別</h2>
+  <p style="font-size:.84rem;color:var(--text2);margin-bottom:.8rem">這是三科對比中迄今最劇烈的差異：</p>
+  <div class="table-wrap"><table><thead><tr><th>Dimension</th><th>DSE Chinese History</th><th>Mainland History</th></tr></thead><tbody>
+    <tr><td>Time Span 時間跨度</td><td>夏商周至二十世紀末（約 4000 年）</td><td>中國：史前至當代；世界：古代文明至當代全球化</td></tr>
+    <tr><td>Spatial Scope 空間範圍</td><td>僅中國（含港澳台）</td><td>中國 + 世界所有主要文明</td></tr>
+    <tr><td>Pure Chinese History Hours 純中國史課時</td><td><strong>230 小時</strong>（必修 160h + 選修 70h）</td><td>約 60 學時（必修中國史部分約 12-15 個專題 + 選擇性必修中部分涉中內容）</td></tr>
+    <tr><td>Political History 政治史</td><td>極詳（必修甲部+乙部以政治演變為主線）</td><td>必修通史覆蓋，選擇性必修模塊 1「國家制度與社會治理」專題展開</td></tr>
+    <tr><td>Economic History 經濟史</td><td>分散嵌入各時期</td><td>選擇性必修模塊 2「經濟與社會生活」獨立專題</td></tr>
+    <tr><td>Cultural History 文化史</td><td>選修專題覆蓋（如單元一、三、五）</td><td>選擇性必修模塊 3「文化交流與傳播」獨立專題</td></tr>
+    <tr><td>Social History 社會史</td><td>選修部分涉及（如單元六「女性社會地位」）</td><td>分散在各模塊中</td></tr>
+    <tr><td>Historical Methodology 史學方法</td><td><strong>12 小時</strong>獨立訓練（歷史研習的態度與方法）</td><td>選修模塊「史學入門」和「史料研讀」</td></tr>
+  </tbody></table></div>
+  <blockquote><strong>一句話概括差異：</strong>DSE 是用 250 小時深挖一條垂直的井（中國歷史），內地是用 180 學時的水龍頭沖一片水平的田（中外歷史 + 專題史）。兩者的內容範圍不在同一個數量級上，幾乎不具備直接可比性。</blockquote>
+</section>
+
+<!-- §3 -->
+<section class="section">
+  <h2 class="section-title"><span class="num">三、</span>Depth Comparison: DSE's "Point-Line-Plane" vs Mainland's "Core Competencies" 深度對比</h2>
+
+  <h3 class="dse">DSE 更深的地方</h3>
+
+  <h4 style="font-size:.88rem;color:var(--accent2);margin:.8rem 0 .4rem">3.1 Detail Density of Chinese History — Overwhelming Advantage 中國歷史的細節密度</h4>
+  <p style="font-size:.8rem;color:var(--text2);margin-bottom:.5rem">DSE 的「詳近略遠」原則意味著：</p>
+  <div class="table-wrap"><table><thead><tr><th>Period 時期</th><th>DSE Requirement（Examples）</th><th>Mainland Requirement（Examples）</th></tr></thead><tbody>
+    <tr><td><strong>Qin-Han</strong> 秦漢</td><td>秦始皇法家治國 vs 漢武帝獨尊儒術的<strong>原因、政策、措施及評價</strong>；兩漢戚宦掌權——王莽篡漢的時勢分析、東漢戚宦對國運的影響</td><td>必修：梳理秦始皇鞏固統一的措施、漢武帝解決王國問題及尊崇儒術等史事</td></tr>
+    <tr><td><strong>Wei-Jin-Northern-Southern</strong> 魏晉南北朝</td><td><strong>北方游牧民族與漢人融和的具體情況及影響</strong>；<strong>士族與寒門的地位變化</strong></td><td>必修：三國兩晉南北朝的民族交融</td></tr>
+    <tr><td><strong>Sui-Tang</strong> 隋唐</td><td>開皇之治、貞觀之治、開元之治的<strong>具體政策及成效對比</strong>；安史之亂的<strong>起因、經過及影響</strong></td><td>必修：隋唐大一統的發展</td></tr>
+    <tr><td><strong>Song-Yuan-Ming-Qing</strong> 宋元明清</td><td><strong>宋代中央集權制的具體措施</strong>；<strong>元代行中書省制</strong>；明清君主集權的<strong>遞進式強化措施</strong>（明太祖→明成祖→清聖祖→清世宗）；清初<strong>因族制宜的民族政策</strong></td><td>必修：遼宋夏金多民族政權並立與元朝統一；明至清中葉中國版圖的奠定、封建專制的發展</td></tr>
+    <tr><td><strong>Modern (19-20c)</strong> 近現代</td><td>極詳：列強入侵的完整歷程；改革與革命；<strong>民國初年政局（袁、段掌權）</strong>；<strong>山東事件與五四運動</strong>；<strong>外蒙與西藏事件</strong>；<strong>國共分合的詳細過程</strong>；<strong>抗戰完整歷程</strong>；建國後（鎮反、土改、一五計劃、三面紅旗）；「文革」歷程與衍生問題；改革開放；對外關係脈絡與成就</td><td>必修：救亡圖存的鬥爭；中共成立與新民主主義革命；社會主義革命與建設；改革開放與新時代</td></tr>
+  </tbody></table></div>
+  <p style="font-size:.8rem;color:var(--text3);margin-top:.4rem">DSE 中國史的單點深度——尤其是在政治制度、民族關係、近現代政治事件上——遠超內地必修課程的覆蓋密度。DSE 用了 160h 必修 + 70h 選修 = 230h 純中國史；內地中國史在必修中約佔 60 學時。</p>
+
+  <h4 style="font-size:.88rem;color:var(--accent2);margin:1rem 0 .4rem">3.2 Depth of Essay Argumentation 論述題的思辨深度</h4>
+  <div class="table-wrap"><table><thead><tr><th>Dimension</th><th>DSE</th><th>Mainland</th></tr></thead><tbody>
+    <tr><td>Question Type 題型</td><td>卷二「歷史專題」論文題——在 1 小時 20 分鐘內完成<strong>兩篇完整的專題論文</strong></td><td>等級考含材料分析題和論述題，但深度與 DSE 專題論文不可比</td></tr>
+    <tr><td>Grading 評分方式</td><td><strong>水平評核（level marking）</strong>——不按內容要點給分，而按「歷史思維的水平層次」給分</td><td>要點評分 + 素養等級評價並行</td></tr>
+    <tr><td>Requirements 論述要求</td><td>需要構建完整的論點、論據、論證鏈條——引用具體史實支持觀點、比較不同歷史解釋、得出有依據的結論</td><td>需要一定的論述能力，但標準客觀性較強</td></tr>
+  </tbody></table></div>
+
+  <h4 style="font-size:.88rem;color:var(--accent2);margin:1rem 0 .4rem">3.3 Independent Hours for Historical Research Methods 歷史研習方法的獨立課時</h4>
+  <p style="font-size:.84rem;color:var(--text2)">DSE 用 <strong>12 小時</strong>獨立訓練「歷史研習的態度與方法」——雖然不單獨考評，但它不是一句口號，而是有獨立的課時保障。內地的史學方法訓練主要放在選修模塊「史學入門」和「史料研讀」中（這些是真正的選修，可能大部分學生不會選），以及嵌入在「史料實證」素養的日常教學中。</p>
+
+  <h3 class="cn" style="margin-top:1.5rem">內地更深的地方</h3>
+
+  <h4 style="font-size:.88rem;color:var(--accent-pink);margin:.8rem 0 .4rem">3.4 World History — Completely Absent from DSE 世界史——DSE 完全沒有</h4>
+  <p style="font-size:.84rem;color:var(--text2);margin-bottom:.6rem">這是兩套課程最根本的差異。DSE 中國歷史科完全不涉及世界史。內地必修《中外歷史綱要》的 24 個專題中約一半是世界史：世界文明的起源與早期發展、中古世界的多元面貌、全球聯繫的建立（新航路開闢）、西方人文主義的發展與資本主義制度的確立、改變世界面貌的工業革命、世界殖民體系的形成與亞非拉民族獨立運動、世界大戰與十月革命、冷戰與當代世界。</p>
+  <blockquote>一個 DSE 中國歷史考生可以對法國大革命、美國獨立戰爭、工業革命、冷戰一無所知而仍然拿到最高等級 5**。一個內地歷史考生必須對整個世界近代史有基本的了解。這不是深度的差異，是<strong>學科定義的差異</strong>——DSE 體系中有獨立的「歷史科」（History，專門教授世界史），中國歷史科與歷史科是兩門互相獨立的選修科目。內地歷史則是一門統一的必修課。</blockquote>
+
+  <h4 style="font-size:.88rem;color:var(--accent-pink);margin:1rem 0 .4rem">3.5 Historical Materialism as Theoretical Framework 唯物史觀作為理論框架</h4>
+  <div class="table-wrap"><table><thead><tr><th>Dimension</th><th>DSE</th><th>Mainland</th></tr></thead><tbody>
+    <tr><td>Theoretical Framework 理論框架</td><td>無明確的理論框架要求</td><td><strong>唯物史觀是五大核心素養之首</strong>——生產力與生產關係、經濟基礎與上層建築的辯證關係是貫穿整個課程的分析工具</td></tr>
+    <tr><td>Student Requirement 對學生的要求</td><td>基於史料進行歷史解釋，但不要求使用特定理論</td><td>水平 3 要求「能夠從生產力與生產關係、經濟基礎與上層建築的辯證關係來理解歷史上的變化與延續」</td></tr>
+  </tbody></table></div>
+  <p style="font-size:.84rem;color:var(--text2);margin-top:.4rem">唯物史觀作為一個分析工具，確實提供了普通學生進入歷史分析的一套「腳手架」——他不需要自己發明一套分析框架，而是可以使用這套成熟的工具去解剖任何歷史現象。DSE 學生對歷史現象的分析更多依賴課堂積累和自身思辨能力，缺乏一個統一的理論入口。</p>
+
+  <h4 style="font-size:.88rem;color:var(--accent-pink);margin:1rem 0 .4rem">3.6 Three Dimensions of Thematic History 專題史的三個維度</h4>
+  <p style="font-size:.84rem;color:var(--text2);margin-bottom:.5rem">DSE 選修是六選一，學生在 70 小時內專攻一個方向。內地選擇性必修三個模塊<strong>全部必修</strong>：</p>
+  <div class="table-wrap"><table><thead><tr><th>Module 模塊</th><th>Mainland Requirement</th><th>DSE Counterpart</th></tr></thead><tbody>
+    <tr><td><strong>State System &amp; Social Governance</strong> 國家制度與社會治理</td><td>政治體制、官員選拔、法律與教化、民族關係、貨幣與稅收、基層治理與社會保障——<strong>全部必修</strong></td><td>選修單元四「制度與政治演變」部分覆蓋</td></tr>
+    <tr><td><strong>Economy &amp; Social Life</strong> 經濟與社會生活</td><td>食物生產、生產工具、商業貿易、城鎮、交通、醫療——從農業革命到現代醫療衛生體系</td><td>DSE 無獨立經濟史模塊</td></tr>
+    <tr><td><strong>Cultural Exchange &amp; Transmission</strong> 文化交流與傳播</td><td>中華文化、世界文化、人口遷徙、戰爭與文化、文化傳承保護、信息革命</td><td>選修單元五「宗教傳播與文化交流」部分覆蓋</td></tr>
+  </tbody></table></div>
+
+  <h4 style="font-size:.88rem;color:var(--accent-pink);margin:1rem 0 .4rem">3.7 Historical Source Analysis — A Tiered Training System 史料實證——有明確水平標準的訓練體系</h4>
+  <p style="font-size:.84rem;color:var(--text2)">內地的「史料實證」素養有四個明確水平：水平 1（知道史料的多種類型）→ 水平 2（認識不同類型史料的不同價值，嘗試用史料論證觀點）→ 水平 3（自主搜集、整理、辨析史料，進行價值判斷，利用不同類型的史料互證）→ 水平 4（比較分析不同來源、不同觀點的史料，辨別作者意圖，恰當、規範地引用史料）。這套遞進的訓練體系使史料實證成為一個可以<strong>系統教學和精確評價</strong>的能力。DSE 雖然也有史料分析題，但缺乏這種分級的標準框架。</p>
+
+  <div class="advice-box" style="margin-top:1.2rem">
+    <strong style="color:var(--accent-amber)">⚠️ 對 EMI 學生的額外提醒：</strong>對於海納有容這樣的 EMI 學生，DSE 中國歷史的最大挑戰往往不只是「史實記憶量」，而是<strong>史料閱讀門檻</strong>和<strong>中文論述表達</strong>。DSE 中史的史料題常包含淺近文言文（如《史記》《資治通鑑》選段），卷二要求用精準的中文撰寫完整論文。這對日常以英語學習理科的 EMI 學生來說，是需要從初中開始積累的能力——文言文閱讀和議論文寫作訓練不能靠考前突擊。
+  </div>
+</section>
+
+<!-- §4 -->
+<section class="section">
+  <h2 class="section-title"><span class="num">四、</span>Examination Format Comparison 考核方式對比</h2>
+  <div class="table-wrap"><table><thead><tr><th>Dimension</th><th>DSE Chinese History</th><th>Gaokao 內地高考</th></tr></thead><tbody>
+    <tr><td>Exam Structure 考試結構</td><td>卷一（歷代發展）70% + 卷二（歷史專題）30%</td><td>合格考（水平 2）+ 等級考（水平 4）</td></tr>
+    <tr><td>Paper 1 卷一題型</td><td>必答題（多項資料，40 分）+ 甲/乙部各選一題（50 分），共 2h15min</td><td>單選 + 材料分析 + 論述</td></tr>
+    <tr><td>Paper 2 卷二題型</td><td>在所修的一個專題單元中選答兩題，1h20min——每道都是完整論文</td><td>無獨立論文卷</td></tr>
+    <tr><td>Grading 評分方式</td><td><strong>水平評核（level marking）</strong>——按思維層次而非內容要點給分</td><td>要點評分與素養水平評價結合</td></tr>
+    <tr><td>SBA</td><td>無</td><td>無</td></tr>
+  </tbody></table></div>
+</section>
+
+<!-- §5 -->
+<section class="section">
+  <h2 class="section-title"><span class="num">五、</span>Difficulty Visualization 難度差異可視化</h2>
+
+  <div class="viz-group"><div class="viz-label">Chinese History Depth 中國史深度 <span class="note">(DSE 壓倒性優勢)</span></div>
+    <div class="viz-row"><span class="tag dse">DSE</span><div class="viz-outer"><div class="viz-inner dse" style="width:100%">230h 純中國史：從夏商周到 20 世紀末，每一時期的政治/制度/民族都有極細要求</div></div></div>
+    <div class="viz-row"><span class="tag cn">內地</span><div class="viz-outer"><div class="viz-inner cn" style="width:42%">必修中約 12-15 個中國史專題，約 60 學時</div></div></div>
+  </div>
+  <div class="viz-group"><div class="viz-label">World History 世界史 <span class="note">(內地獨有)</span></div>
+    <div class="viz-row"><span class="tag cn">內地</span><div class="viz-outer"><div class="viz-inner cn" style="width:100%">必修約半數為世界史（從古代文明到當代全球化）</div></div></div>
+    <div class="viz-row"><span class="tag dse">DSE</span><div class="viz-outer"><div class="viz-inner dse" style="width:2%"></div></div></div>
+    <p style="font-size:.72rem;color:var(--text3);margin-left:4rem">完全空白（DSE 有獨立的「歷史科」，中國歷史科不涉及世界史）</p>
+  </div>
+  <div class="viz-group"><div class="viz-label">Thematic History Coverage 專題史覆蓋面 <span class="note">(內地三個維度全部必修)</span></div>
+    <div class="viz-row"><span class="tag cn">內地</span><div class="viz-outer"><div class="viz-inner cn" style="width:100%">政治制度 + 經濟生活 + 文化交流三模塊全修全考</div></div></div>
+    <div class="viz-row"><span class="tag dse">DSE</span><div class="viz-outer"><div class="viz-inner dse" style="width:55%">六選一，專攻一個方向（70h），其他方向無接觸</div></div></div>
+  </div>
+  <div class="viz-group"><div class="viz-label">Theoretical Framework 理論框架 <span class="note">(內地獨有)</span></div>
+    <div class="viz-row"><span class="tag cn">內地</span><div class="viz-outer"><div class="viz-inner cn" style="width:100%">唯物史觀作為貫穿全程的分析工具，有明確水平標準</div></div></div>
+    <div class="viz-row"><span class="tag dse">DSE</span><div class="viz-outer"><div class="viz-inner dse" style="width:32%">無統一理論框架，依賴課堂積累和個人思辨</div></div></div>
+  </div>
+  <div class="viz-group"><div class="viz-label">Essay Argumentation 論文論述能力 <span class="note">(DSE 要求更高)</span></div>
+    <div class="viz-row"><span class="tag dse">DSE</span><div class="viz-outer"><div class="viz-inner dse" style="width:100%">1h20min 內寫出兩篇完整專題論文，水平評核（level marking）</div></div></div>
+    <div class="viz-row"><span class="tag cn">內地</span><div class="viz-outer"><div class="viz-inner cn" style="width:58%">材料分析+論述題，以要點並結合素養為評核標準</div></div></div>
+  </div>
+</section>
+
+<!-- §6 -->
+<section class="section">
+  <h2 class="section-title"><span class="num">六、</span>Comprehensive Conclusion: The Most Dramatic Difference 綜合結論——最劇烈的差異</h2>
+
+  <div class="table-wrap"><table><thead><tr><th>Dimension</th><th>Science Subjects (Phy/Chem/Bio)</th><th>History</th></tr></thead><tbody>
+    <tr><td>Essence of Difference 差異本質</td><td>深度和廣度取捨不同</td><td><strong>學科邊界不同</strong>——一個只做中國史，一個做中外史</td></tr>
+    <tr><td>Content Overlap 內容重疊度</td><td>60-80% 重疊</td><td>約 30% 重疊（中國史部分）</td></tr>
+    <tr><td>Where the Hours Go 同樣多的課時花在哪裡</td><td>物理/化學/生物的「同一塊知識」的更深層次</td><td>DSE：在 4000 年中國史上縱向挖掘；內地：在中外歷史上橫向拓展</td></tr>
+  </tbody></table></div>
+
+  <p style="font-size:.84rem;color:var(--text2);margin:1rem 0">香港高中設有兩門歷史科目：<strong>中國歷史科</strong>和<strong>歷史科</strong>（世界史）。「中國歷史」的定位就是只研究中國歷史——這是有意為之。世界史交給「歷史科」去處理。內地高中只有一門「歷史」科：門類必須覆蓋中外古今。這是一個<strong>制度設計的根本差異</strong>，不是難度的差異。</p>
+
+  <p style="font-size:.84rem;color:var(--text2)"><strong style="color:var(--accent)">如果以「中國史領域的專精度」為尺度：</strong>DSE 碾壓內地。230h 純中國史訓練 + 水平評核論文題。<br>
+  <strong style="color:var(--accent-pink)">如果以「歷史學科的綜合素養」為尺度：</strong>內地的中外史並重 + 唯物史觀框架 + 三個專題史模塊 + 史料實證分級訓練，給學生的是一套更完整的「歷史學家的思維裝備」。<br>
+  <strong style="color:var(--accent2)">如果以「論文寫作能力」為尺度：</strong>DSE 卷二的兩篇專題論文 + 水平評核，要求學生具備內地高考不要求的獨立論述和論證能力。</p>
+
+  <blockquote style="margin-top:1.2rem"><strong>一句話總結：</strong>DSE 中國歷史是一口 230 小時的深井——從夏商周一直打到改革開放，每一個時代的要求都細緻到具體的制度、人物、事件和因果關係。內地歷史是一座 180 學時的觀景台——站在上面可以同時看到中國史和世界史、政治制度和經濟生活、文化傳播和全球化的全貌。對海納有容而言，如果他們選修 DSE 中國歷史，他們將成為中國歷史的「專才」；如果他們面對內地歷史高考，他們會成為中外歷史的「通才」。兩種訓練沒有高下，但通向完全不同的歷史素養。</blockquote>
+</section>
+
+<!-- Appendix -->
+<section class="section">
+  <h2 class="section-title"><span class="num">附錄、</span>Knowledge Coverage Matrix 兩套課程知識覆蓋矩陣</h2>
+  <div class="table-wrap"><table class="matrix-table"><thead><tr><th>Domain 領域</th><th>DSE</th><th>Mainland</th><th>Deeper / Broader</th></tr></thead><tbody>
+    <tr><td><strong>Ancient China (Xia-Shang-Zhou)</strong> 中國上古</td><td class="check">✅ 必修甲部</td><td class="check">✅ 必修</td><td class="winner-dse"><strong>DSE</strong>（分封制+春秋戰國之變）</td></tr>
+    <tr><td><strong>Qin-Han</strong> 中國秦漢</td><td class="check">✅ 必修甲部</td><td class="check">✅ 必修</td><td class="winner-dse"><strong>DSE</strong>（秦法家vs漢尊儒+戚宦政治）</td></tr>
+    <tr><td><strong>Wei-Jin-N-S Dynasties</strong> 魏晉南北朝</td><td class="check">✅ 必修甲部</td><td class="check">✅ 必修</td><td class="winner-dse"><strong>DSE</strong>（民族融合+江南開發+士族與寒門）</td></tr>
+    <tr><td><strong>Sui-Tang</strong> 中國隋唐</td><td class="check">✅ 必修甲部</td><td class="check">✅ 必修</td><td class="winner-dse"><strong>DSE</strong>（三治世對比+安史之亂因果）</td></tr>
+    <tr><td><strong>Song-Yuan-Ming-Qing</strong> 宋元明清</td><td class="check">✅ 必修甲部</td><td class="check">✅ 必修</td><td class="winner-dse"><strong>DSE</strong>（中央/君主集權遞進+民族政策細節）</td></tr>
+    <tr><td><strong>Modern (Opium War–1911)</strong> 中國近代</td><td class="check">✅ 必修乙部</td><td class="check">✅ 必修</td><td class="winner-dse"><strong>DSE</strong>（列強入侵完整歷程+改革與革命對比）</td></tr>
+    <tr><td><strong>Modern (1911–1949)</strong> 中國現代</td><td class="check">✅ 必修乙部</td><td class="check">✅ 必修</td><td class="winner-dse"><strong>DSE</strong>（民初政局+國共分合+抗戰詳程）</td></tr>
+    <tr><td><strong>Contemporary (1949–late 20c)</strong> 中國當代</td><td class="check">✅ 必修乙部</td><td class="check">✅ 必修</td><td class="winner-dse"><strong>DSE</strong>（建國運動+文革+改革開放+外交脈絡）</td></tr>
+    <tr><td><strong>Ancient World Civilizations</strong> 世界古代文明</td><td class="cross">❌</td><td class="check">✅ 必修</td><td class="winner-cn"><strong>內地</strong></td></tr>
+    <tr><td><strong>Medieval World</strong> 世界中古史</td><td class="cross">❌</td><td class="check">✅ 必修</td><td class="winner-cn"><strong>內地</strong></td></tr>
+    <tr><td><strong>Modern World (Industry/Capitalism/Colonialism)</strong> 世界近代史</td><td class="cross">❌</td><td class="check">✅ 必修</td><td class="winner-cn"><strong>內地</strong></td></tr>
+    <tr><td><strong>Contemporary World (WW/Cold War/Globalization)</strong> 世界現代史</td><td class="cross">❌</td><td class="check">✅ 必修</td><td class="winner-cn"><strong>內地</strong></td></tr>
+    <tr><td><strong>Political Institutions (Thematic)</strong> 政治制度史</td><td class="check">✅ 選修單元四</td><td class="check">✅ 選擇性必修 1</td><td class="winner-cn"><strong>內地</strong>（三個專題全修）</td></tr>
+    <tr><td><strong>Economic Life (Thematic)</strong> 經濟生活史</td><td class="cross">❌</td><td class="check">✅ 選擇性必修 2</td><td class="winner-cn"><strong>內地</strong>（DSE 無獨立經濟史）</td></tr>
+    <tr><td><strong>Cultural Exchange (Thematic)</strong> 文化交流史</td><td class="check">✅ 選修單元五</td><td class="check">✅ 選擇性必修 3</td><td class="winner-cn">內地（覆蓋面更廣+世界文化）</td></tr>
+    <tr><td><strong>Intellectual History</strong> 知識分子專題</td><td class="check">✅ 選修單元三</td><td class="cross">部分嵌入</td><td class="winner-dse"><strong>DSE</strong></td></tr>
+    <tr><td><strong>Women's Social Status</strong> 女性社會地位</td><td class="check">✅ 選修單元六</td><td class="cross">❌（無獨立專題）</td><td class="winner-dse"><strong>DSE</strong></td></tr>
+    <tr><td><strong>Historical Methodology</strong> 史學方法獨立訓練</td><td class="check">✅ 12h</td><td class="check">✅ 選修模塊</td><td class="winner-tie">相當</td></tr>
+    <tr><td><strong>Historical Materialism</strong> 唯物史觀框架</td><td class="cross">❌</td><td class="check">✅ 必修（核心素養之首）</td><td class="winner-cn"><strong>內地</strong></td></tr>
+    <tr><td><strong>Tiered Source Analysis</strong> 史料實證分級訓練</td><td class="check">✅（嵌入）</td><td class="check">✅（五維核心素養之一，有明確水平標準）</td><td class="winner-cn">內地（分級更系統）</td></tr>
+    <tr><td><strong>Essay Writing</strong> 論文寫作</td><td class="check">✅ 卷二（兩篇專題論文）</td><td class="check">✅（材料題中有論述要求）</td><td class="winner-dse"><strong>DSE</strong>（獨立論文卷+水平評核）</td></tr>
+  </tbody></table></div>
+</section>
+
+</div>
+</body>
+</html>
