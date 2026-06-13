@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>S3 Geography Flashcards — Term 2 Exam</title>
+<style>
+:root {
+  --bg: #fafaf8;
+  --card-bg: #ffffff;
+  --text: #1a1a1a;
+  --text-secondary: #5c5c5c;
+  --border: #e5e5e0;
+  --accent: #2c5f2d;
+  --known: #4a9b4e;
+  --review: #d4a017;
+  --shadow: 0 2px 12px rgba(0,0,0,0.06);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.10);
+  --radius: 14px;
+  --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* ── Header ── */
+header {
+  width: 100%;
+  max-width: 720px;
+  padding: 20px 20px 0;
+  text-align: center;
+}
+header h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+header .subtitle {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+/* ── Section Filters ── */
+.filters {
+  width: 100%;
+  max-width: 720px;
+  padding: 14px 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  justify-content: center;
+}
+.filter-btn {
+  padding: 7px 15px;
+  border: 1.5px solid var(--border);
+  border-radius: 20px;
+  background: var(--card-bg);
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.18s;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+.filter-btn:hover { border-color: #bbb; }
+.filter-btn.active {
+  background: var(--text);
+  color: #fff;
+  border-color: var(--text);
+}
+.filter-btn[data-section="Rocks & Landforms 岩石與地貌"].active { background: #8b5e3c; border-color: #8b5e3c; }
+.filter-btn[data-section="Tropical Rainforests 熱帶雨林"].active { background: #2c6e2c; border-color: #2c6e2c; }
+.filter-btn[data-section="Deforestation & Conservation 砍伐與保護"].active { background: #b8860b; border-color: #b8860b; }
+.filter-btn[data-section="Tourism & HKSAR Passport 旅遊與香港特區護照"].active { background: #2a6496; border-color: #2a6496; }
+.filter-btn[data-section="Map Skills 地圖技能"].active { background: #5c5c6e; border-color: #5c5c6e; }
+.filter-btn[data-section="Data-Response & Exam Terms 數據題與考試術語"].active { background: #7b4f9e; border-color: #7b4f9e; }
+
+/* ── Progress Bar ── */
+.progress-wrap {
+  width: 100%;
+  max-width: 720px;
+  padding: 0 20px 6px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.progress-bar {
+  flex: 1;
+  height: 5px;
+  background: var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: var(--known);
+  border-radius: 3px;
+  transition: width 0.3s;
+}
+.progress-label {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  min-width: 48px;
+  text-align: right;
+}
+
+/* ── Controls ── */
+.controls {
+  width: 100%;
+  max-width: 720px;
+  padding: 6px 20px 14px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.ctrl-btn {
+  padding: 6px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  background: var(--card-bg);
+  font-size: 0.8rem;
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.ctrl-btn:hover { border-color: #aaa; }
+.ctrl-btn.on { background: #e8f0e8; border-color: var(--known); color: var(--known); }
+.ctrl-btn svg { width: 15px; height: 15px; }
+
+/* ── Card Area ── */
+.card-area {
+  width: 100%;
+  max-width: 720px;
+  padding: 0 20px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+/* 3D Flip Container */
+.flip-container {
+  width: 100%;
+  max-width: 500px;
+  aspect-ratio: 3 / 2;
+  perspective: 1000px;
+  cursor: pointer;
+}
+.flipper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+.flip-container.flipped .flipper {
+  transform: rotateY(180deg);
+}
+
+.card-face {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius);
+  background: var(--card-bg);
+  box-shadow: var(--shadow);
+  backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 28px 32px;
+  text-align: center;
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+
+/* Front */
+.card-front .section-tag {
+  position: absolute;
+  top: 14px;
+  left: 18px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+  opacity: 0.5;
+}
+.card-front .term-en {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  line-height: 1.2;
+}
+.card-front .term-zh {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  margin-top: 8px;
+  font-weight: 400;
+}
+.card-front .card-hint {
+  position: absolute;
+  bottom: 16px;
+  font-size: 0.7rem;
+  color: #bbb;
+  letter-spacing: 0.03em;
+}
+
+/* Back */
+.card-back {
+  transform: rotateY(180deg);
+  justify-content: flex-start;
+  padding-top: 36px;
+}
+.card-back .back-label {
+  position: absolute;
+  top: 14px;
+  left: 18px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--known);
+}
+.card-back .def-en {
+  font-size: 1.05rem;
+  line-height: 1.65;
+  color: var(--text);
+  text-align: left;
+  width: 100%;
+}
+.card-back .def-en .highlight {
+  background: #fff3cd;
+  padding: 1px 3px;
+  border-radius: 3px;
+  font-weight: 600;
+}
+
+@media (max-width: 520px) {
+  .card-front .term-en { font-size: 1.45rem; }
+  .card-back .def-en { font-size: 0.95rem; }
+  .card-face { padding: 20px; }
+  .flip-container { aspect-ratio: 4 / 3; }
+}
+
+/* ── Action Buttons ── */
+.actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.action-btn {
+  padding: 10px 24px;
+  border-radius: 10px;
+  border: 1.5px solid var(--border);
+  background: var(--card-bg);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
+.action-btn.known-btn { color: var(--known); border-color: var(--known); }
+.action-btn.known-btn:hover, .action-btn.known-btn:active { background: #e8f5e9; }
+.action-btn.review-btn { color: var(--review); border-color: var(--review); }
+.action-btn.review-btn:hover, .action-btn.review-btn:active { background: #fff8e1; }
+.action-btn.skip-btn { color: var(--text-secondary); }
+.action-btn.skip-btn:hover, .action-btn.skip-btn:active { background: #f0f0f0; }
+
+/* ── Keyboard Hints ── */
+.kb-hints {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 4px 0;
+}
+.kb-hint {
+  font-size: 0.7rem;
+  color: #bbb;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.kb-hint kbd {
+  display: inline-block;
+  padding: 1px 6px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: #f5f5f5;
+  font-family: var(--font);
+  font-size: 0.68rem;
+  color: #888;
+  min-width: 20px;
+  text-align: center;
+}
+
+/* ── Stats Banner ── */
+.stats-banner {
+  display: none;
+  max-width: 720px;
+  margin: 0 20px 16px;
+  padding: 12px 18px;
+  background: #e8f5e9;
+  border-radius: 10px;
+  font-size: 0.82rem;
+  color: #2e7d32;
+  text-align: center;
+}
+.stats-banner.show { display: block; }
+
+/* ── Empty State ── */
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  color: var(--text-secondary);
+}
+.empty-state .emoji { font-size: 3rem; margin-bottom: 12px; }
+
+/* ── Footer ── */
+footer {
+  margin-top: auto;
+  padding: 16px;
+  font-size: 0.7rem;
+  color: #ccc;
+  text-align: center;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>S3 Geography Flashcards</h1>
+  <div class="subtitle">2nd Term Examination · 17 June 2026 · 129 terms</div>
+</header>
+
+<div class="filters" id="filters"></div>
+
+<div class="progress-wrap">
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-label" id="progressLabel">0 / 0</div>
+</div>
+
+<div class="controls" id="controls">
+  <button class="ctrl-btn" id="btnShuffle" title="Shuffle cards">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>
+    Shuffle
+  </button>
+  <button class="ctrl-btn" id="btnReviewOnly" title="Show only cards marked for review">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    Review Only
+  </button>
+  <button class="ctrl-btn" id="btnReset" title="Reset all progress">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+    Reset
+  </button>
+</div>
+
+<div class="card-area" id="cardArea">
+  <div class="empty-state">
+    <div class="emoji">🗺️</div>
+    <p>Select a section to start</p>
+  </div>
+</div>
+
+<div class="stats-banner" id="statsBanner"></div>
+
+<div class="kb-hints">
+  <span class="kb-hint"><kbd>←</kbd><kbd>→</kbd> Navigate</span>
+  <span class="kb-hint"><kbd>Space</kbd> Flip</span>
+  <span class="kb-hint"><kbd>K</kbd> Known</span>
+  <span class="kb-hint"><kbd>R</kbd> Review</span>
+</div>
+
+<footer>S3 Geography · Tsuen Wan Government Secondary School · Term 2 Exam 2026</footer>
+
+<script>
+// ── DATA ──
+const ALL_TERMS = [
+  // Section 1: Rocks & Landforms
+  {id:1,term:"Igneous rock",ch:"火成岩",def:"Rock formed from cooled magma or lava. 由冷卻的岩漿或熔岩形成的岩石。",sec:"Rocks & Landforms 岩石與地貌"},
+  {id:2,term:"Extrusive igneous rock",ch:"噴出火成岩",def:"Igneous rock formed above the ground surface when lava cools rapidly in contact with air. 熔岩於地表接觸空氣後快速冷卻形成的火成岩。",sec:"Rocks & Landforms 岩石與地貌"},
+  {id:3,term:"Intrusive igneous rock",ch:"侵入火成岩",def:"Igneous rock formed below the ground surface when magma cools very slowly underground. 岩漿於地下緩慢冷卻形成的火成岩。",sec:"Rocks & Landforms 岩石與地貌"},
+  {id:4,term:"Sedimentary rock",ch:"沉積岩",def:"Rock formed by compaction and cementation of deposited sediments, usually in layers. 由沉積物經壓實與膠結形成的岩石，通常呈層狀。",sec:"Rocks & Landforms 岩石與地貌"},
+  {id:5,term:"Metamorphic rock",ch:"變質岩",def:"Rock formed when an existing rock is subjected to extreme heat and pressure deep underground <b>without melting</b>. 現有岩石在地下深處承受極端高溫高壓<b>但不熔化</b>而形成的岩石。",sec:"Rocks & Landforms 岩石與地貌"},
+  {id:6,term:"Magma",ch:"岩漿",def:"Molten rock beneath the Earth's surface. 地表之下的熔融岩石。",sec:"Rocks & Landforms 岩石與地貌"},
+  {id:7,term:"Lava",ch:"熔岩",def:"Magma that reaches the Earth's surface during a volcanic eruption. 火山爆發時到達地表的岩漿。",sec:"Rocks & Landforms 岩石與地貌"},
+  {id:8,term:"Weathering",ch:"風化",def:"The breaking down of rocks on the surface by natural forces such as rain, wind, and temperature changes. 岩石在地表被雨水、風、溫度變化等自然力量分解的過程。",sec:"Rocks & Landforms 岩石與地貌"},
+  {id:9,term:"Erosion",ch:"侵蝕",def:"The removal and transport of weathered rock fragments by water, wind, or ice. 水、風或冰將風化後的岩石碎片移走並搬運的過程。",sec:"Rocks & Landforms 岩石與地貌"},
+  {id:10,term:"Transport",ch:"搬運",def:"The movement of eroded rock fragments from one place to another by water, wind, or ice. 水、風或冰將侵蝕後的岩石碎片從一處搬運至另一處。",sec:"Rocks & Landforms 岩石與地貌"},
+  {id:11,term:"Deposition",ch:"沉積",def:"The dropping of transported materials when the energy of the transporting agent decreases. 搬運介質的能量減弱時，搬運物質沉積下來的過程。",sec:"Rocks & Landforms 岩石與地貌"},
+  {id:12,term:"Compaction",ch:"壓實",def:"The compression of lower sediment layers due to the weight of overlying layers. 上層沉積物的重量導致下層沉積物被壓縮的過程。",sec:"Rocks & Landforms 岩石與地貌"},
+  {id:13,term:"Cementation",ch:"膠結",def:"The process in which minerals crystallise between sediment grains, binding them into solid rock. 礦物在沉積顆粒之間結晶，將其膠結成堅硬岩石的過程。",sec:"Rocks & Landforms 岩石與地貌"},
+  {id:14,term:"Crystal",ch:"晶體",def:"A solid with a regular, repeating internal structure. 內部結構規則且重複的固體。",sec:"Rocks & Landforms 岩石與地貌"},
+  {id:15,term:"Fine crystals",ch:"細小晶體",def:"Small crystals formed when magma or lava cools rapidly. 岩漿或熔岩快速冷卻時形成的小晶體。",sec:"Rocks & Landforms 岩石與地貌"},
+  {id:16,term:"Coarse crystals",ch:"粗大晶體",def:"Large crystals formed when magma cools very slowly underground. 岩漿在地下緩慢冷卻時形成的大晶體。",sec:"Rocks & Landforms 岩石與地貌"},
+  {id:17,term:"Stratified / Layered",ch:"層理結構",def:"Arranged in horizontal layers, with the youngest layer on top. 以水平岩層排列，最年輕的岩層在最上。",sec:"Rocks & Landforms 岩石與地貌"},
+  {id:18,term:"Foliated",ch:"葉理",def:"Having parallel bands of minerals formed under directional pressure. 在定向壓力下礦物排列成平行帶狀。",sec:"Rocks & Landforms 岩石與地貌"},
+  {id:19,term:"Hexagonal columnar jointing",ch:"六角形柱狀節理",def:"A fracture pattern in volcanic rocks that forms hexagonal columns as lava cools and contracts evenly. 火山岩的裂縫形態，熔岩均勻冷卻收縮時形成六角柱。",sec:"Rocks & Landforms 岩石與地貌"},
+  {id:20,term:"Fossil",ch:"化石",def:"The preserved remains or traces of ancient organisms found in sedimentary rocks. 沉積岩中發現的古代生物遺骸或痕跡。",sec:"Rocks & Landforms 岩石與地貌"},
+  {id:21,term:"Resistance to weathering",ch:"抗風化程度",def:"The ability of a rock to withstand breakdown by weathering forces. 岩石抵抗風化力量分解的能力。",sec:"Rocks & Landforms 岩石與地貌"},
+  {id:22,term:"Volcanic tuff",ch:"火山凝灰岩",def:"An extrusive igneous rock formed from compacted volcanic ash. 由壓實火山灰形成的噴出火成岩。",sec:"Rocks & Landforms 岩石與地貌"},
+  {id:23,term:"Basalt",ch:"玄武岩",def:"A dark, fine-grained extrusive igneous rock formed from rapidly cooled lava. 由快速冷卻熔岩形成的深色細粒噴出火成岩。",sec:"Rocks & Landforms 岩石與地貌"},
+  {id:24,term:"Granite",ch:"花崗岩",def:"A light-coloured, coarse-grained intrusive igneous rock common in Hong Kong. 香港常見的淺色粗大晶體侵入火成岩。",sec:"Rocks & Landforms 岩石與地貌"},
+  {id:25,term:"Sandstone",ch:"砂岩",def:"A sedimentary rock composed mainly of sand-sized mineral particles. 主要由砂粒大小的礦物顆粒組成的沉積岩。",sec:"Rocks & Landforms 岩石與地貌"},
+  {id:26,term:"Mudstone",ch:"泥岩",def:"A fine-grained sedimentary rock formed from compacted mud. 由壓實泥漿形成的細粒沉積岩。",sec:"Rocks & Landforms 岩石與地貌"},
+  {id:27,term:"Shale",ch:"頁岩",def:"A fine-grained sedimentary rock that splits easily into thin layers. 容易分裂成薄層的細粒沉積岩。",sec:"Rocks & Landforms 岩石與地貌"},
+  {id:28,term:"Marble",ch:"大理岩",def:"A metamorphic rock formed from limestone under heat and pressure. 石灰岩在高溫高壓下變質形成的變質岩。",sec:"Rocks & Landforms 岩石與地貌"},
+  {id:29,term:"Slate",ch:"板岩",def:"A fine-grained metamorphic rock formed from shale under heat and pressure. 頁岩在高溫高壓下變質形成的細粒變質岩。",sec:"Rocks & Landforms 岩石與地貌"},
+  {id:30,term:"Landform",ch:"地貌",def:"A natural feature of the Earth's surface, such as a hill, valley, or coastline. 地球表面的自然特徵，如山地、河谷或海岸線。",sec:"Rocks & Landforms 岩石與地貌"},
+  {id:31,term:"Sea arch",ch:"海蝕拱",def:"A natural arch formed when erosion breaks through a headland from both sides. 侵蝕從兩側貫穿海岬而形成的天然拱形地貌。",sec:"Rocks & Landforms 岩石與地貌"},
+  {id:32,term:"Sea stack",ch:"海蝕柱",def:"An isolated pillar of rock left standing after the roof of a sea arch collapses. 海蝕拱頂部崩塌後遺留的孤立岩石柱。",sec:"Rocks & Landforms 岩石與地貌"},
+  {id:33,term:"Tombolo",ch:"連島沙洲",def:"A sand bar that connects an island to the mainland. 連接島嶼與大陸的沙洲。",sec:"Rocks & Landforms 岩石與地貌"},
+  {id:34,term:"Wave-cut platform",ch:"海蝕平台",def:"A flat rock surface at the base of a cliff, formed by wave erosion. 懸崖底部的平坦岩石表面，由海浪侵蝕形成。",sec:"Rocks & Landforms 岩石與地貌"},
+  {id:35,term:"Geosite",ch:"地質景點",def:"A site of special geological interest within a geopark. 地質公園內具有特殊地質價值的地點。",sec:"Rocks & Landforms 岩石與地貌"},
+  {id:36,term:"UNESCO Global Geopark",ch:"聯合國教科文組織世界地質公園",def:"An area with outstanding geological heritage that promotes conservation, education, and sustainable tourism. 擁有傑出地質遺產、促進保護、教育與可持續旅遊的地區。",sec:"Rocks & Landforms 岩石與地貌"},
+  {id:37,term:"Core Protection Area",ch:"核心保護區",def:"A zone with the strictest protection, very limited tourist access, and minimal facilities. 保護最嚴格的區域，遊客進入極受限制，設施極少。",sec:"Rocks & Landforms 岩石與地貌"},
+  {id:38,term:"Integrated Protection Area",ch:"綜合保護區",def:"A zone with moderate protection that allows more tourists and facilities. 保護程度中等的區域，允許較多遊客與設施。",sec:"Rocks & Landforms 岩石與地貌"},
+  {id:39,term:"Carrying capacity",ch:"承載力",def:"The maximum number of visitors an area can support without causing environmental damage. 一個地區在不造成環境破壞的前提下所能容納的最大遊客數量。",sec:"Rocks & Landforms 岩石與地貌"},
+
+  // Section 2: Tropical Rainforests
+  {id:40,term:"Tropical rainforest",ch:"熱帶雨林",def:"A dense forest found near the Equator with high temperature and heavy rainfall throughout the year. 赤道附近、全年高溫多雨地區的茂密森林。",sec:"Tropical Rainforests 熱帶雨林"},
+  {id:41,term:"Equator",ch:"赤道",def:"The imaginary line at 0° latitude that divides the Earth into Northern and Southern Hemispheres. 位於0度緯度的假想線，將地球分為南北半球。",sec:"Tropical Rainforests 熱帶雨林"},
+  {id:42,term:"Latitude",ch:"緯度",def:"The angular distance of a place north or south of the Equator. 某地點與赤道之間的南北角度距離。",sec:"Tropical Rainforests 熱帶雨林"},
+  {id:43,term:"Convection rain / Convectional rainfall",ch:"對流雨",def:"Rainfall caused by intense heating of the ground, which makes warm air rise, cool, and condense into rain clouds. 地面強烈加熱導致暖空氣上升、冷卻、凝結成雨雲所形成的降雨。",sec:"Tropical Rainforests 熱帶雨林"},
+  {id:44,term:"Annual rainfall",ch:"年降雨量",def:"The total amount of rain that falls in a place over one year. 某地一年內的降雨總量。",sec:"Tropical Rainforests 熱帶雨林"},
+  {id:45,term:"Annual mean temperature",ch:"年均溫",def:"The average temperature of a place over one year. 某地一年內的平均氣溫。",sec:"Tropical Rainforests 熱帶雨林"},
+  {id:46,term:"Annual range of temperature",ch:"年溫差",def:"The difference between the highest and lowest monthly mean temperatures in a year. 一年內最高月均溫與最低月均溫之差。",sec:"Tropical Rainforests 熱帶雨林"},
+  {id:47,term:"Relative humidity",ch:"相對濕度",def:"The amount of water vapour in the air compared to the maximum amount the air can hold. 空氣中水蒸氣含量與其最大容納量之比。",sec:"Tropical Rainforests 熱帶雨林"},
+  {id:48,term:"Monsoon",ch:"季風",def:"A seasonal wind pattern that brings wet and dry seasons to a region. 帶來某地區乾濕季節的季節性風向模式。",sec:"Tropical Rainforests 熱帶雨林"},
+  {id:49,term:"Insolation",ch:"日照 / 太陽輻射",def:"The solar radiation received by the Earth's surface. 地球表面接收到的太陽輻射。",sec:"Tropical Rainforests 熱帶雨林"},
+  {id:50,term:"Five-layered vegetation structure",ch:"五層植被結構",def:"The vertical arrangement of plants in a tropical rainforest into five distinct layers. 熱帶雨林中植物垂直分布的五個明顯層次。",sec:"Tropical Rainforests 熱帶雨林"},
+  {id:51,term:"Emergent layer",ch:"露生層",def:"The topmost layer, with the tallest trees rising above the main canopy (over 50 m). 最頂層，最高大的樹木突出於主要冠層之上（超過50米）。",sec:"Tropical Rainforests 熱帶雨林"},
+  {id:52,term:"Canopy layer",ch:"冠層",def:"The dense, continuous cover of broad leaves at 20–35 m height that blocks most sunlight. 位於20至35米高度的茂密連續闊葉覆蓋層，遮擋大部分陽光。",sec:"Tropical Rainforests 熱帶雨林"},
+  {id:53,term:"Understorey",ch:"幼樹層",def:"The layer of young trees waiting for a gap in the canopy to reach sunlight. 等待冠層出現空隙以獲取陽光的幼樹層。",sec:"Tropical Rainforests 熱帶雨林"},
+  {id:54,term:"Shrub layer",ch:"灌木層",def:"The layer of shrubs and small trees below the understorey. 位於幼樹層之下的灌木與小樹層。",sec:"Tropical Rainforests 熱帶雨林"},
+  {id:55,term:"Ground layer / Undergrowth",ch:"底層 / 林下植被",def:"The lowest layer, dark and wet, with sparse vegetation such as ferns and mosses. 最底層，陰暗潮濕，植被稀疏，如蕨類與苔蘚。",sec:"Tropical Rainforests 熱帶雨林"},
+  {id:56,term:"Plant adaptation",ch:"植物適應性",def:"A special feature of a plant that helps it survive in its environment. 幫助植物在其環境中生存的特殊特徵。",sec:"Tropical Rainforests 熱帶雨林"},
+  {id:57,term:"Buttress roots",ch:"板根",def:"Large, flat roots that spread out from the base of tall trees to support them in shallow soil. 從高大樹木基部向外伸展的大而扁平的根，用於在淺土中支撐樹木。",sec:"Tropical Rainforests 熱帶雨林"},
+  {id:58,term:"Drip-tips",ch:"滴水葉尖",def:"Pointed leaf tips that allow rainwater to drain off quickly. 使雨水快速排走的尖形葉尖。",sec:"Tropical Rainforests 熱帶雨林"},
+  {id:59,term:"Waxy leaf surface",ch:"蠟質葉面",def:"A shiny, waterproof coating on leaves that reduces water loss through evapotranspiration. 葉面上的光亮防水塗層，減少蒸散造成的水分流失。",sec:"Tropical Rainforests 熱帶雨林"},
+  {id:60,term:"Evergreen",ch:"常綠",def:"Remaining green and leafy throughout the year; no marked dry season causes continuous leaf shedding and regrowth. 全年保持綠色和葉片；無明顯乾季導致持續落葉與生長。",sec:"Tropical Rainforests 熱帶雨林"},
+  {id:61,term:"Photosynthesis",ch:"光合作用",def:"The process by which plants use sunlight, water, and carbon dioxide to produce food and release oxygen. 植物利用陽光、水和二氧化碳製造養分並釋放氧氣的過程。",sec:"Tropical Rainforests 熱帶雨林"},
+  {id:62,term:"Evapotranspiration",ch:"蒸散",def:"The combined process of water evaporation from the soil and transpiration from plants. 土壤水分蒸發與植物蒸騰的綜合過程。",sec:"Tropical Rainforests 熱帶雨林"},
+  {id:63,term:"Nutrient cycle",ch:"養分循環",def:"The movement and exchange of nutrients between living organisms and the environment. 生物與環境之間養分的流動與交換。",sec:"Tropical Rainforests 熱帶雨林"},
+  {id:64,term:"Leaching",ch:"淋溶",def:"The removal of nutrients from the soil by rainwater draining through it. 雨水滲透土壤時將養分帶走的過程。",sec:"Tropical Rainforests 熱帶雨林"},
+  {id:65,term:"Epiphyte",ch:"附生植物",def:"A plant that grows on another plant for physical support only, not for nutrients. 僅依附其他植物生長以獲取物理支撐、不獲取養分的植物。",sec:"Tropical Rainforests 熱帶雨林"},
+  {id:66,term:"Parasite",ch:"寄生植物",def:"A plant that obtains nutrients from a host plant, harming it. 從寄主植物獲取養分並對其造成傷害的植物。",sec:"Tropical Rainforests 熱帶雨林"},
+  {id:67,term:"Climber (Liana)",ch:"攀緣植物（藤蔓）",def:"A plant that climbs up trees to reach sunlight in the dense rainforest. 在茂密雨林中攀附樹木向上生長以獲取陽光的植物。",sec:"Tropical Rainforests 熱帶雨林"},
+  {id:68,term:"Saprophyte",ch:"腐生植物",def:"An organism that feeds on dead organic matter. 以死亡有機物為食的生物。",sec:"Tropical Rainforests 熱帶雨林"},
+  {id:69,term:"Biodiversity",ch:"生物多樣性",def:"The variety of living species (plants, animals, microorganisms) in an ecosystem. 生態系統中生物種類（植物、動物、微生物）的多樣性。",sec:"Tropical Rainforests 熱帶雨林"},
+  {id:70,term:"Carbon sink",ch:"碳匯",def:"A natural or artificial reservoir that absorbs more carbon dioxide than it releases. 吸收二氧化碳多於釋放的天然或人工儲庫。",sec:"Tropical Rainforests 熱帶雨林"},
+  {id:71,term:"Carbon source",ch:"碳源",def:"A process or activity that releases more carbon dioxide than it absorbs. 釋放二氧化碳多於吸收的過程或活動。",sec:"Tropical Rainforests 熱帶雨林"},
+
+  // Section 3: Deforestation & Conservation
+  {id:72,term:"Deforestation",ch:"森林砍伐",def:"The large-scale clearing of forest land, usually for human activities. 大規模清除森林土地，通常用於人類活動。",sec:"Deforestation & Conservation 砍伐與保護"},
+  {id:73,term:"Shifting cultivation / Slash-and-burn",ch:"游耕 / 刀耕火種",def:"A farming method in which forest is cut and burned to clear land for crops, then abandoned when soil nutrients are depleted. 砍伐並焚燒森林以開墾農地的耕作方式，土壤養分耗盡後便放棄。",sec:"Deforestation & Conservation 砍伐與保護"},
+  {id:74,term:"Cattle ranching / Livestock rearing",ch:"畜牧養殖",def:"Raising cattle or other farm animals on cleared rainforest land. 在清除的雨林土地上飼養牛或其他農畜。",sec:"Deforestation & Conservation 砍伐與保護"},
+  {id:75,term:"Plantation",ch:"種植園",def:"A large-scale farm growing a single commercial crop, such as oil palms or soybeans. 大規模種植單一經濟作物（如油棕或大豆）的農場。",sec:"Deforestation & Conservation 砍伐與保護"},
+  {id:76,term:"Commercial logging",ch:"商業伐木",def:"The cutting down of trees for sale and profit. 為銷售和獲利而砍伐樹木。",sec:"Deforestation & Conservation 砍伐與保護"},
+  {id:77,term:"Opencast mining",ch:"露天採礦",def:"Extracting minerals from the ground by removing the surface layer. 移除地表土層以開採地下礦物的作業方式。",sec:"Deforestation & Conservation 砍伐與保護"},
+  {id:78,term:"Foreign debt",ch:"外債",def:"Money that a country owes to foreign governments or banks. 一個國家欠外國政府或銀行的款項。",sec:"Deforestation & Conservation 砍伐與保護"},
+  {id:79,term:"Soil erosion",ch:"土壤侵蝕",def:"The washing away of topsoil by rain or wind after vegetation is removed. 植被清除後表土被雨水或風沖走的過程。",sec:"Deforestation & Conservation 砍伐與保護"},
+  {id:80,term:"Topsoil",ch:"表土",def:"The uppermost layer of soil, rich in organic matter and nutrients. 土壤最上層，富含有機物質和養分。",sec:"Deforestation & Conservation 砍伐與保護"},
+  {id:81,term:"Global warming",ch:"全球暖化",def:"The long-term increase in Earth's average temperature, mainly caused by increased greenhouse gases. 主要由溫室氣體增加導致的地球平均氣溫長期上升。",sec:"Deforestation & Conservation 砍伐與保護"},
+  {id:82,term:"Greenhouse effect",ch:"溫室效應",def:"The trapping of heat in the Earth's atmosphere by gases such as carbon dioxide. 二氧化碳等氣體將熱量困於地球大氣層中的現象。",sec:"Deforestation & Conservation 砍伐與保護"},
+  {id:83,term:"Habitat loss",ch:"棲息地喪失",def:"The destruction of the natural environment where a species lives. 物種生存的自然環境被破壞。",sec:"Deforestation & Conservation 砍伐與保護"},
+  {id:84,term:"Water cycle disruption",ch:"水循環破壞",def:"The disturbance of the natural movement of water between the atmosphere, land, and oceans. 水在大氣、陸地與海洋之間自然循環受到干擾。",sec:"Deforestation & Conservation 砍伐與保護"},
+  {id:85,term:"Afforestation",ch:"植樹造林",def:"The planting of trees in an area where there was no forest before. 在原本無森林的地區種植樹木。",sec:"Deforestation & Conservation 砍伐與保護"},
+  {id:86,term:"Reforestation",ch:"重新造林",def:"The replanting of trees in an area where the forest has been cut down. 在森林被砍伐的地區重新種植樹木。",sec:"Deforestation & Conservation 砍伐與保護"},
+  {id:87,term:"Selective logging",ch:"選擇性砍伐",def:"Cutting down only certain trees rather than clearing the entire forest. 只砍伐特定樹木而非清除整片森林。",sec:"Deforestation & Conservation 砍伐與保護"},
+  {id:88,term:"Timber certification",ch:"木材認證",def:"A system (e.g. FSC) that verifies timber comes from sustainably managed forests. 驗證木材來自可持續管理森林的認證系統（如FSC）。",sec:"Deforestation & Conservation 砍伐與保護"},
+  {id:89,term:"Carbon trading",ch:"碳交易",def:"A market system in which countries or companies buy and sell permits to emit carbon dioxide. 國家或公司買賣二氧化碳排放許可的市場機制。",sec:"Deforestation & Conservation 砍伐與保護"},
+  {id:90,term:"Carbon taxation",ch:"碳稅",def:"A tax on the carbon content of fuels, designed to reduce carbon dioxide emissions. 針對燃料含碳量徵收的稅項，旨在減少二氧化碳排放。",sec:"Deforestation & Conservation 砍伐與保護"},
+  {id:91,term:"Eco-label",ch:"環保標籤",def:"A label on a product indicating that it meets certain environmental standards. 表示產品符合特定環保標準的標籤。",sec:"Deforestation & Conservation 砍伐與保護"},
+  {id:92,term:"Corporate Social Responsibility (CSR)",ch:"企業社會責任",def:"A company's commitment to operate in an ethical and environmentally friendly way. 企業承諾以道德且環保的方式營運。",sec:"Deforestation & Conservation 砍伐與保護"},
+  {id:93,term:"Agroforestry",ch:"農林複合經營",def:"A land-use system that combines trees and crops or livestock on the same land. 在同一塊土地上同時種植樹木與農作物或飼養牲畜的土地利用系統。",sec:"Deforestation & Conservation 砍伐與保護"},
+  {id:94,term:"National park / Nature reserve",ch:"國家公園 / 自然保護區",def:"A protected area where natural habitats and wildlife are conserved. 保護自然棲息地與野生動植物的受保護區域。",sec:"Deforestation & Conservation 砍伐與保護"},
+
+  // Section 4: Tourism & HKSAR Passport
+  {id:95,term:"Sustainable tourism",ch:"可持續旅遊",def:"Tourism that minimises negative impacts on the environment, society, and culture while generating economic benefits. 在產生經濟效益的同時，將對環境、社會與文化的負面影響降至最低的旅遊方式。",sec:"Tourism & HKSAR Passport 旅遊與香港特區護照"},
+  {id:96,term:"Ecotourism",ch:"生態旅遊",def:"Responsible travel to natural areas that conserves the environment and benefits local people. 前往自然區域的負責任旅行，旨在保護環境並惠及當地居民。",sec:"Tourism & HKSAR Passport 旅遊與香港特區護照"},
+  {id:97,term:"Natural attraction",ch:"自然景點",def:"A place of interest based on natural features such as mountains, rivers, or beaches. 以山脈、河流或海灘等自然特徵為基礎的觀光景點。",sec:"Tourism & HKSAR Passport 旅遊與香港特區護照"},
+  {id:98,term:"Cultural attraction",ch:"文化景點",def:"A place of interest based on human heritage, such as temples, museums, or historical sites. 以寺廟、博物館或歷史遺跡等人類遺產為基礎的觀光景點。",sec:"Tourism & HKSAR Passport 旅遊與香港特區護照"},
+  {id:99,term:"Heritage trail",ch:"文物徑",def:"A walking route that passes through areas of historical or cultural significance. 穿越具有歷史或文化意義地區的步行路線。",sec:"Tourism & HKSAR Passport 旅遊與香港特區護照"},
+  {id:100,term:"HKSAR Passport",ch:"香港特區護照",def:"A passport issued by the Hong Kong Special Administrative Region Government to Chinese citizens who are permanent residents of Hong Kong. 香港特別行政區政府向中國籍香港永久性居民簽發的護照。",sec:"Tourism & HKSAR Passport 旅遊與香港特區護照"},
+  {id:101,term:"Eligibility",ch:"申請資格",def:"The conditions that must be met to qualify for something. 必須符合的條件才能獲得某項資格。",sec:"Tourism & HKSAR Passport 旅遊與香港特區護照"},
+  {id:102,term:"Visa-free access",ch:"免簽入境",def:"Permission to enter a country without needing to apply for a visa in advance. 無需事先申請簽證即可進入某國的許可。",sec:"Tourism & HKSAR Passport 旅遊與香港特區護照"},
+  {id:103,term:"Basic Law Article 154",ch:"基本法第154條",def:"States that the HKSAR Government independently manages immigration policy and issues passports to permanent residents. 規定特區政府獨立管理出入境政策並向永久性居民簽發護照。",sec:"Tourism & HKSAR Passport 旅遊與香港特區護照"},
+  {id:104,term:"Basic Law Article 22",ch:"基本法第22條",def:"States that mainland residents need approval to enter Hong Kong. 規定內地居民進入香港須辦理批准手續。",sec:"Tourism & HKSAR Passport 旅遊與香港特區護照"},
+  {id:105,term:"National security",ch:"國家安全",def:"The protection of a nation's political, military, economic, and social stability from threats. 保護國家政治、軍事、經濟及社會穩定免受威脅。",sec:"Tourism & HKSAR Passport 旅遊與香港特區護照"},
+
+  // Section 5: Map Skills
+  {id:106,term:"Representative Fraction (RF)",ch:"分數式比例尺",def:"A scale expressed as a ratio (e.g. 1:50,000), meaning 1 unit on the map represents 50,000 units on the ground. 以比率表示的比例尺（如1:50,000），即地圖上1單位代表地面50,000單位。",sec:"Map Skills 地圖技能"},
+  {id:107,term:"Linear scale",ch:"直線比例尺",def:"A line marked with distances that shows the relationship between map distance and real distance. 標有距離的線段，顯示地圖距離與實際距離的關係。",sec:"Map Skills 地圖技能"},
+  {id:108,term:"Statement scale",ch:"說明式比例尺",def:"A scale expressed in words (e.g. \"1 cm to 1 km\"). 以文字表示的比例尺（如「1厘米代表1公里」）。",sec:"Map Skills 地圖技能"},
+  {id:109,term:"Straight-line distance",ch:"直線距離",def:"The shortest distance between two points measured directly on a map. 在地圖上直接測量兩點之間的最短距離。",sec:"Map Skills 地圖技能"},
+  {id:110,term:"Curved-line distance",ch:"曲線距離",def:"The distance along a winding route, measured with a strip of paper or string. 沿彎曲路線的距離，以紙條或線繩測量。",sec:"Map Skills 地圖技能"},
+  {id:111,term:"Whole circle bearing",ch:"全圓方位角",def:"The angle measured clockwise from North (0° to 360°). 從北方順時針量度的角度（0°至360°）。",sec:"Map Skills 地圖技能"},
+  {id:112,term:"Reduced bearing",ch:"象限方位角",def:"The angle measured from North or South toward East or West (e.g. N30°E). 從北方或南方量向東方或西方的角度（如北偏東30度）。",sec:"Map Skills 地圖技能"},
+  {id:113,term:"Square-counting method",ch:"數方格法",def:"A method to estimate area by counting complete and half-complete squares on a grid. 以數算完整方格和半個方格來估算面積的方法。",sec:"Map Skills 地圖技能"},
+  {id:114,term:"Vertical Exaggeration (V.E.)",ch:"垂直誇張",def:"The ratio of vertical scale to horizontal scale on a cross-section diagram. 剖面圖上垂直比例尺與水平比例尺之比。",sec:"Map Skills 地圖技能"},
+  {id:115,term:"Climatic graph",ch:"氣候圖",def:"A graph showing monthly temperature (as a line) and rainfall (as bars) for a place. 顯示某地每月氣溫（曲線）與降雨量（柱狀）的圖表。",sec:"Map Skills 地圖技能"},
+  {id:116,term:"Annual range",ch:"年較差",def:"The difference between the highest and lowest monthly values of temperature or rainfall. 一年中氣溫或降雨量最高月與最低月之差。",sec:"Map Skills 地圖技能"},
+
+  // Section 6: Data-Response & Exam Terms
+  {id:117,term:"Percentage change",ch:"百分比變化",def:"The relative change between an old value and a new value, calculated as ((New – Old) / Old) × 100%. 舊數值與新數值之間的相對變化，計算方式為((新–舊)/舊)×100%。",sec:"Data-Response & Exam Terms 數據題與考試術語"},
+  {id:118,term:"Trend",ch:"趨勢",def:"The general direction in which a set of data moves over time. 一組數據隨時間變化的總體方向。",sec:"Data-Response & Exam Terms 數據題與考試術語"},
+  {id:119,term:"Overall trend",ch:"整體趨勢",def:"The general pattern of increase, decrease, or stability over the entire period. 整段期間的總體上升、下降或穩定模式。",sec:"Data-Response & Exam Terms 數據題與考試術語"},
+  {id:120,term:"Fluctuation",ch:"波動",def:"Irregular rises and falls in data values. 數據值的不規則升降。",sec:"Data-Response & Exam Terms 數據題與考試術語"},
+  {id:121,term:"Peak",ch:"最高點",def:"The highest value in a dataset. 數據集中的最高值。",sec:"Data-Response & Exam Terms 數據題與考試術語"},
+  {id:122,term:"Trough",ch:"最低點",def:"The lowest value in a dataset. 數據集中的最低值。",sec:"Data-Response & Exam Terms 數據題與考試術語"},
+  {id:123,term:"Range",ch:"幅度 / 全距",def:"The difference between the highest and lowest values in a dataset. 數據集中最高值與最低值之差。",sec:"Data-Response & Exam Terms 數據題與考試術語"},
+  {id:124,term:"Describe",ch:"描述",def:"State what you see from the data or map (pattern, trend, distribution). 陳述從數據或地圖中觀察到的內容（模式、趨勢、分布）。",sec:"Data-Response & Exam Terms 數據題與考試術語"},
+  {id:125,term:"Explain",ch:"解釋",def:"Give reasons why something happens, using geographical knowledge (cause → process → effect). 利用地理知識解釋某事發生的原因（原因→過程→結果）。",sec:"Data-Response & Exam Terms 數據題與考試術語"},
+  {id:126,term:"Compare / Contrast",ch:"比較 / 對比",def:"Identify similarities and differences between two or more items. 找出兩個或多個項目之間的相似與差異。",sec:"Data-Response & Exam Terms 數據題與考試術語"},
+  {id:127,term:"Discuss",ch:"討論",def:"Present different viewpoints or arguments, often with supporting evidence. 提出不同的觀點或論點，通常附有支持證據。",sec:"Data-Response & Exam Terms 數據題與考試術語"},
+  {id:128,term:"Suggest",ch:"建議",def:"Propose solutions or measures with reasons. 提出解決方案或措施並說明理由。",sec:"Data-Response & Exam Terms 數據題與考試術語"},
+  {id:129,term:"PEEL",ch:"段落結構",def:"A paragraph structure for essay writing: <b>P</b>oint, <b>E</b>xplanation, <b>E</b>vidence, <b>L</b>ink. 文章寫作段落結構：<b>觀點</b>、<b>解釋</b>、<b>證據</b>、<b>扣題</b>。",sec:"Data-Response & Exam Terms 數據題與考試術語"}
+];
+
+// ── STATE ──
+const STORAGE_KEY = 'geog_flashcards_s3';
+let state = loadState();
+let currentDeck = [];
+let currentIndex = 0;
+let isFlipped = false;
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch(e) {}
+  return { known: {}, review: {}, shuffle: false, reviewOnly: false };
+}
+
+function saveState() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch(e) {}
+}
+
+// ── DOM REFS ──
+const filtersEl = document.getElementById('filters');
+const cardArea = document.getElementById('cardArea');
+const progressFill = document.getElementById('progressFill');
+const progressLabel = document.getElementById('progressLabel');
+const statsBanner = document.getElementById('statsBanner');
+const btnShuffle = document.getElementById('btnShuffle');
+const btnReviewOnly = document.getElementById('btnReviewOnly');
+const btnReset = document.getElementById('btnReset');
+
+// ── SECTIONS ──
+const SECTION_ORDER = [
+  "Rocks & Landforms 岩石與地貌",
+  "Tropical Rainforests 熱帶雨林",
+  "Deforestation & Conservation 砍伐與保護",
+  "Tourism & HKSAR Passport 旅遊與香港特區護照",
+  "Map Skills 地圖技能",
+  "Data-Response & Exam Terms 數據題與考試術語"
+];
+
+// ── BUILD FILTERS ──
+let activeSection = null;
+
+function buildFilters() {
+  filtersEl.innerHTML = '';
+  
+  const allBtn = document.createElement('button');
+  allBtn.className = 'filter-btn' + (activeSection === null ? ' active' : '');
+  allBtn.textContent = 'All · 全部';
+  allBtn.onclick = () => selectSection(null);
+  filtersEl.appendChild(allBtn);
+  
+  for (const sec of SECTION_ORDER) {
+    const count = ALL_TERMS.filter(t => t.sec === sec).length;
+    const btn = document.createElement('button');
+    btn.className = 'filter-btn' + (activeSection === sec ? ' active' : '');
+    btn.dataset.section = sec;
+    btn.textContent = `${sec.split(' ').pop()} · ${count}`;
+    btn.onclick = () => selectSection(sec);
+    filtersEl.appendChild(btn);
+  }
+}
+
+function selectSection(sec) {
+  activeSection = sec;
+  buildFilters();
+  buildDeck();
+}
+
+// ── BUILD DECK ──
+function buildDeck() {
+  let pool = activeSection
+    ? ALL_TERMS.filter(t => t.sec === activeSection)
+    : [...ALL_TERMS];
+  
+  if (state.reviewOnly) {
+    pool = pool.filter(t => state.review[t.id]);
+  }
+  
+  if (state.shuffle) {
+    pool = shuffleArray([...pool]);
+  }
+  
+  currentDeck = pool;
+  currentIndex = 0;
+  isFlipped = false;
+  render();
+}
+
+function shuffleArray(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+// ── RENDER ──
+function render() {
+  updateProgress();
+  updateStats();
+  
+  if (currentDeck.length === 0) {
+    cardArea.innerHTML = `
+      <div class="empty-state">
+        <div class="emoji">${state.reviewOnly ? '🎉' : '🗺️'}</div>
+        <p>${state.reviewOnly ? 'All review cards cleared! 所有待複習卡片已完成！' : 'Select a section to start 選擇章節開始'}</p>
+      </div>`;
+    return;
+  }
+  
+  const card = currentDeck[currentIndex];
+  const status = state.known[card.id] ? 'known' : (state.review[card.id] ? 'review' : '');
+  
+  cardArea.innerHTML = `
+    <div class="flip-container${isFlipped ? ' flipped' : ''}" id="flipContainer" onclick="flipCard()">
+      <div class="flipper">
+        <div class="card-face card-front">
+          <div class="section-tag">${card.sec.split(' ').pop()}</div>
+          <div class="term-en">${card.term}</div>
+          <div class="term-zh">${card.ch}</div>
+          <div class="card-hint">Tap or Space to flip</div>
+        </div>
+        <div class="card-face card-back">
+          <div class="back-label">Definition</div>
+          <div class="def-en">${card.def}</div>
+        </div>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="action-btn known-btn" onclick="markKnown()" title="I know this">
+        ✓ Known 已掌握
+      </button>
+      <button class="action-btn review-btn" onclick="markReview()" title="Need to review">
+        ↻ Review 需複習
+      </button>
+      <button class="action-btn skip-btn" onclick="nextCard()" title="Skip">
+        Skip 跳過 →
+      </button>
+    </div>
+  `;
+}
+
+function flipCard() {
+  isFlipped = !isFlipped;
+  const container = document.getElementById('flipContainer');
+  if (container) {
+    container.classList.toggle('flipped', isFlipped);
+  }
+}
+
+function markKnown() {
+  if (currentDeck.length === 0) return;
+  const card = currentDeck[currentIndex];
+  state.known[card.id] = true;
+  delete state.review[card.id];
+  saveState();
+  if (state.reviewOnly) { buildDeck(); return; }
+  isFlipped = false;
+  advanceCard();
+}
+
+function markReview() {
+  if (currentDeck.length === 0) return;
+  const card = currentDeck[currentIndex];
+  delete state.known[card.id];
+  state.review[card.id] = true;
+  saveState();
+  if (!state.reviewOnly) { isFlipped = false; advanceCard(); }
+  else { isFlipped = false; render(); }
+}
+
+function nextCard() {
+  if (currentDeck.length === 0) return;
+  isFlipped = false;
+  advanceCard();
+}
+
+function advanceCard() {
+  if (currentDeck.length <= 1) {
+    currentIndex = 0;
+    render();
+    return;
+  }
+  currentIndex = (currentIndex + 1) % currentDeck.length;
+  render();
+}
+
+function prevCard() {
+  if (currentDeck.length <= 1) return;
+  isFlipped = false;
+  currentIndex = (currentIndex - 1 + currentDeck.length) % currentDeck.length;
+  render();
+}
+
+// ── PROGRESS ──
+function updateProgress() {
+  if (currentDeck.length === 0) {
+    progressFill.style.width = '0%';
+    progressLabel.textContent = '0 / 0';
+    return;
+  }
+  let knownCount = 0;
+  for (const card of currentDeck) {
+    if (state.known[card.id]) knownCount++;
+  }
+  const pct = Math.round((knownCount / currentDeck.length) * 100);
+  progressFill.style.width = pct + '%';
+  progressLabel.textContent = `${knownCount} / ${currentDeck.length}`;
+}
+
+function updateStats() {
+  let totalKnown = 0, totalReview = 0;
+  for (const t of ALL_TERMS) {
+    if (state.known[t.id]) totalKnown++;
+    if (state.review[t.id]) totalReview++;
+  }
+  if (totalKnown === 0 && totalReview === 0) {
+    statsBanner.classList.remove('show');
+    return;
+  }
+  statsBanner.classList.add('show');
+  statsBanner.innerHTML = `📊 All sections: <strong>${totalKnown}</strong> known · <strong>${totalReview}</strong> need review · <strong>${129 - totalKnown - totalReview}</strong> untouched`;
+}
+
+// ── CONTROLS ──
+btnShuffle.onclick = () => {
+  state.shuffle = !state.shuffle;
+  btnShuffle.classList.toggle('on', state.shuffle);
+  saveState();
+  buildDeck();
+};
+
+btnReviewOnly.onclick = () => {
+  state.reviewOnly = !state.reviewOnly;
+  btnReviewOnly.classList.toggle('on', state.reviewOnly);
+  saveState();
+  buildDeck();
+};
+
+btnReset.onclick = () => {
+  if (!confirm('Reset all progress? This cannot be undone.\n確定要重置所有進度嗎？此操作無法撤銷。')) return;
+  state.known = {};
+  state.review = {};
+  state.reviewOnly = false;
+  btnReviewOnly.classList.remove('on');
+  saveState();
+  buildDeck();
+};
+
+// ── KEYBOARD ──
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'BUTTON') return;
+  switch(e.key) {
+    case ' ': case 'Spacebar':
+      e.preventDefault();
+      flipCard();
+      break;
+    case 'ArrowRight':
+      e.preventDefault();
+      isFlipped = false;
+      advanceCard();
+      break;
+    case 'ArrowLeft':
+      e.preventDefault();
+      isFlipped = false;
+      prevCard();
+      break;
+    case 'k': case 'K':
+      e.preventDefault();
+      markKnown();
+      break;
+    case 'r': case 'R':
+      e.preventDefault();
+      markReview();
+      break;
+  }
+});
+
+// ── TOUCH SWIPE ──
+let touchStartX = 0;
+document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, {passive: true});
+document.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  if (Math.abs(dx) > 60) {
+    if (dx < 0) { isFlipped = false; advanceCard(); }
+    else { isFlipped = false; prevCard(); }
+  }
+});
+
+// ── INIT ──
+function init() {
+  btnShuffle.classList.toggle('on', state.shuffle);
+  btnReviewOnly.classList.toggle('on', state.reviewOnly);
+  buildFilters();
+  buildDeck();
+}
+init();
+</script>
+</body>
+</html>

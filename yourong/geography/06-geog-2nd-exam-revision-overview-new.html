@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S3 Geography 2nd Term Exam — Revision Overview</title>
+<style>
+/* ===== CSS Variables & Themes ===== */
+:root {
+  --primary: #1a56db;
+  --primary-light: #dbeafe;
+  --primary-dark: #1e40af;
+  --accent: #f59e0b;
+  --accent-light: #fef3c7;
+  --bg: #f8fafc;
+  --surface: #ffffff;
+  --text: #1e293b;
+  --text-secondary: #64748b;
+  --border: #e2e8f0;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+  --radius: 8px;
+  --sidebar-width: 240px;
+  --color-heat-high: #dc2626;
+  --color-heat-mid: #f59e0b;
+  --color-heat-low: #22c55e;
+}
+
+[data-theme="yourong"] {
+  --primary: #0d9488;
+  --primary-light: #ccfbf1;
+  --primary-dark: #0f766e;
+}
+
+/* ===== Reset & Base ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== Dashboard Header ===== */
+.dashboard {
+  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+  color: #fff;
+  padding: 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+}
+.dashboard-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px 24px;
+  justify-content: space-between;
+}
+.dash-left { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+.countdown { display: flex; align-items: center; gap: 10px; }
+.countdown-icon { font-size: 2rem; }
+.countdown-text { font-size: 0.8rem; opacity: 0.8; line-height: 1.3; }
+.countdown-num { font-size: 1.6rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+.dash-cards { display: flex; gap: 8px; flex-wrap: wrap; }
+.dash-card {
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(4px);
+  border-radius: var(--radius);
+  padding: 8px 14px;
+  text-align: center;
+  min-width: 70px;
+}
+.dash-card .label { font-size: 0.65rem; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.05em; }
+.dash-card .value { font-size: 1.1rem; font-weight: 700; }
+.dash-card .sub { font-size: 0.65rem; opacity: 0.6; }
+.dash-right { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.theme-switch { display: flex; gap: 4px; background: rgba(255,255,255,0.12); border-radius: 20px; padding: 3px; }
+.theme-btn {
+  border: none; background: transparent; color: rgba(255,255,255,0.7);
+  padding: 5px 14px; border-radius: 18px; cursor: pointer; font-size: 0.8rem;
+  font-weight: 500; transition: all 0.2s; white-space: nowrap;
+  font-family: inherit;
+}
+.theme-btn.active { background: #fff; color: var(--primary-dark); box-shadow: 0 1px 3px rgba(0,0,0,0.12); }
+.theme-btn:hover:not(.active) { color: #fff; }
+.heatmap-mini { display: flex; gap: 8px; align-items: center; font-size: 0.7rem; }
+.heat-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.heat-dot.high { background: #fca5a5; }
+.heat-dot.mid { background: #fcd34d; }
+.heat-dot.low { background: #86efac; }
+
+/* ===== Main Layout ===== */
+.main-layout { display: flex; max-width: 1200px; margin: 0 auto; min-height: calc(100vh - 80px); }
+
+/* ===== Sidebar ===== */
+.sidebar {
+  width: var(--sidebar-width);
+  min-width: var(--sidebar-width);
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 20px 0;
+  position: sticky;
+  top: 80px;
+  height: calc(100vh - 80px);
+  overflow-y: auto;
+  font-size: 0.85rem;
+}
+.sidebar-title {
+  font-weight: 700; color: var(--text-secondary); text-transform: uppercase;
+  letter-spacing: 0.06em; font-size: 0.7rem; padding: 0 20px 10px;
+}
+.sidebar a {
+  display: block; padding: 7px 20px; color: var(--text-secondary);
+  text-decoration: none; border-left: 3px solid transparent; transition: all 0.15s;
+}
+.sidebar a:hover, .sidebar a.active { color: var(--primary); background: var(--primary-light); border-left-color: var(--primary); }
+.sidebar .sub { padding-left: 32px; font-size: 0.8rem; }
+.sidebar-toggle { display: none; }
+
+/* ===== Content ===== */
+.content { flex: 1; padding: 32px 40px; max-width: 880px; }
+.content section { margin-bottom: 48px; }
+.content h1 { font-size: 1.8rem; font-weight: 800; color: var(--text); margin-bottom: 8px; letter-spacing: -0.01em; }
+.content h2 {
+  font-size: 1.35rem; font-weight: 700; color: var(--primary-dark);
+  border-bottom: 2px solid var(--primary-light); padding-bottom: 8px;
+  margin-bottom: 20px; margin-top: 36px;
+}
+.content h3 { font-size: 1.05rem; font-weight: 700; color: var(--text); margin: 20px 0 10px; }
+.content h4 { font-size: 0.95rem; font-weight: 600; color: var(--primary); margin: 16px 0 8px; }
+.content p { margin-bottom: 12px; }
+.content .subtitle { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 16px; }
+
+/* ===== Tables ===== */
+.content table {
+  width: 100%; border-collapse: collapse; margin: 16px 0 24px;
+  font-size: 0.88rem; box-shadow: var(--shadow); border-radius: var(--radius);
+  overflow: hidden;
+}
+.content thead th {
+  background: var(--primary); color: #fff; padding: 10px 14px;
+  text-align: left; font-weight: 600; font-size: 0.8rem;
+  position: sticky; top: 0;
+}
+.content tbody td {
+  padding: 10px 14px; border-bottom: 1px solid var(--border);
+  vertical-align: top; background: var(--surface);
+}
+.content tbody tr:nth-child(even) td { background: #f8fafc; }
+.content tbody tr:hover td { background: var(--primary-light); }
+
+/* ===== Tips / Callouts ===== */
+.tip {
+  background: var(--accent-light); border-left: 4px solid var(--accent);
+  padding: 14px 18px; margin: 16px 0; border-radius: 0 var(--radius) var(--radius) 0;
+  font-size: 0.88rem;
+}
+.tip strong { color: #92400e; }
+
+/* ===== Checklist ===== */
+.checklist { list-style: none; padding: 0; }
+.checklist li {
+  padding: 10px 14px; margin: 4px 0; background: var(--surface);
+  border: 1px solid var(--border); border-radius: var(--radius);
+  cursor: pointer; transition: all 0.15s; display: flex; align-items: flex-start; gap: 10px;
+  font-size: 0.9rem;
+}
+.checklist li:hover { border-color: var(--primary); box-shadow: var(--shadow); }
+.checklist li.checked { background: #f0fdf4; border-color: #86efac; }
+.checklist li.checked .check-box { background: #22c55e; border-color: #22c55e; }
+.checklist li.checked .check-box::after { content: "✓"; color: #fff; font-weight: 700; font-size: 0.8rem; }
+.checklist li.checked .item-text { color: #64748b; text-decoration: line-through; }
+.check-box {
+  width: 20px; height: 20px; min-width: 20px; border: 2px solid #cbd5e1;
+  border-radius: 4px; display: flex; align-items: center; justify-content: center;
+  margin-top: 1px;
+}
+
+/* ===== Collapsible ===== */
+.collapsible { margin: 12px 0; }
+.collapsible-summary {
+  cursor: pointer; padding: 12px 16px; background: var(--surface);
+  border: 1px solid var(--border); border-radius: var(--radius);
+  font-weight: 600; display: flex; justify-content: space-between; align-items: center;
+  user-select: none; transition: background 0.15s;
+}
+.collapsible-summary:hover { background: var(--primary-light); }
+.collapsible-summary::after { content: "▸"; transition: transform 0.2s; font-size: 0.8rem; color: var(--text-secondary); }
+.collapsible.open .collapsible-summary::after { transform: rotate(90deg); }
+.collapsible-content { display: none; padding: 16px; border: 1px solid var(--border); border-top: none; border-radius: 0 0 var(--radius) var(--radius); background: var(--surface); }
+.collapsible.open .collapsible-content { display: block; }
+
+/* ===== Heatmap ===== */
+.heatmap-grid { display: grid; grid-template-columns: auto repeat(3, 1fr) auto; gap: 2px; margin: 16px 0; font-size: 0.82rem; }
+.heatmap-grid > div { padding: 8px 10px; background: var(--surface); border: 1px solid var(--border); }
+.heatmap-grid .header { background: var(--primary); color: #fff; font-weight: 600; text-align: center; }
+.heatmap-grid .freq-cell { text-align: center; font-weight: 700; border-radius: 4px; }
+.heatmap-grid .freq-cell.high { background: #fee2e2; color: #991b1b; }
+.heatmap-grid .freq-cell.mid { background: #fef3c7; color: #92400e; }
+.heatmap-grid .freq-cell.low { background: #dcfce7; color: #166534; }
+
+/* ===== Formula Cards ===== */
+.formula-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 16px 0; }
+.formula-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 16px; box-shadow: var(--shadow);
+}
+.formula-card .name { font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 4px; }
+.formula-card .expr { font-family: "SF Mono", "Consolas", "Monaco", monospace; font-size: 0.9rem; font-weight: 600; color: var(--primary); word-break: break-all; }
+
+/* ===== Quick Link Jump (mobile) ===== */
+.jump-nav { display: none; margin: 12px 24px; }
+.jump-nav select { width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: var(--radius); font-size: 0.9rem; background: var(--surface); font-family: inherit; }
+
+/* ===== Print ===== */
+@media print {
+  .dashboard, .sidebar, .jump-nav, .theme-switch, .sidebar-toggle { display: none !important; }
+  .main-layout { display: block; }
+  .content { max-width: 100%; padding: 0; }
+  .content section { page-break-inside: avoid; margin-bottom: 24px; }
+  .content h2 { break-after: avoid; }
+  .collapsible-content { display: block !important; }
+  body { font-size: 12px; color: #000; background: #fff; }
+  .content thead th { background: #e5e7eb !important; color: #000 !important; }
+  .tip { background: #fef9c3 !important; border-left-color: #eab308 !important; }
+}
+
+/* ===== Mobile ===== */
+@media (max-width: 768px) {
+  .dashboard-inner { padding: 12px 16px; flex-direction: column; align-items: stretch; gap: 10px; }
+  .dash-left { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .dash-right { justify-content: flex-start; }
+  .countdown-num { font-size: 1.3rem; }
+  .sidebar { display: none; position: fixed; top: 0; left: 0; width: 260px; z-index: 200; height: 100vh; box-shadow: var(--shadow-md); }
+  .sidebar.open { display: block; }
+  .sidebar-toggle { display: block; position: fixed; bottom: 20px; right: 20px; z-index: 201; width: 48px; height: 48px; border-radius: 50%; background: var(--primary); color: #fff; border: none; font-size: 1.4rem; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.25); }
+  .jump-nav { display: block; }
+  .content { padding: 20px 16px; }
+  .heatmap-grid { font-size: 0.7rem; }
+  .heatmap-grid > div { padding: 6px; }
+  .formula-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 480px) { .formula-grid { grid-template-columns: 1fr; } .dash-cards { gap: 4px; } .dash-card { min-width: 55px; padding: 6px 8px; } .dash-card .value { font-size: 0.9rem; } }
+</style>
+</head>
+<body data-theme="haina">
+
+<!-- ===== Dashboard Header ===== -->
+<header class="dashboard">
+  <div class="dashboard-inner">
+    <div class="dash-left">
+      <div class="countdown">
+        <div class="countdown-icon">⏱</div>
+        <div>
+          <div class="countdown-text">距離考試</div>
+          <div class="countdown-num" id="countdown">計算中…</div>
+        </div>
+      </div>
+      <div class="dash-cards">
+        <div class="dash-card"><div class="label">Section A</div><div class="value">20 marks</div><div class="sub">MCQ · ~10 min</div></div>
+        <div class="dash-card"><div class="label">Section B</div><div class="value">66–68 marks</div><div class="sub">Structured · ~40 min</div></div>
+        <div class="dash-card"><div class="label">Section C</div><div class="value">14 marks</div><div class="sub">Essay · ~10 min</div></div>
+      </div>
+    </div>
+    <div class="dash-right">
+      <div class="heatmap-mini">
+        必考熱力
+        <span class="heat-dot high"></span>100%
+        <span class="heat-dot mid"></span>中等
+        <span class="heat-dot low"></span>低
+      </div>
+      <div class="theme-switch">
+        <button class="theme-btn active" data-theme="haina" onclick="switchTheme('haina')">🔵 海納藍</button>
+        <button class="theme-btn" data-theme="yourong" onclick="switchTheme('yourong')">🟢 有容綠</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile Jump Nav -->
+<div class="jump-nav">
+  <select onchange="if(this.value) document.getElementById(this.value).scrollIntoView({behavior:'smooth'});">
+    <option value="">— 快速跳轉 —</option>
+    <option value="sec-structure">1. 考試結構</option>
+    <option value="sec-scope">2. 考試範圍</option>
+    <option value="sec-rocks">3.1 岩石與地貌</option>
+    <option value="sec-rainforest">3.2 熱帶雨林</option>
+    <option value="sec-deforestation">3.3 森林砍伐</option>
+    <option value="sec-tourism">3.4 旅遊與護照</option>
+    <option value="sec-strategy">4. 題型策略</option>
+    <option value="sec-patterns">5. 歷年規律</option>
+    <option value="sec-checklist">6. 複習清單</option>
+    <option value="sec-formulas">附錄：公式與速記</option>
+  </select>
+</div>
+
+<!-- ===== Main Layout ===== -->
+<div class="main-layout">
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-title">目錄</div>
+    <a href="#sec-structure">1. 考試結構</a>
+    <a href="#sec-scope">2. 考試範圍</a>
+    <a href="#sec-rocks">3.1 岩石與地貌</a>
+    <a href="#sec-rainforest">3.2 熱帶雨林</a>
+    <a href="#sec-deforestation">3.3 森林砍伐</a>
+    <a href="#sec-tourism">3.4 旅遊與護照</a>
+    <a href="#sec-strategy">4. 題型策略</a>
+    <a href="#sec-patterns">5. 歷年規律</a>
+    <a href="#sec-checklist">6. 複習清單</a>
+    <a href="#sec-formulas">附錄：公式與速記</a>
+  </nav>
+  <button class="sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()" aria-label="Menu">☰</button>
+
+  <!-- ===== Content ===== -->
+  <main class="content">
+    <section id="sec-top">
+      <h1>S3 Geography 2nd Term Examination — Revision Overview</h1>
+      <p class="subtitle">
+        <strong>Prepared for:</strong> Haina &amp; Yourong (S3, Tsuen Wan Government Secondary School, EMI)<br>
+        <strong>Exam Date:</strong> 17 June 2026 (Tuesday AM) · Paper 1 only · 100 marks · 60 minutes<br>
+        <strong>Based on:</strong> Scope 2025-26 + Past Papers (2223/2324/2425) with full Marking Schemes + Textbook OCR + Worksheets
+      </p>
+    </section>
+
+    <!-- ===== Section 1: Exam Structure ===== -->
+    <section id="sec-structure">
+      <h2>1. Exam Structure &amp; Section Breakdown</h2>
+      <table>
+        <thead><tr><th>Section</th><th>Type</th><th>Marks</th><th>Questions</th><th>Time Budget</th></tr></thead>
+        <tbody>
+          <tr><td><strong>A</strong></td><td>Multiple-choice Questions (MCQ) 選擇題</td><td>20</td><td>10 items × 2 marks</td><td>~10 min</td></tr>
+          <tr><td><strong>B</strong></td><td>Map / Data / Skill-based Structured Questions 地圖數據技能結構題</td><td>66–68</td><td>3–4 sub-questions</td><td>~40 min</td></tr>
+          <tr><td><strong>C</strong></td><td>Short Essay Question 短文章題</td><td>14</td><td>1 essay (Intro + Body + Conclusion)</td><td>~10 min</td></tr>
+        </tbody>
+      </table>
+      <div class="tip">
+        <strong>Key Insight from Past Papers 歷年規律：</strong> Section B always contains <strong>at least one large question on Hong Kong Geopark / rocks</strong> (15–26 marks) and <strong>at least one large question on tropical rainforests / deforestation</strong> (18–33 marks). Map skills are embedded in almost every Section B question.<br>
+        Section B 每年必含香港地質公園/岩石大題（15–26分）及熱帶雨林/砍伐大題（合計18–33分）。地圖技能幾乎滲透於所有 Section B 題目。
+      </div>
+    </section>
+
+    <!-- ===== Section 2: Scope Summary ===== -->
+    <section id="sec-scope">
+      <h2>2. Scope Summary 考試範圍總覽</h2>
+      <h3>First Term Coverage 上學期範圍（約佔 30–40%）</h3>
+      <table>
+        <thead><tr><th>Source</th><th>Pages / Items</th></tr></thead>
+        <tbody>
+          <tr><td>Tourism Textbook</td><td>Unit 3: P.28–29, 31, 44–47; Unit 4: P.54–55</td></tr>
+          <tr><td>Worksheets</td><td>Rocks in Hong Kong, Part 7 Tourism-HKSAR Passport</td></tr>
+        </tbody>
+      </table>
+      <p><strong>Core Topics:</strong> Natural &amp; cultural attractions in HK 香港自然與文化景點 · HK UNESCO Global Geopark: regions, geosites, protection areas 香港世界地質公園：分區、地質景點、保護區 · Sustainable tourism &amp; ecotourism 可持續旅遊與生態旅遊 · Three rock types: igneous (intrusive/extrusive), sedimentary, metamorphic 三大岩類：火成岩（侵入/噴出）、沉積岩、變質岩 · Rock formation processes, characteristics &amp; uses 岩石形成過程、特徵與用途 · Map-reading skills: scale, distance, direction, bearing, area 地圖閱讀技能 · HKSAR Passport: eligibility, visa-free access, Basic Law Articles 154 &amp; 22, national security fields 香港特區護照：申請資格、免簽、基本法154及22條、國家安全領域</p>
+
+      <h3>Second Term Coverage 下學期範圍（約佔 60–70%）</h3>
+      <table>
+        <thead><tr><th>Source</th><th>Pages</th></tr></thead>
+        <tbody>
+          <tr><td>Saving Our Rainforests</td><td>P.4–64 (nearly entire book)</td></tr>
+        </tbody>
+      </table>
+      <p><strong>Core Topics:</strong> Distribution &amp; location of tropical rainforests 熱帶雨林分布與位置 · Climatic characteristics: temperature, rainfall, convection rain 氣候特徵：氣溫、降雨、對流雨 · Five-layered vegetation structure &amp; plant adaptations 五層植被結構與植物適應性 · Biodiversity &amp; wildlife 生物多樣性與野生動物 · Roles of rainforests in regulating global climate 雨林調節全球氣候的角色 · Resources provided by rainforests 雨林提供的資源 · Human activities: deforestation, farming, resource extraction, development projects 人類活動 · Causes &amp; impacts of deforestation (environmental &amp; socio-economic) 砍伐原因與影響 · Conservation measures: governments, private corporations, individuals 保護措施</p>
+    </section>
+
+    <!-- ===== Section 3.1: Rocks & Landforms ===== -->
+    <section id="sec-rocks">
+      <h2>3.1 Theme 1: Rocks &amp; Landforms in Hong Kong 香港岩石與地貌</h2>
+
+      <h3>Three Rock Types — Comparison Table 三大岩類對比表</h3>
+      <table>
+        <thead>
+          <tr><th>Feature</th><th>Igneous — Extrusive (Volcanic) 噴出火成岩</th><th>Igneous — Intrusive 侵入火成岩</th><th>Sedimentary 沉積岩</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Formation</strong></td><td>Volcanic eruption → lava &amp; ash cool <strong>above</strong> ground surface 火山爆發，熔岩與火山灰於地表冷卻</td><td>Magma enters cracks <strong>below</strong> ground → slow cooling 岩漿進入地下裂隙緩慢冷卻</td><td>Weathering → erosion → transport → deposition → compaction → cementation 風化侵蝕搬運沉積壓實膠結</td></tr>
+          <tr><td><strong>Crystal size</strong></td><td>Fine / small crystals (fast cooling) 細小晶體（快速冷卻）</td><td>Coarse / large crystals (slow cooling) 粗大晶體（緩慢冷卻）</td><td>No crystals; contains sediments / fossils 無晶體，含沉積物或化石</td></tr>
+          <tr><td><strong>Structure</strong></td><td>Absence of layers; hexagonal columnar jointing (e.g. volcanic tuff) 無層理；六角形柱狀節理</td><td>Absence of layers 無層理</td><td>Layered / stratified 層理結構</td></tr>
+          <tr><td><strong>Examples in HK</strong></td><td>Volcanic tuff, basalt — <strong>Sai Kung / High Island</strong> 火山凝灰岩、玄武岩 — 西貢/萬宜水庫</td><td>Granite — common in HK 花崗岩 — 香港常見</td><td>Sandstone, mudstone, shale — <strong>Northeast NT / Ping Chau / Port Island</strong> 砂岩、泥岩、頁岩 — 新界東北/平洲/赤洲</td></tr>
+          <tr><td><strong>Resistance</strong></td><td>More resistant to weathering 較抗風化</td><td>Highly resistant 高度抗風化</td><td>Less resistant 較易風化</td></tr>
+          <tr><td><strong>Landforms</strong></td><td>High hills, hexagonal columns 高山、六角柱</td><td>High hills 高山</td><td>Low hills, coastal landforms 矮山、海岸地貌</td></tr>
+        </tbody>
+      </table>
+      <div class="tip">
+        <strong>Marking Scheme Tip (2324/2425):</strong> When asked to "contrast rocks at two locations", cover: rock type, crystal size/structure, place of formation, formation process, examples, resistance, resultant landform, sketch with label. Cover as many as possible.<br>
+        對比兩地岩石時，評分標準涵蓋：岩石類型、晶體大小/結構、形成位置、形成過程、例子、抗風化程度、形成地貌、附標註草圖。盡量覆蓋越多項越好。
+      </div>
+
+      <h3>HK UNESCO Global Geopark 香港世界地質公園</h3>
+      <table>
+        <thead><tr><th>Region</th><th>Area</th><th>Key Geosites</th><th>Rock Type</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Sai Kung (Volcanic)</strong> 西貢（火山岩園區）</td><td>High Island, Sharp Island, Ninepin Group 萬宜水庫、橋咀洲、糧船灣</td><td>Hexagonal columnar volcanic tuff, tombolo, sea arch, sea stack 六角形火山凝灰岩、連島沙洲、海蝕拱、海蝕柱</td><td>Volcanic / igneous 火山/火成岩</td></tr>
+          <tr><td><strong>Northeast NT (Sedimentary)</strong> 新界東北（沉積岩園區）</td><td>Tung Ping Chau, Port Island, Double Haven 東平洲、赤洲、印洲塘</td><td>Layered sedimentary rocks, fossils, fold structures, wave-cut platform 層理沉積岩、化石、褶曲構造、海蝕平台</td><td>Sedimentary 沉積岩</td></tr>
+        </tbody>
+      </table>
+
+      <h4>Protection Areas 保護區分級</h4>
+      <table>
+        <thead><tr><th>Aspect</th><th>Core Protection Area 核心保護區</th><th>Integrated / Special Area 綜合/特別保護區</th></tr></thead>
+        <tbody>
+          <tr><td>Protection level</td><td>Strictest</td><td>Moderate</td></tr>
+          <tr><td>Tourist capacity</td><td>Very low / limited</td><td>Quite high</td></tr>
+          <tr><td>Facilities</td><td>Minimal (information boards)</td><td>More (trails, pavilions, toilets)</td></tr>
+          <tr><td>Purpose</td><td>Conserve ecology &amp; geology</td><td>Conservation + education + recreation</td></tr>
+        </tbody>
+      </table>
+
+      <p><strong>Sustainable Tourism Measures in Geopark 地質公園可持續旅遊措施：</strong> Small group tours (within carrying capacity) 小團導賞（控制在承載力內）· Tour guide services to educate visitors 導賞服務教育遊客 · Set up core areas / special areas / marine parks 設立核心區、特別區、海岸公園 · Laws to protect geosites 立法保護地質景點 · Involve local people in tourism development 讓當地居民參與旅遊發展</p>
+
+      <h3>Map Skills Checklist 地圖技能清單</h3>
+      <ul class="checklist" id="checklist-maps"></ul>
+      <div class="tip">
+        <strong>Marking Scheme Tip (2324 Q1f):</strong> Distance calculation must show <strong>3 steps</strong>: (1) measured length ±0.3 cm, (2) multiply by scale, (3) final answer with unit. Missing steps lose marks.<br>
+        距離計算必須展示三步：測量長度（容差±0.3cm）→ 乘以比例尺 → 最終答案連單位。缺步驟扣分。
+      </div>
+    </section>
+
+    <!-- ===== Section 3.2: Tropical Rainforests ===== -->
+    <section id="sec-rainforest">
+      <h2>3.2 Theme 2: Tropical Rainforests 熱帶雨林</h2>
+
+      <h3>Distribution &amp; Location 分布與位置</h3>
+      <table>
+        <thead><tr><th>Element</th><th>Details</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Latitudes</strong></td><td>Mainly between 10°N and 10°S; extend to 23.5°N and 23.5°S where climatic conditions are favourable 主要位於南北緯10°之間；氣候條件允許時可延伸至回歸線</td></tr>
+          <tr><td><strong>Three main regions</strong></td><td>1. <strong>Amazon Basin</strong> (South America) — largest, ~50–73% of world total 亞馬遜盆地（南美洲）— 最大<br>2. <strong>Congo Basin</strong> (Africa) 剛果盆地（非洲）<br>3. <strong>Southeast Asia</strong> (Indonesia, Malaysia, etc.) 東南亞</td></tr>
+          <tr><td><strong>Why near Equator?</strong></td><td>Low latitudes → high angle of sun → large amount of solar radiation → hot &amp; wet all year 低緯度太陽高度角大→太陽輻射強→終年高溫多雨</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Climatic Characteristics 氣候特徵</h3>
+      <table>
+        <thead><tr><th>Element</th><th>Characteristic</th><th>Explanation</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Annual rainfall</strong></td><td>&gt; 2,000 mm; rains almost every day, usually in the <strong>afternoon</strong> 年降水量>2000毫米；幾乎每日有雨，多在下午</td><td>Convection rain: intense heating → air rises → cools → condenses → rainfall 對流雨</td></tr>
+          <tr><td><strong>Annual mean temperature</strong></td><td>Above <strong>26°C</strong> 年均溫高於26°C</td><td>High solar radiation throughout the year 全年太陽輻射強</td></tr>
+          <tr><td><strong>Annual range of temperature</strong></td><td>Small, only <strong>2–4°C</strong> 年溫差小</td><td>No winter season; consistently high insolation 無冬季；日照持續強烈</td></tr>
+          <tr><td><strong>Relative humidity</strong></td><td>High (above 90%) 相對濕度高</td><td>Abundant rainfall + high temperature → much evapotranspiration 豐沛降雨+高溫→大量蒸散</td></tr>
+        </tbody>
+      </table>
+      <div class="tip">
+        <strong>Past Paper Trap 歷年陷阱題：</strong> HK has <strong>no tropical rainforest</strong> because it is located further north (beyond 10°N), affected by the <strong>monsoon system</strong> → distinct wet &amp; dry seasons, lower temperature &amp; rainfall.<br>
+        香港無熱帶雨林，因緯度較高（北回歸線以北），受季風影響，有明顯乾濕季，氣溫與雨量不足。
+      </div>
+      <div class="tip">
+        <strong>Marking Scheme Tip (2324 Q2d / 2425 Q2c):</strong> For "describe &amp; explain temperature", any 4 of: (1) high temp (>26°C), (2) low latitudes, (3) large solar radiation, (4) high angle of sun, (5) concentrated insolation, (6) no winter = full marks.
+      </div>
+
+      <h3>Five-Layered Vegetation Structure 五層植被結構</h3>
+      <table>
+        <thead><tr><th>Layer</th><th>Name</th><th>Height</th><th>Characteristics</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td><strong>Emergent layer</strong> 露生層</td><td>&gt; 50 m</td><td>Tallest trees rise above canopy; straight thick trunks; buttress roots; compete for sunlight 最高大樹突出冠層之上；筆直粗壯樹幹；板根支撐</td></tr>
+          <tr><td>2</td><td><strong>Canopy layer</strong> 冠層</td><td>20–35 m</td><td>Dense, continuous cover of broad leaves; blocks most sunlight 茂密連續的闊葉覆蓋；遮擋大部分陽光</td></tr>
+          <tr><td>3</td><td><strong>Understorey</strong> 幼樹層</td><td>—</td><td>Young trees waiting to reach canopy 等待長至高層的幼樹</td></tr>
+          <tr><td>4</td><td><strong>Shrub layer</strong> 灌木層</td><td>—</td><td>Shrubs, small trees 灌木、小樹</td></tr>
+          <tr><td>5</td><td><strong>Undergrowth &amp; ground layer</strong> 底層</td><td>—</td><td>Dark &amp; wet; sparse vegetation; ferns, herbs, mosses, saprophytes, rafflesia 陰暗潮濕；植被稀疏；蕨類、草本植物、苔蘚、腐生植物、萊佛士花</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Plant Adaptations 植物適應性</h3>
+      <table>
+        <thead><tr><th>Adaptation</th><th>Function</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Buttress roots</strong> 板根</td><td>Support tall trees in shallow soil 支撐高大樹木</td></tr>
+          <tr><td><strong>Broad leaves</strong> 闊葉</td><td>Maximize sunlight interception for photosynthesis 最大化截獲陽光進行光合作用</td></tr>
+          <tr><td><strong>Drip-tips</strong> 滴水葉尖</td><td>Drain excess water quickly 快速排走多餘雨水</td></tr>
+          <tr><td><strong>Waxy leaf surfaces</strong> 蠟質葉面</td><td>Reduce evapotranspiration 減少蒸散</td></tr>
+          <tr><td><strong>Shallow roots</strong> 淺根</td><td>Absorb nutrients before leaching 在養分流失前吸收</td></tr>
+          <tr><td><strong>Smooth, thin, straight trunks</strong> 光滑筆直樹幹</td><td>Grow tall rapidly to reach sunlight 快速長高以獲取陽光</td></tr>
+          <tr><td><strong>Evergreen</strong> 常綠</td><td>No marked dry/cool season → leaves shed &amp; regrow continuously 無明顯乾旱或寒冷季節，全年持續落葉與生長</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Special Plant Types 特殊植物類型</h3>
+      <table>
+        <thead><tr><th>Type</th><th>Definition</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Epiphytes</strong> 附生植物</td><td>Grow on other plants for physical support only; NOT parasites 僅依附其他植物生長，非寄生</td><td>Orchids, ferns 蘭花、蕨類</td></tr>
+          <tr><td><strong>Parasites</strong> 寄生植物</td><td>Obtain nutrients from host plant 從寄主植物獲取養分</td><td>Rafflesia 萊佛士花</td></tr>
+          <tr><td><strong>Climbers</strong> 攀緣植物</td><td>Climb up trees to reach sunlight 攀附樹木向上生長以獲取陽光</td><td>Lianas 藤蔓</td></tr>
+          <tr><td><strong>Saprophytes</strong> 腐生植物</td><td>Feed on dead organic matter 以死亡有機物為食</td><td>Mushrooms, fungi 蘑菇、真菌</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Roles of Rainforests in Global Climate 雨林調節全球氣候的角色</h3>
+      <p><strong>Carbon sink</strong> 碳匯: Absorb CO₂ during photosynthesis · <strong>Oxygen source</strong> 氧氣來源: Release O₂ · <strong>Evapotranspiration</strong> 蒸散: Release water vapour → form clouds → rainfall · <strong>Regulate temperature</strong> 調節氣溫: Dense vegetation absorbs heat</p>
+
+      <h3>Resources from Rainforests 雨林資源</h3>
+      <table>
+        <thead><tr><th>Category</th><th>Examples</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Food</strong> 食物</td><td>Cacao/cocoa, banana, maize, oil palms, pineapple 可可、香蕉、玉米、油棕、菠蘿</td></tr>
+          <tr><td><strong>Medicine</strong> 藥物</td><td>Medicinal plants collected by native people 原住民採集的藥用植物</td></tr>
+          <tr><td><strong>Timber &amp; wood</strong> 木材</td><td>Hardwood for furniture &amp; construction 硬木用於家具與建築</td></tr>
+          <tr><td><strong>Natural rubber</strong> 天然橡膠</td><td>Rubber bands, tyres 橡皮筋、輪胎</td></tr>
+          <tr><td><strong>Biofuel</strong> 生物燃料</td><td>Oil palms, maize 油棕、玉米</td></tr>
+          <tr><td><strong>Genetic resources</strong> 基因資源</td><td>Biodiversity for research &amp; breeding 生物多樣性供研究與育種</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ===== Section 3.3: Deforestation ===== -->
+    <section id="sec-deforestation">
+      <h2>3.3 Theme 3: Deforestation 森林砍伐</h2>
+
+      <h3>Causes of Large-Scale Deforestation 大規模砍伐原因</h3>
+      <table>
+        <thead><tr><th>Level</th><th>Causes</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Global / Economic</strong> 全球/經濟層面</td><td>Rising standard of living → higher demand for meat, consumer goods, biofuel 生活水平提高→需求增加<br>Most rainforest countries are poor → governments exploit rainforests to repay <strong>foreign debts</strong> 雨林國家貧窮→開發雨林償還外債</td></tr>
+          <tr><td><strong>National</strong> 國家層面</td><td>Rapid <strong>population growth</strong> → demand for natural resources 人口快速增長→自然資源需求<br>Need for <strong>economic development</strong> → roads, dams, towns 經濟發展需要→修路、建壩、建城</td></tr>
+          <tr><td><strong>Local / Activity</strong> 地方/活動層面</td><td><strong>Shifting cultivation</strong> (slash-and-burn) 游耕（刀耕火種）· <strong>Cattle ranching / livestock rearing</strong> 畜牧養殖 · <strong>Plantations</strong> (oil palms, soybean, banana) 種植園 · <strong>Commercial logging</strong> 商業伐木 · <strong>Opencast mining</strong> 露天採礦 · <strong>Firewood collection</strong> 薪柴採集</td></tr>
+        </tbody>
+      </table>
+      <div class="tip">
+        <strong>Marking Scheme Tip (2324 Q3b):</strong> Underlying causes = 3 marks. Must mention: population growth + demand for resources, rising living standard + demand for meat/goods, poor countries + foreign debts.
+      </div>
+
+      <h3>Environmental Impacts 環境影響</h3>
+      <table>
+        <thead><tr><th>Impact</th><th>Explanation</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Loss of biodiversity / habitats</strong> 生物多樣性/棲息地喪失</td><td>Destruction of five-layered structure → wildlife extinction 破壞五層結構→野生動物滅絕</td></tr>
+          <tr><td><strong>Soil erosion &amp; flooding</strong> 土壤侵蝕與洪水</td><td>Tree roots no longer bind soil; topsoil washed away by rain 樹根不再固土；表土被雨水沖走</td></tr>
+          <tr><td><strong>Disruption of water cycle</strong> 水循環破壞</td><td>Less evapotranspiration → less cloud &amp; rainfall 蒸散減少→雲層與降雨減少</td></tr>
+          <tr><td><strong>Changes in local climate</strong> 局地氣候改變</td><td>Drier microclimate; larger diurnal temperature range; stronger winds 微氣候變乾；日溫差增大；風力增強</td></tr>
+          <tr><td><strong>Global warming</strong> 全球暖化</td><td>Loss of carbon sink → more CO₂ in atmosphere 碳匯喪失→大氣二氧化碳增加</td></tr>
+          <tr><td><strong>Loss of genetic resources / medicines</strong> 基因資源/藥物喪失</td><td>Potential cures lost before discovery 潛在藥物未發現即消失</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Socio-Economic Impacts on Native People 對原住民的社會經濟影響</h3>
+      <p>Loss of homes &amp; social ties 失去家園與社會聯繫 · Decrease in food &amp; water supply 食物與水源減少 · Spread of infectious diseases 傳染病蔓延 · Loss of unique culture / traditions 獨特文化/傳統喪失 · Environmental pollution (water, air) 環境污染 · More extreme weather events 更極端天氣事件</p>
+
+      <h3>Conservation Measures 保護措施</h3>
+      <table>
+        <thead><tr><th>Stakeholder</th><th>Measures</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Governments</strong> 政府</td><td>Land use planning / establish <strong>national parks &amp; nature reserves</strong> 設立國家公園與自然保護區 · <strong>Legislation</strong> to ban illegal logging 立法禁止非法砍伐 · <strong>Timber certification</strong> (e.g. FSC) 木材認證 · <strong>Afforestation / reforestation</strong> 植樹造林 · <strong>Carbon trading &amp; carbon taxation</strong> 碳交易與碳稅 · Population control 人口控制 · Improving governance &amp; fighting corruption 改善治理與打擊貪腐</td></tr>
+          <tr><td><strong>Private corporations</strong> 私營企業</td><td>Better logging methods: <strong>selective logging</strong> 選擇性砍伐 · <strong>Corporate social responsibility (CSR)</strong> 企業社會責任 · Develop <strong>agroforestry</strong> 農林複合經營 · Support products with <strong>eco-labels</strong> 支持環保標籤產品</td></tr>
+          <tr><td><strong>Individuals</strong> 個人</td><td><strong>Simple lifestyle:</strong> reduce, reuse, recycle 簡樸生活：減少使用、重複利用、循環再造 · <strong>Smart consumption:</strong> choose certified / eco-labelled products 明智消費 · <strong>Eat less meat</strong> 減少肉食（降低畜牧與飼料種植需求）</td></tr>
+        </tbody>
+      </table>
+      <p><strong>Constraints of eco-labels:</strong> Higher costs, little choice, lack of promotion / monitoring. 環保標籤限制：成本較高、選擇較少、推廣與監管不足。</p>
+      <div class="tip">
+        <strong>Marking Scheme Tip (2324 Q3h):</strong> Government measures = 2 marks each for any 2 valid suggestions. Must be government-level actions (not individual or corporate).
+      </div>
+
+      <h3>Deforestation Cause-Impact-Measure Chain 砍伐因果鏈</h3>
+      <table>
+        <tbody>
+          <tr><td style="text-align:center;background:#fef2f2;"><strong>Population growth + Rising living standard</strong></td></tr>
+          <tr><td style="text-align:center;font-size:1.2rem;">↓</td></tr>
+          <tr><td style="text-align:center;background:#fff7ed;">Higher demand for meat, timber, farmland, biofuel</td></tr>
+          <tr><td style="text-align:center;font-size:1.2rem;">↓</td></tr>
+          <tr><td style="text-align:center;background:#fffbeb;">Shifting cultivation / cattle ranching / logging / mining</td></tr>
+          <tr><td style="text-align:center;font-size:1.2rem;">↓</td></tr>
+          <tr><td style="text-align:center;background:#fef2f2;"><strong>Loss of forest cover</strong></td></tr>
+          <tr><td style="text-align:center;font-size:1.2rem;">↓</td></tr>
+          <tr><td style="text-align:center;background:#f0fdf4;">Env impacts: biodiversity loss, soil erosion, climate change<br>Socio-economic impacts: native people displaced, culture lost</td></tr>
+          <tr><td style="text-align:center;font-size:1.2rem;">↓</td></tr>
+          <tr><td style="text-align:center;background:#eff6ff;"><strong>Solutions:</strong> Govt (parks, laws, carbon tax) + Corp (selective logging, CSR) + Individual (reduce, reuse, recycle, less meat)</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ===== Section 3.4: Tourism & HKSAR Passport ===== -->
+    <section id="sec-tourism">
+      <h2>3.4 Theme 4: Tourism &amp; HKSAR Passport 旅遊與香港特區護照</h2>
+
+      <h3>Sustainable Tourism Objectives 可持續旅遊目標</h3>
+      <table>
+        <thead><tr><th>Dimension</th><th>Objectives</th><th>Examples in HK</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Economic</strong> 經濟</td><td>Provide jobs; help economic development; generate income 提供就業、協助經濟發展、創造收入</td><td>Tours, workshops in Geopark &amp; heritage trails 地質公園與文物徑的導賞與工作坊</td></tr>
+          <tr><td><strong>Environmental</strong> 環境</td><td>Cause little harm; conserve wildlife; raise awareness 減少傷害、保護野生動物、提高意識</td><td>Core areas, small group tours, educational facilities 核心區、小團導賞、教育設施</td></tr>
+          <tr><td><strong>Socio-cultural</strong> 社會文化</td><td>Conserve cultures &amp; historical values; promote cultural exchange; involve local people; ensure fair share of income 保護文化與歷史價值、促進文化交流、讓當地居民參與、確保公平收入分享</td><td>Local people as tour guides; community-based tourism 當地居民擔任導賞員、社區旅遊</td></tr>
+        </tbody>
+      </table>
+
+      <h3>HKSAR Passport 香港特區護照</h3>
+      <table>
+        <thead><tr><th>Item</th><th>Content</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Eligibility</strong> 申請資格</td><td>(1) Chinese citizen; (2) Permanent resident of HKSAR; (3) Holder of valid HK permanent identity card 中國公民、香港特區永久性居民、持有有效香港永久性居民身份證</td></tr>
+          <tr><td><strong>Chinese nationality</strong> 中國國籍</td><td>(a) Of Chinese descent born in HK or other parts of China; OR (b) Fulfils criteria in PRC Nationality Law 中國血統出生於香港或中國其他地區；或符合中華人民共和國國籍法規定</td></tr>
+          <tr><td><strong>Visa-free access</strong> 免簽</td><td>175 countries and territories grant visa-free access or visa-on-arrival 175個國家及地區給予免簽或落地簽</td></tr>
+          <tr><td><strong>Basic Law Art. 154</strong> 基本法154條</td><td>HKSAR Government independently manages immigration policy and visa controls; issues passports to permanent residents 特區政府獨立管理出入境政策及簽證管制；向永久性居民簽發護照</td></tr>
+          <tr><td><strong>Basic Law Art. 22</strong> 基本法22條</td><td>Mainland residents need approval for entry into HK 內地居民進入香港須辦理批准手續</td></tr>
+          <tr><td><strong>National Security fields</strong> 國家安全領域</td><td>Political, Military, Homeland, Economic, Financial, Cultural, Societal, Science &amp; Technology, Cyber, Food, Ecological, Resources, Nuclear, Outer Space, Deep Sea, Overseas Interests, Data, Intelligence 政治、軍事、國土、經濟、金融、文化、社會、科技、網絡、糧食、生態、資源、核、太空、深海、海外利益、數據、人工智能</td></tr>
+        </tbody>
+      </table>
+      <div class="tip">
+        <strong>Exam Trap 考試陷阱：</strong> If asked "Which visitors might threaten national security?" — the worksheet used "spy from the USA" as an example, threatening Political &amp; Economic security. Be prepared to link visitor types to specific security fields.
+      </div>
+      <p><strong>What Tourists Should DO 應做：</strong> Respect others &amp; local customs; help the local environment; travel "green"; use fewer plastic products; buy from local markets 尊重他人與當地風俗、保護環境、綠色旅遊、減少塑膠、本地市場消費<br>
+      <strong>What Tourists Should NOT DO 不應做：</strong> Touch or climb on rocks in Geopark; take away rock specimens; litter; join hunting tours; disturb wildlife 觸摸攀爬地質公園岩石、帶走標本、亂拋垃圾、參加狩獵團、騷擾野生動物</p>
+    </section>
+
+    <!-- ===== Section 4: Question Type Strategies ===== -->
+    <section id="sec-strategy">
+      <h2>4. Question Type Breakdown &amp; Answering Strategies 題型拆解與答題策略</h2>
+
+      <h3>Section A: MCQ (20 marks)</h3>
+      <p><strong>Strategy:</strong> Most questions are <strong>"Which of the following is/are correct?"</strong> with 3 statements → test all combinations carefully. 多數為「以下哪些正確？」含3個陳述→小心驗證所有組合。For "NOT" questions, eliminate obviously correct options first. 遇到「NOT」題型，先排除明顯正確的選項。</p>
+      <p><strong>Common traps 常見陷阱：</strong> Confuse <strong>carbon sink vs carbon source</strong> 碳匯與碳源 · <strong>epiphytes vs parasites</strong> 附生與寄生 · <strong>core vs integrated protection area</strong> 核心與綜合保護區 · <strong>igneous intrusive vs extrusive</strong> 侵入岩與噴出岩</p>
+
+      <h3>Section B: Structured Questions (66–68 marks)</h3>
+      <table>
+        <thead><tr><th>Sub-type</th><th>Marks</th><th>Strategy</th><th>Marking Scheme Pattern</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Identify / Name</strong> 辨識/命名</td><td>1–2</td><td>Use precise geographical terms 使用精確地理術語</td><td>Exact term required; spelling errors may be penalised</td></tr>
+          <tr><td><strong>Describe</strong> 描述</td><td>2–4</td><td>State the trend/pattern first, then support with data 先說趨勢/模式，再以數據支持</td><td>1 mark for overall trend + 1 mark for data support</td></tr>
+          <tr><td><strong>Explain</strong> 解釋</td><td>2–4</td><td>Use "Because… / This is due to…" structure. Link cause → process → effect 使用因果結構</td><td>1 mark per valid linked point (cause + process + effect)</td></tr>
+          <tr><td><strong>Compare / Contrast</strong> 比較</td><td>4–10</td><td>Use a table format. Compare point-by-point (rock type, crystal, structure, resistance, landform) 善用答題紙表格，逐點比對</td><td>1 mark per valid comparison point; sketches with labels = extra marks</td></tr>
+          <tr><td><strong>Calculate</strong> 計算</td><td>1–3</td><td>Always <strong>show steps</strong>: formula → substitution → answer with unit 必須展示步驟</td><td>Step marks awarded even if final answer is wrong</td></tr>
+          <tr><td><strong>Discuss / Suggest</strong> 討論/建議</td><td>2–4</td><td>Give <strong>two-sided</strong> answer where appropriate 適當時給雙面論點</td><td>1 mark per valid reason; must be well-explained</td></tr>
+          <tr><td><strong>Measure</strong> 測量</td><td>2–4</td><td>State tool (ruler), measurement (cm), scale, calculation, final answer with unit 說明工具、讀數、比例尺、計算</td><td>±0.3 cm tolerance for map measurements</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Section C: Short Essay (14 marks) — PEEL Formula</h3>
+      <table>
+        <thead><tr><th>Component</th><th>Marks</th><th>Requirement</th></tr></thead>
+        <tbody>
+          <tr><td>Introduction</td><td>1–2</td><td>Topic sentence + elaboration</td></tr>
+          <tr><td>Main Body Point 1</td><td>4</td><td>Explain formation / describe characteristics with details</td></tr>
+          <tr><td>Main Body Point 2</td><td>4</td><td>Explain formation / discuss issue with examples</td></tr>
+          <tr><td>Main Body Point 3</td><td>4</td><td>Discuss / evaluate with HK or global examples</td></tr>
+          <tr><td>Conclusion</td><td>1–2</td><td>Summary + recommendation / personal stance</td></tr>
+        </tbody>
+      </table>
+      <p><strong>PEEL Writing Formula:</strong> <strong>P</strong>oint: State one clear idea per paragraph 每段一個清晰觀點 · <strong>E</strong>xplanation: Describe the geographical process 描述地理過程 · <strong>E</strong>vidence: Give specific example or data 給出具體例子或數據 · <strong>L</strong>ink: Connect back to the essay question 回扣文章題目</p>
+    </section>
+
+    <!-- ===== Section 5: Patterns from Past Papers ===== -->
+    <section id="sec-patterns">
+      <h2>5. Patterns from Past Papers (2223 → 2425) 歷年試卷規律</h2>
+
+      <h3>Must-Appear Topics 每年必考主題</h3>
+      <div class="heatmap-grid">
+        <div class="header">Topic</div><div class="header">2223</div><div class="header">2324</div><div class="header">2425</div><div class="header">Frequency</div>
+        <div>HK Geopark / Rocks map question</div><div class="freq-cell high">Q1 (26m)</div><div class="freq-cell high">Q1 (15m)</div><div class="freq-cell high">Q1 (19m)</div><div class="freq-cell high">100%</div>
+        <div>Tropical rainforest distribution / climate</div><div class="freq-cell high">Q2a–d (5m)</div><div class="freq-cell high">Q2a–d (10m)</div><div class="freq-cell high">Q2 (15m)</div><div class="freq-cell high">100%</div>
+        <div>Deforestation data + impacts + measures</div><div class="freq-cell high">Q3 (21m)</div><div class="freq-cell high">Q3 (18m)</div><div class="freq-cell high">Q4 (19m)</div><div class="freq-cell high">100%</div>
+        <div>Vegetation structure / adaptations</div><div class="freq-cell high">Section C (8m)</div><div class="freq-cell high">Q2 (6m+)</div><div class="freq-cell high">Q3 (15m)</div><div class="freq-cell high">100%</div>
+        <div>Short Essay (rocks or climate+veg)</div><div class="freq-cell high">Climate+veg</div><div class="freq-cell high">Rocks+uses</div><div class="freq-cell high">Sedimentary+fossils</div><div class="freq-cell high">100%</div>
+      </div>
+
+      <h3>Trend Analysis 趨勢分析</h3>
+      <ul>
+        <li><strong>Map skills are getting more complex:</strong> 2425 asked for contrast tables of <strong>two pairs</strong> of locations, not just one. 地圖技能越來越複雜：2425要求對比兩對地點。</li>
+        <li><strong>Rainforest questions are becoming more detailed:</strong> From simple distribution marking (2223) to detailed five-layer structure + water cycle effects (2425). 雨林題目越來越細緻。</li>
+        <li><strong>Essay topics alternate between geology and rainforest:</strong> 2223 = climate+vegetation; 2324 = rocks+uses; 2425 = sedimentary+fossils. <strong>2526 may return to rainforest or mix both.</strong> 文章題在地質與雨林間交替：2526可能回歸雨林或兩者混合。</li>
+        <li><strong>Data-response questions now include percentage change calculations and trend descriptions every year.</strong> 數據題每年必考百分比變化計算與趨勢描述。</li>
+        <li><strong>HKSAR Passport / National Security</strong> content appeared in worksheet (Part 7 Tourism) — may appear as MCQ or short-answer in future exams. HKSAR護照/國家安全內容出現於工作紙，未來可能以選擇題或短答題形式出現。</li>
+      </ul>
+    </section>
+
+    <!-- ===== Section 6: Revision Checklist ===== -->
+    <section id="sec-checklist">
+      <h2>6. Revision Checklist 複習清單</h2>
+
+      <h3>Knowledge Mastery 知識掌握</h3>
+      <ul class="checklist" id="checklist-knowledge"></ul>
+
+      <h3>Skills Mastery 技能掌握</h3>
+      <ul class="checklist" id="checklist-skills"></ul>
+
+      <h3>Past Paper Practice 試卷練習</h3>
+      <ul class="checklist" id="checklist-practice"></ul>
+    </section>
+
+    <!-- ===== Appendix: Formulas & Must-Memorise ===== -->
+    <section id="sec-formulas">
+      <h2>Appendix A: Key Formulas 關鍵公式</h2>
+      <div class="formula-grid">
+        <div class="formula-card"><div class="name">Percentage Change 百分比變化</div><div class="expr">((New – Old) / Old) × 100%</div></div>
+        <div class="formula-card"><div class="name">Actual Distance 實際距離</div><div class="expr">Map Distance × Scale<br><small>100 cm = 1 m; 100,000 cm = 1 km</small></div></div>
+        <div class="formula-card"><div class="name">Actual Area 實際面積</div><div class="expr">No. of squares × Area of one square<br><small>Count complete + ½ incomplete</small></div></div>
+        <div class="formula-card"><div class="name">Vertical Exaggeration (V.E.) 垂直誇張</div><div class="expr">Vertical Scale / Horizontal Scale</div></div>
+        <div class="formula-card"><div class="name">Time Zone 時區</div><div class="expr">Longitude diff ÷ 15° = hour diff<br><small>East = ahead, West = behind</small></div></div>
+      </div>
+
+      <h2>Appendix B: Must-Memorise Quick Facts 必背速記</h2>
+
+      <div class="collapsible open">
+        <div class="collapsible-summary">Protection Area Comparison 保護區對比</div>
+        <div class="collapsible-content">
+          <table>
+            <thead><tr><th>Aspect</th><th>Core Protection Area</th><th>Integrated / Special Area</th></tr></thead>
+            <tbody>
+              <tr><td>Protection level</td><td>Strictest</td><td>Moderate</td></tr>
+              <tr><td>Tourist capacity</td><td>Very low / limited</td><td>Quite high</td></tr>
+              <tr><td>Facilities</td><td>Minimal (information boards)</td><td>More (trails, pavilions, toilets)</td></tr>
+              <tr><td>Purpose</td><td>Conserve ecology &amp; geology</td><td>Conservation + education + recreation</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="collapsible">
+        <div class="collapsible-summary">HKSAR Passport Quick Facts 特區護照速記</div>
+        <div class="collapsible-content">
+          <table>
+            <tbody>
+              <tr><td><strong>Eligibility</strong></td><td>Chinese citizen + HKSAR permanent resident + valid HK permanent ID card</td></tr>
+              <tr><td><strong>Visa-free</strong></td><td>175 countries/territories</td></tr>
+              <tr><td><strong>Basic Law Art. 154</strong></td><td>Independent immigration policy; issue passports to permanent residents</td></tr>
+              <tr><td><strong>Basic Law Art. 22</strong></td><td>Mainland residents need approval for entry</td></tr>
+              <tr><td><strong>National Security Fields</strong></td><td>Political, Military, Homeland, Economic, Financial, Cultural, Societal, S&amp;T, Cyber, Food, Ecological, Resources, Nuclear, Outer Space, Deep Sea, Overseas Interests, Data, Intelligence</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <footer style="text-align:center;padding:40px 0;color:var(--text-secondary);font-size:0.82rem;border-top:1px solid var(--border);margin-top:40px;">
+      <p>End of Revision Overview · Last updated: 2026-06-13</p>
+      <p>Compiled from: Geography Scope 2025-26 + Past Papers 2223/2324/2425 (with full Marking Schemes) + Textbook OCR + Worksheets OCR</p>
+    </footer>
+  </main>
+</div>
+
+<!-- ===== JavaScript ===== -->
+<script>
+// Countdown
+(function() {
+  const examDate = new Date('2026-06-17T08:30:00+08:00');
+  const el = document.getElementById('countdown');
+  function update() {
+    const now = new Date();
+    const diff = examDate - now;
+    if (diff <= 0) { el.textContent = '考試中！'; return; }
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    el.textContent = days + ' 天 ' + hours + ' 小時 ' + mins + ' 分鐘';
+  }
+  update();
+  setInterval(update, 60000);
+})();
+
+// Theme switch
+function switchTheme(theme) {
+  document.body.setAttribute('data-theme', theme);
+  document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector(`.theme-btn[data-theme="${theme}"]`).classList.add('active');
+  localStorage.setItem('geo-theme', theme);
+}
+(function() {
+  const saved = localStorage.getItem('geo-theme');
+  if (saved === 'yourong') switchTheme('yourong');
+})();
+
+// Sidebar (mobile)
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+}
+document.addEventListener('click', function(e) {
+  const sidebar = document.getElementById('sidebar');
+  const toggle = document.getElementById('sidebarToggle');
+  if (sidebar.classList.contains('open') && !sidebar.contains(e.target) && e.target !== toggle) {
+    sidebar.classList.remove('open');
+  }
+});
+
+// Collapsible sections
+document.querySelectorAll('.collapsible-summary').forEach(summary => {
+  summary.addEventListener('click', function() {
+    this.parentElement.classList.toggle('open');
+  });
+});
+
+// Checklist items with localStorage
+const checklistData = {
+  'checklist-maps': [
+    'Scale conversion: RF ↔ linear scale ↔ statement scale 比例尺換算',
+    'Straight-line distance: ruler measurement × scale 直線距離測量',
+    'Curved-line distance: strip-of-paper method 曲線距離（紙條法）',
+    'Area: count complete & incomplete squares (½ rule) 面積（數方格法）',
+    'Direction: compass direction (N, S, E, W, NE, SE, SW, NW) 羅盤方向',
+    'Whole circle bearing: measured clockwise from N (0°–360°) 全圓方位角',
+    'Reduced bearing: angle from N or S toward E or W (e.g. N30°E) 象限方位角',
+    'Climatic graph: read temperature curve & rainfall bars 氣候圖判讀'
+  ],
+  'checklist-knowledge': [
+    'Memorise the <strong>five-layered structure</strong> names, heights, and characteristics 背熟五層植被結構',
+    'Memorise <strong>three rock types</strong> formation, crystal size, structure, examples in HK, resistance 背熟三大岩類',
+    'Memorise <strong>three main rainforest regions</strong> + approximate latitudes 背熟三大雨林區域與緯度',
+    'Memorise <strong>climatic data</strong> of rainforests (rainfall >2000mm, temp >26°C, range 2–4°C) 背熟雨林氣候數據',
+    'Know <strong>causes → impacts → measures</strong> chain for deforestation 掌握砍伐因果鏈',
+    'Know <strong>sustainable tourism</strong> objectives + examples in HK Geopark 掌握可持續旅遊目標與香港例子',
+    'Know <strong>HK Geopark</strong> two regions, rock types, geosites, protection area differences 掌握地質公園兩大園區',
+    'Know <strong>HKSAR Passport eligibility</strong> + Basic Law Art. 154 & 22 + national security fields 掌握特區護照相關知識'
+  ],
+  'checklist-skills': [
+    'Can measure straight-line & curved-line distance on a map 能量測直線與曲線距離',
+    'Can calculate actual area using square-counting method 能以數方格法計算實際面積',
+    'Can find whole circle bearing & reduced bearing 能找出全圓方位角與象限方位角',
+    'Can convert between RF, linear scale & statement scale 能換算三種比例尺',
+    'Can read & interpret climatic graphs 能閱讀與詮釋氣候圖',
+    'Can calculate percentage change 能計算百分比變化',
+    'Can describe data trends (increase/decrease, rate, overall pattern) 能描述數據趨勢',
+    'Can draw & label bar graphs / line graphs accurately 能準確繪製與標註圖表'
+  ],
+  'checklist-practice': [
+    'Completed 2223 Paper under timed conditions + self-marked with marking scheme 限時完成2223試卷',
+    'Completed 2324 Paper under timed conditions + self-marked with marking scheme 限時完成2324試卷',
+    'Completed 2425 Paper under timed conditions + self-marked with marking scheme 限時完成2425試卷',
+    'Identified & corrected weak topics 識別並修正薄弱主題'
+  ]
+};
+
+Object.keys(checklistData).forEach(listId => {
+  const ul = document.getElementById(listId);
+  if (!ul) return;
+  checklistData[listId].forEach((text, i) => {
+    const li = document.createElement('li');
+    const key = listId + '-' + i;
+    li.innerHTML = '<span class="check-box"></span><span class="item-text">' + text + '</span>';
+    if (localStorage.getItem(key) === 'true') li.classList.add('checked');
+    li.addEventListener('click', function() {
+      this.classList.toggle('checked');
+      localStorage.setItem(key, this.classList.contains('checked'));
+    });
+    ul.appendChild(li);
+  });
+});
+
+// Scroll spy for sidebar
+(function() {
+  const sections = document.querySelectorAll('section[id]');
+  const links = document.querySelectorAll('.sidebar a');
+  window.addEventListener('scroll', function() {
+    let current = '';
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 120) current = s.id; });
+    links.forEach(a => {
+      a.classList.remove('active');
+      if (a.getAttribute('href') === '#' + current) a.classList.add('active');
+    });
+  });
+})();
+</script>
+
+</body>
+</html>

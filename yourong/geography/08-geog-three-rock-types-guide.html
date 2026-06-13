@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Three Rock Types — Formation, Comparison &amp; Exam Guide | S3 Geography</title>
+<style>
+/* ===== Variables ===== */
+:root {
+  --primary: #1e40af;
+  --primary-light: #dbeafe;
+  --primary-mid: #3b82f6;
+  --extrusive: #ef4444;
+  --extrusive-light: #fef2f2;
+  --intrusive: #f59e0b;
+  --intrusive-light: #fffbeb;
+  --sedimentary: #22c55e;
+  --sedimentary-light: #f0fdf4;
+  --metamorphic: #a855f7;
+  --metamorphic-light: #faf5ff;
+  --bg: #f8fafc;
+  --surface: #ffffff;
+  --text: #1e293b;
+  --text-secondary: #64748b;
+  --border: #e2e8f0;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+  --radius: 10px;
+}
+
+/* ===== Reset & Base ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+  background: var(--bg); color: var(--text); line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== Header ===== */
+.page-header {
+  background: linear-gradient(135deg, #1e3a5f 0%, var(--primary) 100%);
+  color: #fff; text-align: center; padding: 32px 24px;
+}
+.page-header h1 { font-size: 1.55rem; font-weight: 800; margin-bottom: 6px; }
+.page-header .sub { font-size: 0.85rem; opacity: 0.85; }
+
+/* ===== Nav Bar ===== */
+.nav-bar {
+  display: flex; justify-content: center; gap: 4px; flex-wrap: wrap;
+  padding: 10px 16px; background: rgba(0,0,0,0.06);
+}
+.nav-bar a {
+  color: rgba(255,255,255,0.8); text-decoration: none; font-size: 0.75rem;
+  padding: 4px 10px; border-radius: 12px; transition: all 0.15s;
+}
+.nav-bar a:hover { background: rgba(255,255,255,0.2); color: #fff; }
+
+/* ===== Container ===== */
+.container { max-width: 860px; margin: 0 auto; padding: 28px 20px 60px; }
+
+/* ===== Sections ===== */
+.section { margin-bottom: 40px; }
+.section h2 {
+  font-size: 1.2rem; font-weight: 700; color: var(--primary);
+  border-bottom: 2px solid var(--primary-light); padding-bottom: 8px; margin-bottom: 18px;
+}
+.section h3 { font-size: 1rem; font-weight: 700; margin: 22px 0 8px; }
+.section h4 { font-size: 0.9rem; font-weight: 600; color: var(--primary); margin: 14px 0 6px; }
+
+/* ===== Logic Chain ===== */
+.chain-row {
+  display: flex; flex-wrap: wrap; gap: 0; align-items: stretch;
+  margin: 18px 0; border-radius: var(--radius); overflow: hidden;
+  box-shadow: var(--shadow);
+}
+.chain-step {
+  flex: 1; min-width: 100px; padding: 12px 10px; text-align: center;
+  background: var(--surface); border-right: 1px solid var(--border);
+  font-size: 0.75rem; font-weight: 600; position: relative;
+}
+.chain-step:last-child { border-right: none; }
+.chain-step .step-num {
+  display: inline-block; width: 22px; height: 22px; border-radius: 50%;
+  background: var(--primary); color: #fff; font-size: 0.7rem; font-weight: 700;
+  line-height: 22px; margin-bottom: 4px;
+}
+.chain-step .step-en { color: var(--primary-dark); margin-bottom: 2px; }
+.chain-step .step-zh { color: var(--text-secondary); font-size: 0.7rem; font-weight: 400; }
+
+/* ===== Formation Flow ===== */
+.flow-container {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 20px; margin: 14px 0;
+  box-shadow: var(--shadow);
+}
+.flow-title {
+  font-weight: 700; font-size: 0.9rem; margin-bottom: 14px;
+  display: flex; align-items: center; gap: 8px;
+}
+.flow-title .badge {
+  font-size: 0.65rem; padding: 3px 8px; border-radius: 10px;
+  color: #fff; font-weight: 600;
+}
+.badge-extrusive { background: var(--extrusive); }
+.badge-intrusive { background: var(--intrusive); }
+.badge-sedimentary { background: var(--sedimentary); color: #000; }
+.badge-metamorphic { background: var(--metamorphic); }
+
+.flow-steps { display: flex; flex-direction: column; gap: 0; }
+.flow-step {
+  display: flex; align-items: flex-start; gap: 10px; position: relative;
+  padding: 0 0 0 36px;
+}
+.flow-step::before {
+  content: ""; position: absolute; left: 16px; top: 0; bottom: 0;
+  width: 2px; background: var(--border);
+}
+.flow-step:last-child::before { display: none; }
+.flow-step .step-dot {
+  width: 32px; height: 32px; min-width: 32px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 0.8rem; color: #fff;
+  position: relative; z-index: 1;
+}
+.dot-extrusive { background: var(--extrusive); }
+.dot-intrusive { background: var(--intrusive); }
+.dot-sedimentary { background: var(--sedimentary); }
+.dot-metamorphic { background: var(--metamorphic); }
+.flow-step .step-body { padding: 6px 0 14px; flex: 1; }
+.flow-step .step-en { font-weight: 500; }
+.flow-step .step-zh { font-size: 0.82rem; color: var(--text-secondary); }
+
+/* ===== Feature Cards ===== */
+.feature-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px; margin: 14px 0;
+}
+.feature-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 12px 14px; box-shadow: var(--shadow);
+}
+.feature-card .ft-label { font-size: 0.65rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 2px; }
+.feature-card .ft-en { font-weight: 600; font-size: 0.85rem; }
+.feature-card .ft-zh { font-size: 0.75rem; color: var(--text-secondary); }
+
+/* ===== Tables ===== */
+.content-table {
+  width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 0.8rem;
+  border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow);
+}
+.content-table thead th {
+  background: var(--primary); color: #fff; padding: 9px 10px;
+  text-align: left; font-weight: 600; font-size: 0.72rem;
+}
+.content-table tbody td {
+  padding: 9px 10px; border-bottom: 1px solid var(--border); background: var(--surface);
+  vertical-align: top;
+}
+.content-table tbody tr:nth-child(even) td { background: #f8fafc; }
+.content-table tbody tr:hover td { background: var(--primary-light); }
+
+/* ===== Callout ===== */
+.callout {
+  padding: 12px 16px; margin: 14px 0; border-radius: var(--radius);
+  border-left: 4px solid; font-size: 0.85rem;
+}
+.callout.info { background: #eff6ff; border-color: var(--primary-mid); }
+.callout.warn { background: var(--extrusive-light); border-color: var(--extrusive); }
+.callout.tip { background: #fefce8; border-color: #eab308; }
+.callout strong { color: inherit; }
+
+/* ===== Self-Test ===== */
+.quiz-item {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); overflow: hidden; margin: 10px 0; box-shadow: var(--shadow);
+}
+.quiz-q {
+  padding: 14px 16px; cursor: pointer; font-weight: 600; font-size: 0.88rem;
+  display: flex; justify-content: space-between; align-items: center;
+  user-select: none; transition: background 0.15s;
+}
+.quiz-q:hover { background: var(--primary-light); }
+.quiz-q::after { content: "▸"; font-size: 0.8rem; color: var(--text-secondary); transition: transform 0.2s; }
+.quiz-item.open .quiz-q::after { transform: rotate(90deg); }
+.quiz-answer { display: none; padding: 14px 18px; border-top: 1px solid var(--border); font-size: 0.85rem; background: #f8fafc; }
+.quiz-item.open .quiz-answer { display: block; }
+.quiz-answer .answer-label { font-weight: 700; color: #166534; font-size: 0.72rem; margin-bottom: 4px; text-transform: uppercase; }
+
+/* ===== Trap Cards ===== */
+.trap-grid { display: grid; gap: 10px; margin: 14px 0; }
+.trap-card {
+  display: flex; gap: 10px; background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 14px; box-shadow: var(--shadow); align-items: flex-start;
+}
+.trap-icon { font-size: 1.4rem; min-width: 28px; text-align: center; }
+.trap-body { flex: 1; }
+.trap-body .trap-title { font-weight: 700; font-size: 0.85rem; margin-bottom: 4px; color: var(--extrusive); }
+.trap-body .trap-wrong { font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 2px; }
+.trap-body .trap-correct { font-size: 0.82rem; color: #166534; }
+
+/* ===== Comparison Summary Box ===== */
+.compare-box {
+  background: linear-gradient(135deg, #eff6ff 0%, #faf5ff 100%);
+  border: 2px solid var(--primary-light); border-radius: var(--radius);
+  padding: 18px; margin: 16px 0;
+}
+.compare-box h4 { margin-top: 0; color: var(--primary-dark); }
+
+/* ===== Cool Speed Story ===== */
+.cool-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+.cool-card {
+  padding: 16px; border-radius: var(--radius); text-align: center;
+}
+.cool-card.fast { background: var(--extrusive-light); border: 2px solid var(--extrusive); }
+.cool-card.slow { background: var(--intrusive-light); border: 2px solid var(--intrusive); }
+.cool-card .cool-icon { font-size: 2rem; margin-bottom: 6px; }
+.cool-card .cool-name { font-weight: 700; font-size: 0.9rem; margin-bottom: 4px; }
+.cool-card .cool-desc { font-size: 0.8rem; color: var(--text-secondary); }
+
+/* ===== Print ===== */
+@media print {
+  .page-header, .nav-bar { background: #f8fafc !important; color: #000 !important; }
+  .page-header h1 { color: #000 !important; }
+  .nav-bar, .quiz-q::after { display: none !important; }
+  .quiz-answer { display: block !important; }
+  .flow-step::before { background: #ccc; }
+  .container { padding: 0; }
+  body { font-size: 11px; }
+}
+
+/* ===== Mobile ===== */
+@media (max-width: 640px) {
+  .page-header h1 { font-size: 1.2rem; }
+  .container { padding: 16px 12px; }
+  .chain-row { flex-direction: column; }
+  .chain-step { flex: none; padding: 10px; text-align: left; display: flex; align-items: center; gap: 10px; }
+  .cool-cards { grid-template-columns: 1fr; }
+  .feature-grid { grid-template-columns: 1fr 1fr; }
+  .flow-steps { padding-left: 0; }
+  .flow-step { padding-left: 28px; }
+}
+</style>
+</head>
+<body>
+
+<header class="page-header">
+  <h1>Three Rock Types — Formation, Comparison &amp; Exam Guide</h1>
+  <p class="sub">S3 Geography · 2nd Term Examination · 17 June 2026</p>
+</header>
+<nav class="nav-bar">
+  <a href="#logic">Logic Chain</a>
+  <a href="#extrusive">Extrusive</a>
+  <a href="#intrusive">Intrusive</a>
+  <a href="#sedimentary">Sedimentary</a>
+  <a href="#metamorphic">Metamorphic</a>
+  <a href="#compare">Comparison</a>
+  <a href="#marking">Marking Scheme</a>
+  <a href="#quiz">Self-Test</a>
+  <a href="#traps">Traps</a>
+</nav>
+
+<div class="container">
+
+<!-- ===== The Big Picture ===== -->
+<section class="section" id="logic">
+  <h2>The Big Picture: One Logic Chain</h2>
+  <p style="margin-bottom:14px;">Every question about rocks follows this chain. <strong>Memorise the chain, not isolated facts.</strong> 每個關於岩石的問題都遵循這條邏輯鏈。記住因果關係，而非孤立知識點。</p>
+
+  <div class="chain-row">
+    <div class="chain-step">
+      <div class="step-num">1</div>
+      <div class="step-en">Formation<br>Location</div>
+      <div class="step-zh">形成位置</div>
+    </div>
+    <div class="chain-step">
+      <div class="step-num">2</div>
+      <div class="step-en">Temperature<br>&amp; Pressure</div>
+      <div class="step-zh">溫度與壓力</div>
+    </div>
+    <div class="chain-step">
+      <div class="step-num">3</div>
+      <div class="step-en">Crystal Size<br>&amp; Structure</div>
+      <div class="step-zh">晶體大小與結構</div>
+    </div>
+    <div class="chain-step">
+      <div class="step-num">4</div>
+      <div class="step-en">Resistance to<br>Weathering</div>
+      <div class="step-zh">抗風化程度</div>
+    </div>
+    <div class="chain-step">
+      <div class="step-num">5</div>
+      <div class="step-en">Resultant<br>Landform</div>
+      <div class="step-zh">形成地貌</div>
+    </div>
+  </div>
+
+  <table class="content-table">
+    <thead><tr><th>Step</th><th>What to ask yourself</th></tr></thead>
+    <tbody>
+      <tr><td>1. Where did it form?</td><td>Above ground (surface) or below ground (underground)? 地表還是地下？</td></tr>
+      <tr><td>2. How fast did it cool / change?</td><td>Fast cooling = small crystals. Slow cooling = large crystals. High pressure = layered structure. 快冷=細晶體，慢冷=粗晶體，高壓=層理結構</td></tr>
+      <tr><td>3. What does it look like?</td><td>Crystals? Layers? Fossils? Joints? 有晶體嗎？有層理嗎？有化石嗎？有節理嗎？</td></tr>
+      <tr><td>4. How strong is it?</td><td>Hard / resistant = high hills. Soft / weak = low hills / coastal features. 堅硬抗風化=高山，軟弱易風化=矮山/海岸地貌</td></tr>
+      <tr><td>5. What landform does it create?</td><td>Match rock resistance to landform height / shape. 將岩石的抗風化程度與地貌高度/形狀對應</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ===== Rock 1: Extrusive Igneous ===== -->
+<section class="section" id="extrusive">
+  <h2>Rock Type 1: Igneous — Extrusive (Volcanic) 噴出火成岩</h2>
+
+  <div class="flow-container">
+    <div class="flow-title"><span class="badge badge-extrusive">EXTRUSIVE</span> Formation Process 形成過程</div>
+    <div class="flow-steps">
+      <div class="flow-step">
+        <div class="step-dot dot-extrusive">1</div>
+        <div class="step-body"><div class="step-en">Magma rises from deep underground toward the surface.</div><div class="step-zh">岩漿從地下深處向地表上升。</div></div>
+      </div>
+      <div class="flow-step">
+        <div class="step-dot dot-extrusive">2</div>
+        <div class="step-body"><div class="step-en">Volcanic eruption — magma breaks through the Earth's crust.</div><div class="step-zh">火山爆發 — 岩漿衝破地殼。</div></div>
+      </div>
+      <div class="flow-step">
+        <div class="step-dot dot-extrusive">3</div>
+        <div class="step-body"><div class="step-en">Lava and volcanic ash are ejected <strong>above the ground surface</strong>.</div><div class="step-zh">熔岩與火山灰噴出<strong>地表</strong>。</div></div>
+      </div>
+      <div class="flow-step">
+        <div class="step-dot dot-extrusive">4</div>
+        <div class="step-body"><div class="step-en">Lava and ash cool <strong>rapidly</strong> in contact with air and water.</div><div class="step-zh">熔岩與火山灰接觸空氣和水後<strong>快速冷卻</strong>。</div></div>
+      </div>
+      <div class="flow-step">
+        <div class="step-dot dot-extrusive">5</div>
+        <div class="step-body"><div class="step-en">Rock solidifies with <strong>fine / small crystals</strong> (fast cooling leaves no time for large crystals to grow).</div><div class="step-zh">岩石凝固形成<strong>細小晶體</strong>（快速冷卻沒有足夠時間讓大晶體生長）。</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="feature-grid">
+    <div class="feature-card"><div class="ft-label">Crystal size</div><div class="ft-en">Fine / small crystals</div><div class="ft-zh">細小晶體</div></div>
+    <div class="feature-card"><div class="ft-label">Structure</div><div class="ft-en">No layers; hexagonal columnar jointing</div><div class="ft-zh">無層理；六角形柱狀節理</div></div>
+    <div class="feature-card"><div class="ft-label">Resistance</div><div class="ft-en">More resistant to weathering</div><div class="ft-zh">較抗風化</div></div>
+    <div class="feature-card"><div class="ft-label">Examples in HK</div><div class="ft-en">Volcanic tuff, basalt — Sai Kung, High Island</div><div class="ft-zh">火山凝灰岩、玄武岩 — 西貢、萬宜水庫</div></div>
+    <div class="feature-card"><div class="ft-label">Landforms</div><div class="ft-en">High hills, hexagonal columns, sea arches, sea stacks</div><div class="ft-zh">高山、六角柱、海蝕拱、海蝕柱</div></div>
+    <div class="feature-card"><div class="ft-label">Why hexagonal columns?</div><div class="ft-en">Lava contracts evenly as it cools, cracks form at 120° angles, producing hexagons</div><div class="ft-zh">熔岩冷卻時均勻收縮，裂縫以120度角形成，產生六角柱</div></div>
+  </div>
+</section>
+
+<!-- ===== Rock 2: Intrusive Igneous ===== -->
+<section class="section" id="intrusive">
+  <h2>Rock Type 2: Igneous — Intrusive 侵入火成岩</h2>
+
+  <div class="flow-container">
+    <div class="flow-title"><span class="badge badge-intrusive">INTRUSIVE</span> Formation Process 形成過程</div>
+    <div class="flow-steps">
+      <div class="flow-step">
+        <div class="step-dot dot-intrusive">1</div>
+        <div class="step-body"><div class="step-en">Magma rises but <strong>does NOT reach the surface</strong>.</div><div class="step-zh">岩漿上升但<strong>未到達地表</strong>。</div></div>
+      </div>
+      <div class="flow-step">
+        <div class="step-dot dot-intrusive">2</div>
+        <div class="step-body"><div class="step-en">Magma enters cracks and spaces <strong>below the ground surface</strong> (intrudes into existing rock layers).</div><div class="step-zh">岩漿進入<strong>地表以下</strong>的裂隙和空間（侵入現有岩層）。</div></div>
+      </div>
+      <div class="flow-step">
+        <div class="step-dot dot-intrusive">3</div>
+        <div class="step-body"><div class="step-en">Magma cools <strong>very slowly</strong> underground (surrounded by warm rock, heat escapes gradually).</div><div class="step-zh">岩漿在地下<strong>非常緩慢地</strong>冷卻（被溫暖的岩石包圍，熱量逐漸散失）。</div></div>
+      </div>
+      <div class="flow-step">
+        <div class="step-dot dot-intrusive">4</div>
+        <div class="step-body"><div class="step-en">Rock solidifies with <strong>coarse / large crystals</strong> (slow cooling gives time for large crystals to grow).</div><div class="step-zh">岩石凝固形成<strong>粗大晶體</strong>（緩慢冷卻給予大晶體生長的時間）。</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="feature-grid">
+    <div class="feature-card"><div class="ft-label">Crystal size</div><div class="ft-en">Coarse / large crystals</div><div class="ft-zh">粗大晶體</div></div>
+    <div class="feature-card"><div class="ft-label">Structure</div><div class="ft-en">No layers; large mineral grains visible</div><div class="ft-zh">無層理；肉眼可見粗大礦物顆粒</div></div>
+    <div class="feature-card"><div class="ft-label">Resistance</div><div class="ft-en">Highly resistant to weathering</div><div class="ft-zh">高度抗風化</div></div>
+    <div class="feature-card"><div class="ft-label">Examples in HK</div><div class="ft-en">Granite — Ma On Shan, common in HK</div><div class="ft-zh">花崗岩 — 馬鞍山、香港常見</div></div>
+    <div class="feature-card"><div class="ft-label">Landforms</div><div class="ft-en">High hills, rounded boulders</div><div class="ft-zh">高山、圓形巨石</div></div>
+  </div>
+
+  <!-- Cooling Speed Story -->
+  <div class="callout info">
+    <strong>The "Cooling Speed Story" 冷卻速度故事</strong> — the single most important concept for igneous rocks.
+  </div>
+  <div class="cool-cards">
+    <div class="cool-card fast">
+      <div class="cool-icon">🌋</div>
+      <div class="cool-name">Extrusive 噴出</div>
+      <div class="cool-desc"><strong>Above ground.</strong> Fast cooling (seconds to hours). Fine crystals.<br><strong>地表。</strong>快速冷卻（數秒至數小時）。細小晶體。</div>
+      <div style="font-size:0.78rem;margin-top:6px;color:var(--text-secondary);">比喻：Hot soup spilled on a cold table — surface cools instantly. 熱湯灑在冷桌上 — 表面瞬間冷卻。</div>
+    </div>
+    <div class="cool-card slow">
+      <div class="cool-icon">🪨</div>
+      <div class="cool-name">Intrusive 侵入</div>
+      <div class="cool-desc"><strong>Below ground.</strong> Very slow cooling (thousands to millions of years). Large crystals.<br><strong>地下。</strong>極慢冷卻（數千至數百萬年）。粗大晶體。</div>
+      <div style="font-size:0.78rem;margin-top:6px;color:var(--text-secondary);">比喻：Hot soup kept in a thermos — cools very slowly. 熱湯放在保溫壺中 — 冷卻極慢。</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Rock 3: Sedimentary ===== -->
+<section class="section" id="sedimentary">
+  <h2>Rock Type 3: Sedimentary 沉積岩</h2>
+
+  <div class="flow-container">
+    <div class="flow-title"><span class="badge badge-sedimentary">SEDIMENTARY</span> Formation Process — Six-Step Method (WET DCC)</div>
+    <div class="flow-steps">
+      <div class="flow-step">
+        <div class="step-dot dot-sedimentary">1</div>
+        <div class="step-body"><div class="step-en"><strong>Weathering 風化:</strong> Rocks on the surface are broken down by weathering (rain, wind, temperature changes).</div><div class="step-zh">地表岩石被風化作用（雨水、風、溫度變化）分解。</div></div>
+      </div>
+      <div class="flow-step">
+        <div class="step-dot dot-sedimentary">2</div>
+        <div class="step-body"><div class="step-en"><strong>Erosion 侵蝕:</strong> Weathered rock fragments are loosened and removed.</div><div class="step-zh">風化後的岩石碎片被鬆動並移走。</div></div>
+      </div>
+      <div class="flow-step">
+        <div class="step-dot dot-sedimentary">3</div>
+        <div class="step-body"><div class="step-en"><strong>Transport 搬運:</strong> Rock fragments are transported by water, wind, or ice to a new location (usually low-lying areas like river mouths or seabeds).</div><div class="step-zh">岩石碎片被水、風或冰搬運至新位置（通常為低窪地區如河口或海底）。</div></div>
+      </div>
+      <div class="flow-step">
+        <div class="step-dot dot-sedimentary">4</div>
+        <div class="step-body"><div class="step-en"><strong>Deposition 沉積:</strong> Transported materials are deposited when the energy of water / wind / ice decreases.</div><div class="step-zh">當水/風/冰的能量減弱時，搬運物質沉積下來。</div></div>
+      </div>
+      <div class="flow-step">
+        <div class="step-dot dot-sedimentary">5</div>
+        <div class="step-body"><div class="step-en"><strong>Compaction 壓實:</strong> More layers accumulate on top — weight increases — lower layers are compressed (compacted).</div><div class="step-zh">更多岩層堆積在上層 — 重量增加 — 下層被壓縮（壓實）。</div></div>
+      </div>
+      <div class="flow-step">
+        <div class="step-dot dot-sedimentary">6</div>
+        <div class="step-body"><div class="step-en"><strong>Cementation 膠結:</strong> Minerals dissolved in water crystallise between sediment grains, binding them together into solid rock.</div><div class="step-zh">水中溶解的礦物在沉積顆粒之間結晶，將它們膠結成堅硬岩石。</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout tip">
+    <strong>Mnemonic 記憶口訣:</strong> <strong>WET DCC</strong> — Weather, Erode, Transport, Deposit, Compact, Cement
+  </div>
+
+  <div class="feature-grid">
+    <div class="feature-card"><div class="ft-label">Crystal size</div><div class="ft-en">No crystals; contains sediments / fossils</div><div class="ft-zh">無晶體，含沉積物或化石</div></div>
+    <div class="feature-card"><div class="ft-label">Structure</div><div class="ft-en">Layered / stratified (youngest on top)</div><div class="ft-zh">層理結構（最年輕的在最上）</div></div>
+    <div class="feature-card"><div class="ft-label">Why fossils?</div><div class="ft-en">Dead organisms buried in sediment are preserved</div><div class="ft-zh">埋於沉積物中的生物遺骸被保存為化石</div></div>
+    <div class="feature-card"><div class="ft-label">Resistance</div><div class="ft-en">Less resistant to weathering</div><div class="ft-zh">較易風化</div></div>
+    <div class="feature-card"><div class="ft-label">Examples in HK</div><div class="ft-en">Sandstone, mudstone, shale — NE NT, Ping Chau, Port Island</div><div class="ft-zh">砂岩、泥岩、頁岩 — 新界東北、平洲、赤洲</div></div>
+    <div class="feature-card"><div class="ft-label">Landforms</div><div class="ft-en">Low hills, wave-cut platforms, fold structures</div><div class="ft-zh">矮山、海蝕平台、褶曲構造</div></div>
+  </div>
+</section>
+
+<!-- ===== Rock 4: Metamorphic ===== -->
+<section class="section" id="metamorphic">
+  <h2>Rock Type 4: Metamorphic 變質岩</h2>
+
+  <div class="flow-container">
+    <div class="flow-title"><span class="badge badge-metamorphic">METAMORPHIC</span> Formation Process 形成過程</div>
+    <div class="flow-steps">
+      <div class="flow-step">
+        <div class="step-dot dot-metamorphic">1</div>
+        <div class="step-body"><div class="step-en">An <strong>existing rock</strong> (igneous, sedimentary, or even another metamorphic rock) is subjected to <strong>extreme heat and pressure</strong> deep underground.</div><div class="step-zh"><strong>現有岩石</strong>（火成岩、沉積岩或甚至另一種變質岩）在地下深處承受<strong>極端高溫和高壓</strong>。</div></div>
+      </div>
+      <div class="flow-step">
+        <div class="step-dot dot-metamorphic">2</div>
+        <div class="step-body"><div class="step-en">The heat and pressure change the mineral composition and texture of the rock <strong>without melting it completely</strong>.</div><div class="step-zh">高溫和高壓改變岩石的礦物成分和質地，<strong>但並未完全熔化</strong>。</div></div>
+      </div>
+      <div class="flow-step">
+        <div class="step-dot dot-metamorphic">3</div>
+        <div class="step-body"><div class="step-en">New minerals form and crystals may rearrange into <strong>bands or layers</strong> (foliated texture).</div><div class="step-zh">新礦物形成，晶體可能重新排列成<strong>帶狀或層狀</strong>（葉理）。</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout warn">
+    <strong>The "No Melting Rule" 不熔化法則:</strong> The key difference between metamorphic and igneous: <strong>metamorphic rocks form WITHOUT melting</strong>. The original rock is changed by heat and pressure, but it never becomes liquid magma.<br>
+    變質岩與火成岩的關鍵區別：<strong>變質岩形成時不熔化</strong>。原始岩石被高溫高壓改變，但從未變成液態岩漿。
+  </div>
+
+  <div class="feature-grid">
+    <div class="feature-card"><div class="ft-label">Crystal size</div><div class="ft-en">Crystals rearranged into bands / layers</div><div class="ft-zh">晶體重新排列成帶狀/層狀</div></div>
+    <div class="feature-card"><div class="ft-label">Structure</div><div class="ft-en">Foliated (banded) or non-foliated</div><div class="ft-zh">葉理（帶狀）或非葉理</div></div>
+    <div class="feature-card"><div class="ft-label">Foliated vs Non-foliated</div><div class="ft-en">Foliated = minerals aligned under directional pressure; Non-foliated = no banding, uniform pressure</div><div class="ft-zh">葉理=定向壓力下礦物排列成帶；非葉理=均勻壓力下無帶狀</div></div>
+    <div class="feature-card"><div class="ft-label">Resistance</div><div class="ft-en">Generally very resistant</div><div class="ft-zh">通常非常抗風化</div></div>
+    <div class="feature-card"><div class="ft-label">Examples</div><div class="ft-en">Marble (from limestone), Slate (from shale), Schist, Gneiss</div><div class="ft-zh">大理岩（由石灰岩變質）、板岩（由頁岩變質）、片岩、片麻岩</div></div>
+    <div class="feature-card"><div class="ft-label">Landforms</div><div class="ft-en">Rugged terrain, resistant ridges</div><div class="ft-zh">崎嶇地形、抗風化山脊</div></div>
+  </div>
+</section>
+
+<!-- ===== Comparison Table ===== -->
+<section class="section" id="compare">
+  <h2>Four-Rock Comparison Table 四岩類對比總表</h2>
+  <table class="content-table">
+    <thead>
+      <tr>
+        <th>Feature</th>
+        <th>Igneous — Extrusive 噴出火成岩</th>
+        <th>Igneous — Intrusive 侵入火成岩</th>
+        <th>Sedimentary 沉積岩</th>
+        <th>Metamorphic 變質岩</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Formation location</strong></td>
+        <td>Above ground (surface) 地表</td>
+        <td>Below ground (underground) 地下</td>
+        <td>Surface to deposition in layers 地表到層狀沉積</td>
+        <td>Deep underground (heat + pressure) 地下深處（高溫高壓）</td>
+      </tr>
+      <tr>
+        <td><strong>Cooling / Change speed</strong></td>
+        <td>Rapid cooling 快速冷卻</td>
+        <td>Very slow cooling 非常緩慢冷卻</td>
+        <td>Slow accumulation over time 長期緩慢堆積</td>
+        <td>Gradual change under heat &amp; pressure 高溫高壓下逐漸變化</td>
+      </tr>
+      <tr>
+        <td><strong>Crystal size</strong></td>
+        <td>Fine / small 細小</td>
+        <td>Coarse / large 粗大</td>
+        <td>No crystals 無晶體</td>
+        <td>Rearranged crystals 重新排列的晶體</td>
+      </tr>
+      <tr>
+        <td><strong>Structure</strong></td>
+        <td>No layers; hexagonal jointing 無層理；六角柱狀節理</td>
+        <td>No layers; visible grains 無層理；肉眼可見顆粒</td>
+        <td>Layered / stratified; fossils 層理；含化石</td>
+        <td>Foliated (banded) or non-foliated 葉理或非葉理</td>
+      </tr>
+      <tr>
+        <td><strong>Resistance</strong></td>
+        <td>More resistant 較抗風化</td>
+        <td>Highly resistant 高度抗風化</td>
+        <td>Less resistant 較易風化</td>
+        <td>Very resistant 非常抗風化</td>
+      </tr>
+      <tr>
+        <td><strong>Examples in HK</strong></td>
+        <td>Volcanic tuff, basalt — Sai Kung, High Island 火山凝灰岩、玄武岩 — 西貢、萬宜水庫</td>
+        <td>Granite — Ma On Shan, common in HK 花崗岩 — 馬鞍山、香港常見</td>
+        <td>Sandstone, mudstone, shale — NE NT, Ping Chau, Port Island 砂岩、泥岩、頁岩 — 新界東北、平洲、赤洲</td>
+        <td>Marble, slate — HK less common 大理岩、板岩 — 香港較少見</td>
+      </tr>
+      <tr>
+        <td><strong>Landforms</strong></td>
+        <td>High hills, hexagonal columns, sea arches 高山、六角柱、海蝕拱</td>
+        <td>High hills, rounded boulders 高山、圓形巨石</td>
+        <td>Low hills, wave-cut platforms, folds 矮山、海蝕平台、褶曲</td>
+        <td>Rugged terrain, resistant ridges 崎嶇地形、抗風化山脊</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ===== Marking Scheme ===== -->
+<section class="section" id="marking">
+  <h2>Marking Scheme Breakdown 評分標準拆解</h2>
+  <p style="margin-bottom:12px;"><strong>"Contrast rocks at two locations"</strong> — how marks are awarded. Total possible: 10–14 marks. Aim to cover at least 7–8 points.</p>
+
+  <table class="content-table">
+    <thead><tr><th style="width:60px;">Marks</th><th>Marking Point</th><th>What to write</th></tr></thead>
+    <tbody>
+      <tr><td>1–2</td><td><strong>Rock type</strong> 岩石類型</td><td>"Location A has igneous extrusive rock; Location B has sedimentary rock"</td></tr>
+      <tr><td>1–2</td><td><strong>Crystal size</strong> 晶體大小</td><td>"Location A has fine crystals; Location B has no crystals"</td></tr>
+      <tr><td>1–2</td><td><strong>Structure</strong> 結構</td><td>"Location A has no layers; Location B has layered structure"</td></tr>
+      <tr><td>1–2</td><td><strong>Place of formation</strong> 形成位置</td><td>"Location A formed above ground; Location B formed by deposition"</td></tr>
+      <tr><td>1–2</td><td><strong>Formation process</strong> 形成過程</td><td>"Location A cooled rapidly from lava; Location B formed by compaction and cementation"</td></tr>
+      <tr><td>1</td><td><strong>Examples</strong> 例子</td><td>"Location A is volcanic tuff at Sai Kung; Location B is sandstone at Ping Chau"</td></tr>
+      <tr><td>1</td><td><strong>Resistance</strong> 抗風化程度</td><td>"Location A is more resistant; Location B is less resistant"</td></tr>
+      <tr><td>1</td><td><strong>Resultant landform</strong> 形成地貌</td><td>"Location A forms high hills; Location B forms low hills"</td></tr>
+      <tr><td>1–2</td><td><strong>Sketch with label</strong> 附標註草圖</td><td>Draw and label the rock structure</td></tr>
+    </tbody>
+  </table>
+
+  <div class="compare-box">
+    <h4>Key Rule: Always link formation to characteristics to landform</h4>
+    <p style="margin-bottom:8px;"><strong>Bad answer 差答案:</strong> "Sai Kung has volcanic tuff. It has fine crystals."</p>
+    <p><strong>Good answer 好答案:</strong> "Sai Kung has <strong>igneous extrusive rock</strong> (volcanic tuff). It formed <strong>above the ground surface</strong> when lava <strong>cooled rapidly</strong> in contact with air, producing <strong>fine crystals</strong> and <strong>no layers</strong>. Because it is <strong>more resistant to weathering</strong>, it forms <strong>high hills</strong> such as those at High Island."</p>
+  </div>
+</section>
+
+<!-- ===== Self-Test ===== -->
+<section class="section" id="quiz">
+  <h2>Self-Test: Identify the Rock Type 自測：判斷岩類</h2>
+  <p style="margin-bottom:12px;font-size:0.85rem;color:var(--text-secondary);">Click each question to reveal the answer. 點擊題目查看答案。</p>
+
+  <div class="quiz-item">
+    <div class="quiz-q" onclick="this.parentElement.classList.toggle('open')">Q1: This rock has coarse crystals visible to the naked eye. It formed deep underground and is very common in Hong Kong. It creates high hills.</div>
+    <div class="quiz-answer">
+      <div class="answer-label">Answer</div>
+      <p><strong>Igneous — Intrusive (Granite) 侵入火成岩（花崗岩）</strong></p>
+      <p style="color:var(--text-secondary);font-size:0.82rem;">Key clues: coarse crystals (slow cooling underground), common in HK, high hills. 關鍵線索：粗晶體（地下緩慢冷卻）、香港常見、高山。</p>
+    </div>
+  </div>
+
+  <div class="quiz-item">
+    <div class="quiz-q" onclick="this.parentElement.classList.toggle('open')">Q2: This rock has horizontal layers. It contains fossils. It is found at Ping Chau and Port Island. It weathers easily and forms low hills.</div>
+    <div class="quiz-answer">
+      <div class="answer-label">Answer</div>
+      <p><strong>Sedimentary (Sandstone / Mudstone / Shale) 沉積岩（砂岩/泥岩/頁岩）</strong></p>
+      <p style="color:var(--text-secondary);font-size:0.82rem;">Key clues: layered structure, fossils, Ping Chau / Port Island, less resistant, low hills. 關鍵線索：層理結構、化石、平洲/赤洲、易風化、矮山。</p>
+    </div>
+  </div>
+
+  <div class="quiz-item">
+    <div class="quiz-q" onclick="this.parentElement.classList.toggle('open')">Q3: This rock has fine crystals and hexagonal columnar joints. It is found at High Island. It formed from lava that cooled quickly above the ground.</div>
+    <div class="quiz-answer">
+      <div class="answer-label">Answer</div>
+      <p><strong>Igneous — Extrusive (Volcanic tuff) 噴出火成岩（火山凝灰岩）</strong></p>
+      <p style="color:var(--text-secondary);font-size:0.82rem;">Key clues: fine crystals, hexagonal columns, High Island, rapid cooling above ground. 關鍵線索：細晶體、六角柱、萬宜水庫、地表快速冷卻。</p>
+    </div>
+  </div>
+
+  <div class="quiz-item">
+    <div class="quiz-q" onclick="this.parentElement.classList.toggle('open')">Q4: This rock has bands of minerals aligned in parallel layers. It formed from limestone that was subjected to heat and pressure deep underground. It did not melt.</div>
+    <div class="quiz-answer">
+      <div class="answer-label">Answer</div>
+      <p><strong>Metamorphic (Marble) 變質岩（大理岩）</strong></p>
+      <p style="color:var(--text-secondary);font-size:0.82rem;">Key clues: foliated / banded structure, formed from existing rock (limestone), heat + pressure, no melting. 關鍵線索：葉理/帶狀結構、由石灰岩變質、高溫高壓、不熔化。</p>
+    </div>
+  </div>
+
+  <div class="quiz-item">
+    <div class="quiz-q" onclick="this.parentElement.classList.toggle('open')">Q5: At Location A, the rocks form high hills with hexagonal columns. At Location B, the rocks form low hills with layered structures and fossils. Contrast the two locations.</div>
+    <div class="quiz-answer">
+      <div class="answer-label">Answer Framework</div>
+      <table class="content-table" style="margin-top:8px;">
+        <thead><tr><th>Feature</th><th>Location A</th><th>Location B</th></tr></thead>
+        <tbody>
+          <tr><td>Rock type</td><td>Igneous — Extrusive (volcanic tuff)</td><td>Sedimentary (sandstone/mudstone)</td></tr>
+          <tr><td>Crystal size</td><td>Fine / small crystals</td><td>No crystals</td></tr>
+          <tr><td>Structure</td><td>No layers; hexagonal columnar joints</td><td>Layered / stratified; contains fossils</td></tr>
+          <tr><td>Formation</td><td>Formed above ground; rapid cooling of lava</td><td>Weathering to erosion to transport to deposition to compaction to cementation</td></tr>
+          <tr><td>Resistance</td><td>More resistant</td><td>Less resistant</td></tr>
+          <tr><td>Landform</td><td>High hills, hexagonal columns</td><td>Low hills, coastal landforms</td></tr>
+          <tr><td>Example in HK</td><td>High Island, Sai Kung</td><td>Ping Chau, Port Island, Northeast NT</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Exam Traps ===== -->
+<section class="section" id="traps">
+  <h2>Exam Traps to Avoid 考試陷阱</h2>
+  <div class="trap-grid">
+    <div class="trap-card">
+      <div class="trap-icon">⚠️</div>
+      <div class="trap-body">
+        <div class="trap-title">Confusing "no crystals" with "no layers"</div>
+        <div class="trap-wrong">Sedimentary has no crystals BUT has layers. Igneous has crystals BUT no layers. 沉積岩無晶體但有層理；火成岩有晶體但無層理。</div>
+        <div class="trap-correct">Memorise separately: crystal size ≠ structure. 分開記憶：晶體大小 ≠ 結構。</div>
+      </div>
+    </div>
+    <div class="trap-card">
+      <div class="trap-icon">⚠️</div>
+      <div class="trap-body">
+        <div class="trap-title">Saying all igneous rocks have large crystals</div>
+        <div class="trap-wrong">Only intrusive igneous has large crystals. Extrusive has fine crystals. 只有侵入火成岩有粗大晶體；噴出火成岩是細小晶體。</div>
+        <div class="trap-correct">Always specify "intrusive" or "extrusive". 必須標明「侵入」或「噴出」。</div>
+      </div>
+    </div>
+    <div class="trap-card">
+      <div class="trap-icon">⚠️</div>
+      <div class="trap-body">
+        <div class="trap-title">Forgetting to mention cooling speed</div>
+        <div class="trap-wrong">Cooling speed is WHY crystal size differs. Without it, the explanation is incomplete. 冷卻速度是晶體大小的原因，不解釋就不完整。</div>
+        <div class="trap-correct">Always include: "rapid cooling produces fine crystals" or "slow cooling produces large crystals".</div>
+      </div>
+    </div>
+    <div class="trap-card">
+      <div class="trap-icon">⚠️</div>
+      <div class="trap-body">
+        <div class="trap-title">Saying sedimentary rocks "melt" to form</div>
+        <div class="trap-wrong">Sedimentary forms from sediments, not from melting. Only igneous forms from cooled magma/lava. 沉積岩來自沉積物而非熔化。</div>
+        <div class="trap-correct">Remember WET DCC: Weather to Erode to Transport to Deposit to Compact to Cement.</div>
+      </div>
+    </div>
+    <div class="trap-card">
+      <div class="trap-icon">⚠️</div>
+      <div class="trap-body">
+        <div class="trap-title">Calling metamorphic rocks "melted"</div>
+        <div class="trap-wrong">Metamorphic rocks form under heat and pressure WITHOUT melting. 變質岩不熔化。</div>
+        <div class="trap-correct">Remember the "No Melting Rule". 記住「不熔化法則」。</div>
+      </div>
+    </div>
+    <div class="trap-card">
+      <div class="trap-icon">⚠️</div>
+      <div class="trap-body">
+        <div class="trap-title">Only listing features without linking</div>
+        <div class="trap-wrong">Marking scheme rewards LINKED explanations (cause to effect). 只列特徵不連貫。</div>
+        <div class="trap-correct">Always say: "Because X, therefore Y, resulting in Z". 永遠使用「因為X，所以Y，導致Z」。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer style="text-align:center;padding:30px 0 16px;color:var(--text-secondary);font-size:0.78rem;border-top:1px solid var(--border);margin-top:32px;">
+  <p>End of Three Rock Types Guide · Last updated: 2026-06-13</p>
+</footer>
+
+</div>
+</body>
+</html>
